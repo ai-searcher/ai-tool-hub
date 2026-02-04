@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Tools Hub 2026 - Finde das perfekte KI-Tool</title>
-<meta name="description" content="Die größte KI-Tools-Datenbank mit 500+ Tools. Filtere nach Kategorien, Preis und Funktionen. Kostenlose und Premium-Tools für jeden Bedarf.">
-<meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools, KI für Business">
+<title>AI Tools Hub 2026 - Find Your Perfect AI Tool</title>
+<meta name="description" content="Die größte KI-Tools-Datenbank mit 100+ Tools. Filtere nach Kategorien, Preis und Funktionen.">
+<meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-/* Reset & Base */
+/* Dein ursprüngliches CSS bleibt komplett unverändert */
 * {
     margin: 0;
     padding: 0;
@@ -49,7 +49,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Language Switch */
 .language-switch {
     position: fixed;
     top: 20px;
@@ -77,7 +76,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Header */
 .header {
     padding: 80px 20px 40px;
     text-align: center;
@@ -119,7 +117,6 @@ body {
     line-height: 1.6;
 }
 
-/* Search */
 .search-container {
     max-width: 800px;
     margin: 0 auto 30px;
@@ -154,7 +151,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* Quick Filters */
 .quick-filters {
     display: flex;
     flex-wrap: wrap;
@@ -192,7 +188,6 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* Advanced Filters */
 .advanced-filters {
     background: var(--card-bg);
     border-radius: var(--radius);
@@ -238,7 +233,6 @@ body {
     border-color: var(--primary);
 }
 
-/* Tool Count */
 .tool-count {
     text-align: center;
     margin-bottom: 30px;
@@ -251,7 +245,6 @@ body {
     font-weight: 700;
 }
 
-/* Tools Grid */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -416,7 +409,6 @@ body {
     color: var(--primary);
 }
 
-/* Empty State */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -462,7 +454,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Footer */
 .footer {
     text-align: center;
     padding: 40px 20px;
@@ -486,7 +477,6 @@ body {
     color: var(--primary);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .header {
         padding: 60px 20px 30px;
@@ -567,52 +557,52 @@ body {
 <div class="language-switch">
     <button class="lang-btn" id="langBtn">
         <i class="fas fa-globe"></i>
-        <span>DE</span>
+        <span id="langText">EN</span>
     </button>
 </div>
 
 <!-- Header -->
 <header class="header">
-    <div class="badge">🚀 500+ KI-Tools für 2026</div>
-    <h1>Finde dein perfektes KI-Tool</h1>
-    <p>Durchsuche die größte Datenbank von KI-Tools. Filtere nach Kategorie, Preis und Funktionen. Entdecke kostenlose und Premium-Tools für jeden Bedarf.</p>
+    <div class="badge" id="badgeText">🚀 100+ KI-Tools für 2026</div>
+    <h1 id="pageTitle">Finde dein perfektes KI-Tool</h1>
+    <p id="pageDescription">Durchsuche die größte Datenbank von KI-Tools. Filtere nach Kategorie, Preis und Funktionen. Entdecke kostenlose und Premium-Tools für jeden Bedarf.</p>
     
     <div class="search-container">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-box" id="searchInput" placeholder="Welches KI-Tool suchst du? Z.B. 'Bildgenerator', 'Schreibassistent', 'Code-Hilfe'...">
+        <input type="text" class="search-box" id="searchInput">
     </div>
     
     <div class="quick-filters" id="categoryFilters">
         <button class="filter-btn active" data-category="all">
-            <i class="fas fa-globe"></i> Alle Tools
+            <i class="fas fa-globe"></i> <span class="cat-text">Alle Tools</span>
         </button>
         <button class="filter-btn" data-category="text">
-            <i class="fas fa-keyboard"></i> Text & Schreiben
+            <i class="fas fa-keyboard"></i> <span class="cat-text">Text & Schreiben</span>
         </button>
         <button class="filter-btn" data-category="image">
-            <i class="fas fa-image"></i> Bilder & Design
+            <i class="fas fa-image"></i> <span class="cat-text">Bilder & Design</span>
         </button>
         <button class="filter-btn" data-category="audio">
-            <i class="fas fa-music"></i> Audio & Musik
+            <i class="fas fa-music"></i> <span class="cat-text">Audio & Musik</span>
         </button>
         <button class="filter-btn" data-category="video">
-            <i class="fas fa-video"></i> Video
+            <i class="fas fa-video"></i> <span class="cat-text">Video</span>
         </button>
         <button class="filter-btn" data-category="code">
-            <i class="fas fa-code"></i> Code & Entwicklung
+            <i class="fas fa-code"></i> <span class="cat-text">Code & Entwicklung</span>
         </button>
         <button class="filter-btn" data-category="business">
-            <i class="fas fa-briefcase"></i> Business
+            <i class="fas fa-briefcase"></i> <span class="cat-text">Business</span>
         </button>
         <button class="filter-btn" data-category="free">
-            <i class="fas fa-gift"></i> Kostenlos
+            <i class="fas fa-gift"></i> <span class="cat-text">Kostenlos</span>
         </button>
     </div>
     
     <div class="advanced-filters">
         <div class="filter-row">
             <div class="filter-group">
-                <label for="priceFilter"><i class="fas fa-tag"></i> Preis</label>
+                <label for="priceFilter"><i class="fas fa-tag"></i> <span id="labelPrice">Preis</span></label>
                 <select id="priceFilter" class="filter-select">
                     <option value="all">Alle Preise</option>
                     <option value="free">Nur kostenlos</option>
@@ -622,7 +612,7 @@ body {
             </div>
             
             <div class="filter-group">
-                <label for="ratingFilter"><i class="fas fa-star"></i> Bewertung</label>
+                <label for="ratingFilter"><i class="fas fa-star"></i> <span id="labelRating">Bewertung</span></label>
                 <select id="ratingFilter" class="filter-select">
                     <option value="0">Alle Bewertungen</option>
                     <option value="4">⭐ 4.0+ Sterne</option>
@@ -632,7 +622,7 @@ body {
             </div>
             
             <div class="filter-group">
-                <label for="sortFilter"><i class="fas fa-sort"></i> Sortieren nach</label>
+                <label for="sortFilter"><i class="fas fa-sort"></i> <span id="labelSort">Sortieren nach</span></label>
                 <select id="sortFilter" class="filter-select">
                     <option value="popular">Beliebteste</option>
                     <option value="rating">Beste Bewertung</option>
@@ -645,7 +635,7 @@ body {
     </div>
     
     <div class="tool-count">
-        <span id="toolCount">0</span> KI-Tools gefunden
+        <span id="toolCount">0</span> <span id="toolsFoundText">KI-Tools gefunden</span>
     </div>
 </header>
 
@@ -658,969 +648,420 @@ body {
 
 <!-- Footer -->
 <footer class="footer">
-    <p>© 2026 AI Tools Hub | Die größte KI-Tools-Datenbank</p>
-    <p>Alle Preise und Informationen sind ohne Gewähr. Affiliate-Links können enthalten sein.</p>
-    <p><a href="#"><i class="fas fa-question-circle"></i> Hilfe & Support</a> | <a href="#"><i class="fas fa-envelope"></i> Kontakt</a></p>
+    <p id="footerCopyright">© 2026 AI Tools Hub | Die größte KI-Tools-Datenbank</p>
+    <p id="footerDisclaimer">Alle Preise und Informationen sind ohne Gewähr. Affiliate-Links können enthalten sein.</p>
+    <p><a href="#"><i class="fas fa-question-circle"></i> <span id="helpText">Hilfe & Support</span></a> | <a href="#"><i class="fas fa-envelope"></i> <span id="contactText">Kontakt</span></a></p>
 </footer>
 
-<!-- JavaScript -->
 <script>
-// Sprachdaten
+// VOLLSTÄNDIGE KI-TOOLS DATENBANK (100+ Tools)
+const aiTools = [
+    // TEXT & SCHREIBEN (25 Tools)
+    {id:1,name:"ChatGPT Plus",category:"text",price:"paid",priceDisplay:"$20/Monat",priceNum:20,rating:4.9,description:{de:"Der leistungsstärkste KI-Chatbot mit GPT-4, Internetzugang und benutzerdefinierten GPTs.",en:"The most powerful AI chatbot with GPT-4, internet access, and custom GPTs."},features:["GPT-4","128K Context","Internet","DALL-E 3"],link:"https://chat.openai.com/",badge:"popular"},
+    {id:2,name:"Claude AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.8,description:{de:"KI-Assistent spezialisiert auf lange Kontexte (bis zu 200K Token).",en:"AI assistant specialized in long contexts (up to 200K tokens)."},features:["200K Tokens","File Upload","Free Version","Ethics Focus"],link:"https://claude.ai/",badge:"popular"},
+    {id:3,name:"Perplexity AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.7,description:{de:"KI-Suchmaschine mit Quellenangaben und Echtzeit-Informationen.",en:"AI search engine with citations and real-time information."},features:["Citations","Real-time Search","Free Version","Accurate"],link:"https://www.perplexity.ai/",badge:"new"},
+    {id:4,name:"Jasper AI",category:"text",price:"paid",priceDisplay:"Ab $39/Monat",priceNum:39,rating:4.6,description:{de:"KI-Schreibassistent für Marketing, Werbung und Business-Inhalte.",en:"AI writing assistant for marketing, advertising, and business content."},features:["Marketing Templates","Brand Voice","SEO Optimization"],link:"https://www.jasper.ai/",badge:null},
+    {id:5,name:"Copy.ai",category:"text",price:"freemium",priceDisplay:"Kostenlos/$49",priceNum:0,rating:4.5,description:{de:"KI für Werbetexte, Social Media und Marketing-Inhalte.",en:"AI for ad copy, social media, and marketing content."},features:["2000+ Templates","Free Version","25+ Languages"],link:"https://www.copy.ai/",badge:"free"},
+    {id:6,name:"Grammarly GO",category:"text",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.7,description:{de:"KI-Schreibassistent für Grammatikkorrektur und Stilverbesserung.",en:"AI writing assistant for grammar correction and style improvement."},features:["Grammar Check","Writing Style","Browser Extension"],link:"https://www.grammarly.com/",badge:null},
+    {id:7,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Kostenlos/$9.95",priceNum:0,rating:4.4,description:{de:"KI-Paraphrasierungstool für Umschreiben und Zusammenfassen.",en:"AI paraphrasing tool for rewriting and summarizing."},features:["Paraphrasing","Summarization","Free Version"],link:"https://quillbot.com/",badge:"free"},
+    {id:8,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/Monat",priceNum:10,rating:4.6,description:{de:"KI direkt in Notion für Schreiben und Brainstorming.",en:"AI directly in Notion for writing and brainstorming."},features:["Notion Integration","Summarization","Translation"],link:"https://www.notion.so/product/ai",badge:null},
+    {id:9,name:"Wordtune",category:"text",price:"freemium",priceDisplay:"Kostenlos/$9.99",priceNum:0,rating:4.5,description:{de:"KI für bessere Formulierungen und stilistische Verbesserungen.",en:"AI for better phrasing and stylistic improvements."},features:["Rewriting","Tone Adjustment","Free Version"],link:"https://www.wordtune.com/",badge:"free"},
+    {id:10,name:"Rytr",category:"text",price:"freemium",priceDisplay:"Kostenlos/$9",priceNum:0,rating:4.4,description:{de:"KI-Schreibassistent für schnelle Content-Erstellung.",en:"AI writing assistant for fast content creation."},features:["40+ Use Cases","30+ Languages","Free Version"],link:"https://rytr.me/",badge:"free"},
+    {id:11,name:"Writesonic",category:"text",price:"freemium",priceDisplay:"Kostenlos/$16",priceNum:0,rating:4.5,description:{de:"KI für SEO-optimierte Artikel und Marketing-Texte.",en:"AI for SEO-optimized articles and marketing copy."},features:["SEO Articles","GPT-4","Free Version"],link:"https://writesonic.com/",badge:null},
+    {id:12,name:"Sudowrite",category:"text",price:"paid",priceDisplay:"Ab $19/Monat",priceNum:19,rating:4.6,description:{de:"KI speziell für kreatives Schreiben und Romane.",en:"AI specifically for creative writing and novels."},features:["Story Writing","Character Development","Brainstorming"],link:"https://www.sudowrite.com/",badge:null},
+    {id:13,name:"Anyword",category:"text",price:"paid",priceDisplay:"Ab $49/Monat",priceNum:49,rating:4.4,description:{de:"KI für datengetriebenes Marketing und Copywriting.",en:"AI for data-driven marketing and copywriting."},features:["Performance Prediction","A/B Testing","Analytics"],link:"https://anyword.com/",badge:null},
+    {id:14,name:"Longshot AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.3,description:{de:"KI für faktentreue, recherchierte Long-Form Inhalte.",en:"AI for fact-checked, researched long-form content."},features:["Fact Checking","SEO Content","Free Version"],link:"https://www.longshot.ai/",badge:"free"},
+    {id:15,name:"Frase",category:"text",price:"paid",priceDisplay:"Ab $15/Monat",priceNum:15,rating:4.5,description:{de:"KI für SEO-Content-Optimierung und Research.",en:"AI for SEO content optimization and research."},features:["SEO Research","Content Briefs","Optimization"],link:"https://www.frase.io/",badge:null},
+    {id:16,name:"Lex",category:"text",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.4,description:{de:"Minimalistischer KI-Texteditor für fokussiertes Schreiben.",en:"Minimalist AI text editor for focused writing."},features:["Clean Interface","AI Suggestions","Free Version"],link:"https://lex.page/",badge:"free"},
+    {id:17,name:"Writer",category:"text",price:"paid",priceDisplay:"Ab $18/Monat",priceNum:18,rating:4.5,description:{de:"KI-Schreibplattform für Teams mit Brand Guidelines.",en:"AI writing platform for teams with brand guidelines."},features:["Team Collaboration","Brand Voice","Style Guide"],link:"https://writer.com/",badge:null},
+    {id:18,name:"Hypotenuse AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.3,description:{de:"KI für Produktbeschreibungen und E-Commerce Content.",en:"AI for product descriptions and e-commerce content."},features:["Product Descriptions","Bulk Generation","Free Trial"],link:"https://www.hypotenuse.ai/",badge:"free"},
+    {id:19,name:"Texti",category:"text",price:"freemium",priceDisplay:"Kostenlos",priceNum:0,rating:4.2,description:{de:"Kostenloser Browser-basierter KI-Schreibassistent.",en:"Free browser-based AI writing assistant."},features:["Browser Extension","Free Forever","Quick Access"],link:"https://texti.app/",badge:"free"},
+    {id:20,name:"Simplified AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.4,description:{de:"All-in-One KI für Content, Design und Social Media.",en:"All-in-one AI for content, design, and social media."},features:["Content+Design","Templates","Free Version"],link:"https://simplified.com/",badge:"free"},
+    {id:21,name:"Moonbeam",category:"text",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.3,description:{de:"KI für Long-Form Content wie Essays und Artikel.",en:"AI for long-form content like essays and articles."},features:["Long-Form Writing","Templates","Free Version"],link:"https://www.gomoonbeam.com/",badge:"free"},
+    {id:22,name:"Compose AI",category:"text",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.5,description:{de:"Kostenlose Chrome-Erweiterung für schnelleres Tippen.",en:"Free Chrome extension for faster typing."},features:["Chrome Extension","Free Forever","Autocomplete"],link:"https://www.compose.ai/",badge:"free"},
+    {id:23,name:"Jenni AI",category:"text",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.4,description:{de:"KI für akademisches Schreiben und Research Papers.",en:"AI for academic writing and research papers."},features:["Academic Writing","Citations","Free Version"],link:"https://jenni.ai/",badge:"free"},
+    {id:24,name:"ShortlyAI",category:"text",price:"paid",priceDisplay:"$79/Monat",priceNum:79,rating:4.3,description:{de:"KI-Schreibpartner für kreative und lange Texte.",en:"AI writing partner for creative and long texts."},features:["Unlimited Writing","Story Mode","Commands"],link:"https://www.shortlyai.com/",badge:null},
+    {id:25,name:"Copysmith",category:"text",price:"paid",priceDisplay:"Ab $19/Monat",priceNum:19,rating:4.2,description:{de:"KI für E-Commerce und Produktmarketing-Texte.",en:"AI for e-commerce and product marketing copy."},features:["E-commerce Focus","Product Descriptions","Bulk Generation"],link:"https://copysmith.ai/",badge:null},
+
+    // BILDER & DESIGN (25 Tools)
+    {id:26,name:"Midjourney",category:"image",price:"paid",priceDisplay:"Ab $10/Monat",priceNum:10,rating:4.9,description:{de:"Der beste KI-Bildgenerator für künstlerische, hochwertige Bilder.",en:"The best AI image generator for artistic, high-quality images."},features:["Artistic Quality","Style Consistency","Discord"],link:"https://www.midjourney.com/",badge:"popular"},
+    {id:27,name:"DALL-E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT Plus",priceNum:20,rating:4.8,description:{de:"OpenAIs Bildgenerator mit hervorragendem Textverständnis.",en:"OpenAI's image generator with excellent text understanding."},features:["Text Understanding","ChatGPT Integration","High Quality"],link:"https://openai.com/dall-e-3",badge:"new"},
+    {id:28,name:"Stable Diffusion",category:"image",price:"freemium",priceDisplay:"Kostenlos/Ab $9",priceNum:0,rating:4.7,description:{de:"Open-Source Bildgenerator, lokal lauffähig und anpassbar.",en:"Open-source image generator, locally runnable and customizable."},features:["Open-Source","Local Installation","Custom Models"],link:"https://stability.ai/",badge:"free"},
+    {id:29,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/Ab $10",priceNum:0,rating:4.6,description:{de:"Bildgenerator mit vielen Vorlagen und kostenlosen Credits.",en:"Image generator with many templates and free credits."},features:["Daily Credits","Many Models","Canvas Editor"],link:"https://leonardo.ai/",badge:"free"},
+    {id:30,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Kostenlos/$4.99",priceNum:0,rating:4.5,description:{de:"Adobes KI-Bildgenerator für kommerzielle Sicherheit.",en:"Adobe's AI image generator for commercial safety."},features:["Commercial Safe","Adobe Integration","Text Effects"],link:"https://www.adobe.com/sensei/generative-ai/firefly.html",badge:"free"},
+    {id:31,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$12.99",priceNum:0,rating:4.4,description:{de:"KI-Tools in Canva für Design und Bildgenerierung.",en:"AI tools in Canva for design and image generation."},features:["Canva Integration","Magic Design","Free Version"],link:"https://www.canva.com/ai-tools/",badge:"free"},
+    {id:32,name:"DreamStudio",category:"image",price:"paid",priceDisplay:"Ab $10",priceNum:10,rating:4.5,description:{de:"Offizielle Stable Diffusion Web-App mit Advanced Controls.",en:"Official Stable Diffusion web app with advanced controls."},features:["Stable Diffusion","Advanced Controls","API Access"],link:"https://dreamstudio.ai/",badge:null},
+    {id:33,name:"Runway ML",category:"image",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.6,description:{de:"KI-Kreativsuite für Bilder, Videos und Animationen.",en:"AI creative suite for images, videos, and animations."},features:["Image-to-Image","Inpainting","Free Version"],link:"https://runwayml.com/",badge:"free"},
+    {id:34,name:"Clipdrop",category:"image",price:"freemium",priceDisplay:"Kostenlos/$9",priceNum:0,rating:4.4,description:{de:"KI-Tools für Hintergrundentfernung und Bildverbesserung.",en:"AI tools for background removal and image enhancement."},features:["Background Removal","Cleanup","Free Version"],link:"https://clipdrop.co/",badge:"free"},
+    {id:35,name:"Photoshop AI",category:"image",price:"paid",priceDisplay:"$20.99/Monat",priceNum:20.99,rating:4.7,description:{de:"Generative AI in Adobe Photoshop für Profis.",en:"Generative AI in Adobe Photoshop for professionals."},features:["Generative Fill","Generative Expand","Professional"],link:"https://www.adobe.com/products/photoshop/ai.html",badge:"new"},
+    {id:36,name:"Imagen AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$9.99",priceNum:0,rating:4.3,description:{de:"KI-Bildbearbeitung für Fotografie und Retusche.",en:"AI image editing for photography and retouching."},features:["Photo Editing","Presets","Free Version"],link:"https://imagen-ai.com/",badge:"free"},
+    {id:37,name:"Playground AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.5,description:{de:"Benutzerfreundlicher Bildgenerator mit vielen Modellen.",en:"User-friendly image generator with many models."},features:["1000 Images/Day","Many Models","Free Version"],link:"https://playgroundai.com/",badge:"free"},
+    {id:38,name:"Artbreeder",category:"image",price:"freemium",priceDisplay:"Kostenlos/$8.99",priceNum:0,rating:4.4,description:{de:"KI für Bildmischung und kreative Charaktererstellung.",en:"AI for image mixing and creative character creation."},features:["Image Mixing","Character Creation","Free Version"],link:"https://www.artbreeder.com/",badge:"free"},
+    {id:39,name:"NightCafe",category:"image",price:"freemium",priceDisplay:"Kostenlos/Ab $6",priceNum:0,rating:4.3,description:{de:"KI-Kunstgenerator mit Community und täglichen Challenges.",en:"AI art generator with community and daily challenges."},features:["Multiple AI Models","Community","Free Credits"],link:"https://nightcafe.studio/",badge:"free"},
+    {id:40,name:"BlueWillow",category:"image",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.2,description:{de:"Kostenloser Midjourney-Alternative via Discord.",en:"Free Midjourney alternative via Discord."},features:["Free Forever","Discord Bot","Unlimited"],link:"https://www.bluewillow.ai/",badge:"free"},
+    {id:41,name:"Getimg.ai",category:"image",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.4,description:{de:"KI-Bildgenerator mit Editor und Outpainting.",en:"AI image generator with editor and outpainting."},features:["Image Editor","Outpainting","Free Version"],link:"https://getimg.ai/",badge:"free"},
+    {id:42,name:"Pixlr AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$7.99",priceNum:0,rating:4.3,description:{de:"Online-Bildeditor mit KI-Features.",en:"Online image editor with AI features."},features:["AI Remove Background","AI Cutout","Free Version"],link:"https://pixlr.com/",badge:"free"},
+    {id:43,name:"Remove.bg",category:"image",price:"freemium",priceDisplay:"Kostenlos/Ab $9",priceNum:0,rating:4.6,description:{de:"Spezialisiert auf automatische Hintergrundentfernung.",en:"Specialized in automatic background removal."},features:["Background Removal","Bulk Processing","Free Version"],link:"https://www.remove.bg/",badge:"free"},
+    {id:44,name:"Fotor AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$8.99",priceNum:0,rating:4.2,description:{de:"KI-Fotoeditor mit Bildgenerator und Effekten.",en:"AI photo editor with image generator and effects."},features:["Photo Editor","AI Generator","Free Version"],link:"https://www.fotor.com/",badge:"free"},
+    {id:45,name:"Craiyon",category:"image",price:"freemium",priceDisplay:"Kostenlos/$6",priceNum:0,rating:4.1,description:{de:"Ehemals DALL-E mini - einfacher kostenloser Generator.",en:"Formerly DALL-E mini - simple free generator."},features:["Free Forever","Simple Interface","Quick"],link:"https://www.craiyon.com/",badge:"free"},
+    {id:46,name:"Deep Dream Generator",category:"image",price:"freemium",priceDisplay:"Kostenlos/$19",priceNum:0,rating:4.0,description:{de:"Künstlerische KI-Bildtransformation und Stil-Transfer.",en:"Artistic AI image transformation and style transfer."},features:["Style Transfer","Deep Dream","Free Version"],link:"https://deepdreamgenerator.com/",badge:"free"},
+    {id:47,name:"Lexica Art",category:"image",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.4,description:{de:"Suchmaschine und Generator für Stable Diffusion Bilder.",en:"Search engine and generator for Stable Diffusion images."},features:["Search Gallery","Generate","Free Version"],link:"https://lexica.art/",badge:"free"},
+    {id:48,name:"Starryai",category:"image",price:"freemium",priceDisplay:"Kostenlos/$15.99",priceNum:0,rating:4.2,description:{de:"Mobile-first KI-Kunstgenerator mit App.",en:"Mobile-first AI art generator with app."},features:["Mobile App","5 Free/Day","Multiple Styles"],link:"https://starryai.com/",badge:"free"},
+    {id:49,name:"CF Spark",category:"image",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.1,description:{de:"Kostenloser Bildgenerator von Creative Fabrica.",en:"Free image generator from Creative Fabrica."},features:["Free Forever","Multiple Tools","No Watermark"],link:"https://www.creativefabrica.com/spark/",badge:"free"},
+    {id:50,name:"Picsart AI",category:"image",price:"freemium",priceDisplay:"Kostenlos/$5",priceNum:0,rating:4.3,description:{de:"Mobile Foto-Editor mit KI-Features und Community.",en:"Mobile photo editor with AI features and community."},features:["Mobile App","AI Tools","Free Version"],link:"https://picsart.com/",badge:"free"},
+
+    // AUDIO & MUSIK (15 Tools)
+    {id:51,name:"Suno AI",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.8,description:{de:"Revolutionärer Musikgenerator der komplette Songs erstellt.",en:"Revolutionary music generator that creates complete songs."},features:["Complete Songs","Vocals","Free Version"],link:"https://suno.com/",badge:"popular"},
+    {id:52,name:"Udio",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.7,description:{de:"KI-Musikgenerator mit natürlichem Gesang.",en:"AI music generator with natural vocals."},features:["High Quality","Natural Vocals","Free Version"],link:"https://www.udio.com/",badge:"new"},
+    {id:53,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$5",priceNum:0,rating:4.8,description:{de:"Beste KI-Stimmensynthese in 29 Sprachen.",en:"Best AI voice synthesis in 29 languages."},features:["Realistic Voices","29 Languages","Voice Cloning"],link:"https://elevenlabs.io/",badge:"popular"},
+    {id:54,name:"Murf AI",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$19",priceNum:0,rating:4.6,description:{de:"KI-Voiceover für professionelle Videos und Podcasts.",en:"AI voiceover for professional videos and podcasts."},features:["120+ Voices","20+ Languages","Free Version"],link:"https://murf.ai/",badge:"free"},
+    {id:55,name:"Beatoven.ai",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.4,description:{de:"KI-Hintergrundmusik für Videos und Podcasts.",en:"AI background music for videos and podcasts."},features:["Background Music","Mood Adjustment","Free Version"],link:"https://www.beatoven.ai/",badge:"free"},
+    {id:56,name:"Soundraw",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$19.99",priceNum:0,rating:4.3,description:{de:"KI-Musikgenerator mit anpassbaren Tracks.",en:"AI music generator with customizable tracks."},features:["Customizable Music","Royalty-Free","Free Trial"],link:"https://soundraw.io/",badge:"free"},
+    {id:57,name:"Boomy",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$9.99",priceNum:0,rating:4.2,description:{de:"KI erstellt Songs die auf Streaming-Plattformen released werden.",en:"AI creates songs that can be released on streaming platforms."},features:["Create Songs","Release Music","Free Version"],link:"https://boomy.com/",badge:"free"},
+    {id:58,name:"AIVA",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.3,description:{de:"KI-Komponist für Soundtracks und emotionale Musik.",en:"AI composer for soundtracks and emotional music."},features:["Emotional Music","Soundtrack Composition","Free Version"],link:"https://www.aiva.ai/",badge:"free"},
+    {id:59,name:"Speechify",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$11.58",priceNum:0,rating:4.5,description:{de:"Text-zu-Sprache mit natürlichen Stimmen.",en:"Text-to-speech with natural voices."},features:["Natural TTS","Speed Control","Free Version"],link:"https://speechify.com/",badge:"free"},
+    {id:60,name:"Descript Overdub",category:"audio",price:"paid",priceDisplay:"Ab $15/Monat",priceNum:15,rating:4.6,description:{de:"Stimm-Cloning für Audio-Editing.",en:"Voice cloning for audio editing."},features:["Voice Cloning","Audio Editing","Text-based"],link:"https://www.descript.com/overdub",badge:null},
+    {id:61,name:"Play.ht",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$31",priceNum:0,rating:4.4,description:{de:"Realistischer Text-zu-Sprache Generator.",en:"Realistic text-to-speech generator."},features:["Realistic Voices","Voice Cloning","Free Version"],link:"https://play.ht/",badge:"free"},
+    {id:62,name:"Resemble AI",category:"audio",price:"paid",priceDisplay:"Ab $0.006/Sek",priceNum:29,rating:4.5,description:{de:"Enterprise Voice-Cloning und Sprach-KI.",en:"Enterprise voice cloning and speech AI."},features:["Voice Cloning","Real-time","API"],link:"https://www.resemble.ai/",badge:null},
+    {id:63,name:"Lalal.ai",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.5,description:{de:"KI für Stem-Separation und Vocal-Removal.",en:"AI for stem separation and vocal removal."},features:["Vocal Removal","Stem Separation","Free Version"],link:"https://www.lalal.ai/",badge:"free"},
+    {id:64,name:"Voicemod AI",category:"audio",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.3,description:{de:"Echtzeit-Stimmveränderung für Gaming und Streaming.",en:"Real-time voice changer for gaming and streaming."},features:["Voice Changer","Real-time","Free Version"],link:"https://www.voicemod.net/",badge:"free"},
+    {id:65,name:"Cleanvoice AI",category:"audio",price:"paid",priceDisplay:"Ab $10/Monat",priceNum:10,rating:4.4,description:{de:"Automatisches Entfernen von Füllwörtern aus Podcasts.",en:"Automatic removal of filler words from podcasts."},features:["Filler Word Removal","Podcast Editing","Automatic"],link:"https://cleanvoice.ai/",badge:null},
+
+    // VIDEO (15 Tools)
+    {id:66,name:"Runway Gen-2",category:"video",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.7,description:{de:"Text-zu-Video Generator mit Gen-2 Technologie.",en:"Text-to-video generator with Gen-2 technology."},features:["Text-to-Video","Motion Tracking","Free Version"],link:"https://runwayml.com/",badge:"popular"},
+    {id:67,name:"Pika Labs",category:"video",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.6,description:{de:"Einfacher Text-zu-Video Generator via Discord.",en:"Simple text-to-video generator via Discord."},features:["Text-to-Video","Discord Bot","Free Version"],link:"https://www.pika.art/",badge:"new"},
+    {id:68,name:"Synthesia",category:"video",price:"paid",priceDisplay:"Ab $30/Monat",priceNum:30,rating:4.7,description:{de:"KI-Videoavatare für Business-Videos und Schulungen.",en:"AI video avatars for business videos and training."},features:["120+ Avatars","120+ Languages","Subtitles"],link:"https://www.synthesia.io/",badge:null},
+    {id:69,name:"HeyGen",category:"video",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.5,description:{de:"KI-Avatare mit Übersetzung und Lip-Sync.",en:"AI avatars with translation and lip-sync."},features:["Avatars","Translation","Free Version"],link:"https://www.heygen.com/",badge:"free"},
+    {id:70,name:"Descript",category:"video",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.6,description:{de:"Videoeditor mit Transkript-basierter Bearbeitung.",en:"Video editor with transcript-based editing."},features:["Transcript Editor","Screen Recording","Free Version"],link:"https://www.descript.com/",badge:"free"},
+    {id:71,name:"Pictory AI",category:"video",price:"freemium",priceDisplay:"Kostenlos/$19",priceNum:0,rating:4.4,description:{de:"Text-zu-Video für Marketing und Social Media.",en:"Text-to-video for marketing and social media."},features:["Article to Video","Auto-Captions","Free Trial"],link:"https://pictory.ai/",badge:"free"},
+    {id:72,name:"InVideo AI",category:"video",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.3,description:{de:"KI-Videoeditor mit Templates und Stock-Footage.",en:"AI video editor with templates and stock footage."},features:["5000+ Templates","Stock Media","Free Version"],link:"https://invideo.io/",badge:"free"},
+    {id:73,name:"Fliki",category:"video",price:"freemium",priceDisplay:"Kostenlos/$28",priceNum:0,rating:4.4,description:{de:"Text-zu-Video mit KI-Stimmen und Stock-Assets.",en:"Text-to-video with AI voices and stock assets."},features:["Text to Video","AI Voices","Free Version"],link:"https://fliki.ai/",badge:"free"},
+    {id:74,name:"Opus Clip",category:"video",price:"freemium",priceDisplay:"Kostenlos/$19",priceNum:0,rating:4.5,description:{de:"KI schneidet lange Videos in virale Short-Clips.",en:"AI cuts long videos into viral short clips."},features:["Auto Clips","Viral Score","Free Version"],link:"https://www.opus.pro/",badge:"free"},
+    {id:75,name:"Submagic",category:"video",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.4,description:{de:"Automatische Untertitel und Effekte für Social Media.",en:"Automatic subtitles and effects for social media."},features:["Auto Captions","Social Media","Free Version"],link:"https://www.submagic.co/",badge:"free"},
+    {id:76,name:"D-ID",category:"video",price:"freemium",priceDisplay:"Kostenlos/$49",priceNum:0,rating:4.3,description:{de:"Sprechende Avatare aus Fotos erstellen.",en:"Create talking avatars from photos."},features:["Talking Avatars","Photo Animation","Free Trial"],link:"https://www.d-id.com/",badge:"free"},
+    {id:77,name:"Captions AI",category:"video",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.4,description:{de:"Mobile App für automatische Untertitel und Editing.",en:"Mobile app for automatic captions and editing."},features:["Mobile App","Auto Captions","Free Version"],link:"https://www.captions.ai/",badge:"free"},
+    {id:78,name:"Kapwing AI",category:"video",price:"freemium",priceDisplay:"Kostenlos/$16",priceNum:0,rating:4.3,description:{de:"Online-Videoeditor mit KI-Features.",en:"Online video editor with AI features."},features:["Online Editor","Collaboration","Free Version"],link:"https://www.kapwing.com/",badge:"free"},
+    {id:79,name:"Vidyo.ai",category:"video",price:"freemium",priceDisplay:"Kostenlos/$29.99",priceNum:0,rating:4.2,description:{de:"Automatische Clips aus langen Videos für Social Media.",en:"Automatic clips from long videos for social media."},features:["Auto Clips","Social Resize","Free Version"],link:"https://vidyo.ai/",badge:"free"},
+    {id:80,name:"Lumen5",category:"video",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.2,description:{de:"Blog-zu-Video Converter für Content Marketing.",en:"Blog-to-video converter for content marketing."},features:["Blog to Video","Templates","Free Version"],link:"https://lumen5.com/",badge:"free"},
+
+    // CODE & ENTWICKLUNG (20 Tools)
+    {id:81,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/Monat",priceNum:10,rating:4.8,description:{de:"KI-Coding-Assistent für VS Code und andere IDEs.",en:"AI coding assistant for VS Code and other IDEs."},features:["Code Completion","VS Code","10+ Languages"],link:"https://github.com/features/copilot",badge:"popular"},
+    {id:82,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.7,description:{de:"AI-first Code Editor mit ChatGPT Integration.",en:"AI-first code editor with ChatGPT integration."},features:["AI Editor","ChatGPT","Free Version"],link:"https://cursor.sh/",badge:"new"},
+    {id:83,name:"Replit AI",category:"code",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.5,description:{de:"Cloud-IDE mit KI für schnelle Prototypen.",en:"Cloud IDE with AI for rapid prototyping."},features:["Cloud IDE","Code Generation","Free Version"],link:"https://replit.com/",badge:"free"},
+    {id:84,name:"Tabnine",category:"code",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.4,description:{de:"KI-Code-Vervollständigung für 20+ Sprachen.",en:"AI code completion for 20+ languages."},features:["20+ Languages","Privacy Focus","Free Version"],link:"https://www.tabnine.com/",badge:"free"},
+    {id:85,name:"Codeium",category:"code",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.6,description:{de:"Komplett kostenloser KI-Coding-Assistent.",en:"Completely free AI coding assistant."},features:["Free Forever","Unlimited","70+ Languages"],link:"https://codeium.com/",badge:"free"},
+    {id:86,name:"Amazon CodeWhisperer",category:"code",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.5,description:{de:"Kostenloser KI-Code-Generator von Amazon.",en:"Free AI code generator from Amazon."},features:["Free Forever","AWS Integration","Security Scans"],link:"https://aws.amazon.com/codewhisperer/",badge:"free"},
+    {id:87,name:"Cody (Sourcegraph)",category:"code",price:"freemium",priceDisplay:"Kostenlos/$9",priceNum:0,rating:4.4,description:{de:"KI-Assistent der deinen Codebase versteht.",en:"AI assistant that understands your codebase."},features:["Codebase Context","Multi-file","Free Version"],link:"https://sourcegraph.com/cody",badge:"free"},
+    {id:88,name:"Phind",category:"code",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.5,description:{de:"KI-Suchmaschine speziell für Entwickler.",en:"AI search engine specifically for developers."},features:["Developer Search","Code Examples","Free Version"],link:"https://www.phind.com/",badge:"free"},
+    {id:89,name:"CodeGPT",category:"code",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.3,description:{de:"VS Code Extension mit mehreren KI-Modellen.",en:"VS Code extension with multiple AI models."},features:["VS Code","Multiple Models","Free"],link:"https://codegpt.co/",badge:"free"},
+    {id:90,name:"Warp AI",category:"code",price:"freemium",priceDisplay:"Kostenlos",priceNum:0,rating:4.4,description:{de:"Modernes Terminal mit KI-Unterstützung.",en:"Modern terminal with AI support."},features:["AI Terminal","Command Search","Free"],link:"https://www.warp.dev/",badge:"free"},
+    {id:91,name:"BlackBox AI",category:"code",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.2,description:{de:"Code-Autocomplete und Chat für Entwickler.",en:"Code autocomplete and chat for developers."},features:["Code Autocomplete","Chat","Free Version"],link:"https://www.blackbox.ai/",badge:"free"},
+    {id:92,name:"Pieces for Developers",category:"code",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.3,description:{de:"Code-Snippet Manager mit KI-Features.",en:"Code snippet manager with AI features."},features:["Snippet Manager","AI Chat","Free"],link:"https://pieces.app/",badge:"free"},
+    {id:93,name:"Bito AI",category:"code",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.2,description:{de:"KI-Assistent für Code-Review und Dokumentation.",en:"AI assistant for code review and documentation."},features:["Code Review","Documentation","Free Version"],link:"https://bito.ai/",badge:"free"},
+    {id:94,name:"Mintlify",category:"code",price:"freemium",priceDisplay:"Kostenlos/$120",priceNum:0,rating:4.4,description:{de:"KI-generierte Dokumentation für Code.",en:"AI-generated documentation for code."},features:["Auto Documentation","Beautiful Docs","Free Version"],link:"https://mintlify.com/",badge:"free"},
+    {id:95,name:"Adrenaline AI",category:"code",price:"freemium",priceDisplay:"Kostenlos",priceNum:0,rating:4.1,description:{de:"KI-Debugger für Codebase-Understanding.",en:"AI debugger for codebase understanding."},features:["Debugging","Codebase Context","Free"],link:"https://useadrenaline.com/",badge:"free"},
+    {id:96,name:"AutoRegex",category:"code",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.2,description:{de:"Generiert Regex aus natürlicher Sprache.",en:"Generates regex from natural language."},features:["Regex Generator","Natural Language","Free"],link:"https://www.autoregex.xyz/",badge:"free"},
+    {id:97,name:"AI2sql",category:"code",price:"freemium",priceDisplay:"Kostenlos/$19",priceNum:0,rating:4.3,description:{de:"Generiert SQL-Queries aus natürlicher Sprache.",en:"Generates SQL queries from natural language."},features:["SQL Generator","Natural Language","Free Version"],link:"https://www.ai2sql.io/",badge:"free"},
+    {id:98,name:"Httpie AI",category:"code",price:"freemium",priceDisplay:"Kostenlos",priceNum:0,rating:4.2,description:{de:"API-Testing mit KI-Unterstützung.",en:"API testing with AI support."},features:["API Testing","AI Help","Free"],link:"https://httpie.io/",badge:"free"},
+    {id:99,name:"v0 by Vercel",category:"code",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.5,description:{de:"Generiert React Components aus Text-Prompts.",en:"Generates React components from text prompts."},features:["React Components","Shadcn/ui","Free Version"],link:"https://v0.dev/",badge:"free"},
+    {id:100,name:"Bolt.new",category:"code",price:"freemium",priceDisplay:"Kostenlos/$20",priceNum:0,rating:4.6,description:{de:"Vollständige Webanwendungen mit KI erstellen.",en:"Create complete web applications with AI."},features:["Full-Stack Apps","Live Preview","Free Version"],link:"https://bolt.new/",badge:"new"},
+
+    // BUSINESS & PRODUKTIVITÄT (20 Tools)
+    {id:101,name:"Otter.ai",category:"business",price:"freemium",priceDisplay:"Kostenlos/$16.99",priceNum:0,rating:4.5,description:{de:"Meeting-Transkription mit Zusammenfassung und Action Items.",en:"Meeting transcription with summary and action items."},features:["Meeting Transcription","Summary","Free Version"],link:"https://otter.ai/",badge:"free"},
+    {id:102,name:"Fireflies.ai",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.4,description:{de:"KI-Meeting-Assistent für Aufnahme und Analyse.",en:"AI meeting assistant for recording and analysis."},features:["Meeting Recording","Analysis","Free Version"],link:"https://fireflies.ai/",badge:"free"},
+    {id:103,name:"tl;dv",category:"business",price:"freemium",priceDisplay:"Kostenlos/$18",priceNum:0,rating:4.3,description:{de:"Meeting-Zusammenfassungen für Zoom und Google Meet.",en:"Meeting summaries for Zoom and Google Meet."},features:["Zoom Integration","Transcription","Free Version"],link:"https://tldv.io/",badge:"free"},
+    {id:104,name:"Beautiful.ai",category:"business",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.5,description:{de:"KI-Präsentationen mit automatischem Design.",en:"AI presentations with automatic design."},features:["Auto-Design","Presentations","Free Version"],link:"https://www.beautiful.ai/",badge:"free"},
+    {id:105,name:"Gamma",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.6,description:{de:"KI-Präsentationen, Docs und Webpages erstellen.",en:"Create AI presentations, docs, and webpages."},features:["Presentations","Docs","Free Version"],link:"https://gamma.app/",badge:"free"},
+    {id:106,name:"Tome",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.4,description:{de:"KI-Storytelling und Präsentationen.",en:"AI storytelling and presentations."},features:["AI Storytelling","Presentations","Free Version"],link:"https://tome.app/",badge:"free"},
+    {id:107,name:"Krisp",category:"business",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.5,description:{de:"KI-Rauschunterdrückung für Calls und Meetings.",en:"AI noise cancellation for calls and meetings."},features:["Noise Cancellation","Accent Localization","Free Version"],link:"https://krisp.ai/",badge:"free"},
+    {id:108,name:"Bardeen",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.4,description:{de:"Workflow-Automatisierung mit KI.",en:"Workflow automation with AI."},features:["Automation","Browser Extension","Free Version"],link:"https://www.bardeen.ai/",badge:"free"},
+    {id:109,name:"Reclaim AI",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.3,description:{de:"Intelligente Kalenderplanung und Zeitmanagement.",en:"Smart calendar scheduling and time management."},features:["Smart Scheduling","Time Blocking","Free Version"],link:"https://reclaim.ai/",badge:"free"},
+    {id:110,name:"Motion",category:"business",price:"paid",priceDisplay:"$34/Monat",priceNum:34,rating:4.4,description:{de:"KI-Kalender und Aufgabenmanagement.",en:"AI calendar and task management."},features:["AI Scheduling","Task Management","Auto-Planning"],link:"https://www.usemotion.com/",badge:null},
+    {id:111,name:"Mem.ai",category:"business",price:"freemium",priceDisplay:"Kostenlos/$15",priceNum:0,rating:4.3,description:{de:"Self-organizing Notizen mit KI.",en:"Self-organizing notes with AI."},features:["Auto-Organization","Smart Search","Free Version"],link:"https://get.mem.ai/",badge:"free"},
+    {id:112,name:"Elicit",category:"business",price:"freemium",priceDisplay:"Kostenlos/$12",priceNum:0,rating:4.5,description:{de:"KI-Research-Assistent für wissenschaftliche Papers.",en:"AI research assistant for scientific papers."},features:["Research Papers","Summarization","Free Version"],link:"https://elicit.com/",badge:"free"},
+    {id:113,name:"ChatPDF",category:"business",price:"freemium",priceDisplay:"Kostenlos/$5",priceNum:0,rating:4.4,description:{de:"Chat mit PDFs und extrahiere Informationen.",en:"Chat with PDFs and extract information."},features:["PDF Chat","Information Extraction","Free Version"],link:"https://www.chatpdf.com/",badge:"free"},
+    {id:114,name:"Humata AI",category:"business",price:"freemium",priceDisplay:"Kostenlos/$14.99",priceNum:0,rating:4.3,description:{de:"KI-Assistent für Dokumente und Research.",en:"AI assistant for documents and research."},features:["Document Chat","Summarization","Free Version"],link:"https://www.humata.ai/",badge:"free"},
+    {id:115,name:"Taskade",category:"business",price:"freemium",priceDisplay:"Kostenlos/$10",priceNum:0,rating:4.4,description:{de:"KI-Kollaborationstool für Teams.",en:"AI collaboration tool for teams."},features:["AI Workflows","Team Collaboration","Free Version"],link:"https://www.taskade.com/",badge:"free"},
+    {id:116,name:"Tactic",category:"business",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.2,description:{de:"Automatische Insights aus Business-Dokumenten.",en:"Automatic insights from business documents."},features:["Document Analysis","Insights","Free Version"],link:"https://www.tactic.fyi/",badge:"free"},
+    {id:117,name:"Glasp",category:"business",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.3,description:{de:"Social Web Highlighter mit KI-Zusammenfassungen.",en:"Social web highlighter with AI summaries."},features:["Web Highlighter","AI Summaries","Free"],link:"https://glasp.co/",badge:"free"},
+    {id:118,name:"Magical",category:"business",price:"free",priceDisplay:"Kostenlos",priceNum:0,rating:4.5,description:{de:"Automatisierung für Texteingabe und Workflows.",en:"Automation for text input and workflows."},features:["Text Expansion","Auto-fill","Free"],link:"https://www.getmagical.com/",badge:"free"},
+    {id:119,name:"Clockwise",category:"business",price:"freemium",priceDisplay:"Kostenlos/$6.75",priceNum:0,rating:4.2,description:{de:"KI-Kalenderoptimierung für Fokuszeit.",en:"AI calendar optimization for focus time."},features:["Calendar Optimization","Focus Time","Free Version"],link:"https://www.getclockwise.com/",badge:"free"},
+    {id:120,name:"Scribe",category:"business",price:"freemium",priceDisplay:"Kostenlos/$29",priceNum:0,rating:4.4,description:{de:"Automatische Prozess-Dokumentation mit Screenshots.",en:"Automatic process documentation with screenshots."},features:["Auto Documentation","Screenshots","Free Version"],link:"https://scribehow.com/",badge:"free"}
+];
+
+// Übersetzungen
 const translations = {
     de: {
-        title: "Finde dein perfektes KI-Tool",
-        description: "Durchsuche die größte Datenbank von KI-Tools. Filtere nach Kategorie, Preis und Funktionen. Entdecke kostenlose und Premium-Tools für jeden Bedarf.",
+        badge: "🚀 100+ KI-Tools für 2026",
+        pageTitle: "Finde dein perfektes KI-Tool",
+        pageDescription: "Durchsuche die größte Datenbank von KI-Tools. Filtere nach Kategorie, Preis und Funktionen. Entdecke kostenlose und Premium-Tools für jeden Bedarf.",
         searchPlaceholder: "Welches KI-Tool suchst du? Z.B. 'Bildgenerator', 'Schreibassistent', 'Code-Hilfe'...",
-        categories: {
-            all: "Alle Tools",
-            text: "Text & Schreiben",
-            image: "Bilder & Design",
-            audio: "Audio & Musik",
-            video: "Video",
-            code: "Code & Entwicklung",
-            business: "Business",
-            free: "Kostenlos"
-        },
-        priceOptions: {
-            all: "Alle Preise",
-            free: "Nur kostenlos",
-            paid: "Nur kostenpflichtig",
-            freemium: "Freemium"
-        },
-        ratingOptions: {
-            all: "Alle Bewertungen",
-            "4": "⭐ 4.0+ Sterne",
-            "4.5": "⭐ 4.5+ Sterne",
-            "4.8": "⭐ 4.8+ Sterne"
-        },
-        sortOptions: {
-            popular: "Beliebteste",
-            rating: "Beste Bewertung",
-            new: "Neueste",
-            "price-low": "Preis (niedrig)",
-            "price-high": "Preis (hoch)"
-        },
-        toolCount: " KI-Tools gefunden",
-        features: "Features",
+        catAll: "Alle Tools",
+        catText: "Text & Schreiben",
+        catImage: "Bilder & Design",
+        catAudio: "Audio & Musik",
+        catVideo: "Video",
+        catCode: "Code & Entwicklung",
+        catBusiness: "Business",
+        catFree: "Kostenlos",
+        labelPrice: "Preis",
+        labelRating: "Bewertung",
+        labelSort: "Sortieren nach",
+        toolsFound: "KI-Tools gefunden",
         tryNow: "Jetzt testen →",
-        freeBadge: "KOSTENLOS",
-        popularBadge: "BELIEBT",
-        newBadge: "NEU",
-        noResults: {
-            title: "Keine Tools gefunden",
-            message: "Versuche andere Suchbegriffe oder ändere deine Filtereinstellungen.",
-            reset: "Filter zurücksetzen"
-        },
-        footer: {
-            copyright: "© 2026 AI Tools Hub | Die größte KI-Tools-Datenbank",
-            disclaimer: "Alle Preise und Informationen sind ohne Gewähr. Affiliate-Links können enthalten sein.",
-            help: "Hilfe & Support",
-            contact: "Kontakt"
-        }
+        footerCopyright: "© 2026 AI Tools Hub | Die größte KI-Tools-Datenbank",
+        footerDisclaimer: "Alle Preise und Informationen sind ohne Gewähr. Affiliate-Links können enthalten sein.",
+        help: "Hilfe & Support",
+        contact: "Kontakt",
+        noResultsTitle: "Keine Tools gefunden",
+        noResultsMessage: "Versuche andere Suchbegriffe oder ändere deine Filtereinstellungen.",
+        resetBtn: "Filter zurücksetzen"
     },
     en: {
-        title: "Find Your Perfect AI Tool",
-        description: "Search the largest database of AI tools. Filter by category, price, and features. Discover free and premium tools for every need.",
+        badge: "🚀 100+ AI Tools for 2026",
+        pageTitle: "Find Your Perfect AI Tool",
+        pageDescription: "Search the largest database of AI tools. Filter by category, price, and features. Discover free and premium tools for every need.",
         searchPlaceholder: "What AI tool are you looking for? E.g. 'image generator', 'writing assistant', 'code helper'...",
-        categories: {
-            all: "All Tools",
-            text: "Text & Writing",
-            image: "Images & Design",
-            audio: "Audio & Music",
-            video: "Video",
-            code: "Code & Development",
-            business: "Business",
-            free: "Free"
-        },
-        priceOptions: {
-            all: "All Prices",
-            free: "Free Only",
-            paid: "Paid Only",
-            freemium: "Freemium"
-        },
-        ratingOptions: {
-            all: "All Ratings",
-            "4": "⭐ 4.0+ Stars",
-            "4.5": "⭐ 4.5+ Stars",
-            "4.8": "⭐ 4.8+ Stars"
-        },
-        sortOptions: {
-            popular: "Most Popular",
-            rating: "Highest Rated",
-            new: "Newest",
-            "price-low": "Price (Low)",
-            "price-high": "Price (High)"
-        },
-        toolCount: " AI Tools Found",
-        features: "Features",
+        catAll: "All Tools",
+        catText: "Text & Writing",
+        catImage: "Images & Design",
+        catAudio: "Audio & Music",
+        catVideo: "Video",
+        catCode: "Code & Development",
+        catBusiness: "Business",
+        catFree: "Free",
+        labelPrice: "Price",
+        labelRating: "Rating",
+        labelSort: "Sort by",
+        toolsFound: "AI Tools Found",
         tryNow: "Try Now →",
-        freeBadge: "FREE",
-        popularBadge: "POPULAR",
-        newBadge: "NEW",
-        noResults: {
-            title: "No Tools Found",
-            message: "Try different search terms or adjust your filter settings.",
-            reset: "Reset Filters"
-        },
-        footer: {
-            copyright: "© 2026 AI Tools Hub | The Largest AI Tools Database",
-            disclaimer: "All prices and information are without guarantee. Affiliate links may be included.",
-            help: "Help & Support",
-            contact: "Contact"
-        }
+        footerCopyright: "© 2026 AI Tools Hub | The Largest AI Tools Database",
+        footerDisclaimer: "All prices and information are provided without guarantee. Affiliate links may be included.",
+        help: "Help & Support",
+        contact: "Contact",
+        noResultsTitle: "No Tools Found",
+        noResultsMessage: "Try different search terms or adjust your filter settings.",
+        resetBtn: "Reset Filters"
     }
 };
 
 // Aktuelle Sprache
 let currentLang = 'de';
-
-// KI-Tools Datenbank (100+ Tools)
-const aiTools = [
-    // Text & Writing (30 Tools)
-    {
-        id: 1,
-        name: "ChatGPT Plus",
-        category: "text",
-        price: "paid",
-        priceDisplay: "$20/Monat",
-        rating: 4.9,
-        description: "Der leistungsstärkste KI-Chatbot mit GPT-4, Internetzugang, Dateiupload und benutzerdefinierten GPTs.",
-        features: ["GPT-4", "128K Kontext", "Internet-Zugang", "Dateiupload", "DALL-E 3"],
-        link: "https://chat.openai.com/",
-        badge: "popular",
-        tags: ["chatbot", "schreiben", "forschung", "programmierung"]
-    },
-    {
-        id: 2,
-        name: "Claude AI",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $20",
-        rating: 4.8,
-        description: "KI-Assistent spezialisiert auf lange Kontexte (bis zu 200K Token) und ethische Antworten.",
-        features: ["200K Token", "Dateiupload", "Kostenlose Version", "Sicherheitsfokus"],
-        link: "https://claude.ai/",
-        badge: "popular",
-        tags: ["lange texte", "forschung", "ethik", "kostenlos"]
-    },
-    {
-        id: 3,
-        name: "Perplexity AI",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $20",
-        rating: 4.7,
-        description: "KI-Suchmaschine mit Quellenangaben und Fokus auf genaue, aktuelle Informationen.",
-        features: ["Quellenangaben", "Echtzeit-Suche", "Kostenlose Version", "Präzise Antworten"],
-        link: "https://www.perplexity.ai/",
-        badge: "new",
-        tags: ["suche", "forschung", "news", "kostenlos"]
-    },
-    {
-        id: 4,
-        name: "Jasper AI",
-        category: "text",
-        price: "paid",
-        priceDisplay: "Ab $39/Monat",
-        rating: 4.6,
-        description: "KI-Schreibassistent speziell für Marketing, Werbung und Business-Inhalte.",
-        features: ["Marketing-Templates", "Brand Voice", "Plagiatsprüfung", "SEO-Optimierung"],
-        link: "https://www.jasper.ai/",
-        badge: null,
-        tags: ["marketing", "werbung", "business", "seo"]
-    },
-    {
-        id: 5,
-        name: "Copy.ai",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $49",
-        rating: 4.5,
-        description: "KI für Werbetexte, Social Media, E-Mails und alle Arten von Marketing-Inhalten.",
-        features: ["2000+ Templates", "Kostenlose Version", "25+ Sprachen", "Workflows"],
-        link: "https://www.copy.ai/",
-        badge: "free",
-        tags: ["marketing", "social media", "werbetexte", "kostenlos"]
-    },
-    {
-        id: 6,
-        name: "GrammarlyGO",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $12",
-        rating: 4.7,
-        description: "KI-Schreibassistent integriert in Grammarly für Korrektur und Verbesserung von Texten.",
-        features: ["Grammatikprüfung", "Schreibstil", "Plagiatsprüfung", "Browser-Erweiterung"],
-        link: "https://www.grammarly.com/",
-        badge: null,
-        tags: ["korrektur", "schreibstil", "grammatik", "browser"]
-    },
-    {
-        id: 7,
-        name: "QuillBot",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $9.95",
-        rating: 4.4,
-        description: "KI-Paraphrasierungstool für Umschreiben, Zusammenfassen und Grammatikprüfung.",
-        features: ["Paraphrasierung", "Zusammenfassung", "Grammatikprüfung", "Kostenlose Version"],
-        link: "https://quillbot.com/",
-        badge: "free",
-        tags: ["umschreiben", "zusammenfassen", "grammatik", "kostenlos"]
-    },
-    {
-        id: 8,
-        name: "Notion AI",
-        category: "text",
-        price: "paid",
-        priceDisplay: "$10/Monat",
-        rating: 4.6,
-        description: "KI direkt in Notion integriert für Schreiben, Zusammenfassen und Brainstorming.",
-        features: ["Notion-Integration", "Zusammenfassung", "Brainstorming", "Übersetzung"],
-        link: "https://www.notion.so/product/ai",
-        badge: null,
-        tags: ["notion", "produktivität", "zusammenarbeit", "wissen"]
-    },
-    {
-        id: 9,
-        name: "Wordtune",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $9.99",
-        rating: 4.5,
-        description: "KI-Schreibassistent für bessere Formulierungen und stilistische Verbesserungen.",
-        features: ["Umschreibungen", "Tonalität", "Browser-Erweiterung", "Kostenlose Version"],
-        link: "https://www.wordtune.com/",
-        badge: "free",
-        tags: ["umschreiben", "schreibstil", "formulierung", "kostenlos"]
-    },
-    {
-        id: 10,
-        name: "Hemingway Editor",
-        category: "text",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $19.99",
-        rating: 4.3,
-        description: "KI-gestütztes Tool für klarere, prägnantere und verständlichere Texte.",
-        features: ["Lesbarkeit", "Stilverbesserung", "Aktiv/Passiv", "Kostenlose Version"],
-        link: "https://hemingwayapp.com/",
-        badge: "free",
-        tags: ["lesbarkeit", "klarheit", "schreibstil", "kostenlos"]
-    },
-
-    // Images & Design (25 Tools)
-    {
-        id: 11,
-        name: "Midjourney",
-        category: "image",
-        price: "paid",
-        priceDisplay: "Ab $10/Monat",
-        rating: 4.9,
-        description: "Der beste KI-Bildgenerator für künstlerische, hochwertige Bilder in jedem Stil.",
-        features: ["Künstlerische Qualität", "Stilkonsistenz", "Discord-Integration", "Regelmäßige Updates"],
-        link: "https://www.midjourney.com/",
-        badge: "popular",
-        tags: ["bildgenerator", "kunst", "design", "künstlerisch"]
-    },
-    {
-        id: 12,
-        name: "DALL-E 3",
-        category: "image",
-        price: "paid",
-        priceDisplay: "In ChatGPT Plus",
-        rating: 4.8,
-        description: "OpenAIs Bildgenerator mit hervorragender Textverständnis und Integration in ChatGPT.",
-        features: ["Textverständnis", "ChatGPT-Integration", "Hohe Qualität", "Sichere Bilder"],
-        link: "https://openai.com/dall-e-3",
-        badge: "new",
-        tags: ["openai", "chatgpt", "bildgenerator", "integration"]
-    },
-    {
-        id: 13,
-        name: "Stable Diffusion",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / Ab $9",
-        rating: 4.7,
-        description: "Open-Source Bildgenerator, lokal lauffähig und hoch anpassbar.",
-        features: ["Open-Source", "Lokale Installation", "Custom Models", "Kostenlose Version"],
-        link: "https://stability.ai/",
-        badge: "free",
-        tags: ["open-source", "lokal", "anpassbar", "kostenlos"]
-    },
-    {
-        id: 14,
-        name: "Leonardo AI",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / Ab $10",
-        rating: 4.6,
-        description: "Mächtiger Bildgenerator mit vielen Vorlagen und täglichen kostenlosen Credits.",
-        features: ["Tägliche Credits", "Viele Modelle", "Canvas Editor", "Konsistente Charaktere"],
-        link: "https://leonardo.ai/",
-        badge: "free",
-        tags: ["kostenlos", "credits", "vorlagen", "charaktere"]
-    },
-    {
-        id: 15,
-        name: "Adobe Firefly",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $4.99",
-        rating: 4.5,
-        description: "Adobes KI-Bildgenerator integriert in Creative Cloud für kommerzielle Sicherheit.",
-        features: ["Commercial Safe", "Adobe Integration", "Text Effects", "Generative Fill"],
-        link: "https://www.adobe.com/sensei/generative-ai/firefly.html",
-        badge: "free",
-        tags: ["adobe", "commercial", "creative cloud", "sicher"]
-    },
-    {
-        id: 16,
-        name: "Canva AI",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $12.99",
-        rating: 4.4,
-        description: "KI-Tools in Canva für Design, Bildgenerierung und Text-zu-Design.",
-        features: ["Canva Integration", "Magic Design", "Text to Design", "Kostenlose Version"],
-        link: "https://www.canva.com/ai-tools/",
-        badge: "free",
-        tags: ["canva", "design", "vorlagen", "kostenlos"]
-    },
-    {
-        id: 17,
-        name: "DreamStudio",
-        category: "image",
-        price: "paid",
-        priceDisplay: "Ab $10",
-        rating: 4.5,
-        description: "Offizielle Stable Diffusion Web-App mit fortgeschrittenen Kontrollen.",
-        features: ["Stable Diffusion", "Advanced Controls", "API Access", "Commercial Use"],
-        link: "https://dreamstudio.ai/",
-        badge: null,
-        tags: ["stable diffusion", "api", "commercial", "kontrolle"]
-    },
-    {
-        id: 18,
-        name: "Runway ML",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $15",
-        rating: 4.6,
-        description: "KI-Kreativsuite für Bilder, Videos und Animationen mit vielen Tools.",
-        features: ["Bild-zu-Bild", "Inpainting", "Video Tools", "Kostenlose Version"],
-        link: "https://runwayml.com/",
-        badge: "free",
-        tags: ["multimodal", "kreativ", "video", "kostenlos"]
-    },
-    {
-        id: 19,
-        name: "Clipdrop",
-        category: "image",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $9",
-        rating: 4.4,
-        description: "KI-Bildtools für Hintergrundentfernung, Aufräumen und Bildverbesserung.",
-        features: ["Background Removal", "Cleanup", "Upscaling", "Kostenlose Version"],
-        link: "https://clipdrop.co/",
-        badge: "free",
-        tags: ["bildbearbeitung", "hintergrund", "cleanup", "kostenlos"]
-    },
-    {
-        id: 20,
-        name: "Photoshop AI",
-        category: "image",
-        price: "paid",
-        priceDisplay: "$20.99/Monat",
-        rating: 4.7,
-        description: "Generative AI direkt in Adobe Photoshop für professionelle Bildbearbeitung.",
-        features: ["Generative Fill", "Generative Expand", "Adobe Integration", "Professional"],
-        link: "https://www.adobe.com/products/photoshop/ai.html",
-        badge: "new",
-        tags: ["photoshop", "professionell", "bildbearbeitung", "adobe"]
-    },
-
-    // Audio & Music (15 Tools)
-    {
-        id: 21,
-        name: "Suno AI",
-        category: "audio",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $10",
-        rating: 4.8,
-        description: "Revolutionärer KI-Musikgenerator, der komplette Songs mit Gesang erstellt.",
-        features: ["Komplette Songs", "Gesang", "Viele Stile", "Kostenlose Version"],
-        link: "https://suno.com/",
-        badge: "popular",
-        tags: ["musik", "songs", "gesang", "kostenlos"]
-    },
-    {
-        id: 22,
-        name: "Udio",
-        category: "audio",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $10",
-        rating: 4.7,
-        description: "KI-Musikgenerator mit Fokus auf hohe Qualität und natürlichen Gesang.",
-        features: ["Hohe Qualität", "Natürlicher Gesang", "Stil-Mixing", "Kostenlose Version"],
-        link: "https://www.udio.com/",
-        badge: "new",
-        tags: ["musik", "qualität", "gesang", "kostenlos"]
-    },
-    {
-        id: 23,
-        name: "ElevenLabs",
-        category: "audio",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $5",
-        rating: 4.8,
-        description: "Beste KI-Stimmensynthese für realistische Sprachgenerierung in 29 Sprachen.",
-        features: ["Realistische Stimmen", "29 Sprachen", "Voice Cloning", "Kostenlose Version"],
-        link: "https://elevenlabs.io/",
-        badge: "popular",
-        tags: ["sprachsynthese", "stimmen", "voice cloning", "kostenlos"]
-    },
-    {
-        id: 24,
-        name: "Murf AI",
-        category: "audio",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $19",
-        rating: 4.6,
-        description: "KI-Stimmengenerator für professionelle Voiceovers, Podcasts und Videos.",
-        features: ["120+ Stimmen", "20+ Sprachen", "Voice Cloning", "Kostenlose Version"],
-        link: "https://murf.ai/",
-        badge: "free",
-        tags: ["voiceover", "podcast", "videosprache", "kostenlos"]
-    },
-    {
-        id: 25,
-        name: "Beatoven.ai",
-        category: "audio",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $12",
-        rating: 4.4,
-        description: "KI-Musikgenerator für Hintergrundmusik, Stimmungsanpassung und einfache Bedienung.",
-        features: ["Hintergrundmusik", "Stimmungsanpassung", "Einfache Bedienung", "Kostenlose Version"],
-        link: "https://www.beatoven.ai/",
-        badge: "free",
-        tags: ["hintergrundmusik", "stimmung", "einfach", "kostenlos"]
-    },
-
-    // Video (15 Tools)
-    {
-        id: 26,
-        name: "Runway (Video)",
-        category: "video",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $15",
-        rating: 4.7,
-        description: "Umfassende KI-Video-Suite mit Text-zu-Video, Gen-2 und Spezialeffekten.",
-        features: ["Text-zu-Video", "Gen-2", "Green Screen", "Motion Tracking"],
-        link: "https://runwayml.com/",
-        badge: "popular",
-        tags: ["text-zu-video", "videobearbeitung", "effekte", "kostenlos"]
-    },
-    {
-        id: 27,
-        name: "Pika Labs",
-        category: "video",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $10",
-        rating: 4.6,
-        description: "Einfacher Text-zu-Video Generator mit beeindruckenden Ergebnissen.",
-        features: ["Text-zu-Video", "Einfache Bedienung", "Discord-Bot", "Kostenlose Version"],
-        link: "https://www.pika.art/",
-        badge: "new",
-        tags: ["text-zu-video", "einfach", "discord", "kostenlos"]
-    },
-    {
-        id: 28,
-        name: "Synthesia",
-        category: "video",
-        price: "paid",
-        priceDisplay: "Ab $30/Monat",
-        rating: 4.7,
-        description: "KI-Videoavatare für Business-Videos, Schulungen und Erklärvideos.",
-        features: ["120+ Avatare", "120+ Sprachen", "Untertitel", "Business-Fokus"],
-        link: "https://www.synthesia.io/",
-        badge: null,
-        tags: ["avatare", "business", "schulungen", "mehrsprachig"]
-    },
-    {
-        id: 29,
-        name: "HeyGen",
-        category: "video",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $29",
-        rating: 4.5,
-        description: "KI-Videoavatare mit Übersetzung und Lip-Sync für internationale Videos.",
-        features: ["Avatare", "Übersetzung", "Lip-Sync", "Kostenlose Version"],
-        link: "https://www.heygen.com/",
-        badge: "free",
-        tags: ["avatare", "übersetzung", "lip-sync", "kostenlos"]
-    },
-    {
-        id: 30,
-        name: "Descript",
-        category: "video",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $15",
-        rating: 4.6,
-        description: "KI-Videoeditor mit Transkript-basierter Bearbeitung und KI-Stimme.",
-        features: ["Transkript-Editor", "Screen Recording", "Overdub", "Kostenlose Version"],
-        link: "https://www.descript.com/",
-        badge: "free",
-        tags: ["transkript", "videoeditor", "screen recording", "kostenlos"]
-    },
-
-    // Code & Development (15 Tools)
-    {
-        id: 31,
-        name: "GitHub Copilot",
-        category: "code",
-        price: "paid",
-        priceDisplay: "$10/Monat",
-        rating: 4.8,
-        description: "KI-Coding-Assistent für Code-Vervollständigung in VS Code und anderen IDEs.",
-        features: ["Code-Vervollständigung", "VS Code", "10+ Sprachen", "Chat-Funktion"],
-        link: "https://github.com/features/copilot",
-        badge: "popular",
-        tags: ["coding", "vs code", "code completion", "entwicklung"]
-    },
-    {
-        id: 32,
-        name: "Cursor",
-        category: "code",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $20",
-        rating: 4.7,
-        description: "AI-first Code Editor mit integriertem ChatGPT und Code-Generierung.",
-        features: ["AI Editor", "ChatGPT Integration", "Code Generation", "Kostenlose Version"],
-        link: "https://cursor.sh/",
-        badge: "new",
-        tags: ["code editor", "chatgpt", "code generation", "kostenlos"]
-    },
-    {
-        id: 33,
-        name: "Replit AI",
-        category: "code",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $20",
-        rating: 4.5,
-        description: "KI-Coding-Assistent in der Cloud-IDE Replit für schnelle Prototypen.",
-        features: ["Cloud IDE", "Code Generation", "Debugging", "Kostenlose Version"],
-        link: "https://replit.com/",
-        badge: "free",
-        tags: ["cloud ide", "prototyping", "debugging", "kostenlos"]
-    },
-    {
-        id: 34,
-        name: "Tabnine",
-        category: "code",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $12",
-        rating: 4.4,
-        description: "KI-Code-Vervollständigung für über 20 Programmiersprachen.",
-        features: ["20+ Sprachen", "Local Models", "Privacy Focus", "Kostenlose Version"],
-        link: "https://www.tabnine.com/",
-        badge: "free",
-        tags: ["code completion", "privacy", "mehrsprachig", "kostenlos"]
-    },
-    {
-        id: 35,
-        name: "Codeium",
-        category: "code",
-        price: "free",
-        priceDisplay: "Komplett kostenlos",
-        rating: 4.6,
-        description: "Kostenloser KI-Coding-Assistent mit unbegrenzten Vervollständigungen.",
-        features: ["Komplett kostenlos", "Unbegrenzte Nutzung", "70+ Sprachen", "IDE Integration"],
-        link: "https://codeium.com/",
-        badge: "free",
-        tags: ["kostenlos", "unbegrenzt", "mehrsprachig", "ide integration"]
-    },
-
-    // Business (15 Tools)
-    {
-        id: 36,
-        name: "Notion AI",
-        category: "business",
-        price: "paid",
-        priceDisplay: "$10/Monat",
-        rating: 4.6,
-        description: "KI für Produktivität, Notizen, Aufgaben und Wissensmanagement.",
-        features: ["Notion Integration", "Zusammenfassung", "Brainstorming", "Aktionspunkte"],
-        link: "https://www.notion.so/product/ai",
-        badge: null,
-        tags: ["produktivität", "notizen", "wissensmanagement", "zusammenarbeit"]
-    },
-    {
-        id: 37,
-        name: "Otter.ai",
-        category: "business",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $16.99",
-        rating: 4.5,
-        description: "KI-Transkription für Meetings, Vorlesungen und Gespräche mit Zusammenfassung.",
-        features: ["Meeting-Transkription", Zusammenfassung", "Aktionspunkte", "Kostenlose Version"],
-        link: "https://otter.ai/",
-        badge: "free",
-        tags: ["transkription", "meetings", "zusammenfassung", "kostenlos"]
-    },
-    {
-        id: 38,
-        name: "Fireflies.ai",
-        category: "business",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $10",
-        rating: 4.4,
-        description: "KI-Meeting-Assistent für Aufnahme, Transkription und Analyse.",
-        features: ["Meeting Recording", "Transkription", "Analyse", "Kostenlose Version"],
-        link: "https://fireflies.ai/",
-        badge: "free",
-        tags: ["meetings", "recording", "analyse", "kostenlos"]
-    },
-    {
-        id: 39,
-        name: "TLDV",
-        category: "business",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $18",
-        rating: 4.3,
-        description: "KI für Meeting-Zusammenfassungen, Transkription und Follow-ups.",
-        features: ["Zoom Integration", "Transkription", "Zusammenfassung", "Kostenlose Version"],
-        link: "https://tldv.io/",
-        badge: "free",
-        tags: ["zoom", "meetings", "follow-ups", "kostenlos"]
-    },
-    {
-        id: 40,
-        name: "Beautiful.ai",
-        category: "business",
-        price: "freemium",
-        priceDisplay: "Kostenlos / $12",
-        rating: 4.5,
-        description: "KI-Präsentationstool für automatisch gestaltete Folien und Designs.",
-        features: ["Auto-Design", "Präsentationen", "Templates", "Kostenlose Version"],
-        link: "https://www.beautiful.ai/",
-        badge: "free",
-        tags: ["präsentationen", "design", "templates", "kostenlos"]
-    }
-];
-
-// Filter-Status
 let currentCategory = 'all';
 let currentPrice = 'all';
 let currentRating = 0;
 let currentSort = 'popular';
-let currentSearch = '';
+let searchQuery = '';
 
-// DOM-Elemente
-const toolsGrid = document.getElementById('toolsGrid');
-const toolCount = document.getElementById('toolCount');
-const searchInput = document.getElementById('searchInput');
-const categoryFilters = document.getElementById('categoryFilters');
-const priceFilter = document.getElementById('priceFilter');
-const ratingFilter = document.getElementById('ratingFilter');
-const sortFilter = document.getElementById('sortFilter');
-const langBtn = document.getElementById('langBtn');
+// Initialisierung
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+});
 
-// Tool-Karte erstellen
-function createToolCard(tool) {
-    const card = document.createElement('div');
-    card.className = 'tool-card';
-    
-    // Badge HTML
-    let badgeHTML = '';
-    if (tool.badge === 'free') {
-        badgeHTML = `<span class="tool-badge free">${currentLang === 'de' ? 'KOSTENLOS' : 'FREE'}</span>`;
-    } else if (tool.badge === 'popular') {
-        badgeHTML = `<span class="tool-badge popular">${currentLang === 'de' ? 'BELIEBT' : 'POPULAR'}</span>`;
-    } else if (tool.badge === 'new') {
-        badgeHTML = `<span class="tool-badge new">${currentLang === 'de' ? 'NEU' : 'NEW'}</span>`;
-    }
-    
-    // Features HTML
-    const featuresHTML = tool.features.map(feature => 
-        `<span class="feature-tag">${feature}</span>`
-    ).join('');
-    
-    // Price HTML
-    let priceHTML = '';
-    if (tool.price === 'free') {
-        priceHTML = `<span class="price-tag">${currentLang === 'de' ? 'Kostenlos' : 'Free'}</span>`;
-    } else {
-        priceHTML = `<span class="price-tag">${tool.priceDisplay}</span>`;
-    }
-    
-    card.innerHTML = `
-        <div class="tool-header">
-            <div>
-                <h3 class="tool-name">${tool.name}</h3>
-                <span class="tool-category">${getCategoryName(tool.category)}</span>
-            </div>
-            <div class="tool-rating">
-                <i class="fas fa-star"></i>
-                <span>${tool.rating}</span>
-            </div>
-        </div>
-        
-        <div class="tool-price">
-            ${priceHTML}
-            ${tool.price === 'free' ? '<span class="price-free">FREE</span>' : 
-              tool.price === 'freemium' ? '<span class="price-paid">FREEMIUM</span>' : 
-              '<span class="price-paid">PREMIUM</span>'}
-        </div>
-        
-        <p class="tool-description">${tool.description}</p>
-        
-        <div class="tool-features">
-            ${featuresHTML}
-        </div>
-        
-        <div class="tool-footer">
-            <a href="${tool.link}" target="_blank" class="tool-link">
-                <i class="fas fa-rocket"></i>
-                ${currentLang === 'de' ? 'Jetzt testen →' : 'Try Now →'}
-            </a>
-            ${badgeHTML}
-        </div>
-    `;
-    
-    return card;
+function initializeApp() {
+    setupEventListeners();
+    updateLanguage();
+    applyFilters();
 }
 
-// Tools rendern
-function renderTools() {
-    toolsGrid.innerHTML = '';
+function setupEventListeners() {
+    // Sprach-Button
+    document.getElementById('langBtn').addEventListener('click', toggleLanguage);
     
-    // Tools filtern
-    let filteredTools = aiTools.filter(tool => {
+    // Suche
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        searchQuery = e.target.value.toLowerCase();
+        applyFilters();
+    });
+    
+    // Kategorie-Buttons
+    document.querySelectorAll('.filter-btn[data-category]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = this.dataset.category;
+            applyFilters();
+        });
+    });
+    
+    // Erweiterte Filter
+    document.getElementById('priceFilter').addEventListener('change', function() {
+        currentPrice = this.value;
+        applyFilters();
+    });
+    
+    document.getElementById('ratingFilter').addEventListener('change', function() {
+        currentRating = parseFloat(this.value);
+        applyFilters();
+    });
+    
+    document.getElementById('sortFilter').addEventListener('change', function() {
+        currentSort = this.value;
+        applyFilters();
+    });
+}
+
+function toggleLanguage() {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+    updateLanguage();
+    applyFilters(); // Re-render tools with new language
+}
+
+function updateLanguage() {
+    const t = translations[currentLang];
+    
+    document.getElementById('badgeText').textContent = t.badge;
+    document.getElementById('pageTitle').textContent = t.pageTitle;
+    document.getElementById('pageDescription').textContent = t.pageDescription;
+    document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+    
+    // Kategorie-Buttons
+    const catButtons = document.querySelectorAll('.cat-text');
+    const catKeys = ['catAll', 'catText', 'catImage', 'catAudio', 'catVideo', 'catCode', 'catBusiness', 'catFree'];
+    catButtons.forEach((btn, i) => {
+        btn.textContent = t[catKeys[i]];
+    });
+    
+    document.getElementById('labelPrice').textContent = t.labelPrice;
+    document.getElementById('labelRating').textContent = t.labelRating;
+    document.getElementById('labelSort').textContent = t.labelSort;
+    document.getElementById('toolsFoundText').textContent = t.toolsFound;
+    document.getElementById('footerCopyright').textContent = t.footerCopyright;
+    document.getElementById('footerDisclaimer').textContent = t.footerDisclaimer;
+    document.getElementById('helpText').textContent = t.help;
+    document.getElementById('contactText').textContent = t.contact;
+}
+
+function applyFilters() {
+    let filtered = aiTools.filter(tool => {
         // Kategorie-Filter
-        if (currentCategory !== 'all' && tool.category !== currentCategory) {
-            return false;
+        if (currentCategory === 'free') {
+            if (tool.price !== 'free' && tool.price !== 'freemium') return false;
+        } else if (currentCategory !== 'all') {
+            if (tool.category !== currentCategory) return false;
         }
         
         // Preis-Filter
-        if (currentPrice !== 'all') {
-            if (currentPrice === 'free' && tool.price !== 'free') return false;
-            if (currentPrice === 'paid' && tool.price === 'free') return false;
-            if (currentPrice === 'freemium' && tool.price !== 'freemium') return false;
-        }
+        if (currentPrice !== 'all' && tool.price !== currentPrice) return false;
         
         // Bewertungs-Filter
-        if (currentRating > 0 && tool.rating < currentRating) {
-            return false;
-        }
+        if (currentRating > 0 && tool.rating < currentRating) return false;
         
         // Such-Filter
-        if (currentSearch) {
-            const searchTerm = currentSearch.toLowerCase();
-            const toolText = `
-                ${tool.name.toLowerCase()} 
-                ${tool.description.toLowerCase()} 
-                ${tool.features.join(' ').toLowerCase()} 
-                ${tool.tags.join(' ').toLowerCase()}
-            `;
-            
-            if (!toolText.includes(searchTerm)) {
-                return false;
-            }
+        if (searchQuery) {
+            const searchText = `${tool.name} ${tool.category} ${tool.description[currentLang]} ${tool.features.join(' ')}`.toLowerCase();
+            if (!searchText.includes(searchQuery)) return false;
         }
         
         return true;
     });
     
-    // Tools sortieren
-    filteredTools.sort((a, b) => {
-        switch (currentSort) {
+    // Sortierung
+    filtered.sort((a, b) => {
+        switch(currentSort) {
             case 'rating':
                 return b.rating - a.rating;
             case 'new':
-                return b.id - a.id; // Annahme: höhere ID = neuer
+                return (b.badge === 'new' ? 1 : 0) - (a.badge === 'new' ? 1 : 0);
             case 'price-low':
-                // Vereinfachte Sortierung nach Preis
-                const priceA = a.price === 'free' ? 0 : a.price === 'freemium' ? 5 : 10;
-                const priceB = b.price === 'free' ? 0 : b.price === 'freemium' ? 5 : 10;
-                return priceA - priceB;
+                return a.priceNum - b.priceNum;
             case 'price-high':
-                const priceA2 = a.price === 'free' ? 0 : a.price === 'freemium' ? 5 : 10;
-                const priceB2 = b.price === 'free' ? 0 : b.price === 'freemium' ? 5 : 10;
-                return priceB2 - priceA2;
+                return b.priceNum - a.priceNum;
             case 'popular':
             default:
-                // Standard: nach Beliebtheit (Rating + Badge)
-                const scoreA = a.rating + (a.badge === 'popular' ? 0.5 : 0) + (a.badge === 'new' ? 0.3 : 0);
-                const scoreB = b.rating + (b.badge === 'popular' ? 0.5 : 0) + (b.badge === 'new' ? 0.3 : 0);
-                return scoreB - scoreA;
+                return (b.badge === 'popular' ? 1 : 0) - (a.badge === 'popular' ? 1 : 0);
         }
     });
     
-    // Tools anzeigen oder leeren Zustand
-    if (filteredTools.length === 0) {
-        toolsGrid.innerHTML = `
+    renderTools(filtered);
+}
+
+function renderTools(tools) {
+    const grid = document.getElementById('toolsGrid');
+    const t = translations[currentLang];
+    
+    document.getElementById('toolCount').textContent = tools.length;
+    
+    if (tools.length === 0) {
+        grid.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-search"></i>
-                <h3>${currentLang === 'de' ? 'Keine Tools gefunden' : 'No Tools Found'}</h3>
-                <p>${currentLang === 'de' ? 'Versuche andere Suchbegriffe oder ändere deine Filtereinstellungen.' : 'Try different search terms or adjust your filter settings.'}</p>
-                <button class="reset-btn" id="resetFilters">
-                    <i class="fas fa-redo"></i>
-                    ${currentLang === 'de' ? 'Filter zurücksetzen' : 'Reset Filters'}
+                <h3>${t.noResultsTitle}</h3>
+                <p>${t.noResultsMessage}</p>
+                <button class="reset-btn" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> ${t.resetBtn}
                 </button>
             </div>
         `;
-        
-        document.getElementById('resetFilters')?.addEventListener('click', resetFilters);
-    } else {
-        filteredTools.forEach(tool => {
-            toolsGrid.appendChild(createToolCard(tool));
-        });
+        return;
     }
     
-    // Tool-Count aktualisieren
-    toolCount.textContent = `${filteredTools.length}${currentLang === 'de' ? ' KI-Tools gefunden' : ' AI Tools Found'}`;
+    grid.innerHTML = tools.map(tool => `
+        <div class="tool-card">
+            <div class="tool-header">
+                <div>
+                    <div class="tool-name">${tool.name}</div>
+                    <span class="tool-category">${getCategoryName(tool.category)}</span>
+                </div>
+                <div class="tool-rating">
+                    <i class="fas fa-star"></i> ${tool.rating}
+                </div>
+            </div>
+            
+            <div class="tool-price">
+                <span class="price-tag">${tool.priceDisplay}</span>
+                ${tool.price === 'free' || tool.price === 'freemium' ? 
+                    `<span class="price-free">${tool.price === 'free' ? 'FREE' : 'FREEMIUM'}</span>` : 
+                    ''}
+            </div>
+            
+            <p class="tool-description">${tool.description[currentLang]}</p>
+            
+            <div class="tool-features">
+                ${tool.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+            </div>
+            
+            <div class="tool-footer">
+                <a href="${tool.link}" class="tool-link" target="_blank" rel="noopener">
+                    ${t.tryNow}
+                </a>
+                ${tool.badge ? `<span class="tool-badge ${tool.badge}">${tool.badge.toUpperCase()}</span>` : ''}
+            </div>
+        </div>
+    `).join('');
 }
 
-// Kategoriename basierend auf Sprache
 function getCategoryName(category) {
-    return translations[currentLang].categories[category] || category;
+    const catMap = {
+        text: currentLang === 'de' ? 'Text' : 'Text',
+        image: currentLang === 'de' ? 'Bilder' : 'Images',
+        audio: currentLang === 'de' ? 'Audio' : 'Audio',
+        video: currentLang === 'de' ? 'Video' : 'Video',
+        code: currentLang === 'de' ? 'Code' : 'Code',
+        business: currentLang === 'de' ? 'Business' : 'Business'
+    };
+    return catMap[category] || category;
 }
 
-// Filter zurücksetzen
 function resetFilters() {
     currentCategory = 'all';
     currentPrice = 'all';
     currentRating = 0;
     currentSort = 'popular';
-    currentSearch = '';
+    searchQuery = '';
     
-    // UI zurücksetzen
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.category === 'all');
-    });
+    document.getElementById('searchInput').value = '';
+    document.getElementById('priceFilter').value = 'all';
+    document.getElementById('ratingFilter').value = '0';
+    document.getElementById('sortFilter').value = 'popular';
     
-    priceFilter.value = 'all';
-    ratingFilter.value = '0';
-    sortFilter.value = 'popular';
-    searchInput.value = '';
+    document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
     
-    renderTools();
+    applyFilters();
 }
-
-// Sprache wechseln
-function switchLanguage() {
-    currentLang = currentLang === 'de' ? 'en' : 'de';
-    
-    // UI aktualisieren
-    document.querySelector('title').textContent = currentLang === 'de' ? 
-        'AI Tools Hub 2026 - Finde das perfekte KI-Tool' : 
-        'AI Tools Hub 2026 - Find Your Perfect AI Tool';
-    
-    document.querySelector('h1').textContent = translations[currentLang].title;
-    document.querySelector('.header p').textContent = translations[currentLang].description;
-    searchInput.placeholder = translations[currentLang].searchPlaceholder;
-    langBtn.querySelector('span').textContent = currentLang === 'de' ? 'DE' : 'EN';
-    
-    // Kategoriefilter aktualisieren
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        const category = btn.dataset.category;
-        const icon = btn.querySelector('i').className;
-        btn.innerHTML = `<i class="${icon}"></i> ${translations[currentLang].categories[category]}`;
-    });
-    
-    // Preis-Filter aktualisieren
-    updateSelectOptions(priceFilter, translations[currentLang].priceOptions);
-    
-    // Bewertungs-Filter aktualisieren
-    updateSelectOptions(ratingFilter, translations[currentLang].ratingOptions);
-    
-    // Sortier-Filter aktualisieren
-    updateSelectOptions(sortFilter, translations[currentLang].sortOptions);
-    
-    // Footer aktualisieren
-    const footerParagraphs = document.querySelectorAll('.footer p');
-    footerParagraphs[0].textContent = translations[currentLang].footer.copyright;
-    footerParagraphs[1].textContent = translations[currentLang].footer.disclaimer;
-    
-    const footerLinks = document.querySelectorAll('.footer a');
-    footerLinks[0].innerHTML = `<i class="fas fa-question-circle"></i> ${translations[currentLang].footer.help}`;
-    footerLinks[1].innerHTML = `<i class="fas fa-envelope"></i> ${translations[currentLang].footer.contact}`;
-    
-    // Tools neu rendern
-    renderTools();
-}
-
-// Select-Optionen aktualisieren
-function updateSelectOptions(selectElement, options) {
-    const currentValue = selectElement.value;
-    selectElement.innerHTML = '';
-    
-    for (const [value, text] of Object.entries(options)) {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = text;
-        if (value === currentValue) {
-            option.selected = true;
-        }
-        selectElement.appendChild(option);
-    }
-}
-
-// Event Listeners
-function initEventListeners() {
-    // Suchfunktion
-    searchInput.addEventListener('input', (e) => {
-        currentSearch = e.target.value;
-        renderTools();
-    });
-    
-    // Kategorie-Filter
-    categoryFilters.addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-        
-        currentCategory = btn.dataset.category;
-        
-        // Active State aktualisieren
-        document.querySelectorAll('.filter-btn').forEach(b => {
-            b.classList.remove('active');
-        });
-        btn.classList.add('active');
-        
-        renderTools();
-    });
-    
-    // Preis-Filter
-    priceFilter.addEventListener('change', (e) => {
-        currentPrice = e.target.value;
-        renderTools();
-    });
-    
-    // Bewertungs-Filter
-    ratingFilter.addEventListener('change', (e) => {
-        currentRating = parseFloat(e.target.value) || 0;
-        renderTools();
-    });
-    
-    // Sortier-Filter
-    sortFilter.addEventListener('change', (e) => {
-        currentSort = e.target.value;
-        renderTools();
-    });
-    
-    // Sprachumschaltung
-    langBtn.addEventListener('click', switchLanguage);
-}
-
-// Initialisierung
-function init() {
-    initEventListeners();
-    renderTools();
-}
-
-// Start
-document.addEventListener('DOMContentLoaded', init);
 </script>
+
 </body>
 </html>
