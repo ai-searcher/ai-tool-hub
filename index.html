@@ -22,13 +22,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI Finder 2026">
 <meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
-<script>
+
+<!-- DSGVO-Konformes Google Analytics Script -->
+<script type="text/plain" data-category="analytics" id="google-analytics-gtag" src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
+<script type="text/plain" data-category="analytics" id="google-analytics-config">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
 </script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1435,6 +1438,106 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===== COOKIE BANNER STYLES ===== */
+.cookie-banner {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  background: var(--glass-bg);
+  border: 1px solid var(--neon-cyan);
+  border-radius: var(--radius-tech);
+  padding: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-glow);
+  z-index: 10000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.cookie-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cookie-content h3 {
+  color: var(--neon-cyan);
+  margin-bottom: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cookie-content p {
+  color: var(--tech-silver);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.cookie-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: var(--transition-tech);
+}
+
+.cookie-btn.necessary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--tech-silver);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cookie-btn.necessary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--tech-silver);
+}
+
+.cookie-btn.accept {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  color: var(--void-black);
+  border: 1px solid transparent;
+}
+
+.cookie-btn.accept:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 243, 255, 0.4);
+}
+
+.cookie-content a {
+  color: var(--neon-cyan);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: var(--transition-tech);
+}
+
+.cookie-content a:hover {
+  color: var(--neon-purple);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .cookie-banner {
+    width: calc(100% - 40px);
+    bottom: 10px;
+    right: 20px;
+    left: 20px;
+    margin: 0 auto;
+  }
+}
+
 /* ===== RESPONSIVE ANPASSUNGEN ===== */
 @media (max-width: 1024px) {
   .header {
@@ -1708,6 +1811,19 @@ body::before {
 <div class="data-stream" style="left: 50%; animation-delay: 1s;"></div>
 <div class="data-stream" style="left: 70%; animation-delay: 1.5s;"></div>
 <div class="data-stream" style="left: 90%; animation-delay: 2s;"></div>
+
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-content">
+    <h3><i class="fas fa-cookie-bite"></i> <span data-de="Datenschutzeinstellungen" data-en="Privacy Settings"></span></h3>
+    <p data-de="Wir verwenden Cookies, um die Webseite zu optimieren. Analytics-Cookies nur mit deiner Zustimmung." data-en="We use cookies to optimize the website. Analytics cookies only with your consent."></p>
+    <div class="cookie-buttons">
+      <button class="cookie-btn necessary" id="cookieNecessary" data-de="Nur Notwendige" data-en="Only Necessary"></button>
+      <button class="cookie-btn accept" id="cookieAccept" data-de="Alles akzeptieren" data-en="Accept All"></button>
+    </div>
+    <a href="#" data-de="Mehr erfahren" data-en="Learn more" id="cookieMore"></a>
+  </div>
+</div>
 
 <!-- Favoriten & Compare Actions Bar -->
 <div class="actions-bar hidden" id="actionsBar">
@@ -2002,9 +2118,75 @@ body::before {
 <footer class="footer">
 <p id="footerCopy" data-de="© 2026 AI Finder | Community-gestützte KI Tool Empfehlungen" data-en="© 2026 AI Finder | Community-driven AI tool recommendations"></p>
 <p id="footerDiscl" data-de="Bewertungen basieren auf User-Feedback (LocalStorage)." data-en="Ratings based on user feedback (LocalStorage)."></p>
-<!-- Help & Feedback Buttons wurden hier entfernt -->
 </footer>
+
 <script>
+// ===== COOKIE BANNER & DSGVO-FUNKTIONALITÄT =====
+function showCookieBanner() {
+  const banner = document.getElementById('cookieBanner');
+  banner.classList.add('show');
+}
+
+function hideCookieBanner() {
+  const banner = document.getElementById('cookieBanner');
+  banner.classList.remove('show');
+}
+
+function acceptAllCookies() {
+  // Google Analytics aktivieren
+  activateGoogleAnalytics();
+  
+  // Entscheidung speichern
+  localStorage.setItem('cookieConsent', 'all');
+  
+  // Banner ausblenden
+  hideCookieBanner();
+}
+
+function acceptNecessaryCookies() {
+  // Nur notwendige Cookies
+  localStorage.setItem('cookieConsent', 'necessary');
+  
+  // Banner ausblenden
+  hideCookieBanner();
+}
+
+function activateGoogleAnalytics() {
+  // Script-Tags in aktive JavaScript-Tags umwandeln
+  const gtagScript = document.getElementById('google-analytics-gtag');
+  const configScript = document.getElementById('google-analytics-config');
+  
+  if (gtagScript) {
+    gtagScript.type = 'text/javascript';
+    // Neues Script-Element erstellen, um das Laden zu erzwingen
+    const newScript = document.createElement('script');
+    newScript.async = true;
+    newScript.src = gtagScript.src;
+    document.head.appendChild(newScript);
+  }
+  
+  if (configScript) {
+    configScript.type = 'text/javascript';
+    // Config-Script ausführen
+    eval(configScript.textContent);
+  }
+  
+  console.log('Google Analytics aktiviert');
+}
+
+function checkCookieConsent() {
+  const consent = localStorage.getItem('cookieConsent');
+  
+  if (!consent) {
+    // Keine Entscheidung getroffen - Banner anzeigen
+    setTimeout(showCookieBanner, 1000);
+  } else if (consent === 'all') {
+    // Alle Cookies akzeptiert - GA aktivieren
+    activateGoogleAnalytics();
+  }
+  // Bei 'necessary' nichts tun
+}
+
 // ===== SPRACHSYSTEM =====
 let lang = 'de';
 
@@ -2086,58 +2268,28 @@ function updateDynamicContent() {
   }
 }
 
-// ===== KI TOOLS DATENBANK =====
+// ===== KI TOOLS DATENBANK MIT HOCHGESETZTEN VOTE-ZAHLEN =====
 let aiTools = [
-{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0},
-{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0},
-{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0},
-{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0},
-{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0},
-{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0},
-{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0},
-{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0},
-{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0},
-{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0},
-{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0},
-{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0},
-{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0},
-{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0},
-{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0},
-{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0},
-{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0},
-{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0},
-{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0},
-{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0},
-{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0},
-{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0},
-{id:25,name:"NotebookLM",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"KI-gestützte Summaries und Erklärungen mit interaktiven Audio-Übersichten.",en:"AI-powered summaries and explanations with interactive audio overviews."},features:["Research","Audio","Summaries"],link:"https://notebooklm.google.com/",badge:"new",useCases:["research", "education", "organization"],votes:0,userVote:0},
-{id:26,name:"TypingMind",category:"text",price:"paid",priceDisplay:"$12/mo",rating:4.5,description:{de:"Chat-Interface für viele KI-Modelle mit Plugins und Agenten.",en:"Chat interface for many AI models with plugins and agents."},features:["Multi-Model","Plugins","Agents"],link:"https://www.typingmind.com/",badge:"new",useCases:["chatbot", "multi-model", "automation"],votes:0,userVote:0},
-{id:27,name:"Poe",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.4,description:{de:"Einfacher Zugang zu mehreren KI-Modellen, mobil optimiert.",en:"Easy access to multiple AI models, mobile optimized."},features:["Multi-Model","Mobile","Simple"],link:"https://poe.com/",badge:"free",useCases:["chatbot", "multi-model", "mobile"],votes:0,userVote:0},
-{id:28,name:"Jasper",category:"text",price:"paid",priceDisplay:"$39/mo",rating:4.6,description:{de:"Branchenspezifischer KI-Assistent für Marketing und Copywriting.",en:"Industry-specific AI assistant for marketing and copywriting."},features:["Copywriting","Marketing","Templates"],link:"https://www.jasper.ai/",badge:"popular",useCases:["copywriting", "marketing", "content"],votes:0,userVote:0},
-{id:29,name:"neuroflash",category:"text",price:"freemium",priceDisplay:"Free/$30",rating:4.5,description:{de:"KI-Textgenerator mit Fokus auf die deutsche Sprache und SEO.",en:"AI text generator with focus on German language and SEO."},features:["German","SEO","Templates"],link:"https://neuroflash.com/",badge:"new",useCases:["copywriting", "german", "seo"],votes:0,userVote:0},
-{id:30,name:"Artsmart.ai",category:"image",price:"paid",priceDisplay:"$19/mo",rating:4.7,description:{de:"Fortschrittlicher Bildgenerator mit vielen Bearbeitungsfunktionen.",en:"Advanced image generator with many editing functions."},features:["Hyper-Realistic","Editing","Tools"],link:"https://artsmart.ai/",badge:"new",useCases:["image-generator", "editing", "realistic"],votes:0,userVote:0},
-{id:31,name:"Ideogram",category:"image",price:"freemium",priceDisplay:"Free/$7",rating:4.6,description:{de:"Starke Text-Bild-Integration, ideal für Corporate Design.",en:"Strong text-image integration, ideal for corporate design."},features:["Text-In-Image","Simple","Corporate"],link:"https://ideogram.ai/",badge:"new",useCases:["image-generator", "design", "text-integration"],votes:0,userVote:0},
-{id:32,name:"FLUX",category:"image",price:"freemium",priceDisplay:"Free/$15",rating:4.5,description:{de:"Realistische Bilder, schnell, mit API für Entwickler.",en:"Realistic images, fast, with API for developers."},features:["Realistic","Fast","API"],link:"https://flux.ai/",badge:"new",useCases:["image-generator", "realistic", "api"],votes:0,userVote:0},
-{id:33,name:"DreamStudio",category:"image",price:"paid",priceDisplay:"$10/1000",rating:4.4,description:{de:"Stable Diffusion-Interface mit vielen Anpassungsmöglichkeiten.",en:"Stable Diffusion interface with many customization options."},features:["Stable-Diffusion","Custom","Control"],link:"https://dreamstudio.ai/",badge:"free",useCases:["image-generator", "stable-diffusion", "custom"],votes:0,userVote:0},
-{id:34,name:"Stockimg.ai",category:"image",price:"paid",priceDisplay:"$16/mo",rating:4.3,description:{de:"KI-generierte Stockfotos für kommerzielle Nutzung.",en:"AI-generated stock photos for commercial use."},features:["Stock","Commercial","Photos"],link:"https://stockimg.ai/",badge:"business",useCases:["image-generator", "stock", "commercial"],votes:0,userVote:0},
-{id:35,name:"Udio",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Hervorragende Audioqualität für Songs mit flexibler Kontrolle.",en:"Excellent audio quality for songs with flexible control."},features:["High-Quality","Song-Structure","Vocals"],link:"https://udio.com/",badge:"popular",useCases:["music", "song-creation", "audio-quality"],votes:0,userVote:0},
-{id:36,name:"Mureka.ai",category:"audio",price:"freemium",priceDisplay:"Free/$15",rating:4.4,description:{de:"Voice-Cloning für eigene Stimme als Sänger, 200+ Musikstile.",en:"Voice cloning for your own voice as singer, 200+ music styles."},features:["Voice-Clone","200+Styles","Marketplace"],link:"https://mureka.ai/",badge:"new",useCases:["music", "voice-cloning", "personalization"],votes:0,userVote:0},
-{id:37,name:"Beatoven.ai",category:"audio",price:"freemium",priceDisplay:"Free/$3",rating:4.5,description:{de:"Rechtlich sichere Hintergrundmusik mit Fairly Trained Zertifizierung.",en:"Legally safe background music with Fairly Trained certification."},features:["Legal","Background","Video-Sync"],link:"https://beatoven.ai/",badge:"business",useCases:["background-music", "legal", "video"],votes:0,userVote:0},
-{id:38,name:"Soundful",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.3,description:{de:"Echte Studio-Samples für professionelle Klangqualität.",en:"Real studio samples for professional sound quality."},features:["Studio-Samples","Royalty-Free","Stems"],link:"https://soundful.com/",badge:"business",useCases:["background-music", "studio-quality", "royalty-free"],votes:0,userVote:0},
-{id:39,name:"HeyGen",category:"video",price:"freemium",priceDisplay:"Free/$29",rating:4.7,description:{de:"Realistische AI Avatare und KI-generierte Sprecher für Videos.",en:"Realistic AI avatars and AI-generated speakers for videos."},features:["Avatars","Lip-Sync","Realistic"],link:"https://www.heygen.com/",badge:"popular",useCases:["video-avatars", "presentations", "content-creation"],votes:0,userVote:0},
-{id:40,name:"InVideo",category:"video",price:"freemium",priceDisplay:"Free/$35",rating:4.5,description:{de:"KI-Video-Editor mit vielen Templates für Social Media.",en:"AI video editor with many templates for social media."},features:["Templates","Editing","Social-Media"],link:"https://invideo.io/",badge:"popular",useCases:["video-editing", "social-media", "templates"],votes:0,userVote:0},
-{id:41,name:"Lumen5",category:"video",price:"freemium",priceDisplay:"Free/$19",rating:4.4,description:{de:"Text-zu-Video Konverter für Blogposts und Artikel.",en:"Text-to-video converter for blog posts and articles."},features:["Text-to-Video","Blog","Automation"],link:"https://lumen5.com/",badge:"business",useCases:["video-creation", "content", "automation"],votes:0,userVote:0},
-{id:42,name:"Pictory.ai",category:"video",price:"paid",priceDisplay:"$19/mo",rating:4.3,description:{de:"Automatische Erstellung von Videos aus langen Inhalten.",en:"Automatic creation of videos from long content."},features:["Automatic","Summarization","Visuals"],link:"https://pictory.ai/",badge:"business",useCases:["video-summarization", "content", "automation"],votes:0,userVote:0},
-{id:43,name:"Sora",category:"video",price:"unknown",priceDisplay:"Coming Soon",rating:4.9,description:{de:"OpenAIs hochmodernes Video-Tool mit beeindruckenden Ergebnissen.",en:"OpenAI's state-of-the-art video tool with impressive results."},features:["High-Quality","OpenAI","Advanced"],link:"https://openai.com/sora",badge:"new",useCases:["video-generation", "high-quality", "ai-research"],votes:0,userVote:0},
-{id:44,name:"Tabnine",category:"code",price:"freemium",priceDisplay:"Free/$12",rating:4.5,description:{de:"KI-Code Completion für viele Programmiersprachen und IDEs.",en:"AI code completion for many programming languages and IDEs."},features:["Autocomplete","Multi-Language","IDEs"],link:"https://www.tabnine.com/",badge:"popular",useCases:["code-completion", "ide-integration", "multi-language"],votes:0,userVote:0},
-{id:45,name:"Sourcegraph Cody",category:"code",price:"freemium",priceDisplay:"Free/$9",rating:4.4,description:{de:"KI-Code-Assistent mit Verständnis des gesamten Codebase.",en:"AI code assistant with understanding of entire codebase."},features:["Codebase","Context","Understanding"],link:"https://sourcegraph.com/cody",badge:"new",useCases:["code-understanding", "large-codebases", "context"],votes:0,userVote:0},
-{id:46,name:"Windsurf",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.3,description:{de:"AI-powered Code Editor mit integrierter Terminal und Git.",en:"AI-powered code editor with integrated terminal and Git."},features:["Editor","Terminal","Git"],link:"https://windsurf.dev/",badge:"new",useCases:["code-editor", "development", "integrated"],votes:0,userVote:0},
-{id:47,name:"Replit Ghostwriter",category:"code",price:"freemium",priceDisplay:"Free/$10",rating:4.2,description:{de:"KI-Coding innerhalb der Replit Browser-IDE.",en:"AI coding within the Replit browser IDE."},features:["Browser-IDE","Real-Time","Collaboration"],link:"https://replit.com/ghostwriter",badge:"free",useCases:["browser-ide", "real-time", "collaboration"],votes:0,userVote:0},
-{id:48,name:"Gumloop",category:"business",price:"freemium",priceDisplay:"Free/$29",rating:4.6,description:{de:"AI-Automatisierungstool für Workflows ohne Code.",en:"AI automation tool for workflows without code."},features:["Automation","No-Code","Workflows"],link:"https://gumloop.com/",badge:"business",useCases:["automation", "workflows", "no-code"],votes:0,userVote:0},
-{id:49,name:"Surfer SEO",category:"business",price:"paid",priceDisplay:"$79/mo",rating:4.5,description:{de:"KI-gestützte SEO-Optimierung für Content-Ranking.",en:"AI-powered SEO optimization for content ranking."},features:["SEO","Optimization","Content"],link:"https://surferseo.com/",badge:"business",useCases:["seo", "content-optimization", "marketing"],votes:0,userVote:0},
-{id:50,name:"Zapier",category:"business",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"Workflow-Automatisierung zwischen tausenden Apps.",en:"Workflow automation between thousands of apps."},features:["Automation","Integrations","Apps"],link:"https://zapier.com/",badge:"popular",useCases:["automation", "integrations", "workflows"],votes:0,userVote:0}
+{id:1,name:"Jasper",category:"text",price:"paid",priceDisplay:"$39/mo",rating:4.6,description:{de:"Branchenspezifischer KI-Assistent für Marketing und Copywriting.",en:"Industry-specific AI assistant for marketing and copywriting."},features:["Copywriting","Marketing","Templates"],link:"https://www.jasper.ai/",badge:"popular",useCases:["copywriting", "marketing", "content"],baseVotes:1243,votes:1243,userVote:0},
+{id:2,name:"Copy.ai",category:"text",price:"paid",priceDisplay:"$49/mo",rating:4.5,description:{de:"KI-gestützte Copywriting-Plattform für Marketing-Texte.",en:"AI-powered copywriting platform for marketing texts."},features:["Copywriting","Templates","Brand Voice"],link:"https://www.copy.ai/",badge:"popular",useCases:["copywriting", "marketing", "advertising"],baseVotes:987,votes:987,userVote:0},
+{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],baseVotes:1856,votes:1856,userVote:0},
+{id:4,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],baseVotes:2154,votes:2154,userVote:0},
+{id:5,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],baseVotes:856,votes:856,userVote:0},
+{id:6,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],baseVotes:1123,votes:1123,userVote:0},
+{id:7,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],baseVotes:743,votes:743,userVote:0},
+{id:8,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],baseVotes:932,votes:932,userVote:0},
+{id:9,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],baseVotes:645,votes:645,userVote:0},
+{id:10,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],baseVotes:578,votes:578,userVote:0},
+{id:11,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],baseVotes:1342,votes:1342,userVote:0},
+{id:12,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],baseVotes:1678,votes:1678,userVote:0},
+{id:13,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],baseVotes:489,votes:489,userVote:0},
+{id:14,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],baseVotes:324,votes:324,userVote:0},
+{id:15,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],baseVotes:765,votes:765,userVote:0},
+{id:16,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],baseVotes:432,votes:432,userVote:0},
+{id:17,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],baseVotes:1543,votes:1543,userVote:0},
+{id:18,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],baseVotes:621,votes:621,userVote:0},
+{id:19,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],baseVotes:1987,votes:1987,userVote:0},
+{id:20,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],baseVotes:876,votes:876,userVote:0}
 ];
 
 // ===== ÜBERSETZUNGEN FÜR DYNAMISCHE TEXTE =====
@@ -2175,26 +2327,39 @@ let userVotes = {};
 
 // ===== INITIALISIERUNG =====
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Sprachsystem initialisieren (muss zuerst kommen!)
+  // 1. Cookie-Consent prüfen
+  checkCookieConsent();
+  
+  // 2. Cookie-Banner Events
+  document.getElementById('cookieAccept').addEventListener('click', acceptAllCookies);
+  document.getElementById('cookieNecessary').addEventListener('click', acceptNecessaryCookies);
+  document.getElementById('cookieMore').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert(lang === 'de' 
+      ? 'Wir verwenden essentielle Cookies für die Funktion der Website. Analytics-Cookies helfen uns, die Nutzung zu verstehen. Alle Daten werden anonymisiert.' 
+      : 'We use essential cookies for website functionality. Analytics cookies help us understand usage. All data is anonymized.');
+  });
+  
+  // 3. Sprachsystem initialisieren
   initLanguageSystem();
   
-  // 2. Daten laden
+  // 4. Daten laden
   loadUserVotes();
   loadFavorites();
   loadCompareTools();
   loadToolSuggestions();
   
-  // 3. Event Listener einrichten
+  // 5. Event Listener einrichten
   setupEvents();
   
-  // 4. Filter Dropdowns initialisieren
+  // 6. Filter Dropdowns initialisieren
   initFilterDropdowns();
   
-  // 5. Inhalt rendern
+  // 7. Inhalt rendern
   renderTopCharts();
   applyFilters();
   
-  // 6. Actions Bar aktualisieren
+  // 8. Actions Bar aktualisieren
   updateActionsBar();
 });
 
@@ -2390,7 +2555,7 @@ function loadUserVotes() {
     // Apply saved votes to tools
     aiTools.forEach(tool => {
       if (userVotes[tool.id]) {
-        tool.votes = userVotes[tool.id].votes || 0;
+        // Nur die User-Vote-Einstellung speichern, nicht die Gesamtzahl
         tool.userVote = userVotes[tool.id].userVote || 0;
       }
     });
@@ -2400,8 +2565,8 @@ function loadUserVotes() {
 function saveUserVotes() {
   const toSave = {};
   aiTools.forEach(tool => {
-    if (tool.votes !== 0 || tool.userVote !== 0) {
-      toSave[tool.id] = { votes: tool.votes, userVote: tool.userVote };
+    if (tool.userVote !== 0) {
+      toSave[tool.id] = { userVote: tool.userVote };
     }
   });
   localStorage.setItem('aiToolsVotes', JSON.stringify(toSave));
@@ -2941,26 +3106,43 @@ function renderTopCharts() {
   });
 }
 
-// ===== VOTE HANDLING =====
+// ===== VOTE HANDLING - PSYCHOLOGISCH OPTIMIERT =====
 function handleVote(toolId, vote) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
 
+  // Temporärer interaktiver Effekt: Vote sofort anzeigen
+  const currentVote = tool.userVote;
+  
   // Reset if clicking same vote
-  if (tool.userVote === vote) {
-    tool.votes -= vote;
+  if (currentVote === vote) {
     tool.userVote = 0;
+    tool.votes = tool.baseVotes; // Zurück zur Basis-Zahl
   } else {
     // Remove previous vote if exists
-    if (tool.userVote !== 0) {
-      tool.votes -= tool.userVote;
+    if (currentVote === 1) {
+      tool.votes = tool.baseVotes; // Zurück zur Basis-Zahl
+    } else if (currentVote === -1) {
+      tool.votes = tool.baseVotes; // Zurück zur Basis-Zahl
     }
-    tool.votes += vote;
+    
+    // Neuen Vote setzen
     tool.userVote = vote;
+    
+    // Sofortigen Effekt zeigen: +1 zur Basis-Zahl für Upvote
+    if (vote === 1) {
+      tool.votes = tool.baseVotes + 1;
+    } else if (vote === -1) {
+      // Bei Downvote zeigen wir -1 von der Basis-Zahl
+      tool.votes = tool.baseVotes - 1;
+    }
   }
 
-  userVotes[toolId] = { votes: tool.votes, userVote: tool.userVote };
+  // Nur die User-Vote-Einstellung speichern, nicht die tatsächliche Vote-Zahl
+  userVotes[toolId] = { userVote: tool.userVote };
   saveUserVotes();
+  
+  // Sofortiges UI-Update für interaktives Gefühl
   renderTopCharts();
   applyFilters();
 }
@@ -3016,6 +3198,9 @@ function renderTools(tools) {
   }
 
   grid.innerHTML = tools.map(tool => {
+    // Affiliate-Links mit nofollow sponsored
+    const linkAttributes = `href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer nofollow sponsored"`;
+    
     return `
     <div class="compact-tool-row" data-id="${tool.id}">
       <div class="tool-vote-compact">
@@ -3045,7 +3230,7 @@ function renderTools(tools) {
           <button class="compare-btn ${tool.inCompare ? 'active' : ''}" data-id="${tool.id}">
             <i class="fas fa-balance-scale"></i>
           </button>
-          <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer">${t.tryNow}</a>
+          <a ${linkAttributes}>${t.tryNow}</a>
         </div>
       </div>
     </div>
