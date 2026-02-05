@@ -89,12 +89,13 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%
 .chart-category{font-size:0.75rem;color:var(--primary-light);font-weight:600}
 .chart-price{font-size:0.8rem;color:var(--secondary-light);font-weight:700;margin:6px 0}
 .chart-description{font-size:0.78rem;color:var(--text-muted);line-height:1.4;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.chart-actions{display:flex;gap:8px}
-.vote-btn{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--dark-light);border-radius:6px;padding:8px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.8rem;font-weight:600}
+.chart-actions{display:flex;gap:10px}
+.vote-btn{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--dark-light);border-radius:8px;padding:12px 8px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.9rem;font-weight:600;min-height:44px}
 .vote-btn.up:hover{background:rgba(16,185,129,0.15);border-color:var(--secondary);color:var(--secondary-light)}
 .vote-btn.down:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#f87171}
 .vote-btn.active.up{background:rgba(16,185,129,0.25);border-color:var(--secondary);color:var(--secondary-light)}
 .vote-btn.active.down{background:rgba(239,68,68,0.25);border-color:#ef4444;color:#f87171}
+.vote-btn i{font-size:1.1rem}
 .tools-container{max-width:1200px;margin:0 auto;padding:0 20px 40px}
 .compact-tools-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .compact-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -108,22 +109,24 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%
 .tools-count{font-size:0.9rem;color:var(--text-muted)}
 .tools-count span{color:var(--primary-light);font-weight:800}
 .compact-tools-grid{display:grid;grid-template-columns:1fr;gap:10px}
-.compact-tool-row{background:var(--card-bg);border-radius:var(--radius);padding:14px;border:1px solid var(--dark-light);backdrop-filter:blur(10px);transition:var(--transition);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}
+.compact-tool-row{background:var(--card-bg);border-radius:var(--radius);padding:14px;border:1px solid var(--dark-light);backdrop-filter:blur(10px);transition:var(--transition);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}
 .compact-tool-row:hover{border-color:var(--primary);transform:translateY(-2px)}
-.tool-vote-compact{display:flex;flex-direction:column;align-items:center;gap:4px}
-.vote-count{font-weight:800;font-size:0.9rem;color:var(--text)}
-.vote-btn-compact{background:transparent;border:none;color:var(--text-muted);cursor:pointer;transition:var(--transition);padding:2px;border-radius:4px}
-.vote-btn-compact:hover{color:var(--primary-light)}
-.vote-btn-compact.active.up{color:var(--secondary-light)}
-.vote-btn-compact.active.down{color:#f87171}
+.tool-vote-compact{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:70px}
+.vote-count{font-weight:800;font-size:1rem;color:var(--text)}
+.vote-buttons-compact{display:flex;gap:10px}
+.vote-btn-compact{background:transparent;border:2px solid var(--dark-light);color:var(--text-muted);cursor:pointer;transition:var(--transition);padding:8px 10px;border-radius:8px;width:42px;height:42px;display:flex;align-items:center;justify-content:center}
+.vote-btn-compact:hover{background:var(--glass);border-color:var(--primary-light)}
+.vote-btn-compact.active.up{color:var(--secondary-light);border-color:var(--secondary);background:rgba(16,185,129,0.1)}
+.vote-btn-compact.active.down{color:#f87171;border-color:#ef4444;background:rgba(239,68,68,0.1)}
+.vote-btn-compact i{font-size:1.1rem}
 .tool-info-compact{overflow:hidden}
-.tool-name-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.tool-name-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
 .tool-name-compact{font-weight:800;font-size:0.95rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tool-category-compact{font-size:0.7rem;color:var(--primary-light);font-weight:600;padding:2px 8px;background:rgba(99,102,241,0.1);border-radius:10px;white-space:nowrap}
 .tool-desc-compact{font-size:0.8rem;color:var(--text-muted);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.tool-meta-compact{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:140px}
+.tool-meta-compact{display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:140px}
 .tool-price-compact{font-size:0.85rem;font-weight:800;color:var(--secondary-light)}
-.tool-link-compact{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:700;transition:var(--transition);font-size:0.8rem;white-space:nowrap;text-align:center}
+.tool-link-compact{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700;transition:var(--transition);font-size:0.85rem;white-space:nowrap;text-align:center}
 .tool-link-compact:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,0.3)}
 .empty-state{text-align:center;padding:40px 20px;grid-column:1/-1}
 .empty-state i{font-size:3rem;color:var(--text-muted);margin-bottom:16px;opacity:0.5}
@@ -138,8 +141,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%
 .scroll-top{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;width:45px;height:45px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);z-index:999;box-shadow:var(--shadow)}
 .scroll-top.visible{display:flex}
 .scroll-top:hover{transform:translateY(-3px)}
-@media (max-width:768px){.header{padding:50px 15px 15px}.quick-navigation{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:0 15px}.top-charts-section{padding:0 15px}.tools-container{padding:0 15px 30px}.compact-tools-header{flex-direction:column;align-items:stretch}.compact-filters{justify-content:center}.compact-tool-row{grid-template-columns:1fr;gap:10px}.tool-meta-compact{flex-direction:row;justify-content:space-between;align-items:center;min-width:auto}.tool-vote-compact{flex-direction:row;gap:12px}}
-@media (max-width:480px){.header h1{font-size:1.5rem}.search-box{padding:12px 16px 12px 44px;font-size:0.9rem}.quick-navigation{grid-template-columns:1fr 1fr}.top-charts{grid-template-columns:1fr}.compact-tool-row{padding:12px}}
+@media (max-width:768px){.header{padding:50px 15px 15px}.quick-navigation{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:0 15px}.top-charts-section{padding:0 15px}.tools-container{padding:0 15px 30px}.compact-tools-header{flex-direction:column;align-items:stretch}.compact-filters{justify-content:center}.compact-tool-row{grid-template-columns:1fr;gap:12px}.tool-meta-compact{flex-direction:row;justify-content:space-between;align-items:center;min-width:auto}.tool-vote-compact{flex-direction:row;justify-content:space-between;width:100%;margin-bottom:8px}.vote-buttons-compact{gap:15px}}
+@media (max-width:480px){.header h1{font-size:1.5rem}.search-box{padding:12px 16px 12px 44px;font-size:0.9rem}.quick-navigation{grid-template-columns:1fr 1fr}.top-charts{grid-template-columns:1fr}.compact-tool-row{padding:12px}.vote-btn-compact{width:38px;height:38px;padding:6px}.tool-link-compact{padding:8px 14px;font-size:0.8rem}}
 </style>
 </head>
 <body>
@@ -163,32 +166,32 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%
 </div>
 </header>
 <section class="quick-navigation" id="quickNav">
-<div class="quick-card" data-usecase="chatbot">
+<div class="quick-card" data-filter="chat-text">
 <div class="quick-icon"><i class="fas fa-comments"></i></div>
 <div class="quick-title" id="navChat">Chat & Text</div>
 <div class="quick-desc" id="navChatDesc">KI schreiben lassen, Fragen beantworten</div>
 </div>
-<div class="quick-card" data-usecase="image-generator">
+<div class="quick-card" data-filter="image">
 <div class="quick-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
 <div class="quick-title" id="navImage">Bilder generieren</div>
 <div class="quick-desc" id="navImageDesc">Kunst, Logos, Designs erstellen</div>
 </div>
-<div class="quick-card" data-usecase="voice-generator">
+<div class="quick-card" data-filter="audio">
 <div class="quick-icon"><i class="fas fa-microphone-lines"></i></div>
 <div class="quick-title" id="navVoice">Stimmen & Audio</div>
 <div class="quick-desc" id="navVoiceDesc">Text vorlesen, Musik generieren</div>
 </div>
-<div class="quick-card" data-usecase="video-editor">
+<div class="quick-card" data-filter="video">
 <div class="quick-icon"><i class="fas fa-video"></i></div>
 <div class="quick-title" id="navVideo">Video erstellen</div>
 <div class="quick-desc" id="navVideoDesc">KI-Videos, Avatare, Editing</div>
 </div>
-<div class="quick-card" data-usecase="coding-assistant">
+<div class="quick-card" data-filter="code">
 <div class="quick-icon"><i class="fas fa-code"></i></div>
 <div class="quick-title" id="navCode">Programmieren</div>
 <div class="quick-desc" id="navCodeDesc">Code generieren, debuggen, erklären</div>
 </div>
-<div class="quick-card" data-category="free">
+<div class="quick-card" data-filter="free">
 <div class="quick-icon"><i class="fas fa-gift"></i></div>
 <div class="quick-title" id="navFree">Kostenlos</div>
 <div class="quick-desc" id="navFreeDesc">Top kostenlose KI-Tools</div>
@@ -228,34 +231,34 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%
 <script>
 // KI Tools Datenbank mit initialen Votes
 let aiTools = [
-{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot"],votes:0,userVote:0},
-{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot"],votes:0,userVote:0},
-{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator"],votes:0,userVote:0},
-{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant"],votes:0,userVote:0},
-{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator"],votes:0,userVote:0},
-{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor"],votes:0,userVote:0},
-{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot"],votes:0,userVote:0},
-{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot"],votes:0,userVote:0},
-{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator"],votes:0,userVote:0},
-{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator"],votes:0,userVote:0},
-{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant"],votes:0,userVote:0},
-{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant"],votes:0,userVote:0},
-{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator"],votes:0,userVote:0},
-{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor"],votes:0,userVote:0},
-{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator"],votes:0,userVote:0},
-{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot"],votes:0,userVote:0}
+{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0},
+{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0},
+{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
+{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0},
+{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0},
+{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0},
+{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0},
+{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0},
+{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
+{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0},
+{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0},
+{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0},
+{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0},
+{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0},
+{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0},
+{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0}
 ];
 
-// Erweitere die Liste mit mehr Tools (gekürzt für Übersicht)
+// Erweitere die Liste mit mehr Tools
 const moreTools = [
-{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["chatbot"],votes:0,userVote:0},
-{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["chatbot"],votes:0,userVote:0},
-{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator"],votes:0,userVote:0},
-{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator"],votes:0,userVote:0},
-{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor"],votes:0,userVote:0},
-{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator"],votes:0,userVote:0},
-{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator"],votes:0,userVote:0},
-{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant"],votes:0,userVote:0}
+{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0},
+{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0},
+{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0},
+{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0},
+{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0},
+{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0},
+{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0},
+{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0}
 ];
 
 aiTools = [...aiTools, ...moreTools];
@@ -431,20 +434,31 @@ function setupEvents() {
     const card = e.target.closest('.quick-card');
     if (!card) return;
     
-    const category = card.dataset.category;
-    const useCase = card.dataset.usecase;
+    const filterType = card.dataset.filter;
     
+    // Reset all filter buttons
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     
-    if (category) {
-      cat = category;
-      document.querySelector(`[data-category="${category}"]`).classList.add('active');
-    } else if (useCase) {
+    // Reset search
+    query = '';
+    searchInput.value = '';
+    
+    // Handle different filter types
+    if (filterType === 'chat-text') {
+      cat = 'text';
+      document.querySelector(`[data-category="text"]`).classList.add('active');
+    } else if (filterType === 'free') {
       cat = 'all';
-      query = useCase;
-      searchInput.value = translations[lang][`nav${useCase.split('-')[0].charAt(0).toUpperCase() + useCase.split('-')[0].slice(1)}`];
-      document.querySelector('[data-scope="all"]').classList.add('active');
+      price = 'free';
+      document.querySelector(`[data-scope="all"]`).classList.add('active');
+    } else if (['image', 'audio', 'video', 'code'].includes(filterType)) {
+      cat = filterType;
+      document.querySelector(`[data-category="${filterType}"]`).classList.add('active');
     }
+    
+    // Update filter dropdowns
+    document.getElementById('priceFilter').value = price;
+    document.getElementById('sortFilter').value = sort;
     
     applyFilters();
     window.scrollTo({ top: document.querySelector('.tools-container').offsetTop - 20, behavior: 'smooth' });
@@ -488,7 +502,7 @@ function setupEvents() {
 function showSuggestions(q) {
   const div = document.getElementById('searchSuggestions');
   const matches = aiTools.filter(t => {
-    const txt = `${t.name} ${t.category} ${t.description[lang]} ${t.features.join(' ')}`.toLowerCase();
+    const txt = `${t.name} ${t.category} ${t.description[lang]} ${t.features.join(' ')} ${t.useCases ? t.useCases.join(' ') : ''}`.toLowerCase();
     return txt.includes(q);
   }).slice(0, 6);
   
@@ -680,7 +694,7 @@ function applyFilters() {
     if (cat !== 'all' && tool.category !== cat) return false;
     if (price !== 'all' && tool.price !== price) return false;
     if (query) {
-      const txt = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')}`.toLowerCase();
+      const txt = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')} ${tool.useCases ? tool.useCases.join(' ') : ''}`.toLowerCase();
       if (!txt.includes(query)) return false;
     }
     return true;
@@ -727,7 +741,7 @@ function renderTools(tools) {
     <div class="compact-tool-row" data-id="${tool.id}">
       <div class="tool-vote-compact">
         <div class="vote-count">${tool.votes}</div>
-        <div>
+        <div class="vote-buttons-compact">
           <button class="vote-btn-compact up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
             <i class="fas fa-thumbs-up"></i>
           </button>
