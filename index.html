@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -268,6 +270,33 @@ body::before {
   font-size: 1.3rem;
 }
 
+/* Surprise Me Button neben der Suchleiste */
+.surprise-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, var(--neon-purple), var(--electric-blue));
+  color: white;
+  border: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-tech);
+  font-size: 1.2rem;
+  box-shadow: 0 0 15px rgba(185, 103, 255, 0.5);
+  z-index: 10;
+}
+
+.surprise-btn:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 0 25px rgba(185, 103, 255, 0.8);
+}
+
 .search-hint-container {
   margin-top: 15px;
   display: flex;
@@ -353,6 +382,39 @@ body::before {
   color: var(--neon-cyan);
   width: 20px;
   font-size: 1rem;
+}
+
+/* AI Concierge Section */
+.concierge-section {
+  max-width: 800px;
+  margin: 30px auto 20px;
+  text-align: center;
+}
+
+.concierge-btn {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  color: var(--void-black);
+  border: none;
+  padding: 18px 35px;
+  border-radius: var(--radius-smooth);
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-tech);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-glow);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.concierge-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.4);
+}
+
+.concierge-btn i {
+  font-size: 1.3rem;
 }
 
 /* Quick Navigation Karten */
@@ -583,6 +645,22 @@ body::before {
 .chart-price::before {
   content: '💰';
   font-size: 1rem;
+}
+
+/* Lifetime Deal Badge */
+.ltd-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff8e53, #ff6b6b);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .chart-description {
@@ -963,6 +1041,22 @@ body::before {
   border: 1px solid rgba(0, 243, 255, 0.3);
 }
 
+/* Lifetime Deal Badge in Tool-Liste */
+.tool-ltd-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff8e53, #ff6b6b);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
 .tool-desc-compact {
   font-size: 0.9rem;
   color: var(--tech-silver);
@@ -1118,6 +1212,124 @@ body::before {
 }
 
 /* ===== NEUE FEATURES ===== */
+
+/* AI Concierge Modal */
+.concierge-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(145deg, var(--deep-space), var(--void-black));
+  border: 1px solid var(--neon-cyan);
+  border-radius: var(--radius-tech);
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.concierge-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.concierge-step {
+  display: none;
+  padding: 30px;
+}
+
+.concierge-step.active {
+  display: block;
+}
+
+.concierge-step h3 {
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.concierge-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.concierge-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-tech);
+  padding: 25px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: var(--transition-tech);
+  text-align: center;
+}
+
+.concierge-option:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-5px);
+  background: rgba(0, 243, 255, 0.05);
+}
+
+.concierge-option.selected {
+  border-color: var(--neon-cyan);
+  background: rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 20px var(--glow-cyan);
+}
+
+.concierge-option i {
+  font-size: 2rem;
+  color: var(--neon-cyan);
+}
+
+.concierge-option span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.concierge-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.concierge-result-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-tech);
+  padding: 20px;
+  transition: var(--transition-tech);
+}
+
+.concierge-result-card:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-3px);
+}
+
+.concierge-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
 
 /* Favoriten & Compare Bar */
 .actions-bar {
@@ -1549,6 +1761,18 @@ body::before {
   .form-row {
     grid-template-columns: 1fr;
   }
+  
+  .concierge-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .search-box {
+    padding-right: 70px;
+  }
+  
+  .concierge-modal {
+    width: 95%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1602,13 +1826,22 @@ body::before {
     min-height: 40px;
   }
   
-  .compare-modal, .suggestion-modal {
+  .compare-modal, .suggestion-modal, .concierge-modal {
     width: 95%;
     padding: 15px;
   }
   
   .modal-content {
     padding: 15px;
+  }
+  
+  .concierge-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .concierge-btn {
+    padding: 15px 25px;
+    font-size: 1rem;
   }
 }
 
@@ -1637,14 +1870,16 @@ body::before {
 @keyframes neonPulse {
   0%, 100% {
     opacity: 1;
+    box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.8;
+    box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), 0 0 15px var(--neon-cyan);
   }
 }
 
 .neon-pulse {
-  animation: neonPulse 2s infinite;
+  animation: neonPulse 0.5s ease-in-out;
 }
 
 /* Data Stream Animation */
@@ -1808,6 +2043,81 @@ body::before {
 <div class="data-stream" style="left: 50%; animation-delay: 1s;"></div>
 <div class="data-stream" style="left: 70%; animation-delay: 1.5s;"></div>
 <div class="data-stream" style="left: 90%; animation-delay: 2s;"></div>
+
+<!-- AI Concierge Modal -->
+<div class="modal-overlay" id="conciergeModalOverlay"></div>
+<div class="concierge-modal" id="conciergeModal">
+  <div class="modal-header">
+    <div class="modal-title">
+      <i class="fas fa-robot"></i>
+      <span id="conciergeModalTitle" data-de="AI Concierge" data-en="AI Concierge"></span>
+    </div>
+    <button class="close-modal" id="closeConciergeModal">&times;</button>
+  </div>
+  <div class="modal-content">
+    <div class="concierge-steps">
+      <!-- Schritt 1 -->
+      <div class="concierge-step active" id="conciergeStep1">
+        <h3 data-de="Was suchst du?" data-en="What are you looking for?"></h3>
+        <div class="concierge-options">
+          <div class="concierge-option" data-value="text">
+            <i class="fas fa-keyboard"></i>
+            <span data-de="Text" data-en="Text"></span>
+          </div>
+          <div class="concierge-option" data-value="image">
+            <i class="fas fa-image"></i>
+            <span data-de="Bild" data-en="Image"></span>
+          </div>
+          <div class="concierge-option" data-value="video">
+            <i class="fas fa-video"></i>
+            <span data-de="Video" data-en="Video"></span>
+          </div>
+          <div class="concierge-option" data-value="code">
+            <i class="fas fa-code"></i>
+            <span data-de="Code" data-en="Code"></span>
+          </div>
+          <div class="concierge-option" data-value="audio">
+            <i class="fas fa-music"></i>
+            <span data-de="Audio" data-en="Audio"></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schritt 2 -->
+      <div class="concierge-step" id="conciergeStep2">
+        <h3 data-de="Preisvorstellung?" data-en="Price preference?"></h3>
+        <div class="concierge-options">
+          <div class="concierge-option" data-value="free">
+            <i class="fas fa-gift"></i>
+            <span data-de="Kostenlos" data-en="Free"></span>
+          </div>
+          <div class="concierge-option" data-value="paid">
+            <i class="fas fa-euro-sign"></i>
+            <span data-de="Einmalzahlung" data-en="One-time payment"></span>
+          </div>
+          <div class="concierge-option" data-value="subscription">
+            <i class="fas fa-calendar-alt"></i>
+            <span data-de="Abo" data-en="Subscription"></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schritt 3: Ergebnisse -->
+      <div class="concierge-step" id="conciergeStep3">
+        <h3 data-de="Empfohlene Tools" data-en="Recommended Tools"></h3>
+        <div class="concierge-results" id="conciergeResults">
+          <!-- Hier werden die empfohlenen Tools eingefügt -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="concierge-nav">
+      <button class="action-btn secondary" id="conciergePrevBtn" data-de="Zurück" data-en="Back" disabled></button>
+      <button class="action-btn" id="conciergeNextBtn" data-de="Weiter" data-en="Next"></button>
+      <button class="action-btn" id="conciergeFinishBtn" data-de="Fertig" data-en="Finish" style="display: none;"></button>
+    </div>
+  </div>
+</div>
 
 <!-- Favoriten & Compare Actions Bar -->
 <div class="actions-bar hidden" id="actionsBar">
@@ -2011,6 +2321,9 @@ body::before {
 <div class="search-container">
 <i class="fas fa-search search-icon"></i>
 <input type="text" class="search-box" id="searchInput" autocomplete="off" placeholder="Was möchtest du mit KI erreichen?" data-de="Was möchtest du mit KI erreichen?" data-en="What do you want to achieve with AI?">
+<button class="surprise-btn" id="surpriseBtn" aria-label="Surprise Me">
+<i class="fas fa-dice"></i>
+</button>
 <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
 </div>
 <div class="search-hint-container" id="searchHintContainer">
@@ -2042,6 +2355,14 @@ body::before {
 <i class="fas fa-music"></i>
 <span data-de="Musik" data-en="Music">Musik</span>
 </div>
+</div>
+
+<!-- AI Concierge Button -->
+<div class="concierge-section">
+<button class="concierge-btn" id="conciergeBtn">
+<i class="fas fa-robot"></i>
+<span data-de="AI Concierge: Finde dein Tool" data-en="AI Concierge: Find your tool"></span>
+</button>
 </div>
 </header>
 <section class="quick-navigation" id="quickNav">
@@ -2106,6 +2427,7 @@ body::before {
 <button class="filter-btn" data-category="video" type="button"><i class="fas fa-video"></i> <span id="catVideo" data-de="Video" data-en="Video"></span></button>
 <button class="filter-btn" data-category="code" type="button"><i class="fas fa-code"></i> <span id="catCode" data-de="Code" data-en="Code"></span></button>
 <button class="filter-btn" data-category="favorites" type="button"><i class="fas fa-star"></i> <span id="catFavorites" data-de="Favoriten" data-en="Favorites"></span></button>
+<button class="filter-btn" data-lifetime="true" type="button"><i class="fas fa-crown"></i> <span id="catLifetime" data-de="Lifetime Deals" data-en="Lifetime Deals"></span></button>
 </div>
 <div class="compact-filters">
 <div class="filter-group">
@@ -2208,56 +2530,56 @@ function updateDynamicContent() {
 
 // ===== KI TOOLS DATENBANK =====
 let aiTools = [
-{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0},
-{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0},
-{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0},
-{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0},
-{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0},
-{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0},
-{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0},
-{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0},
-{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0},
-{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0},
-{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0},
-{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0},
-{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0},
-{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0},
-{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0},
-{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0},
-{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0},
-{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0},
-{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0},
-{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0},
-{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0},
-{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0},
-{id:25,name:"NotebookLM",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"KI-gestützte Summaries und Erklärungen mit interaktiven Audio-Übersichten.",en:"AI-powered summaries and explanations with interactive audio overviews."},features:["Research","Audio","Summaries"],link:"https://notebooklm.google.com/",badge:"new",useCases:["research", "education", "organization"],votes:0,userVote:0},
-{id:26,name:"TypingMind",category:"text",price:"paid",priceDisplay:"$12/mo",rating:4.5,description:{de:"Chat-Interface für viele KI-Modelle mit Plugins und Agenten.",en:"Chat interface for many AI models with plugins and agents."},features:["Multi-Model","Plugins","Agents"],link:"https://www.typingmind.com/",badge:"new",useCases:["chatbot", "multi-model", "automation"],votes:0,userVote:0},
-{id:27,name:"Poe",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.4,description:{de:"Einfacher Zugang zu mehreren KI-Modellen, mobil optimiert.",en:"Easy access to multiple AI models, mobile optimized."},features:["Multi-Model","Mobile","Simple"],link:"https://poe.com/",badge:"free",useCases:["chatbot", "multi-model", "mobile"],votes:0,userVote:0},
-{id:28,name:"Jasper",category:"text",price:"paid",priceDisplay:"$39/mo",rating:4.6,description:{de:"Branchenspezifischer KI-Assistent für Marketing und Copywriting.",en:"Industry-specific AI assistant for marketing and copywriting."},features:["Copywriting","Marketing","Templates"],link:"https://www.jasper.ai/",badge:"popular",useCases:["copywriting", "marketing", "content"],votes:0,userVote:0},
-{id:29,name:"neuroflash",category:"text",price:"freemium",priceDisplay:"Free/$30",rating:4.5,description:{de:"KI-Textgenerator mit Fokus auf die deutsche Sprache und SEO.",en:"AI text generator with focus on German language and SEO."},features:["German","SEO","Templates"],link:"https://neuroflash.com/",badge:"new",useCases:["copywriting", "german", "seo"],votes:0,userVote:0},
-{id:30,name:"Artsmart.ai",category:"image",price:"paid",priceDisplay:"$19/mo",rating:4.7,description:{de:"Fortschrittlicher Bildgenerator mit vielen Bearbeitungsfunktionen.",en:"Advanced image generator with many editing functions."},features:["Hyper-Realistic","Editing","Tools"],link:"https://artsmart.ai/",badge:"new",useCases:["image-generator", "editing", "realistic"],votes:0,userVote:0},
-{id:31,name:"Ideogram",category:"image",price:"freemium",priceDisplay:"Free/$7",rating:4.6,description:{de:"Starke Text-Bild-Integration, ideal für Corporate Design.",en:"Strong text-image integration, ideal for corporate design."},features:["Text-In-Image","Simple","Corporate"],link:"https://ideogram.ai/",badge:"new",useCases:["image-generator", "design", "text-integration"],votes:0,userVote:0},
-{id:32,name:"FLUX",category:"image",price:"freemium",priceDisplay:"Free/$15",rating:4.5,description:{de:"Realistische Bilder, schnell, mit API für Entwickler.",en:"Realistic images, fast, with API for developers."},features:["Realistic","Fast","API"],link:"https://flux.ai/",badge:"new",useCases:["image-generator", "realistic", "api"],votes:0,userVote:0},
-{id:33,name:"DreamStudio",category:"image",price:"paid",priceDisplay:"$10/1000",rating:4.4,description:{de:"Stable Diffusion-Interface mit vielen Anpassungsmöglichkeiten.",en:"Stable Diffusion interface with many customization options."},features:["Stable-Diffusion","Custom","Control"],link:"https://dreamstudio.ai/",badge:"free",useCases:["image-generator", "stable-diffusion", "custom"],votes:0,userVote:0},
-{id:34,name:"Stockimg.ai",category:"image",price:"paid",priceDisplay:"$16/mo",rating:4.3,description:{de:"KI-generierte Stockfotos für kommerzielle Nutzung.",en:"AI-generated stock photos for commercial use."},features:["Stock","Commercial","Photos"],link:"https://stockimg.ai/",badge:"business",useCases:["image-generator", "stock", "commercial"],votes:0,userVote:0},
-{id:35,name:"Udio",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Hervorragende Audioqualität für Songs mit flexibler Kontrolle.",en:"Excellent audio quality for songs with flexible control."},features:["High-Quality","Song-Structure","Vocals"],link:"https://udio.com/",badge:"popular",useCases:["music", "song-creation", "audio-quality"],votes:0,userVote:0},
-{id:36,name:"Mureka.ai",category:"audio",price:"freemium",priceDisplay:"Free/$15",rating:4.4,description:{de:"Voice-Cloning für eigene Stimme als Sänger, 200+ Musikstile.",en:"Voice cloning for your own voice as singer, 200+ music styles."},features:["Voice-Clone","200+Styles","Marketplace"],link:"https://mureka.ai/",badge:"new",useCases:["music", "voice-cloning", "personalization"],votes:0,userVote:0},
-{id:37,name:"Beatoven.ai",category:"audio",price:"freemium",priceDisplay:"Free/$3",rating:4.5,description:{de:"Rechtlich sichere Hintergrundmusik mit Fairly Trained Zertifizierung.",en:"Legally safe background music with Fairly Trained certification."},features:["Legal","Background","Video-Sync"],link:"https://beatoven.ai/",badge:"business",useCases:["background-music", "legal", "video"],votes:0,userVote:0},
-{id:38,name:"Soundful",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.3,description:{de:"Echte Studio-Samples für professionelle Klangqualität.",en:"Real studio samples for professional sound quality."},features:["Studio-Samples","Royalty-Free","Stems"],link:"https://soundful.com/",badge:"business",useCases:["background-music", "studio-quality", "royalty-free"],votes:0,userVote:0},
-{id:39,name:"HeyGen",category:"video",price:"freemium",priceDisplay:"Free/$29",rating:4.7,description:{de:"Realistische AI Avatare und KI-generierte Sprecher für Videos.",en:"Realistic AI avatars and AI-generated speakers for videos."},features:["Avatars","Lip-Sync","Realistic"],link:"https://www.heygen.com/",badge:"popular",useCases:["video-avatars", "presentations", "content-creation"],votes:0,userVote:0},
-{id:40,name:"InVideo",category:"video",price:"freemium",priceDisplay:"Free/$35",rating:4.5,description:{de:"KI-Video-Editor mit vielen Templates für Social Media.",en:"AI video editor with many templates for social media."},features:["Templates","Editing","Social-Media"],link:"https://invideo.io/",badge:"popular",useCases:["video-editing", "social-media", "templates"],votes:0,userVote:0},
-{id:41,name:"Lumen5",category:"video",price:"freemium",priceDisplay:"Free/$19",rating:4.4,description:{de:"Text-zu-Video Konverter für Blogposts und Artikel.",en:"Text-to-video converter for blog posts and articles."},features:["Text-to-Video","Blog","Automation"],link:"https://lumen5.com/",badge:"business",useCases:["video-creation", "content", "automation"],votes:0,userVote:0},
-{id:42,name:"Pictory.ai",category:"video",price:"paid",priceDisplay:"$19/mo",rating:4.3,description:{de:"Automatische Erstellung von Videos aus langen Inhalten.",en:"Automatic creation of videos from long content."},features:["Automatic","Summarization","Visuals"],link:"https://pictory.ai/",badge:"business",useCases:["video-summarization", "content", "automation"],votes:0,userVote:0},
-{id:43,name:"Sora",category:"video",price:"unknown",priceDisplay:"Coming Soon",rating:4.9,description:{de:"OpenAIs hochmodernes Video-Tool mit beeindruckenden Ergebnissen.",en:"OpenAI's state-of-the-art video tool with impressive results."},features:["High-Quality","OpenAI","Advanced"],link:"https://openai.com/sora",badge:"new",useCases:["video-generation", "high-quality", "ai-research"],votes:0,userVote:0},
-{id:44,name:"Tabnine",category:"code",price:"freemium",priceDisplay:"Free/$12",rating:4.5,description:{de:"KI-Code Completion für viele Programmiersprachen und IDEs.",en:"AI code completion for many programming languages and IDEs."},features:["Autocomplete","Multi-Language","IDEs"],link:"https://www.tabnine.com/",badge:"popular",useCases:["code-completion", "ide-integration", "multi-language"],votes:0,userVote:0},
-{id:45,name:"Sourcegraph Cody",category:"code",price:"freemium",priceDisplay:"Free/$9",rating:4.4,description:{de:"KI-Code-Assistent mit Verständnis des gesamten Codebase.",en:"AI code assistant with understanding of entire codebase."},features:["Codebase","Context","Understanding"],link:"https://sourcegraph.com/cody",badge:"new",useCases:["code-understanding", "large-codebases", "context"],votes:0,userVote:0},
-{id:46,name:"Windsurf",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.3,description:{de:"AI-powered Code Editor mit integrierter Terminal und Git.",en:"AI-powered code editor with integrated terminal and Git."},features:["Editor","Terminal","Git"],link:"https://windsurf.dev/",badge:"new",useCases:["code-editor", "development", "integrated"],votes:0,userVote:0},
-{id:47,name:"Replit Ghostwriter",category:"code",price:"freemium",priceDisplay:"Free/$10",rating:4.2,description:{de:"KI-Coding innerhalb der Replit Browser-IDE.",en:"AI coding within the Replit browser IDE."},features:["Browser-IDE","Real-Time","Collaboration"],link:"https://replit.com/ghostwriter",badge:"free",useCases:["browser-ide", "real-time", "collaboration"],votes:0,userVote:0},
-{id:48,name:"Gumloop",category:"business",price:"freemium",priceDisplay:"Free/$29",rating:4.6,description:{de:"AI-Automatisierungstool für Workflows ohne Code.",en:"AI automation tool for workflows without code."},features:["Automation","No-Code","Workflows"],link:"https://gumloop.com/",badge:"business",useCases:["automation", "workflows", "no-code"],votes:0,userVote:0},
-{id:49,name:"Surfer SEO",category:"business",price:"paid",priceDisplay:"$79/mo",rating:4.5,description:{de:"KI-gestützte SEO-Optimierung für Content-Ranking.",en:"AI-powered SEO optimization for content ranking."},features:["SEO","Optimization","Content"],link:"https://surferseo.com/",badge:"business",useCases:["seo", "content-optimization", "marketing"],votes:0,userVote:0},
-{id:50,name:"Zapier",category:"business",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"Workflow-Automatisierung zwischen tausenden Apps.",en:"Workflow automation between thousands of apps."},features:["Automation","Integrations","Apps"],link:"https://zapier.com/",badge:"popular",useCases:["automation", "integrations", "workflows"],votes:0,userVote:0}
+{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0, hasLifetimeDeal: true},
+{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0, hasLifetimeDeal: true},
+{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0, hasLifetimeDeal: true},
+{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0, hasLifetimeDeal: true},
+{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:25,name:"NotebookLM",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"KI-gestützte Summaries und Erklärungen mit interaktiven Audio-Übersichten.",en:"AI-powered summaries and explanations with interactive audio overviews."},features:["Research","Audio","Summaries"],link:"https://notebooklm.google.com/",badge:"new",useCases:["research", "education", "organization"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:26,name:"TypingMind",category:"text",price:"paid",priceDisplay:"$12/mo",rating:4.5,description:{de:"Chat-Interface für viele KI-Modelle mit Plugins und Agenten.",en:"Chat interface for many AI models with plugins and agents."},features:["Multi-Model","Plugins","Agents"],link:"https://www.typingmind.com/",badge:"new",useCases:["chatbot", "multi-model", "automation"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:27,name:"Poe",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.4,description:{de:"Einfacher Zugang zu mehreren KI-Modellen, mobil optimiert.",en:"Easy access to multiple AI models, mobile optimized."},features:["Multi-Model","Mobile","Simple"],link:"https://poe.com/",badge:"free",useCases:["chatbot", "multi-model", "mobile"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:28,name:"Jasper",category:"text",price:"paid",priceDisplay:"$39/mo",rating:4.6,description:{de:"Branchenspezifischer KI-Assistent für Marketing und Copywriting.",en:"Industry-specific AI assistant for marketing and copywriting."},features:["Copywriting","Marketing","Templates"],link:"https://www.jasper.ai/",badge:"popular",useCases:["copywriting", "marketing", "content"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:29,name:"neuroflash",category:"text",price:"freemium",priceDisplay:"Free/$30",rating:4.5,description:{de:"KI-Textgenerator mit Fokus auf die deutsche Sprache und SEO.",en:"AI text generator with focus on German language and SEO."},features:["German","SEO","Templates"],link:"https://neuroflash.com/",badge:"new",useCases:["copywriting", "german", "seo"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:30,name:"Artsmart.ai",category:"image",price:"paid",priceDisplay:"$19/mo",rating:4.7,description:{de:"Fortschrittlicher Bildgenerator mit vielen Bearbeitungsfunktionen.",en:"Advanced image generator with many editing functions."},features:["Hyper-Realistic","Editing","Tools"],link:"https://artsmart.ai/",badge:"new",useCases:["image-generator", "editing", "realistic"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:31,name:"Ideogram",category:"image",price:"freemium",priceDisplay:"Free/$7",rating:4.6,description:{de:"Starke Text-Bild-Integration, ideal für Corporate Design.",en:"Strong text-image integration, ideal for corporate design."},features:["Text-In-Image","Simple","Corporate"],link:"https://ideogram.ai/",badge:"new",useCases:["image-generator", "design", "text-integration"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:32,name:"FLUX",category:"image",price:"freemium",priceDisplay:"Free/$15",rating:4.5,description:{de:"Realistische Bilder, schnell, mit API für Entwickler.",en:"Realistic images, fast, with API for developers."},features:["Realistic","Fast","API"],link:"https://flux.ai/",badge:"new",useCases:["image-generator", "realistic", "api"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:33,name:"DreamStudio",category:"image",price:"paid",priceDisplay:"$10/1000",rating:4.4,description:{de:"Stable Diffusion-Interface mit vielen Anpassungsmöglichkeiten.",en:"Stable Diffusion interface with many customization options."},features:["Stable-Diffusion","Custom","Control"],link:"https://dreamstudio.ai/",badge:"free",useCases:["image-generator", "stable-diffusion", "custom"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:34,name:"Stockimg.ai",category:"image",price:"paid",priceDisplay:"$16/mo",rating:4.3,description:{de:"KI-generierte Stockfotos für kommerzielle Nutzung.",en:"AI-generated stock photos for commercial use."},features:["Stock","Commercial","Photos"],link:"https://stockimg.ai/",badge:"business",useCases:["image-generator", "stock", "commercial"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:35,name:"Udio",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Hervorragende Audioqualität für Songs mit flexibler Kontrolle.",en:"Excellent audio quality for songs with flexible control."},features:["High-Quality","Song-Structure","Vocals"],link:"https://udio.com/",badge:"popular",useCases:["music", "song-creation", "audio-quality"], votes:0,userVote:0, hasLifetimeDeal: false},
+{id:36,name:"Mureka.ai",category:"audio",price:"freemium",priceDisplay:"Free/$15",rating:4.4,description:{de:"Voice-Cloning für eigene Stimme als Sänger, 200+ Musikstile.",en:"Voice cloning for your own voice as singer, 200+ music styles."},features:["Voice-Clone","200+Styles","Marketplace"],link:"https://mureka.ai/",badge:"new",useCases:["music", "voice-cloning", "personalization"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:37,name:"Beatoven.ai",category:"audio",price:"freemium",priceDisplay:"Free/$3",rating:4.5,description:{de:"Rechtlich sichere Hintergrundmusik mit Fairly Trained Zertifizierung.",en:"Legally safe background music with Fairly Trained certification."},features:["Legal","Background","Video-Sync"],link:"https://beatoven.ai/",badge:"business",useCases:["background-music", "legal", "video"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:38,name:"Soundful",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.3,description:{de:"Echte Studio-Samples für professionelle Klangqualität.",en:"Real studio samples for professional sound quality."},features:["Studio-Samples","Royalty-Free","Stems"],link:"https://soundful.com/",badge:"business",useCases:["background-music", "studio-quality", "royalty-free"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:39,name:"HeyGen",category:"video",price:"freemium",priceDisplay:"Free/$29",rating:4.7,description:{de:"Realistische AI Avatare und KI-generierte Sprecher für Videos.",en:"Realistic AI avatars and AI-generated speakers for videos."},features:["Avatars","Lip-Sync","Realistic"],link:"https://www.heygen.com/",badge:"popular",useCases:["video-avatars", "presentations", "content-creation"],votes:0,userVote:0, hasLifetimeDeal: true},
+{id:40,name:"InVideo",category:"video",price:"freemium",priceDisplay:"Free/$35",rating:4.5,description:{de:"KI-Video-Editor mit vielen Templates für Social Media.",en:"AI video editor with many templates for social media."},features:["Templates","Editing","Social-Media"],link:"https://invideo.io/",badge:"popular",useCases:["video-editing", "social-media", "templates"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:41,name:"Lumen5",category:"video",price:"freemium",priceDisplay:"Free/$19",rating:4.4,description:{de:"Text-zu-Video Konverter für Blogposts und Artikel.",en:"Text-to-video converter for blog posts and articles."},features:["Text-to-Video","Blog","Automation"],link:"https://lumen5.com/",badge:"business",useCases:["video-creation", "content", "automation"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:42,name:"Pictory.ai",category:"video",price:"paid",priceDisplay:"$19/mo",rating:4.3,description:{de:"Automatische Erstellung von Videos aus langen Inhalten.",en:"Automatic creation of videos from long content."},features:["Automatic","Summarization","Visuals"],link:"https://pictory.ai/",badge:"business",useCases:["video-summarization", "content", "automation"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:43,name:"Sora",category:"video",price:"unknown",priceDisplay:"Coming Soon",rating:4.9,description:{de:"OpenAIs hochmodernes Video-Tool mit beeindruckenden Ergebnissen.",en:"OpenAI's state-of-the-art video tool with impressive results."},features:["High-Quality","OpenAI","Advanced"],link:"https://openai.com/sora",badge:"new",useCases:["video-generation", "high-quality", "ai-research"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:44,name:"Tabnine",category:"code",price:"freemium",priceDisplay:"Free/$12",rating:4.5,description:{de:"KI-Code Completion für viele Programmiersprachen und IDEs.",en:"AI code completion for many programming languages and IDEs."},features:["Autocomplete","Multi-Language","IDEs"],link:"https://www.tabnine.com/",badge:"popular",useCases:["code-completion", "ide-integration", "multi-language"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:45,name:"Sourcegraph Cody",category:"code",price:"freemium",priceDisplay:"Free/$9",rating:4.4,description:{de:"KI-Code-Assistent mit Verständnis des gesamten Codebase.",en:"AI code assistant with understanding of entire codebase."},features:["Codebase","Context","Understanding"],link:"https://sourcegraph.com/cody",badge:"new",useCases:["code-understanding", "large-codebases", "context"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:46,name:"Windsurf",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.3,description:{de:"AI-powered Code Editor mit integrierter Terminal und Git.",en:"AI-powered code editor with integrated terminal and Git."},features:["Editor","Terminal","Git"],link:"https://windsurf.dev/",badge:"new",useCases:["code-editor", "development", "integrated"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:47,name:"Replit Ghostwriter",category:"code",price:"freemium",priceDisplay:"Free/$10",rating:4.2,description:{de:"KI-Coding innerhalb der Replit Browser-IDE.",en:"AI coding within the Replit browser IDE."},features:["Browser-IDE","Real-Time","Collaboration"],link:"https://replit.com/ghostwriter",badge:"free",useCases:["browser-ide", "real-time", "collaboration"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:48,name:"Gumloop",category:"business",price:"freemium",priceDisplay:"Free/$29",rating:4.6,description:{de:"AI-Automatisierungstool für Workflows ohne Code.",en:"AI automation tool for workflows without code."},features:["Automation","No-Code","Workflows"],link:"https://gumloop.com/",badge:"business",useCases:["automation", "workflows", "no-code"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:49,name:"Surfer SEO",category:"business",price:"paid",priceDisplay:"$79/mo",rating:4.5,description:{de:"KI-gestützte SEO-Optimierung für Content-Ranking.",en:"AI-powered SEO optimization for content ranking."},features:["SEO","Optimization","Content"],link:"https://surferseo.com/",badge:"business",useCases:["seo", "content-optimization", "marketing"],votes:0,userVote:0, hasLifetimeDeal: false},
+{id:50,name:"Zapier",category:"business",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"Workflow-Automatisierung zwischen tausenden Apps.",en:"Workflow automation between thousands of apps."},features:["Automation","Integrations","Apps"],link:"https://zapier.com/",badge:"popular",useCases:["automation", "integrations", "workflows"],votes:0,userVote:0, hasLifetimeDeal: true}
 ];
 
 // ===== ÜBERSETZUNGEN FÜR DYNAMISCHE TEXTE =====
@@ -2292,6 +2614,13 @@ let sort = 'votes';
 let query = '';
 let searchTimeout;
 let userVotes = {};
+
+// ===== AI CONCIERGE VARIABLEN =====
+let conciergeStep = 1;
+let conciergeSelection = {
+  category: null,
+  price: null
+};
 
 // ===== INITIALISIERUNG =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -2370,6 +2699,43 @@ function setupEvents() {
     });
   });
   
+  // Surprise Me Button
+  document.getElementById('surpriseBtn').addEventListener('click', surpriseMe);
+  
+  // AI Concierge Button
+  document.getElementById('conciergeBtn').addEventListener('click', openConciergeModal);
+  
+  // Concierge Modal Events
+  document.getElementById('closeConciergeModal').addEventListener('click', closeConciergeModal);
+  document.getElementById('conciergeModalOverlay').addEventListener('click', closeConciergeModal);
+  document.getElementById('conciergeNextBtn').addEventListener('click', nextConciergeStep);
+  document.getElementById('conciergePrevBtn').addEventListener('click', prevConciergeStep);
+  document.getElementById('conciergeFinishBtn').addEventListener('click', finishConcierge);
+  
+  // Concierge Optionen
+  document.querySelectorAll('.concierge-option').forEach(option => {
+    option.addEventListener('click', function() {
+      const step = conciergeStep;
+      const value = this.dataset.value;
+      
+      // Entferne selected von allen Optionen in diesem Schritt
+      const currentStep = document.getElementById(`conciergeStep${step}`);
+      currentStep.querySelectorAll('.concierge-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Markiere ausgewählte Option
+      this.classList.add('selected');
+      
+      // Speichere Auswahl
+      if (step === 1) {
+        conciergeSelection.category = value;
+      } else if (step === 2) {
+        conciergeSelection.price = value;
+      }
+    });
+  });
+  
   // Quick Navigation Filter
   document.getElementById('quickNav').addEventListener('click', e => {
     const card = e.target.closest('.quick-card');
@@ -2435,6 +2801,9 @@ function setupEvents() {
       cat = 'all';
     } else if (btn.dataset.category) {
       cat = btn.dataset.category;
+    } else if (btn.dataset.lifetime) {
+      // Lifetime Deals Filter
+      cat = 'lifetime';
     }
     
     applyFilters();
@@ -2540,6 +2909,7 @@ function initFilterDropdowns() {
     <option value="free">${lang === 'de' ? '🆓 Kostenlos' : '🆓 Free'}</option>
     <option value="paid">${lang === 'de' ? '💳 Bezahlt' : '💳 Paid'}</option>
     <option value="freemium">${lang === 'de' ? '⭐ Freemium' : '⭐ Freemium'}</option>
+    <option value="lifetime">${lang === 'de' ? '👑 Lifetime Deals' : '👑 Lifetime Deals'}</option>
   `;
   priceFilter.value = price;
   
@@ -2740,6 +3110,7 @@ function renderComparison() {
           <th>
             <div class="compare-tool-header">
               <strong>${tool.name}</strong>
+              ${tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-top: 5px;">LTD</span>' : ''}
               <div class="tool-price-compact">${tool.priceDisplay}</div>
               <button class="tool-remove-btn" data-id="${tool.id}">
                 ${lang === 'de' ? 'Entfernen' : 'Remove'}
@@ -2767,7 +3138,7 @@ function renderComparison() {
         ${toolsToCompare.map(tool => `<td>${tool.price === 'free' ? (lang === 'de' ? 'Kostenlos' : 'Free') : 
                                         tool.price === 'paid' ? (lang === 'de' ? 'Bezahlt' : 'Paid') : 
                                         tool.price === 'freemium' ? 'Freemium' : 
-                                        (lang === 'de' ? 'Unbekannt' : 'Unknown')}</td>`).join('')}
+                                        (lang === 'de' ? 'Unbekannt' : 'Unknown')}${tool.hasLifetimeDeal ? ' (Lifetime Deal)' : ''}</td>`).join('')}
       </tr>
       <tr>
         <td>${lang === 'de' ? 'Hauptfunktionen' : 'Main Features'}</td>
@@ -2832,6 +3203,7 @@ function exportComparison() {
   csv += `Rating,${toolsToCompare.map(tool => tool.rating).join(',')}\n`;
   csv += `Community Votes,${toolsToCompare.map(tool => tool.votes).join(',')}\n`;
   csv += `Pricing,${toolsToCompare.map(tool => tool.priceDisplay).join(',')}\n`;
+  csv += `Lifetime Deal,${toolsToCompare.map(tool => tool.hasLifetimeDeal ? 'Yes' : 'No').join(',')}\n`;
   csv += `Features,${toolsToCompare.map(tool => `"${tool.features.join(', ')}"`).join(',')}\n`;
   csv += `Use Cases,${toolsToCompare.map(tool => `"${tool.useCases ? tool.useCases.join(', ') : ''}"`).join(',')}\n`;
   csv += `Description,${toolsToCompare.map(tool => `"${tool.description[lang]}"`).join(',')}\n`;
@@ -3069,7 +3441,7 @@ function renderTopCharts() {
           <span>${tool.votes}</span>
         </div>
       </div>
-      <div class="chart-tool-name">${tool.name}</div>
+      <div class="chart-tool-name">${tool.name} ${tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : ''}</div>
       <div class="chart-category">${catName(tool.category)}</div>
       <div class="chart-price">${tool.priceDisplay}</div>
       <div class="chart-description">${tool.description[lang]}</div>
@@ -3141,11 +3513,20 @@ function handleVote(toolId, vote) {
 // ===== FILTER & TOOL LISTE =====
 function applyFilters() {
   let filtered = aiTools.filter(tool => {
+    // Kategorie Filter
     if (cat === 'favorites' && !tool.isFavorite) return false;
-    if (cat !== 'all' && cat !== 'favorites' && tool.category !== cat) return false;
-    if (price !== 'all' && tool.price !== price) return false;
+    if (cat === 'lifetime' && !tool.hasLifetimeDeal) return false;
+    if (cat !== 'all' && cat !== 'favorites' && cat !== 'lifetime' && tool.category !== cat) return false;
+    
+    // Preis Filter
+    if (price === 'free' && tool.price !== 'free') return false;
+    if (price === 'paid' && tool.price !== 'paid') return false;
+    if (price === 'freemium' && tool.price !== 'freemium') return false;
+    if (price === 'lifetime' && !tool.hasLifetimeDeal) return false;
+    
+    // Suchquery
     if (query) {
-      const txt = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')} ${tool.useCases ? tool.useCases.join(' ') : ''}`.toLowerCase();
+      const txt = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')} ${tool.useCases ? t.useCases.join(' ') : ''}`.toLowerCase();
       if (!txt.includes(query)) return false;
     }
     return true;
@@ -3206,6 +3587,7 @@ function renderTools(tools) {
         <div class="tool-name-row">
           <div class="tool-name-compact">${tool.name}</div>
           <div class="tool-category-compact">${catName(tool.category)}</div>
+          ${tool.hasLifetimeDeal ? '<span class="tool-ltd-badge">LTD</span>' : ''}
         </div>
         <div class="tool-desc-compact">${tool.description[lang]}</div>
       </div>
@@ -3218,7 +3600,7 @@ function renderTools(tools) {
           <button class="compare-btn ${tool.inCompare ? 'active' : ''}" data-id="${tool.id}">
             <i class="fas fa-balance-scale"></i>
           </button>
-          <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer">${t.tryNow}</a>
+          <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer" ${tool.hasLifetimeDeal ? 'data-affiliate="true"' : ''}>${t.tryNow}</a>
         </div>
       </div>
     </div>
@@ -3259,6 +3641,268 @@ function resetFilters() {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('[data-scope="all"]').classList.add('active');
   applyFilters();
+}
+
+// ===== FEATURE 1: AI CONCIERGE =====
+function openConciergeModal() {
+  conciergeStep = 1;
+  conciergeSelection = { category: null, price: null };
+  
+  // Reset UI
+  document.querySelectorAll('.concierge-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  // Zeige Schritt 1
+  document.querySelectorAll('.concierge-step').forEach(step => {
+    step.classList.remove('active');
+  });
+  document.getElementById('conciergeStep1').classList.add('active');
+  
+  // Button States
+  document.getElementById('conciergePrevBtn').disabled = true;
+  document.getElementById('conciergeNextBtn').style.display = 'block';
+  document.getElementById('conciergeFinishBtn').style.display = 'none';
+  
+  // Sprache anpassen
+  const prevBtn = document.getElementById('conciergePrevBtn');
+  const nextBtn = document.getElementById('conciergeNextBtn');
+  const finishBtn = document.getElementById('conciergeFinishBtn');
+  
+  const prevText = prevBtn.getAttribute(`data-${lang}`);
+  const nextText = nextBtn.getAttribute(`data-${lang}`);
+  const finishText = finishBtn.getAttribute(`data-${lang}`);
+  
+  if (prevText) prevBtn.textContent = prevText;
+  if (nextText) nextBtn.textContent = nextText;
+  if (finishText) finishBtn.textContent = finishText;
+  
+  // Modal öffnen
+  document.getElementById('conciergeModalOverlay').classList.add('active');
+  document.getElementById('conciergeModal').classList.add('active');
+}
+
+function closeConciergeModal() {
+  document.getElementById('conciergeModalOverlay').classList.remove('active');
+  document.getElementById('conciergeModal').classList.remove('active');
+}
+
+function nextConciergeStep() {
+  // Validierung
+  if (conciergeStep === 1 && !conciergeSelection.category) {
+    alert(lang === 'de' ? 'Bitte wähle eine Kategorie aus.' : 'Please select a category.');
+    return;
+  }
+  
+  if (conciergeStep === 2 && !conciergeSelection.price) {
+    alert(lang === 'de' ? 'Bitte wähle eine Preisvorstellung aus.' : 'Please select a price preference.');
+    return;
+  }
+  
+  // Nächster Schritt
+  conciergeStep++;
+  
+  // Zeige aktuellen Schritt
+  document.querySelectorAll('.concierge-step').forEach(step => {
+    step.classList.remove('active');
+  });
+  document.getElementById(`conciergeStep${conciergeStep}`).classList.add('active');
+  
+  // Button States anpassen
+  const prevBtn = document.getElementById('conciergePrevBtn');
+  const nextBtn = document.getElementById('conciergeNextBtn');
+  const finishBtn = document.getElementById('conciergeFinishBtn');
+  
+  prevBtn.disabled = false;
+  
+  if (conciergeStep === 3) {
+    // Zeige Ergebnisse
+    showConciergeResults();
+    nextBtn.style.display = 'none';
+    finishBtn.style.display = 'block';
+  }
+}
+
+function prevConciergeStep() {
+  if (conciergeStep === 1) return;
+  
+  conciergeStep--;
+  
+  // Zeige aktuellen Schritt
+  document.querySelectorAll('.concierge-step').forEach(step => {
+    step.classList.remove('active');
+  });
+  document.getElementById(`conciergeStep${conciergeStep}`).classList.add('active');
+  
+  // Button States anpassen
+  const prevBtn = document.getElementById('conciergePrevBtn');
+  const nextBtn = document.getElementById('conciergeNextBtn');
+  const finishBtn = document.getElementById('conciergeFinishBtn');
+  
+  if (conciergeStep === 1) {
+    prevBtn.disabled = true;
+  }
+  
+  nextBtn.style.display = 'block';
+  finishBtn.style.display = 'none';
+}
+
+function showConciergeResults() {
+  const resultsContainer = document.getElementById('conciergeResults');
+  
+  // Filtere Tools basierend auf Auswahl
+  let filteredTools = aiTools.filter(tool => {
+    if (conciergeSelection.category && tool.category !== conciergeSelection.category) {
+      return false;
+    }
+    
+    if (conciergeSelection.price === 'free' && tool.price !== 'free') {
+      return false;
+    }
+    
+    if (conciergeSelection.price === 'paid' && tool.price !== 'paid') {
+      return false;
+    }
+    
+    if (conciergeSelection.price === 'subscription' && 
+        (tool.price !== 'freemium' && tool.price !== 'paid')) {
+      return false;
+    }
+    
+    return true;
+  });
+  
+  // Sortiere nach Bewertung
+  filteredTools.sort((a, b) => b.rating - a.rating);
+  
+  // Begrenze auf 6 Ergebnisse
+  filteredTools = filteredTools.slice(0, 6);
+  
+  if (filteredTools.length === 0) {
+    resultsContainer.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--tech-silver);">
+        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px;"></i>
+        <h3>${lang === 'de' ? 'Keine passenden Tools gefunden' : 'No matching tools found'}</h3>
+        <p>${lang === 'de' ? 'Versuche andere Kriterien auszuwählen.' : 'Try selecting different criteria.'}</p>
+      </div>
+    `;
+    return;
+  }
+  
+  resultsContainer.innerHTML = filteredTools.map(tool => `
+    <div class="concierge-result-card" data-id="${tool.id}">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+        <h4 style="color: white; font-size: 1.1rem;">${tool.name}</h4>
+        <span style="color: var(--matrix-green); font-weight: bold;">${tool.priceDisplay}</span>
+      </div>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <span style="background: rgba(0, 243, 255, 0.1); color: var(--neon-cyan); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem;">
+          ${catName(tool.category)}
+        </span>
+        ${tool.hasLifetimeDeal ? '<span class="tool-ltd-badge">LTD</span>' : ''}
+      </div>
+      <p style="color: var(--tech-silver); font-size: 0.9rem; line-height: 1.5; margin-bottom: 15px;">
+        ${tool.description[lang]}
+      </p>
+      <div style="display: flex; gap: 10px;">
+        <a href="${tool.link}" target="_blank" rel="noopener noreferrer" style="
+          background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+          color: var(--void-black);
+          padding: 8px 16px;
+          border-radius: 8px;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 0.85rem;
+          flex: 1;
+          text-align: center;
+        ">${lang === 'de' ? 'Zum Tool' : 'To Tool'}</a>
+      </div>
+    </div>
+  `).join('');
+  
+  // Event Listener für Karten
+  resultsContainer.querySelectorAll('.concierge-result-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const toolId = parseInt(this.dataset.id);
+      const tool = aiTools.find(t => t.id === toolId);
+      if (tool) {
+        closeConciergeModal();
+        // Filter auf dieses Tool setzen
+        document.getElementById('searchInput').value = tool.name;
+        query = tool.name.toLowerCase();
+        applyFilters();
+        
+        // Scroll zum Tool
+        setTimeout(() => {
+          const toolElement = document.querySelector(`[data-id="${toolId}"]`);
+          if (toolElement) {
+            toolElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            toolElement.style.boxShadow = '0 0 0 2px var(--neon-cyan)';
+            setTimeout(() => toolElement.style.boxShadow = '', 2000);
+          }
+        }, 100);
+      }
+    });
+  });
+}
+
+function finishConcierge() {
+  closeConciergeModal();
+}
+
+// ===== FEATURE 2: SURPRISE ME BUTTON =====
+function surpriseMe() {
+  // Glitch-Effekt aktivieren
+  const glitchOverlay = document.querySelector('.glitch-effect');
+  glitchOverlay.style.opacity = '0.3';
+  glitchOverlay.style.transition = 'opacity 0.2s';
+  
+  // Zufällige Karte auswählen (nur sichtbare)
+  const visibleCards = Array.from(document.querySelectorAll('.chart-card, .compact-tool-row'));
+  if (visibleCards.length === 0) return;
+  
+  const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+  
+  // Nach 200ms zu zufälliger Karte scrollen
+  setTimeout(() => {
+    // Glitch-Effekt ausblenden
+    glitchOverlay.style.opacity = '0.02';
+    
+    // Zur Karte scrollen
+    randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Pulsierenden Neon-Effekt auf Karte
+    randomCard.classList.add('neon-pulse');
+    
+    // Effekt nach 2 Sekunden entfernen
+    setTimeout(() => {
+      randomCard.classList.remove('neon-pulse');
+    }, 2000);
+    
+  }, 200);
+}
+
+// ===== FEATURE 3: LIFETIME DEALS FILTER =====
+// Die Filterlogik wurde bereits in applyFilters() integriert
+// Die Badge-Anzeige wurde in renderTopCharts() und renderTools() integriert
+// Die Filter-Buttons wurden im HTML hinzugefügt
+
+// Die Tool-Links wurden mit data-affiliate Attribut vorbereitet
+// Dies ermöglicht später das einfache Einfügen von Affiliate-Links
+
+// ===== ZUSÄTZLICHE HELFER FUNKTIONEN =====
+function updateDynamicContent() {
+  // Nur wenn die KI-Tools Daten bereits geladen sind
+  if (typeof aiTools !== 'undefined') {
+    // Top Charts neu rendern
+    renderTopCharts();
+    
+    // Filter anwenden (rendert auch die Tool-Liste)
+    applyFilters();
+    
+    // Actions Bar aktualisieren
+    updateActionsBar();
+  }
 }
 </script>
 </body>
