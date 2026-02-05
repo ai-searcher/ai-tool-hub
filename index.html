@@ -27,7 +27,6 @@
   <meta property="og:description" content="Intelligente KI-Tool-Suche mit Filtern, Favoriten, Vergleich & Prompt-Ersteller." />
   <meta property="og:url" content="https://ai-searcher.github.io/ai-tool-hub/" />
   <meta property="og:site_name" content="AI Tools Hub" />
-  <!-- Tipp: Lege eine echte Datei ab, z.B. /og-image.png -->
   <meta property="og:image" content="https://ai-searcher.github.io/ai-tool-hub/og-image.png" />
 
   <!-- Twitter Card -->
@@ -42,9 +41,7 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-53RF07VYJ8', {
-      anonymize_ip: true
-    });
+    gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
   </script>
 
   <!-- Fonts -->
@@ -72,7 +69,6 @@
   </script>
 
   <script id="jsonLdItemList" type="application/ld+json">{}</script>
-  <script id="jsonLdFaq" type="application/ld+json">{}</script>
 
   <style>
     /* Reset & Base */
@@ -85,22 +81,16 @@
       --secondary-light: #34d399;
       --accent: #8b5cf6;
       --danger: #ef4444;
-
       --dark: #0f172a;
       --dark-light: #1e293b;
-
       --text: #f8fafc;
       --text-muted: #94a3b8;
-
       --card-bg: rgba(30, 41, 59, 0.70);
-      --glass: rgba(255, 255, 255, 0.06);
       --shadow: 0 10px 25px rgba(0,0,0,0.32);
       --radius: 12px;
       --transition: all 0.25s ease;
-
       --maxw: 1200px;
     }
-
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
@@ -108,178 +98,111 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     a { color: inherit; }
     .sr-only {
       position:absolute; width:1px; height:1px; padding:0; margin:-1px;
       overflow:hidden; clip:rect(0,0,0,0); border:0;
     }
-
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
 
     /* Top controls */
     .top-controls {
-      position: fixed;
-      top: 18px;
-      right: 18px;
-      z-index: 1000;
-      display: flex;
-      gap: 10px;
-      align-items: center;
+      position: fixed; top: 18px; right: 18px; z-index: 1000;
+      display: flex; gap: 10px; align-items: center;
     }
-
     .icon-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--dark-light);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
+      background: var(--card-bg); border: 1px solid var(--dark-light);
+      color: var(--text); padding: 10px 12px; border-radius: 10px;
+      cursor: pointer; backdrop-filter: blur(10px);
       transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
+      display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
     }
-
-    .icon-btn:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .lang-btn {
-      border: 2px solid var(--primary);
-      font-weight: 700;
-    }
+    .icon-btn:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .lang-btn { border: 2px solid var(--primary); font-weight: 700; }
 
     /* Header */
     .header {
-      padding: 84px 20px 28px;
-      text-align: center;
-      max-width: var(--maxw);
-      margin: 0 auto;
+      padding: 84px 20px 28px; text-align: center;
+      max-width: var(--maxw); margin: 0 auto;
     }
-
     .badge {
       background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      display: inline-block;
-      margin-bottom: 18px;
+      color: white; padding: 6px 16px; border-radius: 20px;
+      font-size: 0.85rem; font-weight: 700;
+      display: inline-block; margin-bottom: 18px;
       animation: float 3s ease-in-out infinite;
     }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
     }
-
     .header h1 {
       font-size: clamp(2rem, 5vw, 3.5rem);
-      margin-bottom: 12px;
-      line-height: 1.1;
+      margin-bottom: 12px; line-height: 1.1;
       background: linear-gradient(90deg, #fff, var(--primary-light));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     .header p {
-      font-size: 1.06rem;
-      color: var(--text-muted);
-      max-width: 760px;
-      margin: 0 auto 22px;
-      line-height: 1.6;
+      font-size: 1.06rem; color: var(--text-muted);
+      max-width: 760px; margin: 0 auto 22px; line-height: 1.6;
     }
 
     /* Search */
     .search-container {
-      max-width: 860px;
-      margin: 0 auto 12px;
-      position: relative;
+      max-width: 860px; margin: 0 auto 12px; position: relative;
     }
     .search-box {
-      width: 100%;
-      padding: 18px 18px 18px 54px;
-      background: var(--card-bg);
-      border: 2px solid var(--dark-light);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-size: 1rem;
-      transition: var(--transition);
+      width: 100%; padding: 18px 18px 18px 54px;
+      background: var(--card-bg); border: 2px solid var(--dark-light);
+      border-radius: var(--radius); color: var(--text);
+      font-size: 1rem; transition: var(--transition);
       backdrop-filter: blur(10px);
     }
     .search-box:focus {
-      outline: none;
-      border-color: var(--primary);
+      outline: none; border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
     }
     .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--primary-light);
-      font-size: 1.1rem;
-      opacity: 0.95;
+      position: absolute; left: 18px; top: 50%;
+      transform: translateY(-50%); color: var(--primary-light);
+      font-size: 1.1rem; opacity: 0.95;
     }
 
     /* Smart suggestions */
     .smart-bar {
-      max-width: 860px;
-      margin: 0 auto 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 0.92rem;
+      max-width: 860px; margin: 0 auto 16px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; align-items: center;
+      color: var(--text-muted); font-size: 0.92rem;
     }
     .chip {
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--dark-light);
-      color: var(--text);
-      padding: 8px 12px;
-      border-radius: 999px;
-      cursor: pointer;
+      color: var(--text); padding: 8px 12px;
+      border-radius: 999px; cursor: pointer;
       transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 38px;
-      user-select: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      min-height: 38px; user-select: none;
     }
     .chip:hover { border-color: var(--primary); transform: translateY(-2px); }
     .chip strong { color: var(--primary-light); }
 
     /* Quick Filters */
     .quick-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin: 12px 0 18px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; margin: 12px 0 18px;
     }
     .filter-btn {
       background: var(--card-bg);
       border: 1px solid var(--dark-light);
-      color: var(--text-muted);
-      padding: 12px 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      transition: var(--transition);
-      white-space: nowrap;
-      min-height: 44px;
+      color: var(--text-muted); padding: 12px 18px;
+      border-radius: 30px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 600; transition: var(--transition);
+      white-space: nowrap; min-height: 44px;
     }
     .filter-btn:hover {
       border-color: var(--primary);
@@ -288,8 +211,7 @@
     }
     .filter-btn.active {
       background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-color: transparent;
-      color: white;
+      border-color: transparent; color: white;
       box-shadow: var(--shadow);
     }
 
@@ -297,200 +219,148 @@
     .advanced-filters {
       background: var(--card-bg);
       border-radius: var(--radius);
-      padding: 14px 16px;
-      margin: 0 auto 14px;
+      padding: 14px 16px; margin: 0 auto 14px;
       backdrop-filter: blur(10px);
       border: 1px solid var(--dark-light);
       max-width: 980px;
     }
     .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      align-items: center; justify-content: center;
     }
     .filter-group { position: relative; }
     .filter-select {
       padding: 10px 36px 10px 14px;
       background: var(--dark);
       border: 1px solid var(--dark-light);
-      border-radius: 10px;
-      color: var(--text);
-      font-size: 0.92rem;
-      transition: var(--transition);
-      cursor: pointer;
-      appearance: none;
-      min-width: 170px;
-      font-weight: 600;
+      border-radius: 10px; color: var(--text);
+      font-size: 0.92rem; transition: var(--transition);
+      cursor: pointer; appearance: none;
+      min-width: 170px; font-weight: 600;
       min-height: 44px;
     }
     .filter-select:focus { outline: none; border-color: var(--primary); }
     .filter-group::after {
-      content: '▼';
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--primary-light);
-      pointer-events: none;
+      content: '▼'; position: absolute;
+      right: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--primary-light); pointer-events: none;
       font-size: 0.7rem;
     }
 
     /* Tool Count */
     .tool-count {
-      text-align: center;
-      margin: 10px 0 6px;
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      text-align: center; margin: 10px 0 6px;
+      color: var(--text-muted); font-size: 0.95rem;
     }
     .tool-count span.count {
-      color: var(--primary-light);
-      font-weight: 800;
+      color: var(--primary-light); font-weight: 800;
     }
 
     /* Layout */
     .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 20px;
+      max-width: 1400px; margin: 0 auto; padding: 0 20px;
     }
 
     /* Top Picks */
     .top-picks {
-      max-width: var(--maxw);
-      margin: 0 auto 18px;
-      padding: 0 20px;
+      max-width: var(--maxw); margin: 0 auto 18px; padding: 0 20px;
     }
     .top-picks-inner {
       background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(139,92,246,0.12));
       border: 1px solid rgba(129,140,248,0.25);
-      border-radius: var(--radius);
-      padding: 14px 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      backdrop-filter: blur(10px);
+      border-radius: var(--radius); padding: 14px 14px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; backdrop-filter: blur(10px);
     }
 
     /* Prompt Builder */
     .prompt-section {
-      max-width: var(--maxw);
-      margin: 0 auto 18px;
-      padding: 0 20px;
+      max-width: var(--maxw); margin: 0 auto 18px; padding: 0 20px;
     }
     .prompt-card {
       background: var(--card-bg);
       border: 1px solid var(--dark-light);
-      border-radius: var(--radius);
-      padding: 16px;
+      border-radius: var(--radius); padding: 16px;
       backdrop-filter: blur(10px);
     }
     .prompt-head {
-      display: flex;
-      gap: 12px;
+      display: flex; gap: 12px;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      align-items: center; flex-wrap: wrap;
       margin-bottom: 12px;
     }
     .prompt-head h2 {
-      font-size: 1.1rem;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: 1.1rem; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
     }
     .prompt-toggle {
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--dark-light);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 10px 12px;
-      cursor: pointer;
-      min-height: 44px;
-      transition: var(--transition);
+      color: var(--text); border-radius: 10px;
+      padding: 10px 12px; cursor: pointer;
+      min-height: 44px; transition: var(--transition);
       font-weight: 700;
     }
     .prompt-toggle:hover { border-color: var(--primary); transform: translateY(-2px); }
 
-    .prompt-body {
-      display: none;
-      margin-top: 10px;
-    }
+    .prompt-body { display: none; margin-top: 10px; }
     .prompt-body.open { display: block; }
 
     .prompt-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 10px;
     }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
     .field label {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-weight: 600;
+      font-size: 0.9rem; color: var(--text-muted); font-weight: 600;
     }
     .field input, .field textarea, .field select {
       background: rgba(15,23,42,0.9);
       border: 1px solid var(--dark-light);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 10px 12px;
-      min-height: 44px;
-      font-size: 0.95rem;
-      transition: var(--transition);
+      color: var(--text); border-radius: 10px;
+      padding: 10px 12px; min-height: 44px;
+      font-size: 0.95rem; transition: var(--transition);
     }
     .field textarea { min-height: 88px; resize: vertical; }
-    .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--primary); }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline: none; border-color: var(--primary);
+    }
 
     .prompt-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-      align-items: center;
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: flex-start; align-items: center;
       margin-top: 8px;
     }
     .btn {
-      border: none;
-      background: var(--primary);
-      color: white;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
+      border: none; background: var(--primary);
+      color: white; padding: 12px 16px;
+      border-radius: 10px; cursor: pointer;
       transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 800;
-      min-height: 44px;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 800; min-height: 44px;
     }
     .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
-    .btn.secondary { background: rgba(255,255,255,0.06); border: 1px solid var(--dark-light); color: var(--text); }
-    .btn.secondary:hover { border-color: var(--primary); background: rgba(255,255,255,0.08); }
+    .btn.secondary {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--dark-light);
+      color: var(--text);
+    }
+    .btn.secondary:hover {
+      border-color: var(--primary);
+      background: rgba(255,255,255,0.08);
+    }
     .btn.danger { background: rgba(239,68,68,0.92); }
     .btn.danger:hover { background: rgba(239,68,68,1); }
 
     .prompt-output {
-      margin-top: 10px;
-      border: 1px solid var(--dark-light);
-      border-radius: 12px;
-      padding: 12px;
+      margin-top: 10px; border: 1px solid var(--dark-light);
+      border-radius: 12px; padding: 12px;
       background: rgba(2,6,23,0.45);
     }
     .prompt-output pre {
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      color: var(--text);
-      font-size: 0.92rem;
+      white-space: pre-wrap; word-break: break-word;
+      font-family: ui-monospace, monospace;
+      color: var(--text); font-size: 0.92rem;
       line-height: 1.55;
     }
 
@@ -498,21 +368,16 @@
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-      gap: 22px;
-      margin: 14px 0 24px;
+      gap: 22px; margin: 14px 0 24px;
     }
-
     .tool-card {
       background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 20px;
+      border-radius: var(--radius); padding: 20px;
       transition: var(--transition);
       border: 1px solid var(--dark-light);
       backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      position: relative;
+      display: flex; flex-direction: column;
+      height: 100%; position: relative;
     }
     .tool-card:hover {
       transform: translateY(-6px);
@@ -521,228 +386,191 @@
     }
 
     .tool-actions-top {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      display: flex;
-      gap: 8px;
+      position: absolute; top: 14px; right: 14px;
+      display: flex; gap: 8px;
     }
     .mini {
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--dark-light);
-      color: var(--text);
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      cursor: pointer;
+      color: var(--text); width: 38px; height: 38px;
+      border-radius: 10px; cursor: pointer;
       transition: var(--transition);
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center; justify-content: center;
     }
     .mini:hover { border-color: var(--primary); transform: translateY(-2px); }
-    .mini.active { border-color: rgba(52, 211, 153, 0.75); background: rgba(16,185,129,0.12); }
+    .mini.active {
+      border-color: rgba(52, 211, 153, 0.75);
+      background: rgba(16,185,129,0.12);
+    }
 
     .tool-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      gap: 14px;
-      padding-right: 78px;
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 10px;
+      gap: 14px; padding-right: 78px;
     }
     .tool-name {
-      font-size: 1.18rem;
-      font-weight: 900;
-      color: var(--text);
-      margin-bottom: 6px;
+      font-size: 1.18rem; font-weight: 900;
+      color: var(--text); margin-bottom: 6px;
       line-height: 1.2;
     }
     .tool-category {
-      font-size: 0.84rem;
-      color: var(--primary-light);
-      font-weight: 800;
-      display: inline-block;
+      font-size: 0.84rem; color: var(--primary-light);
+      font-weight: 800; display: inline-block;
       padding: 4px 10px;
       background: rgba(99,102,241,0.12);
       border-radius: 999px;
     }
     .tool-rating {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #fbbf24;
-      font-weight: 900;
-      white-space: nowrap;
-      margin-top: 2px;
+      display: flex; align-items: center; gap: 6px;
+      color: #fbbf24; font-weight: 900;
+      white-space: nowrap; margin-top: 2px;
     }
 
     .tool-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-      align-items: center;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 12px; align-items: center;
     }
     .price-tag {
-      font-size: 1.05rem;
-      font-weight: 900;
+      font-size: 1.05rem; font-weight: 900;
       color: var(--secondary-light);
     }
     .pill {
-      font-size: 0.78rem;
-      font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 999px;
+      font-size: 0.78rem; font-weight: 900;
+      padding: 4px 10px; border-radius: 999px;
       border: 1px solid var(--dark-light);
       color: var(--text);
       background: rgba(255,255,255,0.04);
     }
-    .pill.free { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.10); }
-    .pill.paid { border-color: rgba(99,102,241,0.35); background: rgba(99,102,241,0.10); }
-    .pill.freemium { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.10); }
+    .pill.free {
+      border-color: rgba(16,185,129,0.35);
+      background: rgba(16,185,129,0.10);
+    }
+    .pill.paid {
+      border-color: rgba(99,102,241,0.35);
+      background: rgba(99,102,241,0.10);
+    }
+    .pill.freemium {
+      border-color: rgba(245,158,11,0.35);
+      background: rgba(245,158,11,0.10);
+    }
 
     .tool-description {
-      color: var(--text-muted);
-      margin-bottom: 14px;
-      line-height: 1.65;
-      flex-grow: 1;
+      color: var(--text-muted); margin-bottom: 14px;
+      line-height: 1.65; flex-grow: 1;
       font-size: 0.97rem;
     }
 
     .tool-features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: flex; flex-wrap: wrap; gap: 8px;
       margin-bottom: 14px;
     }
     .feature-tag {
       background: rgba(255, 255, 255, 0.05);
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.78rem;
+      color: var(--text-muted); padding: 4px 10px;
+      border-radius: 999px; font-size: 0.78rem;
       font-weight: 700;
       border: 1px solid rgba(148,163,184,0.15);
     }
 
     .tool-footer {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; gap: 10px; flex-wrap: wrap;
+      align-items: center; justify-content: space-between;
       margin-top: auto;
     }
     .tool-link {
       background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      padding: 12px 14px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 900;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      flex: 1;
-      justify-content: center;
+      color: white; padding: 12px 14px;
+      border-radius: 10px; text-decoration: none;
+      font-weight: 900; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 8px;
+      min-height: 44px; flex: 1; justify-content: center;
     }
     .tool-link:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 16px rgba(99,102,241,0.28);
     }
     .more-btn {
-      flex: 0 0 auto;
-      min-width: 120px;
+      flex: 0 0 auto; min-width: 120px;
       justify-content: center;
     }
 
     .tool-badge {
-      font-size: 0.78rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-weight: 900;
+      font-size: 0.78rem; padding: 4px 10px;
+      border-radius: 999px; font-weight: 900;
       border: 1px solid rgba(255,255,255,0.10);
       background: rgba(255,255,255,0.05);
       color: var(--text);
     }
-    .tool-badge.popular { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.12); }
-    .tool-badge.new { border-color: rgba(99,102,241,0.35); background: rgba(99,102,241,0.12); }
-    .tool-badge.free { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.12); }
-    .tool-badge.aff { border-color: rgba(239,68,68,0.30); background: rgba(239,68,68,0.10); }
+    .tool-badge.popular {
+      border-color: rgba(245,158,11,0.35);
+      background: rgba(245,158,11,0.12);
+    }
+    .tool-badge.new {
+      border-color: rgba(99,102,241,0.35);
+      background: rgba(99,102,241,0.12);
+    }
+    .tool-badge.free {
+      border-color: rgba(16,185,129,0.35);
+      background: rgba(16,185,129,0.12);
+    }
+    .tool-badge.aff {
+      border-color: rgba(239,68,68,0.30);
+      background: rgba(239,68,68,0.10);
+    }
 
     /* Empty state */
     .empty-state {
-      text-align: center;
-      padding: 52px 18px;
+      text-align: center; padding: 52px 18px;
       grid-column: 1 / -1;
       background: rgba(2,6,23,0.25);
       border: 1px dashed rgba(148,163,184,0.25);
       border-radius: var(--radius);
     }
     .empty-state i {
-      font-size: 3.2rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      opacity: 0.55;
+      font-size: 3.2rem; color: var(--text-muted);
+      margin-bottom: 12px; opacity: 0.55;
     }
-    .empty-state h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--text); }
-    .empty-state p { color: var(--text-muted); max-width: 560px; margin: 0 auto 16px; line-height: 1.6; }
+    .empty-state h3 {
+      font-size: 1.3rem; margin-bottom: 8px;
+      color: var(--text);
+    }
+    .empty-state p {
+      color: var(--text-muted); max-width: 560px;
+      margin: 0 auto 16px; line-height: 1.6;
+    }
 
     /* Load more */
     .load-more-wrap {
-      display: flex;
-      justify-content: center;
+      display: flex; justify-content: center;
       margin: 14px 0 56px;
     }
 
-    /* Footer + FAQ */
+    /* Footer */
     .footer {
-      text-align: center;
-      padding: 34px 20px;
+      text-align: center; padding: 34px 20px;
       border-top: 1px solid var(--dark-light);
-      margin-top: 30px;
-      color: var(--text-muted);
+      margin-top: 30px; color: var(--text-muted);
     }
-    .footer p { font-size: 0.92rem; margin-bottom: 8px; line-height: 1.6; }
-    .footer a { color: var(--primary-light); text-decoration: none; }
+    .footer p {
+      font-size: 0.92rem; margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
     .footer a:hover { color: var(--primary); }
-
-    .faq {
-      max-width: 900px;
-      margin: 16px auto 0;
-      text-align: left;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(148,163,184,0.15);
-      border-radius: var(--radius);
-      padding: 12px;
-    }
-    .faq details {
-      border-bottom: 1px solid rgba(148,163,184,0.12);
-      padding: 10px 8px;
-    }
-    .faq details:last-child { border-bottom: none; }
-    .faq summary {
-      cursor: pointer;
-      font-weight: 800;
-      color: var(--text);
-      list-style: none;
-    }
-    .faq summary::-webkit-details-marker { display: none; }
-    .faq .answer { margin-top: 8px; color: var(--text-muted); line-height: 1.6; }
 
     /* Modal */
     .modal-backdrop {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.55);
-      display: none;
-      z-index: 1100;
-      padding: 20px;
+      display: none; z-index: 1100; padding: 20px;
     }
-    .modal-backdrop.open { display: grid; place-items: center; }
+    .modal-backdrop.open {
+      display: grid; place-items: center;
+    }
     .modal {
       width: min(920px, 100%);
       background: rgba(15,23,42,0.92);
@@ -753,24 +581,26 @@
       overflow: hidden;
     }
     .modal-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px;
       padding: 14px 14px;
       border-bottom: 1px solid rgba(148,163,184,0.15);
     }
-    .modal-head h3 { font-size: 1.05rem; color: var(--text); }
+    .modal-head h3 {
+      font-size: 1.05rem; color: var(--text);
+    }
     .modal-close {
       width: 42px; height: 42px;
       border-radius: 12px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(148,163,184,0.18);
-      color: var(--text);
-      cursor: pointer;
+      color: var(--text); cursor: pointer;
       transition: var(--transition);
     }
-    .modal-close:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .modal-close:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
     .modal-body { padding: 14px; }
     .modal-grid {
       display: grid;
@@ -779,48 +609,51 @@
     }
     .modal-box {
       border: 1px solid rgba(148,163,184,0.14);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 14px; padding: 12px;
       background: rgba(2,6,23,0.35);
     }
-    .modal-box h4 { font-size: 0.98rem; margin-bottom: 8px; color: var(--text); }
-    .modal-box p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
-    .modal-box ul { margin-top: 8px; color: var(--text-muted); line-height: 1.6; padding-left: 18px; }
+    .modal-box h4 {
+      font-size: 0.98rem; margin-bottom: 8px;
+      color: var(--text);
+    }
+    .modal-box p {
+      color: var(--text-muted); line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .modal-box ul {
+      margin-top: 8px; color: var(--text-muted);
+      line-height: 1.6; padding-left: 18px;
+    }
     .modal-box li { margin: 4px 0; }
     .compare-table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 12px;
+      width: 100%; border-collapse: collapse;
+      overflow: hidden; border-radius: 12px;
       border: 1px solid rgba(148,163,184,0.14);
     }
     .compare-table th, .compare-table td {
       padding: 10px;
       border-bottom: 1px solid rgba(148,163,184,0.12);
-      vertical-align: top;
-      text-align: left;
+      vertical-align: top; text-align: left;
     }
-    .compare-table th { color: var(--text); font-weight: 900; background: rgba(255,255,255,0.04); }
+    .compare-table th {
+      color: var(--text); font-weight: 900;
+      background: rgba(255,255,255,0.04);
+    }
     .compare-table td { color: var(--text-muted); }
     .compare-table tr:last-child td { border-bottom: none; }
 
     /* Toast */
     .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
+      position: fixed; left: 50%; bottom: 18px;
       transform: translateX(-50%);
       background: rgba(15,23,42,0.92);
       border: 1px solid rgba(148,163,184,0.20);
-      color: var(--text);
-      padding: 10px 12px;
+      color: var(--text); padding: 10px 12px;
       border-radius: 999px;
       box-shadow: var(--shadow);
-      display: none;
-      z-index: 1200;
+      display: none; z-index: 1200;
       max-width: min(680px, 92vw);
-      text-align: center;
-      font-weight: 700;
+      text-align: center; font-weight: 700;
     }
     .toast.show { display: block; }
 
@@ -878,4 +711,1269 @@
       <button class="filter-btn active" data-category="all" type="button"><i class="fas fa-globe"></i> <span class="cat-text">Alle Tools</span></button>
       <button class="filter-btn" data-category="text" type="button"><i class="fas fa-keyboard"></i> <span class="cat-text">Text & Schreiben</span></button>
       <button class="filter-btn" data-category="image" type="button"><i class="fas fa-image"></i> <span class="cat-text">Bilder & Design</span></button>
-      <button class="filter-btn" data-category="audio" type="button"><i class="fas fa-music"></i> <span class="cat-text">Audio & Musik</span></but
+      <button class="filter-btn" data-category="audio" type="button"><i class="fas fa-music"></i> <span class="cat-text">Audio & Musik</span></button>
+      <button class="filter-btn" data-category="video" type="button"><i class="fas fa-video"></i> <span class="cat-text">Video</span></button>
+      <button class="filter-btn" data-category="code" type="button"><i class="fas fa-code"></i> <span class="cat-text">Code & Entwicklung</span></button>
+      <button class="filter-btn" data-category="business" type="button"><i class="fas fa-briefcase"></i> <span class="cat-text">Business</span></button>
+      <button class="filter-btn" data-category="prompt" type="button"><i class="fas fa-wand-magic-sparkles"></i> <span class="cat-text">Prompt‑Ersteller</span></button>
+      <button class="filter-btn" data-category="free" type="button"><i class="fas fa-gift"></i> <span class="cat-text">Gratis & Freemium</span></button>
+    </div>
+
+    <div class="advanced-filters">
+      <div class="filter-row">
+        <div class="filter-group">
+          <select id="priceFilter" class="filter-select" aria-label="Preisfilter"></select>
+        </div>
+        <div class="filter-group">
+          <select id="ratingFilter" class="filter-select" aria-label="Bewertungsfilter"></select>
+        </div>
+        <div class="filter-group">
+          <select id="featureFilter" class="filter-select" aria-label="Featurefilter"></select>
+        </div>
+        <div class="filter-group">
+          <select id="sortFilter" class="filter-select" aria-label="Sortierung"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-count" aria-live="polite">
+      <span class="count" id="toolCount">0</span> <span id="toolsFoundText">KI-Tools gefunden</span>
+      <span id="resultsMeta" style="display:block; margin-top:6px; font-size:0.9rem;"></span>
+    </div>
+  </header>
+
+  <!-- Top Picks -->
+  <section class="top-picks" aria-label="Top Empfehlungen">
+    <div class="top-picks-inner" id="topPicks"></div>
+  </section>
+
+  <!-- Prompt Builder -->
+  <section class="prompt-section" id="promptSection">
+    <div class="prompt-card">
+      <div class="prompt-head">
+        <h2><i class="fas fa-wand-magic-sparkles"></i> <span id="promptTitle">Prompt‑Ersteller (intelligent)</span></h2>
+        <button class="prompt-toggle" id="promptToggle" type="button">
+          <span id="promptToggleText">Öffnen</span> <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+
+      <div class="prompt-body" id="promptBody">
+        <div class="prompt-grid">
+          <div class="field">
+            <label for="pbGoal">Ziel (Was soll die KI liefern?)</label>
+            <input id="pbGoal" type="text" placeholder="z.B. Produktbeschreibung für Amazon, 5 Varianten, deutsch" />
+          </div>
+          <div class="field">
+            <label for="pbModel">Ziel‑Tool/Modell</label>
+            <select id="pbModel">
+              <option value="general">Allgemein</option>
+              <option value="chatgpt">ChatGPT / GPT</option>
+              <option value="claude">Claude</option>
+              <option value="perplexity">Perplexity (Recherche)</option>
+              <option value="midjourney">Midjourney (Bild)</option>
+              <option value="sd">Stable Diffusion (Bild)</option>
+              <option value="runway">Runway (Video)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="pbContext">Kontext (Wichtige Infos/Details)</label>
+            <textarea id="pbContext" placeholder="z.B. Zielgruppe, Produktdetails, Ton, Beispiele, Constraints..."></textarea>
+          </div>
+          <div class="field">
+            <label for="pbInput">Input‑Daten (falls vorhanden)</label>
+            <textarea id="pbInput" placeholder="z.B. Stichpunkte, Rohtext, Daten, URL‑Inhalte (kurz) ..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="pbOutput">Output‑Format</label>
+            <input id="pbOutput" type="text" placeholder="z.B. Markdown, Tabelle, JSON, Bulletpoints" />
+          </div>
+          <div class="field">
+            <label for="pbTone">Ton/Style</label>
+            <input id="pbTone" type="text" placeholder="z.B. sachlich, locker, verkaufsstark, technisch, kurz" />
+          </div>
+
+          <div class="field">
+            <label for="pbConstraints">Einschränkungen</label>
+            <textarea id="pbConstraints" placeholder="z.B. Max 120 Wörter, keine Emojis..."></textarea>
+          </div>
+          <div class="field">
+            <label for="pbLanguage">Sprache</label>
+            <select id="pbLanguage">
+              <option value="de">Deutsch</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="prompt-actions">
+          <button class="btn" id="pbGenerate" type="button"><i class="fas fa-bolt"></i> <span id="pbGenerateText">Prompt generieren</span></button>
+          <button class="btn secondary" id="pbCopy" type="button"><i class="fas fa-copy"></i> <span id="pbCopyText">Kopieren</span></button>
+          <button class="btn secondary" id="pbFindTools" type="button"><i class="fas fa-magnifying-glass"></i> <span id="pbFindToolsText">Passende Tools finden</span></button>
+          <button class="btn danger" id="pbClear" type="button"><i class="fas fa-trash"></i> <span id="pbClearText">Reset</span></button>
+        </div>
+
+        <div class="prompt-output" id="promptOutputWrap" style="display:none;">
+          <pre id="promptOutput"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="tools-grid" id="toolsGrid" aria-label="Tool-Liste"></div>
+
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none;">
+      <button class="btn secondary" id="loadMoreBtn" type="button">
+        <i class="fas fa-plus"></i> <span id="loadMoreText">Mehr laden</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Modal: Tool Details / Compare -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modalTitle">Details</h3>
+        <button class="modal-close" id="modalClose" type="button" aria-label="Schließen"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p id="footerCopyright">© 2026 AI Tools Hub | KI-Tools schnell finden</p>
+    <p id="footerDisclaimer">Alle Preise/Infos ohne Gewähr. Affiliate-Links können enthalten sein.</p>
+    <p>
+      <a href="#promptSection"><i class="fas fa-wand-magic-sparkles"></i> <span id="helpText">Prompt‑Ersteller</span></a>
+      |
+      <a href="mailto:contact@example.com"><i class="fas fa-envelope"></i> <span id="contactText">Kontakt</span></a>
+    </p>
+  </footer>
+
+  <script>
+    // DATA (26 Tools - erweitere auf 120+ in tools.json)
+    const fallbackTools = [
+      {id:1,name:"ChatGPT Plus",category:"text",price:"paid",priceDisplay:"$20/mo",priceNum:20,rating:4.9,description:{de:"Leistungsstarker KI-Chat mit GPT. Ideal für Schreiben, Planung, Ideen.",en:"Powerful AI chat. Great for writing, planning, ideas."},features:["Chat","GPT","Custom GPTs","Image"],link:"https://chat.openai.com/",badge:"popular",affiliate:true},
+      {id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",priceNum:0,rating:4.8,description:{de:"Stark bei langen Kontexten, sauberen Texten.",en:"Strong for long context, clean writing."},features:["Long context","Files","Writing"],link:"https://claude.ai/",badge:"popular",affiliate:false},
+      {id:3,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",priceNum:0,rating:4.7,description:{de:"Recherche mit Quellenangaben.",en:"Research with citations."},features:["Citations","Search","Real-time"],link:"https://www.perplexity.ai/",badge:"new",affiliate:false},
+      {id:4,name:"Jasper",category:"text",price:"paid",priceDisplay:"$39/mo",priceNum:39,rating:4.5,description:{de:"Marketing- und Copywriting-Tool.",en:"Marketing/copywriting tool."},features:["Marketing","Brand voice","Templates"],link:"https://www.jasper.ai/",badge:"",affiliate:true},
+      {id:5,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Korrektur, Stil und Ton.",en:"Grammar, style, tone."},features:["Grammar","Tone","Browser"],link:"https://www.grammarly.com/",badge:"",affiliate:true},
+      {id:26,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",priceNum:10,rating:4.9,description:{de:"Top für künstlerische KI-Bilder.",en:"Top artistic images."},features:["Art","Style","High quality"],link:"https://www.midjourney.com/",badge:"popular",affiliate:true},
+      {id:27,name:"DALL·E",category:"image",price:"paid",priceDisplay:"Paid",priceNum:20,rating:4.8,description:{de:"Bildgenerator mit gutem Textverständnis.",en:"Image generator with text understanding."},features:["Text-to-image","Prompting","Editing"],link:"https://openai.com/dall-e-3",badge:"new",affiliate:false},
+      {id:28,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.7,description:{de:"Viele Modelle, Presets, Workflows.",en:"Many models, presets, workflows."},features:["Models","Presets","Assets"],link:"https://leonardo.ai/",badge:"",affiliate:true},
+      {id:29,name:"Canva (AI)",category:"image",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Design‑Suite mit KI‑Features.",en:"Design suite with AI features."},features:["Design","Templates","Brand"],link:"https://www.canva.com/",badge:"popular",affiliate:true},
+      {id:30,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",priceNum:0,rating:4.6,description:{de:"Open‑Source Bildgenerierung.",en:"Open-source image generation."},features:["Open source","Custom models","Control"],link:"https://stability.ai/",badge:"",affiliate:false},
+      {id:51,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.8,description:{de:"Musikgenerator für komplette Songs.",en:"Music generator for complete songs."},features:["Songs","Vocals","Fast"],link:"https://suno.com/",badge:"popular",affiliate:true},
+      {id:53,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.8,description:{de:"Stimme/Voice‑Over mit natürlichem Klang.",en:"Natural voice generation."},features:["Voice","TTS","Cloning"],link:"https://elevenlabs.io/",badge:"popular",affiliate:true},
+      {id:54,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Podcast/Audio‑Editing mit Transkription.",en:"Audio/podcast editing with transcription."},features:["Editing","Transcription","Overdub"],link:"https://www.descript.com/",badge:"",affiliate:true},
+      {id:66,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.7,description:{de:"Text‑zu‑Video & kreative Video‑Tools.",en:"Text-to-video and creative video tools."},features:["Text-to-video","Editing","Motion"],link:"https://runwayml.com/",badge:"popular",affiliate:true},
+      {id:67,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Schnelles Generieren kurzer Videos.",en:"Fast short clips from prompts."},features:["Clips","Prompt","Fast"],link:"https://pika.art/",badge:"new",affiliate:false},
+      {id:68,name:"CapCut",category:"video",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Video‑Editor mit KI‑Features.",en:"Video editor with AI features."},features:["Subtitles","Templates","Cleanup"],link:"https://www.capcut.com/",badge:"",affiliate:true},
+      {id:81,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",priceNum:10,rating:4.8,description:{de:"Coding‑Assistant für IDEs.",en:"Coding assistant for IDEs."},features:["Autocomplete","IDE","Suggestions"],link:"https://github.com/features/copilot",badge:"popular",affiliate:true},
+      {id:82,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.7,description:{de:"AI‑first Code Editor.",en:"AI-first code editor."},features:["Editor","Refactor","Chat"],link:"https://cursor.sh/",badge:"new",affiliate:true},
+      {id:83,name:"Replit",category:"code",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.5,description:{de:"Online IDE – schnell starten, teilen, deployen.",en:"Online IDE to start, share, deploy."},features:["IDE","Deploy","Share"],link:"https://replit.com/",badge:"",affiliate:true},
+      {id:101,name:"Otter.ai",category:"business",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.5,description:{de:"Meeting‑Transkription mit Zusammenfassungen.",en:"Meeting transcription with summaries."},features:["Meetings","Transcription","Summary"],link:"https://otter.ai/",badge:"free",affiliate:true},
+      {id:105,name:"Gamma",category:"business",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Präsentationen, Docs & Pages mit KI.",en:"Create AI presentations, docs, pages."},features:["Slides","Docs","Pages"],link:"https://gamma.app/",badge:"free",affiliate:true},
+      {id:106,name:"Notion AI",category:"business",price:"paid",priceDisplay:"$10/mo",priceNum:10,rating:4.6,description:{de:"KI in Notion für Schreiben, Zusammenfassen, Aufgaben.",en:"AI inside Notion for writing, summaries, tasks."},features:["Notes","Docs","Productivity"],link:"https://www.notion.so/product/ai",badge:"popular",affiliate:true},
+      {id:201,name:"PromptPerfect",category:"prompt",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.6,description:{de:"Optimiert Prompts automatisch.",en:"Automatically improves prompts."},features:["Optimization","Variants","Quality"],link:"https://promptperfect.jina.ai/",badge:"new",affiliate:false},
+      {id:202,name:"AIPRM",category:"prompt",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.5,description:{de:"Prompt‑Bibliothek/Workflows.",en:"Prompt library and workflows."},features:["Library","Templates","Workflow"],link:"https://www.aiprm.com/",badge:"",affiliate:true},
+      {id:203,name:"PromptHero",category:"prompt",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.4,description:{de:"Prompt‑Sammlungen & Inspiration.",en:"Prompt collections and inspiration."},features:["Community","Prompts","Search"],link:"https://prompthero.com/",badge:"",affiliate:true},
+      {id:204,name:"Langfuse",category:"prompt",price:"freemium",priceDisplay:"Free/Paid",priceNum:0,rating:4.5,description:{de:"Prompt‑Management für Teams.",en:"Prompt management for teams."},features:["Mgmt","Eval","Observability"],link:"https://langfuse.com/",badge:"",affiliate:false}
+    ];
+
+    let aiTools = [];
+    const PAGE_SIZE = 24;
+
+    // TRANSLATIONS
+    const translations = {
+      de: {
+        badge: "🚀 KI-Tools für 2026",
+        pageTitle: "Finde dein perfektes KI-Tool",
+        pageDescription: "Intelligente Suche statt endloses Scrollen: Filtere, speichere Favoriten, vergleiche Tools und erstelle in Sekunden bessere Prompts.",
+        searchPlaceholder: "Suche z.B. „Bildgenerator", „kostenlos", „Prompt", „Meeting"…",
+        smartHint: "Tipp:",
+        chipImage: "Bildgenerator",
+        chipVideo: "Text‑zu‑Video",
+        chipPrompt: "Prompt‑Ersteller",
+        chipOpenPrompt: "Prompt‑Tool öffnen",
+        catAll: "Alle Tools",
+        catText: "Text & Schreiben",
+        catImage: "Bilder & Design",
+        catAudio: "Audio & Musik",
+        catVideo: "Video",
+        catCode: "Code & Entwicklung",
+        catBusiness: "Business",
+        catPrompt: "Prompt‑Ersteller",
+        catFree: "Gratis & Freemium",
+        priceAll: "💰 Alle Preise",
+        priceFree: "🆓 Nur kostenlos",
+        pricePaid: "💳 Nur kostenpflichtig",
+        priceFreemium: "⭐ Nur freemium",
+        ratingAll: "⭐ Alle Bewertungen",
+        rating4: "⭐ 4.0+",
+        rating45: "⭐ 4.5+",
+        rating48: "⭐ 4.8+",
+        featureAll: "🏷️ Alle Features",
+        sortPopular: "🔥 Beliebt",
+        sortRating: "⭐ Beste Bewertung",
+        sortNew: "✨ Neu",
+        sortPriceLow: "💰 Preis (niedrig)",
+        sortPriceHigh: "💰 Preis (hoch)",
+        toolsFound: "Tools gefunden",
+        resultsMeta: "Schnell‑Filter: Tippe „kostenlos", „prompt", „bild", „video"…",
+        tryNow: "Zum Tool →",
+        details: "Details",
+        compare: "Vergleich",
+        addCompare: "Vergleichen",
+        fav: "Favorit",
+        unfav: "Entfernen",
+        copied: "Kopiert!",
+        topPicksTitle: "Top Picks:",
+        topPick1: "Beste Allround‑KI",
+        topPick2: "Beste Recherche",
+        topPick3: "Beste Bilder",
+        topPick4: "Prompt verbessern",
+        loadMore: "Mehr laden",
+        noResultsTitle: "Keine Tools gefunden",
+        noResultsMessage: "Andere Suchbegriffe testen oder Filter lockern.",
+        resetBtn: "Filter zurücksetzen",
+        promptTitle: "Prompt‑Ersteller (intelligent)",
+        promptOpen: "Öffnen",
+        promptClose: "Schließen",
+        pbGenerate: "Prompt generieren",
+        pbCopy: "Kopieren",
+        pbFindTools: "Passende Tools finden",
+        pbReset: "Reset",
+        modalTool: "Tool‑Details",
+        modalCompare: "Vergleich",
+        footerCopyright: "© 2026 AI Tools Hub | KI-Tools schnell finden",
+        footerDisclaimer: "Alle Preise/Infos ohne Gewähr. Affiliate-Links können enthalten sein."
+      },
+      en: {
+        badge: "🚀 AI Tools for 2026",
+        pageTitle: "Find Your Perfect AI Tool",
+        pageDescription: "Smart search instead of endless scrolling: filter, save favorites, compare tools, and generate better prompts in seconds.",
+        searchPlaceholder: "Search e.g. "image generator", "free", "prompt", "meeting"…",
+        smartHint: "Tip:",
+        chipImage: "Image generator",
+        chipVideo: "Text‑to‑video",
+        chipPrompt: "Prompt builder",
+        chipOpenPrompt: "Open prompt builder",
+        catAll: "All Tools",
+        catText: "Text & Writing",
+        catImage: "Images & Design",
+        catAudio: "Audio & Music",
+        catVideo: "Video",
+        catCode: "Code & Development",
+        catBusiness: "Business",
+        catPrompt: "Prompt builder",
+        catFree: "Free & Freemium",
+        priceAll: "💰 All prices",
+        priceFree: "🆓 Free only",
+        pricePaid: "💳 Paid only",
+        priceFreemium: "⭐ Freemium only",
+        ratingAll: "⭐ All ratings",
+        rating4: "⭐ 4.0+",
+        rating45: "⭐ 4.5+",
+        rating48: "⭐ 4.8+",
+        featureAll: "🏷️ All features",
+        sortPopular: "🔥 Popular",
+        sortRating: "⭐ Highest rated",
+        sortNew: "✨ New",
+        sortPriceLow: "💰 Price (low)",
+        sortPriceHigh: "💰 Price (high)",
+        toolsFound: "Tools found",
+        resultsMeta: "Quick filter: type "free", "prompt", "image", "video"…",
+        tryNow: "Open tool →",
+        details: "Details",
+        compare: "Compare",
+        addCompare: "Compare",
+        fav: "Favorite",
+        unfav: "Remove",
+        copied: "Copied!",
+        topPicksTitle: "Top picks:",
+        topPick1: "Best all‑round AI",
+        topPick2: "Best research",
+        topPick3: "Best images",
+        topPick4: "Improve prompts",
+        loadMore: "Load more",
+        noResultsTitle: "No tools found",
+        noResultsMessage: "Try different search terms or loosen filters.",
+        resetBtn: "Reset filters",
+        promptTitle: "Prompt builder (smart)",
+        promptOpen: "Open",
+        promptClose: "Close",
+        pbGenerate: "Generate prompt",
+        pbCopy: "Copy",
+        pbFindTools: "Find matching tools",
+        pbReset: "Reset",
+        modalTool: "Tool details",
+        modalCompare: "Compare",
+        footerCopyright: "© 2026 AI Tools Hub | Find AI tools fast",
+        footerDisclaimer: "All prices/info without guarantee. Affiliate links may be included."
+      }
+    };
+
+    // STATE
+    let currentLang = 'de';
+    let currentCategory = 'all';
+    let currentPrice = 'all';
+    let currentRating = 0;
+    let currentSort = 'popular';
+    let currentFeature = 'all';
+    let searchQuery = '';
+    let currentPage = 1;
+    let favorites = new Set();
+    let compare = new Set();
+    let filteredAll = [];
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', async () => {
+      readPersistedState();
+      currentLang = getLangFromUrlOrStorage();
+      setHtmlLang(currentLang);
+      await loadTools();
+      setupEventListeners();
+      updateLanguage();
+      rebuildFeatureFilter();
+      renderTopPicks();
+      applyFilters(true);
+      updateHeadLinksForLang();
+    });
+
+    function readPersistedState() {
+      try {
+        const fav = JSON.parse(localStorage.getItem('aihub_favorites') || '[]');
+        favorites = new Set(fav);
+      } catch {}
+      try {
+        const cmp = JSON.parse(localStorage.getItem('aihub_compare') || '[]');
+        compare = new Set(cmp);
+      } catch {}
+    }
+
+    async function loadTools() {
+      try {
+        const res = await fetch('tools.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('No tools.json');
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Invalid tools.json');
+        aiTools = data;
+      } catch {
+        aiTools = fallbackTools;
+      }
+
+      aiTools = aiTools
+        .filter(t => t && t.id && t.name && t.category && t.price && t.description && t.description.de && t.description.en)
+        .map(t => ({
+          affiliate: false,
+          badge: "",
+          features: [],
+          priceNum: 0,
+          priceDisplay: "",
+          rating: 4.5,
+          ...t
+        }));
+
+      document.getElementById('badgeText').textContent = currentLang === 'de'
+        ? `🚀 ${aiTools.length}+ KI-Tools für 2026`
+        : `🚀 ${aiTools.length}+ AI Tools for 2026`;
+    }
+
+    function getLangFromUrlOrStorage() {
+      const url = new URL(window.location.href);
+      const qp = (url.searchParams.get('lang') || '').toLowerCase();
+      if (qp === 'de' || qp === 'en') return qp;
+      const stored = (localStorage.getItem('aihub_lang') || '').toLowerCase();
+      if (stored === 'de' || stored === 'en') return stored;
+      return 'de';
+    }
+
+    function setHtmlLang(lang) {
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    function updateHeadLinksForLang() {
+      const base = new URL(window.location.href);
+      base.searchParams.set('lang', currentLang);
+      const canonical = document.getElementById('canonicalLink');
+      canonical.href = base.toString();
+      const urlDe = new URL(base.toString()); urlDe.searchParams.set('lang', 'de');
+      const urlEn = new URL(base.toString()); urlEn.searchParams.set('lang', 'en');
+      document.getElementById('hreflangDe').href = urlDe.toString();
+      document.getElementById('hreflangEn').href = urlEn.toString();
+      const t = translations[currentLang];
+      document.title = (currentLang === 'de')
+        ? "AI Tools Hub 2026 – Finde dein perfektes KI-Tool"
+        : "AI Tools Hub 2026 – Find Your Perfect AI Tool";
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', t.pageDescription);
+    }
+
+    function setLangInUrl(lang) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', lang);
+      history.replaceState({}, "", url.toString());
+    }
+
+    // EVENTS
+    function setupEventListeners() {
+      document.getElementById('langBtn').addEventListener('click', toggleLanguage);
+
+      const debouncedSearch = debounce((val) => {
+        searchQuery = normalize(val);
+        currentPage = 1;
+        applyFilters(true);
+      }, 180);
+
+      document.getElementById('searchInput').addEventListener('input', e => {
+        debouncedSearch(e.target.value || '');
+      });
+
+      document.querySelectorAll('.filter-btn[data-category]').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = this.dataset.category;
+          currentPage = 1;
+          applyFilters(true);
+        });
+      });
+
+      document.getElementById('priceFilter').addEventListener('change', function() {
+        currentPrice = this.value;
+        currentPage = 1;
+        applyFilters(true);
+      });
+
+      document.getElementById('ratingFilter').addEventListener('change', function() {
+        currentRating = parseFloat(this.value);
+        currentPage = 1;
+        applyFilters(true);
+      });
+
+      document.getElementById('featureFilter').addEventListener('change', function() {
+        currentFeature = this.value;
+        currentPage = 1;
+        applyFilters(true);
+      });
+
+      document.getElementById('sortFilter').addEventListener('change', function() {
+        currentSort = this.value;
+        currentPage = 1;
+        applyFilters(true);
+      });
+
+      // Smart chips
+      document.querySelectorAll('.chip[data-smart]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const type = chip.dataset.smart;
+          const value = chip.dataset.value;
+
+          if (type === 'intent') {
+            if (value === 'prompt') {
+              currentCategory = 'prompt';
+              activateCategoryButton('prompt');
+              openPromptBuilder(true);
+              currentPage = 1;
+              applyFilters(true);
+              return;
+            }
+            currentCategory = value;
+            activateCategoryButton(value);
+            currentPage = 1;
+            applyFilters(true);
+          }
+
+          if (type === 'action' && value === 'openPrompt') {
+            openPromptBuilder(true);
+            document.getElementById('promptSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // Prompt builder
+      document.getElementById('promptToggle').addEventListener('click', () => {
+        const isOpen = document.getElementById('promptBody').classList.contains('open');
+        openPromptBuilder(!isOpen);
+      });
+
+      document.getElementById('pbGenerate').addEventListener('click', () => {
+        const prompt = generatePrompt();
+        showPrompt(prompt);
+      });
+      document.getElementById('pbCopy').addEventListener('click', async () => {
+        const text = document.getElementById('promptOutput').textContent || '';
+        if (!text.trim()) return toastMsg(currentLang === 'de' ? "Erst Prompt generieren." : "Generate a prompt first.");
+        await copyToClipboard(text);
+        toastMsg(translations[currentLang].copied);
+      });
+      document.getElementById('pbClear').addEventListener('click', () => {
+        clearPromptBuilder();
+        toastMsg(currentLang === 'de' ? "Zurückgesetzt." : "Reset.");
+      });
+      document.getElementById('pbFindTools').addEventListener('click', () => {
+        const goal = (document.getElementById('pbGoal').value || '').trim();
+        const model = document.getElementById('pbModel').value;
+        const hint = [goal, model].filter(Boolean).join(' ');
+        document.getElementById('searchInput').value = hint;
+        searchQuery = normalize(hint);
+        currentPage = 1;
+        applyFilters(true);
+        toastMsg(currentLang === 'de' ? "Tools nach deinem Prompt-Ziel gefiltert." : "Filtered tools based on your prompt goal.");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Modal
+      document.getElementById('modalClose').addEventListener('click', closeModal);
+      document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+        if (e.target.id === 'modalBackdrop') closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // Compare button
+      document.getElementById('compareBtn').addEventListener('click', () => openCompareModal());
+
+      // Load more
+      document.getElementById('loadMoreBtn').addEventListener('click', () => {
+        currentPage += 1;
+        renderToolsPage();
+      });
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'de' ? 'en' : 'de';
+      localStorage.setItem('aihub_lang', currentLang);
+      setHtmlLang(currentLang);
+      setLangInUrl(currentLang);
+      document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+      updateLanguage();
+      rebuildFeatureFilter();
+      renderTopPicks();
+      currentPage = 1;
+      applyFilters(true);
+      updateHeadLinksForLang();
+    }
+
+    function activateCategoryButton(cat) {
+      document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+      const el = document.querySelector(`.filter-btn[data-category="${cat}"]`);
+      if (el) el.classList.add('active');
+      currentCategory = cat;
+    }
+
+    // UI TEXTS
+    function updateLanguage() {
+      const t = translations[currentLang];
+      document.getElementById('pageTitle').textContent = t.pageTitle;
+      document.getElementById('pageDescription').textContent = t.pageDescription;
+      document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+      document.getElementById('smartHint').textContent = t.smartHint;
+      document.getElementById('chipImage').textContent = t.chipImage;
+      document.getElementById('chipVideo').textContent = t.chipVideo;
+      document.getElementById('chipPrompt').textContent = t.chipPrompt;
+      document.getElementById('chipOpenPrompt').textContent = t.chipOpenPrompt;
+
+      const catButtons = document.querySelectorAll('.cat-text');
+      const catKeys = ['catAll','catText','catImage','catAudio','catVideo','catCode','catBusiness','catPrompt','catFree'];
+      catButtons.forEach((btn, i) => { btn.textContent = t[catKeys[i]]; });
+
+      updateDropdowns();
+      document.getElementById('toolsFoundText').textContent = t.toolsFound;
+      document.getElementById('resultsMeta').textContent = t.resultsMeta;
+      document.getElementById('promptTitle').textContent = t.promptTitle;
+      document.getElementById('promptToggleText').textContent =
+        document.getElementById('promptBody').classList.contains('open') ? t.promptClose : t.promptOpen;
+      document.getElementById('pbGenerateText').textContent = t.pbGenerate;
+      document.getElementById('pbCopyText').textContent = t.pbCopy;
+      document.getElementById('pbFindToolsText').textContent = t.pbFindTools;
+      document.getElementById('pbClearText').textContent = t.pbReset;
+      document.getElementById('loadMoreText').textContent = t.loadMore;
+      document.getElementById('compareText').textContent = t.compare;
+      document.getElementById('footerCopyright').textContent = t.footerCopyright;
+      document.getElementById('footerDisclaimer').textContent = t.footerDisclaimer;
+      updateCompareCount();
+    }
+
+    function updateDropdowns() {
+      const t = translations[currentLang];
+      document.getElementById('priceFilter').innerHTML = `
+        <option value="all">${t.priceAll}</option>
+        <option value="free">${t.priceFree}</option>
+        <option value="paid">${t.pricePaid}</option>
+        <option value="freemium">${t.priceFreemium}</option>
+      `;
+      document.getElementById('priceFilter').value = currentPrice;
+
+      document.getElementById('ratingFilter').innerHTML = `
+        <option value="0">${t.ratingAll}</option>
+        <option value="4">${t.rating4}</option>
+        <option value="4.5">${t.rating45}</option>
+        <option value="4.8">${t.rating48}</option>
+      `;
+      document.getElementById('ratingFilter').value = String(currentRating);
+
+      document.getElementById('sortFilter').innerHTML = `
+        <option value="popular">${t.sortPopular}</option>
+        <option value="rating">${t.sortRating}</option>
+        <option value="new">${t.sortNew}</option>
+        <option value="price-low">${t.sortPriceLow}</option>
+        <option value="price-high">${t.sortPriceHigh}</option>
+      `;
+      document.getElementById('sortFilter').value = currentSort;
+    }
+
+    function rebuildFeatureFilter() {
+      const t = translations[currentLang];
+      const allFeatures = new Set();
+      aiTools.forEach(tool => (tool.features || []).forEach(f => allFeatures.add(f)));
+      const sorted = Array.from(allFeatures).sort((a,b) => a.localeCompare(b));
+      const options = [`<option value="all">${t.featureAll}</option>`]
+        .concat(sorted.map(f => `<option value="${escapeHtmlAttr(f)}">${escapeHtml(f)}</option>`));
+      const sel = document.getElementById('featureFilter');
+      sel.innerHTML = options.join('');
+      sel.value = currentFeature;
+    }
+
+    // FILTERS + SORT
+    function applyFilters(resetGrid) {
+      const q = searchQuery;
+
+      filteredAll = aiTools.filter(tool => {
+        if (currentCategory === 'free') {
+          if (tool.price !== 'free' && tool.price !== 'freemium') return false;
+        } else if (currentCategory !== 'all') {
+          if (tool.category !== currentCategory) return false;
+        }
+        if (currentPrice !== 'all' && tool.price !== currentPrice) return false;
+        if (currentRating > 0 && (tool.rating || 0) < currentRating) return false;
+        if (currentFeature !== 'all') {
+          const feats = (tool.features || []);
+          if (!feats.includes(currentFeature)) return false;
+        }
+        if (q) {
+          const score = computeSearchScore(tool, q);
+          if (score <= 0) return false;
+          tool.__score = score;
+        } else {
+          tool.__score = 0;
+        }
+        return true;
+      });
+
+      filteredAll.sort((a,b) => {
+        if (q) return (b.__score || 0) - (a.__score || 0);
+        switch (currentSort) {
+          case 'rating': return (b.rating || 0) - (a.rating || 0);
+          case 'new': return (b.badge === 'new' ? 1 : 0) - (a.badge === 'new' ? 1 : 0);
+          case 'price-low': return (a.priceNum || 0) - (b.priceNum || 0);
+          case 'price-high': return (b.priceNum || 0) - (a.priceNum || 0);
+          default:
+            return (b.badge === 'popular' ? 1 : 0) - (a.badge === 'popular' ? 1 : 0);
+        }
+      });
+
+      document.getElementById('toolCount').textContent = filteredAll.length;
+
+      if (resetGrid) {
+        currentPage = 1;
+        renderToolsPage(true);
+      } else {
+        renderToolsPage(false);
+      }
+    }
+
+    function renderToolsPage(clear) {
+      const grid = document.getElementById('toolsGrid');
+      const t = translations[currentLang];
+      const end = PAGE_SIZE * currentPage;
+      const pageItems = filteredAll.slice(0, end);
+
+      if (clear) grid.innerHTML = '';
+
+      if (filteredAll.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>${t.noResultsTitle}</h3>
+            <p>${t.noResultsMessage}</p>
+            <button class="btn secondary" type="button" onclick="resetFilters()">
+              <i class="fas fa-redo"></i> ${t.resetBtn}
+            </button>
+          </div>
+        `;
+        document.getElementById('loadMoreWrap').style.display = 'none';
+        return;
+      }
+
+      const html = pageItems.map(tool => toolCardHtml(tool)).join('');
+      if (clear) grid.innerHTML = html;
+      else grid.insertAdjacentHTML('beforeend', html);
+
+      // Bind actions
+      pageItems.forEach(tool => {
+        const favBtn = document.getElementById(`fav_${tool.id}`);
+        const cmpBtn = document.getElementById(`cmp_${tool.id}`);
+        const detBtn = document.getElementById(`det_${tool.id}`);
+        const linkA = document.getElementById(`lnk_${tool.id}`);
+
+        if (favBtn) favBtn.addEventListener('click', () => toggleFavorite(tool.id));
+        if (cmpBtn) cmpBtn.addEventListener('click', () => toggleCompare(tool.id));
+        if (detBtn) detBtn.addEventListener('click', () => openToolModal(tool.id));
+        if (linkA) linkA.addEventListener('click', () => trackAffiliateClick(tool));
+      });
+
+      document.getElementById('loadMoreWrap').style.display = (filteredAll.length > end) ? 'flex' : 'none';
+    }
+
+    function computeSearchScore(tool, q) {
+      const tokens = q.split(/\s+/).filter(Boolean);
+      if (!tokens.length) return 0;
+      const text = normalize([
+        tool.name,
+        tool.category,
+        tool.price,
+        tool.priceDisplay,
+        tool.description[currentLang],
+        (tool.features || []).join(' ')
+      ].join(' '));
+
+      let score = 0;
+      for (const tok of tokens) {
+        if (tok.length < 2) continue;
+        if (text.includes(tok)) score += 2;
+        if (normalize(tool.name).includes(tok)) score += 4;
+        if ((tok === 'kostenlos' || tok === 'free') && (tool.price === 'free' || tool.price === 'freemium')) score += 3;
+        if ((tok.includes('prompt') || tok.includes('vorlage')) && tool.category === 'prompt') score += 4;
+        if ((tok.includes('bild') || tok.includes('image') || tok.includes('logo')) && tool.category === 'image') score += 3;
+        if ((tok.includes('video')) && tool.category === 'video') score += 3;
+        if ((tok.includes('code') || tok.includes('vscode')) && tool.category === 'code') score += 2;
+      }
+      return score;
+    }
+
+    // RENDERING
+    function toolCardHtml(tool) {
+      const t = translations[currentLang];
+      const isFav = favorites.has(tool.id);
+      const isCmp = compare.has(tool.id);
+      const pricePillClass = tool.price === 'free' ? 'free' : tool.price === 'paid' ? 'paid' : 'freemium';
+      const pricePillText = tool.price.toUpperCase();
+      const badgeHtml = tool.badge
+        ? `<span class="tool-badge ${escapeHtmlAttr(tool.badge)}">${escapeHtml(tool.badge.toUpperCase())}</span>`
+        : '';
+      const affHtml = tool.affiliate
+        ? `<span class="tool-badge aff">AFFILIATE</span>`
+        : '';
+
+      return `
+        <article class="tool-card" data-id="${tool.id}">
+          <div class="tool-actions-top">
+            <button class="mini ${isFav ? 'active' : ''}" id="fav_${tool.id}" type="button" title="${isFav ? t.unfav : t.fav}" aria-label="${isFav ? t.unfav : t.fav}">
+              <i class="fas fa-heart"></i>
+            </button>
+            <button class="mini ${isCmp ? 'active' : ''}" id="cmp_${tool.id}" type="button" title="${t.addCompare}" aria-label="${t.addCompare}">
+              <i class="fas fa-scale-balanced"></i>
+            </button>
+          </div>
+
+          <div class="tool-header">
+            <div>
+              <div class="tool-name">${escapeHtml(tool.name)}</div>
+              <span class="tool-category">${escapeHtml(getCategoryName(tool.category))}</span>
+            </div>
+            <div class="tool-rating"><i class="fas fa-star"></i> ${Number(tool.rating || 0).toFixed(1)}</div>
+          </div>
+
+          <div class="tool-meta">
+            <span class="price-tag">${escapeHtml(tool.priceDisplay || '')}</span>
+            <span class="pill ${pricePillClass}">${pricePillText}</span>
+            ${badgeHtml}
+            ${affHtml}
+          </div>
+
+          <p class="tool-description">${escapeHtml(tool.description[currentLang] || '')}</p>
+
+          <div class="tool-features">
+            ${(tool.features || []).slice(0, 8).map(f => `<span class="feature-tag">${escapeHtml(f)}</span>`).join('')}
+          </div>
+
+          <div class="tool-footer">
+            <a id="lnk_${tool.id}" href="${escapeHtmlAttr(tool.link)}"
+               class="tool-link" target="_blank" rel="noopener noreferrer"
+               data-tool-id="${tool.id}">
+              ${t.tryNow}
+              <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+            <button class="btn secondary more-btn" id="det_${tool.id}" type="button">
+              <i class="fas fa-circle-info"></i> ${t.details}
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderTopPicks() {
+      const t = translations[currentLang];
+      const picks = [
+        {label: t.topPick1, id: 1},
+        {label: t.topPick2, id: 3},
+        {label: t.topPick3, id: 26},
+        {label: t.topPick4, id: 201}
+      ];
+
+      const wrap = document.getElementById('topPicks');
+      wrap.innerHTML = `
+        <span style="color:var(--text); font-weight:900; margin-right:6px;">${t.topPicksTitle}</span>
+        ${picks.map(p => {
+          const tool = aiTools.find(x => x.id === p.id);
+          if (!tool) return '';
+          return `<div class="chip" data-pick="${tool.id}">
+            <i class="fas fa-sparkles"></i>
+            <span><strong>${escapeHtml(p.label)}</strong>: ${escapeHtml(tool.name)}</span>
+          </div>`;
+        }).join('')}
+      `;
+
+      wrap.querySelectorAll('.chip[data-pick]').forEach(ch => {
+        ch.addEventListener('click', () => {
+          const id = Number(ch.dataset.pick);
+          openToolModal(id);
+        });
+      });
+    }
+
+    function getCategoryName(category) {
+      const map = {
+        text: currentLang === 'de' ? 'Text' : 'Text',
+        image: currentLang === 'de' ? 'Bilder' : 'Images',
+        audio: currentLang === 'de' ? 'Audio' : 'Audio',
+        video: currentLang === 'de' ? 'Video' : 'Video',
+        code: currentLang === 'de' ? 'Code' : 'Code',
+        business: currentLang === 'de' ? 'Business' : 'Business',
+        prompt: currentLang === 'de' ? 'Prompt' : 'Prompt'
+      };
+      return map[category] || category;
+    }
+
+    // FAVORITES/COMPARE
+    function toggleFavorite(id) {
+      if (favorites.has(id)) favorites.delete(id);
+      else favorites.add(id);
+      localStorage.setItem('aihub_favorites', JSON.stringify(Array.from(favorites)));
+      const btn = document.getElementById(`fav_${id}`);
+      if (btn) btn.classList.toggle('active');
+      toastMsg(favorites.has(id)
+        ? (currentLang === 'de' ? "Zu Favoriten hinzugefügt." : "Added to favorites.")
+        : (currentLang === 'de' ? "Aus Favoriten entfernt." : "Removed from favorites."));
+    }
+
+    function toggleCompare(id) {
+      if (compare.has(id)) compare.delete(id);
+      else compare.add(id);
+      localStorage.setItem('aihub_compare', JSON.stringify(Array.from(compare)));
+      const btn = document.getElementById(`cmp_${id}`);
+      if (btn) btn.classList.toggle('active');
+      updateCompareCount();
+      toastMsg(currentLang === 'de' ? "Vergleich aktualisiert." : "Compare updated.");
+    }
+
+    function updateCompareCount() {
+      document.getElementById('compareCount').textContent = compare.size;
+    }
+
+    function openCompareModal() {
+      const t = translations[currentLang];
+      const ids = Array.from(compare);
+      const items = ids.map(id => aiTools.find(x => x.id === id)).filter(Boolean);
+
+      document.getElementById('modalTitle').textContent = t.modalCompare;
+
+      if (items.length === 0) {
+        document.getElementById('modalBody').innerHTML = `
+          <div class="modal-box">
+            <h4>${t.modalCompare}</h4>
+            <p>${currentLang === 'de'
+              ? "Füge Tools über das Waage‑Icon hinzu, um sie hier zu vergleichen."
+              : "Add tools using the scale icon to compare them here."}</p>
+          </div>
+        `;
+        return openModal();
+      }
+
+      const rows = [
+        {k: currentLang === 'de' ? "Name" : "Name", v: (tool) => tool.name},
+        {k: currentLang === 'de' ? "Kategorie" : "Category", v: (tool) => getCategoryName(tool.category)},
+        {k: currentLang === 'de' ? "Preis" : "Price", v: (tool) => tool.priceDisplay},
+        {k: currentLang === 'de' ? "Modell" : "Pricing", v: (tool) => tool.price.toUpperCase()},
+        {k: currentLang === 'de' ? "Bewertung" : "Rating", v: (tool) => String(tool.rating)},
+        {k: currentLang === 'de' ? "Features" : "Features", v: (tool) => (tool.features || []).slice(0, 10).join(', ')}
+      ];
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-box">
+          <h4>${currentLang === 'de' ? "Tools vergleichen" : "Compare tools"}</h4>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>${currentLang === 'de' ? "Feld" : "Field"}</th>
+                ${items.map(it => `<th>${escapeHtml(it.name)}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(r => `
+                <tr>
+                  <td style="color:var(--text); font-weight:900;">${escapeHtml(r.k)}</td>
+                  ${items.map(it => `<td>${escapeHtml(String(r.v(it) || ''))}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="prompt-actions" style="margin-top:12px;">
+            <button class="btn secondary" type="button" onclick="clearCompare()"><i class="fas fa-trash"></i> ${currentLang === 'de' ? "Vergleich leeren" : "Clear compare"}</button>
+          </div>
+        </div>
+      `;
+      openModal();
+    }
+
+    function clearCompare() {
+      compare = new Set();
+      localStorage.setItem('aihub_compare', JSON.stringify([]));
+      updateCompareCount();
+      document.querySelectorAll('[id^="cmp_"]').forEach(btn => btn.classList.remove('active'));
+      closeModal();
+      toastMsg(currentLang === 'de' ? "Vergleich geleert." : "Compare cleared.");
+    }
+
+    // MODAL (Tool)
+    function openToolModal(id) {
+      const tool = aiTools.find(x => x.id === id);
+      if (!tool) return;
+
+      const t = translations[currentLang];
+      document.getElementById('modalTitle').textContent = t.modalTool;
+
+      const featList = (tool.features || []).map(f => `<li>${escapeHtml(f)}</li>`).join('');
+      const affNote = tool.affiliate
+        ? (currentLang === 'de'
+          ? "Hinweis: Dieser Link kann ein Affiliate‑Link sein."
+          : "Note: This link may be an affiliate link.")
+        : "";
+
+      const quickPrompt = buildQuickPromptForTool(tool);
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-grid">
+          <div class="modal-box">
+            <h4>${escapeHtml(tool.name)} <span class="tool-badge ${escapeHtmlAttr(tool.badge || '')}" style="margin-left:8px;">${escapeHtml((tool.badge || '').toUpperCase())}</span></h4>
+            <p>${escapeHtml(tool.description[currentLang] || '')}</p>
+            <ul>${featList}</ul>
+
+            <div class="prompt-actions" style="margin-top:12px;">
+              <a class="btn" href="${escapeHtmlAttr(tool.link)}" target="_blank" rel="noopener noreferrer" onclick="trackAffiliateClick({id:${tool.id}})">
+                <i class="fas fa-arrow-up-right-from-square"></i> ${translations[currentLang].tryNow}
+              </a>
+              <button class="btn secondary" type="button" id="copyToolPromptBtn">
+                <i class="fas fa-copy"></i> ${currentLang === 'de' ? "Prompt‑Vorlage kopieren" : "Copy prompt template"}
+              </button>
+            </div>
+
+            <p style="margin-top:10px; color:var(--text-muted); font-size:0.92rem;">${escapeHtml(affNote)}</p>
+          </div>
+
+          <div class="modal-box">
+            <h4>${currentLang === 'de' ? "Schnell‑Prompt (Vorlage)" : "Quick prompt (template)"}</h4>
+            <p style="margin-bottom:8px;">${currentLang === 'de'
+              ? "Passe Ziel/Kontext an – dann bekommst du konsistentere Ergebnisse."
+              : "Adjust goal/context to get more consistent results."}</p>
+            <div class="prompt-output">
+              <pre id="toolQuickPrompt">${escapeHtml(quickPrompt)}</pre>
+            </div>
+          </div>
+        </div>
+      `;
+
+      openModal();
+
+      const copyBtn = document.getElementById('copyToolPromptBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          await copyToClipboard(quickPrompt);
+          toastMsg(translations[currentLang].copied);
+        });
+      }
+    }
+
+    function openModal() {
+      const b = document.getElementById('modalBackdrop');
+      b.classList.add('open');
+      b.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      const b = document.getElementById('modalBackdrop');
+      b.classList.remove('open');
+      b.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // PROMPT BUILDER
+    function openPromptBuilder(open) {
+      const body = document.getElementById('promptBody');
+      body.classList.toggle('open', !!open);
+      document.getElementById('promptToggleText').textContent = open
+        ? translations[currentLang].promptClose
+        : translations[currentLang].promptOpen;
+    }
+
+    function clearPromptBuilder() {
+      document.getElementById('pbGoal').value = "";
+      document.getElementById('pbContext').value = "";
+      document.getElementById('pbInput').value = "";
+      document.getElementById('pbOutput').value = "";
+      document.getElementById('pbTone').value = "";
+      document.getElementById('pbConstraints').value = "";
+      document.getElementById('pbLanguage').value = currentLang;
+      document.getElementById('pbModel').value = "general";
+      document.getElementById('promptOutput').textContent = "";
+      document.getElementById('promptOutputWrap').style.display = "none";
+    }
+
+    function generatePrompt() {
+      const goal = (document.getElementById('pbGoal').value || '').trim();
+      const ctx = (document.getElementById('pbContext').value || '').trim();
+      const input = (document.getElementById('pbInput').value || '').trim();
+      const output = (document.getElementById('pbOutput').value || '').trim();
+      const tone = (document.getElementById('pbTone').value || '').trim();
+      const constraints = (document.getElementById('pbConstraints').value || '').trim();
+      const lang = document.getElementById('pbLanguage').value;
+      const model = document.getElementById('pbModel').value;
+
+      if (!goal) {
+        return currentLang === 'de'
+          ? "Bitte definiere zuerst ein Ziel."
+          : "Please define a goal first.";
+      }
+
+      let lines = [];
+      lines.push(currentLang === 'de' ? "# ZIEL" : "# GOAL");
+      lines.push(goal);
+
+      if (ctx) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# KONTEXT" : "# CONTEXT");
+        lines.push(ctx);
+      }
+
+      if (input) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# INPUT" : "# INPUT");
+        lines.push(input);
+      }
+
+      if (output) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# OUTPUT-FORMAT" : "# OUTPUT FORMAT");
+        lines.push(output);
+      }
+
+      if (tone) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# TON/STYLE" : "# TONE/STYLE");
+        lines.push(tone);
+      }
+
+      if (constraints) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# EINSCHRÄNKUNGEN" : "# CONSTRAINTS");
+        lines.push(constraints);
+      }
+
+      lines.push("");
+      lines.push(currentLang === 'de' ? "# ANWEISUNGEN" : "# INSTRUCTIONS");
+      lines.push(currentLang === 'de'
+        ? "Gib eine klare, strukturierte Antwort basierend auf den obigen Anforderungen."
+        : "Provide a clear, structured answer based on the above requirements.");
+
+      if (lang) {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# SPRACHE" : "# LANGUAGE");
+        lines.push(lang === 'de' ? "Deutsch" : "English");
+      }
+
+      if (model && model !== 'general') {
+        lines.push("");
+        lines.push(currentLang === 'de' ? "# MODELL-SPEZIFISCH" : "# MODEL-SPECIFIC");
+        const modelHints = {
+          chatgpt: currentLang === 'de'
+            ? "Nutze GPTs/Tools wenn nötig. Sei direkt und hilfreich."
+            : "Use GPTs/Tools if needed. Be direct and helpful.",
+          claude: currentLang === 'de'
+            ? "Nutze langen Kontext optimal. Strukturiere klar."
+            : "Use long context optimally. Structure clearly.",
+          perplexity: currentLang === 'de'
+            ? "Recherchiere gründlich. Gib Quellen an."
+            : "Research thoroughly. Provide citations.",
+          midjourney: currentLang === 'de'
+            ? "Beschreibe visuelle Details präzise: Stil, Farben, Komposition, Beleuchtung."
+            : "Describe visual details precisely: style, colors, composition, lighting.",
+          sd: currentLang === 'de'
+            ? "Nutze Negative Prompts. Definiere Stil (z.B. photorealistic, anime)."
+            : "Use negative prompts. Define style (e.g. photorealistic, anime).",
+          runway: currentLang === 'de'
+            ? "Beschreibe Bewegung und Szenenwechsel klar."
+            : "Describe motion and scene transitions clearly."
+        };
+        lines.push(modelHints[model] || "");
+      }
+
+      return lines.join('\n');
+    }
+
+    function showPrompt(prompt) {
+      document.getElementById('promptOutput').textContent = prompt;
+      document.getElementById('promptOutputWrap').style.display = "block";
+    }
+
+    function buildQuickPromptForTool(tool) {
+      const catMap = {
+        text: currentLang === 'de' ? "Schreiben/Textgenerierung" : "Writing/Text generation",
+        image: currentLang === 'de' ? "Bildgenerierung" : "Image generation",
+        audio: currentLang === 'de' ? "Audio/Musik" : "Audio/Music",
+        video: currentLang === 'de' ? "Video" : "Video",
+        code: currentLang === 'de' ? "Code/Entwicklung" : "Code/Development",
+        business: currentLang === 'de' ? "Business/Produktivität" : "Business/Productivity",
+        prompt: currentLang === 'de' ? "Prompt-Optimierung" : "Prompt optimization"
+      };
+
+      const catName = catMap[tool.category] || tool.category;
+
+      if (currentLang === 'de') {
+        return `# ZIEL
+[Beschreibe hier, was ${tool.name} für dich machen soll]
+
+# KONTEXT
+Tool: ${tool.name}
+Kategorie: ${catName}
+Features: ${(tool.features || []).join(', ')}
+
+# OUTPUT-FORMAT
+[z.B. Text, Markdown, JSON, Bild, Video, Code, ...]
+
+# TON/STYLE
+[z.B. professionell, kreativ, technisch, kurz, ...]
+
+# EINSCHRÄNKUNGEN
+[z.B. Max 200 Wörter, keine Emojis, ...]
+
+# ANWEISUNGEN
+Gib eine klare, strukturierte Antwort basierend auf den obigen Anforderungen.`;
+      } else {
+        return `# GOAL
+[Describe what you want ${tool.name} to do for you]
+
+# CONTEXT
+Tool: ${tool.name}
+Category: ${catName}
+Features: ${(tool.features || []).join(', ')}
+
+# OUTPUT FORMAT
+[e.g. Text, Markdown, JSON, Image, Video, Code, ...]
+
+# TONE/STYLE
+[e.g. professional, creative, technical, concise, ...]
+
+# CONSTRAINTS
+[e.g. Max 200 words, no emojis, ...]
+
+# INSTRUCTIONS
+Provide a clear, structured answer based on the above requirements.`;
+      }
+    }
+
+    // UTILITIES
+    function normalize(text) {
+      return String(text || '').toLowerCase().trim();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function escapeHtmlAttr(text) {
+      return String(text || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    }
+
+    function toastMsg(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    function trackAffiliateClick(tool) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click', {
+          event_category: 'outbound',
+          event_label: tool.name || 'unknown',
+          transport_type: 'beacon'
+        });
+      }
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      currentPrice = 'all';
+      currentRating = 0;
+      currentSort = 'popular';
+      currentFeature = 'all';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('priceFilter').value = 'all';
+      document.getElementById('ratingFilter').value = '0';
+      document.getElementById('featureFilter').value = 'all';
+      document.getElementById('sortFilter').value = 'popular';
+      document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+      document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
+      currentPage = 1;
+      applyFilters(true);
+    }
+  </script>
+</body>
+</html>
