@@ -27,7 +27,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script type="application/ld+json">
 {
@@ -44,395 +44,2503 @@
 }
 </script>
 <style>
+/* === CSS RESET & VARIABLES === */
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--primary:#6366f1;--primary-light:#818cf8;--primary-dark:#4f46e5;--secondary:#10b981;--secondary-light:#34d399;--accent:#8b5cf6;--dark:#0f172a;--dark-light:#1e293b;--text:#f8fafc;--text-muted:#94a3b8;--card-bg:rgba(30,41,59,0.85);--glass:rgba(255,255,255,0.05);--shadow:0 8px 20px rgba(0,0,0,0.4);--radius:10px;--transition:all 0.25s ease}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.4}
-.language-switch{position:fixed;top:15px;right:15px;z-index:1000}
-.lang-btn{background:var(--card-bg);border:2px solid var(--primary);color:var(--text);padding:6px 14px;border-radius:var(--radius);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:600;transition:var(--transition);backdrop-filter:blur(10px);font-size:0.9rem}
-.lang-btn:hover{background:var(--primary);transform:translateY(-2px)}
-.header{padding:60px 20px 20px;text-align:center;max-width:1200px;margin:0 auto}
-.badge{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:5px 14px;border-radius:20px;font-size:0.8rem;font-weight:600;display:inline-block;margin-bottom:12px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.header h1{font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:12px;line-height:1.1;background:linear-gradient(90deg,#fff,var(--primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header p{font-size:0.95rem;color:var(--text-muted);max-width:600px;margin:0 auto 18px;line-height:1.5}
-.search-container{max-width:700px;margin:0 auto 12px;position:relative}
-.search-box{width:100%;padding:14px 20px 14px 48px;background:var(--card-bg);border:2px solid var(--dark-light);border-radius:var(--radius);color:var(--text);font-size:0.95rem;transition:var(--transition);backdrop-filter:blur(10px)}
-.search-box:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
-.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--primary-light);font-size:1.1rem}
-.search-hint-container{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
-.search-hint-text{font-size:0.8rem;color:var(--text-muted);margin-right:8px;display:flex;align-items:center;gap:4px}
-.search-hint-text i{color:var(--primary-light);font-size:0.7rem}
-.search-hint-chip{background:rgba(99,102,241,0.1);color:var(--primary-light);padding:4px 10px;border-radius:16px;font-size:0.75rem;cursor:pointer;transition:var(--transition);border:1px solid rgba(99,102,241,0.3);display:flex;align-items:center;gap:4px;white-space:nowrap}
-.search-hint-chip:hover{background:rgba(99,102,241,0.2);transform:translateY(-1px);border-color:var(--primary-light)}
-.search-hint-chip i{font-size:0.7rem}
-.search-suggestions{position:absolute;top:100%;left:0;right:0;background:var(--card-bg);border:2px solid var(--primary);border-top:none;border-radius:0 0 var(--radius) var(--radius);backdrop-filter:blur(10px);max-height:280px;overflow-y:auto;z-index:100;display:none}
-.search-suggestions.active{display:block}
-.suggestion-item{padding:10px 16px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--dark-light)}
-.suggestion-item:hover{background:rgba(99,102,241,0.1)}
-.suggestion-icon{color:var(--primary-light);width:18px;font-size:0.9rem}
-.suggestion-text{flex:1;display:flex;flex-direction:column;gap:2px}
-.suggestion-name{color:var(--text);font-weight:700;font-size:0.9rem}
-.suggestion-meta{font-size:0.75rem;color:var(--text-muted)}
-.quick-navigation{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:1200px;margin:0 auto 20px;padding:0 20px}
-.quick-card{background:var(--card-bg);border-radius:var(--radius);padding:16px;transition:var(--transition);border:1px solid var(--dark-light);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer}
-.quick-card:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:var(--shadow)}
-.quick-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:1.1rem}
-.quick-title{font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:4px}
-.quick-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.3}
-.top-charts-section{max-width:1200px;margin:0 auto 20px;padding:0 20px}
-.section-title{display:flex;align-items:center;gap:8px;font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:12px}
-.section-title i{color:var(--primary)}
-.top-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.chart-card{background:var(--card-bg);border-radius:var(--radius);padding:20px;border:1px solid var(--dark-light);backdrop-filter:blur(10px);position:relative;min-height:300px;display:flex;flex-direction:column}
-.chart-header{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin-bottom:16px;flex-shrink:0}
-.chart-rank{width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;flex-shrink:0}
-.chart-rank.rank-1{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
-.chart-rank.rank-2{background:linear-gradient(135deg,#94a3b8,#64748b)}
-.chart-rank.rank-3{background:linear-gradient(135deg,#d97706,#b45309)}
-.chart-votes{display:flex;align-items:center;gap:4px;font-size:0.85rem;color:var(--text-muted);white-space:nowrap;justify-content:flex-end}
-.chart-votes i{color:var(--secondary-light)}
-.chart-tool-name{font-weight:800;font-size:1rem;color:var(--text);margin-bottom:6px;line-height:1.2}
-.chart-category{font-size:0.8rem;color:var(--primary-light);font-weight:600;margin-bottom:4px}
-.chart-price{font-size:0.85rem;color:var(--secondary-light);font-weight:700;margin:12px 0 8px}
-.chart-description{font-size:0.85rem;color:var(--text-muted);line-height:1.4;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex-grow:1}
-.chart-actions{display:flex;gap:12px;margin-top:auto;flex-shrink:0}
-.vote-btn{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--dark-light);border-radius:8px;padding:12px 8px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;font-size:0.85rem;font-weight:600;min-height:44px}
-.vote-btn.up:hover{background:rgba(16,185,129,0.15);border-color:var(--secondary);color:var(--secondary-light)}
-.vote-btn.down:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#f87171}
-.vote-btn.active.up{background:rgba(16,185,129,0.25);border-color:var(--secondary);color:var(--secondary-light)}
-.vote-btn.active.down{background:rgba(239,68,68,0.25);border-color:#ef4444;color:#f87171}
-.vote-btn i{font-size:1rem}
-.chart-comment-btn{background:rgba(99,102,241,0.1);border:1px solid var(--primary);border-radius:20px;padding:8px 14px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--primary-light);height:44px;flex-shrink:0;justify-content:center;min-width:0}
-.chart-comment-btn:hover{background:rgba(99,102,241,0.2);transform:translateY(-1px)}
-.comment-badge{background:var(--primary);color:white;font-size:0.7rem;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;padding:0 5px;box-shadow:0 2px 4px rgba(0,0,0,0.2);margin-left:2px;flex-shrink:0}
-.comment-badge.empty{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
-.tools-container{max-width:1200px;margin:0 auto;padding:0 20px 40px}
-.compact-tools-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
-.compact-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.filter-btn{background:var(--card-bg);border:1px solid var(--dark-light);color:var(--text-muted);padding:8px 16px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:600;transition:var(--transition);white-space:nowrap;font-size:0.85rem}
-.filter-btn:hover{border-color:var(--primary);color:var(--primary-light)}
-.filter-btn.active{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:transparent;color:white;box-shadow:var(--shadow)}
-.filter-select{padding:8px 30px 8px 12px;background:var(--dark);border:1px solid var(--dark-light);border-radius:8px;color:var(--text);font-size:0.85rem;transition:var(--transition);cursor:pointer;appearance:none;min-width:140px;font-weight:600}
-.filter-select:focus{outline:none;border-color:var(--primary)}
-.filter-group{position:relative}
-.filter-group::after{content:'▼';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--primary-light);pointer-events:none;font-size:0.6rem}
-.tools-count{font-size:0.9rem;color:var(--text-muted)}
-.tools-count span{color:var(--primary-light);font-weight:800}
-.compact-tools-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.compact-tool-row{background:var(--card-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--dark-light);backdrop-filter:blur(10px);transition:var(--transition);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}
-.compact-tool-row:hover{border-color:var(--primary);transform:translateY(-2px)}
-.tool-vote-compact{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:70px}
-.vote-count{font-weight:800;font-size:1.1rem;color:var(--text)}
-.vote-buttons-compact{display:flex;gap:10px}
-.vote-btn-compact{background:transparent;border:2px solid var(--dark-light);color:var(--text-muted);cursor:pointer;transition:var(--transition);padding:8px 10px;border-radius:8px;width:42px;height:42px;display:flex;align-items:center;justify-content:center}
-.vote-btn-compact:hover{background:var(--glass);border-color:var(--primary-light)}
-.vote-btn-compact.active.up{color:var(--secondary-light);border-color:var(--secondary);background:rgba(16,185,129,0.1)}
-.vote-btn-compact.active.down{color:#f87171;border-color:#ef4444;background:rgba(239,68,68,0.1)}
-.vote-btn-compact i{font-size:1.1rem}
-.tool-info-compact{overflow:hidden;min-width:0}
-.tool-name-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.tool-name-compact{font-weight:800;font-size:1rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tool-category-compact{font-size:0.75rem;color:var(--primary-light);font-weight:600;padding:3px 8px;background:rgba(99,102,241,0.1);border-radius:10px;white-space:nowrap}
-.tool-desc-compact{font-size:0.85rem;color:var(--text-muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.4em}
-.tool-meta-compact{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:140px}
-.tool-price-compact{font-size:0.9rem;font-weight:800;color:var(--secondary-light)}
-.tool-link-compact{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:700;transition:var(--transition);font-size:0.85rem;white-space:nowrap;text-align:center;display:inline-block}
-.tool-link-compact:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,0.3)}
-.comment-btn-compact{background:rgba(99,102,241,0.1);border:1px solid var(--primary);border-radius:8px;padding:6px 12px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--primary-light);white-space:nowrap;height:36px;min-width:80px;justify-content:center}
-.comment-btn-compact:hover{background:rgba(99,102,241,0.2);transform:translateY(-1px)}
-.empty-state{text-align:center;padding:40px 20px;grid-column:1/-1}
-.empty-state i{font-size:3rem;color:var(--text-muted);margin-bottom:16px;opacity:0.5}
-.empty-state h3{font-size:1.2rem;margin-bottom:10px;color:var(--text)}
-.empty-state p{color:var(--text-muted);max-width:400px;margin:0 auto 20px;line-height:1.5;font-size:0.9rem}
-.reset-btn{background:var(--primary);color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;gap:6px;font-size:0.9rem}
-.reset-btn:hover{background:var(--primary-dark);transform:translateY(-2px)}
-.footer{text-align:center;padding:30px 20px;border-top:1px solid var(--dark-light);margin-top:20px}
-.footer p{color:var(--text-muted);font-size:0.8rem;margin-bottom:6px}
-.footer a{color:var(--primary-light);text-decoration:none;transition:var(--transition);font-size:0.8rem}
-.footer a:hover{color:var(--primary)}
-.scroll-top{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:white;width:45px;height:45px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);z-index:999;box-shadow:var(--shadow)}
-.scroll-top.visible{display:flex}
-.scroll-top:hover{transform:translateY(-3px)}
-/* Kommentar Overlay */
-.comments-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.95);z-index:1000;display:none;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(5px)}
-.comments-overlay.active{display:flex}
-.comments-container{width:100%;max-width:600px;max-height:80vh;background:var(--card-bg);border-radius:var(--radius);border:2px solid var(--primary);overflow:hidden;display:flex;flex-direction:column;backdrop-filter:blur(10px);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.comments-header{background:linear-gradient(135deg,var(--primary),var(--accent));padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
-.comments-title{font-weight:800;font-size:1.1rem;color:white;display:flex;align-items:center;gap:8px}
-.comments-title i{font-size:0.9rem}
-.close-comments{background:transparent;border:none;color:white;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:var(--transition);font-size:1.1rem}
-.close-comments:hover{background:rgba(255,255,255,0.1);transform:rotate(90deg)}
-.comments-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
-.comment-item{background:rgba(255,255,255,0.03);border-radius:10px;padding:14px;border:1px solid var(--dark-light);transition:var(--transition)}
-.comment-item:hover{border-color:var(--primary-light)}
-.comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.comment-user{display:flex;align-items:center;gap:8px}
-.user-avatar{width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem}
-.user-name{font-weight:600;font-size:0.85rem;color:var(--text)}
-.comment-time{font-size:0.75rem;color:var(--text-muted)}
-.comment-content{font-size:0.9rem;line-height:1.5;color:var(--text)}
-.comment-actions{display:flex;gap:10px;margin-top:10px}
-.comment-like-btn{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;gap:4px;transition:var(--transition);padding:4px 8px;border-radius:4px}
-.comment-like-btn:hover{color:var(--secondary-light);background:rgba(16,185,129,0.1)}
-.comment-like-btn.liked{color:var(--secondary-light)}
-.no-comments{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:0.9rem}
-.no-comments i{font-size:2rem;margin-bottom:12px;opacity:0.5}
-.comments-input-container{padding:20px;border-top:1px solid var(--dark-light);background:rgba(30,41,59,0.5)}
-.comment-input{width:100%;background:var(--dark);border:2px solid var(--dark-light);border-radius:8px;padding:12px 16px;color:var(--text);font-size:0.9rem;resize:none;min-height:80px;transition:var(--transition);font-family:'Inter',sans-serif}
-.comment-input:focus{outline:none;border-color:var(--primary)}
-.comment-input::placeholder{color:var(--text-muted)}
-.comment-submit-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
-.user-input-container{display:flex;align-items:center;gap:10px}
-.user-input-label{font-size:0.8rem;color:var(--text-muted)}
-.user-input{background:var(--dark);border:1px solid var(--dark-light);border-radius:6px;padding:8px 12px;color:var(--text);font-size:0.85rem;width:150px;transition:var(--transition)}
-.user-input:focus{outline:none;border-color:var(--primary)}
-.comment-submit-btn{background:linear-gradient(135deg,var(--primary),var(--accent));color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px}
-.comment-submit-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(99,102,241,0.3)}
-.comment-submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
-/* Responsive Anpassungen für die Chart-Card */
-@media (max-width:768px){
-  .header{padding:50px 15px 15px}
-  .quick-navigation{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:0 15px}
-  .top-charts-section{padding:0 15px}
-  .tools-container{padding:0 15px 30px}
-  .compact-tools-header{flex-direction:column;align-items:stretch}
-  .compact-filters{justify-content:center}
-  .compact-tool-row{grid-template-columns:1fr;gap:12px}
-  .tool-meta-compact{flex-direction:row;justify-content:space-between;align-items:center;min-width:auto}
-  .tool-vote-compact{flex-direction:row;justify-content:space-between;width:100%;margin-bottom:8px}
-  .vote-buttons-compact{gap:15px}
-  .search-hint-container{justify-content:flex-start;overflow-x:auto;padding-bottom:5px;-ms-overflow-style:none;scrollbar-width:none}
-  .search-hint-container::-webkit-scrollbar{display:none}
-  .comments-container{max-height:90vh;margin:0}
-  .chart-card{padding:16px;min-height:280px}
-  .top-charts{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-  .chart-header{gap:10px}
-  .chart-comment-btn{padding:6px 12px;font-size:0.7rem;height:40px}
-  .comment-badge{min-width:18px;height:18px;font-size:0.65rem}
+:root{
+  /* Futuristic AI Color Scheme */
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1525;
+  --bg-tertiary: #1a2238;
+  --card-bg: rgba(16, 23, 41, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  /* Neon Accent Colors */
+  --accent-cyan: #00f3ff;
+  --accent-purple: #8a2be2;
+  --accent-neon: #00ff9d;
+  --accent-pink: #ff00ff;
+  --accent-blue: #0066ff;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  --gradient-secondary: linear-gradient(135deg, var(--accent-neon), var(--accent-blue));
+  --gradient-dark: linear-gradient(135deg, #0f172a, #1e1b4b);
+  
+  /* Effects */
+  --glow-cyan: 0 0 20px rgba(0, 243, 255, 0.4);
+  --glow-purple: 0 0 20px rgba(138, 43, 226, 0.4);
+  --glow-neon: 0 0 20px rgba(0, 255, 157, 0.4);
+  --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.5);
+  --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.3);
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.2);
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-round: 50px;
+  
+  /* Transitions */
+  --transition-fast: all 0.2s ease;
+  --transition-normal: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
 }
 
-@media (max-width:480px){
-  .header h1{font-size:1.5rem}
-  .search-box{padding:12px 16px 12px 44px;font-size:0.9rem}
-  .quick-navigation{grid-template-columns:1fr 1fr}
-  .top-charts{grid-template-columns:1fr}
-  .compact-tool-row{padding:12px}
-  .vote-btn-compact{width:38px;height:38px;padding:6px}
-  .tool-link-compact{padding:8px 14px;font-size:0.8rem}
-  .search-hint-text{font-size:0.7rem}
-  .search-hint-chip{font-size:0.7rem;padding:3px 8px}
-  .comment-submit-row{flex-direction:column;gap:12px;align-items:stretch}
-  .user-input-container{justify-content:space-between}
-  .comments-body{padding:15px}
-  .comments-header{padding:15px}
-  .comment-btn-compact{min-width:70px;padding:5px 10px}
-  .chart-actions{gap:10px}
-  .chart-header{grid-template-columns:auto 1fr;grid-template-rows:auto auto;gap:8px}
-  .chart-votes{grid-column:2;grid-row:1;justify-content:flex-start}
-  .chart-comment-btn{grid-column:1;grid-row:2;justify-self:start;width:auto;padding:6px 10px;height:36px}
-  .chart-rank{grid-column:1;grid-row:1}
-  .chart-comment-btn .comment-badge{min-width:16px;height:16px;font-size:0.6rem}
+/* === BASE STYLES === */
+body{
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
 }
 
-@media (max-width:375px){
-  .chart-header{grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:6px}
-  .chart-rank{justify-self:start}
-  .chart-votes{justify-self:start;grid-row:2}
-  .chart-comment-btn{grid-row:3;justify-self:start;margin-top:4px}
-  .chart-card{min-height:300px}
+/* Cyber Grid Background */
+body::before{
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 40s linear infinite;
+  pointer-events: none;
+  z-index: -2;
 }
 
-@media (max-width:320px){
-  .chart-header{gap:4px}
-  .chart-comment-btn{padding:4px 8px;font-size:0.65rem}
-  .chart-votes{font-size:0.75rem}
-  .chart-card{padding:12px;min-height:280px}
+@keyframes gridMove{
+  0%{ background-position: 0 0; }
+  100%{ background-position: 50px 50px; }
+}
+
+/* Particles Container */
+#particles-js{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* === GLASSMORPHISM UTILITIES === */
+.glass-effect{
+  background: var(--card-bg);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-medium);
+}
+
+.glass-light{
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* === GLOW EFFECTS === */
+.glow-cyan{
+  box-shadow: var(--glow-cyan);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+}
+
+.glow-purple{
+  box-shadow: var(--glow-purple);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.glow-neon{
+  box-shadow: var(--glow-neon);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+/* === BUTTON STYLES === */
+.btn-primary{
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-round);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+}
+
+.btn-primary::after{
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-primary:hover::after{
+  opacity: 0.5;
+}
+
+.btn-secondary{
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  padding: 10px 20px;
+  border-radius: var(--radius-round);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover{
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+}
+
+.icon-btn{
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  color: var(--text-secondary);
+}
+
+.icon-btn:hover{
+  background: rgba(0, 243, 255, 0.1);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  transform: scale(1.1);
+}
+
+/* === HEADER & NAVIGATION === */
+.top-bar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  background: rgba(10, 14, 23, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo i{
+  font-size: 1.4rem;
+}
+
+.controls{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.theme-toggle{
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  color: var(--text-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle:hover{
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.theme-toggle i:last-child{
+  display: none;
+}
+
+.dark-mode .theme-toggle i:first-child{
+  display: none;
+}
+
+.dark-mode .theme-toggle i:last-child{
+  display: block;
+}
+
+.language-switch{
+  position: relative;
+}
+
+.lang-btn{
+  background: var(--bg-tertiary);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: var(--transition-normal);
+  font-size: 0.9rem;
+}
+
+.lang-btn:hover{
+  background: rgba(0, 243, 255, 0.1);
+  border-color: var(--accent-cyan);
+}
+
+/* === MAIN HEADER === */
+.header{
+  padding: 120px 20px 40px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.badge{
+  background: var(--gradient-primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: var(--radius-round);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+  box-shadow: var(--glow-cyan);
+}
+
+@keyframes float{
+  0%, 100%{ transform: translateY(0) rotate(0deg); }
+  50%{ transform: translateY(-5px) rotate(1deg); }
+}
+
+.header h1{
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  margin-bottom: 16px;
+  line-height: 1.1;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.header p{
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+/* === ENHANCED SEARCH === */
+.search-container{
+  max-width: 800px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.search-box{
+  width: 100%;
+  padding: 18px 24px 18px 56px;
+  background: var(--card-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-round);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition-normal);
+  backdrop-filter: blur(10px);
+  font-weight: 500;
+}
+
+.search-box:focus{
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  background: rgba(16, 23, 41, 0.95);
+}
+
+.search-icon{
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+}
+
+.search-hint-container{
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-hint-text{
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-hint-text i{
+  color: var(--accent-cyan);
+  font-size: 0.8rem;
+}
+
+.search-hint-chip{
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--accent-cyan);
+  padding: 6px 14px;
+  border-radius: var(--radius-round);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.search-hint-chip:hover{
+  background: rgba(0, 243, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+  border-color: var(--accent-cyan);
+}
+
+.search-hint-chip i{
+  font-size: 0.8rem;
+}
+
+/* Advanced Filters */
+.advanced-filters{
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.filter-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-tag{
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-round);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-tag:hover{
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.filter-tag.active{
+  background: rgba(138, 43, 226, 0.2);
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+  font-weight: 600;
+}
+
+/* === QUICK NAVIGATION === */
+.quick-navigation{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.quick-card{
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: var(--transition-normal);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-card:hover{
+  transform: translateY(-8px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.quick-card::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.quick-card:hover::before{
+  opacity: 1;
+}
+
+.quick-icon{
+  width: 56px;
+  height: 56px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  box-shadow: var(--glow-cyan);
+}
+
+.quick-title{
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.quick-desc{
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* === FEATURED SECTION === */
+.tool-of-day{
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.tool-of-day .section-title{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.tool-of-day .section-title i{
+  color: var(--accent-neon);
+}
+
+.tool-of-day .badge{
+  background: var(--gradient-secondary);
+  font-size: 0.7rem;
+  padding: 4px 12px;
+  margin-left: 10px;
+}
+
+.featured-tool{
+  background: linear-gradient(145deg, rgba(0, 243, 255, 0.1), rgba(138, 43, 226, 0.1));
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 243, 255, 0.2);
+}
+
+.featured-badge{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--gradient-secondary);
+  color: white;
+  padding: 6px 16px;
+  border-radius: var(--radius-round);
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: var(--glow-neon);
+}
+
+.featured-content h3{
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.featured-desc{
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.featured-meta{
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.featured-rating, .featured-discount{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.featured-rating{
+  color: var(--accent-neon);
+}
+
+.featured-discount{
+  color: var(--accent-pink);
+}
+
+/* === TOP CHARTS === */
+.top-charts-section{
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.section-title{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.section-title i{
+  color: var(--accent-cyan);
+}
+
+.top-charts{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.chart-card{
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-normal);
+}
+
+.chart-card:hover{
+  transform: translateY(-5px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.chart-header{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.chart-rank{
+  width: 40px;
+  height: 40px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+  box-shadow: var(--glow-cyan);
+}
+
+.chart-rank.rank-1{
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-blue));
+  box-shadow: var(--glow-neon);
+}
+
+.chart-rank.rank-2{
+  background: linear-gradient(135deg, var(--accent-purple), #9b4dff);
+  box-shadow: var(--glow-purple);
+}
+
+.chart-rank.rank-3{
+  background: linear-gradient(135deg, var(--accent-cyan), #00a8ff);
+  box-shadow: var(--glow-cyan);
+}
+
+.chart-votes{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  justify-content: flex-end;
+}
+
+.chart-votes i{
+  color: var(--accent-neon);
+}
+
+.chart-tool-name{
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.chart-category{
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(0, 243, 255, 0.1);
+  border-radius: var(--radius-round);
+}
+
+.chart-price{
+  font-size: 0.95rem;
+  color: var(--accent-neon);
+  font-weight: 700;
+  margin: 16px 0 12px;
+}
+
+.chart-description{
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.chart-actions{
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.vote-btn{
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  min-height: 44px;
+}
+
+.vote-btn.up:hover{
+  background: rgba(0, 255, 157, 0.15);
+  border-color: var(--accent-neon);
+  color: var(--accent-neon);
+}
+
+.vote-btn.down:hover{
+  background: rgba(255, 0, 255, 0.15);
+  border-color: var(--accent-pink);
+  color: #ff66ff;
+}
+
+.vote-btn.active.up{
+  background: rgba(0, 255, 157, 0.25);
+  border-color: var(--accent-neon);
+  color: var(--accent-neon);
+}
+
+.vote-btn.active.down{
+  background: rgba(255, 0, 255, 0.25);
+  border-color: var(--accent-pink);
+  color: #ff66ff;
+}
+
+.vote-btn i{
+  font-size: 1rem;
+}
+
+.chart-comment-btn{
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-round);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+  height: 44px;
+  flex-shrink: 0;
+  justify-content: center;
+  min-width: 0;
+}
+
+.chart-comment-btn:hover{
+  background: rgba(0, 243, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-cyan);
+}
+
+.comment-badge{
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  font-size: 0.75rem;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding: 0 6px;
+  margin-left: 4px;
+  box-shadow: 0 2px 8px rgba(0, 243, 255, 0.3);
+}
+
+.comment-badge.empty{
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* === TOOLS GRID === */
+.tools-container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.compact-tools-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.compact-filters{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.filter-btn{
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  padding: 10px 20px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: var(--transition-normal);
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.filter-btn:hover{
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: rgba(0, 243, 255, 0.1);
+}
+
+.filter-btn.active{
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--glow-cyan);
+}
+
+.filter-select{
+  padding: 10px 36px 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: var(--transition-normal);
+  cursor: pointer;
+  appearance: none;
+  min-width: 160px;
+  font-weight: 500;
+}
+
+.filter-select:focus{
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.1);
+}
+
+.filter-group{
+  position: relative;
+}
+
+.filter-group::after{
+  content: '▼';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-cyan);
+  pointer-events: none;
+  font-size: 0.7rem;
+}
+
+.tools-count{
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.tools-count span{
+  color: var(--accent-cyan);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* === MODERN TOOL CARDS === */
+.ai-tool-card{
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-tool-card:hover{
+  transform: translateY(-5px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.card-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.tool-badge{
+  padding: 6px 14px;
+  border-radius: var(--radius-round);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-badge[data-badge="popular"]{
+  background: rgba(0, 255, 157, 0.2);
+  color: var(--accent-neon);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.tool-badge[data-badge="new"]{
+  background: rgba(0, 243, 255, 0.2);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+}
+
+.tool-badge[data-badge="free"]{
+  background: rgba(255, 0, 255, 0.2);
+  color: var(--accent-pink);
+  border: 1px solid rgba(255, 0, 255, 0.3);
+}
+
+.tool-actions{
+  display: flex;
+  gap: 8px;
+}
+
+.card-body{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tool-icon{
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  box-shadow: var(--glow-cyan);
+}
+
+.tool-name{
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.tool-desc{
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.tool-stats{
+  display: flex;
+  gap: 20px;
+  margin: 10px 0;
+}
+
+.stat{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stat i{
+  color: var(--accent-cyan);
+}
+
+.tool-features{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.feature-tag{
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-round);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.card-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.pricing{
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent-neon);
+}
+
+.action-buttons{
+  display: flex;
+  gap: 12px;
+}
+
+/* === COMPACT TOOLS VIEW === */
+.compact-tools-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.compact-tool-row{
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  transition: var(--transition-normal);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.compact-tool-row:hover{
+  border-color: var(--accent-cyan);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-cyan);
+}
+
+.compact-tool-row::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.compact-tool-row:hover::before{
+  opacity: 1;
+}
+
+.tool-vote-compact{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 80px;
+}
+
+.vote-count{
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+}
+
+.vote-buttons-compact{
+  display: flex;
+  gap: 12px;
+}
+
+.vote-btn-compact{
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--glass-border);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  padding: 10px;
+  border-radius: var(--radius-md);
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vote-btn-compact:hover{
+  background: rgba(0, 243, 255, 0.1);
+  border-color: var(--accent-cyan);
+}
+
+.vote-btn-compact.active.up{
+  color: var(--accent-neon);
+  border-color: var(--accent-neon);
+  background: rgba(0, 255, 157, 0.1);
+}
+
+.vote-btn-compact.active.down{
+  color: #ff66ff;
+  border-color: var(--accent-pink);
+  background: rgba(255, 0, 255, 0.1);
+}
+
+.vote-btn-compact i{
+  font-size: 1.2rem;
+}
+
+.tool-info-compact{
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tool-name-row{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.tool-name-compact{
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tool-category-compact{
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  padding: 4px 12px;
+  background: rgba(0, 243, 255, 0.1);
+  border-radius: var(--radius-round);
+  white-space: nowrap;
+}
+
+.tool-desc-compact{
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+}
+
+.tool-meta-compact{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 160px;
+}
+
+.tool-price-compact{
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent-neon);
+}
+
+.tool-link-compact{
+  background: var(--gradient-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition-normal);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  text-align: center;
+  display: inline-block;
+}
+
+.tool-link-compact:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 243, 255, 0.4);
+}
+
+.comment-btn-compact{
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  white-space: nowrap;
+  height: 40px;
+  min-width: 90px;
+  justify-content: center;
+}
+
+.comment-btn-compact:hover{
+  background: rgba(0, 243, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+}
+
+/* === COMPARISON MODAL === */
+.comparison-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 14, 23, 0.95);
+  z-index: 2000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.comparison-overlay.active{
+  display: flex;
+}
+
+.comparison-container{
+  width: 100%;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--accent-cyan);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.comparison-header{
+  background: var(--gradient-primary);
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comparison-title{
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close-comparison{
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-normal);
+  font-size: 1.1rem;
+}
+
+.close-comparison:hover{
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.comparison-body{
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.comparison-tools{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 30px;
+  align-items: start;
+  margin-bottom: 30px;
+}
+
+.tool-compare{
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-lg);
+  padding: 25px;
+  border: 1px solid var(--glass-border);
+}
+
+.vs-separator{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vs-separator span{
+  background: var(--gradient-primary);
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  box-shadow: var(--glow-cyan);
+}
+
+.comparison-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th{
+  text-align: left;
+  padding: 15px;
+  background: rgba(0, 243, 255, 0.1);
+  color: var(--accent-cyan);
+  font-weight: 700;
+  border-bottom: 2px solid var(--accent-cyan);
+}
+
+.comparison-table td{
+  padding: 15px;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.comparison-table tr:hover{
+  background: rgba(0, 243, 255, 0.05);
+}
+
+.compare-btn{
+  background: rgba(138, 43, 226, 0.1);
+  border: 1px solid var(--accent-purple);
+  color: var(--accent-purple);
+  padding: 8px 16px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: var(--transition-normal);
+}
+
+.compare-btn:hover{
+  background: rgba(138, 43, 226, 0.2);
+  transform: translateY(-2px);
+}
+
+/* === COMMENTS OVERLAY === */
+.comments-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 14, 23, 0.98);
+  z-index: 2000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.comments-overlay.active{
+  display: flex;
+}
+
+.comments-container{
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--accent-cyan);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 80px rgba(0, 243, 255, 0.2);
+}
+
+.comments-header{
+  background: var(--gradient-primary);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comments-title{
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comments-title i{
+  font-size: 1rem;
+}
+
+.close-comments{
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-normal);
+  font-size: 1.1rem;
+}
+
+.close-comments:hover{
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.comments-body{
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comment-item{
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-normal);
+}
+
+.comment-item:hover{
+  border-color: var(--accent-cyan);
+}
+
+.comment-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.comment-user{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar{
+  width: 36px;
+  height: 36px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.user-name{
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.comment-time{
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.comment-content{
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.comment-actions{
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.comment-like-btn{
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-normal);
+  padding: 6px 12px;
+  border-radius: var(--radius-round);
+}
+
+.comment-like-btn:hover{
+  color: var(--accent-neon);
+  background: rgba(0, 255, 157, 0.1);
+}
+
+.comment-like-btn.liked{
+  color: var(--accent-neon);
+}
+
+.no-comments{
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.no-comments i{
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.comments-input-container{
+  padding: 24px;
+  border-top: 1px solid var(--glass-border);
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.comment-input{
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  resize: none;
+  min-height: 100px;
+  transition: var(--transition-normal);
+  font-family: 'Inter', sans-serif;
+}
+
+.comment-input:focus{
+  outline: none;
+  border-color: var(--accent-cyan);
+  background: rgba(0, 243, 255, 0.05);
+}
+
+.comment-input::placeholder{
+  color: var(--text-muted);
+}
+
+.comment-submit-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.user-input-container{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-input-label{
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.user-input{
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  width: 180px;
+  transition: var(--transition-normal);
+}
+
+.user-input:focus{
+  outline: none;
+  border-color: var(--accent-cyan);
+}
+
+.comment-submit-btn{
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-submit-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 243, 255, 0.4);
+}
+
+.comment-submit-btn:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === EMPTY STATE === */
+.empty-state{
+  text-align: center;
+  padding: 60px 20px;
+  grid-column: 1/-1;
+}
+
+.empty-state i{
+  font-size: 4rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.empty-state h3{
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.empty-state p{
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto 25px;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.reset-btn{
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-round);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.reset-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+}
+
+/* === FOOTER === */
+.footer{
+  text-align: center;
+  padding: 40px 20px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 40px;
+  background: rgba(10, 14, 23, 0.8);
+}
+
+.footer p{
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.footer a{
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: var(--transition-normal);
+  font-size: 0.9rem;
+}
+
+.footer a:hover{
+  color: var(--accent-neon);
+  text-decoration: underline;
+}
+
+/* === SCROLL TOP === */
+.scroll-top{
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--gradient-primary);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  z-index: 999;
+  box-shadow: var(--glow-cyan);
+  border: none;
+}
+
+.scroll-top.visible{
+  display: flex;
+}
+
+.scroll-top:hover{
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.4);
+}
+
+/* === MOBILE VOICE SEARCH === */
+.mobile-search-ai{
+  display: none;
+  align-items: center;
+  background: var(--card-bg);
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  margin: 10px 20px 20px;
+  border: 1px solid var(--glass-border);
+}
+
+.voice-search-btn{
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.voice-search-btn:hover{
+  transform: scale(1.1);
+  box-shadow: var(--glow-cyan);
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 1200px){
+  .comparison-tools{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+  
+  .vs-separator{
+    order: 3;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 992px){
+  .quick-navigation{
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .top-charts{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px){
+  .header{
+    padding: 100px 15px 30px;
+  }
+  
+  .quick-navigation{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 0 15px;
+  }
+  
+  .top-charts{
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .top-charts-section{
+    padding: 0 15px;
+  }
+  
+  .tools-container{
+    padding: 0 15px 40px;
+  }
+  
+  .compact-tools-header{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  
+  .compact-filters{
+    justify-content: center;
+  }
+  
+  .compact-tool-row{
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .tool-meta-compact{
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .tool-vote-compact{
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .vote-buttons-compact{
+    gap: 20px;
+  }
+  
+  .search-hint-container{
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .search-hint-container::-webkit-scrollbar{
+    display: none;
+  }
+  
+  .comments-container{
+    max-height: 90vh;
+    margin: 0;
+  }
+  
+  .chart-card{
+    padding: 20px;
+    min-height: 300px;
+  }
+  
+  .chart-header{
+    gap: 12px;
+  }
+  
+  .chart-comment-btn{
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    height: 40px;
+  }
+  
+  .comment-badge{
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+  
+  .mobile-search-ai{
+    display: flex;
+  }
+  
+  .search-container{
+    display: none;
+  }
+}
+
+@media (max-width: 576px){
+  .header h1{
+    font-size: 2rem;
+  }
+  
+  .quick-navigation{
+    grid-template-columns: 1fr;
+  }
+  
+  .compact-tool-row{
+    padding: 16px;
+  }
+  
+  .vote-btn-compact{
+    width: 42px;
+    height: 42px;
+    padding: 8px;
+  }
+  
+  .tool-link-compact{
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .search-hint-text{
+    font-size: 0.8rem;
+  }
+  
+  .search-hint-chip{
+    font-size: 0.75rem;
+    padding: 5px 12px;
+  }
+  
+  .comment-submit-row{
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .user-input-container{
+    justify-content: space-between;
+  }
+  
+  .comments-body{
+    padding: 20px;
+  }
+  
+  .comments-header{
+    padding: 16px 20px;
+  }
+  
+  .comment-btn-compact{
+    min-width: 80px;
+    padding: 6px 12px;
+  }
+  
+  .chart-actions{
+    gap: 10px;
+  }
+  
+  .chart-header{
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+  }
+  
+  .chart-votes{
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-start;
+  }
+  
+  .chart-comment-btn{
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    width: auto;
+    padding: 8px 12px;
+    height: 38px;
+  }
+  
+  .chart-rank{
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .chart-comment-btn .comment-badge{
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+  }
+  
+  .filter-tags{
+    overflow-x: auto;
+    padding-bottom: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .filter-tags::-webkit-scrollbar{
+    display: none;
+  }
+}
+
+@media (max-width: 480px){
+  .header h1{
+    font-size: 1.8rem;
+  }
+  
+  .header p{
+    font-size: 1rem;
+  }
+  
+  .badge{
+    font-size: 0.8rem;
+    padding: 6px 16px;
+  }
+  
+  .chart-header{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+  }
+  
+  .chart-rank{
+    justify-self: start;
+  }
+  
+  .chart-votes{
+    justify-self: start;
+    grid-row: 2;
+  }
+  
+  .chart-comment-btn{
+    grid-row: 3;
+    justify-self: start;
+    margin-top: 5px;
+  }
+  
+  .chart-card{
+    min-height: 320px;
+  }
+  
+  .tool-of-day{
+    padding: 0 10px;
+  }
+  
+  .featured-tool{
+    padding: 20px;
+  }
+  
+  .featured-content h3{
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 375px){
+  .chart-header{
+    gap: 6px;
+  }
+  
+  .chart-comment-btn{
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+  
+  .chart-votes{
+    font-size: 0.8rem;
+  }
+  
+  .chart-card{
+    padding: 16px;
+    min-height: 300px;
+  }
+  
+  .tool-name-compact{
+    font-size: 1rem;
+  }
+  
+  .tool-desc-compact{
+    font-size: 0.85rem;
+  }
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn{
+  from{ opacity: 0; transform: translateY(20px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.fade-in{
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes pulse{
+  0%, 100%{ opacity: 1; }
+  50%{ opacity: 0.7; }
+}
+
+.pulse{
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes slideIn{
+  from{ transform: translateX(-100%); }
+  to{ transform: translateX(0); }
+}
+
+.slide-in{
+  animation: slideIn 0.5s ease-out;
 }
 </style>
 </head>
-<body>
-<div class="language-switch">
-<button class="lang-btn" id="langBtn" type="button" aria-label="Sprache wechseln">
-<i class="fas fa-globe"></i>
-<span id="langText">EN</span>
-</button>
+<body class="dark-mode">
+<div id="particles-js"></div>
+
+<div class="top-bar">
+  <div class="logo">
+    <i class="fas fa-robot"></i>
+    <span>AI Finder</span>
+  </div>
+  
+  <div class="controls">
+    <button class="theme-toggle" id="themeToggle">
+      <i class="fas fa-moon"></i>
+      <i class="fas fa-sun"></i>
+    </button>
+    
+    <div class="language-switch">
+      <button class="lang-btn" id="langBtn" type="button" aria-label="Sprache wechseln">
+        <i class="fas fa-globe"></i>
+        <span id="langText">EN</span>
+      </button>
+    </div>
+  </div>
 </div>
+
 <div class="comments-overlay" id="commentsOverlay">
-<div class="comments-container">
-<div class="comments-header">
-<div class="comments-title">
-<i class="fas fa-comments"></i>
-<span id="commentsToolTitle">Kommentare</span>
+  <div class="comments-container">
+    <div class="comments-header">
+      <div class="comments-title">
+        <i class="fas fa-comments"></i>
+        <span id="commentsToolTitle">Kommentare</span>
+      </div>
+      <button class="close-comments" id="closeComments">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="comments-body" id="commentsBody"></div>
+    <div class="comments-input-container">
+      <textarea class="comment-input" id="commentInput" placeholder="Dein Kommentar... (Enter zum Senden, Shift+Enter für neue Zeile)"></textarea>
+      <div class="comment-submit-row">
+        <div class="user-input-container">
+          <span class="user-input-label" id="userLabel">Name:</span>
+          <input type="text" class="user-input" id="userNameInput" placeholder="Anonym" maxlength="20">
+        </div>
+        <button class="comment-submit-btn" id="submitCommentBtn">
+          <i class="fas fa-paper-plane"></i>
+          <span id="submitText">Kommentieren</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-<button class="close-comments" id="closeComments">
-<i class="fas fa-times"></i>
-</button>
+
+<div class="comparison-overlay" id="comparisonOverlay">
+  <div class="comparison-container">
+    <div class="comparison-header">
+      <div class="comparison-title">
+        <i class="fas fa-balance-scale"></i>
+        <span id="comparisonTitle">KI-Tools Vergleich</span>
+      </div>
+      <button class="close-comparison" id="closeComparison">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="comparison-body" id="comparisonBody"></div>
+  </div>
 </div>
-<div class="comments-body" id="commentsBody">
-<!-- Kommentare werden hier dynamisch eingefügt -->
-</div>
-<div class="comments-input-container">
-<textarea class="comment-input" id="commentInput" placeholder="Dein Kommentar... (Enter zum Senden, Shift+Enter für neue Zeile)"></textarea>
-<div class="comment-submit-row">
-<div class="user-input-container">
-<span class="user-input-label" id="userLabel">Name:</span>
-<input type="text" class="user-input" id="userNameInput" placeholder="Anonym" maxlength="20">
-</div>
-<button class="comment-submit-btn" id="submitCommentBtn">
-<i class="fas fa-paper-plane"></i>
-<span id="submitText">Kommentieren</span>
-</button>
-</div>
-</div>
-</div>
-</div>
+
 <div class="scroll-top" id="scrollTop" aria-label="Nach oben">
-<i class="fas fa-arrow-up"></i>
+  <i class="fas fa-arrow-up"></i>
 </div>
-<header class="header">
-<div class="badge" id="badgeText">🚀 126 KI-Tools für 2026</div>
-<h1 id="pageTitle">Finde sofort dein perfektes KI-Tool</h1>
-<p id="pageDescription">Echte User-Bewertungen, Top 5 Charts, intelligente Empfehlungen. Kein unnötiges Scrollen.</p>
-<div class="search-container">
-<i class="fas fa-search search-icon"></i>
-<input type="text" class="search-box" id="searchInput" autocomplete="off" placeholder="Was möchtest du mit KI erreichen?">
-<div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
-</div>
-<div class="search-hint-container" id="searchHintContainer">
-<div class="search-hint-text">
-<i class="fas fa-lightbulb"></i>
-<span id="hintText">Tipp: Suche nach</span>
-</div>
-<div class="search-hint-chip" data-search="ChatGPT">
-<i class="fas fa-robot"></i>
-<span>ChatGPT</span>
-</div>
-<div class="search-hint-chip" data-search="Bilder">
-<i class="fas fa-image"></i>
-<span>Bilder</span>
-</div>
-<div class="search-hint-chip" data-search="Video">
-<i class="fas fa-video"></i>
-<span>Video</span>
-</div>
-<div class="search-hint-chip" data-search="kostenlos">
-<i class="fas fa-gift"></i>
-<span>kostenlos</span>
-</div>
-<div class="search-hint-chip" data-search="Code">
-<i class="fas fa-code"></i>
-<span>Code</span>
-</div>
-<div class="search-hint-chip" data-search="Musik">
-<i class="fas fa-music"></i>
-<span>Musik</span>
-</div>
-</div>
+
+<header class="header fade-in">
+  <div class="badge" id="badgeText">🚀 126 KI-Tools für 2026</div>
+  <h1 id="pageTitle">Finde sofort dein perfektes KI-Tool</h1>
+  <p id="pageDescription">Echte User-Bewertungen, Top 5 Charts, intelligente Empfehlungen. Kein unnötiges Scrollen.</p>
+  
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="search-box" id="searchInput" autocomplete="off" placeholder="Was möchtest du mit KI erreichen?">
+    <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
+  </div>
+  
+  <div class="mobile-search-ai">
+    <div style="flex: 1; position: relative;">
+      <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--accent-cyan);"></i>
+      <input type="text" style="width: 100%; padding: 10px 10px 10px 36px; background: transparent; border: none; color: var(--text-primary); font-size: 0.9rem;" placeholder="KI-Tools suchen..." id="mobileSearch">
+    </div>
+    <button class="voice-search-btn" id="voiceSearchBtn">
+      <i class="fas fa-microphone"></i>
+    </button>
+  </div>
+  
+  <div class="search-hint-container" id="searchHintContainer">
+    <div class="search-hint-text">
+      <i class="fas fa-lightbulb"></i>
+      <span id="hintText">Tipp: Suche nach</span>
+    </div>
+    <div class="search-hint-chip" data-search="ChatGPT">
+      <i class="fas fa-robot"></i>
+      <span>ChatGPT</span>
+    </div>
+    <div class="search-hint-chip" data-search="Bilder">
+      <i class="fas fa-image"></i>
+      <span>Bilder</span>
+    </div>
+    <div class="search-hint-chip" data-search="Video">
+      <i class="fas fa-video"></i>
+      <span>Video</span>
+    </div>
+    <div class="search-hint-chip" data-search="kostenlos">
+      <i class="fas fa-gift"></i>
+      <span>kostenlos</span>
+    </div>
+    <div class="search-hint-chip" data-search="Code">
+      <i class="fas fa-code"></i>
+      <span>Code</span>
+    </div>
+    <div class="search-hint-chip" data-search="Musik">
+      <i class="fas fa-music"></i>
+      <span>Musik</span>
+    </div>
+  </div>
 </header>
-<section class="quick-navigation" id="quickNav">
-<div class="quick-card" data-filter="chat-text">
-<div class="quick-icon"><i class="fas fa-comments"></i></div>
-<div class="quick-title" id="navChat">Chat & Text</div>
-<div class="quick-desc" id="navChatDesc">KI schreiben lassen, Fragen beantworten</div>
-</div>
-<div class="quick-card" data-filter="image">
-<div class="quick-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-<div class="quick-title" id="navImage">Bilder generieren</div>
-<div class="quick-desc" id="navImageDesc">Kunst, Logos, Designs erstellen</div>
-</div>
-<div class="quick-card" data-filter="audio">
-<div class="quick-icon"><i class="fas fa-microphone-lines"></i></div>
-<div class="quick-title" id="navVoice">Stimmen & Audio</div>
-<div class="quick-desc" id="navVoiceDesc">Text vorlesen, Musik generieren</div>
-</div>
-<div class="quick-card" data-filter="video">
-<div class="quick-icon"><i class="fas fa-video"></i></div>
-<div class="quick-title" id="navVideo">Video erstellen</div>
-<div class="quick-desc" id="navVideoDesc">KI-Videos, Avatare, Editing</div>
-</div>
-<div class="quick-card" data-filter="code">
-<div class="quick-icon"><i class="fas fa-code"></i></div>
-<div class="quick-title" id="navCode">Programmieren</div>
-<div class="quick-desc" id="navCodeDesc">Code generieren, debuggen, erklären</div>
-</div>
-<div class="quick-card" data-filter="free">
-<div class="quick-icon"><i class="fas fa-gift"></i></div>
-<div class="quick-title" id="navFree">Kostenlos</div>
-<div class="quick-desc" id="navFreeDesc">Top kostenlose KI-Tools</div>
-</div>
+
+<section class="quick-navigation fade-in">
+  <div class="quick-card" data-filter="chat-text">
+    <div class="quick-icon"><i class="fas fa-comments"></i></div>
+    <div class="quick-title" id="navChat">Chat & Text</div>
+    <div class="quick-desc" id="navChatDesc">KI schreiben lassen, Fragen beantworten</div>
+  </div>
+  <div class="quick-card" data-filter="image">
+    <div class="quick-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+    <div class="quick-title" id="navImage">Bilder generieren</div>
+    <div class="quick-desc" id="navImageDesc">Kunst, Logos, Designs erstellen</div>
+  </div>
+  <div class="quick-card" data-filter="audio">
+    <div class="quick-icon"><i class="fas fa-microphone-lines"></i></div>
+    <div class="quick-title" id="navVoice">Stimmen & Audio</div>
+    <div class="quick-desc" id="navVoiceDesc">Text vorlesen, Musik generieren</div>
+  </div>
+  <div class="quick-card" data-filter="video">
+    <div class="quick-icon"><i class="fas fa-video"></i></div>
+    <div class="quick-title" id="navVideo">Video erstellen</div>
+    <div class="quick-desc" id="navVideoDesc">KI-Videos, Avatare, Editing</div>
+  </div>
+  <div class="quick-card" data-filter="code">
+    <div class="quick-icon"><i class="fas fa-code"></i></div>
+    <div class="quick-title" id="navCode">Programmieren</div>
+    <div class="quick-desc" id="navCodeDesc">Code generieren, debuggen, erklären</div>
+  </div>
+  <div class="quick-card" data-filter="free">
+    <div class="quick-icon"><i class="fas fa-gift"></i></div>
+    <div class="quick-title" id="navFree">Kostenlos</div>
+    <div class="quick-desc" id="navFreeDesc">Top kostenlose KI-Tools</div>
+  </div>
 </section>
-<section class="top-charts-section">
-<div class="section-title"><i class="fas fa-trophy"></i> <span id="topChartsTitle">Top 5 KI-Tools - Community Ranking</span></div>
-<div class="top-charts" id="topCharts"></div>
+
+<section class="tool-of-day fade-in">
+  <div class="section-title">
+    <i class="fas fa-crown"></i>
+    <span id="toolOfDayTitle">KI-Tool des Tages</span>
+    <span class="badge">Empfohlen</span>
+  </div>
+  <div class="featured-tool glass-effect">
+    <div class="featured-badge">🔥 Tages-Highlight</div>
+    <div class="featured-content">
+      <h3 id="featuredToolName">Midjourney</h3>
+      <p class="featured-desc" id="featuredToolDesc">Beste künstlerische Bildgenerierung mit täglich wechselndem Special Offer</p>
+      <div class="featured-meta">
+        <span class="featured-rating">⭐ 4.9/5</span>
+        <span class="featured-discount">-20% heute</span>
+      </div>
+      <button class="btn-primary" id="featuredToolBtn">Jetzt testen</button>
+    </div>
+  </div>
 </section>
-<section class="tools-container">
-<div class="compact-tools-header">
-<div class="compact-filters">
-<button class="filter-btn active" data-scope="all" type="button"><i class="fas fa-globe"></i> <span id="catAll">Alle</span></button>
-<button class="filter-btn" data-category="text" type="button"><i class="fas fa-keyboard"></i> <span id="catText">Text</span></button>
-<button class="filter-btn" data-category="image" type="button"><i class="fas fa-image"></i> <span id="catImage">Bilder</span></button>
-<button class="filter-btn" data-category="audio" type="button"><i class="fas fa-music"></i> <span id="catAudio">Audio</span></button>
-<button class="filter-btn" data-category="video" type="button"><i class="fas fa-video"></i> <span id="catVideo">Video</span></button>
-<button class="filter-btn" data-category="code" type="button"><i class="fas fa-code"></i> <span id="catCode">Code</span></button>
-</div>
-<div class="compact-filters">
-<div class="filter-group">
-<select id="priceFilter" class="filter-select"></select>
-</div>
-<div class="filter-group">
-<select id="sortFilter" class="filter-select"></select>
-</div>
-</div>
-<div class="tools-count"><span id="toolCount">0</span> <span id="toolsText">Tools</span></div>
-</div>
-<div class="compact-tools-grid" id="toolsGrid"></div>
+
+<section class="advanced-filters fade-in">
+  <div class="filter-tags" id="advancedFilters">
+    <span class="filter-tag active" data-tag="all"><i class="fas fa-globe"></i> Alle</span>
+    <span class="filter-tag" data-tag="free"><i class="fas fa-gift"></i> Kostenlos</span>
+    <span class="filter-tag" data-tag="popular"><i class="fas fa-fire"></i> Beliebt</span>
+    <span class="filter-tag" data-tag="new"><i class="fas fa-star"></i> Neu</span>
+    <span class="filter-tag" data-tag="api"><i class="fas fa-code"></i> API verfügbar</span>
+    <span class="filter-tag" data-tag="browser"><i class="fas fa-window-maximize"></i> Browser-basiert</span>
+    <span class="filter-tag" data-tag="mobile"><i class="fas fa-mobile-alt"></i> Mobile App</span>
+  </div>
+  
+  <div class="ai-suggestions glass-effect" id="aiSuggestions" style="display: none; padding: 20px; margin-top: 20px;">
+    <h4><i class="fas fa-robot"></i> <span id="suggestionsTitle">KI-Empfehlungen basierend auf deiner Suche</span></h4>
+    <div class="suggestions-list" id="suggestionsList"></div>
+  </div>
 </section>
+
+<section class="top-charts-section fade-in">
+  <div class="section-title"><i class="fas fa-trophy"></i> <span id="topChartsTitle">Top 5 KI-Tools - Community Ranking</span></div>
+  <div class="top-charts" id="topCharts"></div>
+</section>
+
+<section class="tools-container fade-in">
+  <div class="compact-tools-header">
+    <div class="compact-filters">
+      <button class="filter-btn active" data-scope="all" type="button"><i class="fas fa-globe"></i> <span id="catAll">Alle</span></button>
+      <button class="filter-btn" data-category="text" type="button"><i class="fas fa-keyboard"></i> <span id="catText">Text</span></button>
+      <button class="filter-btn" data-category="image" type="button"><i class="fas fa-image"></i> <span id="catImage">Bilder</span></button>
+      <button class="filter-btn" data-category="audio" type="button"><i class="fas fa-music"></i> <span id="catAudio">Audio</span></button>
+      <button class="filter-btn" data-category="video" type="button"><i class="fas fa-video"></i> <span id="catVideo">Video</span></button>
+      <button class="filter-btn" data-category="code" type="button"><i class="fas fa-code"></i> <span id="catCode">Code</span></button>
+    </div>
+    <div class="compact-filters">
+      <div class="filter-group">
+        <select id="priceFilter" class="filter-select"></select>
+      </div>
+      <div class="filter-group">
+        <select id="sortFilter" class="filter-select"></select>
+      </div>
+      <button class="btn-secondary" id="toggleViewBtn">
+        <i class="fas fa-th-large"></i>
+        <span id="toggleViewText">Card View</span>
+      </button>
+    </div>
+    <div class="tools-count"><span id="toolCount">0</span> <span id="toolsText">Tools</span></div>
+  </div>
+  
+  <div class="compact-tools-grid" id="toolsGrid"></div>
+  
+  <div class="ai-tools-grid" id="aiToolsGrid" style="display: none; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 30px;"></div>
+</section>
+
 <footer class="footer">
-<p id="footerCopy">© 2026 AI Finder | Community-gestützte KI Tool Empfehlungen</p>
-<p id="footerDiscl">Bewertungen basieren auf User-Feedback (LocalStorage).</p>
-<p><a href="#"><i class="fas fa-question-circle"></i> Hilfe</a> | <a href="#"><i class="fas fa-envelope"></i> Feedback</a></p>
+  <p id="footerCopy">© 2026 AI Finder | Community-gestützte KI Tool Empfehlungen</p>
+  <p id="footerDiscl">Bewertungen basieren auf User-Feedback (LocalStorage).</p>
+  <p>
+    <a href="#"><i class="fas fa-question-circle"></i> <span id="helpText">Hilfe</span></a> | 
+    <a href="#"><i class="fas fa-envelope"></i> <span id="feedbackText">Feedback</span></a> |
+    <a href="#" id="compareSelectedBtn"><i class="fas fa-balance-scale"></i> <span id="compareText">Ausgewählte vergleichen</span></a>
+  </p>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
-// KI Tools Datenbank mit initialen Votes
+// === KONFIGURATION ===
 let aiTools = [
-{id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0},
-{id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0},
-{id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0},
-{id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0},
-{id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0},
-{id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0},
-{id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0},
-{id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0},
-{id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0},
-{id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0},
-{id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0},
-{id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0},
-{id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0},
-{id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0},
-{id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0}
+  {id:1,name:"ChatGPT",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.9,description:{de:"Bester Allrounder für Texte, Ideen, Code.",en:"Best all-rounder for text, ideas, code."},features:["GPT-4","Web","Files","API"],link:"https://chat.openai.com/",badge:"popular",useCases:["chatbot", "writing", "coding"],votes:0,userVote:0,difficulty:"beginner",languages:["en","de"],integrations:["api","browser","mobile"],trending:true},
+  {id:2,name:"Claude",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.8,description:{de:"Exzellent für lange Texte, Dokumente.",en:"Excellent for long-form, documents."},features:["200K","Files","Writing","API"],link:"https://claude.ai/",badge:"popular",useCases:["chatbot", "writing", "analysis"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:3,name:"Midjourney",category:"image",price:"paid",priceDisplay:"$10/mo",rating:4.9,description:{de:"Beste künstlerische Bildgenerierung.",en:"Best artistic image generation."},features:["Art","Styles","Quality","API"],link:"https://www.midjourney.com/",badge:"popular",useCases:["image-generator", "art", "design"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["discord"],trending:true,featured:true},
+  {id:4,name:"GitHub Copilot",category:"code",price:"paid",priceDisplay:"$10/mo",rating:4.8,description:{de:"Bester Code-Assistent für Entwickler.",en:"Best code assistant for developers."},features:["Autocomplete","Chat","Multi-Lang","API"],link:"https://github.com/features/copilot",badge:"popular",useCases:["coding-assistant", "debugging", "code-explanation"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["vscode","jetbrains"],trending:true},
+  {id:5,name:"ElevenLabs",category:"audio",price:"freemium",priceDisplay:"Free/$5",rating:4.8,description:{de:"Realistische KI-Stimmen, Voice Cloning.",en:"Realistic AI voices, voice cloning."},features:["TTS","Clone","Emotion","API"],link:"https://elevenlabs.io/",badge:"popular",useCases:["voice-generator", "text-to-speech", "voice-cloning"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:6,name:"Runway",category:"video",price:"freemium",priceDisplay:"Free/$15",rating:4.7,description:{de:"Text-zu-Video, KI-Video Editing.",en:"Text-to-video, AI video editing."},features:["Gen","Edit","FX","API"],link:"https://runwayml.com/",badge:"popular",useCases:["video-editor", "video-generation", "editing"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:7,name:"Gemini",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"Googles KI mit Web Integration.",en:"Google's AI with web integration."},features:["Web","Multimodal","Apps","API"],link:"https://gemini.google.com/",badge:"new",useCases:["chatbot", "research", "writing"],votes:0,userVote:0,difficulty:"beginner",languages:["en","de"],integrations:["api","browser","mobile"],trending:true},
+  {id:8,name:"Perplexity",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"KI-Suche mit Quellenangaben.",en:"AI search with citations."},features:["Citations","Web","Sources","API"],link:"https://www.perplexity.ai/",badge:"new",useCases:["chatbot", "research", "information"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser","mobile"],trending:true},
+  {id:9,name:"DALL·E 3",category:"image",price:"paid",priceDisplay:"In ChatGPT+",rating:4.7,description:{de:"Text-zu-Bild in ChatGPT.",en:"Text-to-image in ChatGPT."},features:["Text","Images","ChatGPT","API"],link:"https://openai.com/dall-e-3",badge:"new",useCases:["image-generator", "art", "design"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["chatgpt"],trending:true},
+  {id:10,name:"Stable Diffusion",category:"image",price:"free",priceDisplay:"Free",rating:4.7,description:{de:"Open-Source Bildgenerierung.",en:"Open-source image generation."},features:["Open","Local","Custom","API"],link:"https://stability.ai/",badge:"free",useCases:["image-generator", "art", "custom-models"],votes:0,userVote:0,difficulty:"expert",languages:["en"],integrations:["api","local"],trending:false},
+  {id:11,name:"Cursor",category:"code",price:"freemium",priceDisplay:"Free/$20",rating:4.7,description:{de:"AI-first Code Editor.",en:"AI-first code editor."},features:["Editor","Chat","Context","API"],link:"https://cursor.sh/",badge:"new",useCases:["coding-assistant", "debugging", "code-editor"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["desktop"],trending:true},
+  {id:12,name:"Codeium",category:"code",price:"free",priceDisplay:"Free",rating:4.6,description:{de:"Kostenloser Code Assistant.",en:"Free code assistant."},features:["Free","Autocomplete","Chat","API"],link:"https://codeium.com/",badge:"free",useCases:["coding-assistant", "debugging", "free"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["vscode","jetbrains"],trending:false},
+  {id:13,name:"Suno",category:"audio",price:"freemium",priceDisplay:"Free/$10",rating:4.8,description:{de:"Songs aus Text generieren.",en:"Generate songs from text."},features:["Songs","Vocals","Lyrics","API"],link:"https://suno.com/",badge:"popular",useCases:["voice-generator", "music", "audio-creation"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:14,name:"Pika",category:"video",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Text-zu-Video Generation.",en:"Text-to-video generation."},features:["T2V","Styles","Short","API"],link:"https://pika.art/",badge:"new",useCases:["video-editor", "video-generation", "short-videos"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:15,name:"Canva AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Design mit KI Features.",en:"Design with AI features."},features:["Magic","Templates","Design","API"],link:"https://www.canva.com/",badge:"popular",useCases:["image-generator", "design", "templates"],votes:0,userVote:0,difficulty:"beginner",languages:["en","de"],integrations:["browser","mobile"],trending:false},
+  {id:16,name:"Notion AI",category:"text",price:"paid",priceDisplay:"$10/mo",rating:4.6,description:{de:"KI in Notion für Notizen.",en:"AI in Notion for notes."},features:["Summaries","Write","Organize","API"],link:"https://www.notion.so/product/ai",badge:"new",useCases:["chatbot", "writing", "organization"],votes:0,userVote:0,difficulty:"beginner",languages:["en","de"],integrations:["notion"],trending:false}
 ];
 
-// Erweitere die Liste mit mehr Tools
+// Weitere Tools
 const moreTools = [
-{id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0},
-{id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0},
-{id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0},
-{id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0},
-{id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0},
-{id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0},
-{id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0},
-{id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0}
+  {id:17,name:"Grammarly",category:"text",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Grammatik & Stil Korrektur.",en:"Grammar and style correction."},features:["Grammar","Tone","Check","API"],link:"https://www.grammarly.com/",badge:"popular",useCases:["writing", "editing", "grammar"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["browser","mobile"],trending:false},
+  {id:18,name:"QuillBot",category:"text",price:"freemium",priceDisplay:"Free/$10",rating:4.5,description:{de:"Paraphrasieren, Zusammenfassen.",en:"Paraphrasing, summarizing."},features:["Paraphrase","Summarize","API"],link:"https://quillbot.com/",badge:"free",useCases:["writing", "paraphrasing", "summarizing"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:false},
+  {id:19,name:"Adobe Firefly",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.7,description:{de:"Adobe's generative KI.",en:"Adobe's generative AI."},features:["Gen fill","Text2img","API"],link:"https://www.adobe.com/products/firefly.html",badge:"new",useCases:["image-generator", "design", "editing"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["adobe"],trending:true},
+  {id:20,name:"Descript",category:"audio",price:"freemium",priceDisplay:"Free/$12",rating:4.7,description:{de:"Audio/Video über Text editieren.",en:"Edit audio/video via text."},features:["Transcribe","Overdub","API"],link:"https://www.descript.com/",badge:"popular",useCases:["voice-generator", "audio-editing", "transcription"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["desktop"],trending:false},
+  {id:21,name:"Synthesia",category:"video",price:"paid",priceDisplay:"$30/mo",rating:4.6,description:{de:"AI Avatare für Videos.",en:"AI avatars for videos."},features:["Avatars","Languages","API"],link:"https://www.synthesia.io/",badge:"popular",useCases:["video-editor", "avatars", "presentations"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:false},
+  {id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio","API"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0,difficulty:"beginner",languages:["en"],integrations:["api","browser"],trending:false},
+  {id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas","API"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["api","browser"],trending:true},
+  {id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components","API"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0,difficulty:"intermediate",languages:["en"],integrations:["api","browser"],trending:true}
 ];
 
 aiTools = [...aiTools, ...moreTools];
 
-// Kommentar Datenbank
+// === GLOBALE VARIABLEN ===
 let commentsDB = {};
 let likedComments = {};
+let userVotes = {};
+let lang = 'de';
+let cat = 'all';
+let price = 'all';
+let sort = 'votes';
+let query = '';
+let searchTimeout;
+let currentToolId = null;
+let userName = '';
+let advancedTag = 'all';
+let isCardView = false;
+let comparedTools = new Set();
+let currentFeaturedTool = null;
 
-// Translations
+// === TRANSLATIONS ===
 const translations = {
   de: {
     badge: n => `🚀 ${n} KI-Tools für 2026`,
@@ -452,6 +2560,7 @@ const translations = {
     navCodeDesc: "Code generieren, debuggen, erklären",
     navFree: "Kostenlos",
     navFreeDesc: "Top kostenlose KI-Tools",
+    toolOfDayTitle: "KI-Tool des Tages",
     topChartsTitle: "Top 5 KI-Tools - Community Ranking",
     catAll: "Alle",
     catText: "Text",
@@ -475,6 +2584,9 @@ const translations = {
     resetBtn: "Filter zurücksetzen",
     footerCopy: "© 2026 AI Finder | Community-gestützte KI Tool Empfehlungen",
     footerDiscl: "Bewertungen basieren auf User-Feedback (LocalStorage).",
+    helpText: "Hilfe",
+    feedbackText: "Feedback",
+    compareText: "Ausgewählte vergleichen",
     comments: "Kommentare",
     commentPlaceholder: "Dein Kommentar... (Enter zum Senden, Shift+Enter für neue Zeile)",
     userLabel: "Name:",
@@ -491,7 +2603,20 @@ const translations = {
     days: "Tagen",
     weeks: "Wochen",
     months: "Monaten",
-    years: "Jahren"
+    years: "Jahren",
+    suggestionsTitle: "KI-Empfehlungen basierend auf deiner Suche",
+    compareTitle: "KI-Tools Vergleich",
+    toggleViewText: "Card View",
+    toggleViewTextCompact: "List View",
+    featuredToolBtn: "Jetzt testen",
+    compareBtn: "Vergleichen",
+    removeCompare: "Entfernen",
+    addToCompare: "Zum Vergleich hinzufügen",
+    clearComparison: "Vergleich löschen",
+    compareFeatures: "Features",
+    comparePricing: "Preise",
+    compareRatings: "Bewertungen",
+    compareBestFor: "Am besten für"
   },
   en: {
     badge: n => `🚀 ${n} AI Tools for 2026`,
@@ -511,6 +2636,7 @@ const translations = {
     navCodeDesc: "Generate code, debug, explain",
     navFree: "Free",
     navFreeDesc: "Top free AI tools",
+    toolOfDayTitle: "AI Tool of the Day",
     topChartsTitle: "Top 5 AI Tools - Community Ranking",
     catAll: "All",
     catText: "Text",
@@ -534,6 +2660,9 @@ const translations = {
     resetBtn: "Reset filters",
     footerCopy: "© 2026 AI Finder | Community-driven AI tool recommendations",
     footerDiscl: "Ratings based on user feedback (LocalStorage).",
+    helpText: "Help",
+    feedbackText: "Feedback",
+    compareText: "Compare selected",
     comments: "Comments",
     commentPlaceholder: "Your comment... (Enter to send, Shift+Enter for new line)",
     userLabel: "Name:",
@@ -550,33 +2679,76 @@ const translations = {
     days: "days",
     weeks: "weeks",
     months: "months",
-    years: "years"
+    years: "years",
+    suggestionsTitle: "AI Recommendations based on your search",
+    compareTitle: "AI Tools Comparison",
+    toggleViewText: "Card View",
+    toggleViewTextCompact: "List View",
+    featuredToolBtn: "Try now",
+    compareBtn: "Compare",
+    removeCompare: "Remove",
+    addToCompare: "Add to compare",
+    clearComparison: "Clear comparison",
+    compareFeatures: "Features",
+    comparePricing: "Pricing",
+    compareRatings: "Ratings",
+    compareBestFor: "Best for"
   }
 };
 
-let lang = 'de';
-let cat = 'all';
-let price = 'all';
-let sort = 'votes';
-let query = '';
-let searchTimeout;
-let userVotes = {};
-let hintInterval;
-let hintChips = [];
-let currentToolId = null;
-let userName = '';
-
-// Initialize
+// === INITIALISIERUNG ===
 document.addEventListener('DOMContentLoaded', () => {
+  initParticles();
   loadUserVotes();
   loadComments();
   loadLikedComments();
   loadUserName();
+  loadComparedTools();
   setupEvents();
   updateLang();
+  renderFeaturedTool();
   renderTopCharts();
   applyFilters();
+  updateComparisonButton();
 });
+
+function initParticles() {
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: ["#00f3ff", "#8a2be2", "#00ff9d"] },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00f3ff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        }
+      },
+      retina_detect: true
+    });
+  }
+}
 
 function loadComments() {
   const saved = localStorage.getItem('aiToolsComments');
@@ -617,7 +2789,6 @@ function loadUserVotes() {
   const saved = localStorage.getItem('aiToolsVotes');
   if (saved) {
     userVotes = JSON.parse(saved);
-    // Apply saved votes to tools
     aiTools.forEach(tool => {
       if (userVotes[tool.id]) {
         tool.votes = userVotes[tool.id].votes || 0;
@@ -637,36 +2808,83 @@ function saveUserVotes() {
   localStorage.setItem('aiToolsVotes', JSON.stringify(toSave));
 }
 
+function loadComparedTools() {
+  const saved = localStorage.getItem('comparedTools');
+  if (saved) {
+    comparedTools = new Set(JSON.parse(saved));
+  }
+}
+
+function saveComparedTools() {
+  localStorage.setItem('comparedTools', JSON.stringify([...comparedTools]));
+}
+
+// === EVENT HANDLER ===
 function setupEvents() {
+  // Theme Toggle
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  
+  // Language Toggle
   document.getElementById('langBtn').addEventListener('click', () => {
     lang = lang === 'de' ? 'en' : 'de';
     document.getElementById('langText').textContent = lang === 'de' ? 'EN' : 'DE';
     updateLang();
     renderTopCharts();
     applyFilters();
-    if (currentToolId) {
-      renderComments(currentToolId);
+    if (currentToolId) renderComments(currentToolId);
+  });
+
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  const mobileSearch = document.getElementById('mobileSearch');
+  
+  [searchInput, mobileSearch].forEach(input => {
+    if (input) {
+      input.addEventListener('input', e => {
+        const otherInput = input === searchInput ? mobileSearch : searchInput;
+        if (otherInput) otherInput.value = e.target.value;
+        
+        clearTimeout(searchTimeout);
+        const v = e.target.value.toLowerCase();
+        searchTimeout = setTimeout(() => {
+          query = v;
+          if (v.length > 1) {
+            showSuggestions(v);
+            showAISuggestions(v);
+          } else {
+            hideSuggestions();
+            document.getElementById('aiSuggestions').style.display = 'none';
+          }
+          applyFilters();
+        }, 300);
+      });
+      
+      input.addEventListener('focus', () => {
+        if (input.value.length > 0) showSuggestions(input.value);
+      });
+      
+      input.addEventListener('blur', () => {
+        setTimeout(hideSuggestions, 200);
+      });
     }
   });
 
-  const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('input', e => {
-    clearTimeout(searchTimeout);
-    const v = e.target.value.toLowerCase();
-    searchTimeout = setTimeout(() => {
-      query = v;
-      if (v.length > 1) showSuggestions(v);
-      else hideSuggestions();
+  // Voice Search
+  document.getElementById('voiceSearchBtn')?.addEventListener('click', startVoiceSearch);
+
+  // Search hints
+  document.querySelectorAll('.search-hint-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const searchTerm = chip.dataset.search;
+      searchInput.value = searchTerm;
+      mobileSearch.value = searchTerm;
+      query = searchTerm.toLowerCase();
       applyFilters();
-    }, 300);
-  });
-  searchInput.addEventListener('focus', () => {
-    if (searchInput.value.length > 0) showSuggestions(searchInput.value);
-  });
-  searchInput.addEventListener('blur', () => {
-    setTimeout(hideSuggestions, 200);
+      searchInput.focus();
+    });
   });
 
+  // Keyboard shortcuts
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();
@@ -674,64 +2892,41 @@ function setupEvents() {
     }
     if (e.key === 'Escape') {
       searchInput.value = '';
+      mobileSearch.value = '';
       query = '';
       hideSuggestions();
+      document.getElementById('aiSuggestions').style.display = 'none';
       applyFilters();
     }
   });
 
-  // Search hint chips click events
-  document.querySelectorAll('.search-hint-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const searchTerm = chip.dataset.search;
-      searchInput.value = searchTerm;
-      query = searchTerm.toLowerCase();
-      applyFilters();
-      searchInput.focus();
-    });
+  // Advanced filters
+  document.getElementById('advancedFilters').addEventListener('click', e => {
+    const tag = e.target.closest('.filter-tag');
+    if (!tag) return;
+    
+    document.querySelectorAll('#advancedFilters .filter-tag').forEach(t => t.classList.remove('active'));
+    tag.classList.add('active');
+    advancedTag = tag.dataset.tag;
+    applyFilters();
   });
 
-  // Kommentar Overlay Events
-  document.getElementById('closeComments').addEventListener('click', closeComments);
-  document.getElementById('commentsOverlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('commentsOverlay')) {
-      closeComments();
-    }
-  });
-
-  // Kommentar senden Event
-  document.getElementById('submitCommentBtn').addEventListener('click', submitComment);
-  document.getElementById('commentInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      submitComment();
-    }
-  });
-
-  // Benutzername speichern beim Verlassen des Felds
-  document.getElementById('userNameInput').addEventListener('blur', saveUserName);
-  document.getElementById('userNameInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      saveUserName();
-      document.getElementById('commentInput').focus();
-    }
-  });
-
+  // Quick navigation
   document.getElementById('quickNav').addEventListener('click', e => {
     const card = e.target.closest('.quick-card');
     if (!card) return;
     
     const filterType = card.dataset.filter;
     
-    // Reset all filter buttons
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#advancedFilters .filter-tag').forEach(t => t.classList.remove('active'));
+    document.querySelector('#advancedFilters .filter-tag[data-tag="all"]').classList.add('active');
     
-    // Reset search
     query = '';
     searchInput.value = '';
+    mobileSearch.value = '';
+    advancedTag = 'all';
     
-    // Handle different filter types
     if (filterType === 'chat-text') {
       cat = 'text';
       document.querySelector(`[data-category="text"]`).classList.add('active');
@@ -739,12 +2934,12 @@ function setupEvents() {
       cat = 'all';
       price = 'free';
       document.querySelector(`[data-scope="all"]`).classList.add('active');
+      document.getElementById('priceFilter').value = price;
     } else if (['image', 'audio', 'video', 'code'].includes(filterType)) {
       cat = filterType;
       document.querySelector(`[data-category="${filterType}"]`).classList.add('active');
     }
     
-    // Update filter dropdowns
     document.getElementById('priceFilter').value = price;
     document.getElementById('sortFilter').value = sort;
     
@@ -752,6 +2947,7 @@ function setupEvents() {
     window.scrollTo({ top: document.querySelector('.tools-container').offsetTop - 20, behavior: 'smooth' });
   });
 
+  // Category filters
   document.querySelector('.compact-filters').addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
@@ -768,6 +2964,7 @@ function setupEvents() {
     applyFilters();
   });
 
+  // Price and sort filters
   document.getElementById('priceFilter').addEventListener('change', function() {
     price = this.value;
     applyFilters();
@@ -778,6 +2975,55 @@ function setupEvents() {
     applyFilters();
   });
 
+  // View toggle
+  document.getElementById('toggleViewBtn').addEventListener('click', toggleView);
+
+  // Featured tool
+  document.getElementById('featuredToolBtn').addEventListener('click', () => {
+    if (currentFeaturedTool) {
+      window.open(currentFeaturedTool.link, '_blank');
+    }
+  });
+
+  // Compare selected
+  document.getElementById('compareSelectedBtn').addEventListener('click', openComparison);
+
+  // Comments overlay
+  document.getElementById('closeComments').addEventListener('click', closeComments);
+  document.getElementById('commentsOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('commentsOverlay')) {
+      closeComments();
+    }
+  });
+
+  // Comments submit
+  document.getElementById('submitCommentBtn').addEventListener('click', submitComment);
+  document.getElementById('commentInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitComment();
+    }
+  });
+
+  // Username save
+  document.getElementById('userNameInput').addEventListener('blur', saveUserName);
+  document.getElementById('userNameInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      saveUserName();
+      document.getElementById('commentInput').focus();
+    }
+  });
+
+  // Comparison overlay
+  document.getElementById('closeComparison').addEventListener('click', closeComparison);
+  document.getElementById('comparisonOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('comparisonOverlay')) {
+      closeComparison();
+    }
+  });
+
+  // Scroll to top
   const scrollBtn = document.getElementById('scrollTop');
   window.addEventListener('scroll', () => {
     scrollBtn.classList.toggle('visible', window.pageYOffset > 300);
@@ -787,119 +3033,170 @@ function setupEvents() {
   });
 }
 
-function showSuggestions(q) {
-  const div = document.getElementById('searchSuggestions');
-  const matches = aiTools.filter(t => {
-    const txt = `${t.name} ${t.category} ${t.description[lang]} ${t.features.join(' ')} ${t.useCases ? t.useCases.join(' ') : ''}`.toLowerCase();
-    return txt.includes(q);
-  }).slice(0, 6);
-  
-  if (matches.length > 0) {
-    div.innerHTML = matches.map(t => `
-      <div class="suggestion-item" data-tool="${t.id}">
-        <i class="${catIcon(t.category)} suggestion-icon"></i>
-        <div class="suggestion-text">
-          <div class="suggestion-name">${highlight(t.name, q)}</div>
-          <div class="suggestion-meta">${catName(t.category)} • ${t.priceDisplay}</div>
-        </div>
-      </div>
-    `).join('');
+// === FUNKTIONALITÄTEN ===
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+function startVoiceSearch() {
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = lang === 'de' ? 'de-DE' : 'en-US';
+    recognition.interimResults = false;
     
-    div.querySelectorAll('.suggestion-item').forEach(el => {
-      el.addEventListener('click', () => {
-        const toolId = parseInt(el.dataset.tool);
-        const tool = aiTools.find(t => t.id === toolId);
-        if (tool) {
-          document.getElementById('searchInput').value = tool.name;
-          query = tool.name.toLowerCase();
-          hideSuggestions();
-          applyFilters();
-          // Scroll to that tool
-          setTimeout(() => {
-            const toolElement = document.querySelector(`[data-id="${toolId}"]`);
-            if (toolElement) {
-              toolElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              toolElement.style.boxShadow = '0 0 0 2px var(--primary)';
-              setTimeout(() => toolElement.style.boxShadow = '', 2000);
-            }
-          }, 100);
-        }
-      });
-    });
-    div.classList.add('active');
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById('searchInput').value = transcript;
+      document.getElementById('mobileSearch').value = transcript;
+      query = transcript.toLowerCase();
+      applyFilters();
+    };
+    
+    recognition.start();
   } else {
-    hideSuggestions();
+    alert('Voice search is not supported in your browser.');
   }
 }
 
-function hideSuggestions() {
-  document.getElementById('searchSuggestions').classList.remove('active');
+function toggleView() {
+  isCardView = !isCardView;
+  const btn = document.getElementById('toggleViewBtn');
+  const btnText = document.getElementById('toggleViewText');
+  const grid = document.getElementById('toolsGrid');
+  const cardGrid = document.getElementById('aiToolsGrid');
+  
+  if (isCardView) {
+    grid.style.display = 'none';
+    cardGrid.style.display = 'grid';
+    btn.innerHTML = `<i class="fas fa-list"></i><span id="toggleViewText">${translations[lang].toggleViewTextCompact}</span>`;
+    renderCardView();
+  } else {
+    grid.style.display = 'grid';
+    cardGrid.style.display = 'none';
+    btn.innerHTML = `<i class="fas fa-th-large"></i><span id="toggleViewText">${translations[lang].toggleViewText}</span>`;
+  }
+  updateLang();
 }
 
-function highlight(txt, q) {
-  const rx = new RegExp(`(${q})`, 'gi');
-  return txt.replace(rx, '<span style="color:var(--primary-light)">$1</span>');
+function renderFeaturedTool() {
+  const featured = aiTools.find(t => t.featured) || aiTools[Math.floor(Math.random() * aiTools.length)];
+  currentFeaturedTool = featured;
+  
+  document.getElementById('featuredToolName').textContent = featured.name;
+  document.getElementById('featuredToolDesc').textContent = featured.description[lang];
+  document.getElementById('featuredToolBtn').textContent = translations[lang].featuredToolBtn;
 }
 
-function catIcon(c) {
-  const m = {
+function showAISuggestions(query) {
+  const suggestionsDiv = document.getElementById('aiSuggestions');
+  const listDiv = document.getElementById('suggestionsList');
+  
+  if (query.length < 2) {
+    suggestionsDiv.style.display = 'none';
+    return;
+  }
+  
+  const suggestions = aiTools.filter(tool => {
+    const searchText = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.useCases.join(' ')}`.toLowerCase();
+    return searchText.includes(query);
+  }).slice(0, 3);
+  
+  if (suggestions.length > 0) {
+    listDiv.innerHTML = suggestions.map(tool => `
+      <div class="suggestion-item" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00f3ff, #8a2be2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i class="${getCategoryIcon(tool.category)}"></i>
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: 600; color: var(--text-primary);">${tool.name}</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);">${tool.description[lang]}</div>
+        </div>
+        <button class="btn-secondary" onclick="window.open('${tool.link}', '_blank')">${translations[lang].tryNow}</button>
+      </div>
+    `).join('');
+    
+    suggestionsDiv.style.display = 'block';
+  } else {
+    suggestionsDiv.style.display = 'none';
+  }
+}
+
+function getCategoryIcon(category) {
+  const icons = {
     text: 'fas fa-keyboard',
     image: 'fas fa-image',
     audio: 'fas fa-music',
     video: 'fas fa-video',
-    code: 'fas fa-code',
-    business: 'fas fa-briefcase'
+    code: 'fas fa-code'
   };
-  return m[c] || 'fas fa-star';
-}
-
-function catName(c) {
-  const m = {
-    text: lang === 'de' ? 'Text' : 'Text',
-    image: lang === 'de' ? 'Bilder' : 'Images',
-    audio: 'Audio',
-    video: 'Video',
-    code: 'Code',
-    business: 'Business'
-  };
-  return m[c] || c;
+  return icons[category] || 'fas fa-robot';
 }
 
 function updateLang() {
   const t = translations[lang];
-  document.getElementById('badgeText').textContent = t.badge(aiTools.length);
-  document.getElementById('pageTitle').textContent = t.title;
-  document.getElementById('pageDescription').textContent = t.desc;
-  document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-  document.getElementById('hintText').textContent = t.searchHint;
-  document.getElementById('navChat').textContent = t.navChat;
-  document.getElementById('navChatDesc').textContent = t.navChatDesc;
-  document.getElementById('navImage').textContent = t.navImage;
-  document.getElementById('navImageDesc').textContent = t.navImageDesc;
-  document.getElementById('navVoice').textContent = t.navVoice;
-  document.getElementById('navVoiceDesc').textContent = t.navVoiceDesc;
-  document.getElementById('navVideo').textContent = t.navVideo;
-  document.getElementById('navVideoDesc').textContent = t.navVideoDesc;
-  document.getElementById('navCode').textContent = t.navCode;
-  document.getElementById('navCodeDesc').textContent = t.navCodeDesc;
-  document.getElementById('navFree').textContent = t.navFree;
-  document.getElementById('navFreeDesc').textContent = t.navFreeDesc;
-  document.getElementById('topChartsTitle').textContent = t.topChartsTitle;
-  document.getElementById('catAll').textContent = t.catAll;
-  document.getElementById('catText').textContent = t.catText;
-  document.getElementById('catImage').textContent = t.catImage;
-  document.getElementById('catAudio').textContent = t.catAudio;
-  document.getElementById('catVideo').textContent = t.catVideo;
-  document.getElementById('catCode').textContent = t.catCode;
-  document.getElementById('toolsText').textContent = t.toolsFound;
-  document.getElementById('footerCopy').textContent = t.footerCopy;
-  document.getElementById('footerDiscl').textContent = t.footerDiscl;
-  document.getElementById('commentsToolTitle').textContent = t.comments;
-  document.getElementById('commentInput').placeholder = t.commentPlaceholder;
-  document.getElementById('userLabel').textContent = t.userLabel;
-  document.getElementById('userNameInput').placeholder = t.userPlaceholder;
-  document.getElementById('submitText').textContent = t.submitText;
-
+  
+  // Update all translatable elements
+  const elements = {
+    'badgeText': t.badge(aiTools.length),
+    'pageTitle': t.title,
+    'pageDescription': t.desc,
+    'searchInput': {placeholder: t.searchPlaceholder},
+    'mobileSearch': {placeholder: 'KI-Tools suchen...'},
+    'hintText': t.searchHint,
+    'navChat': t.navChat,
+    'navChatDesc': t.navChatDesc,
+    'navImage': t.navImage,
+    'navImageDesc': t.navImageDesc,
+    'navVoice': t.navVoice,
+    'navVoiceDesc': t.navVoiceDesc,
+    'navVideo': t.navVideo,
+    'navVideoDesc': t.navVideoDesc,
+    'navCode': t.navCode,
+    'navCodeDesc': t.navCodeDesc,
+    'navFree': t.navFree,
+    'navFreeDesc': t.navFreeDesc,
+    'toolOfDayTitle': t.toolOfDayTitle,
+    'topChartsTitle': t.topChartsTitle,
+    'catAll': t.catAll,
+    'catText': t.catText,
+    'catImage': t.catImage,
+    'catAudio': t.catAudio,
+    'catVideo': t.catVideo,
+    'catCode': t.catCode,
+    'toolsText': t.toolsFound,
+    'footerCopy': t.footerCopy,
+    'footerDiscl': t.footerDiscl,
+    'helpText': t.helpText,
+    'feedbackText': t.feedbackText,
+    'compareText': t.compareText,
+    'commentsToolTitle': t.comments,
+    'commentInput': {placeholder: t.commentPlaceholder},
+    'userLabel': t.userLabel,
+    'userNameInput': {placeholder: t.userPlaceholder},
+    'submitText': t.submitText,
+    'suggestionsTitle': t.suggestionsTitle,
+    'comparisonTitle': t.compareTitle,
+    'toggleViewText': isCardView ? t.toggleViewTextCompact : t.toggleViewText,
+    'featuredToolBtn': t.featuredToolBtn
+  };
+  
+  Object.entries(elements).forEach(([id, value]) => {
+    const element = document.getElementById(id);
+    if (element) {
+      if (typeof value === 'string') {
+        element.textContent = value;
+      } else if (typeof value === 'object') {
+        Object.entries(value).forEach(([attr, val]) => {
+          element[attr] = val;
+        });
+      }
+    }
+  });
+  
+  // Update filter dropdowns
   const pf = document.getElementById('priceFilter');
   pf.innerHTML = `
     <option value="all">${t.priceAll}</option>
@@ -908,7 +3205,7 @@ function updateLang() {
     <option value="freemium">${t.priceFreemium}</option>
   `;
   pf.value = price;
-
+  
   const sf = document.getElementById('sortFilter');
   sf.innerHTML = `
     <option value="votes">${t.sortVotes}</option>
@@ -918,61 +3215,314 @@ function updateLang() {
     <option value="price-high">${t.sortPriceHigh}</option>
   `;
   sf.value = sort;
+  
+  // Update advanced filter tags
+  const tags = document.querySelectorAll('#advancedFilters .filter-tag');
+  tags[0].innerHTML = `<i class="fas fa-globe"></i> ${t.catAll}`;
+  tags[1].innerHTML = `<i class="fas fa-gift"></i> ${t.priceFree}`;
+  tags[2].innerHTML = `<i class="fas fa-fire"></i> ${t.sortPopular}`;
+  tags[3].innerHTML = `<i class="fas fa-star"></i> ${lang === 'de' ? 'Neu' : 'New'}`;
 }
 
-function renderTopCharts() {
-  const container = document.getElementById('topCharts');
-  const t = translations[lang];
-  const sortedTools = [...aiTools]
-    .sort((a, b) => (b.votes + b.rating * 10) - (a.votes + a.rating * 10))
-    .slice(0, 5);
+function applyFilters() {
+  let filtered = aiTools.filter(tool => {
+    // Category filter
+    if (cat !== 'all' && tool.category !== cat) return false;
+    
+    // Price filter
+    if (price !== 'all' && tool.price !== price) return false;
+    
+    // Advanced tag filter
+    if (advancedTag !== 'all') {
+      if (advancedTag === 'free' && tool.price !== 'free') return false;
+      if (advancedTag === 'popular' && !tool.trending) return false;
+      if (advancedTag === 'new' && tool.badge !== 'new') return false;
+      if (advancedTag === 'api' && !tool.features.includes('API')) return false;
+      if (advancedTag === 'browser' && !tool.integrations?.includes('browser')) return false;
+      if (advancedTag === 'mobile' && !tool.integrations?.includes('mobile')) return false;
+    }
+    
+    // Search query
+    if (query) {
+      const searchText = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')} ${tool.useCases.join(' ')}`.toLowerCase();
+      if (!searchText.includes(query)) return false;
+    }
+    
+    return true;
+  });
+  
+  // Sorting
+  filtered.sort((a, b) => {
+    switch (sort) {
+      case 'rating':
+        return b.rating - a.rating;
+      case 'votes':
+        return (b.votes + b.rating * 10) - (a.votes + a.rating * 10);
+      case 'popular':
+        return (b.trending ? 1 : 0) - (a.trending ? 1 : 0);
+      case 'price-low':
+        const aPrice = parsePrice(a.priceDisplay);
+        const bPrice = parsePrice(b.priceDisplay);
+        return aPrice - bPrice;
+      case 'price-high':
+        const aPrice2 = parsePrice(a.priceDisplay);
+        const bPrice2 = parsePrice(b.priceDisplay);
+        return bPrice2 - aPrice2;
+      default:
+        return 0;
+    }
+  });
+  
+  document.getElementById('toolCount').textContent = filtered.length;
+  
+  if (isCardView) {
+    renderCardView(filtered);
+  } else {
+    renderTools(filtered);
+  }
+}
 
-  container.innerHTML = sortedTools.map((tool, index) => {
-    const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
-    const badgeClass = commentCount === 0 ? 'empty' : '';
-    return `
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-rank rank-${index + 1}">${index + 1}</div>
-        <div class="chart-votes">
-          <i class="fas fa-thumbs-up"></i>
-          <span>${tool.votes}</span>
-        </div>
-        <button class="chart-comment-btn" data-id="${tool.id}">
-          <i class="fas fa-comment"></i>
-          <span class="comment-badge ${badgeClass}">${commentCount}</span>
+function parsePrice(priceStr) {
+  if (priceStr.toLowerCase().includes('free')) return 0;
+  const match = priceStr.match(/\$?(\d+(\.\d+)?)/);
+  return match ? parseFloat(match[1]) : 999;
+}
+
+function renderTools(tools) {
+  const grid = document.getElementById('toolsGrid');
+  const t = translations[lang];
+  
+  if (tools.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <h3>${t.noTitle}</h3>
+        <p>${t.noMsg}</p>
+        <button class="reset-btn" id="resetFiltersBtn">
+          <i class="fas fa-redo"></i> ${t.resetBtn}
         </button>
       </div>
-      <div class="chart-tool-name">${tool.name}</div>
-      <div class="chart-category">${catName(tool.category)}</div>
-      <div class="chart-price">${tool.priceDisplay}</div>
-      <div class="chart-description">${tool.description[lang]}</div>
-      <div class="chart-actions">
-        <button class="vote-btn up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
-          <i class="fas fa-thumbs-up"></i> ${lang === 'de' ? 'Hilfreich' : 'Helpful'}
-        </button>
-        <button class="vote-btn down ${tool.userVote === -1 ? 'active' : ''}" data-id="${tool.id}" data-vote="-1">
-          <i class="fas fa-thumbs-down"></i>
-        </button>
+    `;
+    document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
+    return;
+  }
+  
+  grid.innerHTML = tools.map(tool => {
+    const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
+    const badgeClass = commentCount === 0 ? 'empty' : '';
+    const isCompared = comparedTools.has(tool.id);
+    
+    return `
+    <div class="compact-tool-row" data-id="${tool.id}">
+      <div class="tool-vote-compact">
+        <div class="vote-count">${tool.votes}</div>
+        <div class="vote-buttons-compact">
+          <button class="vote-btn-compact up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
+            <i class="fas fa-thumbs-up"></i>
+          </button>
+          <button class="vote-btn-compact down ${tool.userVote === -1 ? 'active' : ''}" data-id="${tool.id}" data-vote="-1">
+            <i class="fas fa-thumbs-down"></i>
+          </button>
+        </div>
+      </div>
+      <div class="tool-info-compact">
+        <div class="tool-name-row">
+          <div class="tool-name-compact">${tool.name}</div>
+          <div class="tool-category-compact">${getCategoryName(tool.category)}</div>
+          <button class="compare-btn ${isCompared ? 'active' : ''}" data-id="${tool.id}" style="margin-left: auto; font-size: 0.75rem; padding: 4px 10px;">
+            <i class="fas fa-${isCompared ? 'minus' : 'balance-scale'}"></i>
+            ${isCompared ? t.removeCompare : t.addToCompare}
+          </button>
+        </div>
+        <div class="tool-desc-compact">${tool.description[lang]}</div>
+      </div>
+      <div class="tool-meta-compact">
+        <div class="tool-price-compact">${tool.priceDisplay}</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="comment-btn-compact" data-id="${tool.id}">
+            <i class="fas fa-comment"></i>
+            <span class="comment-badge ${badgeClass}">${commentCount}</span>
+          </button>
+          <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer">${t.tryNow}</a>
+        </div>
       </div>
     </div>
   `}).join('');
+  
+  // Add event listeners
+  addToolEventListeners();
+}
 
-  // Add vote event listeners
-  container.querySelectorAll('.vote-btn').forEach(btn => {
+function renderCardView(tools = null) {
+  const grid = document.getElementById('aiToolsGrid');
+  const filteredTools = tools || getFilteredTools();
+  const t = translations[lang];
+  
+  if (filteredTools.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <i class="fas fa-search"></i>
+        <h3>${t.noTitle}</h3>
+        <p>${t.noMsg}</p>
+        <button class="reset-btn" id="resetFiltersBtnCard">
+          <i class="fas fa-redo"></i> ${t.resetBtn}
+        </button>
+      </div>
+    `;
+    document.getElementById('resetFiltersBtnCard').addEventListener('click', resetFilters);
+    return;
+  }
+  
+  grid.innerHTML = filteredTools.map(tool => {
+    const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
+    const isCompared = comparedTools.has(tool.id);
+    
+    return `
+    <div class="ai-tool-card" data-id="${tool.id}">
+      <div class="card-header">
+        <div class="tool-badge" data-badge="${tool.badge}">
+          ${tool.badge === 'popular' ? '🔥 Top' : tool.badge === 'new' ? '✨ Neu' : '🆓 Kostenlos'}
+        </div>
+        <div class="tool-actions">
+          <button class="icon-btn bookmark" data-id="${tool.id}">
+            <i class="far fa-bookmark"></i>
+          </button>
+          <button class="icon-btn compare ${isCompared ? 'active' : ''}" data-id="${tool.id}">
+            <i class="fas fa-${isCompared ? 'minus' : 'balance-scale'}"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="tool-icon" style="background: ${getToolGradient(tool.category)};">
+          <i class="${getCategoryIcon(tool.category)}"></i>
+        </div>
+        <h3 class="tool-name">${tool.name}</h3>
+        <p class="tool-desc">${tool.description[lang]}</p>
+        
+        <div class="tool-stats">
+          <div class="stat">
+            <i class="fas fa-bolt"></i>
+            <span>${tool.rating}/5</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-users"></i>
+            <span>${tool.votes}</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-clock"></i>
+            <span>${tool.difficulty === 'beginner' ? 'Einfach' : tool.difficulty === 'intermediate' ? 'Mittel' : 'Experte'}</span>
+          </div>
+        </div>
+        
+        <div class="tool-features">
+          ${tool.features.slice(0, 3).map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <div class="pricing">${tool.priceDisplay}</div>
+        <div class="action-buttons">
+          <button class="comment-btn-compact" data-id="${tool.id}" style="background: rgba(0,243,255,0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-comment"></i>
+            <span>${commentCount}</span>
+          </button>
+          <a href="${tool.link}" class="btn-primary" target="_blank" rel="noopener noreferrer">
+            ${t.tryNow}
+          </a>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+  
+  addToolEventListeners();
+}
+
+function getToolGradient(category) {
+  const gradients = {
+    text: 'linear-gradient(135deg, #00f3ff, #0066ff)',
+    image: 'linear-gradient(135deg, #ff00ff, #8a2be2)',
+    audio: 'linear-gradient(135deg, #00ff9d, #00b894)',
+    video: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
+    code: 'linear-gradient(135deg, #feca57, #ff9f43)'
+  };
+  return gradients[category] || 'linear-gradient(135deg, #00f3ff, #8a2be2)';
+}
+
+function getCategoryName(category) {
+  const names = {
+    text: lang === 'de' ? 'Text' : 'Text',
+    image: lang === 'de' ? 'Bilder' : 'Images',
+    audio: 'Audio',
+    video: 'Video',
+    code: 'Code'
+  };
+  return names[category] || category;
+}
+
+function getFilteredTools() {
+  return aiTools.filter(tool => {
+    if (cat !== 'all' && tool.category !== cat) return false;
+    if (price !== 'all' && tool.price !== price) return false;
+    if (advancedTag !== 'all') {
+      if (advancedTag === 'free' && tool.price !== 'free') return false;
+      if (advancedTag === 'popular' && !tool.trending) return false;
+      if (advancedTag === 'new' && tool.badge !== 'new') return false;
+      if (advancedTag === 'api' && !tool.features.includes('API')) return false;
+      if (advancedTag === 'browser' && !tool.integrations?.includes('browser')) return false;
+      if (advancedTag === 'mobile' && !tool.integrations?.includes('mobile')) return false;
+    }
+    if (query) {
+      const searchText = `${tool.name} ${tool.category} ${tool.description[lang]} ${tool.features.join(' ')} ${tool.useCases.join(' ')}`.toLowerCase();
+      if (!searchText.includes(query)) return false;
+    }
+    return true;
+  });
+}
+
+function addToolEventListeners() {
+  // Vote buttons
+  document.querySelectorAll('.vote-btn-compact, .vote-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const toolId = parseInt(btn.dataset.id);
       const vote = parseInt(btn.dataset.vote);
       handleVote(toolId, vote);
     });
   });
-
-  // Add comment button listeners
-  container.querySelectorAll('.chart-comment-btn').forEach(btn => {
+  
+  // Comment buttons
+  document.querySelectorAll('.comment-btn-compact, .chart-comment-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const toolId = parseInt(btn.dataset.id);
       openComments(toolId);
+    });
+  });
+  
+  // Compare buttons
+  document.querySelectorAll('.compare-btn, .icon-btn.compare').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const toolId = parseInt(btn.dataset.id);
+      toggleComparison(toolId);
+    });
+  });
+  
+  // Bookmark buttons
+  document.querySelectorAll('.icon-btn.bookmark').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const toolId = parseInt(btn.dataset.id);
+      const icon = btn.querySelector('i');
+      if (icon.classList.contains('far')) {
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+        btn.style.color = 'var(--accent-neon)';
+      } else {
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+        btn.style.color = '';
+      }
     });
   });
 }
@@ -980,24 +3530,22 @@ function renderTopCharts() {
 function handleVote(toolId, vote) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
-
-  // Reset if clicking same vote
+  
   if (tool.userVote === vote) {
     tool.votes -= vote;
     tool.userVote = 0;
   } else {
-    // Remove previous vote if exists
     if (tool.userVote !== 0) {
       tool.votes -= tool.userVote;
     }
     tool.votes += vote;
     tool.userVote = vote;
   }
-
+  
   userVotes[toolId] = { votes: tool.votes, userVote: tool.userVote };
   saveUserVotes();
   renderTopCharts();
-  applyFilters(); // Update main list
+  applyFilters();
 }
 
 function openComments(toolId) {
@@ -1009,7 +3557,6 @@ function openComments(toolId) {
   document.getElementById('commentsOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
   
-  // Setze Fokus auf Kommentarfeld
   setTimeout(() => {
     document.getElementById('commentInput').focus();
   }, 300);
@@ -1067,7 +3614,6 @@ function renderComments(toolId) {
     `;
   }).join('');
   
-  // Add like button listeners
   commentsBody.querySelectorAll('.comment-like-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const commentId = btn.dataset.commentId;
@@ -1084,13 +3630,9 @@ function submitComment() {
   
   if (!text) return;
   
-  // Benutzername speichern
   saveUserName();
   
-  // Kommentar-ID generieren
   const commentId = Date.now();
-  
-  // Kommentar erstellen
   const comment = {
     id: commentId,
     user: userName,
@@ -1099,26 +3641,17 @@ function submitComment() {
     likes: 0
   };
   
-  // Kommentar zur Datenbank hinzufügen
   if (!commentsDB[currentToolId]) {
     commentsDB[currentToolId] = [];
   }
   commentsDB[currentToolId].push(comment);
   
-  // Speichern
   saveComments();
-  
-  // Kommentarfeld leeren
   commentInput.value = '';
-  
-  // Kommentarliste aktualisieren
   renderComments(currentToolId);
-  
-  // Kommentarzahlen in der Liste aktualisieren
   renderTopCharts();
   applyFilters();
   
-  // Erfolgsfeedback
   const submitBtn = document.getElementById('submitCommentBtn');
   const originalText = submitBtn.innerHTML;
   submitBtn.innerHTML = '<i class="fas fa-check"></i> Gesendet!';
@@ -1132,10 +3665,8 @@ function submitComment() {
 
 function toggleCommentLike(commentId) {
   if (!likedComments[commentId]) {
-    // Like hinzufügen
     likedComments[commentId] = true;
     
-    // Like-Zähler in Kommentar erhöhen
     Object.keys(commentsDB).forEach(toolId => {
       commentsDB[toolId].forEach(comment => {
         if (comment.id == commentId) {
@@ -1144,10 +3675,8 @@ function toggleCommentLike(commentId) {
       });
     });
   } else {
-    // Like entfernen
     delete likedComments[commentId];
     
-    // Like-Zähler in Kommentar verringern
     Object.keys(commentsDB).forEach(toolId => {
       commentsDB[toolId].forEach(comment => {
         if (comment.id == commentId) {
@@ -1206,107 +3735,167 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function applyFilters() {
-  let filtered = aiTools.filter(tool => {
-    if (cat !== 'all' && tool.category !== cat) return false;
-    if (price !== 'all' && tool.price !== price) return false;
-    if (query) {
-      const txt = `${tool.name} ${tool.category} ${tool.description[lang]} ${t.features.join(' ')} ${t.useCases ? t.useCases.join(' ') : ''}`.toLowerCase();
-      if (!txt.includes(query)) return false;
-    }
-    return true;
-  });
-
-  filtered.sort((a, b) => {
-    if (sort === 'rating') return b.rating - a.rating;
-    if (sort === 'votes') return (b.votes + b.rating * 10) - (a.votes + a.rating * 10);
-    if (sort === 'popular') return (b.badge === 'popular' ? 1 : 0) - (a.badge === 'popular' ? 1 : 0);
-    if (sort === 'price-low' || sort === 'price-high') {
-      const aPrice = a.priceDisplay.includes('Free') ? 0 : 
-                    parseFloat(a.priceDisplay.replace(/[^\d.]/g, '')) || 999;
-      const bPrice = b.priceDisplay.includes('Free') ? 0 : 
-                    parseFloat(b.priceDisplay.replace(/[^\d.]/g, '')) || 999;
-      return sort === 'price-low' ? aPrice - bPrice : bPrice - aPrice;
-    }
-    return 0;
-  });
-
-  renderTools(filtered);
-}
-
-function renderTools(tools) {
-  const grid = document.getElementById('toolsGrid');
+function renderTopCharts() {
+  const container = document.getElementById('topCharts');
   const t = translations[lang];
-  document.getElementById('toolCount').textContent = tools.length;
+  const sortedTools = [...aiTools]
+    .sort((a, b) => (b.votes + b.rating * 10) - (a.votes + a.rating * 10))
+    .slice(0, 5);
 
-  if (tools.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-search"></i>
-        <h3>${t.noTitle}</h3>
-        <p>${t.noMsg}</p>
-        <button class="reset-btn" id="resetFiltersBtn">
-          <i class="fas fa-redo"></i> ${t.resetBtn}
-        </button>
-      </div>
-    `;
-    document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
-    return;
-  }
-
-  grid.innerHTML = tools.map(tool => {
+  container.innerHTML = sortedTools.map((tool, index) => {
     const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
     const badgeClass = commentCount === 0 ? 'empty' : '';
+    const isCompared = comparedTools.has(tool.id);
+    
     return `
-    <div class="compact-tool-row" data-id="${tool.id}">
-      <div class="tool-vote-compact">
-        <div class="vote-count">${tool.votes}</div>
-        <div class="vote-buttons-compact">
-          <button class="vote-btn-compact up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
-            <i class="fas fa-thumbs-up"></i>
-          </button>
-          <button class="vote-btn-compact down ${tool.userVote === -1 ? 'active' : ''}" data-id="${tool.id}" data-vote="-1">
-            <i class="fas fa-thumbs-down"></i>
-          </button>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-rank rank-${index + 1}">${index + 1}</div>
+        <div class="chart-votes">
+          <i class="fas fa-thumbs-up"></i>
+          <span>${tool.votes}</span>
         </div>
+        <button class="chart-comment-btn" data-id="${tool.id}">
+          <i class="fas fa-comment"></i>
+          <span class="comment-badge ${badgeClass}">${commentCount}</span>
+        </button>
       </div>
-      <div class="tool-info-compact">
-        <div class="tool-name-row">
-          <div class="tool-name-compact">${tool.name}</div>
-          <div class="tool-category-compact">${catName(tool.category)}</div>
-        </div>
-        <div class="tool-desc-compact">${tool.description[lang]}</div>
-      </div>
-      <div class="tool-meta-compact">
-        <div class="tool-price-compact">${tool.priceDisplay}</div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button class="comment-btn-compact" data-id="${tool.id}">
-            <i class="fas fa-comment"></i>
-            <span class="comment-badge ${badgeClass}">${commentCount}</span>
-          </button>
-          <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer">${t.tryNow}</a>
-        </div>
+      <div class="chart-tool-name">${tool.name}</div>
+      <div class="chart-category">${getCategoryName(tool.category)}</div>
+      <div class="chart-price">${tool.priceDisplay}</div>
+      <div class="chart-description">${tool.description[lang]}</div>
+      <div class="chart-actions">
+        <button class="vote-btn up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
+          <i class="fas fa-thumbs-up"></i> ${lang === 'de' ? 'Hilfreich' : 'Helpful'}
+        </button>
+        <button class="vote-btn down ${tool.userVote === -1 ? 'active' : ''}" data-id="${tool.id}" data-vote="-1">
+          <i class="fas fa-thumbs-down"></i>
+        </button>
+        <button class="compare-btn ${isCompared ? 'active' : ''}" data-id="${tool.id}" style="font-size: 0.8rem; padding: 8px 12px;">
+          <i class="fas fa-${isCompared ? 'minus' : 'balance-scale'}"></i>
+        </button>
       </div>
     </div>
   `}).join('');
 
-  // Add vote event listeners
-  grid.querySelectorAll('.vote-btn-compact').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const toolId = parseInt(btn.dataset.id);
-      const vote = parseInt(btn.dataset.vote);
-      handleVote(toolId, vote);
-    });
-  });
+  addToolEventListeners();
+}
 
-  // Add comment button listeners
-  grid.querySelectorAll('.comment-btn-compact').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const toolId = parseInt(btn.dataset.id);
-      openComments(toolId);
-    });
-  });
+function toggleComparison(toolId) {
+  if (comparedTools.has(toolId)) {
+    comparedTools.delete(toolId);
+  } else {
+    comparedTools.add(toolId);
+    if (comparedTools.size > 4) {
+      const first = Array.from(comparedTools)[0];
+      comparedTools.delete(first);
+    }
+  }
+  
+  saveComparedTools();
+  updateComparisonButton();
+  applyFilters();
+  renderTopCharts();
+}
+
+function updateComparisonButton() {
+  const btn = document.getElementById('compareSelectedBtn');
+  const t = translations[lang];
+  
+  if (comparedTools.size > 0) {
+    btn.style.display = 'inline';
+    btn.innerHTML = `<i class="fas fa-balance-scale"></i> ${t.compareText} (${comparedTools.size})`;
+  } else {
+    btn.style.display = 'inline';
+    btn.innerHTML = `<i class="fas fa-balance-scale"></i> ${t.compareText}`;
+  }
+}
+
+function openComparison() {
+  if (comparedTools.size < 2) {
+    alert(lang === 'de' ? 'Bitte wähle mindestens 2 Tools zum Vergleichen aus.' : 'Please select at least 2 tools to compare.');
+    return;
+  }
+  
+  const comparisonBody = document.getElementById('comparisonBody');
+  const t = translations[lang];
+  const tools = Array.from(comparedTools).map(id => aiTools.find(t => t.id === id));
+  
+  comparisonBody.innerHTML = `
+    <div class="comparison-tools">
+      ${tools.map((tool, index) => `
+        <div class="tool-compare" id="compareTool${index + 1}">
+          <div style="text-align: center; margin-bottom: 20px;">
+            <div style="width: 60px; height: 60px; background: ${getToolGradient(tool.category)}; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.5rem;">
+              <i class="${getCategoryIcon(tool.category)}"></i>
+            </div>
+            <h3 style="color: var(--text-primary); margin-bottom: 8px;">${tool.name}</h3>
+            <div style="color: var(--accent-cyan); font-weight: 600; margin-bottom: 8px;">${getCategoryName(tool.category)}</div>
+            <div style="color: var(--accent-neon); font-weight: 800; font-size: 1.2rem;">${tool.priceDisplay}</div>
+          </div>
+          <button class="btn-primary" onclick="window.open('${tool.link}', '_blank')" style="width: 100%;">${t.tryNow}</button>
+          <button class="btn-secondary" onclick="toggleComparison(${tool.id}); closeComparison();" style="width: 100%; margin-top: 10px;">
+            <i class="fas fa-minus"></i> ${t.removeCompare}
+          </button>
+        </div>
+      `).join('')}
+      ${tools.length === 2 ? `
+        <div class="vs-separator">
+          <span>VS</span>
+        </div>
+      ` : ''}
+    </div>
+    
+    <table class="comparison-table">
+      <tr>
+        <th>${t.compareFeatures}</th>
+        ${tools.map(tool => `<td>${tool.features.slice(0, 4).join(', ')}</td>`).join('')}
+      </tr>
+      <tr>
+        <th>${t.comparePricing}</th>
+        ${tools.map(tool => `<td>${tool.priceDisplay}</td>`).join('')}
+      </tr>
+      <tr>
+        <th>${t.compareRatings}</th>
+        ${tools.map(tool => `<td>⭐ ${tool.rating}/5 (${tool.votes} Votes)</td>`).join('')}
+      </tr>
+      <tr>
+        <th>${t.compareBestFor}</th>
+        ${tools.map(tool => `<td>${tool.useCases.slice(0, 2).join(', ')}</td>`).join('')}
+      </tr>
+      <tr>
+        <th>${lang === 'de' ? 'Schwierigkeit' : 'Difficulty'}</th>
+        ${tools.map(tool => `<td>${
+          tool.difficulty === 'beginner' ? '👶 ' + (lang === 'de' ? 'Einfach' : 'Easy') :
+          tool.difficulty === 'intermediate' ? '⚡ ' + (lang === 'de' ? 'Mittel' : 'Medium') :
+          '💪 ' + (lang === 'de' ? 'Experte' : 'Expert')
+        }</td>`).join('')}
+      </tr>
+    </table>
+    
+    <div style="text-align: center; margin-top: 30px;">
+      <button class="btn-secondary" onclick="clearComparison()">
+        <i class="fas fa-trash"></i> ${t.clearComparison}
+      </button>
+    </div>
+  `;
+  
+  document.getElementById('comparisonOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeComparison() {
+  document.getElementById('comparisonOverlay').classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+function clearComparison() {
+  comparedTools.clear();
+  saveComparedTools();
+  updateComparisonButton();
+  applyFilters();
+  renderTopCharts();
+  closeComparison();
 }
 
 function resetFilters() {
@@ -1314,12 +3903,85 @@ function resetFilters() {
   price = 'all';
   sort = 'votes';
   query = '';
+  advancedTag = 'all';
+  
   document.getElementById('searchInput').value = '';
+  document.getElementById('mobileSearch').value = '';
   document.getElementById('priceFilter').value = 'all';
   document.getElementById('sortFilter').value = 'votes';
+  
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('[data-scope="all"]').classList.add('active');
+  
+  document.querySelectorAll('#advancedFilters .filter-tag').forEach(t => t.classList.remove('active'));
+  document.querySelector('#advancedFilters .filter-tag[data-tag="all"]').classList.add('active');
+  
+  document.getElementById('aiSuggestions').style.display = 'none';
+  hideSuggestions();
+  
   applyFilters();
+}
+
+function showSuggestions(q) {
+  const div = document.getElementById('searchSuggestions');
+  const matches = aiTools.filter(t => {
+    const txt = `${t.name} ${t.category} ${t.description[lang]} ${t.features.join(' ')} ${t.useCases.join(' ')}`.toLowerCase();
+    return txt.includes(q);
+  }).slice(0, 6);
+  
+  if (matches.length > 0) {
+    div.innerHTML = matches.map(t => `
+      <div class="suggestion-item" data-tool="${t.id}" style="padding: 12px 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--glass-border);">
+        <i class="${getCategoryIcon(t.category)}" style="color: var(--accent-cyan);"></i>
+        <div style="flex: 1;">
+          <div style="color: var(--text-primary); font-weight: 600;">${highlight(t.name, q)}</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);">${getCategoryName(t.category)} • ${t.priceDisplay}</div>
+        </div>
+      </div>
+    `).join('');
+    
+    div.querySelectorAll('.suggestion-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const toolId = parseInt(el.dataset.tool);
+        const tool = aiTools.find(t => t.id === toolId);
+        if (tool) {
+          document.getElementById('searchInput').value = tool.name;
+          document.getElementById('mobileSearch').value = tool.name;
+          query = tool.name.toLowerCase();
+          hideSuggestions();
+          applyFilters();
+          
+          setTimeout(() => {
+            const toolElement = document.querySelector(`[data-id="${toolId}"]`);
+            if (toolElement) {
+              toolElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              toolElement.style.boxShadow = '0 0 0 3px var(--accent-cyan)';
+              setTimeout(() => toolElement.style.boxShadow = '', 2000);
+            }
+          }, 100);
+        }
+      });
+    });
+    
+    div.style.display = 'block';
+  } else {
+    hideSuggestions();
+  }
+}
+
+function hideSuggestions() {
+  document.getElementById('searchSuggestions').style.display = 'none';
+}
+
+function highlight(txt, q) {
+  const rx = new RegExp(`(${q})`, 'gi');
+  return txt.replace(rx, '<span style="color:var(--accent-cyan)">$1</span>');
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+  document.body.classList.remove('dark-mode');
 }
 </script>
 </body>
