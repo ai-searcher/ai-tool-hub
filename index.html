@@ -497,7 +497,7 @@ body::before {
 
 .chart-header {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
@@ -546,57 +546,6 @@ body::before {
 
 .chart-votes i {
   color: var(--matrix-green);
-}
-
-.chart-comment-btn {
-  background: rgba(0, 243, 255, 0.1);
-  border: 1px solid var(--neon-cyan);
-  border-radius: 20px;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: var(--transition-tech);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--neon-cyan);
-  min-height: 36px;
-  white-space: nowrap;
-  justify-self: flex-end;
-  min-width: 90px;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.chart-comment-btn:hover {
-  background: rgba(0, 243, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
-}
-
-.comment-badge {
-  background: var(--neon-cyan);
-  color: var(--void-black);
-  font-size: 0.75rem;
-  min-width: 22px;
-  height: 22px;
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  padding: 0 5px;
-  box-shadow: 0 2px 10px rgba(0, 243, 255, 0.5);
-  margin-left: 4px;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.comment-badge.empty {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.7);
-  box-shadow: none;
 }
 
 .chart-tool-name {
@@ -997,31 +946,6 @@ body::before {
   box-shadow: 0 10px 25px rgba(0, 243, 255, 0.4);
 }
 
-.comment-btn-compact {
-  background: rgba(0, 243, 255, 0.1);
-  border: 1px solid var(--neon-cyan);
-  border-radius: 10px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: var(--transition-tech);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--neon-cyan);
-  white-space: nowrap;
-  height: 40px;
-  min-width: 90px;
-  justify-content: center;
-  font-weight: 600;
-}
-
-.comment-btn-compact:hover {
-  background: rgba(0, 243, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
-}
-
 /* Empty State */
 .empty-state {
   text-align: center;
@@ -1131,296 +1055,6 @@ body::before {
   box-shadow: 0 10px 30px rgba(0, 243, 255, 0.6);
 }
 
-/* Kommentar Overlay - Futuristisch */
-.comments-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(5, 8, 16, 0.95);
-  z-index: 1000;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-}
-
-.comments-overlay.active {
-  display: flex;
-}
-
-.comments-container {
-  width: 100%;
-  max-width: 700px;
-  max-height: 85vh;
-  background: linear-gradient(145deg, rgba(20, 25, 40, 0.95), rgba(10, 14, 23, 0.95));
-  border-radius: var(--radius-tech);
-  border: 1px solid var(--neon-cyan);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(0, 243, 255, 0.2);
-}
-
-.comments-header {
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  padding: 25px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.comments-title {
-  font-weight: 900;
-  font-size: 1.3rem;
-  color: var(--void-black);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.comments-title i {
-  font-size: 1.1rem;
-}
-
-.close-comments {
-  background: rgba(0, 0, 0, 0.2);
-  border: none;
-  color: var(--void-black);
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-tech);
-  font-size: 1.2rem;
-}
-
-.close-comments:hover {
-  background: rgba(0, 0, 0, 0.3);
-  transform: rotate(90deg) scale(1.1);
-}
-
-.comments-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.comment-item {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 15px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: var(--transition-tech);
-  position: relative;
-}
-
-.comment-item:hover {
-  border-color: rgba(0, 243, 255, 0.3);
-  box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
-}
-
-.comment-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 100%;
-  background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-purple));
-  border-radius: 15px 0 0 15px;
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.comment-user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 1rem;
-  box-shadow: 0 5px 15px rgba(0, 243, 255, 0.3);
-}
-
-.user-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #ffffff;
-}
-
-.comment-time {
-  font-size: 0.8rem;
-  color: var(--tech-silver);
-}
-
-.comment-content {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #ffffff;
-}
-
-.comment-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.comment-like-btn {
-  background: transparent;
-  border: none;
-  color: var(--tech-silver);
-  cursor: pointer;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition-tech);
-  padding: 6px 12px;
-  border-radius: 8px;
-}
-
-.comment-like-btn:hover {
-  color: var(--matrix-green);
-  background: rgba(0, 255, 157, 0.1);
-}
-
-.comment-like-btn.liked {
-  color: var(--matrix-green);
-}
-
-.no-comments {
-  text-align: center;
-  padding: 50px 20px;
-  color: var(--tech-silver);
-  font-size: 1rem;
-}
-
-.no-comments i {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.comments-input-container {
-  padding: 25px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(10, 14, 23, 0.5);
-}
-
-.comment-input {
-  width: 100%;
-  background: rgba(20, 25, 40, 0.8);
-  border: 1px solid rgba(0, 243, 255, 0.3);
-  border-radius: 12px;
-  padding: 15px 20px;
-  color: #ffffff;
-  font-size: 0.95rem;
-  resize: none;
-  min-height: 100px;
-  transition: var(--transition-tech);
-  font-family: 'Inter', sans-serif;
-  backdrop-filter: blur(10px);
-}
-
-.comment-input:focus {
-  outline: none;
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 20px var(--glow-cyan);
-}
-
-.comment-input::placeholder {
-  color: var(--tech-silver);
-}
-
-.comment-submit-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.user-input-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.user-input-label {
-  font-size: 0.85rem;
-  color: var(--tech-silver);
-}
-
-.user-input {
-  background: rgba(20, 25, 40, 0.8);
-  border: 1px solid rgba(0, 243, 255, 0.3);
-  border-radius: 8px;
-  padding: 10px 15px;
-  color: #ffffff;
-  font-size: 0.9rem;
-  width: 180px;
-  transition: var(--transition-tech);
-  backdrop-filter: blur(10px);
-}
-
-.user-input:focus {
-  outline: none;
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px var(--glow-cyan);
-}
-
-.comment-submit-btn {
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  color: var(--void-black);
-  border: none;
-  padding: 12px 28px;
-  border-radius: 10px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: var(--transition-tech);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.comment-submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 243, 255, 0.4);
-}
-
-.comment-submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
 /* ===== RESPONSIVE ANPASSUNGEN ===== */
 @media (max-width: 1024px) {
   .header {
@@ -1501,11 +1135,6 @@ body::before {
     display: none;
   }
   
-  .comments-container {
-    max-height: 90vh;
-    margin: 0;
-  }
-  
   .chart-card {
     padding: 20px;
   }
@@ -1520,12 +1149,6 @@ body::before {
   .chart-votes {
     order: 2;
     justify-content: center;
-  }
-  
-  .chart-comment-btn {
-    order: 3;
-    min-width: 80px;
-    padding: 8px 12px;
   }
 }
 
@@ -1571,29 +1194,6 @@ body::before {
     padding: 6px 12px;
   }
   
-  .comment-submit-row {
-    flex-direction: column;
-    gap: 15px;
-    align-items: stretch;
-  }
-  
-  .user-input-container {
-    justify-content: space-between;
-  }
-  
-  .comments-body {
-    padding: 20px;
-  }
-  
-  .comments-header {
-    padding: 20px;
-  }
-  
-  .comment-btn-compact {
-    min-width: 80px;
-    padding: 7px 12px;
-  }
-  
   .chart-actions {
     gap: 12px;
   }
@@ -1601,18 +1201,6 @@ body::before {
   .chart-header {
     gap: 6px;
     min-height: 40px;
-  }
-  
-  .chart-comment-btn {
-    font-size: 0.75rem;
-    min-width: 70px;
-    padding: 6px 10px;
-  }
-  
-  .comment-badge {
-    min-width: 20px;
-    height: 20px;
-    font-size: 0.7rem;
   }
 }
 
@@ -1624,11 +1212,6 @@ body::before {
   .chart-votes {
     font-size: 0.8rem;
     min-width: 55px;
-  }
-  
-  .chart-comment-btn {
-    min-width: 65px;
-    padding: 5px 8px;
   }
   
   .chart-rank {
@@ -1646,17 +1229,6 @@ body::before {
   
   .chart-votes {
     margin-left: auto;
-  }
-  
-  .chart-comment-btn {
-    min-width: 60px;
-    padding: 4px 6px;
-  }
-  
-  .comment-badge {
-    min-width: 18px;
-    height: 18px;
-    font-size: 0.65rem;
   }
   
   .quick-navigation {
@@ -1746,40 +1318,13 @@ body::before {
 <span id="langText">EN</span>
 </button>
 </div>
-<div class="comments-overlay" id="commentsOverlay">
-<div class="comments-container">
-<div class="comments-header">
-<div class="comments-title">
-<i class="fas fa-comments"></i>
-<span id="commentsToolTitle" data-de="Kommentare" data-en="Comments"></span>
-</div>
-<button class="close-comments" id="closeComments">
-<i class="fas fa-times"></i>
-</button>
-</div>
-<div class="comments-body" id="commentsBody">
-<!-- Kommentare werden hier dynamisch eingefügt -->
-</div>
-<div class="comments-input-container">
-<textarea class="comment-input" id="commentInput" placeholder="Dein Kommentar... (Enter zum Senden, Shift+Enter für neue Zeile)" data-de="Dein Kommentar... (Enter zum Senden, Shift+Enter für neue Zeile)" data-en="Your comment... (Enter to send, Shift+Enter for new line)"></textarea>
-<div class="comment-submit-row">
-<div class="user-input-container">
-<span class="user-input-label" id="userLabel" data-de="Name:" data-en="Name:"></span>
-<input type="text" class="user-input" id="userNameInput" placeholder="Anonym" maxlength="20" data-de="Anonym" data-en="Anonymous">
-</div>
-<button class="comment-submit-btn" id="submitCommentBtn">
-<i class="fas fa-paper-plane"></i>
-<span id="submitText" data-de="Kommentieren" data-en="Comment"></span>
-</button>
-</div>
-</div>
-</div>
-</div>
+
 <div class="scroll-top" id="scrollTop" aria-label="Nach oben">
 <i class="fas fa-arrow-up"></i>
 </div>
+
 <header class="header">
-<div class="badge" id="badgeText" data-de="🚀 126 KI-Tools für 2026" data-en="🚀 126 AI Tools for 2026"></div>
+<div class="badge" id="badgeText" data-de="🚀 50 KI-Tools für 2026" data-en="🚀 50 AI Tools for 2026"></div>
 <h1 id="pageTitle" data-de="Finde sofort dein perfektes KI-Tool" data-en="Find your perfect AI tool instantly"></h1>
 <p id="pageDescription" data-de="Echte User-Bewertungen, Top 5 Charts, intelligente Empfehlungen. Kein unnötiges Scrollen." data-en="Real user ratings, Top 5 charts, smart recommendations. No unnecessary scrolling."></p>
 <div class="search-container">
@@ -1957,11 +1502,6 @@ function updateDynamicContent() {
     
     // Filter anwenden (rendert auch die Tool-Liste)
     applyFilters();
-    
-    // Kommentare neu rendern falls Overlay offen
-    if (currentToolId) {
-      renderComments(currentToolId);
-    }
   }
 }
 
@@ -1991,7 +1531,6 @@ let aiTools = [
 {id:22,name:"Murf",category:"audio",price:"freemium",priceDisplay:"Free/$19",rating:4.6,description:{de:"TTS für Business.",en:"TTS for business."},features:["TTS","Studio"],link:"https://murf.ai/",badge:"free",useCases:["voice-generator", "text-to-speech", "business"],votes:0,userVote:0},
 {id:23,name:"Leonardo AI",category:"image",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"Bilder, Assets, Game Art.",en:"Images, assets, game art."},features:["Assets","Canvas"],link:"https://leonardo.ai/",badge:"free",useCases:["image-generator", "game-art", "assets"],votes:0,userVote:0},
 {id:24,name:"v0",category:"code",price:"freemium",priceDisplay:"Free/$",rating:4.6,description:{de:"UI aus Text generieren.",en:"Generate UI from text."},features:["React","UI","Components"],link:"https://v0.dev/",badge:"new",useCases:["coding-assistant", "ui-design", "prototyping"],votes:0,userVote:0},
-// Neue KI-Tools (25-50)
 {id:25,name:"NotebookLM",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.6,description:{de:"KI-gestützte Summaries und Erklärungen mit interaktiven Audio-Übersichten.",en:"AI-powered summaries and explanations with interactive audio overviews."},features:["Research","Audio","Summaries"],link:"https://notebooklm.google.com/",badge:"new",useCases:["research", "education", "organization"],votes:0,userVote:0},
 {id:26,name:"TypingMind",category:"text",price:"paid",priceDisplay:"$12/mo",rating:4.5,description:{de:"Chat-Interface für viele KI-Modelle mit Plugins und Agenten.",en:"Chat interface for many AI models with plugins and agents."},features:["Multi-Model","Plugins","Agents"],link:"https://www.typingmind.com/",badge:"new",useCases:["chatbot", "multi-model", "automation"],votes:0,userVote:0},
 {id:27,name:"Poe",category:"text",price:"freemium",priceDisplay:"Free/$20",rating:4.4,description:{de:"Einfacher Zugang zu mehreren KI-Modellen, mobil optimiert.",en:"Easy access to multiple AI models, mobile optimized."},features:["Multi-Model","Mobile","Simple"],link:"https://poe.com/",badge:"free",useCases:["chatbot", "multi-model", "mobile"],votes:0,userVote:0},
@@ -2028,19 +1567,7 @@ const translations = {
     tryNow: "Testen",
     noTitle: "Keine Tools gefunden",
     noMsg: "Ändere deine Filter oder versuche andere Suchbegriffe.",
-    resetBtn: "Filter zurücksetzen",
-    commentLikes: "Gefällt mir",
-    liked: "Gefällt mir",
-    viewComments: "Kommentare",
-    ago: "vor",
-    seconds: "Sekunden",
-    minutes: "Minuten",
-    hours: "Stunden",
-    days: "Tagen",
-    weeks: "Wochen",
-    months: "Monaten",
-    years: "Jahren",
-    noComments: "Noch keine Kommentare. Sei der Erste!"
+    resetBtn: "Filter zurücksetzen"
   },
   en: {
     badge: n => `🚀 ${n} AI Tools for 2026`,
@@ -2048,19 +1575,7 @@ const translations = {
     tryNow: "Try",
     noTitle: "No tools found",
     noMsg: "Change your filters or try different search terms.",
-    resetBtn: "Reset filters",
-    commentLikes: "Likes",
-    liked: "Liked",
-    viewComments: "Comments",
-    ago: "ago",
-    seconds: "seconds",
-    minutes: "minutes",
-    hours: "hours",
-    days: "days",
-    weeks: "weeks",
-    months: "months",
-    years: "years",
-    noComments: "No comments yet. Be the first!"
+    resetBtn: "Reset filters"
   }
 };
 
@@ -2071,12 +1586,6 @@ let sort = 'votes';
 let query = '';
 let searchTimeout;
 let userVotes = {};
-let hintInterval;
-let hintChips = [];
-let currentToolId = null;
-let userName = '';
-let commentsDB = {};
-let likedComments = {};
 
 // ===== INITIALISIERUNG =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -2085,9 +1594,6 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 2. Daten laden
   loadUserVotes();
-  loadComments();
-  loadLikedComments();
-  loadUserName();
   
   // 3. Event Listener einrichten
   setupEvents();
@@ -2147,33 +1653,6 @@ function setupEvents() {
       applyFilters();
       searchInput.focus();
     });
-  });
-  
-  // Kommentar Overlay
-  document.getElementById('closeComments').addEventListener('click', closeComments);
-  document.getElementById('commentsOverlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('commentsOverlay')) {
-      closeComments();
-    }
-  });
-  
-  // Kommentar senden
-  document.getElementById('submitCommentBtn').addEventListener('click', submitComment);
-  document.getElementById('commentInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      submitComment();
-    }
-  });
-  
-  // Benutzername speichern
-  document.getElementById('userNameInput').addEventListener('blur', saveUserName);
-  document.getElementById('userNameInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      saveUserName();
-      document.getElementById('commentInput').focus();
-    }
   });
   
   // Quick Navigation Filter
@@ -2276,41 +1755,6 @@ function initFilterDropdowns() {
 }
 
 // ===== DATEN SPEICHERN/LADEN =====
-function loadComments() {
-  const saved = localStorage.getItem('aiToolsComments');
-  if (saved) {
-    commentsDB = JSON.parse(saved);
-  }
-}
-
-function saveComments() {
-  localStorage.setItem('aiToolsComments', JSON.stringify(commentsDB));
-}
-
-function loadLikedComments() {
-  const saved = localStorage.getItem('likedComments');
-  if (saved) {
-    likedComments = JSON.parse(saved);
-  }
-}
-
-function saveLikedComments() {
-  localStorage.setItem('likedComments', JSON.stringify(likedComments));
-}
-
-function loadUserName() {
-  const saved = localStorage.getItem('commentUserName');
-  if (saved) {
-    userName = saved;
-    document.getElementById('userNameInput').value = userName;
-  }
-}
-
-function saveUserName() {
-  userName = document.getElementById('userNameInput').value.trim() || (lang === 'de' ? 'Anonym' : 'Anonymous');
-  localStorage.setItem('commentUserName', userName);
-}
-
 function loadUserVotes() {
   const saved = localStorage.getItem('aiToolsVotes');
   if (saved) {
@@ -2423,8 +1867,6 @@ function renderTopCharts() {
     .slice(0, 5);
 
   container.innerHTML = sortedTools.map((tool, index) => {
-    const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
-    const badgeClass = commentCount === 0 ? 'empty' : '';
     return `
     <div class="chart-card">
       <div class="chart-header">
@@ -2433,10 +1875,6 @@ function renderTopCharts() {
           <i class="fas fa-thumbs-up"></i>
           <span>${tool.votes}</span>
         </div>
-        <button class="chart-comment-btn" data-id="${tool.id}">
-          <i class="fas fa-comment"></i>
-          <span class="comment-badge ${badgeClass}">${commentCount}</span>
-        </button>
       </div>
       <div class="chart-tool-name">${tool.name}</div>
       <div class="chart-category">${catName(tool.category)}</div>
@@ -2459,15 +1897,6 @@ function renderTopCharts() {
       const toolId = parseInt(btn.dataset.id);
       const vote = parseInt(btn.dataset.vote);
       handleVote(toolId, vote);
-    });
-  });
-
-  // Add comment button listeners
-  container.querySelectorAll('.chart-comment-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const toolId = parseInt(btn.dataset.id);
-      openComments(toolId);
     });
   });
 }
@@ -2494,212 +1923,6 @@ function handleVote(toolId, vote) {
   saveUserVotes();
   renderTopCharts();
   applyFilters();
-}
-
-// ===== KOMMENTARE SYSTEM =====
-function openComments(toolId) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  currentToolId = toolId;
-  document.getElementById('commentsOverlay').classList.add('active');
-  document.body.style.overflow = 'hidden';
-  
-  // Setze Fokus auf Kommentarfeld
-  setTimeout(() => {
-    document.getElementById('commentInput').focus();
-  }, 300);
-  
-  renderComments(toolId);
-}
-
-function closeComments() {
-  document.getElementById('commentsOverlay').classList.remove('active');
-  document.body.style.overflow = 'auto';
-  document.getElementById('commentInput').value = '';
-  currentToolId = null;
-}
-
-function renderComments(toolId) {
-  const commentsBody = document.getElementById('commentsBody');
-  const t = translations[lang];
-  
-  if (!commentsDB[toolId] || commentsDB[toolId].length === 0) {
-    commentsBody.innerHTML = `
-      <div class="no-comments">
-        <i class="fas fa-comment-slash"></i>
-        <p>${t.noComments}</p>
-      </div>
-    `;
-    return;
-  }
-  
-  const comments = commentsDB[toolId].sort((a, b) => b.timestamp - a.timestamp);
-  
-  commentsBody.innerHTML = comments.map(comment => {
-    const timeAgo = getTimeAgo(comment.timestamp);
-    const isLiked = likedComments[comment.id] || false;
-    const likeCount = comment.likes || 0;
-    
-    return `
-      <div class="comment-item" data-comment-id="${comment.id}">
-        <div class="comment-header">
-          <div class="comment-user">
-            <div class="user-avatar" style="background: ${getAvatarColor(comment.user)}">
-              ${comment.user.charAt(0).toUpperCase()}
-            </div>
-            <span class="user-name">${comment.user}</span>
-          </div>
-          <span class="comment-time">${timeAgo}</span>
-        </div>
-        <div class="comment-content">${escapeHtml(comment.text).replace(/\n/g, '<br>')}</div>
-        <div class="comment-actions">
-          <button class="comment-like-btn ${isLiked ? 'liked' : ''}" data-comment-id="${comment.id}">
-            <i class="fas fa-thumbs-up"></i>
-            <span>${likeCount} ${t.commentLikes}</span>
-          </button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  // Add like button listeners
-  commentsBody.querySelectorAll('.comment-like-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const commentId = btn.dataset.commentId;
-      toggleCommentLike(commentId);
-    });
-  });
-}
-
-function submitComment() {
-  if (!currentToolId) return;
-  
-  const commentInput = document.getElementById('commentInput');
-  const text = commentInput.value.trim();
-  
-  if (!text) return;
-  
-  // Benutzername speichern
-  saveUserName();
-  
-  // Kommentar-ID generieren
-  const commentId = Date.now();
-  
-  // Kommentar erstellen
-  const comment = {
-    id: commentId,
-    user: userName,
-    text: text,
-    timestamp: Date.now(),
-    likes: 0
-  };
-  
-  // Kommentar zur Datenbank hinzufügen
-  if (!commentsDB[currentToolId]) {
-    commentsDB[currentToolId] = [];
-  }
-  commentsDB[currentToolId].push(comment);
-  
-  // Speichern
-  saveComments();
-  
-  // Kommentarfeld leeren
-  commentInput.value = '';
-  
-  // Kommentarliste aktualisieren
-  renderComments(currentToolId);
-  
-  // Kommentarzahlen in der Liste aktualisieren
-  renderTopCharts();
-  applyFilters();
-  
-  // Erfolgsfeedback
-  const submitBtn = document.getElementById('submitCommentBtn');
-  const originalText = submitBtn.innerHTML;
-  submitBtn.innerHTML = lang === 'de' ? '<i class="fas fa-check"></i> Gesendet!' : '<i class="fas fa-check"></i> Sent!';
-  submitBtn.disabled = true;
-  
-  setTimeout(() => {
-    submitBtn.innerHTML = originalText;
-    submitBtn.disabled = false;
-  }, 1500);
-}
-
-function toggleCommentLike(commentId) {
-  if (!likedComments[commentId]) {
-    // Like hinzufügen
-    likedComments[commentId] = true;
-    
-    // Like-Zähler in Kommentar erhöhen
-    Object.keys(commentsDB).forEach(toolId => {
-      commentsDB[toolId].forEach(comment => {
-        if (comment.id == commentId) {
-          comment.likes = (comment.likes || 0) + 1;
-        }
-      });
-    });
-  } else {
-    // Like entfernen
-    delete likedComments[commentId];
-    
-    // Like-Zähler in Kommentar verringern
-    Object.keys(commentsDB).forEach(toolId => {
-      commentsDB[toolId].forEach(comment => {
-        if (comment.id == commentId) {
-          comment.likes = Math.max((comment.likes || 0) - 1, 0);
-        }
-      });
-    });
-  }
-  
-  saveComments();
-  saveLikedComments();
-  
-  if (currentToolId) {
-    renderComments(currentToolId);
-  }
-}
-
-function getTimeAgo(timestamp) {
-  const now = Date.now();
-  const diff = now - timestamp;
-  const t = translations[lang];
-  
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const weeks = Math.floor(days / 7);
-  const months = Math.floor(days / 30);
-  const years = Math.floor(days / 365);
-  
-  if (years > 0) return `${years} ${t.years} ${t.ago}`;
-  if (months > 0) return `${months} ${t.months} ${t.ago}`;
-  if (weeks > 0) return `${weeks} ${t.weeks} ${t.ago}`;
-  if (days > 0) return `${days} ${t.days} ${t.ago}`;
-  if (hours > 0) return `${hours} ${t.hours} ${t.ago}`;
-  if (minutes > 0) return `${minutes} ${t.minutes} ${t.ago}`;
-  return `${seconds} ${t.seconds} ${t.ago}`;
-}
-
-function getAvatarColor(userName) {
-  const colors = [
-    'linear-gradient(135deg, var(--neon-cyan), var(--neon-purple))',
-    'linear-gradient(135deg, var(--matrix-green), var(--neon-cyan))',
-    'linear-gradient(135deg, var(--electric-blue), var(--neon-purple))',
-    'linear-gradient(135deg, #ff6b6b, #ffa726)',
-    'linear-gradient(135deg, var(--neon-purple), #ff4081)',
-    'linear-gradient(135deg, var(--neon-cyan), #00bcd4)'
-  ];
-  const index = userName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-  return colors[index];
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
 }
 
 // ===== FILTER & TOOL LISTE =====
@@ -2752,8 +1975,6 @@ function renderTools(tools) {
   }
 
   grid.innerHTML = tools.map(tool => {
-    const commentCount = commentsDB[tool.id] ? commentsDB[tool.id].length : 0;
-    const badgeClass = commentCount === 0 ? 'empty' : '';
     return `
     <div class="compact-tool-row" data-id="${tool.id}">
       <div class="tool-vote-compact">
@@ -2777,10 +1998,6 @@ function renderTools(tools) {
       <div class="tool-meta-compact">
         <div class="tool-price-compact">${tool.priceDisplay}</div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button class="comment-btn-compact" data-id="${tool.id}">
-            <i class="fas fa-comment"></i>
-            <span class="comment-badge ${badgeClass}">${commentCount}</span>
-          </button>
           <a href="${tool.link}" class="tool-link-compact" target="_blank" rel="noopener noreferrer">${t.tryNow}</a>
         </div>
       </div>
@@ -2793,15 +2010,6 @@ function renderTools(tools) {
       const toolId = parseInt(btn.dataset.id);
       const vote = parseInt(btn.dataset.vote);
       handleVote(toolId, vote);
-    });
-  });
-
-  // Add comment button listeners
-  grid.querySelectorAll('.comment-btn-compact').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const toolId = parseInt(btn.dataset.id);
-      openComments(toolId);
     });
   });
 }
