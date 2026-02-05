@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+<title>Feedback - AI Finder 2026</title>
+<meta name="description" content="Feedback zum AI Finder">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="glitch-effect"></div>
+
+<div class="language-switch">
+  <button class="lang-btn" id="langBtn" type="button" aria-label="Sprache wechseln">
+    <i class="fas fa-globe"></i>
+    <span id="langText">EN</span>
+  </button>
+</div>
+
+<div class="feedback-container">
+  <header class="header">
+    <div class="badge" data-de="📣 Feedback" data-en="📣 Feedback"></div>
+    <h1 data-de="Teile dein Feedback mit uns" data-en="Share your feedback with us"></h1>
+    <p data-de="Wir freuen uns über deine Meinung, um AI Finder zu verbessern." data-en="We appreciate your feedback to improve AI Finder."></p>
+    <a href="index.html" class="back-btn" data-de="← Zurück zur Hauptseite" data-en="← Back to main page"></a>
+  </header>
+
+  <main class="feedback-content">
+    <section class="feedback-section">
+      <h2><i class="fas fa-envelope"></i> <span data-de="Direktes Feedback" data-en="Direct Feedback"></span></h2>
+      <p data-de="Klicke unten, um eine E-Mail mit deinem Feedback zu öffnen." data-en="Click below to open an email with your feedback."></p>
+      <button id="mailtoBtn" class="mailto-btn" type="button" data-de="📧 Feedback per E-Mail senden" data-en="📧 Send Feedback via Email"></button>
+    </section>
+
+    <section class="feedback-section">
+      <h2><i class="fas fa-lightbulb"></i> <span data-de="Verbesserungsvorschläge" data-en="Improvement Suggestions"></span></h2>
+      <form id="feedbackForm">
+        <div class="form-group">
+          <label for="name" data-de="Name (optional)" data-en="Name (optional)"></label>
+          <input type="text" id="name" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label for="message" data-de="Deine Nachricht *" data-en="Your Message *"></label>
+          <textarea id="message" rows="5" required placeholder="Dein Feedback..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" data-de="✉️ Feedback vorbereiten" data-en="✉️ Prepare Feedback"></button>
+      </form>
+    </section>
+
+    <section class="feedback-section">
+      <h2><i class="fas fa-info-circle"></i> <span data-de="Hinweis" data-en="Note"></span></h2>
+      <p data-de="Da AI Finder eine statische Website ist, senden wir kein Feedback automatisch. Stattdessen öffnen wir deine Standard-E-Mail-App mit vorausgefüllten Details." data-en="Since AI Finder is a static website, we don't automatically send feedback. Instead, we open your default email app with pre-filled details."></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p data-de="© 2026 AI Finder | Vielen Dank für dein Feedback!" data-en="© 2026 AI Finder | Thank you for your feedback!"></p>
+    <p><a href="index.html" data-de="← Zurück zur Hauptseite" data-en="← Back to main page"></a></p>
+  </footer>
+</div>
+
+<script>
+  // Einfache Sprachlogik für Feedback-Seite
+  let lang = localStorage.getItem('preferredLang') || (navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en');
+  
+  function updateLanguage() {
+    document.querySelectorAll('[data-de][data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = text;
+      } else {
+        el.textContent = text;
+      }
+    });
+    document.getElementById('langText').textContent = lang === 'de' ? 'EN' : 'DE';
+  }
+  
+  document.getElementById('langBtn').addEventListener('click', () => {
+    lang = lang === 'de' ? 'en' : 'de';
+    localStorage.setItem('preferredLang', lang);
+    updateLanguage();
+  });
+  
+  // Mailto Button
+  document.getElementById('mailtoBtn').addEventListener('click', () => {
+    const subject = lang === 'de' ? 'Feedback zu AI Finder' : 'Feedback for AI Finder';
+    const body = lang === 'de' ? 
+      'Mein Feedback:\n\n' :
+      'My feedback:\n\n';
+    
+    window.location.href = `mailto:feedback@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+  
+  // Form Submit
+  document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value || (lang === 'de' ? 'Anonym' : 'Anonymous');
+    const message = document.getElementById('message').value;
+    
+    const subject = lang === 'de' ? 
+      `Feedback von ${name} - AI Finder` :
+      `Feedback from ${name} - AI Finder`;
+    
+    const body = lang === 'de' ?
+      `Name: ${name}\n\nFeedback:\n${message}` :
+      `Name: ${name}\n\nFeedback:\n${message}`;
+    
+    window.location.href = `mailto:feedback@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+  
+  updateLanguage();
+</script>
+</body>
+</html>
