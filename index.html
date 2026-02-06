@@ -2294,9 +2294,10 @@ function openToolDetail(toolId) {
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
   const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
   const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
-      
-  const pros = tool.pros || [];
-  const cons = tool.cons || [];
+  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
+  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
+  
+  const pricingText = tool.pricing ? (currentLang === 'de' ? tool.pricing.de : tool.pricing.en) || '' : '';
   const features = tool.features || [];
   const alternatives = tool.alternatives || [];
   const useCases = tool.useCases || [];
