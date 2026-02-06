@@ -597,6 +597,46 @@ body::before {
   background: rgba(0, 212, 255, 0.15);
 }
 
+/* ===== AI PICK ICON FIX ===== */
+.ai-recommended {
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  transform: translateY(-50%) !important;
+  background: linear-gradient(135deg, var(--secondary), var(--primary)) !important;
+  color: white !important;
+  padding: 4px 10px !important;
+  border-radius: 15px !important;
+  font-size: 0.65rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  animation: pulse 2s infinite !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+
+/* Für Chart-Cards spezifisch */
+.chart-card .ai-recommended {
+  top: 50% !important;
+  right: 10px !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Für Compact Tool Rows spezifisch */
+.compact-tool-row .ai-recommended {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+  display: inline-block !important;
+  margin-left: 8px !important;
+  vertical-align: middle !important;
+}
+
 /* ===== TOOLS CONTAINER ===== */
 .tools-container {
   max-width: 1200px;
@@ -847,28 +887,9 @@ body::before {
   box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
 }
 
-/* ===== AI RECOMMENDATION BADGE ===== */
-.ai-recommended {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
-  color: white;
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  animation: pulse 2s infinite;
-}
-
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
 }
 
 /* ===== MODAL STYLES (Minimalistisch) ===== */
@@ -911,11 +932,11 @@ body::before {
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(30px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0);
   }
@@ -1428,83 +1449,83 @@ body::before {
   .header {
     padding: 60px 15px 30px;
   }
-  
+    
   .quick-navigation {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     padding: 0 15px;
   }
-  
+    
   .top-charts {
     grid-template-columns: 1fr;
   }
-  
+    
   .tools-container {
     padding: 0 15px 40px;
   }
-  
+    
   .compact-tools-header {
     flex-direction: column;
     align-items: stretch;
   }
-  
+    
   .compact-filters {
     justify-content: center;
   }
-  
+    
   .compact-tool-row {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+    
   .tool-meta-compact {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
-  
+    
   .tool-vote-compact {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
   }
-  
+    
   .modal {
     width: 95%;
     max-height: 95vh;
   }
-  
+    
   .modal-header {
     padding: 16px;
   }
-  
+    
   .modal-content {
     padding: 16px;
   }
-  
+    
   .tool-detail-hero {
     flex-direction: column;
   }
-  
+    
   .pros-cons-grid {
     grid-template-columns: 1fr;
   }
-  
+    
   .tool-actions-modal {
     flex-direction: column;
   }
-  
+    
   .cookie-content {
     flex-direction: column;
     text-align: center;
   }
-  
+    
   .cookie-buttons {
     width: 100%;
     flex-direction: column;
   }
-  
+    
   .cookie-btn {
     width: 100%;
     justify-content: center;
@@ -1515,40 +1536,40 @@ body::before {
   .header h1 {
     font-size: 1.6rem;
   }
-  
+    
   .search-box {
     padding: 14px 55px 14px 45px;
     font-size: 0.95rem;
   }
-  
+    
   .quick-navigation {
     grid-template-columns: 1fr;
   }
-  
+    
   .chart-actions {
     gap: 6px;
   }
-  
+    
   .vote-btn {
     padding: 8px;
     font-size: 0.8rem;
   }
-  
+    
   .favorite-btn,
   .compare-btn {
     width: 36px;
     height: 36px;
     font-size: 0.9rem;
   }
-  
+    
   .modal-title {
     font-size: 1.3rem;
   }
-  
+    
   .tool-detail-name {
     font-size: 1.4rem;
   }
-  
+    
   .alternatives-grid {
     grid-template-columns: 1fr;
   }
@@ -1699,7 +1720,7 @@ body::before {
   <p data-de="50+ handverlesene KI-Tools. Intelligente Empfehlungen. Echte User-Bewertungen." data-en="50+ handpicked AI tools. Smart recommendations. Real user ratings.">
     50+ handverlesene KI-Tools. Intelligente Empfehlungen. Echte User-Bewertungen.
   </p>
-  
+    
   <!-- Search -->
   <div class="search-container">
     <i class="fas fa-search search-icon"></i>
@@ -1931,7 +1952,7 @@ body::before {
     </div>
     <div class="modal-content legal-content">
       <h2 data-de="1. Datenschutz auf einen Blick" data-en="1. Data protection at a glance">1. Datenschutz auf einen Blick</h2>
-        
+          
       <h3 data-de="Allgemeine Hinweise" data-en="General information">Allgemeine Hinweise</h3>
       <p data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen." data-en="The following information provides a simple overview of what happens to your personal data when you visit our website.">
         Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.
@@ -2023,13 +2044,13 @@ async function loadAITools() {
     const response = await fetch('./data.json');
     if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
     aiTools = await response.json();
-    
+      
     // User initialisieren
     await initializeUser();
-    
+      
     // Votes von Supabase laden
     await loadVotesFromSupabase();
-    
+      
     // Lokale Votes laden (UI State)
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     aiTools.forEach(tool => {
@@ -2037,19 +2058,19 @@ async function loadAITools() {
         tool.userVote = savedVotes[tool.id].userVote || 0;
       }
     });
-    
+      
     addAIRecommendations();
     renderTopCharts();
     renderTools();
     updateToolCount();
-    
+      
     // Auto-Refresh alle 30 Sekunden
     setInterval(async () => {
       await loadVotesFromSupabase();
       renderTopCharts();
       renderTools();
     }, 30000);
-    
+      
     document.getElementById('loading').style.display = 'none';
   } catch (error) {
     console.error('Fehler beim Laden:', error);
@@ -2074,9 +2095,9 @@ async function loadVotesFromSupabase() {
     const { data: votesData, error } = await supabase
       .from('tool_votes')
       .select('*');
-    
+      
     if (error) throw error;
-    
+      
     if (votesData) {
       votesData.forEach(vote => {
         const tool = aiTools.find(t => t.id === vote.tool_id);
@@ -2094,7 +2115,7 @@ async function loadVotesFromSupabase() {
 function addAIRecommendations() {
   const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-    
+      
   aiTools.forEach(tool => {
     let score = 0;
     if (tool.rating >= 4.7) score += 3;
@@ -2103,7 +2124,7 @@ function addAIRecommendations() {
     if (tool.hasLifetimeDeal) score += 2;
     if (userHistory.includes(tool.category)) score += 2;
     if (favorites.includes(tool.id)) score += 3;
-      
+        
     tool.aiScore = score;
     tool.isAIRecommended = score >= 6;
   });
@@ -2120,7 +2141,7 @@ function renderTopCharts() {
     const rankClass = 'rank-' + (index + 1);
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
     const aiRecommended = tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : '';
-      
+        
     return `
       <div class="chart-card" data-id="${tool.id}" onclick="openToolDetail('${tool.id}')">
         ${aiRecommended}
@@ -2190,7 +2211,7 @@ function renderTools() {
   const toolsHTML = filteredTools.map(tool => {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
-      
+        
     return `
       <div class="compact-tool-row" data-id="${tool.id}" onclick="openToolDetail('${tool.id}')">
         <div class="tool-vote-compact" onclick="event.stopPropagation()">
@@ -2204,7 +2225,7 @@ function renderTools() {
             </button>
           </div>
         </div>
-          
+            
         <div class="tool-info-compact">
           <div class="tool-category-compact">${getCategoryLabel(tool.category)}</div>
           <div class="tool-name-compact">
@@ -2213,7 +2234,7 @@ function renderTools() {
           </div>
           <div class="tool-desc-compact">${description}</div>
         </div>
-          
+            
         <div class="tool-meta-compact" onclick="event.stopPropagation()">
           <div class="tool-price-compact">${tool.priceDisplay}${ltdBadge}</div>
           <div class="tool-actions-compact">
@@ -2247,17 +2268,17 @@ function openToolDetail(toolId) {
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
   const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
   const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
-    
+      
   const pros = tool.pros || [];
   const cons = tool.cons || [];
   const features = tool.features || [];
   const alternatives = tool.alternatives || [];
   const useCases = tool.useCases || [];
-    
+      
   const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
   const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
   const featuresHTML = features.map(f => '<span class="feature-tag"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
-    
+      
   const alternativesHTML = alternatives.map(altId => {
     const altTool = aiTools.find(t => t.id === altId);
     if (!altTool) return '';
@@ -2360,7 +2381,7 @@ function openToolDetail(toolId) {
   document.getElementById('modalContent').innerHTML = modalContent;
   document.getElementById('toolModal').classList.add('active');
   document.body.style.overflow = 'hidden';
-    
+      
   updateLanguage();
 }
 
@@ -2444,86 +2465,95 @@ function shareToolDirectly(toolId) {
   }
 }
 
-// ===== NEUES LIVE-VOTING SYSTEM =====
+// ===== KORRIGIERTE VOTE FUNKTION =====
 async function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
   
+  // UI sofort updaten für schnelles Feedback
   const oldUserVote = tool.userVote || 0;
   const voteValue = type === 'up' ? 1 : -1;
   
-  // UI sofort updaten
+  // Wenn User bereits so gevotet hat, entfernen
   if (tool.userVote === voteValue) {
     tool.userVote = 0;
+    tool.votes = (tool.votes || 0) - voteValue;
   } else {
+    // Wenn User anders gevotet hat oder noch nicht
+    const voteChange = voteValue - (tool.userVote || 0);
     tool.userVote = voteValue;
+    tool.votes = (tool.votes || 0) + voteChange;
   }
   
-  // Lokal speichern
+  // Lokal speichern für UI State
   const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
   savedVotes[toolId] = { userVote: tool.userVote };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
   
-  // Berechnung für Supabase
-  let upvoteChange = 0;
-  let downvoteChange = 0;
-  
-  if (oldUserVote === 1 && voteValue === 1) {
-    // Upvote entfernen
-    upvoteChange = -1;
-  } else if (oldUserVote === -1 && voteValue === -1) {
-    // Downvote entfernen
-    downvoteChange = -1;
-  } else if (oldUserVote === 1 && voteValue === -1) {
-    // Upvote zu Downvote ändern
-    upvoteChange = -1;
-    downvoteChange = 1;
-  } else if (oldUserVote === -1 && voteValue === 1) {
-    // Downvote zu Upvote ändern
-    downvoteChange = -1;
-    upvoteChange = 1;
-  } else if (oldUserVote === 0 && voteValue === 1) {
-    // Neuer Upvote
-    upvoteChange = 1;
-  } else if (oldUserVote === 0 && voteValue === -1) {
-    // Neuer Downvote
-    downvoteChange = 1;
-  }
-  
-  // Supabase Update
   try {
-    const { data: existingVote, error: fetchError } = await supabase
+    // 1. ZUERST prüfen, ob der Eintrag existiert
+    const { data: existingData, error: fetchError } = await supabase
       .from('tool_votes')
       .select('*')
-      .eq('tool_id', toolId)
-      .single();
+      .eq('tool_id', toolId);
     
-    if (fetchError && fetchError.code !== 'PGRST116') {
+    if (fetchError) {
+      console.error('Fehler beim Abrufen:', fetchError);
       throw fetchError;
     }
     
-    if (existingVote) {
-      const updatedUpvotes = (existingVote.upvotes || 0) + upvoteChange;
-      const updatedDownvotes = (existingVote.downvotes || 0) + downvoteChange;
-      const updatedTotal = updatedUpvotes - updatedDownvotes;
+    // 2. Werte für Supabase berechnen
+    let upvotes = 0;
+    let downvotes = 0;
+    
+    // Logik für Upvotes/Downvotes
+    if (oldUserVote === 1 && voteValue === 1) {
+      // Upvote entfernen
+      upvotes = -1;
+    } else if (oldUserVote === -1 && voteValue === -1) {
+      // Downvote entfernen
+      downvotes = -1;
+    } else if (oldUserVote === 1 && voteValue === -1) {
+      // Upvote zu Downvote wechseln
+      upvotes = -1;
+      downvotes = 1;
+    } else if (oldUserVote === -1 && voteValue === 1) {
+      // Downvote zu Upvote wechseln
+      downvotes = -1;
+      upvotes = 1;
+    } else if (oldUserVote === 0 && voteValue === 1) {
+      // Neuer Upvote
+      upvotes = 1;
+    } else if (oldUserVote === 0 && voteValue === -1) {
+      // Neuer Downvote
+      downvotes = 1;
+    }
+    
+    // 3. Wenn Eintrag existiert, UPDATE
+    if (existingData && existingData.length > 0) {
+      const current = existingData[0];
+      const newUpvotes = Math.max(0, (current.upvotes || 0) + upvotes);
+      const newDownvotes = Math.max(0, (current.downvotes || 0) + downvotes);
+      const newTotal = newUpvotes - newDownvotes;
       
       const { error: updateError } = await supabase
         .from('tool_votes')
         .update({
-          upvotes: updatedUpvotes,
-          downvotes: updatedDownvotes,
-          total_votes: updatedTotal,
-          updated_at: new Date().toISOString()
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+          total_votes: newTotal
         })
         .eq('tool_id', toolId);
       
       if (updateError) throw updateError;
       
-      tool.votes = updatedTotal;
+      // Lokale Werte aktualisieren
+      tool.votes = newTotal;
+      
     } else {
-      // Neuer Eintrag
-      const initialUpvotes = upvoteChange > 0 ? 1 : 0;
-      const initialDownvotes = downvoteChange > 0 ? 1 : 0;
+      // 4. Wenn KEIN Eintrag existiert, INSERT mit Werten
+      const initialUpvotes = voteValue === 1 ? 1 : 0;
+      const initialDownvotes = voteValue === -1 ? 1 : 0;
       const initialTotal = initialUpvotes - initialDownvotes;
       
       const { error: insertError } = await supabase
@@ -2537,19 +2567,32 @@ async function vote(toolId, type) {
       
       if (insertError) throw insertError;
       
+      // Lokale Werte aktualisieren
       tool.votes = initialTotal;
     }
     
+    // Erfolgsmeldung
+    showNotification(
+      currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
+      'success'
+    );
+    
     // Animation für Live-Feedback
     animateVoteChange(toolId);
-    showNotification(currentLang === 'de' ? 'Deine Stimme wurde gezählt!' : 'Your vote has been counted!', 'success');
     
   } catch (error) {
-    console.error('Supabase Vote Error:', error);
-    showNotification(currentLang === 'de' ? 'Fehler beim Speichern der Stimme.' : 'Error saving vote.', 'error');
+    console.error('Voting Fehler:', error);
+    showNotification(
+      currentLang === 'de' ? 'Fehler: ' + error.message : 'Error: ' + error.message, 
+      'error'
+    );
+    
+    // Zurück zum alten Zustand
+    tool.userVote = oldUserVote;
+    tool.votes = (tool.votes || 0) - (voteValue - oldUserVote);
   }
   
-  // UI updaten
+  // UI neu rendern
   renderTopCharts();
   renderTools();
 }
@@ -2561,7 +2604,7 @@ function animateVoteChange(toolId) {
     chartCard.classList.add('vote-animation');
     setTimeout(() => chartCard.classList.remove('vote-animation'), 1000);
   }
-  
+    
   // Tool-Row Animation
   const toolRow = document.querySelector(`.compact-tool-row[data-id="${toolId}"]`);
   if (toolRow) {
@@ -2578,14 +2621,14 @@ function showNotification(message, type = 'info') {
     <span>${message}</span>
     <button class="notification-close"><i class="fas fa-times"></i></button>
   `;
-  
+    
   document.body.appendChild(notification);
-  
+    
   // Auto-remove after 3 seconds
   setTimeout(() => {
     notification.remove();
   }, 3000);
-  
+    
   // Close button functionality
   notification.querySelector('.notification-close').addEventListener('click', () => {
     notification.remove();
@@ -2819,14 +2862,14 @@ const searchSuggestions = document.getElementById('searchSuggestions');
 searchBox.addEventListener('input', (e) => {
   searchQuery = e.target.value;
   renderTools();
-    
+      
   if (searchQuery.length > 1) {
     const matches = aiTools.filter(tool => 
       tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tool.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tool.description.en.toLowerCase().includes(searchQuery.toLowerCase())
     ).slice(0, 5);
-      
+        
     if (matches.length > 0) {
       searchSuggestions.innerHTML = matches.map(tool => `
         <div class="suggestion-item" onclick="openToolDetail('${tool.id}'); searchSuggestions.classList.remove('active');">
