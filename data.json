@@ -1,0 +1,1040 @@
+[
+  {
+    "id": "chatgpt",
+    "numericId": 1,
+    "name": "ChatGPT",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "Free/$20",
+    "rating": 4.9,
+    "description": {
+      "de": "Bester Allrounder für Texte, Ideen, Code.",
+      "en": "Best all-rounder for text, ideas, code."
+    },
+    "features": ["GPT-4", "Web", "Files"],
+    "link": "https://chat.openai.com/",
+    "badge": "popular",
+    "useCases": ["chatbot", "writing", "coding"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "ChatGPT Review 2026: Der ultimative KI-Allrounder",
+      "en": "ChatGPT Review 2026: The Ultimate AI All-Rounder"
+    },
+    "seoDesc": {
+      "de": "ChatGPT ist der beste KI-Allrounder für Texte, Code und Ideen. Erfahre alles über Vor- und Nachteile, Preise und Alternativen.",
+      "en": "ChatGPT is the best AI all-rounder for text, code and ideas. Learn about pros, cons, pricing and alternatives."
+    },
+    "alternatives": ["claude", "gemini", "perplexity"],
+    "pros": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support"],
+    "cons": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier"],
+    "pricing": {
+      "free": "Grundlegende Funktionen mit GPT-3.5",
+      "pro": "$20/Monat für GPT-4, Web-Zugang, Datei-Upload"
+    }
+  },
+  {
+    "id": "claude",
+    "numericId": 2,
+    "name": "Claude",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "Free/$20",
+    "rating": 4.8,
+    "description": {
+      "de": "Exzellent für lange Texte, Dokumente.",
+      "en": "Excellent for long-form, documents."
+    },
+    "features": ["200K", "Files", "Writing"],
+    "link": "https://claude.ai/",
+    "badge": "popular",
+    "useCases": ["chatbot", "writing", "analysis"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Claude AI Review: Der Experte für lange Texte und Dokumente",
+      "en": "Claude AI Review: The Expert for Long Texts and Documents"
+    },
+    "seoDesc": {
+      "de": "Claude ist spezialisiert auf lange Texte und Dokumentenanalyse. Ideal für Autoren, Forscher und Unternehmen.",
+      "en": "Claude specializes in long texts and document analysis. Ideal for writers, researchers and businesses."
+    },
+    "alternatives": ["chatgpt", "gemini", "notion-ai"],
+    "pros": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits"],
+    "cons": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution"]
+  },
+  {
+    "id": "midjourney",
+    "numericId": 3,
+    "name": "Midjourney",
+    "category": "image",
+    "price": "paid",
+    "priceDisplay": "$10/mo",
+    "rating": 4.9,
+    "description": {
+      "de": "Beste künstlerische Bildgenerierung.",
+      "en": "Best artistic image generation."
+    },
+    "features": ["Art", "Styles", "Quality"],
+    "link": "https://www.midjourney.com/",
+    "badge": "popular",
+    "useCases": ["image-generator", "art", "design"],
+    "votes": 0,
+    "hasLifetimeDeal": true,
+    "seoTitle": {
+      "de": "Midjourney Review 2026: Die beste KI für künstlerische Bilder",
+      "en": "Midjourney Review 2026: The Best AI for Artistic Images"
+    },
+    "seoDesc": {
+      "de": "Midjourney generiert die künstlerischsten KI-Bilder. Perfekt für Künstler, Designer und Kreative.",
+      "en": "Midjourney generates the most artistic AI images. Perfect for artists, designers and creatives."
+    },
+    "alternatives": ["dalle-3", "stable-diffusion", "firefly"],
+    "pros": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen"],
+    "cons": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse"],
+    "pricing": {
+      "basic": "$10/Monat für 200 Bilder",
+      "standard": "$30/Monat für unbegrenzte Bilder"
+    }
+  },
+  {
+    "id": "github-copilot",
+    "numericId": 4,
+    "name": "GitHub Copilot",
+    "category": "code",
+    "price": "paid",
+    "priceDisplay": "$10/mo",
+    "rating": 4.8,
+    "description": {
+      "de": "Bester Code-Assistent für Entwickler.",
+      "en": "Best code assistant for developers."
+    },
+    "features": ["Autocomplete", "Chat", "Multi-Lang"],
+    "link": "https://github.com/features/copilot",
+    "badge": "popular",
+    "useCases": ["coding-assistant", "debugging", "code-explanation"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "GitHub Copilot Review: Der KI-Pair-Programmierer",
+      "en": "GitHub Copilot Review: The AI Pair Programmer"
+    },
+    "seoDesc": {
+      "de": "GitHub Copilot ist der beste KI-Code-Assistent für Entwickler. Erhöht die Produktivität um bis zu 55%.",
+      "en": "GitHub Copilot is the best AI code assistant for developers. Increases productivity by up to 55%."
+    },
+    "alternatives": ["cursor", "tabnine", "codeium"],
+    "pros": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%"],
+    "cons": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code"],
+    "pricing": {
+      "individual": "$10/Monat pro Nutzer",
+      "business": "$19/Monat pro Nutzer"
+    }
+  },
+  {
+    "id": "elevenlabs",
+    "numericId": 5,
+    "name": "ElevenLabs",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "Free/$5",
+    "rating": 4.8,
+    "description": {
+      "de": "Realistische KI-Stimmen, Voice Cloning.",
+      "en": "Realistic AI voices, voice cloning."
+    },
+    "features": ["TTS", "Clone", "Emotion"],
+    "link": "https://elevenlabs.io/",
+    "badge": "popular",
+    "useCases": ["voice-generator", "text-to-speech", "voice-cloning"],
+    "votes": 0,
+    "hasLifetimeDeal": true,
+    "seoTitle": {
+      "de": "ElevenLabs Review: Die realistischsten KI-Stimmen",
+      "en": "ElevenLabs Review: The Most Realistic AI Voices"
+    },
+    "seoDesc": {
+      "de": "ElevenLabs bietet die realistischsten KI-Stimmen und Voice-Cloning. Ideal für Podcasts, Hörbücher und Videos.",
+      "en": "ElevenLabs offers the most realistic AI voices and voice cloning. Ideal for podcasts, audiobooks and videos."
+    },
+    "alternatives": ["murf", "descript", "suno"],
+    "pros": ["Die realistischsten KI-Stimmen", "Einfaches Voice-Cloning", "Emotionale Sprachausgabe", "Kostenlose Testversion"],
+    "cons": ["Teuer für professionelle Nutzung", "Limitierte kostenlose Nutzung", "Ethische Bedenken bei Voice-Cloning"],
+    "pricing": {
+      "free": "10.000 Zeichen/Monat",
+      "starter": "$5/Monat für 30.000 Zeichen",
+      "creator": "$22/Monat für 100.000 Zeichen"
+    }
+  },
+  {
+    "id": "runway",
+    "numericId": 6,
+    "name": "Runway",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "Free/$15",
+    "rating": 4.7,
+    "description": {
+      "de": "Text-zu-Video, KI-Video Editing.",
+      "en": "Text-to-video, AI video editing."
+    },
+    "features": ["Gen", "Edit", "FX"],
+    "link": "https://runwayml.com/",
+    "badge": "popular",
+    "useCases": ["video-editor", "video-generation", "editing"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Runway Review: KI-Video Editing der nächsten Generation",
+      "en": "Runway Review: Next-Gen AI Video Editing"
+    },
+    "seoDesc": {
+      "de": "Runway ist die führende KI-Video-Plattform mit Text-zu-Video, Objekt-Entfernung und Spezialeffekten.",
+      "en": "Runway is the leading AI video platform with text-to-video, object removal and special effects."
+    },
+    "alternatives": ["pika", "invideo", "heygen"],
+    "pros": ["30+ KI-Video-Tools in einer Plattform", "Professionelle Ergebnisse", "Einfache Benutzeroberfläche", "Kostenloser Plan verfügbar"],
+    "cons": ["Wasserzeichen im Free-Tier", "Teure Pro-Pläne", "Rechenintensiv (braucht gute Hardware)"],
+    "pricing": {
+      "free": "3 Projekte, Wasserzeichen",
+      "standard": "$15/Monat für 125 Credits",
+      "pro": "$35/Monat für 625 Credits"
+    }
+  },
+  {
+    "id": "gemini",
+    "numericId": 7,
+    "name": "Gemini",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "Free/$20",
+    "rating": 4.6,
+    "description": {
+      "de": "Googles KI mit Web Integration.",
+      "en": "Google's AI with web integration."
+    },
+    "features": ["Web", "Multimodal", "Apps"],
+    "link": "https://gemini.google.com/",
+    "badge": "new",
+    "useCases": ["chatbot", "research", "writing"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "perplexity",
+    "numericId": 8,
+    "name": "Perplexity",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "Free/$20",
+    "rating": 4.7,
+    "description": {
+      "de": "KI-Suche mit Quellenangaben.",
+      "en": "AI search with citations."
+    },
+    "features": ["Citations", "Web", "Sources"],
+    "link": "https://www.perplexity.ai/",
+    "badge": "new",
+    "useCases": ["chatbot", "research", "information"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "dalle-3",
+    "numericId": 9,
+    "name": "DALL·E 3",
+    "category": "image",
+    "price": "paid",
+    "priceDisplay": "In ChatGPT+",
+    "rating": 4.7,
+    "description": {
+      "de": "Text-zu-Bild in ChatGPT.",
+      "en": "Text-to-image in ChatGPT."
+    },
+    "features": ["Text", "Images", "ChatGPT"],
+    "link": "https://openai.com/dall-e-3",
+    "badge": "new",
+    "useCases": ["image-generator", "art", "design"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "stable-diffusion",
+    "numericId": 10,
+    "name": "Stable Diffusion",
+    "category": "image",
+    "price": "free",
+    "priceDisplay": "Free",
+    "rating": 4.7,
+    "description": {
+      "de": "Open-Source Bildgenerierung.",
+      "en": "Open-source image generation."
+    },
+    "features": ["Open", "Local", "Custom"],
+    "link": "https://stability.ai/",
+    "badge": "free",
+    "useCases": ["image-generator", "art", "custom-models"],
+    "votes": 0,
+    "hasLifetimeDeal": true
+  },
+  {
+    "id": "notion-ai",
+    "numericId": 11,
+    "name": "Notion AI",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.5,
+    "description": {
+      "de": "KI in deinem Workspace.",
+      "en": "AI in your workspace."
+    },
+    "features": ["Writing", "Summarize", "Translate"],
+    "link": "https://www.notion.so/product/ai",
+    "badge": "popular",
+    "useCases": ["writing", "notes", "organization"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "copy-ai",
+    "numericId": 12,
+    "name": "Copy.ai",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$49/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI für Marketing Texte.",
+      "en": "AI for marketing copy."
+    },
+    "features": ["Marketing", "Templates", "Workflows"],
+    "link": "https://www.copy.ai/",
+    "badge": "popular",
+    "useCases": ["copywriting", "marketing", "ads"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "jasper",
+    "numericId": 13,
+    "name": "Jasper",
+    "category": "text",
+    "price": "paid",
+    "priceDisplay": "$49/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI für Business Content.",
+      "en": "AI for business content."
+    },
+    "features": ["Brand", "Templates", "Collaboration"],
+    "link": "https://www.jasper.ai/",
+    "badge": "popular",
+    "useCases": ["copywriting", "blogging", "seo"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "firefly",
+    "numericId": 14,
+    "name": "Adobe Firefly",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$5/mo",
+    "rating": 4.5,
+    "description": {
+      "de": "Adobe's KI für Kreative.",
+      "en": "Adobe's AI for creatives."
+    },
+    "features": ["Photoshop", "Vector", "Text"],
+    "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
+    "badge": "new",
+    "useCases": ["design", "photo-editing", "illustration"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "leonardo",
+    "numericId": 15,
+    "name": "Leonardo AI",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$12/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "Bildgenerierung für Spiele.",
+      "en": "Image generation for games."
+    },
+    "features": ["Game", "Assets", "Models"],
+    "link": "https://leonardo.ai/",
+    "badge": "new",
+    "useCases": ["game-dev", "3d-models", "textures"],
+    "votes": 0,
+    "hasLifetimeDeal": true
+  },
+  {
+    "id": "playground",
+    "numericId": 16,
+    "name": "Playground AI",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$15/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "Kostenlose Bildgenerierung.",
+      "en": "Free image generation."
+    },
+    "features": ["Free", "Filters", "Editing"],
+    "link": "https://playgroundai.com/",
+    "badge": "free",
+    "useCases": ["image-generator", "art", "social-media"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "murf",
+    "numericId": 17,
+    "name": "Murf AI",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$19/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "Text-zu-Sprache für Videos.",
+      "en": "Text-to-speech for videos."
+    },
+    "features": ["Voice", "Video", "Commercial"],
+    "link": "https://murf.ai/",
+    "badge": "popular",
+    "useCases": ["voiceover", "video", "podcast"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "suno",
+    "numericId": 18,
+    "name": "Suno AI",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.6,
+    "description": {
+      "de": "KI Musik Generator.",
+      "en": "AI music generator."
+    },
+    "features": ["Music", "Lyrics", "Genres"],
+    "link": "https://www.suno.ai/",
+    "badge": "new",
+    "useCases": ["music", "songwriting", "audio"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "boomy",
+    "numericId": 19,
+    "name": "Boomy",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "Erstelle Musik in Sekunden.",
+      "en": "Create music in seconds."
+    },
+    "features": ["Instant", "Royalty", "Distribution"],
+    "link": "https://boomy.com/",
+    "badge": "free",
+    "useCases": ["music", "streaming", "content"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "synthesia",
+    "numericId": 20,
+    "name": "Synthesia",
+    "category": "video",
+    "price": "paid",
+    "priceDisplay": "$30/mo",
+    "rating": 4.5,
+    "description": {
+      "de": "KI Avatare für Videos.",
+      "en": "AI avatars for videos."
+    },
+    "features": ["Avatars", "Languages", "Templates"],
+    "link": "https://www.synthesia.io/",
+    "badge": "popular",
+    "useCases": ["training", "marketing", "explainer"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "heygen",
+    "numericId": 21,
+    "name": "HeyGen",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$30/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "Video mit KI Avataren.",
+      "en": "Video with AI avatars."
+    },
+    "features": ["Avatars", "Translation", "Templates"],
+    "link": "https://www.heygen.com/",
+    "badge": "new",
+    "useCases": ["presentation", "marketing", "education"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "pika",
+    "numericId": 22,
+    "name": "Pika Labs",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.6,
+    "description": {
+      "de": "Text-zu-Video Generator.",
+      "en": "Text-to-video generator."
+    },
+    "features": ["Text", "Editing", "Styles"],
+    "link": "https://www.pika.art/",
+    "badge": "new",
+    "useCases": ["video-generator", "animation", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": true
+  },
+  {
+    "id": "cursor",
+    "numericId": 23,
+    "name": "Cursor",
+    "category": "code",
+    "price": "freemium",
+    "priceDisplay": "$20/mo",
+    "rating": 4.7,
+    "description": {
+      "de": "KI IDE für Programmierer.",
+      "en": "AI IDE for programmers."
+    },
+    "features": ["Editor", "Chat", "Debug"],
+    "link": "https://www.cursor.so/",
+    "badge": "new",
+    "useCases": ["coding", "debugging", "learning"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "replit",
+    "numericId": 24,
+    "name": "Replit AI",
+    "category": "code",
+    "price": "freemium",
+    "priceDisplay": "$20/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI Coding in der Cloud.",
+      "en": "AI coding in the cloud."
+    },
+    "features": ["Cloud", "Collaboration", "Deploy"],
+    "link": "https://replit.com/site/ai",
+    "badge": "free",
+    "useCases": ["coding", "education", "prototyping"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "tabnine",
+    "numericId": 25,
+    "name": "Tabnine",
+    "category": "code",
+    "price": "freemium",
+    "priceDisplay": "$12/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI Code Completion.",
+      "en": "AI code completion."
+    },
+    "features": ["Autocomplete", "Privacy", "Multi-Lang"],
+    "link": "https://www.tabnine.com/",
+    "badge": "popular",
+    "useCases": ["coding", "productivity", "assistant"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "codeium",
+    "numericId": 26,
+    "name": "Codeium",
+    "category": "code",
+    "price": "free",
+    "priceDisplay": "Free",
+    "rating": 4.5,
+    "description": {
+      "de": "Kostenlose KI für Code.",
+      "en": "Free AI for code."
+    },
+    "features": ["Free", "Autocomplete", "Chat"],
+    "link": "https://codeium.com/",
+    "badge": "free",
+    "useCases": ["coding", "learning", "prototyping"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "canva-ai",
+    "numericId": 27,
+    "name": "Canva AI",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$12/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI Design für alle.",
+      "en": "AI design for everyone."
+    },
+    "features": ["Design", "Templates", "Magic"],
+    "link": "https://www.canva.com/ai-tools/",
+    "badge": "popular",
+    "useCases": ["design", "social-media", "presentation"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "tome",
+    "numericId": 28,
+    "name": "Tome",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$8/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI für Präsentationen.",
+      "en": "AI for presentations."
+    },
+    "features": ["Presentations", "Narrative", "Visual"],
+    "link": "https://tome.app/",
+    "badge": "new",
+    "useCases": ["presentation", "storytelling", "business"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "beautiful-ai",
+    "numericId": 29,
+    "name": "Beautiful.ai",
+    "category": "business",
+    "price": "paid",
+    "priceDisplay": "$12/mo",
+    "rating": 4.2,
+    "description": {
+      "de": "KI Präsentation Designer.",
+      "en": "AI presentation designer."
+    },
+    "features": ["Slides", "Design", "Collaboration"],
+    "link": "https://www.beautiful.ai/",
+    "badge": "popular",
+    "useCases": ["presentation", "sales", "pitch"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "gamma",
+    "numericId": 30,
+    "name": "Gamma",
+    "category": "business",
+    "price": "freemium",
+    "priceDisplay": "$8/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI für Dokumente & Präsentationen.",
+      "en": "AI for docs & presentations."
+    },
+    "features": ["Docs", "Presentations", "Websites"],
+    "link": "https://gamma.app/",
+    "badge": "new",
+    "useCases": ["documentation", "presentation", "content"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "invideo",
+    "numericId": 31,
+    "name": "InVideo AI",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$20/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "Text-zu-Video für Social Media.",
+      "en": "Text-to-video for social media."
+    },
+    "features": ["Templates", "Stock", "Automation"],
+    "link": "https://invideo.io/ai",
+    "badge": "popular",
+    "useCases": ["social-media", "marketing", "ads"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "fliki",
+    "numericId": 32,
+    "name": "Fliki",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$21/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "Text-zu-Video mit Stimmen.",
+      "en": "Text-to-video with voices."
+    },
+    "features": ["Voice", "Stock", "Script"],
+    "link": "https://fliki.ai/",
+    "badge": "new",
+    "useCases": ["video", "social-media", "explainer"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "pictory",
+    "numericId": 33,
+    "name": "Pictory",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$19/mo",
+    "rating": 4.2,
+    "description": {
+      "de": "Erstelle Videos aus Text.",
+      "en": "Create videos from text."
+    },
+    "features": ["Script", "Stock", "Automation"],
+    "link": "https://pictory.ai/",
+    "badge": "popular",
+    "useCases": ["marketing", "training", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "wondershare",
+    "numericId": 34,
+    "name": "Wondershare Filmora",
+    "category": "video",
+    "price": "freemium",
+    "priceDisplay": "$50/year",
+    "rating": 4.1,
+    "description": {
+      "de": "KI Video Editor.",
+      "en": "AI video editor."
+    },
+    "features": ["Editing", "Effects", "Templates"],
+    "link": "https://filmora.wondershare.com/ai-video-editor/",
+    "badge": "popular",
+    "useCases": ["video-editing", "youtube", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "descript",
+    "numericId": 35,
+    "name": "Descript",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$12/mo",
+    "rating": 4.5,
+    "description": {
+      "de": "Audio & Video Editor.",
+      "en": "Audio & video editor."
+    },
+    "features": ["Editing", "Transcription", "Voice"],
+    "link": "https://www.descript.com/",
+    "badge": "popular",
+    "useCases": ["podcast", "video", "transcription"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "otter",
+    "numericId": 36,
+    "name": "Otter.ai",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI Meeting Transkription.",
+      "en": "AI meeting transcription."
+    },
+    "features": ["Transcription", "Notes", "Collaboration"],
+    "link": "https://otter.ai/",
+    "badge": "popular",
+    "useCases": ["meetings", "notes", "interviews"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "krisp",
+    "numericId": 37,
+    "name": "Krisp",
+    "category": "audio",
+    "price": "freemium",
+    "priceDisplay": "$8/mo",
+    "rating": 4.5,
+    "description": {
+      "de": "KI Noise Cancellation.",
+      "en": "AI noise cancellation."
+    },
+    "features": ["Noise", "Voice", "Meetings"],
+    "link": "https://krisp.ai/",
+    "badge": "popular",
+    "useCases": ["meetings", "calls", "recording"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "quillbot",
+    "numericId": 38,
+    "name": "QuillBot",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI Paraphraser & Übersetzer.",
+      "en": "AI paraphraser & translator."
+    },
+    "features": ["Paraphrase", "Grammar", "Summarize"],
+    "link": "https://quillbot.com/",
+    "badge": "popular",
+    "useCases": ["writing", "academic", "content"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "grammarly",
+    "numericId": 39,
+    "name": "Grammarly",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$12/mo",
+    "rating": 4.6,
+    "description": {
+      "de": "KI Schreibassistent.",
+      "en": "AI writing assistant."
+    },
+    "features": ["Grammar", "Tone", "Plagiarism"],
+    "link": "https://www.grammarly.com/",
+    "badge": "popular",
+    "useCases": ["writing", "emails", "documents"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "wordtune",
+    "numericId": 40,
+    "name": "Wordtune",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI für besseres Schreiben.",
+      "en": "AI for better writing."
+    },
+    "features": ["Rewrite", "Tone", "Summarize"],
+    "link": "https://www.wordtune.com/",
+    "badge": "popular",
+    "useCases": ["writing", "emails", "creative"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "rytr",
+    "numericId": 41,
+    "name": "Rytr",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$9/mo",
+    "rating": 4.2,
+    "description": {
+      "de": "Kostengünstiger KI Writer.",
+      "en": "Affordable AI writer."
+    },
+    "features": ["Templates", "Languages", "SEO"],
+    "link": "https://rytr.me/",
+    "badge": "free",
+    "useCases": ["copywriting", "blogging", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "writesonic",
+    "numericId": 42,
+    "name": "Writesonic",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$13/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI für Marketing Content.",
+      "en": "AI for marketing content."
+    },
+    "features": ["Templates", "SEO", "Images"],
+    "link": "https://writesonic.com/",
+    "badge": "popular",
+    "useCases": ["copywriting", "ads", "landing-pages"],
+    "votes": 0,
+    "hasLifetimeDeal": true
+  },
+  {
+    "id": "copy",
+    "numericId": 43,
+    "name": "Copy.ai",
+    "category": "text",
+    "price": "freemium",
+    "priceDisplay": "$49/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI Copywriting Plattform.",
+      "en": "AI copywriting platform."
+    },
+    "features": ["Workflows", "Brand", "Collaboration"],
+    "link": "https://www.copy.ai/",
+    "badge": "popular",
+    "useCases": ["marketing", "sales", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "surfer",
+    "numericId": 44,
+    "name": "Surfer SEO",
+    "category": "business",
+    "price": "paid",
+    "priceDisplay": "$59/mo",
+    "rating": 4.4,
+    "description": {
+      "de": "KI für SEO Content.",
+      "en": "AI for SEO content."
+    },
+    "features": ["SEO", "Research", "Optimization"],
+    "link": "https://surferseo.com/",
+    "badge": "popular",
+    "useCases": ["seo", "content", "blogging"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "jasper-art",
+    "numericId": 45,
+    "name": "Jasper Art",
+    "category": "image",
+    "price": "paid",
+    "priceDisplay": "$20/mo",
+    "rating": 4.2,
+    "description": {
+      "de": "Bildgenerierung für Marken.",
+      "en": "Image generation for brands."
+    },
+    "features": ["Brand", "Styles", "Commercial"],
+    "link": "https://www.jasper.ai/art",
+    "badge": "popular",
+    "useCases": ["marketing", "ads", "branding"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "photosonic",
+    "numericId": 46,
+    "name": "Photosonic",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$10/mo",
+    "rating": 4.1,
+    "description": {
+      "de": "Text-zu-Bild Generator.",
+      "en": "Text-to-image generator."
+    },
+    "features": ["Art", "Styles", "Custom"],
+    "link": "https://photosonic.writesonic.com/",
+    "badge": "free",
+    "useCases": ["art", "design", "social"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "nightcafe",
+    "numericId": 47,
+    "name": "NightCafe",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$6/mo",
+    "rating": 4.3,
+    "description": {
+      "de": "KI Kunst Generator.",
+      "en": "AI art generator."
+    },
+    "features": ["Art", "Styles", "Community"],
+    "link": "https://creator.nightcafe.studio/",
+    "badge": "free",
+    "useCases": ["art", "creativity", "prints"],
+    "votes": 0,
+    "hasLifetimeDeal": true
+  },
+  {
+    "id": "dreamstudio",
+    "numericId": 48,
+    "name": "DreamStudio",
+    "category": "image",
+    "price": "paid",
+    "priceDisplay": "$10/credits",
+    "rating": 4.4,
+    "description": {
+      "de": "Stable Diffusion Web UI.",
+      "en": "Stable Diffusion web UI."
+    },
+    "features": ["SDXL", "Control", "Custom"],
+    "link": "https://dreamstudio.ai/",
+    "badge": "popular",
+    "useCases": ["art", "design", "prototyping"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "bluewillow",
+    "numericId": 49,
+    "name": "BlueWillow",
+    "category": "image",
+    "price": "freemium",
+    "priceDisplay": "$5/mo",
+    "rating": 4.2,
+    "description": {
+      "de": "KI Bildgenerierung Discord.",
+      "en": "AI image generation Discord."
+    },
+    "features": ["Community", "Styles", "Fast"],
+    "link": "https://www.bluewillow.ai/",
+    "badge": "free",
+    "useCases": ["art", "social", "design"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  },
+  {
+    "id": "deepdream",
+    "numericId": 50,
+    "name": "DeepDream",
+    "category": "image",
+    "price": "free",
+    "priceDisplay": "Free",
+    "rating": 4.0,
+    "description": {
+      "de": "Früher KI Bildgenerator.",
+      "en": "Early AI image generator."
+    },
+    "features": ["Neural", "Art", "Experimental"],
+    "link": "https://deepdreamgenerator.com/",
+    "badge": "free",
+    "useCases": ["art", "experimental", "fun"],
+    "votes": 0,
+    "hasLifetimeDeal": false
+  }
+]
