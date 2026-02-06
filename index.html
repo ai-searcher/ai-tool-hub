@@ -1,484 +1,2556 @@
-# Creating a refactored single-file HTML/CSS/JS project "ai_finder_2026_refactor.html"
-html = r'''
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AI Finder 2026 — Refactor</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
+<title>AI Finder 2026 - Finde sofort dein perfektes KI-Tool</title>
+<meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
+<meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
+<meta name="google-site-verification" content="Wo_6LQQ8LoGlobalzVMjBHh_Z-VD3N_dFdqCZb2BYxV0" />
+<link rel="canonical" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="de" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="en" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="x-default" href="https://ai-searcher.github.io/ai-tool-hub/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Finder 2026 - Finde sofort dein perfektes KI-Tool">
+<meta property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.">
+<meta property="og:url" content="https://ai-searcher.github.io/ai-tool-hub/">
+<meta property="og:site_name" content="AI Finder">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Finder 2026">
+<meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AI Finder",
+  "url": "https://ai-searcher.github.io/ai-tool-hub/",
+  "description": "Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://ai-searcher.github.io/ai-tool-hub/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 <style>
-:root{
-  --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#7c5cff;
-  --glass: rgba(255,255,255,0.06);
-  --glass-2: rgba(255,255,255,0.03);
-  --radius:12px;
-  --easing: cubic-bezier(.2,.9,.25,1);
-  --gap:12px;
-  --text:#e6eef8;
+/* ===== MINIMALISTISCHES DESIGN MIT MAXIMALER INTELLIGENZ ===== */
+:root {
+  --primary: #00d4ff;
+  --primary-dark: #00a8cc;
+  --secondary: #a855f7;
+  --bg-dark: #0a0e17;
+  --bg-card: #141824;
+  --bg-hover: #1a1f2e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(0, 212, 255, 0.3);
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --gold: #fbbf24;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 8px 30px rgba(0, 212, 255, 0.2);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:var(--text);background:
-linear-gradient(180deg,#081126 0%, #071021 70%);-webkit-font-smoothing:antialiased}
-.container{max-width:1200px;margin:24px auto;padding:16px}
-.header{
-  position:sticky;top:0;z-index:40;background:linear-gradient(180deg, rgba(7,10,18,0.6), rgba(7,10,18,0.35));
-  backdrop-filter: blur(6px);padding:12px;border-radius:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;
-  transition: transform .45s var(--easing), opacity .35s var(--easing);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.header.shrink{transform:translateY(-56px);opacity:.02}
-.brand{display:flex;gap:10px;align-items:center}
-.logo{
-  width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00d4ff);
-  display:grid;place-items:center;font-weight:700;color:#062;box-shadow:0 6px 18px rgba(124,92,255,0.12)
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
 }
-.title{font-size:16px;font-weight:600}
-.sub{font-size:12px;color:var(--muted)}
-.controls{margin-left:auto;display:flex;gap:8px;align-items:center}
-.searchBar{
-  position:relative;flex:1;max-width:520px;
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
 }
-.searchBar input{
-  width:100%;padding:12px 14px;border-radius:999px;border:0;background:var(--glass);color:var(--text);
-  outline:none;box-shadow:inset 0 -2px 12px rgba(0,0,0,0.6);transition:box-shadow .25s var(--easing)
+
+/* ===== LANGUAGE SWITCH ===== */
+.language-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
-.keys{font-size:11px;color:var(--muted);padding:4px 8px;background:transparent;border-radius:6px;border:1px solid rgba(255,255,255,0.04)}
-.lang{cursor:pointer;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04)}
-.pillNav{
-  display:flex;gap:10px;overflow:auto;padding:10px 4px;margin-top:10px;
-  -webkit-overflow-scrolling:touch;
+
+.lang-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 18px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
 }
-.pill{
-  flex:0 0 auto;padding:8px 12px;border-radius:999px;background:var(--glass-2);font-size:13px;color:var(--muted);
-  border:1px solid rgba(255,255,255,0.02);cursor:pointer;transition:transform .22s var(--easing), background .22s;
-  backdrop-filter: blur(6px)
+
+.lang-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
 }
-.pill.active{background:linear-gradient(90deg,var(--accent),#00d4ff);color:white;transform:translateY(-4px);box-shadow:0 8px 30px rgba(124,92,255,0.12)}
-.toolbar{display:flex;gap:8px;align-items:center;margin-left:12px}
-.toolsWrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:18px}
-.card{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:14px;padding:12px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03);
-  transition:transform .28s var(--easing), box-shadow .28s var(--easing), height .28s var(--easing);
-  min-height:90px;display:flex;flex-direction:column;gap:8px;
+
+/* ===== HEADER ===== */
+.header {
+  padding: 80px 20px 40px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
-.card .top{display:flex;align-items:center;gap:10px}
-.avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1f2937,#111827);display:grid;place-items:center;font-weight:700}
-.meta{flex:1}
-.name{font-weight:600;font-size:14px}
-.cat{font-size:12px;color:var(--muted)}
-.stats{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
-.price{font-weight:700;color:var(--text)}
-.quickGlass{
-  position:absolute;inset:auto 10px 12px 10px;height:48px;border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter: blur(6px);
-  transform:translateY(16px);opacity:0;pointer-events:none;transition:all .28s var(--easing)
+
+.badge {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--bg-dark);
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
-.card:hover .quickGlass{transform:translateY(0);opacity:1;pointer-events:auto}
-.quickGlass button{border:0;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.02);color:var(--text);cursor:pointer;font-size:13px}
-.badge{padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.25);font-size:12px;color:var(--muted)}
-.desktop-only{display:inline-block}
-@media (max-width:720px){
-  .header{flex-direction:column;align-items:stretch;padding:10px}
-  .controls{width:100%;margin-top:6px}
-  .pillNav{padding-bottom:8px}
-  .toolsWrap{grid-template-columns:1fr}
-  .desktop-only{display:none}
-  .quickGlass{display:flex;position:static;transform:none;opacity:1;pointer-events:auto;margin-top:6px;height:44px}
-  .card{min-height:84px}
+
+.header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 16px;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
 }
-/* Modal */
-.modal{position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0.6),rgba(2,6,23,0.8));display:grid;place-items:center;padding:20px;z-index:80;opacity:0;pointer-events:none;transition:opacity .22s}
-.modal.show{opacity:1;pointer-events:auto}
-.modalCard{width:100%;max-width:880px;background:linear-gradient(180deg,#071026,#061220);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 40px 120px rgba(2,6,23,0.8)}
-.modalHead{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.modalBody{margin-top:10px;display:grid;grid-template-columns:1fr 320px;gap:14px}
-.leftCol{min-height:160px}
-.rightCol{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:10px}
-.tag{display:inline-block;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:12px;margin-right:6px}
-.kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.02);font-size:13px}
-.closeBtn{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:14px;padding:8px;border-radius:8px}
-.small{font-size:13px;color:var(--muted)}
-.footerNote{font-size:12px;color:var(--muted);margin-top:10px}
-/* Spotlight */
-.spotlight{position:fixed;left:50%;top:12%;transform:translateX(-50%);width:min(840px,92%);z-index:90;display:none}
-.spotlight.show{display:block}
-.spotlightBox{background:#06111a;border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 30px 80px rgba(2,6,23,0.6)}
-.spotInput{width:100%;padding:12px;border-radius:8px;border:0;background:transparent;color:var(--text);outline:none;font-size:16px}
-.suggestions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.suggest{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);font-size:13px;color:var(--muted);cursor:pointer}
-.focused{opacity:0.08;pointer-events:none;transition:opacity .4s var(--easing)}
-/* tiny helpers */
-.row{display:flex;gap:8px;align-items:center}
-.fadeIn{animation:fadeIn .28s var(--easing) both}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.header p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 650px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+/* ===== SEARCH ===== */
+.search-container {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.search-box {
+  width: 100%;
+  padding: 16px 60px 16px 50px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+  background: var(--bg-hover);
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+.surprise-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.1rem;
+}
+
+.surprise-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.search-hint-container {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-hint-chip {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  font-weight: 500;
+}
+
+.search-hint-chip:hover {
+  background: rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  backdrop-filter: blur(10px);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  box-shadow: var(--shadow);
+  margin-top: 4px;
+}
+
+.search-suggestions.active {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: var(--bg-hover);
+}
+
+.suggestion-icon {
+  color: var(--primary);
+  width: 20px;
+  font-size: 1rem;
+}
+
+/* ===== QUICK NAVIGATION ===== */
+.quick-navigation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.quick-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: var(--transition);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.quick-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
+  background: var(--bg-hover);
+}
+
+.quick-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.quick-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.quick-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ===== TOP CHARTS ===== */
+.top-charts-section {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.section-title i {
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+.top-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ===== TOOL CARDS (Minimalistisch) ===== */
+.chart-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chart-rank {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chart-rank.rank-1 {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.chart-rank.rank-2 {
+  background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+}
+
+.chart-rank.rank-3 {
+  background: linear-gradient(135deg, #d97706, #92400e);
+}
+
+.chart-votes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.chart-votes i {
+  color: var(--success);
+}
+
+.chart-tool-name {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.chart-category {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+
+.chart-price {
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 700;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ltd-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chart-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ===== VOTE BUTTONS (Minimalistisch) ===== */
+.vote-btn {
+  flex: 1;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+}
+
+.vote-btn.up {
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn.up:hover,
+.vote-btn.up.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+}
+
+.vote-btn.down {
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.vote-btn.down:hover,
+.vote-btn.down.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--error);
+}
+
+.vote-btn i {
+  font-size: 1rem;
+}
+
+.favorite-btn,
+.compare-btn {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 10px;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.favorite-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.favorite-btn.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.compare-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.compare-btn.active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.15);
+}
+
+/* ===== TOOLS CONTAINER ===== */
+.tools-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.compact-tools-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.compact-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: var(--transition);
+  font-size: 0.85rem;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+.filter-select {
+  padding: 8px 30px 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  transition: var(--transition);
+  cursor: pointer;
+  appearance: none;
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.filter-group {
+  position: relative;
+}
+
+.filter-group::after {
+  content: '▼';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary);
+  pointer-events: none;
+  font-size: 0.65rem;
+}
+
+.tools-count {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.tools-count span {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* ===== COMPACT TOOL LIST ===== */
+.compact-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.compact-tool-row {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.compact-tool-row:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.tool-vote-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 70px;
+}
+
+.vote-count {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.vote-buttons-compact {
+  display: flex;
+  gap: 8px;
+}
+
+.vote-btn-compact {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 8px;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vote-btn-compact:hover {
+  transform: translateY(-2px);
+}
+
+.vote-btn-compact.up {
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn-compact.up:hover,
+.vote-btn-compact.up.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+}
+
+.vote-btn-compact.down {
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.vote-btn-compact.down:hover,
+.vote-btn-compact.down.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--error);
+}
+
+.tool-info-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.tool-name-compact {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-category-compact {
+  font-size: 0.7rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-desc-compact {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tool-meta-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 120px;
+}
+
+.tool-price-compact {
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 700;
+}
+
+.tool-actions-compact {
+  display: flex;
+  gap: 8px;
+}
+
+.tool-link-compact {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.tool-link-compact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+/* ===== AI RECOMMENDATION BADGE ===== */
+.ai-recommended {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ===== MODAL STYLES (Minimalistisch) ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 2000;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.modal-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.modal-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: rotate(90deg);
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.tool-detail-hero {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-detail-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.tool-detail-info {
+  flex: 1;
+}
+
+.tool-detail-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.tool-detail-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.tool-badge {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tool-badge.category {
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.tool-badge.price {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tool-badge.rating {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.tool-description-full {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.tool-section {
+  margin-bottom: 24px;
+}
+
+.tool-section h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-section h3 i {
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.pros-cons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.pros-list,
+.cons-list {
+  background: var(--bg-hover);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.pros-list h4 {
+  color: var(--success);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.cons-list h4 {
+  color: var(--error);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.pros-list ul,
+.cons-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pros-list li,
+.cons-list li {
+  padding: 6px 0;
+  padding-left: 22px;
+  position: relative;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.pros-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success);
+  font-weight: 800;
+}
+
+.cons-list li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--error);
+  font-weight: 800;
+}
+
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feature-tag {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--secondary);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.alternatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.alternative-card {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.alternative-card:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-3px);
+}
+
+.alternative-card-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.alternative-card-category {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-actions-modal {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+}
+
+.btn-secondary {
+  flex: 1;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== LEGAL CONTENT ===== */
+.legal-content h2 {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.legal-content h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.legal-content p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.legal-content ul,
+.legal-content ol {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  margin-left: 20px;
+  font-size: 0.95rem;
+}
+
+.legal-content li {
+  margin-bottom: 6px;
+}
+
+.legal-content a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.legal-content a:hover {
+  border-bottom-color: var(--primary);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 30px 20px 20px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.footer-copyright {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+/* ===== COOKIE BANNER ===== */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  transform: translateY(100%);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cookie-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cookie-content h3 {
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cookie-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 280px;
+  line-height: 1.5;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.cookie-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.cookie-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.cookie-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.cookie-btn.secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.cookie-btn.secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== LOADING ===== */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 40px;
+  color: var(--primary);
+}
+
+.loading i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header {
+    padding: 60px 15px 30px;
+  }
+  
+  .quick-navigation {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 15px;
+  }
+  
+  .top-charts {
+    grid-template-columns: 1fr;
+  }
+  
+  .tools-container {
+    padding: 0 15px 40px;
+  }
+  
+  .compact-tools-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .compact-filters {
+    justify-content: center;
+  }
+  
+  .compact-tool-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .tool-meta-compact {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .tool-vote-compact {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .modal-header {
+    padding: 16px;
+  }
+  
+  .modal-content {
+    padding: 16px;
+  }
+  
+  .tool-detail-hero {
+    flex-direction: column;
+  }
+  
+  .pros-cons-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tool-actions-modal {
+    flex-direction: column;
+  }
+  
+  .cookie-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cookie-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .cookie-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .search-box {
+    padding: 14px 55px 14px 45px;
+    font-size: 0.95rem;
+  }
+  
+  .quick-navigation {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-actions {
+    gap: 6px;
+  }
+  
+  .vote-btn {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+  
+  .favorite-btn,
+  .compare-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+  
+  .modal-title {
+    font-size: 1.3rem;
+  }
+  
+  .tool-detail-name {
+    font-size: 1.4rem;
+  }
+  
+  .alternatives-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <header class="header" id="header">
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div>
-        <div class="title">AI Finder 2026</div>
-        <div class="sub">Radical Simplicity — It just works</div>
-      </div>
-    </div>
 
-    <div class="searchBar" title="Press ⌘/Ctrl + K">
-      <input id="mainSearch" placeholder="Search tools, types, intents... (⌘/Ctrl + K)" />
-    </div>
-
-    <div class="controls">
-      <div class="keys desktop-only">⌘/Ctrl K</div>
-      <button class="lang" id="langBtn">EN</button>
-    </div>
-  </header>
-
-  <!-- Pill navigation -->
-  <div class="pillNav" id="pillNav" aria-hidden="false">
-    <!-- pills populated by JS -->
-  </div>
-
-  <main id="content">
-    <section class="toolsWrap" id="toolsWrap">
-      <!-- tool cards injected here -->
-    </section>
-  </main>
+<!-- Language Switch -->
+<div class="language-switch">
+  <button class="lang-btn" id="langToggle">
+    <i class="fas fa-globe"></i>
+    <span id="langText">EN</span>
+  </button>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="modal" role="dialog" aria-modal="true">
-  <div class="modalCard fadeIn" role="document">
-    <div class="modalHead">
-      <div>
-        <div id="modalTitle" style="font-weight:700;font-size:16px"></div>
-        <div id="modalTagline" class="small"></div>
-      </div>
-      <div class="row">
-        <button class="closeBtn" id="closeModal">Close ✕</button>
-      </div>
+<!-- Header -->
+<header class="header">
+  <div class="badge" data-de="🚀 Die beste KI-Tool-Sammlung 2026" data-en="🚀 The Best AI Tool Collection 2026">
+    🚀 Die beste KI-Tool-Sammlung 2026
+  </div>
+  <h1 data-de="Finde dein perfektes KI-Tool in 2 Klicks" data-en="Find your perfect AI tool in 2 clicks">
+    Finde dein perfektes KI-Tool in 2 Klicks
+  </h1>
+  <p data-de="50+ handverlesene KI-Tools. Intelligente Empfehlungen. Echte User-Bewertungen." data-en="50+ handpicked AI tools. Smart recommendations. Real user ratings.">
+    50+ handverlesene KI-Tools. Intelligente Empfehlungen. Echte User-Bewertungen.
+  </p>
+  
+  <!-- Search -->
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input 
+      type="text" 
+      class="search-box" 
+      id="searchBox"
+      placeholder="Durchsuche alle KI-Tools..." 
+      data-placeholder-de="Durchsuche alle KI-Tools..." 
+      data-placeholder-en="Search all AI tools..."
+    >
+    <button class="surprise-btn" id="surpriseBtn" title="Überrasch mich!">
+      <i class="fas fa-dice"></i>
+    </button>
+    <div class="search-suggestions" id="searchSuggestions"></div>
+  </div>
+
+  <!-- Search Hints -->
+  <div class="search-hint-container">
+    <div class="search-hint-chip" data-query="ChatGPT">
+      <i class="fas fa-comment-dots"></i> ChatGPT
     </div>
-    <div class="modalBody">
-      <div class="leftCol" id="modalLeft">
-        <div id="modalDesc" class="small"></div>
-        <div style="margin-top:12px" id="modalProsCons"></div>
-      </div>
-      <aside class="rightCol">
-        <div class="kv"><div class="small">Price</div><div id="mPrice" class="price"></div></div>
-        <div class="kv"><div class="small">Rating</div><div id="mRating"></div></div>
-        <div class="kv"><div class="small">Category</div><div id="mCategory" class="tag"></div></div>
-        <div class="footerNote" id="mFooter"></div>
-      </aside>
+    <div class="search-hint-chip" data-query="Bildgenerierung">
+      <i class="fas fa-image"></i> 
+      <span data-de="Bilder" data-en="Images">Bilder</span>
+    </div>
+    <div class="search-hint-chip" data-query="free">
+      <i class="fas fa-gift"></i> 
+      <span data-de="Kostenlos" data-en="Free">Kostenlos</span>
+    </div>
+    <div class="search-hint-chip" data-query="code">
+      <i class="fas fa-code"></i> Code
+    </div>
+  </div>
+</header>
+
+<!-- Quick Navigation -->
+<div class="quick-navigation">
+  <div class="quick-card" data-filter="text">
+    <div class="quick-icon">✍️</div>
+    <div class="quick-title" data-de="Text & Schreiben" data-en="Text & Writing">Text & Schreiben</div>
+    <div class="quick-desc" data-de="ChatGPT, Claude & mehr" data-en="ChatGPT, Claude & more">ChatGPT, Claude & mehr</div>
+  </div>
+  <div class="quick-card" data-filter="image">
+    <div class="quick-icon">🎨</div>
+    <div class="quick-title" data-de="Bildgenerierung" data-en="Image Generation">Bildgenerierung</div>
+    <div class="quick-desc" data-de="Midjourney, DALL·E 3" data-en="Midjourney, DALL·E 3">Midjourney, DALL·E 3</div>
+  </div>
+  <div class="quick-card" data-filter="code">
+    <div class="quick-icon">💻</div>
+    <div class="quick-title" data-de="Code" data-en="Code">Code</div>
+    <div class="quick-desc" data-de="GitHub Copilot, Cursor" data-en="GitHub Copilot, Cursor">GitHub Copilot, Cursor</div>
+  </div>
+  <div class="quick-card" data-filter="video">
+    <div class="quick-icon">🎬</div>
+    <div class="quick-title" data-de="Video" data-en="Video">Video</div>
+    <div class="quick-desc" data-de="Runway, Synthesia" data-en="Runway, Synthesia">Runway, Synthesia</div>
+  </div>
+  <div class="quick-card" data-filter="audio">
+    <div class="quick-icon">🎵</div>
+    <div class="quick-title" data-de="Audio" data-en="Audio">Audio</div>
+    <div class="quick-desc" data-de="ElevenLabs, Suno AI" data-en="ElevenLabs, Suno AI">ElevenLabs, Suno AI</div>
+  </div>
+  <div class="quick-card" data-filter="free">
+    <div class="quick-icon">🎁</div>
+    <div class="quick-title" data-de="Kostenlos" data-en="Free">Kostenlos</div>
+    <div class="quick-desc" data-de="100% gratis" data-en="100% free">100% gratis</div>
+  </div>
+</div>
+
+<!-- Top 5 Charts -->
+<div class="top-charts-section">
+  <h2 class="section-title">
+    <i class="fas fa-fire"></i>
+    <span data-de="Top 5 KI-Tools" data-en="Top 5 AI Tools">Top 5 KI-Tools</span>
+  </h2>
+  <div class="top-charts" id="topCharts">
+    <!-- Dynamically filled -->
+  </div>
+</div>
+
+<!-- All Tools -->
+<div class="tools-container">
+  <div class="compact-tools-header">
+    <h2 class="section-title">
+      <i class="fas fa-th-large"></i>
+      <span data-de="Alle Tools" data-en="All Tools">Alle Tools</span>
+    </h2>
+    <div class="tools-count">
+      <span id="toolCount">50</span>
+      <span data-de="Tools" data-en="Tools">Tools</span>
+    </div>
+  </div>
+
+  <div class="compact-filters">
+    <button class="filter-btn active" data-category="all">
+      <i class="fas fa-border-all"></i>
+      <span data-de="Alle" data-en="All">Alle</span>
+    </button>
+    <button class="filter-btn" data-category="text">
+      <i class="fas fa-pen"></i>
+      <span data-de="Text" data-en="Text">Text</span>
+    </button>
+    <button class="filter-btn" data-category="image">
+      <i class="fas fa-image"></i>
+      <span data-de="Bild" data-en="Image">Bild</span>
+    </button>
+    <button class="filter-btn" data-category="code">
+      <i class="fas fa-code"></i>
+      Code
+    </button>
+    <button class="filter-btn" data-category="video">
+      <i class="fas fa-video"></i>
+      Video
+    </button>
+    <button class="filter-btn" data-category="audio">
+      <i class="fas fa-music"></i>
+      Audio
+    </button>
+
+    <div class="filter-group">
+      <select class="filter-select" id="priceFilter">
+        <option value="all" data-de="Alle Preise" data-en="All Prices">Alle Preise</option>
+        <option value="free" data-de="Kostenlos" data-en="Free">Kostenlos</option>
+        <option value="freemium">Freemium</option>
+        <option value="paid" data-de="Kostenpflichtig" data-en="Paid">Kostenpflichtig</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <select class="filter-select" id="sortFilter">
+        <option value="votes" data-de="Beste Bewertung" data-en="Best Rated">Beste Bewertung</option>
+        <option value="name" data-de="A-Z" data-en="A-Z">A-Z</option>
+        <option value="rating">Rating</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="compact-tools-grid" id="toolsGrid">
+    <!-- Dynamically filled -->
+  </div>
+
+  <div class="loading" id="loading">
+    <i class="fas fa-circle-notch"></i>
+    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-links">
+    <a class="footer-link" onclick="openImpressum()" data-de="Impressum" data-en="Imprint">Impressum</a>
+    <a class="footer-link" onclick="openDatenschutz()" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
+  </div>
+  <div class="footer-copyright">
+    © 2026 AI Finder. <span data-de="Alle Rechte vorbehalten." data-en="All rights reserved.">Alle Rechte vorbehalten.</span>
+  </div>
+</footer>
+
+<!-- Tool Detail Modal -->
+<div class="modal-overlay" id="toolModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Tool Details</h2>
+      <button class="modal-close" onclick="closeToolModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content" id="modalContent">
+      <!-- Dynamically filled -->
     </div>
   </div>
 </div>
 
-<!-- Spotlight -->
-<div class="spotlight" id="spotlight">
-  <div class="spotlightBox">
-    <input id="spotInput" class="spotInput" placeholder="Try 'music', 'summarize', or press Esc to close" />
-    <div class="suggestions" id="suggestions"></div>
+<!-- Impressum Modal -->
+<div class="modal-overlay" id="impressumModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" data-de="Impressum" data-en="Imprint">Impressum</h2>
+      <button class="modal-close" onclick="closeImpressum()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content legal-content">
+      <h2 data-de="Angaben gemäß § 5 TMG" data-en="Information according to § 5 TMG">Angaben gemäß § 5 TMG</h2>
+      <p>
+        Max Mustermann<br>
+        Musterstraße 123<br>
+        12345 Musterstadt<br>
+        Deutschland
+      </p>
+
+      <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
+      <p>
+        <span data-de="Telefon: +49 (0) 123 456789" data-en="Phone: +49 (0) 123 456789">Telefon: +49 (0) 123 456789</span><br>
+        <span data-de="E-Mail: info@ai-finder.de" data-en="Email: info@ai-finder.de">E-Mail: info@ai-finder.de</span>
+      </p>
+
+      <h3 data-de="Umsatzsteuer-ID" data-en="VAT ID">Umsatzsteuer-ID</h3>
+      <p>
+        <span data-de="Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:" data-en="VAT identification number according to §27 a VAT Act:">Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:</span><br>
+        DE123456789
+      </p>
+
+      <h2 data-de="Haftungsausschluss" data-en="Disclaimer">Haftungsausschluss</h2>
+
+      <h3 data-de="Haftung für Inhalte" data-en="Liability for content">Haftung für Inhalte</h3>
+      <p data-de="Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen." data-en="The contents of our pages have been created with the greatest care. However, we cannot guarantee the accuracy, completeness and timeliness of the content.">
+        Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+      </p>
+
+      <h3 data-de="Haftung für Links" data-en="Liability for links">Haftung für Links</h3>
+      <p data-de="Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen." data-en="Our offer contains links to external third-party websites over whose content we have no influence. Therefore, we cannot accept any liability for this third-party content.">
+        Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Datenschutz Modal -->
+<div class="modal-overlay" id="datenschutzModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
+      <button class="modal-close" onclick="closeDatenschutz()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content legal-content">
+      <h2 data-de="1. Datenschutz auf einen Blick" data-en="1. Data protection at a glance">1. Datenschutz auf einen Blick</h2>
+      
+      <h3 data-de="Allgemeine Hinweise" data-en="General information">Allgemeine Hinweise</h3>
+      <p data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen." data-en="The following information provides a simple overview of what happens to your personal data when you visit our website.">
+        Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.
+      </p>
+
+      <h3 data-de="Datenerfassung auf unserer Website" data-en="Data collection on our website">Datenerfassung auf unserer Website</h3>
+      <p>
+        <strong data-de="Wer ist verantwortlich für die Datenerfassung auf dieser Website?" data-en="Who is responsible for data collection on this website?">Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong>
+      </p>
+      <p data-de="Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum entnehmen." data-en="Data processing on this website is carried out by the website operator. You can find their contact details in the imprint.">
+        Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum entnehmen.
+      </p>
+
+      <h2 data-de="2. Google Analytics" data-en="2. Google Analytics">2. Google Analytics</h2>
+      <p data-de="Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Ireland Limited. Die erfassten Daten werden anonymisiert." data-en="This website uses Google Analytics, a web analytics service provided by Google Ireland Limited. The collected data is anonymized.">
+        Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Ireland Limited. Die erfassten Daten werden anonymisiert.
+      </p>
+
+      <h3 data-de="Art und Umfang der Verarbeitung" data-en="Type and scope of processing">Art und Umfang der Verarbeitung</h3>
+      <ul>
+        <li data-de="Anonymisierte IP-Adressen" data-en="Anonymized IP addresses">Anonymisierte IP-Adressen</li>
+        <li data-de="Browsertyp/-version" data-en="Browser type/version">Browsertyp/-version</li>
+        <li data-de="Verwendetes Betriebssystem" data-en="Operating system used">Verwendetes Betriebssystem</li>
+        <li data-de="Referrer URL" data-en="Referrer URL">Referrer URL</li>
+        <li data-de="Uhrzeit der Serveranfrage" data-en="Time of server request">Uhrzeit der Serveranfrage</li>
+      </ul>
+
+      <h2 data-de="3. Ihre Rechte" data-en="3. Your rights">3. Ihre Rechte</h2>
+      <p data-de="Sie haben jederzeit das Recht:" data-en="You have the right at any time:">Sie haben jederzeit das Recht:</p>
+      <ul>
+        <li data-de="Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)" data-en="Information about your stored data (Art. 15 GDPR)">Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
+        <li data-de="Berichtigung unrichtiger Daten (Art. 16 DSGVO)" data-en="Correction of incorrect data (Art. 16 GDPR)">Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
+        <li data-de="Löschung Ihrer Daten (Art. 17 DSGVO)" data-en="Deletion of your data (Art. 17 GDPR)">Löschung Ihrer Daten (Art. 17 DSGVO)</li>
+        <li data-de="Einschränkung der Verarbeitung (Art. 18 DSGVO)" data-en="Restriction of processing (Art. 18 GDPR)">Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+        <li data-de="Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)" data-en="Objection to processing (Art. 21 GDPR)">Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+      </ul>
+
+      <h2 data-de="4. Cookies" data-en="4. Cookies">4. Cookies</h2>
+      <p data-de="Unsere Website verwendet Cookies. Cookies helfen uns dabei, unser Angebot nutzerfreundlicher und sicherer zu machen." data-en="Our website uses cookies. Cookies help us to make our offer more user-friendly and secure.">
+        Unsere Website verwendet Cookies. Cookies helfen uns dabei, unser Angebot nutzerfreundlicher und sicherer zu machen.
+      </p>
+
+      <h2 data-de="5. Kontakt" data-en="5. Contact">5. Kontakt</h2>
+      <p data-de="Bei Fragen wenden Sie sich bitte an:" data-en="If you have any questions, please contact:">
+        Bei Fragen wenden Sie sich bitte an:
+      </p>
+      <p>
+        E-Mail: datenschutz@ai-finder.de
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-content">
+    <div>
+      <h3 data-de="🍪 Cookies & Datenschutz" data-en="🍪 Cookies & Privacy">🍪 Cookies & Datenschutz</h3>
+      <p data-de="Wir nutzen Google Analytics zur Verbesserung der Nutzererfahrung. Deine Daten werden anonymisiert." data-en="We use Google Analytics to improve user experience. Your data is anonymized.">
+        Wir nutzen Google Analytics zur Verbesserung der Nutzererfahrung. Deine Daten werden anonymisiert.
+      </p>
+    </div>
+    <div class="cookie-buttons">
+      <button class="cookie-btn primary" id="acceptCookies">
+        <i class="fas fa-check"></i>
+        <span data-de="Akzeptieren" data-en="Accept">Akzeptieren</span>
+      </button>
+      <button class="cookie-btn secondary" id="declineCookies">
+        <i class="fas fa-times"></i>
+        <span data-de="Ablehnen" data-en="Decline">Ablehnen</span>
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
-/* -------- Data (sample) -------- */
-const tools = [
-  {id:1,name:'MelodyAI',cat:'Audio',price:'Free',rating:4.6,tagline:'Generate music with AI',desc:'Create songs, loops and stems.',pros:{en:['Great for prototyping','Large sound library'],de:['Toll zum Prototyping','Große Soundbibliothek']},cons:{en:['Limited mastering'],de:['Begrenztes Mastering']}},
-  {id:2,name:'ClipVision',cat:'Image',price:'$9/mo',rating:4.2,tagline:'Image tool for creators',desc:'Fast image transforms & upscaling',pros:{en:['Fast results'],de:['Schnelle Ergebnisse']},cons:{en:['Watermark on free'],de:['Wasserzeichen in Free']}},
-  {id:3,name:'CodeWhisper',cat:'Code',price:'$29/mo',rating:4.8,tagline:'AI assistant for developers',desc:'Autocomplete & refactor',pros:{en:['Boosts productivity'],de:['Produktivitätssteigerung']},cons:{en:['Occasional hallucinations'],de:['Gelegentliche Fehler']}},
-  {id:4,name:'SummarizePro',cat:'Text',price:'Free',rating:4.3,tagline:'Smart text summarizer',desc:'Condense articles, meetings & docs',pros:{en:['Accurate summaries'],de:['Genaue Zusammenfassungen']},cons:{en:['Needs context sometimes'],de:['Benötigt manchmal Kontext']}},
-  {id:5,name:'DataSmith',cat:'Analytics',price:'Contact',rating:4.5,tagline:'Analytics for product teams',desc:'Dashboards and AI insights',pros:{en:['Deep insights'],de:['Tiefe Einblicke']},cons:{en:['Enterprise pricing']}}
-];
+// ===== GLOBALE VARIABLEN =====
+let aiTools = [];
+let currentLang = 'de';
+let currentCategory = 'all';
+let currentPriceFilter = 'all';
+let currentSort = 'votes';
+let searchQuery = '';
 
-let currentLang = 'en'; // 'en' or 'de'
-let currentCategory = 'All';
-const categories = ['All',...new Set(tools.map(t=>t.cat))];
-
-/* -------- Utilities -------- */
-const $ = (sel, ctx=document) => ctx.querySelector(sel);
-const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
-
-/* -------- Init UI -------- */
-function init(){
-  renderPills();
-  renderTools();
-  attachEvents();
-  renderSuggestions();
-  // accessibility: ensure first pill is active
-  setActivePill(currentCategory);
-}
-init();
-
-/* -------- Pill Nav (horizontal scrolling) -------- */
-function renderPills(){
-  const nav = $('#pillNav');
-  nav.innerHTML = '';
-  categories.forEach(cat=>{
-    const btn = document.createElement('button');
-    btn.className = 'pill';
-    btn.textContent = cat;
-    btn.dataset.cat = cat;
-    if(cat===currentCategory) btn.classList.add('active');
-    btn.addEventListener('click', ()=>{ filterByCategory(cat); });
-    nav.appendChild(btn);
-  });
-}
-
-/* -------- Tools rendering (high-density) -------- */
-function renderTools(filter=''){
-  const wrap = $('#toolsWrap');
-  const q = filter.trim().toLowerCase();
-  const list = tools.filter(t=>{
-    if(currentCategory!=='All' && t.cat!==currentCategory) return false;
-    if(!q) return true;
-    return (t.name+t.tagline+t.desc+t.cat).toLowerCase().includes(q);
-  });
-  // high-density list: show compact cards
-  wrap.innerHTML = '';
-  list.forEach(t=>{
-    const c = document.createElement('article');
-    c.className = 'card';
-    c.setAttribute('data-id', t.id);
-    c.innerHTML = `
-      <div class="top">
-        <div class="avatar">${t.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
-        <div class="meta">
-          <div class="name">${t.name}</div>
-          <div class="cat">${t.tagline} · ${t.cat}</div>
-          <div class="stats"><span class="price">${t.price}</span> · <span>${t.rating}★</span></div>
-        </div>
-        <div class="badge desktop-only">${t.cat}</div>
-      </div>
-      <div class="quickGlass">
-        <button class="openBtn" data-id="${t.id}">${currentLang=='en'?'Open':'Öffnen'}</button>
-        <button class="favBtn" data-id="${t.id}">${currentLang=='en'?'Save':'Speichern'}</button>
-        <button class="visitBtn" data-id="${t.id}">${currentLang=='en'?'Visit':'Besuchen'}</button>
-      </div>
-    `;
-    // hover preview: subtle expansion implemented by CSS transitions
-    c.addEventListener('mouseenter', ()=> showPreview(c,t));
-    c.addEventListener('mouseleave', ()=> hidePreview(c));
-    c.querySelectorAll('.openBtn,.favBtn,.visitBtn').forEach(b=>{
-      b.addEventListener('click', (e)=> {
-        e.stopPropagation();
-        const id = +b.dataset.id;
-        if(b.classList.contains('openBtn')) openToolDetail(id);
-        else alert((currentLang=='en'?'Saved ':'Gespeichert ')+t.name);
-      })
+// ===== DATEN LADEN =====
+async function loadAITools() {
+  try {
+    const response = await fetch('./data.json');
+    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+    aiTools = await response.json();
+    
+    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    aiTools.forEach(tool => {
+      if (savedVotes[tool.id]) {
+        tool.votes = savedVotes[tool.id];
+      }
     });
-    c.addEventListener('click', ()=> openToolDetail(t.id));
-    wrap.appendChild(c);
-  });
-  // when empty
-  if(list.length===0){
-    wrap.innerHTML = '<div style="color:var(--muted);padding:18px;border-radius:10px;background:rgba(255,255,255,0.02)">No tools found</div>';
+    
+    addAIRecommendations();
+    renderTopCharts();
+    renderTools();
+    updateToolCount();
+    document.getElementById('loading').style.display = 'none';
+  } catch (error) {
+    console.error('Fehler beim Laden:', error);
+    document.getElementById('loading').innerHTML = `
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>Fehler beim Laden. Bitte neu laden.</p>
+    `;
+    document.getElementById('loading').style.display = 'block';
   }
 }
 
-/* -------- Hover preview (desktop) -------- */
-function showPreview(card,t){
-  if(window.innerWidth < 720) return;
-  // create overlay glass if not exists
-  if(card._preview) return;
-  const p = document.createElement('div');
-  p.style.position='absolute';
-  p.style.right='12px';
-  p.style.top='12px';
-  p.style.width='220px';
-  p.style.borderRadius='10px';
-  p.style.padding='10px';
-  p.style.background='linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02))';
-  p.style.backdropFilter='blur(6px)';
-  p.style.boxShadow='0 10px 30px rgba(2,6,23,0.6)';
-  p.style.fontSize='13px';
-  p.style.transition='transform .28s var(--easing), opacity .28s var(--easing)';
-  p.innerHTML = `<div style="font-weight:700;margin-bottom:6px">${t.name}</div>
-    <div style="color:var(--muted);font-size:13px">${t.tagline}</div>
-    <div style="margin-top:8px;font-size:13px" class="small"><strong>${currentLang=='en'?'Pros':'Vorteile'}:</strong> ${escapeHTML((t.pros[currentLang]||t.pros.en).slice(0,2).join(', '))}</div>
-    <div class="small" style="margin-top:6px"><strong>${currentLang=='en'?'Cons':'Nachteile'}:</strong> ${(t.cons && (t.cons[currentLang]||t.cons.en))?escapeHTML((t.cons[currentLang]||t.cons.en)[0]):''}</div>
-    <div style="margin-top:8px;display:flex;gap:8px"><div class="tag">${t.price}</div><div class="tag">${t.rating}★</div></div>`;
-  card.appendChild(p);
-  card._preview = p;
-  setTimeout(()=>{ if(p) p.style.transform='translateY(0)'; },10);
-}
-function hidePreview(card){
-  if(card._preview){ card._preview.remove(); card._preview=null; }
-}
-
-/* -------- Modal & language fix (critical) -------- */
-const modal = $('#modal');
-function openToolDetail(id){
-  const t = tools.find(x=>x.id===id);
-  if(!t) return;
-  // ensure every injected label respects currentLang
-  const labels = {
-    pros: currentLang=='en'?'Pros':'Vorteile',
-    cons: currentLang=='en'?'Cons':'Nachteile',
-    price: currentLang=='en'?'Price':'Preis',
-    rating: currentLang=='en'?'Rating':'Bewertung',
-    category: currentLang=='en'?'Category':'Kategorie',
-    close: currentLang=='en'?'Close':'Schließen'
-  };
-  $('#modalTitle').textContent = t.name;
-  $('#modalTagline').textContent = t.tagline;
-  $('#modalDesc').textContent = t.desc;
-  $('#mPrice').textContent = t.price;
-  $('#mRating').textContent = t.rating + ' ★';
-  $('#mCategory').textContent = t.cat;
-  $('#closeModal').textContent = labels.close + ' ✕';
-  // build pros/cons using currentLang variable
-  const pros = (t.pros && (t.pros[currentLang] || t.pros.en)) || [];
-  const cons = (t.cons && (t.cons[currentLang] || t.cons.en)) || [];
-  const pc = document.createElement('div');
-  pc.innerHTML = `<div style="margin-top:8px"><strong>${labels.pros}:</strong><ul>${pros.map(p=>'<li>'+escapeHTML(p)+'</li>').join('')}</ul></div>
-                  <div style="margin-top:8px"><strong>${labels.cons}:</strong><ul>${cons.map(c=>'<li>'+escapeHTML(c)+'</li>').join('')}</ul></div>`;
-  const existing = $('#modalProsCons');
-  existing.innerHTML = '';
-  existing.appendChild(pc);
-  // footer
-  $('#mFooter').textContent = currentLang=='en'?'Delivered with care':'Mit Sorgfalt bereitgestellt';
-  modal.classList.add('show');
-}
-
-/* -------- Closing modal -------- */
-$('#closeModal').addEventListener('click', ()=> modal.classList.remove('show'));
-modal.addEventListener('click', (e)=> { if(e.target===modal) modal.classList.remove('show'); });
-
-/* -------- Filtering & pills -------- */
-function filterByCategory(cat){
-  currentCategory = cat;
-  setActivePill(cat);
-  renderTools($('#mainSearch').value || '');
-}
-function setActivePill(cat){
-  $$('.pill').forEach(p=>p.classList.toggle('active', p.dataset.cat===cat));
-  // ensure pill is visible (smooth scroll)
-  const active = $$('.pill').find(p=>p.dataset.cat===cat);
-  if(active) active.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
-}
-
-/* -------- Search (intent-aware) -------- */
-const mainSearch = $('#mainSearch');
-mainSearch.addEventListener('input', (e)=>{
-  const v = e.target.value;
-  // intent detection: if input matches a category -> switch
-  categories.forEach(c=>{
-    if(v.trim().toLowerCase()===c.toLowerCase()) { filterByCategory(c); return; }
-  });
-  renderTools(v);
-});
-mainSearch.addEventListener('keydown', (e)=>{
-  if(e.key==='Escape') mainSearch.blur();
-});
-
-/* -------- Spotlight (Cmd/Ctrl+K) -------- */
-const spotlight = $('#spotlight');
-const spotInput = $('#spotInput');
-const suggestionsEl = $('#suggestions');
-function openSpotlight(initial=''){
-  spotlight.classList.add('show');
-  spotInput.value = initial;
-  setTimeout(()=> spotInput.focus(),50);
-  renderSuggestions();
-}
-function closeSpotlight(){ spotlight.classList.remove('show'); spotInput.value=''; }
-document.addEventListener('keydown', (e)=>{
-  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openSpotlight(); }
-  if(e.key==='Escape') closeSpotlight();
-});
-spotInput.addEventListener('input', (e)=>{
-  const q = e.target.value.trim().toLowerCase();
-  // if matches category exactly, jump to category
-  const match = categories.find(c=>c.toLowerCase()===q);
-  if(match){ filterByCategory(match); closeSpotlight(); mainSearch.value=''; return; }
-  // else highlight matching tools
-  renderTools(q);
-});
-function renderSuggestions(){
-  suggestionsEl.innerHTML = '';
-  const intents = ['music','image','code','text','analytics','summarize'];
-  intents.forEach(i=>{
-    const s = document.createElement('div');
-    s.className='suggest';
-    s.textContent = i;
-    s.addEventListener('click', ()=>{ openSpotlight(i); spotInput.value=i; spotInput.dispatchEvent(new Event('input')); });
-    suggestionsEl.appendChild(s);
+// ===== AI EMPFEHLUNGEN =====
+function addAIRecommendations() {
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  
+  aiTools.forEach(tool => {
+    let score = 0;
+    if (tool.rating >= 4.7) score += 3;
+    if (tool.votes > 50) score += 2;
+    if (tool.category === 'text' || tool.category === 'image') score += 1;
+    if (tool.hasLifetimeDeal) score += 2;
+    if (userHistory.includes(tool.category)) score += 2;
+    if (favorites.includes(tool.id)) score += 3;
+    
+    tool.aiScore = score;
+    tool.isAIRecommended = score >= 6;
   });
 }
 
-/* -------- Focus Mode: fade header when scrolling -------- */
-let lastScroll = 0;
-window.addEventListener('scroll', ()=>{
-  const y = window.scrollY;
-  const header = $('#header');
-  if(y>80) header.classList.add('shrink'); else header.classList.remove('shrink');
-  // micro-focus: fade non-essential
-  const content = $('#content');
-  if(y>40) document.body.classList.add('focused'); else document.body.classList.remove('focused');
-});
+// ===== TOP 5 CHARTS =====
+function renderTopCharts() {
+  const topTools = [...aiTools]
+    .sort((a, b) => (b.votes || 0) - (a.votes || 0))
+    .slice(0, 5);
 
-/* -------- Micro-interactions: animate filtering -- just add tiny delay for flow -------- */
-let filterTimeout;
-function animateFilter(cb){
-  // fluidness: fade out, update, fade in
-  const wrap = $('#toolsWrap');
-  wrap.style.transition='opacity .28s var(--easing), transform .38s var(--easing)';
-  wrap.style.opacity='0.12';
-  wrap.style.transform='translateY(8px)';
-  clearTimeout(filterTimeout);
-  filterTimeout = setTimeout(()=>{ cb(); wrap.style.opacity='1'; wrap.style.transform='translateY(0)'; }, 180);
+  const topChartsHTML = topTools.map((tool, index) => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const rankClass = 'rank-' + (index + 1);
+    const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
+    const aiRecommended = tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : '';
+    
+    return `
+      <div class="chart-card" onclick="openToolDetail('${tool.id}')">
+        ${aiRecommended}
+        <div class="chart-header">
+          <div class="chart-rank ${rankClass}">${index + 1}</div>
+          <div class="chart-votes">
+            <i class="fas fa-arrow-up"></i>
+            <span>${tool.votes || 0}</span>
+          </div>
+        </div>
+        <div class="chart-category">${getCategoryLabel(tool.category)}</div>
+        <div class="chart-tool-name">${tool.name}</div>
+        <div class="chart-price">💰 ${tool.priceDisplay}${ltdBadge}</div>
+        <div class="chart-description">${description}</div>
+        <div class="chart-actions" onclick="event.stopPropagation()">
+          <button class="vote-btn up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+          <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+            <i class="fas fa-star"></i>
+          </button>
+          <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+            <i class="fas fa-balance-scale"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('topCharts').innerHTML = topChartsHTML;
+  updateLanguage();
 }
 
-/* Override renderTools to use animateFilter */
-const _renderTools = renderTools;
-renderTools = (q='')=> animateFilter(()=>_renderTools(q));
+// ===== ALLE TOOLS =====
+function renderTools() {
+  let filteredTools = [...aiTools];
 
-/* -------- small helpers -------- */
-function escapeHTML(s){
-  if(!s) return '';
-  return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  if (currentCategory !== 'all') {
+    filteredTools = filteredTools.filter(tool => tool.category === currentCategory);
+  }
+
+  if (currentPriceFilter !== 'all') {
+    filteredTools = filteredTools.filter(tool => tool.price === currentPriceFilter);
+  }
+
+  if (searchQuery) {
+    filteredTools = filteredTools.filter(tool => {
+      const searchLower = searchQuery.toLowerCase();
+      return tool.name.toLowerCase().includes(searchLower) ||
+             tool.description.de.toLowerCase().includes(searchLower) ||
+             tool.description.en.toLowerCase().includes(searchLower) ||
+             tool.category.toLowerCase().includes(searchLower);
+    });
+  }
+
+  if (currentSort === 'votes') {
+    filteredTools.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  } else if (currentSort === 'name') {
+    filteredTools.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (currentSort === 'rating') {
+    filteredTools.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  }
+
+  const toolsHTML = filteredTools.map(tool => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
+    
+    return `
+      <div class="compact-tool-row" onclick="openToolDetail('${tool.id}')">
+        <div class="tool-vote-compact" onclick="event.stopPropagation()">
+          <div class="vote-count">${tool.votes || 0}</div>
+          <div class="vote-buttons-compact">
+            <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+              <i class="fas fa-arrow-up"></i>
+            </button>
+            <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+              <i class="fas fa-arrow-down"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="tool-info-compact">
+          <div class="tool-category-compact">${getCategoryLabel(tool.category)}</div>
+          <div class="tool-name-compact">
+            ${tool.name}
+            ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary);" title="AI Recommended"></i>' : ''}
+          </div>
+          <div class="tool-desc-compact">${description}</div>
+        </div>
+        
+        <div class="tool-meta-compact" onclick="event.stopPropagation()">
+          <div class="tool-price-compact">${tool.priceDisplay}${ltdBadge}</div>
+          <div class="tool-actions-compact">
+            <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+              <i class="fas fa-star"></i>
+            </button>
+            <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+              <i class="fas fa-balance-scale"></i>
+            </button>
+            <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-link-compact" onclick="trackToolClick('${tool.id}')">
+              <span data-de="Öffnen" data-en="Open">Öffnen</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('toolsGrid').innerHTML = toolsHTML;
+  document.getElementById('toolCount').textContent = filteredTools.length;
+  updateLanguage();
 }
 
-/* -------- Preview handlers (mobile friendly) -------- */
-function attachEvents(){
-  // language toggle
-  $('#langBtn').addEventListener('click', ()=>{
-    currentLang = currentLang==='en'?'de':'en';
-    $('#langBtn').textContent = currentLang.toUpperCase();
-    // rerender all dynamic labels and content
-    renderTools($('#mainSearch').value || '');
-    if(modal.classList.contains('show')){
-      // re-open last modal content if open by re-rendering text (best-effort)
-      const title = $('#modalTitle').textContent;
-      const t = tools.find(x=>x.name===title);
-      if(t) openToolDetail(t.id);
+// ===== TOOL DETAIL MODAL =====
+function openToolDetail(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  trackUserInteraction(tool.category);
+
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
+  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
+  
+  const pros = tool.pros || [];
+  const cons = tool.cons || [];
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  const useCases = tool.useCases || [];
+  
+  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
+  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="feature-tag"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+  
+  const alternativesHTML = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    if (!altTool) return '';
+    return `
+      <div class="alternative-card" onclick="openToolDetail('${altTool.id}')">
+        <div class="alternative-card-name">${altTool.name}</div>
+        <div class="alternative-card-category">${getCategoryLabel(altTool.category)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const useCasesText = currentLang === 'de' 
+    ? useCases.map(uc => getUseCaseLabelDE(uc)).join(', ')
+    : useCases.map(uc => getUseCaseLabelEN(uc)).join(', ');
+
+  const modalContent = `
+    <div class="tool-detail-hero">
+      <div class="tool-detail-icon">
+        ${getCategoryIcon(tool.category)}
+      </div>
+      <div class="tool-detail-info">
+        <h2 class="tool-detail-name">${tool.name}</h2>
+        <div class="tool-detail-meta">
+          <span class="tool-badge category">
+            <i class="fas fa-tag"></i>
+            ${getCategoryLabel(tool.category)}
+          </span>
+          <span class="tool-badge price">
+            <i class="fas fa-dollar-sign"></i>
+            ${tool.priceDisplay}
+          </span>
+          <span class="tool-badge rating">
+            <i class="fas fa-star"></i>
+            ${tool.rating}/5
+          </span>
+          ${tool.hasLifetimeDeal ? '<span class="ltd-badge">Lifetime Deal</span>' : ''}
+        </div>
+        <p class="tool-description-full">${seoDesc}</p>
+      </div>
+    </div>
+
+    ${pros.length > 0 || cons.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-balance-scale"></i> <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span></h3>
+      <div class="pros-cons-grid">
+        ${pros.length > 0 ? `
+        <div class="pros-list">
+          <h4><i class="fas fa-check-circle"></i> <span data-de="Vorteile" data-en="Pros">Vorteile</span></h4>
+          <ul>${prosHTML}</ul>
+        </div>
+        ` : ''}
+        ${cons.length > 0 ? `
+        <div class="cons-list">
+          <h4><i class="fas fa-times-circle"></i> <span data-de="Nachteile" data-en="Cons">Nachteile</span></h4>
+          <ul>${consHTML}</ul>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
+
+    ${features.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-rocket"></i> <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span></h3>
+      <div class="feature-tags">
+        ${featuresHTML}
+      </div>
+    </div>
+    ` : ''}
+
+    ${useCases.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-lightbulb"></i> <span data-de="Beste Anwendungsfälle" data-en="Best Use Cases">Beste Anwendungsfälle</span></h3>
+      <p style="color: var(--text-secondary); line-height: 1.6;">${useCasesText}</p>
+    </div>
+    ` : ''}
+
+    ${alternatives.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-exchange-alt"></i> <span data-de="Vergleichbare Tools" data-en="Similar Tools">Vergleichbare Tools</span></h3>
+      <div class="alternatives-grid">
+        ${alternativesHTML}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="tool-actions-modal">
+      <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="btn-primary" onclick="trackToolClick('${tool.id}')">
+        <i class="fas fa-external-link-alt"></i>
+        <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
+      </a>
+      <button class="btn-secondary" onclick="shareToolDirectly('${tool.id}')">
+        <i class="fas fa-share-alt"></i>
+        <span data-de="Teilen" data-en="Share">Teilen</span>
+      </button>
+    </div>
+  `;
+
+  document.getElementById('modalTitle').textContent = seoTitle;
+  document.getElementById('modalContent').innerHTML = modalContent;
+  document.getElementById('toolModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  updateLanguage();
+}
+
+function closeToolModal() {
+  document.getElementById('toolModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== IMPRESSUM & DATENSCHUTZ =====
+function openImpressum() {
+  document.getElementById('impressumModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeImpressum() {
+  document.getElementById('impressumModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openDatenschutz() {
+  document.getElementById('datenschutzModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeDatenschutz() {
+  document.getElementById('datenschutzModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
     }
   });
-  // search Enter key: close spotlight if open
-  mainSearch.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); }});
-  // keyboard nav escape
-  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ closeSpotlight(); modal.classList.remove('show'); } });
+});
+
+// Close modals on ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+// ===== INTELLIGENTE FUNKTIONEN =====
+function trackUserInteraction(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
 }
 
-/* -------- Accessibility: focus outlines -------- */
-document.addEventListener('keydown', function(e){ document.documentElement.classList.add('usingKeyboard'); }, {once:true});
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] || 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
+}
 
-/* -------- Initial focus mode state -------- */
-window.dispatchEvent(new Event('scroll'));
+function shareToolDirectly(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const shareData = {
+    title: tool.name + ' - AI Finder',
+    text: currentLang === 'de' ? tool.description.de : tool.description.en,
+    url: window.location.href + '?tool=' + toolId
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareData.url);
+    alert(currentLang === 'de' ? 'Link kopiert!' : 'Link copied!');
+  }
+}
+
+// ===== VOTING SYSTEM =====
+function vote(toolId, type) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  const userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
+
+  if (userVotes[toolId] === type) {
+    if (type === 'up') tool.votes--;
+    else tool.votes++;
+    delete userVotes[toolId];
+    tool.userVote = null;
+  } else {
+    if (userVotes[toolId] === 'up') tool.votes--;
+    else if (userVotes[toolId] === 'down') tool.votes++;
+    
+    if (type === 'up') tool.votes++;
+    else tool.votes--;
+    
+    userVotes[toolId] = type;
+    tool.userVote = type;
+  }
+
+  savedVotes[toolId] = tool.votes;
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  localStorage.setItem('userVotes', JSON.stringify(userVotes));
+
+  renderTopCharts();
+  renderTools();
+}
+
+// ===== FAVORITEN & VERGLEICH =====
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
+}
+
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+  } else {
+    favorites.push(toolId);
+  }
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  renderTopCharts();
+  renderTools();
+}
+
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+    } else {
+      alert(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!');
+      return;
+    }
+  }
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  renderTopCharts();
+  renderTools();
+}
+
+// ===== HELPER FUNCTIONS =====
+function getCategoryIcon(category) {
+  const icons = {
+    text: '✍️',
+    image: '🎨',
+    code: '💻',
+    video: '🎬',
+    audio: '🎵'
+  };
+  return icons[category] || '🤖';
+}
+
+function getCategoryLabel(category) {
+  const labels = {
+    de: {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    },
+    en: {
+      text: 'Text',
+      image: 'Image',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    }
+  };
+  return labels[currentLang][category] || category;
+}
+
+function getUseCaseLabelDE(useCase) {
+  const labels = {
+    'content-creation': 'Content-Erstellung',
+    'marketing': 'Marketing',
+    'development': 'Entwicklung',
+    'design': 'Design',
+    'productivity': 'Produktivität',
+    'education': 'Bildung',
+    'business': 'Business',
+    'entertainment': 'Unterhaltung'
+  };
+  return labels[useCase] || useCase;
+}
+
+function getUseCaseLabelEN(useCase) {
+  const labels = {
+    'content-creation': 'Content Creation',
+    'marketing': 'Marketing',
+    'development': 'Development',
+    'design': 'Design',
+    'productivity': 'Productivity',
+    'education': 'Education',
+    'business': 'Business',
+    'entertainment': 'Entertainment'
+  };
+  return labels[useCase] || useCase;
+}
+
+function updateToolCount() {
+  document.getElementById('toolCount').textContent = aiTools.length;
+}
+
+// ===== SEARCH FUNCTIONALITY =====
+const searchBox = document.getElementById('searchBox');
+const searchSuggestions = document.getElementById('searchSuggestions');
+
+searchBox.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderTools();
+  
+  if (searchQuery.length > 1) {
+    const matches = aiTools.filter(tool => 
+      tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.en.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 5);
+    
+    if (matches.length > 0) {
+      searchSuggestions.innerHTML = matches.map(tool => `
+        <div class="suggestion-item" onclick="openToolDetail('${tool.id}'); searchSuggestions.classList.remove('active');">
+          <span class="suggestion-icon">${getCategoryIcon(tool.category)}</span>
+          <span>${tool.name}</span>
+        </div>
+      `).join('');
+      searchSuggestions.classList.add('active');
+    } else {
+      searchSuggestions.classList.remove('active');
+    }
+  } else {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-container')) {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+// Search hints
+document.querySelectorAll('.search-hint-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const query = chip.getAttribute('data-query');
+    searchBox.value = query;
+    searchQuery = query;
+    renderTools();
+  });
+});
+
+// Surprise button
+document.getElementById('surpriseBtn').addEventListener('click', () => {
+  const randomTool = aiTools[Math.floor(Math.random() * aiTools.length)];
+  openToolDetail(randomTool.id);
+});
+
+// ===== FILTER FUNCTIONALITY =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCategory = btn.getAttribute('data-category');
+    renderTools();
+  });
+});
+
+document.querySelectorAll('.quick-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const filter = card.getAttribute('data-filter');
+    currentCategory = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn[data-category="' + filter + '"]').classList.add('active');
+    renderTools();
+    window.scrollTo({ top: document.querySelector('.tools-container').offsetTop - 20, behavior: 'smooth' });
+  });
+});
+
+document.getElementById('priceFilter').addEventListener('change', (e) => {
+  currentPriceFilter = e.target.value;
+  renderTools();
+});
+
+document.getElementById('sortFilter').addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderTools();
+});
+
+// ===== LANGUAGE SWITCH =====
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+  updateLanguage();
+  renderTopCharts();
+  renderTools();
+});
+
+function updateLanguage() {
+  document.querySelectorAll('[data-de]').forEach(el => {
+    if (el.hasAttribute('placeholder')) {
+      el.placeholder = currentLang === 'de' ? el.getAttribute('data-placeholder-de') : el.getAttribute('data-placeholder-en');
+    } else {
+      el.textContent = currentLang === 'de' ? el.getAttribute('data-de') : el.getAttribute('data-en');
+    }
+  });
+}
+
+// ===== COOKIE BANNER =====
+const cookieBanner = document.getElementById('cookieBanner');
+const acceptCookies = document.getElementById('acceptCookies');
+const declineCookies = document.getElementById('declineCookies');
+
+if (!localStorage.getItem('cookieConsent')) {
+  setTimeout(() => {
+    cookieBanner.classList.add('show');
+  }, 1000);
+}
+
+acceptCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'accepted');
+  cookieBanner.classList.remove('show');
+});
+
+declineCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'declined');
+  cookieBanner.classList.remove('show');
+});
+
+// ===== INIT =====
+loadAITools();
 </script>
-</body>
-</html>
-'''
-open('/mnt/data/ai_finder_2026_refactor.html','w',encoding='utf-8').write(html)
-print("Refactored file created at /mnt/data/ai_finder_2026_refactor.html\n\nPreview (first 40 lines):\n")
-with open('/mnt/data/ai_finder_2026_refactor.html','r',encoding='utf-8') as f:
-    for i,ln in enumerate(f):
-        if i<40:
-            print(ln.rstrip())
-        else:
-            break
 
-# Provide download hint for user
-print("\n[Download the refactored single-file project]")
+</body>
