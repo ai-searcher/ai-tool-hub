@@ -26,6 +26,8 @@
 <meta id="metaDynamicTitle" property="og:title" content="AI Finder 2026 - Finde sofort dein perfektes KI-Tool">
 <meta id="metaDynamicDescription" name="description" property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, Top 5 Charts, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -2519,6 +2521,155 @@ body::before {
 .fade-out {
   animation: fadeOut 0.5s ease forwards;
 }
+/* ===== LIVE BADGE & ANIMATIONS ===== */
+/* Live Badge Styling */
+.live-badge {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4757;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.live-pulse {
+  font-size: 0.6rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Vote Feedback */
+.vote-feedback {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--matrix-green), #00cc7a);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 100;
+  animation: slideDown 0.3s ease, fadeOut 0.3s ease 1.7s forwards;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideDown {
+  from { top: -50px; opacity: 0; }
+  to { top: -30px; opacity: 1; }
+}
+
+/* Price Update Notification */
+.price-update-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  color: var(--void-black);
+  padding: 15px 25px;
+  border-radius: var(--radius-tech);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  box-shadow: var(--shadow-glow);
+  animation: slideInRight 0.5s ease;
+}
+
+.price-update-notification.fade-out {
+  animation: fadeOutRight 0.5s ease forwards;
+}
+
+@keyframes slideInRight {
+  from { right: -300px; opacity: 0; }
+  to { right: 20px; opacity: 1; }
+}
+
+@keyframes fadeOutRight {
+  from { right: 20px; opacity: 1; }
+  to { right: -300px; opacity: 0; }
+}
+
+/* Updated Chart Cards with detailed votes */
+.chart-votes-detailed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--tech-silver);
+  margin-top: 5px;
+}
+
+.vote-count-up {
+  color: var(--matrix-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vote-count-down {
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Connection Status */
+.connection-status {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: var(--radius-tech);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  animation: slideInDown 0.5s ease;
+}
+
+.connection-status.connected {
+  background: rgba(46, 204, 113, 0.2);
+  border: 1px solid rgba(46, 204, 113, 0.5);
+  color: #2ecc71;
+}
+
+.connection-status.disconnected {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  color: #e74c3c;
+}
+
+.connection-status.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.5s, transform 0.5s;
+}
 </style>
 </head>
 <body>
@@ -2933,7 +3084,14 @@ body::before {
 </div>
 </section>
 <section class="top-charts-section">
-<div class="section-title"><i class="fas fa-trophy"></i> <span id="topChartsTitle" data-de="Top 5 KI-Tools - Community Ranking" data-en="Top 5 AI Tools - Community Ranking"></span></div>
+<div class="section-title">
+  <i class="fas fa-trophy"></i> 
+  <span id="topChartsTitle" data-de="Top 5 KI-Tools - Community Ranking" data-en="Top 5 AI Tools - Community Ranking"></span>
+  <span class="live-badge" id="liveBadge">
+    <i class="fas fa-circle live-pulse"></i>
+    <span data-de="Live" data-en="Live"></span>
+  </span>
+</div>
 <div class="top-charts" id="topCharts"></div>
 </section>
 <section class="tools-container">
@@ -2966,6 +3124,16 @@ body::before {
 <!-- Help & Feedback Buttons wurden hier entfernt -->
 </footer>
 <script>
+// ===== SUPABASE CONFIGURATION =====
+const SUPABASE_URL = 'https://jdskiihuhhxuvvsmxljs.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_GWL4ZDiLHT_RCRlpSFKk9w_Cl2iriC_';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===== LIVE DATA VARIABLES =====
+let liveUpdateInterval;
+let lastUpdateTime = null;
+let isLiveConnected = false;
+
 // ===== SPRACHSYSTEM =====
 let lang = 'de';
 const translations = {
@@ -3156,7 +3324,366 @@ function toggleLanguage() {
   updateLanguage(lang);
   document.getElementById('langText').textContent = lang === 'de' ? 'EN' : 'DE';
 }
+// ===== LIVE DATA FUNCTIONS =====
+async function initLiveData() {
+  try {
+    // Test connection
+    const { data, error } = await supabase.from('ai_tools').select('count').limit(1);
+    if (error) throw error;
+    
+    isLiveConnected = true;
+    document.getElementById('liveBadge').style.display = 'flex';
+    updateConnectionStatus();
+    
+    // Start live updates
+    startLiveUpdates();
+    
+    // Load initial data from Supabase
+    await loadLiveToolsData();
+    
+    // Schedule periodic price updates
+    setInterval(checkPriceUpdates, 5 * 60 * 1000); // Every 5 minutes
+    
+  } catch (error) {
+    console.error('Supabase connection failed:', error);
+    isLiveConnected = false;
+    document.getElementById('liveBadge').style.display = 'none';
+    updateConnectionStatus();
+    // Fall back to local data
+    await loadAIToolsData();
+  }
+}
 
+async function loadLiveToolsData() {
+  try {
+    // Load tools with vote counts
+    const { data: toolsData, error: toolsError } = await supabase
+      .from('top_tools_view')
+      .select('*')
+      .order('rank', { ascending: true })
+      .limit(50);
+    
+    if (toolsError) throw toolsError;
+    
+    // Transform data to match our format
+    aiTools = toolsData.map(tool => ({
+      id: tool.id,
+      numericId: tool.id,
+      name: tool.name,
+      category: tool.category,
+      price: tool.price,
+      priceDisplay: tool.price_display,
+      rating: parseFloat(tool.rating),
+      description: {
+        de: tool.description_de || tool.description_en,
+        en: tool.description_en || tool.description_de
+      },
+      features: tool.features || [],
+      link: tool.link,
+      badge: tool.badge,
+      useCases: tool.use_cases || [],
+      votes: tool.net_votes || 0,
+      upvotes: tool.total_upvotes || 0,
+      downvotes: tool.total_downvotes || 0,
+      hasLifetimeDeal: tool.has_lifetime_deal || false,
+      seoTitle: {
+        de: tool.seo_title_de,
+        en: tool.seo_title_en
+      },
+      seoDesc: {
+        de: tool.seo_desc_de,
+        en: tool.seo_desc_en
+      },
+      alternatives: tool.alternatives || [],
+      pros: tool.pros || [],
+      cons: tool.cons || [],
+      pricing: tool.pricing || {},
+      lastUpdated: tool.last_updated,
+      // Load user's personal vote from localStorage
+      userVote: userVotes[tool.id]?.userVote || 0,
+      isFavorite: favorites.includes(tool.id),
+      inCompare: compareTools.includes(tool.id)
+    }));
+    
+    console.log(`Loaded ${aiTools.length} live tools from Supabase`);
+    
+    // Render with new data
+    renderTopCharts();
+    applyFilters();
+    updateLastUpdateTime();
+    
+  } catch (error) {
+    console.error('Error loading live tools:', error);
+    // Fall back to local data
+    await loadAIToolsData();
+  }
+}
+
+function updateConnectionStatus() {
+  const statusIndicator = document.createElement('div');
+  statusIndicator.id = 'connectionStatus';
+  statusIndicator.className = `connection-status ${isLiveConnected ? 'connected' : 'disconnected'}`;
+  statusIndicator.innerHTML = `
+    <i class="fas fa-${isLiveConnected ? 'wifi' : 'exclamation-triangle'}"></i>
+    <span>${isLiveConnected ? 'Live Connected' : 'Using Local Data'}</span>
+  `;
+  
+  const existing = document.getElementById('connectionStatus');
+  if (existing) existing.remove();
+  
+  document.body.appendChild(statusIndicator);
+  
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    if (statusIndicator) statusIndicator.classList.add('fade-out');
+  }, 5000);
+}
+
+function updateLastUpdateTime() {
+  lastUpdateTime = new Date();
+  const timeStr = lastUpdateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('liveBadge').title = `Last updated: ${timeStr}`;
+}
+
+function startLiveUpdates() {
+  // Clear any existing interval
+  if (liveUpdateInterval) clearInterval(liveUpdateInterval);
+  
+  // Update every 30 seconds
+  liveUpdateInterval = setInterval(async () => {
+    if (!isLiveConnected) return;
+    
+    try {
+      // Get latest votes
+      const { data: latestVotes, error } = await supabase
+        .from('top_tools_view')
+        .select('id, net_votes, total_upvotes, total_downvotes')
+        .in('id', aiTools.map(t => t.id));
+      
+      if (error) throw error;
+      
+      // Update local data
+      latestVotes.forEach(voteData => {
+        const tool = aiTools.find(t => t.id === voteData.id);
+        if (tool) {
+          tool.votes = voteData.net_votes || 0;
+          tool.upvotes = voteData.total_upvotes || 0;
+          tool.downvotes = voteData.total_downvotes || 0;
+        }
+      });
+      
+      // Update UI if not on detail view
+      if (!document.getElementById('toolDetailModal').classList.contains('active')) {
+        renderTopCharts();
+        applyFilters();
+        updateLastUpdateTime();
+      }
+      
+      // Pulse live indicator
+      pulseLiveBadge();
+      
+    } catch (error) {
+      console.error('Live update error:', error);
+    }
+  }, 30000); // 30 seconds
+}
+
+function pulseLiveBadge() {
+  const badge = document.getElementById('liveBadge');
+  badge.classList.add('neon-pulse');
+  setTimeout(() => badge.classList.remove('neon-pulse'), 1000);
+}
+
+async function handleLiveVote(toolId, voteType) {
+  if (!isLiveConnected) {
+    // Fallback to localStorage if not connected
+    handleVote(toolId, voteType);
+    return;
+  }
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  // Get user identifier
+  const userId = localStorage.getItem('user_id') || generateUserId();
+  localStorage.setItem('user_id', userId);
+  
+  try {
+    // Check if user already voted
+    const { data: existingVote, error: checkError } = await supabase
+      .from('tool_votes')
+      .select('*')
+      .eq('tool_id', toolId)
+      .eq('user_ip', userId)
+      .single();
+    
+    if (checkError && checkError.code !== 'PGRST116') {
+      // Error other than "not found"
+      console.error('Error checking vote:', checkError);
+      return;
+    }
+    
+    if (existingVote) {
+      // Update existing vote
+      if (existingVote.vote_type === voteType) {
+        // Same vote - remove it
+        const { error: deleteError } = await supabase
+          .from('tool_votes')
+          .delete()
+          .eq('id', existingVote.id);
+        
+        if (!deleteError) {
+          tool.votes -= voteType;
+          tool.userVote = 0;
+          if (voteType === 1) tool.upvotes--;
+          else tool.downvotes--;
+        }
+      } else {
+        // Change vote
+        const { error: updateError } = await supabase
+          .from('tool_votes')
+          .update({ vote_type: voteType })
+          .eq('id', existingVote.id);
+        
+        if (!updateError) {
+          tool.votes += (voteType - existingVote.vote_type) * 2;
+          tool.userVote = voteType;
+          if (existingVote.vote_type === 1) {
+            tool.upvotes--;
+            tool.downvotes += voteType === -1 ? 1 : 0;
+          } else {
+            tool.downvotes--;
+            tool.upvotes += voteType === 1 ? 1 : 0;
+          }
+        }
+      }
+    } else {
+      // New vote
+      const { error: insertError } = await supabase
+        .from('tool_votes')
+        .insert({
+          tool_id: toolId,
+          user_ip: userId,
+          vote_type: voteType
+        });
+      
+      if (!insertError) {
+        tool.votes += voteType;
+        tool.userVote = voteType;
+        if (voteType === 1) tool.upvotes++;
+        else tool.downvotes++;
+      }
+    }
+    
+    // Update local storage
+    userVotes[toolId] = { votes: tool.votes, userVote: tool.userVote };
+    saveUserVotes();
+    
+    // Update UI
+    renderTopCharts();
+    applyFilters();
+    
+    // Show visual feedback
+    showVoteFeedback(toolId, voteType);
+    
+  } catch (error) {
+    console.error('Error submitting vote:', error);
+    // Fallback to local
+    handleVote(toolId, voteType);
+  }
+}
+
+function generateUserId() {
+  return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function showVoteFeedback(toolId, voteType) {
+  const toolElement = document.querySelector(`[data-id="${toolId}"]`);
+  if (toolElement) {
+    const feedback = document.createElement('div');
+    feedback.className = 'vote-feedback';
+    feedback.innerHTML = `
+      <i class="fas fa-${voteType === 1 ? 'thumbs-up' : 'thumbs-down'}"></i>
+      <span>${voteType === 1 ? 'Upvoted!' : 'Downvoted!'}</span>
+    `;
+    toolElement.appendChild(feedback);
+    
+    setTimeout(() => feedback.remove(), 2000);
+  }
+}
+
+async function checkPriceUpdates() {
+  if (!isLiveConnected) return;
+  
+  try {
+    const { data: priceUpdates, error } = await supabase
+      .from('tool_prices')
+      .select('tool_id, price_type, amount, currency, is_lifetime')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    // Group by tool_id
+    const latestPrices = {};
+    priceUpdates.forEach(price => {
+      if (!latestPrices[price.tool_id]) {
+        latestPrices[price.tool_id] = price;
+      }
+    });
+    
+    // Update tools with new prices
+    let updated = false;
+    aiTools.forEach(tool => {
+      if (latestPrices[tool.id]) {
+        const price = latestPrices[tool.id];
+        const oldDisplay = tool.priceDisplay;
+        
+        // Format new price display
+        let newDisplay = '';
+        if (price.amount === 0) {
+          newDisplay = 'Free';
+        } else if (price.is_lifetime) {
+          newDisplay = `Lifetime: ${price.amount}${price.currency}`;
+          tool.hasLifetimeDeal = true;
+        } else {
+          newDisplay = `${price.amount}${price.currency}/month`;
+        }
+        
+        // Update if changed
+        if (tool.priceDisplay !== newDisplay) {
+          tool.priceDisplay = newDisplay;
+          tool.price = price.price_type;
+          updated = true;
+          console.log(`Price updated for ${tool.name}: ${oldDisplay} → ${newDisplay}`);
+        }
+      }
+    });
+    
+    if (updated) {
+      renderTopCharts();
+      applyFilters();
+      showPriceUpdateNotification();
+    }
+    
+  } catch (error) {
+    console.error('Error checking price updates:', error);
+  }
+}
+
+function showPriceUpdateNotification() {
+  const notification = document.createElement('div');
+  notification.className = 'price-update-notification';
+  notification.innerHTML = `
+    <i class="fas fa-sync-alt"></i>
+    <span>Prices have been updated!</span>
+  `;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 500);
+  }, 3000);
+}
 function updateLanguage(language) {
   lang = language;
   const t = translations[lang];
@@ -3303,13 +3830,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupEvents();
   initFilterDropdowns();
   
-  // Externe Daten laden
-  await loadAIToolsData();
+    // Start with live data from Supabase
+  await initLiveData();
   
-  // Nach dem Laden der Daten rendern
-  renderTopCharts();
-  applyFilters();
-  updateActionsBar();
   setTimeout(showCookieBanner, 1000);
 });
 
@@ -3918,28 +4441,54 @@ function highlight(txt, q) {
 function renderTopCharts() {
   const t = translations[lang];
   const container = document.getElementById('topCharts');
+  
+  // Sort by net votes (upvotes - downvotes) combined with rating
   const sortedTools = [...aiTools]
-    .sort((a, b) => (b.votes + b.rating * 10) - (a.votes + a.rating * 10))
+    .sort((a, b) => {
+      const scoreA = (a.votes || 0) + (a.rating * 10);
+      const scoreB = (b.votes || 0) + (b.rating * 10);
+      return scoreB - scoreA;
+    })
     .slice(0, 5);
+  
   container.innerHTML = sortedTools.map((tool, index) => `
     <div class="chart-card">
       <div class="chart-header">
         <div class="chart-rank rank-${index + 1}">${index + 1}</div>
         <div class="chart-votes">
-          <i class="fas fa-thumbs-up"></i>
-          <span>${tool.votes}</span>
+          <i class="fas fa-chart-line"></i>
+          <span>${tool.votes || 0} net votes</span>
         </div>
       </div>
       <div class="chart-tool-name">${tool.name} ${tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : ''}</div>
       <div class="chart-category">${catName(tool.category)}</div>
-      <div class="chart-price">${tool.priceDisplay}</div>
+      <div class="chart-price">
+        ${tool.priceDisplay || 'N/A'}
+        ${tool.lastUpdated ? `<small style="font-size:0.7em; color:var(--tech-silver); display:block;">Updated: ${new Date(tool.lastUpdated).toLocaleDateString()}</small>` : ''}
+      </div>
+      
+      <!-- Detailed vote counts -->
+      <div class="chart-votes-detailed">
+        <div class="vote-count-up">
+          <i class="fas fa-thumbs-up"></i>
+          <span>${tool.upvotes || 0}</span>
+        </div>
+        <div class="vote-count-down">
+          <i class="fas fa-thumbs-down"></i>
+          <span>${tool.downvotes || 0}</span>
+        </div>
+        <div style="flex:1; text-align:right; font-size:0.8em; color:var(--tech-silver)">
+          ${isLiveConnected ? '<i class="fas fa-wifi"></i> Live' : '<i class="fas fa-database"></i> Local'}
+        </div>
+      </div>
+      
       <div class="chart-description">${tool.description[lang]}</div>
       <div class="chart-actions">
         <button class="vote-btn up ${tool.userVote === 1 ? 'active' : ''}" data-id="${tool.id}" data-vote="1">
-          <i class="fas fa-thumbs-up"></i> ${t.helpful}
+          <i class="fas fa-thumbs-up"></i> ${t.helpful} (${tool.upvotes || 0})
         </button>
         <button class="vote-btn down ${tool.userVote === -1 ? 'active' : ''}" data-id="${tool.id}" data-vote="-1">
-          <i class="fas fa-thumbs-down"></i>
+          <i class="fas fa-thumbs-down"></i> (${tool.downvotes || 0})
         </button>
         <button class="favorite-btn ${tool.isFavorite ? 'active' : ''}" data-id="${tool.id}">
           <i class="fas fa-star"></i>
@@ -3950,12 +4499,15 @@ function renderTopCharts() {
       </div>
     </div>
   `).join('');
+  
   container.querySelectorAll('.vote-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleVote(btn.dataset.id, parseInt(btn.dataset.vote)));
+    btn.addEventListener('click', () => handleLiveVote(btn.dataset.id, parseInt(btn.dataset.vote)));
   });
+  
   container.querySelectorAll('.favorite-btn').forEach(btn => {
     btn.addEventListener('click', () => toggleFavorite(btn.dataset.id));
   });
+  
   container.querySelectorAll('.compare-btn').forEach(btn => {
     btn.addEventListener('click', () => toggleCompare(btn.dataset.id));
   });
