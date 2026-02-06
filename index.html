@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://jdskiihuhhxuvvsmxljs.supabase.co; base-uri 'self'; frame-ancestors 'none';">
 <title>AI Finder 2026 - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -23,6 +23,11 @@
 <meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = 'https://jdskiihuhhxuvvsmxljs.supabase.co';
+  const supabaseKey = 'sb_publishable_GWL4ZDiLHT_RCRlpSFKk9w_Cl2iriC_';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -1567,6 +1572,110 @@ body::before {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bg-hover);
 }
+
+/* ===== NEUE CSS-ERWEITERUNGEN FÜR LIVE-FEATURES ===== */
+/* Vote Animation */
+@keyframes votePulse {
+  0% { transform: scale(1); box-shadow: var(--shadow); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+  100% { transform: scale(1); box-shadow: var(--shadow); }
+}
+
+.vote-animation {
+  animation: votePulse 1s ease;
+}
+
+.chart-card.moving-up {
+  border-color: var(--success) !important;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.chart-card.moving-down {
+  border-color: var(--error) !important;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Live Badge */
+.live-badge {
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: 10px;
+  animation: pulse 2s infinite;
+}
+
+/* Supabase Status */
+.supabase-status {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 999;
+}
+
+.supabase-status.online {
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.supabase-status.offline {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 9999;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.notification.success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.notification.error {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.notification.info {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.notification-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1rem;
+}
 </style>
 </head>
 <body>
@@ -1666,6 +1775,7 @@ body::before {
   <h2 class="section-title">
     <i class="fas fa-fire"></i>
     <span data-de="Top 5 KI-Tools" data-en="Top 5 AI Tools">Top 5 KI-Tools</span>
+    <span class="live-badge">LIVE</span>
   </h2>
   <div class="top-charts" id="topCharts">
     <!-- Dynamically filled -->
@@ -1821,7 +1931,7 @@ body::before {
     </div>
     <div class="modal-content legal-content">
       <h2 data-de="1. Datenschutz auf einen Blick" data-en="1. Data protection at a glance">1. Datenschutz auf einen Blick</h2>
-      
+        
       <h3 data-de="Allgemeine Hinweise" data-en="General information">Allgemeine Hinweise</h3>
       <p data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen." data-en="The following information provides a simple overview of what happens to your personal data when you visit our website.">
         Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.
@@ -1850,7 +1960,7 @@ body::before {
       </ul>
 
       <h2 data-de="3. Ihre Rechte" data-en="3. Your rights">3. Ihre Rechte</h2>
-      <p data-de="Sie haben jederzeit das Recht:" data-en="You have the right at any time:">Sie haben jederzeit das Recht:</p>
+      <p data-de="Sie haben jederzeit das recht:" data-en="You have the right at any time:">Sie haben jederzeit das recht:</p>
       <ul>
         <li data-de="Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)" data-en="Information about your stored data (Art. 15 GDPR)">Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
         <li data-de="Berichtigung unrichtiger Daten (Art. 16 DSGVO)" data-en="Correction of incorrect data (Art. 16 GDPR)">Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
@@ -1906,17 +2016,25 @@ let currentPriceFilter = 'all';
 let currentSort = 'votes';
 let searchQuery = '';
 
-// ===== DATEN LADEN =====
+// ===== DATEN LADEN MIT SUPABASE INTEGRATION =====
 async function loadAITools() {
   try {
+    // Tools aus JSON laden
     const response = await fetch('./data.json');
     if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
     aiTools = await response.json();
     
+    // User initialisieren
+    await initializeUser();
+    
+    // Votes von Supabase laden
+    await loadVotesFromSupabase();
+    
+    // Lokale Votes laden (UI State)
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     aiTools.forEach(tool => {
       if (savedVotes[tool.id]) {
-        tool.votes = savedVotes[tool.id];
+        tool.userVote = savedVotes[tool.id].userVote || 0;
       }
     });
     
@@ -1924,6 +2042,14 @@ async function loadAITools() {
     renderTopCharts();
     renderTools();
     updateToolCount();
+    
+    // Auto-Refresh alle 30 Sekunden
+    setInterval(async () => {
+      await loadVotesFromSupabase();
+      renderTopCharts();
+      renderTools();
+    }, 30000);
+    
     document.getElementById('loading').style.display = 'none';
   } catch (error) {
     console.error('Fehler beim Laden:', error);
@@ -1935,11 +2061,40 @@ async function loadAITools() {
   }
 }
 
+async function initializeUser() {
+  let userId = localStorage.getItem('aiUserId');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('aiUserId', userId);
+  }
+}
+
+async function loadVotesFromSupabase() {
+  try {
+    const { data: votesData, error } = await supabase
+      .from('tool_votes')
+      .select('*');
+    
+    if (error) throw error;
+    
+    if (votesData) {
+      votesData.forEach(vote => {
+        const tool = aiTools.find(t => t.id === vote.tool_id);
+        if (tool) {
+          tool.votes = vote.total_votes || 0;
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error loading votes:', error);
+  }
+}
+
 // ===== AI EMPFEHLUNGEN =====
 function addAIRecommendations() {
   const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  
+    
   aiTools.forEach(tool => {
     let score = 0;
     if (tool.rating >= 4.7) score += 3;
@@ -1948,7 +2103,7 @@ function addAIRecommendations() {
     if (tool.hasLifetimeDeal) score += 2;
     if (userHistory.includes(tool.category)) score += 2;
     if (favorites.includes(tool.id)) score += 3;
-    
+      
     tool.aiScore = score;
     tool.isAIRecommended = score >= 6;
   });
@@ -1965,9 +2120,9 @@ function renderTopCharts() {
     const rankClass = 'rank-' + (index + 1);
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
     const aiRecommended = tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : '';
-    
+      
     return `
-      <div class="chart-card" onclick="openToolDetail('${tool.id}')">
+      <div class="chart-card" data-id="${tool.id}" onclick="openToolDetail('${tool.id}')">
         ${aiRecommended}
         <div class="chart-header">
           <div class="chart-rank ${rankClass}">${index + 1}</div>
@@ -1981,10 +2136,10 @@ function renderTopCharts() {
         <div class="chart-price">💰 ${tool.priceDisplay}${ltdBadge}</div>
         <div class="chart-description">${description}</div>
         <div class="chart-actions" onclick="event.stopPropagation()">
-          <button class="vote-btn up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+          <button class="vote-btn up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
             <i class="fas fa-arrow-up"></i>
           </button>
-          <button class="vote-btn down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+          <button class="vote-btn down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
             <i class="fas fa-arrow-down"></i>
           </button>
           <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
@@ -2035,21 +2190,21 @@ function renderTools() {
   const toolsHTML = filteredTools.map(tool => {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
-    
+      
     return `
-      <div class="compact-tool-row" onclick="openToolDetail('${tool.id}')">
+      <div class="compact-tool-row" data-id="${tool.id}" onclick="openToolDetail('${tool.id}')">
         <div class="tool-vote-compact" onclick="event.stopPropagation()">
           <div class="vote-count">${tool.votes || 0}</div>
           <div class="vote-buttons-compact">
-            <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+            <button class="vote-btn-compact up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
               <i class="fas fa-arrow-up"></i>
             </button>
-            <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+            <button class="vote-btn-compact down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
               <i class="fas fa-arrow-down"></i>
             </button>
           </div>
         </div>
-        
+          
         <div class="tool-info-compact">
           <div class="tool-category-compact">${getCategoryLabel(tool.category)}</div>
           <div class="tool-name-compact">
@@ -2058,7 +2213,7 @@ function renderTools() {
           </div>
           <div class="tool-desc-compact">${description}</div>
         </div>
-        
+          
         <div class="tool-meta-compact" onclick="event.stopPropagation()">
           <div class="tool-price-compact">${tool.priceDisplay}${ltdBadge}</div>
           <div class="tool-actions-compact">
@@ -2092,17 +2247,17 @@ function openToolDetail(toolId) {
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
   const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
   const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
-  
+    
   const pros = tool.pros || [];
   const cons = tool.cons || [];
   const features = tool.features || [];
   const alternatives = tool.alternatives || [];
   const useCases = tool.useCases || [];
-  
+    
   const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
   const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
   const featuresHTML = features.map(f => '<span class="feature-tag"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
-  
+    
   const alternativesHTML = alternatives.map(altId => {
     const altTool = aiTools.find(t => t.id === altId);
     if (!altTool) return '';
@@ -2205,7 +2360,7 @@ function openToolDetail(toolId) {
   document.getElementById('modalContent').innerHTML = modalContent;
   document.getElementById('toolModal').classList.add('active');
   document.body.style.overflow = 'hidden';
-  
+    
   updateLanguage();
 }
 
@@ -2289,36 +2444,152 @@ function shareToolDirectly(toolId) {
   }
 }
 
-// ===== VOTING SYSTEM =====
-function vote(toolId, type) {
+// ===== NEUES LIVE-VOTING SYSTEM =====
+async function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
-
-  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  const userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
-
-  if (userVotes[toolId] === type) {
-    if (type === 'up') tool.votes--;
-    else tool.votes++;
-    delete userVotes[toolId];
-    tool.userVote = null;
+  
+  const oldUserVote = tool.userVote || 0;
+  const voteValue = type === 'up' ? 1 : -1;
+  
+  // UI sofort updaten
+  if (tool.userVote === voteValue) {
+    tool.userVote = 0;
   } else {
-    if (userVotes[toolId] === 'up') tool.votes--;
-    else if (userVotes[toolId] === 'down') tool.votes++;
-    
-    if (type === 'up') tool.votes++;
-    else tool.votes--;
-    
-    userVotes[toolId] = type;
-    tool.userVote = type;
+    tool.userVote = voteValue;
   }
-
-  savedVotes[toolId] = tool.votes;
+  
+  // Lokal speichern
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  savedVotes[toolId] = { userVote: tool.userVote };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
-  localStorage.setItem('userVotes', JSON.stringify(userVotes));
-
+  
+  // Berechnung für Supabase
+  let upvoteChange = 0;
+  let downvoteChange = 0;
+  
+  if (oldUserVote === 1 && voteValue === 1) {
+    // Upvote entfernen
+    upvoteChange = -1;
+  } else if (oldUserVote === -1 && voteValue === -1) {
+    // Downvote entfernen
+    downvoteChange = -1;
+  } else if (oldUserVote === 1 && voteValue === -1) {
+    // Upvote zu Downvote ändern
+    upvoteChange = -1;
+    downvoteChange = 1;
+  } else if (oldUserVote === -1 && voteValue === 1) {
+    // Downvote zu Upvote ändern
+    downvoteChange = -1;
+    upvoteChange = 1;
+  } else if (oldUserVote === 0 && voteValue === 1) {
+    // Neuer Upvote
+    upvoteChange = 1;
+  } else if (oldUserVote === 0 && voteValue === -1) {
+    // Neuer Downvote
+    downvoteChange = 1;
+  }
+  
+  // Supabase Update
+  try {
+    const { data: existingVote, error: fetchError } = await supabase
+      .from('tool_votes')
+      .select('*')
+      .eq('tool_id', toolId)
+      .single();
+    
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      throw fetchError;
+    }
+    
+    if (existingVote) {
+      const updatedUpvotes = (existingVote.upvotes || 0) + upvoteChange;
+      const updatedDownvotes = (existingVote.downvotes || 0) + downvoteChange;
+      const updatedTotal = updatedUpvotes - updatedDownvotes;
+      
+      const { error: updateError } = await supabase
+        .from('tool_votes')
+        .update({
+          upvotes: updatedUpvotes,
+          downvotes: updatedDownvotes,
+          total_votes: updatedTotal,
+          updated_at: new Date().toISOString()
+        })
+        .eq('tool_id', toolId);
+      
+      if (updateError) throw updateError;
+      
+      tool.votes = updatedTotal;
+    } else {
+      // Neuer Eintrag
+      const initialUpvotes = upvoteChange > 0 ? 1 : 0;
+      const initialDownvotes = downvoteChange > 0 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
+      
+      const { error: insertError } = await supabase
+        .from('tool_votes')
+        .insert({
+          tool_id: toolId,
+          upvotes: initialUpvotes,
+          downvotes: initialDownvotes,
+          total_votes: initialTotal
+        });
+      
+      if (insertError) throw insertError;
+      
+      tool.votes = initialTotal;
+    }
+    
+    // Animation für Live-Feedback
+    animateVoteChange(toolId);
+    showNotification(currentLang === 'de' ? 'Deine Stimme wurde gezählt!' : 'Your vote has been counted!', 'success');
+    
+  } catch (error) {
+    console.error('Supabase Vote Error:', error);
+    showNotification(currentLang === 'de' ? 'Fehler beim Speichern der Stimme.' : 'Error saving vote.', 'error');
+  }
+  
+  // UI updaten
   renderTopCharts();
   renderTools();
+}
+
+function animateVoteChange(toolId) {
+  // Chart-Card Animation
+  const chartCard = document.querySelector(`.chart-card[data-id="${toolId}"]`);
+  if (chartCard) {
+    chartCard.classList.add('vote-animation');
+    setTimeout(() => chartCard.classList.remove('vote-animation'), 1000);
+  }
+  
+  // Tool-Row Animation
+  const toolRow = document.querySelector(`.compact-tool-row[data-id="${toolId}"]`);
+  if (toolRow) {
+    toolRow.classList.add('vote-animation');
+    setTimeout(() => toolRow.classList.remove('vote-animation'), 1000);
+  }
+}
+
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+    <span>${message}</span>
+    <button class="notification-close"><i class="fas fa-times"></i></button>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 3 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+  
+  // Close button functionality
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.remove();
+  });
 }
 
 // ===== FAVORITEN & VERGLEICH =====
@@ -2331,8 +2602,10 @@ function toggleFavorite(toolId) {
   let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
   if (favorites.includes(toolId)) {
     favorites = favorites.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites', 'info');
   } else {
     favorites.push(toolId);
+    showNotification(currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites', 'success');
   }
   localStorage.setItem('aiFavorites', JSON.stringify(favorites));
   renderTopCharts();
@@ -2348,11 +2621,13 @@ function toggleComparison(toolId) {
   let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
   if (comparison.includes(toolId)) {
     comparison = comparison.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison', 'info');
   } else {
     if (comparison.length < 3) {
       comparison.push(toolId);
+      showNotification(currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison', 'success');
     } else {
-      alert(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!');
+      showNotification(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!', 'error');
       return;
     }
   }
@@ -2395,28 +2670,140 @@ function getCategoryLabel(category) {
 
 function getUseCaseLabelDE(useCase) {
   const labels = {
-    'content-creation': 'Content-Erstellung',
-    'marketing': 'Marketing',
-    'development': 'Entwicklung',
+    'chatbot': 'Chatbot',
+    'writing': 'Schreiben',
+    'coding': 'Programmierung',
+    'image-generator': 'Bildgenerierung',
+    'art': 'Kunst',
     'design': 'Design',
-    'productivity': 'Produktivität',
+    'coding-assistant': 'Code-Assistent',
+    'debugging': 'Debugging',
+    'code-explanation': 'Code-Erklärung',
+    'voice-generator': 'Sprachgenerierung',
+    'text-to-speech': 'Text-zu-Sprache',
+    'voice-cloning': 'Stimmen-Klonen',
+    'video-editor': 'Video-Editor',
+    'video-generation': 'Video-Generierung',
+    'editing': 'Bearbeitung',
+    'research': 'Recherche',
+    'information': 'Information',
+    'custom-models': 'Eigene Modelle',
+    'notes': 'Notizen',
+    'organization': 'Organisation',
+    'copywriting': 'Copywriting',
+    'marketing': 'Marketing',
+    'ads': 'Werbung',
+    'blogging': 'Bloggen',
+    'seo': 'SEO',
+    'photo-editing': 'Foto-Bearbeitung',
+    'illustration': 'Illustration',
+    'game-dev': 'Spieleentwicklung',
+    '3d-models': '3D-Modelle',
+    'textures': 'Texturen',
+    'social-media': 'Social Media',
+    'voiceover': 'Voiceover',
+    'podcast': 'Podcast',
+    'music': 'Musik',
+    'songwriting': 'Songwriting',
+    'streaming': 'Streaming',
+    'content': 'Content',
+    'training': 'Training',
+    'explainer': 'Erklärvideos',
+    'presentation': 'Präsentation',
     'education': 'Bildung',
+    'animation': 'Animation',
+    'learning': 'Lernen',
+    'prototyping': 'Prototyping',
+    'productivity': 'Produktivität',
+    'assistant': 'Assistent',
+    'storytelling': 'Storytelling',
     'business': 'Business',
-    'entertainment': 'Unterhaltung'
+    'documentation': 'Dokumentation',
+    'sales': 'Verkauf',
+    'pitch': 'Pitch',
+    'meetings': 'Meetings',
+    'interviews': 'Interviews',
+    'calls': 'Anrufe',
+    'recording': 'Aufnahme',
+    'academic': 'Akademisch',
+    'emails': 'E-Mails',
+    'documents': 'Dokumente',
+    'creative': 'Kreativ',
+    'landing-pages': 'Landing Pages',
+    'branding': 'Branding',
+    'prints': 'Drucke',
+    'fun': 'Spaß',
+    'youtube': 'YouTube'
   };
   return labels[useCase] || useCase;
 }
 
 function getUseCaseLabelEN(useCase) {
   const labels = {
-    'content-creation': 'Content Creation',
-    'marketing': 'Marketing',
-    'development': 'Development',
+    'chatbot': 'Chatbot',
+    'writing': 'Writing',
+    'coding': 'Coding',
+    'image-generator': 'Image Generation',
+    'art': 'Art',
     'design': 'Design',
-    'productivity': 'Productivity',
+    'coding-assistant': 'Coding Assistant',
+    'debugging': 'Debugging',
+    'code-explanation': 'Code Explanation',
+    'voice-generator': 'Voice Generator',
+    'text-to-speech': 'Text-to-Speech',
+    'voice-cloning': 'Voice Cloning',
+    'video-editor': 'Video Editor',
+    'video-generation': 'Video Generation',
+    'editing': 'Editing',
+    'research': 'Research',
+    'information': 'Information',
+    'custom-models': 'Custom Models',
+    'notes': 'Notes',
+    'organization': 'Organization',
+    'copywriting': 'Copywriting',
+    'marketing': 'Marketing',
+    'ads': 'Ads',
+    'blogging': 'Blogging',
+    'seo': 'SEO',
+    'photo-editing': 'Photo Editing',
+    'illustration': 'Illustration',
+    'game-dev': 'Game Development',
+    '3d-models': '3D Models',
+    'textures': 'Textures',
+    'social-media': 'Social Media',
+    'voiceover': 'Voiceover',
+    'podcast': 'Podcast',
+    'music': 'Music',
+    'songwriting': 'Songwriting',
+    'streaming': 'Streaming',
+    'content': 'Content',
+    'training': 'Training',
+    'explainer': 'Explainer Videos',
+    'presentation': 'Presentation',
     'education': 'Education',
+    'animation': 'Animation',
+    'learning': 'Learning',
+    'prototyping': 'Prototyping',
+    'productivity': 'Productivity',
+    'assistant': 'Assistant',
+    'storytelling': 'Storytelling',
     'business': 'Business',
-    'entertainment': 'Entertainment'
+    'documentation': 'Documentation',
+    'sales': 'Sales',
+    'pitch': 'Pitch',
+    'meetings': 'Meetings',
+    'interviews': 'Interviews',
+    'calls': 'Calls',
+    'recording': 'Recording',
+    'academic': 'Academic',
+    'emails': 'Emails',
+    'documents': 'Documents',
+    'creative': 'Creative',
+    'landing-pages': 'Landing Pages',
+    'branding': 'Branding',
+    'prints': 'Prints',
+    'fun': 'Fun',
+    'youtube': 'YouTube'
   };
   return labels[useCase] || useCase;
 }
@@ -2432,14 +2819,14 @@ const searchSuggestions = document.getElementById('searchSuggestions');
 searchBox.addEventListener('input', (e) => {
   searchQuery = e.target.value;
   renderTools();
-  
+    
   if (searchQuery.length > 1) {
     const matches = aiTools.filter(tool => 
       tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tool.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tool.description.en.toLowerCase().includes(searchQuery.toLowerCase())
     ).slice(0, 5);
-    
+      
     if (matches.length > 0) {
       searchSuggestions.innerHTML = matches.map(tool => `
         <div class="suggestion-item" onclick="openToolDetail('${tool.id}'); searchSuggestions.classList.remove('active');">
@@ -2552,6 +2939,5 @@ declineCookies.addEventListener('click', () => {
 // ===== INIT =====
 loadAITools();
 </script>
-
 </body>
 </html>
