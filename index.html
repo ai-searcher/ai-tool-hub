@@ -194,7 +194,7 @@ body.focus-mode .search-container {
   line-height: 1.6;
 }
 
-/* ===== INTENT SEARCH ===== */
+/* ===== SEARCH ===== */
 .search-container {
   max-width: 700px;
   margin: 0 auto 20px;
@@ -232,6 +232,30 @@ body.focus-mode .search-container {
   font-size: 1.2rem;
 }
 
+.surprise-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.1rem;
+}
+
+.surprise-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
 .search-hint-container {
   margin-top: 12px;
   display: flex;
@@ -263,6 +287,52 @@ body.focus-mode .search-container {
   background: rgba(0, 212, 255, 0.3);
   border-color: var(--primary);
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  backdrop-filter: blur(10px);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  box-shadow: var(--shadow);
+  margin-top: 4px;
+}
+
+.search-suggestions.active {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: var(--bg-hover);
+}
+
+.suggestion-icon {
+  color: var(--primary);
+  width: 20px;
+  font-size: 1rem;
 }
 
 /* ===== QUICK NAVIGATION PILLS ===== */
@@ -348,13 +418,107 @@ body.focus-mode .search-container {
   gap: 20px;
 }
 
-/* ===== HIGH-DENSITY TOOL GRID ===== */
+/* ===== COMPACT TOOLS HEADER ===== */
 .tools-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px 60px;
 }
 
+.compact-tools-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tools-count {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.tools-count span {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* ===== FILTERS ===== */
+.compact-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: var(--transition);
+  font-size: 0.85rem;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+.filter-group {
+  position: relative;
+}
+
+.filter-select {
+  padding: 8px 30px 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  transition: var(--transition);
+  cursor: pointer;
+  appearance: none;
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.filter-group::after {
+  content: '▼';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary);
+  pointer-events: none;
+  font-size: 0.65rem;
+}
+
+/* ===== HIGH-DENSITY TOOL GRID ===== */
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -456,6 +620,19 @@ body.focus-mode .search-container {
   font-weight: 700;
 }
 
+.ltd-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .tool-actions {
   display: flex;
   gap: 8px;
@@ -502,7 +679,89 @@ body.focus-mode .search-container {
   border-color: var(--error);
 }
 
-/* ===== SMART PREVIEW (GLASSMORPHISM OVERLAY) ===== */
+.favorite-btn,
+.compare-btn {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 10px;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.favorite-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.favorite-btn.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.compare-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.compare-btn.active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.15);
+}
+
+.tool-link-compact {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.tool-link-compact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+/* ===== AI RECOMMENDATION BADGE ===== */
+.ai-recommended {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ===== SMART PREVIEW ===== */
 .tool-preview {
   position: absolute;
   top: 0;
@@ -582,7 +841,7 @@ body.focus-mode .search-container {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
@@ -643,7 +902,468 @@ body.focus-mode .search-container {
   transform: rotate(90deg);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+.modal-content {
+  padding: 24px;
+}
+
+.tool-detail-hero {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-detail-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.tool-detail-info {
+  flex: 1;
+}
+
+.tool-detail-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.tool-detail-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.tool-badge {
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tool-badge.category {
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.tool-badge.price {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tool-badge.rating {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.tool-description-full {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.tool-section {
+  margin-bottom: 24px;
+}
+
+.tool-section h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-section h3 i {
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.pros-cons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.pros-list,
+.cons-list {
+  background: var(--bg-hover);
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.pros-list h4 {
+  color: var(--success);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.cons-list h4 {
+  color: var(--error);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+}
+
+.pros-list ul,
+.cons-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pros-list li,
+.cons-list li {
+  padding: 6px 0;
+  padding-left: 22px;
+  position: relative;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.pros-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--success);
+  font-weight: 800;
+}
+
+.cons-list li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: var(--error);
+  font-weight: 800;
+}
+
+.feature-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feature-tag {
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--secondary);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.alternatives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.alternative-card {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.alternative-card:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-3px);
+}
+
+.alternative-card-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.alternative-card-category {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-actions-modal {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+}
+
+.btn-secondary {
+  flex: 1;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== LEGAL CONTENT ===== */
+.legal-content h2 {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.legal-content h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.legal-content p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.legal-content ul,
+.legal-content ol {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  margin-left: 20px;
+  font-size: 0.95rem;
+}
+
+.legal-content li {
+  margin-bottom: 6px;
+}
+
+.legal-content a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.legal-content a:hover {
+  border-bottom-color: var(--primary);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 30px 20px 20px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.footer-copyright {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+/* ===== COOKIE BANNER ===== */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  transform: translateY(100%);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  opacity: 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.cookie-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cookie-content h3 {
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cookie-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 280px;
+  line-height: 1.5;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.cookie-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.cookie-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.cookie-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.cookie-btn.secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.cookie-btn.secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== LOADING ===== */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 40px;
+  color: var(--primary);
+}
+
+.loading i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .tools-grid {
     grid-template-columns: 1fr;
@@ -665,6 +1385,50 @@ body.focus-mode .search-container {
     width: 95%;
     max-height: 95vh;
   }
+  
+  .modal-header {
+    padding: 16px;
+  }
+  
+  .modal-content {
+    padding: 16px;
+  }
+  
+  .tool-detail-hero {
+    flex-direction: column;
+  }
+  
+  .pros-cons-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tool-actions-modal {
+    flex-direction: column;
+  }
+  
+  .cookie-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cookie-buttons {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .cookie-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .compact-tools-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .compact-filters {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -678,6 +1442,34 @@ body.focus-mode .search-container {
   
   .tools-grid {
     gap: 12px;
+  }
+  
+  .modal-title {
+    font-size: 1.3rem;
+  }
+  
+  .tool-detail-name {
+    font-size: 1.4rem;
+  }
+  
+  .alternatives-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tool-actions {
+    gap: 6px;
+  }
+  
+  .vote-btn-compact {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .favorite-btn,
+  .compare-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
   }
 }
 
@@ -734,6 +1526,9 @@ body.focus-mode .search-container {
       data-placeholder-de="Durchsuche alle KI-Tools..." 
       data-placeholder-en="Search all AI tools..."
     >
+    <button class="surprise-btn" id="surpriseBtn" title="Überrasch mich!">
+      <i class="fas fa-dice"></i>
+    </button>
     <div class="search-suggestions" id="searchSuggestions"></div>
   </div>
 
@@ -811,6 +1606,47 @@ body.focus-mode .search-container {
     </div>
   </div>
 
+  <div class="compact-filters">
+    <button class="filter-btn active" data-category="all">
+      <i class="fas fa-border-all"></i>
+      <span data-de="Alle" data-en="All">Alle</span>
+    </button>
+    <button class="filter-btn" data-category="text">
+      <i class="fas fa-pen"></i>
+      <span data-de="Text" data-en="Text">Text</span>
+    </button>
+    <button class="filter-btn" data-category="image">
+      <i class="fas fa-image"></i>
+      <span data-de="Bild" data-en="Image">Bild</span>
+    </button>
+    <button class="filter-btn" data-category="code">
+      <i class="fas fa-code"></i> Code
+    </button>
+    <button class="filter-btn" data-category="video">
+      <i class="fas fa-video"></i> Video
+    </button>
+    <button class="filter-btn" data-category="audio">
+      <i class="fas fa-music"></i> Audio
+    </button>
+
+    <div class="filter-group">
+      <select class="filter-select" id="priceFilter">
+        <option value="all" data-de="Alle Preise" data-en="All Prices">Alle Preise</option>
+        <option value="free" data-de="Kostenlos" data-en="Free">Kostenlos</option>
+        <option value="freemium">Freemium</option>
+        <option value="paid" data-de="Kostenpflichtig" data-en="Paid">Kostenpflichtig</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <select class="filter-select" id="sortFilter">
+        <option value="votes" data-de="Beste Bewertung" data-en="Best Rated">Beste Bewertung</option>
+        <option value="name" data-de="A-Z" data-en="A-Z">A-Z</option>
+        <option value="rating">Rating</option>
+      </select>
+    </div>
+  </div>
+
   <div class="tools-grid" id="toolsGrid">
     <!-- Dynamically filled -->
   </div>
@@ -847,6 +1683,138 @@ body.focus-mode .search-container {
   </div>
 </div>
 
+<!-- Impressum Modal -->
+<div class="modal-overlay" id="impressumModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" data-de="Impressum" data-en="Imprint">Impressum</h2>
+      <button class="modal-close" onclick="closeImpressum()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content legal-content">
+      <h2 data-de="Angaben gemäß § 5 TMG" data-en="Information according to § 5 TMG">Angaben gemäß § 5 TMG</h2>
+      <p>
+        Max Mustermann<br>
+        Musterstraße 123<br>
+        12345 Musterstadt<br>
+        Deutschland
+      </p>
+
+      <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
+      <p>
+        <span data-de="Telefon: +49 (0) 123 456789" data-en="Phone: +49 (0) 123 456789">Telefon: +49 (0) 123 456789</span><br>
+        <span data-de="E-Mail: info@ai-finder.de" data-en="Email: info@ai-finder.de">E-Mail: info@ai-finder.de</span>
+      </p>
+
+      <h3 data-de="Umsatzsteuer-ID" data-en="VAT ID">Umsatzsteuer-ID</h3>
+      <p>
+        <span data-de="Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:" data-en="VAT identification number according to §27 a VAT Act:">Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz:</span><br>
+        DE123456789
+      </p>
+
+      <h2 data-de="Haftungsausschluss" data-en="Disclaimer">Haftungsausschluss</h2>
+
+      <h3 data-de="Haftung für Inhalte" data-en="Liability for content">Haftung für Inhalte</h3>
+      <p data-de="Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen." data-en="The contents of our pages have been created with the greatest care. However, we cannot guarantee the accuracy, completeness and timeliness of the content.">
+        Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+      </p>
+
+      <h3 data-de="Haftung für Links" data-en="Liability for links">Haftung für Links</h3>
+      <p data-de="Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen." data-en="Our offer contains links to external third-party websites over whose content we have no influence. Therefore, we cannot accept any liability for this third-party content.">
+        Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Datenschutz Modal -->
+<div class="modal-overlay" id="datenschutzModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
+      <button class="modal-close" onclick="closeDatenschutz()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content legal-content">
+      <h2 data-de="1. Datenschutz auf einen Blick" data-en="1. Data protection at a glance">1. Datenschutz auf einen Blick</h2>
+        
+      <h3 data-de="Allgemeine Hinweise" data-en="General information">Allgemeine Hinweise</h3>
+      <p data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen." data-en="The following information provides a simple overview of what happens to your personal data when you visit our website.">
+        Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.
+      </p>
+
+      <h3 data-de="Datenerfassung auf unserer Website" data-en="Data collection on our website">Datenerfassung auf unserer Website</h3>
+      <p>
+        <strong data-de="Wer ist verantwortlich für die Datenerfassung auf dieser Website?" data-en="Who is responsible for data collection on this website?">Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong>
+      </p>
+      <p data-de="Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum entnehmen." data-en="Data processing on this website is carried out by the website operator. You can find their contact details in the imprint.">
+        Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum entnehmen.
+      </p>
+
+      <h2 data-de="2. Google Analytics" data-en="2. Google Analytics">2. Google Analytics</h2>
+      <p data-de="Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Ireland Limited. Die erfassten Daten werden anonymisiert." data-en="This website uses Google Analytics, a web analytics service provided by Google Ireland Limited. The collected data is anonymized.">
+        Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Ireland Limited. Die erfassten Daten werden anonymisiert.
+      </p>
+
+      <h3 data-de="Art und Umfang der Verarbeitung" data-en="Type and scope of processing">Art und Umfang der Verarbeitung</h3>
+      <ul>
+        <li data-de="Anonymisierte IP-Adressen" data-en="Anonymized IP addresses">Anonymisierte IP-Adressen</li>
+        <li data-de="Browsertyp/-version" data-en="Browser type/version">Browsertyp/-version</li>
+        <li data-de="Verwendetes Betriebssystem" data-en="Operating system used">Verwendetes Betriebssystem</li>
+        <li data-de="Referrer URL" data-en="Referrer URL">Referrer URL</li>
+        <li data-de="Uhrzeit der Serveranfrage" data-en="Time of server request">Uhrzeit der Serveranfrage</li>
+      </ul>
+
+      <h2 data-de="3. Ihre Rechte" data-en="3. Your rights">3. Ihre Rechte</h2>
+      <p data-de="Sie haben jederzeit das Recht:" data-en="You have the right at any time:">Sie haben jederzeit das Recht:</p>
+      <ul>
+        <li data-de="Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)" data-en="Information about your stored data (Art. 15 GDPR)">Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
+        <li data-de="Berichtigung unrichtiger Daten (Art. 16 DSGVO)" data-en="Correction of incorrect data (Art. 16 GDPR)">Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
+        <li data-de="Löschung Ihrer Daten (Art. 17 DSGVO)" data-en="Deletion of your data (Art. 17 GDPR)">Löschung Ihrer Daten (Art. 17 DSGVO)</li>
+        <li data-de="Einschränkung der Verarbeitung (Art. 18 DSGVO)" data-en="Restriction of processing (Art. 18 GDPR)">Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+        <li data-de="Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)" data-en="Objection to processing (Art. 21 GDPR)">Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+      </ul>
+
+      <h2 data-de="4. Cookies" data-en="4. Cookies">4. Cookies</h2>
+      <p data-de="Unsere Website verwendet Cookies. Cookies helfen uns dabei, unser Angebot nutzerfreundlicher und sicherer zu machen." data-en="Our website uses cookies. Cookies help us to make our offer more user-friendly and secure.">
+        Unsere Website verwendet Cookies. Cookies helfen uns dabei, unser Angebot nutzerfreundlicher und sicherer zu machen.
+      </p>
+
+      <h2 data-de="5. Kontakt" data-en="5. Contact">5. Kontakt</h2>
+      <p data-de="Bei Fragen wenden Sie sich bitte an:" data-en="If you have any questions, please contact:">
+        Bei Fragen wenden Sie sich bitte an:
+      </p>
+      <p>
+        E-Mail: datenschutz@ai-finder.de
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-content">
+    <div>
+      <h3 data-de="🍪 Cookies & Datenschutz" data-en="🍪 Cookies & Privacy">🍪 Cookies & Datenschutz</h3>
+      <p data-de="Wir nutzen Google Analytics zur Verbesserung der Nutzererfahrung. Deine Daten werden anonymisiert." data-en="We use Google Analytics to improve user experience. Your data is anonymized.">
+        Wir nutzen Google Analytics zur Verbesserung der Nutzererfahrung. Deine Daten werden anonymisiert.
+      </p>
+    </div>
+    <div class="cookie-buttons">
+      <button class="cookie-btn primary" id="acceptCookies">
+        <i class="fas fa-check"></i>
+        <span data-de="Akzeptieren" data-en="Accept">Akzeptieren</span>
+      </button>
+      <button class="cookie-btn secondary" id="declineCookies">
+        <i class="fas fa-times"></i>
+        <span data-de="Ablehnen" data-en="Decline">Ablehnen</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== GLOBALE VARIABLEN =====
 let aiTools = [];
@@ -861,49 +1829,17 @@ let isFocusMode = false;
 // ===== DATEN LADEN =====
 async function loadAITools() {
   try {
-    // Sample data - in production, load from data.json
-    aiTools = [
-      {
-        id: 'chatgpt',
-        name: 'ChatGPT',
-        category: 'text',
-        description: { de: 'Advanced AI conversation tool', en: 'Advanced AI conversation tool' },
-        price: 'freemium',
-        priceDisplay: 'Freemium',
-        rating: 4.8,
-        votes: 150,
-        hasLifetimeDeal: false,
-        pros: ['Natural conversations', 'Multi-language support'],
-        cons: ['Limited free tier'],
-        features: ['GPT-4', 'File upload', 'Web browsing'],
-        useCases: ['content-creation', 'education'],
-        link: 'https://chat.openai.com'
-      },
-      {
-        id: 'midjourney',
-        name: 'Midjourney',
-        category: 'image',
-        description: { de: 'AI image generation', en: 'AI image generation' },
-        price: 'paid',
-        priceDisplay: '$10/month',
-        rating: 4.7,
-        votes: 120,
-        hasLifetimeDeal: false,
-        pros: ['High quality images', 'Creative styles'],
-        cons: ['Requires Discord'],
-        features: ['Multiple styles', 'Upscaling'],
-        useCases: ['design', 'content-creation'],
-        link: 'https://midjourney.com'
-      }
-    ];
-    
+    const response = await fetch('./data.json');
+    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+    aiTools = await response.json();
+      
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     aiTools.forEach(tool => {
       if (savedVotes[tool.id]) {
         tool.votes = savedVotes[tool.id];
       }
     });
-    
+      
     addAIRecommendations();
     renderTopCharts();
     renderTools();
@@ -948,9 +1884,11 @@ function renderTopCharts() {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
     const rankClass = 'rank-' + (index + 1);
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
+    const aiRecommended = tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : '';
       
     return `
       <div class="tool-card" onclick="openToolDetail('${tool.id}')">
+        ${aiRecommended}
         <div class="tool-header">
           <div>
             <div class="tool-name">${tool.name}</div>
@@ -965,11 +1903,17 @@ function renderTopCharts() {
         <div class="tool-meta">
           <div class="tool-price">${tool.priceDisplay}${ltdBadge}</div>
           <div class="tool-actions">
-            <button class="vote-btn-compact up" onclick="event.stopPropagation(); vote('${tool.id}', 'up')">
+            <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'up')">
               <i class="fas fa-arrow-up"></i>
             </button>
-            <button class="vote-btn-compact down" onclick="event.stopPropagation(); vote('${tool.id}', 'down')">
+            <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'down')">
               <i class="fas fa-arrow-down"></i>
+            </button>
+            <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${tool.id}')">
+              <i class="fas fa-star"></i>
+            </button>
+            <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleComparison('${tool.id}')">
+              <i class="fas fa-balance-scale"></i>
             </button>
           </div>
         </div>
@@ -1016,6 +1960,10 @@ function renderTools() {
     filteredTools = filteredTools.filter(tool => tool.category === currentCategory);
   }
 
+  if (currentPriceFilter !== 'all') {
+    filteredTools = filteredTools.filter(tool => tool.price === currentPriceFilter);
+  }
+
   if (searchQuery) {
     filteredTools = filteredTools.filter(tool => {
       const searchLower = searchQuery.toLowerCase();
@@ -1049,6 +1997,7 @@ function renderTools() {
         
       return `
         <div class="tool-card" onclick="openToolDetail('${tool.id}')">
+          ${tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : ''}
           <div class="tool-header">
             <div>
               <div class="tool-name">${tool.name}</div>
@@ -1063,11 +2012,17 @@ function renderTools() {
           <div class="tool-meta">
             <div class="tool-price">${tool.priceDisplay}${ltdBadge}</div>
             <div class="tool-actions">
-              <button class="vote-btn-compact up" onclick="event.stopPropagation(); vote('${tool.id}', 'up')">
+              <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'up')">
                 <i class="fas fa-arrow-up"></i>
               </button>
-              <button class="vote-btn-compact down" onclick="event.stopPropagation(); vote('${tool.id}', 'down')">
+              <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'down')">
                 <i class="fas fa-arrow-down"></i>
+              </button>
+              <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${tool.id}')">
+                <i class="fas fa-star"></i>
+              </button>
+              <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleComparison('${tool.id}')">
+                <i class="fas fa-balance-scale"></i>
               </button>
             </div>
           </div>
@@ -1144,6 +2099,14 @@ function highlightMatchingCategory(searchTerm) {
     if (matchingPill) {
       matchingPill.classList.add('active');
       currentCategory = matchingCategory;
+      
+      // Update filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-category') === matchingCategory) {
+          btn.classList.add('active');
+        }
+      });
     }
     
     // Highlight search hint
@@ -1156,7 +2119,7 @@ function highlightMatchingCategory(searchTerm) {
   }
 }
 
-// ===== TOOL DETAIL MODAL (FIXED LANGUAGE BUG) =====
+// ===== TOOL DETAIL MODAL =====
 function openToolDetail(toolId) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
@@ -1164,14 +2127,33 @@ function openToolDetail(toolId) {
   trackUserInteraction(tool.category);
 
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
+  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
+    
   const pros = tool.pros || [];
   const cons = tool.cons || [];
-  
-  // FIXED: Properly translate Pros and Cons headers
-  const prosTitle = currentLang === 'de' ? 'Vorteile' : 'Pros';
-  const consTitle = currentLang === 'de' ? 'Nachteile' : 'Cons';
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  const useCases = tool.useCases || [];
+    
   const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
   const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="feature-tag"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+    
+  const alternativesHTML = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    if (!altTool) return '';
+    return `
+      <div class="alternative-card" onclick="openToolDetail('${altTool.id}')">
+        <div class="alternative-card-name">${altTool.name}</div>
+        <div class="alternative-card-category">${getCategoryLabel(altTool.category)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const useCasesText = currentLang === 'de' 
+    ? useCases.map(uc => getUseCaseLabelDE(uc)).join(', ')
+    : useCases.map(uc => getUseCaseLabelEN(uc)).join(', ');
 
   const modalContent = `
     <div class="tool-detail-hero">
@@ -1193,24 +2175,25 @@ function openToolDetail(toolId) {
             <i class="fas fa-star"></i>
             ${tool.rating}/5
           </span>
+          ${tool.hasLifetimeDeal ? '<span class="ltd-badge">Lifetime Deal</span>' : ''}
         </div>
-        <p class="tool-description-full">${description}</p>
+        <p class="tool-description-full">${seoDesc}</p>
       </div>
     </div>
 
     ${pros.length > 0 || cons.length > 0 ? `
     <div class="tool-section">
-      <h3><i class="fas fa-balance-scale"></i> ${prosTitle} & ${consTitle}</h3>
+      <h3><i class="fas fa-balance-scale"></i> <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span></h3>
       <div class="pros-cons-grid">
         ${pros.length > 0 ? `
         <div class="pros-list">
-          <h4><i class="fas fa-check-circle"></i> ${prosTitle}</h4>
+          <h4><i class="fas fa-check-circle"></i> <span data-de="Vorteile" data-en="Pros">Vorteile</span></h4>
           <ul>${prosHTML}</ul>
         </div>
         ` : ''}
         ${cons.length > 0 ? `
         <div class="cons-list">
-          <h4><i class="fas fa-times-circle"></i> ${consTitle}</h4>
+          <h4><i class="fas fa-times-circle"></i> <span data-de="Nachteile" data-en="Cons">Nachteile</span></h4>
           <ul>${consHTML}</ul>
         </div>
         ` : ''}
@@ -1218,15 +2201,44 @@ function openToolDetail(toolId) {
     </div>
     ` : ''}
 
+    ${features.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-rocket"></i> <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span></h3>
+      <div class="feature-tags">
+        ${featuresHTML}
+      </div>
+    </div>
+    ` : ''}
+
+    ${useCases.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-lightbulb"></i> <span data-de="Beste Anwendungsfälle" data-en="Best Use Cases">Beste Anwendungsfälle</span></h3>
+      <p style="color: var(--text-secondary); line-height: 1.6;">${useCasesText}</p>
+    </div>
+    ` : ''}
+
+    ${alternatives.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-exchange-alt"></i> <span data-de="Vergleichbare Tools" data-en="Similar Tools">Vergleichbare Tools</span></h3>
+      <div class="alternatives-grid">
+        ${alternativesHTML}
+      </div>
+    </div>
+    ` : ''}
+
     <div class="tool-actions-modal">
-      <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="btn-primary">
+      <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="btn-primary" onclick="trackToolClick('${tool.id}')">
         <i class="fas fa-external-link-alt"></i>
         <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
       </a>
+      <button class="btn-secondary" onclick="shareToolDirectly('${tool.id}')">
+        <i class="fas fa-share-alt"></i>
+        <span data-de="Teilen" data-en="Share">Teilen</span>
+      </button>
     </div>
   `;
 
-  document.getElementById('modalTitle').textContent = tool.name;
+  document.getElementById('modalTitle').textContent = seoTitle;
   document.getElementById('modalContent').innerHTML = modalContent;
   document.getElementById('toolModal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -1239,36 +2251,151 @@ function closeToolModal() {
   document.body.style.overflow = '';
 }
 
-// ===== FOCUS MODE =====
-function initFocusMode() {
-  let ticking = false;
-  
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const currentScrollY = window.scrollY;
-        
-        if (currentScrollY > 200 && currentScrollY > lastScrollY) {
-          // Scrolling down past threshold
-          if (!isFocusMode) {
-            document.body.classList.add('focus-mode');
-            isFocusMode = true;
-          }
-        } else if (currentScrollY < 100 || currentScrollY < lastScrollY) {
-          // Scrolling up or near top
-          if (isFocusMode) {
-            document.body.classList.remove('focus-mode');
-            isFocusMode = false;
-          }
-        }
-        
-        lastScrollY = currentScrollY;
-        ticking = false;
-      });
-      
-      ticking = true;
+// ===== IMPRESSUM & DATENSCHUTZ =====
+function openImpressum() {
+  document.getElementById('impressumModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeImpressum() {
+  document.getElementById('impressumModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openDatenschutz() {
+  document.getElementById('datenschutzModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeDatenschutz() {
+  document.getElementById('datenschutzModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
     }
   });
+});
+
+// Close modals on ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+// ===== INTELLIGENTE FUNKTIONEN =====
+function trackUserInteraction(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
+}
+
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] || 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
+}
+
+function shareToolDirectly(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const shareData = {
+    title: tool.name + ' - AI Finder',
+    text: currentLang === 'de' ? tool.description.de : tool.description.en,
+    url: window.location.href + '?tool=' + toolId
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareData.url);
+    alert(currentLang === 'de' ? 'Link kopiert!' : 'Link copied!');
+  }
+}
+
+// ===== VOTING SYSTEM =====
+function vote(toolId, type) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  const userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
+
+  if (userVotes[toolId] === type) {
+    if (type === 'up') tool.votes--;
+    else tool.votes++;
+    delete userVotes[toolId];
+    tool.userVote = null;
+  } else {
+    if (userVotes[toolId] === 'up') tool.votes--;
+    else if (userVotes[toolId] === 'down') tool.votes++;
+      
+    if (type === 'up') tool.votes++;
+    else tool.votes--;
+      
+    userVotes[toolId] = type;
+    tool.userVote = type;
+  }
+
+  savedVotes[toolId] = tool.votes;
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  localStorage.setItem('userVotes', JSON.stringify(userVotes));
+
+  renderTopCharts();
+  renderTools();
+}
+
+// ===== FAVORITEN & VERGLEICH =====
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
+}
+
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+  } else {
+    favorites.push(toolId);
+  }
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  renderTopCharts();
+  renderTools();
+}
+
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+    } else {
+      alert(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!');
+      return;
+    }
+  }
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  renderTopCharts();
+  renderTools();
 }
 
 // ===== HELPER FUNCTIONS =====
@@ -1305,9 +2432,180 @@ function getCategoryLabel(category) {
   return labels[currentLang][category] || category;
 }
 
+function getUseCaseLabelDE(useCase) {
+  const labels = {
+    'content-creation': 'Content-Erstellung',
+    'marketing': 'Marketing',
+    'development': 'Entwicklung',
+    'design': 'Design',
+    'productivity': 'Produktivität',
+    'education': 'Bildung',
+    'business': 'Business',
+    'entertainment': 'Unterhaltung'
+  };
+  return labels[useCase] || useCase;
+}
+
+function getUseCaseLabelEN(useCase) {
+  const labels = {
+    'content-creation': 'Content Creation',
+    'marketing': 'Marketing',
+    'development': 'Development',
+    'design': 'Design',
+    'productivity': 'Productivity',
+    'education': 'Education',
+    'business': 'Business',
+    'entertainment': 'Entertainment'
+  };
+  return labels[useCase] || useCase;
+}
+
 function updateToolCount() {
   document.getElementById('toolCount').textContent = aiTools.length;
 }
+
+// ===== FOCUS MODE =====
+function initFocusMode() {
+  let ticking = false;
+  
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > 200 && currentScrollY > lastScrollY) {
+          // Scrolling down past threshold
+          if (!isFocusMode) {
+            document.body.classList.add('focus-mode');
+            isFocusMode = true;
+          }
+        } else if (currentScrollY < 100 || currentScrollY < lastScrollY) {
+          // Scrolling up or near top
+          if (isFocusMode) {
+            document.body.classList.remove('focus-mode');
+            isFocusMode = false;
+          }
+        }
+        
+        lastScrollY = currentScrollY;
+        ticking = false;
+      });
+      
+      ticking = true;
+    }
+  });
+}
+
+// ===== SEARCH FUNCTIONALITY =====
+const searchBox = document.getElementById('searchBox');
+const searchSuggestions = document.getElementById('searchSuggestions');
+
+searchBox.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderTools();
+    
+  if (searchQuery.length > 1) {
+    const matches = aiTools.filter(tool => 
+      tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.en.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 5);
+      
+    if (matches.length > 0) {
+      searchSuggestions.innerHTML = matches.map(tool => `
+        <div class="suggestion-item" onclick="openToolDetail('${tool.id}'); searchSuggestions.classList.remove('active');">
+          <span class="suggestion-icon">${getCategoryIcon(tool.category)}</span>
+          <span>${tool.name}</span>
+        </div>
+      `).join('');
+      searchSuggestions.classList.add('active');
+    } else {
+      searchSuggestions.classList.remove('active');
+    }
+  } else {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-container')) {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+// Search hints
+document.querySelectorAll('.search-hint-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const query = chip.getAttribute('data-query');
+    searchBox.value = query;
+    searchQuery = query;
+    renderTools();
+  });
+});
+
+// Surprise button
+document.getElementById('surpriseBtn').addEventListener('click', () => {
+  const randomTool = aiTools[Math.floor(Math.random() * aiTools.length)];
+  openToolDetail(randomTool.id);
+});
+
+// ===== FILTER FUNCTIONALITY =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCategory = btn.getAttribute('data-category');
+    
+    // Update quick pills
+    document.querySelectorAll('.quick-pill').forEach(pill => {
+      pill.classList.remove('active');
+      if (pill.getAttribute('data-category') === currentCategory) {
+        pill.classList.add('active');
+      }
+    });
+    
+    renderTools();
+  });
+});
+
+document.querySelectorAll('.quick-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    const category = pill.getAttribute('data-category');
+    currentCategory = category;
+    
+    // Update both filter buttons and quick pills
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.quick-pill').forEach(p => p.classList.remove('active'));
+    
+    pill.classList.add('active');
+    const matchingFilterBtn = document.querySelector(`.filter-btn[data-category="${category}"]`);
+    if (matchingFilterBtn) {
+      matchingFilterBtn.classList.add('active');
+    }
+    
+    renderTools();
+    window.scrollTo({ top: document.querySelector('.tools-container').offsetTop - 20, behavior: 'smooth' });
+  });
+});
+
+document.getElementById('priceFilter').addEventListener('change', (e) => {
+  currentPriceFilter = e.target.value;
+  renderTools();
+});
+
+document.getElementById('sortFilter').addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderTools();
+});
+
+// ===== LANGUAGE SWITCH =====
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+  updateLanguage();
+  renderTopCharts();
+  renderTools();
+});
 
 function updateLanguage() {
   document.querySelectorAll('[data-de]').forEach(el => {
@@ -1319,98 +2617,40 @@ function updateLanguage() {
   });
 }
 
-// ===== EVENT LISTENERS =====
-function initEventListeners() {
-  // Search functionality
-  const searchBox = document.getElementById('searchBox');
-  searchBox.addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    renderTools();
-  });
+// ===== COOKIE BANNER =====
+const cookieBanner = document.getElementById('cookieBanner');
+const acceptCookies = document.getElementById('acceptCookies');
+const declineCookies = document.getElementById('declineCookies');
 
-  // Search hints
-  document.querySelectorAll('.search-hint-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const query = chip.getAttribute('data-query');
-      searchBox.value = query;
-      searchQuery = query;
-      renderTools();
-    });
-  });
-
-  // Quick navigation pills
-  document.querySelectorAll('.quick-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.quick-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      currentCategory = pill.getAttribute('data-category');
-      renderTools();
-    });
-  });
-
-  // Language switch
-  document.getElementById('langToggle').addEventListener('click', () => {
-    currentLang = currentLang === 'de' ? 'en' : 'de';
-    document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
-    updateLanguage();
-    renderTopCharts();
-    renderTools();
-  });
-
-  // Command+K style search
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      searchBox.focus();
-    }
-  });
+if (!localStorage.getItem('cookieConsent')) {
+  setTimeout(() => {
+    cookieBanner.classList.add('show');
+  }, 1000);
 }
 
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', () => {
-  loadAITools();
-  initEventListeners();
-  initFocusMode();
+acceptCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'accepted');
+  cookieBanner.classList.remove('show');
 });
 
-// ===== UTILITY FUNCTIONS (from original) =====
-function trackUserInteraction(category) {
-  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
-  history.push(category);
-  if (history.length > 20) history = history.slice(-20);
-  localStorage.setItem('userHistory', JSON.stringify(history));
-}
+declineCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'declined');
+  cookieBanner.classList.remove('show');
+});
 
-function vote(toolId, type) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-
-  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  const userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
-
-  if (userVotes[toolId] === type) {
-    if (type === 'up') tool.votes--;
-    else tool.votes++;
-    delete userVotes[toolId];
-    tool.userVote = null;
-  } else {
-    if (userVotes[toolId] === 'up') tool.votes--;
-    else if (userVotes[toolId] === 'down') tool.votes++;
-      
-    if (type === 'up') tool.votes++;
-    else tool.votes--;
-      
-    userVotes[toolId] = type;
-    tool.userVote = type;
+// ===== COMMAND+K SEARCH =====
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchBox.focus();
   }
+});
 
-  savedVotes[toolId] = tool.votes;
-  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
-  localStorage.setItem('userVotes', JSON.stringify(userVotes));
-
-  renderTopCharts();
-  renderTools();
-}
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  loadAITools();
+  initFocusMode();
+});
 </script>
 
 </body>
