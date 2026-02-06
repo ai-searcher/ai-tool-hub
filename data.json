@@ -5,16 +5,19 @@
     "name": "ChatGPT",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "Free/$20",
+    "priceDisplay": {
+      "de": "Kostenlos/€20",
+      "en": "Free/$20"
+    },
     "rating": 4.9,
     "description": {
-      "de": "Bester Allrounder für Texte, Ideen, Code.",
-      "en": "Best all-rounder for text, ideas, code."
+      "de": "Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.",
+      "en": "Best all-rounder for text, ideas, code that started the AI revolution."
     },
-    "features": ["GPT-4", "Web", "Files"],
+    "features": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
     "link": "https://chat.openai.com/",
     "badge": "popular",
-    "useCases": ["chatbot", "writing", "coding"],
+    "useCases": ["chatbot", "writing", "coding", "research", "brainstorming"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -27,16 +30,16 @@
     },
     "alternatives": ["claude", "gemini", "perplexity"],
     "pros": {
-      "de": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support"],
-      "en": ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support"]
+      "de": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support", "Multimodal (Bild, Text, Code)"],
+      "en": ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support", "Multimodal (image, text, code)"]
     },
     "cons": {
-      "de": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier"],
-      "en": ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier"]
+      "de": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier", "Warteschlangen im Free-Tier"],
+      "en": ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier", "Queue times in free tier"]
     },
     "pricing": {
-      "de": "Grundlegende Funktionen mit GPT-3.5, $20/Monat für GPT-4, Web-Zugang, Datei-Upload",
-      "en": "Basic features with GPT-3.5, $20/month for GPT-4, web access, file upload"
+      "de": "Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext",
+      "en": "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"
     }
   },
   {
@@ -45,16 +48,19 @@
     "name": "Claude",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "Free/$20",
+    "priceDisplay": {
+      "de": "Kostenlos/€20",
+      "en": "Free/$20"
+    },
     "rating": 4.8,
     "description": {
-      "de": "Exzellent für lange Texte, Dokumente.",
-      "en": "Excellent for long-form, documents."
+      "de": "Exzellent für lange Texte und Dokumentenanalyse mit 200K-Token-Kontext.",
+      "en": "Excellent for long-form writing and document analysis with 200K token context."
     },
-    "features": ["200K", "Files", "Writing"],
+    "features": ["200K Context", "File Upload", "Document Analysis", "API Access", "Web Search"],
     "link": "https://claude.ai/",
     "badge": "popular",
-    "useCases": ["chatbot", "writing", "analysis"],
+    "useCases": ["document-analysis", "academic-writing", "legal-documents", "research", "content-creation"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -67,16 +73,16 @@
     },
     "alternatives": ["chatgpt", "gemini", "notion-ai"],
     "pros": {
-      "de": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits"],
-      "en": ["Up to 200,000 token context", "Excellent document analysis", "Ethical AI development", "Free access with good limits"]
+      "de": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits", "Keine Trainingsdaten-Bias"],
+      "en": ["Up to 200,000 token context", "Excellent document analysis", "Ethical AI development", "Free access with good limits", "No training data bias"]
     },
     "cons": {
-      "de": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution"],
-      "en": ["Less creative than ChatGPT", "Limited image generation", "No code execution"]
+      "de": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution", "Langsame Antwortzeiten bei großen Dokumenten"],
+      "en": ["Less creative than ChatGPT", "Limited image generation", "No code execution", "Slow response times with large documents"]
     },
     "pricing": {
-      "de": "Kostenloser Zugang mit Limits, Pro-Version $20/Monat",
-      "en": "Free access with limits, Pro version $20/month"
+      "de": "Kostenloser Zugang mit Limits, Claude Pro für €20/Monat mit erweiterten Limits und Prioritätszugang",
+      "en": "Free access with limits, Claude Pro for $20/month with extended limits and priority access"
     }
   },
   {
@@ -85,16 +91,19 @@
     "name": "Midjourney",
     "category": "image",
     "price": "paid",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.9,
     "description": {
-      "de": "Beste künstlerische Bildgenerierung.",
-      "en": "Best artistic image generation."
+      "de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
+      "en": "Best artistic image generation with unparalleled stylistic control."
     },
-    "features": ["Art", "Styles", "Quality"],
+    "features": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
     "link": "https://www.midjourney.com/",
     "badge": "popular",
-    "useCases": ["image-generator", "art", "design"],
+    "useCases": ["concept-art", "illustration", "marketing-images", "book-covers", "character-design"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -107,16 +116,16 @@
     },
     "alternatives": ["dalle-3", "stable-diffusion", "firefly"],
     "pros": {
-      "de": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen"],
-      "en": ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements"]
+      "de": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen", "Hohe Auflösungen verfügbar"],
+      "en": ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements", "High resolutions available"]
     },
     "cons": {
-      "de": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse"],
-      "en": ["Only usable via Discord", "No free version", "Steep learning curve for optimal results"]
+      "de": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse", "Kein direkter Web-Zugang"],
+      "en": ["Only usable via Discord", "No free version", "Steep learning curve for optimal results", "No direct web access"]
     },
     "pricing": {
-      "de": "$10/Monat für 200 Bilder, $30/Monat für unbegrenzte Bilder",
-      "en": "$10/month for 200 images, $30/month for unlimited images"
+      "de": "Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung",
+      "en": "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"
     }
   },
   {
@@ -125,16 +134,19 @@
     "name": "GitHub Copilot",
     "category": "code",
     "price": "paid",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "€10/Monat",
+      "en": "$10/month"
+    },
     "rating": 4.8,
     "description": {
-      "de": "Bester Code-Assistent für Entwickler.",
-      "en": "Best code assistant for developers."
+      "de": "Bester KI-Code-Assistent für Entwickler mit IDE-Integration.",
+      "en": "Best AI code assistant for developers with IDE integration."
     },
-    "features": ["Autocomplete", "Chat", "Multi-Lang"],
+    "features": ["Autocomplete", "Chat Interface", "Multi-Language", "IDE Integration", "Code Explanation"],
     "link": "https://github.com/features/copilot",
     "badge": "popular",
-    "useCases": ["coding-assistant", "debugging", "code-explanation"],
+    "useCases": ["coding", "debugging", "learning", "code-review", "documentation"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -147,16 +159,16 @@
     },
     "alternatives": ["cursor", "tabnine", "codeium"],
     "pros": {
-      "de": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%"],
-      "en": ["Integrated into all popular IDEs", "Supports 50+ programming languages", "Learns from your coding style", "Time savings of up to 55%"]
+      "de": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%", "Unternehmenslizenzen verfügbar"],
+      "en": ["Integrated into all popular IDEs", "Supports 50+ programming languages", "Learns from your coding style", "Time savings of up to 55%", "Enterprise licenses available"]
     },
     "cons": {
-      "de": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code"],
-      "en": ["Paid after 30 days", "Sometimes inefficient solutions", "Privacy concerns with proprietary code"]
+      "de": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code", "Internetverbindung erforderlich"],
+      "en": ["Paid after 30 days", "Sometimes inefficient solutions", "Privacy concerns with proprietary code", "Internet connection required"]
     },
     "pricing": {
-      "de": "$10/Monat pro Nutzer (Individual), $19/Monat pro Nutzer (Business)",
-      "en": "$10/month per user (Individual), $19/month per user (Business)"
+      "de": "€10/Monat pro Nutzer (Individual), €19/Monat pro Nutzer (Business), €39/Monat pro Nutzer (Enterprise)",
+      "en": "$10/month per user (Individual), $19/month per user (Business), $39/month per user (Enterprise)"
     }
   },
   {
@@ -165,16 +177,19 @@
     "name": "ElevenLabs",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "Free/$5",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €5",
+      "en": "Free/from $5"
+    },
     "rating": 4.8,
     "description": {
-      "de": "Realistische KI-Stimmen, Voice Cloning.",
-      "en": "Realistic AI voices, voice cloning."
+      "de": "Realistische KI-Stimmen und Voice Cloning für natürliche Sprachausgabe.",
+      "en": "Realistic AI voices and voice cloning for natural speech output."
     },
-    "features": ["TTS", "Clone", "Emotion"],
+    "features": ["Voice Cloning", "Emotional Speech", "Multilingual", "API Access", "Voice Library"],
     "link": "https://elevenlabs.io/",
     "badge": "popular",
-    "useCases": ["voice-generator", "text-to-speech", "voice-cloning"],
+    "useCases": ["voiceovers", "audiobooks", "podcasts", "video-narration", "accessibility"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -187,16 +202,16 @@
     },
     "alternatives": ["murf", "descript", "suno"],
     "pros": {
-      "de": ["Die realistischsten KI-Stimmen", "Einfaches Voice-Cloning", "Emotionale Sprachausgabe", "Kostenlose Testversion"],
-      "en": ["Most realistic AI voices", "Easy voice cloning", "Emotional speech output", "Free trial"]
+      "de": ["Die realistischsten KI-Stimmen", "Einfaches Voice-Cloning", "Emotionale Sprachausgabe", "Kostenlose Testversion", "Hohe Anpassbarkeit"],
+      "en": ["Most realistic AI voices", "Easy voice cloning", "Emotional speech output", "Free trial", "High customization"]
     },
     "cons": {
-      "de": ["Teuer für professionelle Nutzung", "Limitierte kostenlose Nutzung", "Ethische Bedenken bei Voice-Cloning"],
-      "en": ["Expensive for professional use", "Limited free usage", "Ethical concerns with voice cloning"]
+      "de": ["Teuer für professionelle Nutzung", "Limitierte kostenlose Nutzung", "Ethische Bedenken bei Voice-Cloning", "Wasserzeichen in Free-Tier"],
+      "en": ["Expensive for professional use", "Limited free usage", "Ethical concerns with voice cloning", "Watermarks in free tier"]
     },
     "pricing": {
-      "de": "Kostenlos: 10.000 Zeichen/Monat, Starter: $5/Monat für 30.000 Zeichen",
-      "en": "Free: 10,000 characters/month, Starter: $5/month for 30,000 characters"
+      "de": "Kostenlos: 10.000 Zeichen/Monat, Starter: €5/Monat für 30.000 Zeichen, Creator: €22/Monat für 100.000 Zeichen",
+      "en": "Free: 10,000 characters/month, Starter: $5/month for 30,000 characters, Creator: $22/month for 100,000 characters"
     }
   },
   {
@@ -205,16 +220,19 @@
     "name": "Runway",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "Free/$15",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €15",
+      "en": "Free/from $15"
+    },
     "rating": 4.7,
     "description": {
-      "de": "Text-zu-Video, KI-Video Editing.",
-      "en": "Text-to-video, AI video editing."
+      "de": "All-in-One KI-Video-Plattform mit Text-zu-Video und professionellen Editing-Tools.",
+      "en": "All-in-One AI video platform with text-to-video and professional editing tools."
     },
-    "features": ["Gen", "Edit", "FX"],
+    "features": ["Text-to-Video", "Video Editing", "Object Removal", "Motion Tracking", "Green Screen"],
     "link": "https://runwayml.com/",
     "badge": "popular",
-    "useCases": ["video-editor", "video-generation", "editing"],
+    "useCases": ["video-editing", "motion-graphics", "special-effects", "content-creation", "advertising"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -227,16 +245,16 @@
     },
     "alternatives": ["pika", "invideo", "heygen"],
     "pros": {
-      "de": ["30+ KI-Video-Tools in einer Plattform", "Professionelle Ergebnisse", "Einfache Benutzeroberfläche", "Kostenloser Plan verfügbar"],
-      "en": ["30+ AI video tools in one platform", "Professional results", "Easy user interface", "Free plan available"]
+      "de": ["30+ KI-Video-Tools in einer Plattform", "Professionelle Ergebnisse", "Einfache Benutzeroberfläche", "Kostenloser Plan verfügbar", "Regelmäßige neue Features"],
+      "en": ["30+ AI video tools in one platform", "Professional results", "Easy user interface", "Free plan available", "Regular new features"]
     },
     "cons": {
-      "de": ["Wasserzeichen im Free-Tier", "Teure Pro-Pläne", "Rechenintensiv (braucht gute Hardware)"],
-      "en": ["Watermarks in free tier", "Expensive pro plans", "Computationally intensive (needs good hardware)"]
+      "de": ["Wasserzeichen im Free-Tier", "Teure Pro-Pläne", "Rechenintensiv (braucht gute Hardware)", "Lernkurve für alle Tools"],
+      "en": ["Watermarks in free tier", "Expensive pro plans", "Computationally intensive (needs good hardware)", "Learning curve for all tools"]
     },
     "pricing": {
-      "de": "Kostenlos: 3 Projekte, Wasserzeichen; Standard: $15/Monat für 125 Credits",
-      "en": "Free: 3 projects, watermarks; Standard: $15/month for 125 credits"
+      "de": "Kostenlos: 3 Projekte, Wasserzeichen; Standard: €15/Monat für 125 Credits; Pro: €35/Monat für 450 Credits",
+      "en": "Free: 3 projects, watermarks; Standard: $15/month for 125 credits; Pro: $35/month for 450 credits"
     }
   },
   {
@@ -245,37 +263,41 @@
     "name": "Gemini",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "Free/$20",
+    "priceDisplay": {
+      "de": "Kostenlos/€20",
+      "en": "Free/$20"
+    },
     "rating": 4.6,
     "description": {
-      "de": "Googles KI mit Web Integration.",
-      "en": "Google's AI with web integration."
+      "de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
+      "en": "Google's AI assistant with deep web integration and multimodal capabilities."
     },
-    "features": ["Web", "Multimodal", "Apps"],
+    "features": ["Web Search", "Multimodal", "Google Apps", "Code Generation", "Image Analysis"],
     "link": "https://gemini.google.com/",
     "badge": "new",
-    "useCases": ["chatbot", "research", "writing"],
+    "useCases": ["research", "writing", "coding", "analysis", "productivity"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Gemini - Googles KI-Assistent",
-      "en": "Gemini - Google's AI Assistant"
+      "de": "Gemini - Googles KI-Assistent mit Web-Integration",
+      "en": "Gemini - Google's AI Assistant with Web Integration"
     },
     "seoDesc": {
-      "de": "Gemini ist Googles KI mit Web-Integration und Multimodalität.",
-      "en": "Gemini is Google's AI with web integration and multimodality."
+      "de": "Gemini ist Googles KI mit Web-Integration und Multimodalität. Perfekt für Recherche und Produktivität.",
+      "en": "Gemini is Google's AI with web integration and multimodality. Perfect for research and productivity."
     },
+    "alternatives": ["chatgpt", "claude", "perplexity"],
     "pros": {
-      "de": ["Kostenlose Nutzung", "Web-Integration", "Multimodale Fähigkeiten"],
-      "en": ["Free to use", "Web integration", "Multimodal capabilities"]
+      "de": ["Kostenlose Nutzung", "Tiefe Web-Integration", "Multimodale Fähigkeiten", "Gute Google-Integration", "Aktuelle Informationen"],
+      "en": ["Free to use", "Deep web integration", "Multimodal capabilities", "Good Google integration", "Current information"]
     },
     "cons": {
-      "de": ["Noch nicht so ausgereift wie ChatGPT", "Begrenzte Funktionen in der kostenlosen Version"],
-      "en": ["Not as mature as ChatGPT", "Limited features in free version"]
+      "de": ["Noch nicht so ausgereift wie ChatGPT", "Begrenzte Funktionen in der kostenlosen Version", "Datenschutzbedenken bei Google"],
+      "en": ["Not as mature as ChatGPT", "Limited features in free version", "Privacy concerns with Google"]
     },
     "pricing": {
-      "de": "Kostenlos mit Limits, $20/Monat für erweiterte Funktionen",
-      "en": "Free with limits, $20/month for advanced features"
+      "de": "Gemini Basic: Kostenlos, Gemini Advanced: €20/Monat mit erweiterten Funktionen und 2TB Google One",
+      "en": "Gemini Basic: Free, Gemini Advanced: $20/month with advanced features and 2TB Google One"
     }
   },
   {
@@ -284,16 +306,19 @@
     "name": "Perplexity",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "Free/$20",
+    "priceDisplay": {
+      "de": "Kostenlos/€20",
+      "en": "Free/$20"
+    },
     "rating": 4.7,
     "description": {
-      "de": "KI-Suche mit Quellenangaben.",
-      "en": "AI search with citations."
+      "de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
+      "en": "AI search engine with citations and conversational answer formatting."
     },
-    "features": ["Citations", "Web", "Sources"],
+    "features": ["Citations", "Web Search", "File Upload", "Collections", "Copilot"],
     "link": "https://www.perplexity.ai/",
     "badge": "new",
-    "useCases": ["chatbot", "research", "information"],
+    "useCases": ["research", "academic-work", "fact-checking", "news", "learning"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -301,20 +326,21 @@
       "en": "Perplexity - AI Search Engine with Sources"
     },
     "seoDesc": {
-      "de": "Perplexity ist eine KI-Suchmaschine die Antworten mit Quellenangaben liefert.",
-      "en": "Perplexity is an AI search engine that provides answers with citations."
+      "de": "Perplexity ist eine KI-Suchmaschine die Antworten mit Quellenangaben liefert. Ideal für Recherche und akademische Arbeit.",
+      "en": "Perplexity is an AI search engine that provides answers with citations. Ideal for research and academic work."
     },
+    "alternatives": ["gemini", "chatgpt", "claude"],
     "pros": {
-      "de": ["Quellenangaben bei Antworten", "Aktuelle Informationen", "Kostenlose Nutzung"],
-      "en": ["Citations with answers", "Current information", "Free to use"]
+      "de": ["Quellenangaben bei jeder Antwort", "Aktuelle Informationen", "Kostenlose Nutzung", "Keine Halluzinationen", "Fokus auf Fakten"],
+      "en": ["Citations with every answer", "Current information", "Free to use", "No hallucinations", "Focus on facts"]
     },
     "cons": {
-      "de": ["Begrenzte kreative Fähigkeiten", "Teilweise unvollständige Antworten"],
-      "en": ["Limited creative capabilities", "Sometimes incomplete answers"]
+      "de": ["Begrenzte kreative Fähigkeiten", "Teilweise unvollständige Antworten", "Keine komplexen Aufgaben"],
+      "en": ["Limited creative capabilities", "Sometimes incomplete answers", "No complex tasks"]
     },
     "pricing": {
-      "de": "Kostenlos mit Limits, $20/Monat für Pro-Funktionen",
-      "en": "Free with limits, $20/month for pro features"
+      "de": "Kostenlos mit Limits, Pro für €20/Monat mit erweiterten Suchfunktionen und Datei-Upload",
+      "en": "Free with limits, Pro for $20/month with advanced search features and file upload"
     }
   },
   {
@@ -323,37 +349,41 @@
     "name": "DALL·E 3",
     "category": "image",
     "price": "paid",
-    "priceDisplay": "In ChatGPT+",
+    "priceDisplay": {
+      "de": "In ChatGPT+ (€20)",
+      "en": "In ChatGPT+ ($20)"
+    },
     "rating": 4.7,
     "description": {
-      "de": "Text-zu-Bild in ChatGPT.",
-      "en": "Text-to-image in ChatGPT."
+      "de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
+      "en": "Text-to-image generator from OpenAI with excellent text understanding."
     },
-    "features": ["Text", "Images", "ChatGPT"],
+    "features": ["Text-to-Image", "ChatGPT Integration", "High Quality", "Multiple Styles", "Editing"],
     "link": "https://openai.com/dall-e-3",
     "badge": "new",
-    "useCases": ["image-generator", "art", "design"],
+    "useCases": ["image-generation", "concept-art", "social-media", "illustration", "design"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "DALL·E 3 - OpenAI's Bildgenerator",
-      "en": "DALL·E 3 - OpenAI's Image Generator"
+      "de": "DALL·E 3 - OpenAIs fortschrittlicher Bildgenerator",
+      "en": "DALL·E 3 - OpenAI's Advanced Image Generator"
     },
     "seoDesc": {
-      "de": "DALL·E 3 ist OpenAIs fortschrittlicher Text-zu-Bild Generator in ChatGPT integriert.",
-      "en": "DALL·E 3 is OpenAI's advanced text-to-image generator integrated in ChatGPT."
+      "de": "DALL·E 3 ist OpenAIs fortschrittlicher Text-zu-Bild Generator in ChatGPT integriert. Bestes Textverständnis aller Bild-KIs.",
+      "en": "DALL·E 3 is OpenAI's advanced text-to-image generator integrated in ChatGPT. Best text understanding of all image AIs."
     },
+    "alternatives": ["midjourney", "stable-diffusion", "firefly"],
     "pros": {
-      "de": ["Hohe Bildqualität", "Nahtlose Integration in ChatGPT", "Gute Textverständnis"],
-      "en": ["High image quality", "Seamless integration with ChatGPT", "Good text understanding"]
+      "de": ["Hervorragendes Textverständnis", "Nahtlose Integration in ChatGPT", "Hohe Bildqualität", "Keine Lernkurve", "Schnelle Generierung"],
+      "en": ["Excellent text understanding", "Seamless integration with ChatGPT", "High image quality", "No learning curve", "Fast generation"]
     },
     "cons": {
-      "de": ["Nur über ChatGPT+ verfügbar", "Keine eigenständige Nutzung"],
-      "en": ["Only available via ChatGPT+", "No standalone usage"]
+      "de": ["Nur über ChatGPT+ verfügbar", "Keine eigenständige Nutzung", "Weniger stilistische Kontrolle als Midjourney"],
+      "en": ["Only available via ChatGPT+", "No standalone usage", "Less stylistic control than Midjourney"]
     },
     "pricing": {
-      "de": "Teil von ChatGPT Plus ($20/Monat)",
-      "en": "Part of ChatGPT Plus ($20/month)"
+      "de": "Teil von ChatGPT Plus (€20/Monat) inklusive 50 DALL·E 3 Generierungen pro Tag",
+      "en": "Part of ChatGPT Plus ($20/month) including 50 DALL·E 3 generations per day"
     }
   },
   {
@@ -362,16 +392,19 @@
     "name": "Stable Diffusion",
     "category": "image",
     "price": "free",
-    "priceDisplay": "Free",
+    "priceDisplay": {
+      "de": "Kostenlos",
+      "en": "Free"
+    },
     "rating": 4.7,
     "description": {
-      "de": "Open-Source Bildgenerierung.",
-      "en": "Open-source image generation."
+      "de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
+      "en": "Open-source image generation with local installation and full control."
     },
-    "features": ["Open", "Local", "Custom"],
+    "features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "Inpainting"],
     "link": "https://stability.ai/",
     "badge": "free",
-    "useCases": ["image-generator", "art", "custom-models"],
+    "useCases": ["custom-models", "research", "commercial-use", "nsfw-content", "animation"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -379,20 +412,21 @@
       "en": "Stable Diffusion - Open-Source AI Images"
     },
     "seoDesc": {
-      "de": "Stable Diffusion ist ein Open-Source KI-Bildgenerator der lokal ausgeführt werden kann.",
-      "en": "Stable Diffusion is an open-source AI image generator that can run locally."
+      "de": "Stable Diffusion ist ein Open-Source KI-Bildgenerator der lokal ausgeführt werden kann. Volle Kontrolle und Anpassung.",
+      "en": "Stable Diffusion is an open-source AI image generator that can run locally. Full control and customization."
     },
+    "alternatives": ["midjourney", "dalle-3", "leonardo"],
     "pros": {
-      "de": ["Open-Source", "Lokal ausführbar", "Anpassbare Modelle", "Kostenlos"],
-      "en": ["Open-source", "Runnable locally", "Customizable models", "Free"]
+      "de": ["Open-Source und kostenlos", "Lokal ausführbar", "Anpassbare Modelle", "Vollständige Datenschutzkontrolle", "Kommerzielle Nutzung erlaubt"],
+      "en": ["Open-source and free", "Runnable locally", "Customizable models", "Complete privacy control", "Commercial use allowed"]
     },
     "cons": {
-      "de": ["Technisches Know-how erforderlich", "Qualität variiert je nach Modell"],
-      "en": ["Technical knowledge required", "Quality varies by model"]
+      "de": ["Technisches Know-how erforderlich", "Qualität variiert je nach Modell", "Kein Support", "Rechenintensiv"],
+      "en": ["Technical knowledge required", "Quality varies by model", "No support", "Computationally intensive"]
     },
     "pricing": {
-      "de": "Kostenlos (Open-Source)",
-      "en": "Free (Open-source)"
+      "de": "Komplett kostenlos (Open-Source), Hosting-Lösungen ab €10/Monat verfügbar",
+      "en": "Completely free (open-source), hosting solutions from $10/month available"
     }
   },
   {
@@ -401,16 +435,19 @@
     "name": "Notion AI",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "€10/Monat",
+      "en": "$10/month"
+    },
     "rating": 4.5,
     "description": {
-      "de": "KI in deinem Workspace.",
-      "en": "AI in your workspace."
+      "de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
+      "en": "AI directly in your Notion workspace for writing, summarization and more."
     },
-    "features": ["Writing", "Summarize", "Translate"],
+    "features": ["Writing Assistant", "Summarization", "Translation", "Brainstorming", "Editing"],
     "link": "https://www.notion.so/product/ai",
     "badge": "popular",
-    "useCases": ["writing", "notes", "organization"],
+    "useCases": ["note-taking", "documentation", "project-management", "knowledge-base", "meeting-notes"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -421,17 +458,18 @@
       "de": "Notion AI bringt KI direkt in deinen Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
       "en": "Notion AI brings AI directly into your Notion workspace for writing, summarization and more."
     },
+    "alternatives": ["chatgpt", "claude", "gemini"],
     "pros": {
-      "de": ["Nahtlose Notion-Integration", "Vielfältige Schreibhilfen", "Zusammenfassungsfunktionen"],
-      "en": ["Seamless Notion integration", "Various writing assistants", "Summarization features"]
+      "de": ["Nahtlose Notion-Integration", "Vielfältige Schreibhilfen", "Zusammenfassungsfunktionen", "Kein Kontextwechsel nötig", "Team-Kollaboration"],
+      "en": ["Seamless Notion integration", "Various writing assistants", "Summarization features", "No context switching needed", "Team collaboration"]
     },
     "cons": {
-      "de": ["Zusätzliche Kosten zu Notion", "Begrenzte KI-Fähigkeiten"],
-      "en": ["Additional cost to Notion", "Limited AI capabilities"]
+      "de": ["Zusätzliche Kosten zu Notion", "Begrenzte KI-Fähigkeiten", "Keine Bildgenerierung", "Teuer für Einzelpersonen"],
+      "en": ["Additional cost to Notion", "Limited AI capabilities", "No image generation", "Expensive for individuals"]
     },
     "pricing": {
-      "de": "$10/Monat zusätzlich zu Notion",
-      "en": "$10/month in addition to Notion"
+      "de": "€10/Monat zusätzlich zu Notion (ab €8/Monat), Teams ab €15/Monat pro Benutzer",
+      "en": "$10/month in addition to Notion (from $8/month), teams from $15/month per user"
     }
   },
   {
@@ -440,16 +478,19 @@
     "name": "Copy.ai",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$49/mo",
+    "priceDisplay": {
+      "de": "ab €49/Monat",
+      "en": "from $49/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI für Marketing Texte.",
-      "en": "AI for marketing copy."
+      "de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
+      "en": "AI platform specialized in marketing copy and advertising text."
     },
-    "features": ["Marketing", "Templates", "Workflows"],
+    "features": ["Marketing Templates", "Workflows", "Brand Voice", "SEO Tools", "Content Calendar"],
     "link": "https://www.copy.ai/",
     "badge": "popular",
-    "useCases": ["copywriting", "marketing", "ads"],
+    "useCases": ["copywriting", "social-media", "email-marketing", "ad-copy", "landing-pages"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -457,20 +498,21 @@
       "en": "Copy.ai - AI for Marketing Copy"
     },
     "seoDesc": {
-      "de": "Copy.ai ist eine KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
-      "en": "Copy.ai is an AI platform specialized in marketing copy and advertising text."
+      "de": "Copy.ai ist eine KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte. Perfekt für Marketing-Teams.",
+      "en": "Copy.ai is an AI platform specialized in marketing copy and advertising text. Perfect for marketing teams."
     },
+    "alternatives": ["jasper", "writesonic", "rytr"],
     "pros": {
-      "de": ["Spezialisiert auf Marketing", "Viele Vorlagen", "Workflow-Optimierung"],
-      "en": ["Specialized in marketing", "Many templates", "Workflow optimization"]
+      "de": ["Spezialisiert auf Marketing", "90+ Vorlagen", "Workflow-Optimierung", "Team-Kollaboration", "Brand Voice Training"],
+      "en": ["Specialized in marketing", "90+ templates", "Workflow optimization", "Team collaboration", "Brand voice training"]
     },
     "cons": {
-      "de": ["Teuer für Einzelpersonen", "Begrenzte kostenlose Version"],
-      "en": ["Expensive for individuals", "Limited free version"]
+      "de": ["Teuer für Einzelpersonen", "Begrenzte kostenlose Version", "Weniger allgemeine Anwendungen", "Fokus nur auf Marketing"],
+      "en": ["Expensive for individuals", "Limited free version", "Less general applications", "Focus only on marketing"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $49/Monat",
-      "en": "Free trial, From $49/month"
+      "de": "Kostenlose Testversion, Pro ab €49/Monat, Team ab €249/Monat, Enterprise auf Anfrage",
+      "en": "Free trial, Pro from $49/month, Team from $249/month, Enterprise custom pricing"
     }
   },
   {
@@ -479,16 +521,19 @@
     "name": "Jasper",
     "category": "text",
     "price": "paid",
-    "priceDisplay": "$49/mo",
+    "priceDisplay": {
+      "de": "ab €49/Monat",
+      "en": "from $49/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI für Business Content.",
-      "en": "AI for business content."
+      "de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
+      "en": "AI platform for business content with brand customization and collaboration."
     },
-    "features": ["Brand", "Templates", "Collaboration"],
+    "features": ["Brand Voice", "Templates", "Collaboration", "SEO", "Content Analytics"],
     "link": "https://www.jasper.ai/",
     "badge": "popular",
-    "useCases": ["copywriting", "blogging", "seo"],
+    "useCases": ["blog-writing", "seo-content", "social-media", "advertising", "product-descriptions"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -499,17 +544,18 @@
       "de": "Jasper ist eine KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
       "en": "Jasper is an AI platform for business content with brand customization and collaboration."
     },
+    "alternatives": ["copy-ai", "writesonic", "chatgpt"],
     "pros": {
-      "de": ["Markenanpassung", "Team-Kollaboration", "Business-fokussiert"],
-      "en": ["Brand customization", "Team collaboration", "Business-focused"]
+      "de": ["Markenanpassung", "Team-Kollaboration", "Business-fokussiert", "SEO-Optimierung", "Lange Dokumente"],
+      "en": ["Brand customization", "Team collaboration", "Business-focused", "SEO optimization", "Long documents"]
     },
     "cons": {
-      "de": ["Teuer", "Überwiegend für Marketing"],
-      "en": ["Expensive", "Mostly for marketing"]
+      "de": ["Teuer", "Überwiegend für Marketing", "Langsame Updates", "Weniger kreativ als ChatGPT"],
+      "en": ["Expensive", "Mostly for marketing", "Slow updates", "Less creative than ChatGPT"]
     },
     "pricing": {
-      "de": "Ab $49/Monat",
-      "en": "From $49/month"
+      "de": "Creator: €49/Monat, Teams: €125/Monat, Business: €500/Monat, Enterprise auf Anfrage",
+      "en": "Creator: $49/month, Teams: $125/month, Business: $500/month, Enterprise custom pricing"
     }
   },
   {
@@ -518,16 +564,19 @@
     "name": "Adobe Firefly",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$5/mo",
+    "priceDisplay": {
+      "de": "€5/Monat",
+      "en": "$5/month"
+    },
     "rating": 4.5,
     "description": {
-      "de": "Adobe's KI für Kreative.",
-      "en": "Adobe's AI for creatives."
+      "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
+      "en": "Adobe's AI for creative image generation and editing with professional tools."
     },
-    "features": ["Photoshop", "Vector", "Text"],
+    "features": ["Text-to-Image", "Generative Fill", "Vector Recolor", "Text Effects", "3D to Image"],
     "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
     "badge": "new",
-    "useCases": ["design", "photo-editing", "illustration"],
+    "useCases": ["photo-editing", "graphic-design", "illustration", "social-media", "advertising"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -535,20 +584,21 @@
       "en": "Adobe Firefly - AI for Creatives"
     },
     "seoDesc": {
-      "de": "Adobe Firefly ist Adobes KI-Tool für kreative Bildgenerierung und -bearbeitung.",
-      "en": "Adobe Firefly is Adobe's AI tool for creative image generation and editing."
+      "de": "Adobe Firefly ist Adobes KI-Tool für kreative Bildgenerierung und -bearbeitung. Nahtlose Integration in Creative Cloud.",
+      "en": "Adobe Firefly is Adobe's AI tool for creative image generation and editing. Seamless integration with Creative Cloud."
     },
+    "alternatives": ["midjourney", "dalle-3", "canva-ai"],
     "pros": {
-      "de": ["Adobe-Integration", "Professionelle Werkzeuge", "Rechtlich sichere Bilder"],
-      "en": ["Adobe integration", "Professional tools", "Legally safe images"]
+      "de": ["Adobe-Integration", "Professionelle Werkzeuge", "Rechtlich sichere Bilder", "Keine Lernkurve für Adobe-Nutzer", "Kommerzielle Nutzung inklusive"],
+      "en": ["Adobe integration", "Professional tools", "Legally safe images", "No learning curve for Adobe users", "Commercial use included"]
     },
     "cons": {
-      "de": ["Teilweise limitierte Kreativität", "Adobe-Abonnement nötig"],
-      "en": ["Somewhat limited creativity", "Adobe subscription needed"]
+      "de": ["Teilweise limitierte Kreativität", "Adobe-Abonnement nötig", "Weniger Kontrolle als Midjourney", "Langsamere Entwicklung"],
+      "en": ["Somewhat limited creativity", "Adobe subscription needed", "Less control than Midjourney", "Slower development"]
     },
     "pricing": {
-      "de": "In Adobe Creative Cloud enthalten, Ab $5/Monat",
-      "en": "Included in Adobe Creative Cloud, From $5/month"
+      "de": "In Adobe Creative Cloud enthalten (ab €5/Monat für Studenten, ab €25/Monat regulär)",
+      "en": "Included in Adobe Creative Cloud (from $5/month for students, from $25/month regular)"
     }
   },
   {
@@ -557,16 +607,19 @@
     "name": "Leonardo AI",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "Bildgenerierung für Spiele.",
-      "en": "Image generation for games."
+      "de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
+      "en": "Image generation specialized in game assets, textures and 3D models."
     },
-    "features": ["Game", "Assets", "Models"],
+    "features": ["Game Assets", "3D Texturing", "Model Training", "Canvas Editor", "AI Canvas"],
     "link": "https://leonardo.ai/",
     "badge": "new",
-    "useCases": ["game-dev", "3d-models", "textures"],
+    "useCases": ["game-dev", "3d-models", "textures", "character-design", "concept-art"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -574,20 +627,21 @@
       "en": "Leonardo AI - AI for Game Design"
     },
     "seoDesc": {
-      "de": "Leonardo AI ist spezialisiert auf Bildgenerierung für Spiele und 3D-Assets.",
-      "en": "Leonardo AI specializes in image generation for games and 3D assets."
+      "de": "Leonardo AI ist spezialisiert auf Bildgenerierung für Spiele und 3D-Assets. Perfekt für Game-Entwickler.",
+      "en": "Leonardo AI specializes in image generation for games and 3D assets. Perfect for game developers."
     },
+    "alternatives": ["midjourney", "stable-diffusion", "playground"],
     "pros": {
-      "de": ["Spezialisiert auf Game-Assets", "3D-Modell-Unterstützung", "Viele spezifische Modelle"],
-      "en": ["Specialized in game assets", "3D model support", "Many specific models"]
+      "de": ["Spezialisiert auf Game-Assets", "3D-Modell-Unterstützung", "Viele spezifische Modelle", "Eigene Modelle trainieren", "API verfügbar"],
+      "en": ["Specialized in game assets", "3D model support", "Many specific models", "Train your own models", "API available"]
     },
     "cons": {
-      "de": ["Lernkurve für optimale Ergebnisse", "Begrenzte allgemeine Anwendung"],
-      "en": ["Learning curve for optimal results", "Limited general application"]
+      "de": ["Lernkurve für optimale Ergebnisse", "Begrenzte allgemeine Anwendung", "Teilweise inkonsistente Qualität", "Community noch klein"],
+      "en": ["Learning curve for optimal results", "Limited general application", "Somewhat inconsistent quality", "Community still small"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $12/Monat",
-      "en": "Free version available, From $12/month"
+      "de": "Kostenlose Version verfügbar (150 Tokens/Tag), Apprentice: €12/Monat, Artisan: €30/Monat, Maestro: €60/Monat",
+      "en": "Free version available (150 tokens/day), Apprentice: $12/month, Artisan: $30/month, Maestro: $60/month"
     }
   },
   {
@@ -596,16 +650,19 @@
     "name": "Playground AI",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$15/mo",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €15",
+      "en": "Free/from $15"
+    },
     "rating": 4.3,
     "description": {
-      "de": "Kostenlose Bildgenerierung.",
-      "en": "Free image generation."
+      "de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
+      "en": "Free image generation with filters and advanced editing tools."
     },
-    "features": ["Free", "Filters", "Editing"],
+    "features": ["Free Tier", "Filters", "Editing Tools", "Image to Image", "Upscaling"],
     "link": "https://playgroundai.com/",
     "badge": "free",
-    "useCases": ["image-generator", "art", "social-media"],
+    "useCases": ["social-media", "blog-images", "personal-projects", "experimentation", "education"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -613,20 +670,21 @@
       "en": "Playground AI - Free AI Images"
     },
     "seoDesc": {
-      "de": "Playground AI bietet kostenlose Bildgenerierung mit Filtern und Bearbeitungswerkzeugen.",
-      "en": "Playground AI offers free image generation with filters and editing tools."
+      "de": "Playground AI bietet kostenlose Bildgenerierung mit Filtern und Bearbeitungswerkzeugen. Ideal für Einsteiger.",
+      "en": "Playground AI offers free image generation with filters and editing tools. Ideal for beginners."
     },
+    "alternatives": ["midjourney", "leonardo", "nightcafe"],
     "pros": {
-      "de": ["Kostenlose Nutzung", "Filter und Bearbeitung", "Benutzerfreundlich"],
-      "en": ["Free to use", "Filters and editing", "User-friendly"]
+      "de": ["Kostenlose Nutzung", "Filter und Bearbeitung", "Benutzerfreundlich", "Keine Kreditkarte nötig", "Schnelle Ergebnisse"],
+      "en": ["Free to use", "Filters and editing", "User-friendly", "No credit card needed", "Fast results"]
     },
     "cons": {
-      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte tägliche Generierungen"],
-      "en": ["Watermarks in free version", "Limited daily generations"]
+      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte tägliche Generierungen", "Weniger Qualität als Midjourney", "Keine kommerzielle Nutzung im Free-Tier"],
+      "en": ["Watermarks in free version", "Limited daily generations", "Less quality than Midjourney", "No commercial use in free tier"]
     },
     "pricing": {
-      "de": "Kostenlos mit Limits, Ab $15/Monat",
-      "en": "Free with limits, From $15/month"
+      "de": "Kostenlos: 500 Bilder/Tag mit Wasserzeichen, Pro: €15/Monat für 1000 Bilder/Tag, Premium: €45/Monat für unbegrenzt",
+      "en": "Free: 500 images/day with watermarks, Pro: $15/month for 1000 images/day, Premium: $45/month for unlimited"
     }
   },
   {
@@ -635,16 +693,19 @@
     "name": "Murf AI",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$19/mo",
+    "priceDisplay": {
+      "de": "ab €19/Monat",
+      "en": "from $19/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "Text-zu-Sprache für Videos.",
-      "en": "Text-to-speech for videos."
+      "de": "Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.",
+      "en": "Text-to-speech for videos and commercial use with studio quality."
     },
-    "features": ["Voice", "Video", "Commercial"],
+    "features": ["Voice Cloning", "Voice Changer", "Video Integration", "Commercial Rights", "Collaboration"],
     "link": "https://murf.ai/",
     "badge": "popular",
-    "useCases": ["voiceover", "video", "podcast"],
+    "useCases": ["voiceover", "explainer-videos", "e-learning", "podcasts", "advertising"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -655,17 +716,18 @@
       "de": "Murf AI bietet hochwertige Text-zu-Sprache Stimmen für Videos und kommerzielle Nutzung.",
       "en": "Murf AI offers high-quality text-to-speech voices for videos and commercial use."
     },
+    "alternatives": ["elevenlabs", "descript", "suno"],
     "pros": {
-      "de": ["Hohe Stimmenqualität", "Kommerzielle Nutzung", "Video-Integration"],
-      "en": ["High voice quality", "Commercial use", "Video integration"]
+      "de": ["Hohe Stimmenqualität", "Kommerzielle Nutzung", "Video-Integration", "Team-Kollaboration", "Voice Changer"],
+      "en": ["High voice quality", "Commercial use", "Video integration", "Team collaboration", "Voice changer"]
     },
     "cons": {
-      "de": ["Teuer für umfangreiche Nutzung", "Begrenzte kostenlose Version"],
-      "en": ["Expensive for extensive use", "Limited free version"]
+      "de": ["Teuer für umfangreiche Nutzung", "Begrenzte kostenlose Version", "Keine Emotionen wie ElevenLabs", "Lernkurve für optimale Ergebnisse"],
+      "en": ["Expensive for extensive use", "Limited free version", "No emotions like ElevenLabs", "Learning curve for optimal results"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $19/Monat",
-      "en": "Free trial, From $19/month"
+      "de": "Kostenlose Testversion, Basic: €19/Monat, Pro: €26/Monat, Enterprise: €75/Monat",
+      "en": "Free trial, Basic: $19/month, Pro: $26/month, Enterprise: $75/month"
     }
   },
   {
@@ -674,16 +736,19 @@
     "name": "Suno AI",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.6,
     "description": {
-      "de": "KI Musik Generator.",
-      "en": "AI music generator."
+      "de": "KI-Musikgenerator der vollständige Songs mit Gesang und Instrumenten erstellt.",
+      "en": "AI music generator that creates complete songs with vocals and instruments."
     },
-    "features": ["Music", "Lyrics", "Genres"],
+    "features": ["Music Generation", "Lyrics to Music", "Custom Instruments", "Style Control", "Download"],
     "link": "https://www.suno.ai/",
     "badge": "new",
-    "useCases": ["music", "songwriting", "audio"],
+    "useCases": ["music-production", "songwriting", "background-music", "content-creation", "podcast-intros"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -691,20 +756,21 @@
       "en": "Suno AI - AI Music Generator"
     },
     "seoDesc": {
-      "de": "Suno AI generiert vollständige Musikstücke mit Gesang und Instrumenten.",
-      "en": "Suno AI generates complete music pieces with vocals and instruments."
+      "de": "Suno AI generiert vollständige Musikstücke mit Gesang und Instrumenten. Revolutionär für Musikproduktion.",
+      "en": "Suno AI generates complete music pieces with vocals and instruments. Revolutionary for music production."
     },
+    "alternatives": ["boomy", "aiva", "soundraw"],
     "pros": {
-      "de": ["Komplette Musikgenerierung", "Text-zu-Musik", "Verschiedene Genres"],
-      "en": ["Complete music generation", "Text-to-music", "Various genres"]
+      "de": ["Komplette Musikgenerierung", "Text-zu-Musik", "Verschiedene Genres", "Hohe Qualität", "Kostenlose Nutzung"],
+      "en": ["Complete music generation", "Text-to-music", "Various genres", "High quality", "Free to use"]
     },
     "cons": {
-      "de": ["Begrenzte kostenlose Nutzung", "Variable Qualität"],
-      "en": ["Limited free usage", "Variable quality"]
+      "de": ["Begrenzte kostenlose Nutzung", "Variable Qualität", "Keine professionelle Mastering", "Urheberrechtsfragen"],
+      "en": ["Limited free usage", "Variable quality", "No professional mastering", "Copyright questions"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 50 Credits/Monat, Pro: €10/Monat für 500 Credits, Premier: €30/Monat für 2000 Credits",
+      "en": "Free: 50 credits/month, Pro: $10/month for 500 credits, Premier: $30/month for 2000 credits"
     }
   },
   {
@@ -713,16 +779,19 @@
     "name": "Boomy",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "Erstelle Musik in Sekunden.",
-      "en": "Create music in seconds."
+      "de": "Erstelle Musik in Sekunden und veröffentliche sie auf Streaming-Plattformen.",
+      "en": "Create music in seconds and publish to streaming platforms."
     },
-    "features": ["Instant", "Royalty", "Distribution"],
+    "features": ["Instant Creation", "Streaming Distribution", "Royalty Collection", "Customization", "AI Mastering"],
     "link": "https://boomy.com/",
     "badge": "free",
-    "useCases": ["music", "streaming", "content"],
+    "useCases": ["quick-music", "streaming", "royalty-income", "content-background", "experimentation"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -733,17 +802,18 @@
       "de": "Boomy ermöglicht das Erstellen von Musik in Sekunden mit KI und Veröffentlichung auf Streaming-Plattformen.",
       "en": "Boomy enables creating music in seconds with AI and publishing to streaming platforms."
     },
+    "alternatives": ["suno", "soundraw", "aiva"],
     "pros": {
-      "de": ["Sehr schnelle Generierung", "Streaming-Veröffentlichung", "Kostenlose Nutzung"],
-      "en": ["Very fast generation", "Streaming publication", "Free to use"]
+      "de": ["Sehr schnelle Generierung", "Streaming-Veröffentlichung", "Kostenlose Nutzung", "Royalty-Einnahmen", "Einfache Bedienung"],
+      "en": ["Very fast generation", "Streaming publication", "Free to use", "Royalty earnings", "Easy to use"]
     },
     "cons": {
-      "de": ["Begrenzte kreative Kontrolle", "Generische Klänge"],
-      "en": ["Limited creative control", "Generic sounds"]
+      "de": ["Begrenzte kreative Kontrolle", "Generische Klänge", "Keine professionelle Qualität", "Wenig Anpassung"],
+      "en": ["Limited creative control", "Generic sounds", "No professional quality", "Little customization"]
     },
     "pricing": {
-      "de": "Kostenlos mit Limits, Ab $10/Monat",
-      "en": "Free with limits, From $10/month"
+      "de": "Kostenlos mit Limits, Creator: €10/Monat, Pro: €30/Monat",
+      "en": "Free with limits, Creator: $10/month, Pro: $30/month"
     }
   },
   {
@@ -752,16 +822,19 @@
     "name": "Synthesia",
     "category": "video",
     "price": "paid",
-    "priceDisplay": "$30/mo",
+    "priceDisplay": {
+      "de": "ab €30/Monat",
+      "en": "from $30/month"
+    },
     "rating": 4.5,
     "description": {
-      "de": "KI Avatare für Videos.",
-      "en": "AI avatars for videos."
+      "de": "Erstelle Videos mit KI-Avataren die in 120+ Sprachen sprechen.",
+      "en": "Create videos with AI avatars that speak in 120+ languages."
     },
-    "features": ["Avatars", "Languages", "Templates"],
+    "features": ["AI Avatars", "120+ Languages", "Custom Avatars", "Templates", "API"],
     "link": "https://www.synthesia.io/",
     "badge": "popular",
-    "useCases": ["training", "marketing", "explainer"],
+    "useCases": ["training-videos", "corporate-communications", "e-learning", "marketing", "how-to-videos"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -769,20 +842,21 @@
       "en": "Synthesia - AI Avatars for Videos"
     },
     "seoDesc": {
-      "de": "Synthesia erstellt Videos mit KI-Avataren die in verschiedenen Sprachen sprechen.",
-      "en": "Synthesia creates videos with AI avatars that speak in different languages."
+      "de": "Synthesia erstellt Videos mit KI-Avataren die in verschiedenen Sprachen sprechen. Ideal für Unternehmen.",
+      "en": "Synthesia creates videos with AI avatars that speak in different languages. Ideal for businesses."
     },
+    "alternatives": ["heygen", "elai", "pictory"],
     "pros": {
-      "de": ["Realistische Avatare", "Mehrsprachige Unterstützung", "Professionelle Templates"],
-      "en": ["Realistic avatars", "Multilingual support", "Professional templates"]
+      "de": ["Realistische Avatare", "Mehrsprachige Unterstützung", "Professionelle Templates", "Enterprise-Features", "Skalierbar"],
+      "en": ["Realistic avatars", "Multilingual support", "Professional templates", "Enterprise features", "Scalable"]
     },
     "cons": {
-      "de": ["Teuer", "Begrenzte Avatar-Anpassung"],
-      "en": ["Expensive", "Limited avatar customization"]
+      "de": ["Teuer", "Begrenzte Avatar-Anpassung", "Keine kostenlose Version", "Lizenzierungskosten"],
+      "en": ["Expensive", "Limited avatar customization", "No free version", "Licensing costs"]
     },
     "pricing": {
-      "de": "Ab $30/Monat",
-      "en": "From $30/month"
+      "de": "Personal: €30/Monat, Business: ab €89/Monat, Enterprise: auf Anfrage",
+      "en": "Personal: $30/month, Business: from $89/month, Enterprise: custom pricing"
     }
   },
   {
@@ -791,16 +865,19 @@
     "name": "HeyGen",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$30/mo",
+    "priceDisplay": {
+      "de": "ab €30/Monat",
+      "en": "from $30/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "Video mit KI Avataren.",
-      "en": "Video with AI avatars."
+      "de": "Video mit KI-Avataren und Sprachübersetzung für globale Kommunikation.",
+      "en": "Video with AI avatars and voice translation for global communication."
     },
-    "features": ["Avatars", "Translation", "Templates"],
+    "features": ["AI Avatars", "Voice Translation", "Templates", "Custom Avatars", "Team Collaboration"],
     "link": "https://www.heygen.com/",
     "badge": "new",
-    "useCases": ["presentation", "marketing", "education"],
+    "useCases": ["multilingual-videos", "training", "marketing", "presentations", "education"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -811,17 +888,18 @@
       "de": "HeyGen erstellt Videos mit KI-Avataren und Sprachübersetzung für verschiedene Anwendungen.",
       "en": "HeyGen creates videos with AI avatars and voice translation for various applications."
     },
+    "alternatives": ["synthesia", "pictory", "invideo"],
     "pros": {
-      "de": ["Einfache Benutzung", "Sprachübersetzung", "Viele Vorlagen"],
-      "en": ["Easy to use", "Voice translation", "Many templates"]
+      "de": ["Einfache Benutzung", "Sprachübersetzung", "Viele Vorlagen", "Schnelle Erstellung", "Kostenlose Testversion"],
+      "en": ["Easy to use", "Voice translation", "Many templates", "Fast creation", "Free trial"]
     },
     "cons": {
-      "de": ["Wasserzeichen in kostenloser Version", "Teure Pro-Version"],
-      "en": ["Watermarks in free version", "Expensive pro version"]
+      "de": ["Wasserzeichen in kostenloser Version", "Teure Pro-Version", "Limitierte Avatar-Auswahl", "Qualität variiert"],
+      "en": ["Watermarks in free version", "Expensive pro version", "Limited avatar selection", "Quality varies"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $30/Monat",
-      "en": "Free trial, From $30/month"
+      "de": "Kostenlose Testversion, Creator: €30/Monat, Business: €225/Monat, Enterprise: auf Anfrage",
+      "en": "Free trial, Creator: $30/month, Business: $225/month, Enterprise: custom pricing"
     }
   },
   {
@@ -830,16 +908,19 @@
     "name": "Pika Labs",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.6,
     "description": {
-      "de": "Text-zu-Video Generator.",
-      "en": "Text-to-video generator."
+      "de": "Text-zu-Video Generator mit verschiedenen Stilen und Bearbeitungsoptionen.",
+      "en": "Text-to-video generator with various styles and editing options."
     },
-    "features": ["Text", "Editing", "Styles"],
+    "features": ["Text-to-Video", "Image-to-Video", "Video Editing", "Style Transfer", "Sound Effects"],
     "link": "https://www.pika.art/",
     "badge": "new",
-    "useCases": ["video-generator", "animation", "social"],
+    "useCases": ["short-clips", "social-media", "animation", "presentations", "creative-projects"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -850,17 +931,18 @@
       "de": "Pika Labs generiert Videos aus Text mit verschiedenen Stilen und Bearbeitungsoptionen.",
       "en": "Pika Labs generates videos from text with various styles and editing options."
     },
+    "alternatives": ["runway", "invideo", "fliki"],
     "pros": {
-      "de": ["Text-zu-Video", "Verschiedene Stile", "Bearbeitungsfunktionen"],
-      "en": ["Text-to-video", "Various styles", "Editing features"]
+      "de": ["Text-zu-Video", "Verschiedene Stile", "Bearbeitungsfunktionen", "Kostenlose Version", "Aktive Community"],
+      "en": ["Text-to-video", "Various styles", "Editing features", "Free version", "Active community"]
     },
     "cons": {
-      "de": ["Begrenzte Videolänge", "Lernkurve für optimale Ergebnisse"],
-      "en": ["Limited video length", "Learning curve for optimal results"]
+      "de": ["Begrenzte Videolänge", "Lernkurve für optimale Ergebnisse", "Qualität variiert", "Wasserzeichen im Free-Tier"],
+      "en": ["Limited video length", "Learning curve for optimal results", "Quality varies", "Watermarks in free tier"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 30 Credits/Woche, Pro: €10/Monat für 180 Credits, Premium: €30/Monat für 600 Credits",
+      "en": "Free: 30 credits/week, Pro: $10/month for 180 credits, Premium: $30/month for 600 credits"
     }
   },
   {
@@ -869,16 +951,19 @@
     "name": "Cursor",
     "category": "code",
     "price": "freemium",
-    "priceDisplay": "$20/mo",
+    "priceDisplay": {
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
+    },
     "rating": 4.7,
     "description": {
-      "de": "KI IDE für Programmierer.",
-      "en": "AI IDE for programmers."
+      "de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
+      "en": "AI-powered IDE with integrated chat and debugging features."
     },
-    "features": ["Editor", "Chat", "Debug"],
+    "features": ["AI Chat", "Code Generation", "Debugging", "VSCode Based", "Context Awareness"],
     "link": "https://www.cursor.so/",
     "badge": "new",
-    "useCases": ["coding", "debugging", "learning"],
+    "useCases": ["coding", "debugging", "learning", "code-review", "refactoring"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -889,17 +974,18 @@
       "de": "Cursor ist eine KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
       "en": "Cursor is an AI-powered IDE with integrated chat and debugging features."
     },
+    "alternatives": ["github-copilot", "tabnine", "codeium"],
     "pros": {
-      "de": ["KI-gestützte Entwicklung", "Integrierter Chat", "Debugging-Hilfen"],
-      "en": ["AI-assisted development", "Integrated chat", "Debugging assistance"]
+      "de": ["KI-gestützte Entwicklung", "Integrierter Chat", "Debugging-Hilfen", "VSCode-Kompatibilität", "Lokaler Kontext"],
+      "en": ["AI-assisted development", "Integrated chat", "Debugging assistance", "VSCode compatibility", "Local context"]
     },
     "cons": {
-      "de": ["Kostenpflichtig für erweiterte Funktionen", "Noch in Entwicklung"],
-      "en": ["Paid for advanced features", "Still in development"]
+      "de": ["Kostenpflichtig für erweiterte Funktionen", "Noch in Entwicklung", "Performance-Probleme", "Begrenzte Sprachenunterstützung"],
+      "en": ["Paid for advanced features", "Still in development", "Performance issues", "Limited language support"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $20/Monat",
-      "en": "Free version available, From $20/month"
+      "de": "Kostenlos: 50 Anfragen/Monat, Pro: €20/Monat für unbegrenzte Anfragen, Business: €40/Monat pro Benutzer",
+      "en": "Free: 50 requests/month, Pro: $20/month for unlimited requests, Business: $40/month per user"
     }
   },
   {
@@ -908,16 +994,19 @@
     "name": "Replit AI",
     "category": "code",
     "price": "freemium",
-    "priceDisplay": "$20/mo",
+    "priceDisplay": {
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI Coding in der Cloud.",
-      "en": "AI coding in the cloud."
+      "de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
+      "en": "Cloud-based AI coding with collaboration and direct deployment."
     },
-    "features": ["Cloud", "Collaboration", "Deploy"],
+    "features": ["Cloud IDE", "AI Assistant", "Collaboration", "Deployment", "Multi-Language"],
     "link": "https://replit.com/site/ai",
     "badge": "free",
-    "useCases": ["coding", "education", "prototyping"],
+    "useCases": ["learning", "prototyping", "collaborative-coding", "education", "hackathons"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -928,17 +1017,18 @@
       "de": "Replit AI bietet KI-gestütztes Coding in der Cloud mit Kollaboration und Deployment.",
       "en": "Replit AI offers AI-powered coding in the cloud with collaboration and deployment."
     },
+    "alternatives": ["github-copilot", "cursor", "tabnine"],
     "pros": {
-      "de": ["Cloud-basiert", "Kollaborationsfunktionen", "Direktes Deployment"],
-      "en": ["Cloud-based", "Collaboration features", "Direct deployment"]
+      "de": ["Cloud-basiert", "Kollaborationsfunktionen", "Direktes Deployment", "Kostenlose Version", "Browsergestützt"],
+      "en": ["Cloud-based", "Collaboration features", "Direct deployment", "Free version", "Browser-based"]
     },
     "cons": {
-      "de": ["Internetverbindung erforderlich", "Begrenzte lokale Kontrolle"],
-      "en": ["Internet connection required", "Limited local control"]
+      "de": ["Internetverbindung erforderlich", "Begrenzte lokale Kontrolle", "Performance abhängig von Server", "Datenschutzbedenken"],
+      "en": ["Internet connection required", "Limited local control", "Performance depends on server", "Privacy concerns"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $20/Monat",
-      "en": "Free version available, From $20/month"
+      "de": "Kostenlos: 500.000 Tokens/Monat, Core: €8/Monat, Pro: €20/Monat, Teams: €40/Monat pro Benutzer",
+      "en": "Free: 500,000 tokens/month, Core: $8/month, Pro: $20/month, Teams: $40/month per user"
     }
   },
   {
@@ -947,16 +1037,19 @@
     "name": "Tabnine",
     "category": "code",
     "price": "freemium",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI Code Completion.",
-      "en": "AI code completion."
+      "de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
+      "en": "AI code completion with focus on privacy and local processing."
     },
-    "features": ["Autocomplete", "Privacy", "Multi-Lang"],
+    "features": ["Code Completion", "Local Processing", "Privacy Focus", "Multi-Language", "IDE Integration"],
     "link": "https://www.tabnine.com/",
     "badge": "popular",
-    "useCases": ["coding", "productivity", "assistant"],
+    "useCases": ["coding", "productivity", "security", "enterprise", "education"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -967,17 +1060,18 @@
       "de": "Tabnine bietet KI-gestützte Code-Vervollständigung mit Fokus auf Privatsphäre.",
       "en": "Tabnine offers AI-powered code completion with a focus on privacy."
     },
+    "alternatives": ["github-copilot", "cursor", "codeium"],
     "pros": {
-      "de": ["Schnelle Code-Vervollständigung", "Privatsphäre-fokussiert", "Mehrsprachenunterstützung"],
-      "en": ["Fast code completion", "Privacy-focused", "Multi-language support"]
+      "de": ["Schnelle Code-Vervollständigung", "Privatsphäre-fokussiert", "Mehrsprachenunterstützung", "Lokale Verarbeitung", "Enterprise-Sicherheit"],
+      "en": ["Fast code completion", "Privacy-focused", "Multi-language support", "Local processing", "Enterprise security"]
     },
     "cons": {
-      "de": ["Begrenzte kostenlose Version", "Weniger Funktionen als Konkurrenz"],
-      "en": ["Limited free version", "Fewer features than competitors"]
+      "de": ["Begrenzte kostenlose Version", "Weniger Funktionen als Konkurrenz", "Teilweise ungenaue Vorschläge", "Langsamere Updates"],
+      "en": ["Limited free version", "Fewer features than competitors", "Sometimes inaccurate suggestions", "Slower updates"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $12/Monat",
-      "en": "Free version available, From $12/month"
+      "de": "Kostenlos: Basis-Vervollständigung, Pro: €12/Monat, Enterprise: auf Anfrage",
+      "en": "Free: basic completion, Pro: $12/month, Enterprise: custom pricing"
     }
   },
   {
@@ -986,16 +1080,19 @@
     "name": "Codeium",
     "category": "code",
     "price": "free",
-    "priceDisplay": "Free",
+    "priceDisplay": {
+      "de": "Kostenlos",
+      "en": "Free"
+    },
     "rating": 4.5,
     "description": {
-      "de": "Kostenlose KI für Code.",
-      "en": "Free AI for code."
+      "de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
+      "en": "Free AI for code completion and chat features."
     },
-    "features": ["Free", "Autocomplete", "Chat"],
+    "features": ["Free", "Autocomplete", "Chat", "Multi-Language", "IDE Integration"],
     "link": "https://codeium.com/",
     "badge": "free",
-    "useCases": ["coding", "learning", "prototyping"],
+    "useCases": ["learning", "prototyping", "education", "open-source", "personal-projects"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1006,17 +1103,18 @@
       "de": "Codeium ist eine kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
       "en": "Codeium is a free AI for code completion and chat features."
     },
+    "alternatives": ["github-copilot", "tabnine", "cursor"],
     "pros": {
-      "de": ["Komplett kostenlos", "Code-Vervollständigung", "Chat-Funktion"],
-      "en": ["Completely free", "Code completion", "Chat function"]
+      "de": ["Komplett kostenlos", "Code-Vervollständigung", "Chat-Funktion", "Open-Source-Freundlich", "Keine Limits"],
+      "en": ["Completely free", "Code completion", "Chat function", "Open-source friendly", "No limits"]
     },
     "cons": {
-      "de": ["Begrenzte fortgeschrittene Funktionen", "Keine Enterprise-Features"],
-      "en": ["Limited advanced features", "No enterprise features"]
+      "de": ["Begrenzte fortgeschrittene Funktionen", "Keine Enterprise-Features", "Weniger akkurat als Copilot", "Kein lokales Modell"],
+      "en": ["Limited advanced features", "No enterprise features", "Less accurate than Copilot", "No local model"]
     },
     "pricing": {
-      "de": "Komplett kostenlos",
-      "en": "Completely free"
+      "de": "Komplett kostenlos für alle Funktionen",
+      "en": "Completely free for all features"
     }
   },
   {
@@ -1025,16 +1123,19 @@
     "name": "Canva AI",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI Design für alle.",
-      "en": "AI design for everyone."
+      "de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
+      "en": "AI design tools integrated into the popular design platform for everyone."
     },
-    "features": ["Design", "Templates", "Magic"],
+    "features": ["Magic Design", "Text-to-Image", "Magic Eraser", "Background Remover", "Magic Write"],
     "link": "https://www.canva.com/ai-tools/",
     "badge": "popular",
-    "useCases": ["design", "social-media", "presentation"],
+    "useCases": ["social-media", "presentations", "marketing", "education", "personal-projects"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1045,17 +1146,18 @@
       "de": "Canva AI integriert KI in die beliebte Design-Plattform für einfacheres Erstellen.",
       "en": "Canva AI integrates AI into the popular design platform for easier creation."
     },
+    "alternatives": ["firefly", "playground", "photosonic"],
     "pros": {
-      "de": ["Einfache Integration in Canva", "Viele Vorlagen", "Magic-Tools"],
-      "en": ["Easy integration with Canva", "Many templates", "Magic tools"]
+      "de": ["Einfache Integration in Canva", "Viele Vorlagen", "Magic-Tools", "Kostenlose Version", "Team-Kollaboration"],
+      "en": ["Easy integration with Canva", "Many templates", "Magic tools", "Free version", "Team collaboration"]
     },
     "cons": {
-      "de": ["Begrenzte KI-Funktionen", "Canva-Abonnement benötigt"],
-      "en": ["Limited AI features", "Canva subscription needed"]
+      "de": ["Begrenzte KI-Funktionen", "Canva-Abonnement benötigt", "Weniger Kontrolle als Pro-Tools", "Wasserzeichen im Free-Tier"],
+      "en": ["Limited AI features", "Canva subscription needed", "Less control than pro tools", "Watermarks in free tier"]
     },
     "pricing": {
-      "de": "In Canva Pro enthalten ($12/Monat)",
-      "en": "Included in Canva Pro ($12/month)"
+      "de": "Kostenlos: Basis-Funktionen, Canva Pro: €12/Monat, Teams: €14/Monat pro Benutzer",
+      "en": "Free: basic features, Canva Pro: $12/month, Teams: $14/month per user"
     }
   },
   {
@@ -1064,16 +1166,19 @@
     "name": "Tome",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$8/mo",
+    "priceDisplay": {
+      "de": "ab €8/Monat",
+      "en": "from $8/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI für Präsentationen.",
-      "en": "AI for presentations."
+      "de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
+      "en": "AI for presentations and stories with visual support."
     },
-    "features": ["Presentations", "Narrative", "Visual"],
+    "features": ["Presentation AI", "Visual Generation", "Storytelling", "Templates", "Collaboration"],
     "link": "https://tome.app/",
     "badge": "new",
-    "useCases": ["presentation", "storytelling", "business"],
+    "useCases": ["presentations", "storytelling", "pitch-decks", "education", "reports"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1084,17 +1189,18 @@
       "de": "Tome erstellt Präsentationen und Geschichten mit KI-Unterstützung.",
       "en": "Tome creates presentations and stories with AI assistance."
     },
+    "alternatives": ["beautiful-ai", "gamma", "pitch"],
     "pros": {
-      "de": ["Schnelle Präsentationserstellung", "Visuelle Unterstützung", "Storytelling-Fokus"],
-      "en": ["Fast presentation creation", "Visual support", "Storytelling focus"]
+      "de": ["Schnelle Präsentationserstellung", "Visuelle Unterstützung", "Storytelling-Fokus", "Kostenlose Version", "Einfache Bedienung"],
+      "en": ["Fast presentation creation", "Visual support", "Storytelling focus", "Free version", "Easy to use"]
     },
     "cons": {
-      "de": ["Begrenzte Design-Kontrolle", "Teilweise generische Layouts"],
-      "en": ["Limited design control", "Somewhat generic layouts"]
+      "de": ["Begrenzte Design-Kontrolle", "Teilweise generische Layouts", "Wenig Customization", "Export-Limits"],
+      "en": ["Limited design control", "Somewhat generic layouts", "Little customization", "Export limits"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $8/Monat",
-      "en": "Free version available, From $8/month"
+      "de": "Kostenlos: 500 AI Credits, Pro: €8/Monat, Business: €20/Monat pro Benutzer",
+      "en": "Free: 500 AI credits, Pro: $8/month, Business: $20/month per user"
     }
   },
   {
@@ -1103,16 +1209,19 @@
     "name": "Beautiful.ai",
     "category": "business",
     "price": "paid",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.2,
     "description": {
-      "de": "KI Präsentation Designer.",
-      "en": "AI presentation designer."
+      "de": "KI-Präsentationsdesigner der automatisch schöne Präsentationen erstellt.",
+      "en": "AI presentation designer that automatically creates beautiful presentations."
     },
-    "features": ["Slides", "Design", "Collaboration"],
+    "features": ["Auto Design", "Smart Templates", "Team Collaboration", "Analytics", "Brand Kits"],
     "link": "https://www.beautiful.ai/",
     "badge": "popular",
-    "useCases": ["presentation", "sales", "pitch"],
+    "useCases": ["sales-presentations", "pitch-decks", "business-reports", "marketing", "investor-updates"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1123,17 +1232,18 @@
       "de": "Beautiful.ai erstellt automatisch schöne Präsentationen mit KI.",
       "en": "Beautiful.ai automatically creates beautiful presentations with AI."
     },
+    "alternatives": ["tome", "gamma", "pitch"],
     "pros": {
-      "de": ["Automatisches Design", "Team-Kollaboration", "Professionelle Ergebnisse"],
-      "en": ["Automatic design", "Team collaboration", "Professional results"]
+      "de": ["Automatisches Design", "Team-Kollaboration", "Professionelle Ergebnisse", "Brand Consistency", "Analytics"],
+      "en": ["Automatic design", "Team collaboration", "Professional results", "Brand consistency", "Analytics"]
     },
     "cons": {
-      "de": ["Weniger kreative Kontrolle", "Keine kostenlose Version"],
-      "en": ["Less creative control", "No free version"]
+      "de": ["Weniger kreative Kontrolle", "Keine kostenlose Version", "Teuer für Einzelpersonen", "Begrenzte Vorlagen"],
+      "en": ["Less creative control", "No free version", "Expensive for individuals", "Limited templates"]
     },
     "pricing": {
-      "de": "Ab $12/Monat",
-      "en": "From $12/month"
+      "de": "Pro: €12/Monat, Team: €50/Monat, Enterprise: auf Anfrage",
+      "en": "Pro: $12/month, Team: $50/month, Enterprise: custom pricing"
     }
   },
   {
@@ -1142,16 +1252,19 @@
     "name": "Gamma",
     "category": "business",
     "price": "freemium",
-    "priceDisplay": "$8/mo",
+    "priceDisplay": {
+      "de": "ab €8/Monat",
+      "en": "from $8/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI für Dokumente & Präsentationen.",
-      "en": "AI for docs & presentations."
+      "de": "KI für Dokumente, Präsentationen und Websites in einem Tool.",
+      "en": "AI for documents, presentations and websites in one tool."
     },
-    "features": ["Docs", "Presentations", "Websites"],
+    "features": ["Docs", "Presentations", "Websites", "Templates", "Collaboration"],
     "link": "https://gamma.app/",
     "badge": "new",
-    "useCases": ["documentation", "presentation", "content"],
+    "useCases": ["documentation", "presentations", "landing-pages", "reports", "internal-communications"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1162,17 +1275,18 @@
       "de": "Gamma erstellt Dokumente, Präsentationen und Websites mit KI.",
       "en": "Gamma creates documents, presentations and websites with AI."
     },
+    "alternatives": ["tome", "beautiful-ai", "notion"],
     "pros": {
-      "de": ["Vielfältige Ausgabeformate", "Einfache Bedienung", "Website-Generierung"],
-      "en": ["Multiple output formats", "Easy to use", "Website generation"]
+      "de": ["Vielfältige Ausgabeformate", "Einfache Bedienung", "Website-Generierung", "Kostenlose Version", "Schnelle Erstellung"],
+      "en": ["Multiple output formats", "Easy to use", "Website generation", "Free version", "Fast creation"]
     },
     "cons": {
-      "de": ["Begrenzte fortgeschrittene Funktionen", "Design-Einschränkungen"],
-      "en": ["Limited advanced features", "Design restrictions"]
+      "de": ["Begrenzte fortgeschrittene Funktionen", "Design-Einschränkungen", "SEO-Limits für Websites", "Export-Probleme"],
+      "en": ["Limited advanced features", "Design restrictions", "SEO limits for websites", "Export issues"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $8/Monat",
-      "en": "Free version available, From $8/month"
+      "de": "Kostenlos: 400 AI Credits, Plus: €8/Monat, Pro: €20/Monat",
+      "en": "Free: 400 AI credits, Plus: $8/month, Pro: $20/month"
     }
   },
   {
@@ -1181,16 +1295,19 @@
     "name": "InVideo AI",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$20/mo",
+    "priceDisplay": {
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "Text-zu-Video für Social Media.",
-      "en": "Text-to-video for social media."
+      "de": "Text-zu-Video für Social Media mit Vorlagen und Stock-Material.",
+      "en": "Text-to-video for social media with templates and stock material."
     },
-    "features": ["Templates", "Stock", "Automation"],
+    "features": ["Templates", "Stock Media", "Automation", "Text-to-Video", "Social Media Formats"],
     "link": "https://invideo.io/ai",
     "badge": "popular",
-    "useCases": ["social-media", "marketing", "ads"],
+    "useCases": ["social-media", "marketing", "ads", "explainer-videos", "youtube"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1201,17 +1318,18 @@
       "de": "InVideo AI erstellt Social-Media-Videos aus Text mit Vorlagen und Stock-Material.",
       "en": "InVideo AI creates social media videos from text with templates and stock material."
     },
+    "alternatives": ["pictory", "fliki", "runway"],
     "pros": {
-      "de": ["Social-Media-fokussiert", "Viele Vorlagen", "Automatisierte Erstellung"],
-      "en": ["Social-media focused", "Many templates", "Automated creation"]
+      "de": ["Social-Media-fokussiert", "Viele Vorlagen", "Automatisierte Erstellung", "Stock-Medien inklusive", "Kostenlose Testversion"],
+      "en": ["Social-media focused", "Many templates", "Automated creation", "Stock media included", "Free trial"]
     },
     "cons": {
-      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte kreative Kontrolle"],
-      "en": ["Watermarks in free version", "Limited creative control"]
+      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte kreative Kontrolle", "Teilweise generische Videos", "Export-Limits"],
+      "en": ["Watermarks in free version", "Limited creative control", "Somewhat generic videos", "Export limits"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $20/Monat",
-      "en": "Free trial, From $20/month"
+      "de": "Kostenlose Testversion, Plus: €20/Monat, Max: €60/Monat",
+      "en": "Free trial, Plus: $20/month, Max: $60/month"
     }
   },
   {
@@ -1220,16 +1338,19 @@
     "name": "Fliki",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$21/mo",
+    "priceDisplay": {
+      "de": "ab €21/Monat",
+      "en": "from $21/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "Text-zu-Video mit Stimmen.",
-      "en": "Text-to-video with voices."
+      "de": "Text-zu-Video mit realistischen KI-Stimmen und Stock-Material.",
+      "en": "Text-to-video with realistic AI voices and stock material."
     },
-    "features": ["Voice", "Stock", "Script"],
+    "features": ["Voice", "Stock Media", "Script to Video", "Templates", "AI Voices"],
     "link": "https://fliki.ai/",
     "badge": "new",
-    "useCases": ["video", "social-media", "explainer"],
+    "useCases": ["video", "social-media", "explainer", "e-learning", "marketing"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1240,17 +1361,18 @@
       "de": "Fliki erstellt Videos aus Text mit realistischen KI-Stimmen und Stock-Material.",
       "en": "Fliki creates videos from text with realistic AI voices and stock material."
     },
+    "alternatives": ["invideo", "pictory", "synthesia"],
     "pros": {
-      "de": ["Integrierte KI-Stimmen", "Stock-Material", "Skript-basiert"],
-      "en": ["Integrated AI voices", "Stock material", "Script-based"]
+      "de": ["Integrierte KI-Stimmen", "Stock-Material", "Skript-basiert", "Einfache Bedienung", "Kostenlose Version"],
+      "en": ["Integrated AI voices", "Stock material", "Script-based", "Easy to use", "Free version"]
     },
     "cons": {
-      "de": ["Teuer für professionelle Nutzung", "Begrenzte Videoeffekte"],
-      "en": ["Expensive for professional use", "Limited video effects"]
+      "de": ["Teuer für professionelle Nutzung", "Begrenzte Videoeffekte", "Wasserzeichen im Free-Tier", "Langsame Rendering"],
+      "en": ["Expensive for professional use", "Limited video effects", "Watermarks in free tier", "Slow rendering"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $21/Monat",
-      "en": "Free trial, From $21/month"
+      "de": "Kostenlos: 5 Minuten Video/Monat, Basic: €21/Monat, Premium: €66/Monat",
+      "en": "Free: 5 minutes video/month, Basic: $21/month, Premium: $66/month"
     }
   },
   {
@@ -1259,16 +1381,19 @@
     "name": "Pictory",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$19/mo",
+    "priceDisplay": {
+      "de": "ab €19/Monat",
+      "en": "from $19/month"
+    },
     "rating": 4.2,
     "description": {
-      "de": "Erstelle Videos aus Text.",
-      "en": "Create videos from text."
+      "de": "Wandelt Text und Blogs automatisch in Videos um.",
+      "en": "Converts text and blogs automatically into videos."
     },
-    "features": ["Script", "Stock", "Automation"],
+    "features": ["Script", "Stock Media", "Automation", "Blog to Video", "Social Media"],
     "link": "https://pictory.ai/",
     "badge": "popular",
-    "useCases": ["marketing", "training", "social"],
+    "useCases": ["marketing", "training", "social", "blogging", "content-repurposing"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1279,17 +1404,18 @@
       "de": "Pictory wandelt Text in Videos um mit automatischer Skripterstellung und Stock-Material.",
       "en": "Pictory converts text to videos with automatic script creation and stock material."
     },
+    "alternatives": ["invideo", "fliki", "heygen"],
     "pros": {
-      "de": ["Einfache Texteingabe", "Stock-Material", "Automatisierte Erstellung"],
-      "en": ["Easy text input", "Stock material", "Automated creation"]
+      "de": ["Einfache Texteingabe", "Stock-Material", "Automatisierte Erstellung", "Blog zu Video", "Kostenlose Testversion"],
+      "en": ["Easy text input", "Stock material", "Automated creation", "Blog to video", "Free trial"]
     },
     "cons": {
-      "de": ["Begrenzte Anpassungsmöglichkeiten", "Generische Ergebnisse"],
-      "en": ["Limited customization", "Generic results"]
+      "de": ["Begrenzte Anpassungsmöglichkeiten", "Generische Ergebnisse", "Teuer für Einzelpersonen", "Wasserzeichen in Free-Version"],
+      "en": ["Limited customization", "Generic results", "Expensive for individuals", "Watermarks in free version"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $19/Monat",
-      "en": "Free trial, From $19/month"
+      "de": "Kostenlose Testversion, Standard: €19/Monat, Professional: €39/Monat, Teams: €99/Monat",
+      "en": "Free trial, Standard: $19/month, Professional: $39/month, Teams: $99/month"
     }
   },
   {
@@ -1298,16 +1424,19 @@
     "name": "Wondershare Filmora",
     "category": "video",
     "price": "freemium",
-    "priceDisplay": "$50/year",
+    "priceDisplay": {
+      "de": "€50/Jahr",
+      "en": "$50/year"
+    },
     "rating": 4.1,
     "description": {
-      "de": "KI Video Editor.",
-      "en": "AI video editor."
+      "de": "Benutzerfreundlicher Videoeditor mit KI-Funktionen für Einsteiger.",
+      "en": "User-friendly video editor with AI features for beginners."
     },
-    "features": ["Editing", "Effects", "Templates"],
+    "features": ["Editing", "Effects", "Templates", "AI Tools", "Audio Editing"],
     "link": "https://filmora.wondershare.com/ai-video-editor/",
     "badge": "popular",
-    "useCases": ["video-editing", "youtube", "social"],
+    "useCases": ["video-editing", "youtube", "social", "personal-videos", "education"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1318,17 +1447,18 @@
       "de": "Wondershare Filmora ist ein benutzerfreundlicher Videoeditor mit KI-Funktionen.",
       "en": "Wondershare Filmora is a user-friendly video editor with AI features."
     },
+    "alternatives": ["runway", "descript", "adobe-premiere"],
     "pros": {
-      "de": ["Benutzerfreundlich", "Viele Effekte", "Vorlagen"],
-      "en": ["User-friendly", "Many effects", "Templates"]
+      "de": ["Benutzerfreundlich", "Viele Effekte", "Vorlagen", "Kostenlose Version", "Keine Abo nötig (einmalige Zahlung)"],
+      "en": ["User-friendly", "Many effects", "Templates", "Free version", "No subscription needed (one-time payment)"]
     },
     "cons": {
-      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte KI-Funktionen"],
-      "en": ["Watermarks in free version", "Limited AI features"]
+      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte KI-Funktionen", "Weniger professionell als Adobe", "Performance-Probleme"],
+      "en": ["Watermarks in free version", "Limited AI features", "Less professional than Adobe", "Performance issues"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, $50/Jahr",
-      "en": "Free version available, $50/year"
+      "de": "Kostenlose Version verfügbar, Filmora Pro: €50/Jahr oder €100 einmalig",
+      "en": "Free version available, Filmora Pro: $50/year or $100 one-time"
     }
   },
   {
@@ -1337,16 +1467,19 @@
     "name": "Descript",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.5,
     "description": {
-      "de": "Audio & Video Editor.",
-      "en": "Audio & video editor."
+      "de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
+      "en": "Audio and video editor with transcription and AI voices."
     },
-    "features": ["Editing", "Transcription", "Voice"],
+    "features": ["Editing", "Transcription", "Voice", "Screen Recording", "Collaboration"],
     "link": "https://www.descript.com/",
     "badge": "popular",
-    "useCases": ["podcast", "video", "transcription"],
+    "useCases": ["podcast", "video", "transcription", "screen-recording", "voiceover"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1357,17 +1490,18 @@
       "de": "Descript ist ein Audio- und Videoeditor mit Transkription und KI-Stimmen.",
       "en": "Descript is an audio and video editor with transcription and AI voices."
     },
+    "alternatives": ["otter", "murf", "adobe-audition"],
     "pros": {
-      "de": ["Audio- und Videobearbeitung", "Transkription", "KI-Stimmen"],
-      "en": ["Audio and video editing", "Transcription", "AI voices"]
+      "de": ["Audio- und Videobearbeitung", "Transkription", "KI-Stimmen", "Screen Recording", "Team-Kollaboration"],
+      "en": ["Audio and video editing", "Transcription", "AI voices", "Screen recording", "Team collaboration"]
     },
     "cons": {
-      "de": ["Teilweise komplexe Bedienung", "Kostenpflichtig für volle Funktionen"],
-      "en": ["Somewhat complex operation", "Paid for full features"]
+      "de": ["Teilweise komplexe Bedienung", "Kostenpflichtig für volle Funktionen", "Performance-Probleme", "Begrenzte Export-Optionen"],
+      "en": ["Somewhat complex operation", "Paid for full features", "Performance issues", "Limited export options"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $12/Monat",
-      "en": "Free version available, From $12/month"
+      "de": "Kostenlos: 1 Stunde Transkription, Creator: €12/Monat, Pro: €30/Monat",
+      "en": "Free: 1 hour transcription, Creator: $12/month, Pro: $30/month"
     }
   },
   {
@@ -1376,16 +1510,19 @@
     "name": "Otter.ai",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI Meeting Transkription.",
-      "en": "AI meeting transcription."
+      "de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
+      "en": "AI meeting transcription with notes and summaries."
     },
-    "features": ["Transcription", "Notes", "Collaboration"],
+    "features": ["Transcription", "Notes", "Collaboration", "Summarization", "Integration"],
     "link": "https://otter.ai/",
     "badge": "popular",
-    "useCases": ["meetings", "notes", "interviews"],
+    "useCases": ["meetings", "notes", "interviews", "lectures", "customer-calls"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1396,17 +1533,18 @@
       "de": "Otter.ai transkribiert Meetings automatisch und erstellt Notizen.",
       "en": "Otter.ai automatically transcribes meetings and creates notes."
     },
+    "alternatives": ["fireflies", "fathom", "notion-ai"],
     "pros": {
-      "de": ["Automatische Transkription", "Notizen-Erstellung", "Kollaboration"],
-      "en": ["Automatic transcription", "Note creation", "Collaboration"]
+      "de": ["Automatische Transkription", "Notizen-Erstellung", "Kollaboration", "Integration mit Zoom/Teams", "Kostenlose Version"],
+      "en": ["Automatic transcription", "Note creation", "Collaboration", "Integration with Zoom/Teams", "Free version"]
     },
     "cons": {
-      "de": ["Genauigkeit variiert", "Begrenzte kostenlose Minuten"],
-      "en": ["Accuracy varies", "Limited free minutes"]
+      "de": ["Genauigkeit variiert", "Begrenzte kostenlose Minuten", "Teuer für viele Meetings", "Datenschutzbedenken"],
+      "en": ["Accuracy varies", "Limited free minutes", "Expensive for many meetings", "Privacy concerns"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 300 Minuten/Monat, Pro: €10/Monat, Business: €20/Monat pro Benutzer",
+      "en": "Free: 300 minutes/month, Pro: $10/month, Business: $20/month per user"
     }
   },
   {
@@ -1415,16 +1553,19 @@
     "name": "Krisp",
     "category": "audio",
     "price": "freemium",
-    "priceDisplay": "$8/mo",
+    "priceDisplay": {
+      "de": "ab €8/Monat",
+      "en": "from $8/month"
+    },
     "rating": 4.5,
     "description": {
-      "de": "KI Noise Cancellation.",
-      "en": "AI noise cancellation."
+      "de": "KI-Geräuschunterdrückung für bessere Audioqualität in Meetings.",
+      "en": "AI noise cancellation for better audio quality in meetings."
     },
-    "features": ["Noise", "Voice", "Meetings"],
+    "features": ["Noise Cancellation", "Voice Clarity", "Meeting Notes", "Transcription", "Integration"],
     "link": "https://krisp.ai/",
     "badge": "popular",
-    "useCases": ["meetings", "calls", "recording"],
+    "useCases": ["meetings", "calls", "recording", "podcasting", "streaming"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1435,17 +1576,18 @@
       "de": "Krisp entfernt Hintergrundgeräusche in Echtzeit für bessere Audioqualität.",
       "en": "Krisp removes background noise in real-time for better audio quality."
     },
+    "alternatives": ["nvidia-rtx-voice", "sol-call", "microsoft-teams"],
     "pros": {
-      "de": ["Echtzeit-Geräuschunterdrückung", "Verbessert Audioqualität", "Für Meetings und Aufnahmen"],
-      "en": ["Real-time noise cancellation", "Improves audio quality", "For meetings and recordings"]
+      "de": ["Echtzeit-Geräuschunterdrückung", "Verbessert Audioqualität", "Für Meetings und Aufnahmen", "Kostenlose Version", "Einfache Bedienung"],
+      "en": ["Real-time noise cancellation", "Improves audio quality", "For meetings and recordings", "Free version", "Easy to use"]
     },
     "cons": {
-      "de": ["Kostenpflichtig für unbegrenzte Nutzung", "Leichtes Audio-Artifacting"],
-      "en": ["Paid for unlimited use", "Slight audio artifacting"]
+      "de": ["Kostenpflichtig für unbegrenzte Nutzung", "Leichtes Audio-Artifacting", "Performance-Impact", "Begrenzte kostenlose Nutzung"],
+      "en": ["Paid for unlimited use", "Slight audio artifacting", "Performance impact", "Limited free usage"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $8/Monat",
-      "en": "Free version available, From $8/month"
+      "de": "Kostenlos: 60 Minuten/Woche, Pro: €8/Monat, Business: €12/Monat pro Benutzer",
+      "en": "Free: 60 minutes/week, Pro: $8/month, Business: $12/month per user"
     }
   },
   {
@@ -1454,16 +1596,19 @@
     "name": "QuillBot",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI Paraphraser & Übersetzer.",
-      "en": "AI paraphraser & translator."
+      "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
+      "en": "AI paraphraser & translator for better writing."
     },
-    "features": ["Paraphrase", "Grammar", "Summarize"],
+    "features": ["Paraphrase", "Grammar", "Summarize", "Translator", "Plagiarism Check"],
     "link": "https://quillbot.com/",
     "badge": "popular",
-    "useCases": ["writing", "academic", "content"],
+    "useCases": ["writing", "academic", "content", "translation", "proofreading"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1474,17 +1619,18 @@
       "de": "QuillBot paraphrasiert und übersetzt Text mit KI für besseres Schreiben.",
       "en": "QuillBot paraphrases and translates text with AI for better writing."
     },
+    "alternatives": ["grammarly", "wordtune", "chatgpt"],
     "pros": {
-      "de": ["Paraphrasierung", "Grammatikprüfung", "Zusammenfassung"],
-      "en": ["Paraphrasing", "Grammar check", "Summarization"]
+      "de": ["Paraphrasierung", "Grammatikprüfung", "Zusammenfassung", "Übersetzung", "Kostenlose Version"],
+      "en": ["Paraphrasing", "Grammar check", "Summarization", "Translation", "Free version"]
     },
     "cons": {
-      "de": ["Begrenzte kostenlose Nutzung", "Manchmal unnatürliche Ergebnisse"],
-      "en": ["Limited free usage", "Sometimes unnatural results"]
+      "de": ["Begrenzte kostenlose Nutzung", "Manchmal unnatürliche Ergebnisse", "Weniger genau als Grammarly", "Performance-Probleme"],
+      "en": ["Limited free usage", "Sometimes unnatural results", "Less accurate than Grammarly", "Performance issues"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 125 Wörter, Premium: €10/Monat, Team: €8/Monat pro Benutzer",
+      "en": "Free: 125 words, Premium: $10/month, Team: $8/month per user"
     }
   },
   {
@@ -1493,16 +1639,19 @@
     "name": "Grammarly",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$12/mo",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
     "rating": 4.6,
     "description": {
-      "de": "KI Schreibassistent.",
-      "en": "AI writing assistant."
+      "de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
+      "en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
     },
-    "features": ["Grammar", "Tone", "Plagiarism"],
+    "features": ["Grammar", "Tone", "Plagiarism", "Clarity", "Engagement"],
     "link": "https://www.grammarly.com/",
     "badge": "popular",
-    "useCases": ["writing", "emails", "documents"],
+    "useCases": ["writing", "emails", "documents", "academic", "business"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1513,17 +1662,18 @@
       "de": "Grammarly verbessert Schreiben mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
       "en": "Grammarly improves writing with grammar check, tone analysis and plagiarism check."
     },
+    "alternatives": ["quillbot", "wordtune", "prowritingaid"],
     "pros": {
-      "de": ["Umfassende Grammatikprüfung", "Ton-Analyse", "Plagiatsprüfung"],
-      "en": ["Comprehensive grammar check", "Tone analysis", "Plagiarism check"]
+      "de": ["Umfassende Grammatikprüfung", "Ton-Analyse", "Plagiatsprüfung", "Browser-Integration", "Team-Features"],
+      "en": ["Comprehensive grammar check", "Tone analysis", "Plagiarism check", "Browser integration", "Team features"]
     },
     "cons": {
-      "de": ["Teuer für Premium-Funktionen", "Manchmal übermäßige Korrekturen"],
-      "en": ["Expensive for premium features", "Sometimes excessive corrections"]
+      "de": ["Teuer für Premium-Funktionen", "Manchmal übermäßige Korrekturen", "Datenschutzbedenken", "Performance-Impact"],
+      "en": ["Expensive for premium features", "Sometimes excessive corrections", "Privacy concerns", "Performance impact"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $12/Monat",
-      "en": "Free version available, From $12/month"
+      "de": "Kostenlos: Basis-Korrekturen, Premium: €12/Monat, Business: €15/Monat pro Benutzer",
+      "en": "Free: basic corrections, Premium: $12/month, Business: $15/month per user"
     }
   },
   {
@@ -1532,16 +1682,19 @@
     "name": "Wordtune",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI für besseres Schreiben.",
-      "en": "AI for better writing."
+      "de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
+      "en": "AI for better writing by rewriting and tone adjustment."
     },
-    "features": ["Rewrite", "Tone", "Summarize"],
+    "features": ["Rewrite", "Tone", "Summarize", "Spices", "Translation"],
     "link": "https://www.wordtune.com/",
     "badge": "popular",
-    "useCases": ["writing", "emails", "creative"],
+    "useCases": ["writing", "emails", "creative", "academic", "business"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1552,17 +1705,18 @@
       "de": "Wordtune verbessert Schreiben durch Umschreiben, Ton-Anpassung und Zusammenfassung.",
       "en": "Wordtune improves writing by rewriting, tone adjustment and summarization."
     },
+    "alternatives": ["quillbot", "grammarly", "chatgpt"],
     "pros": {
-      "de": ["Umschreibungsfunktionen", "Ton-Anpassung", "Zusammenfassung"],
-      "en": ["Rewriting features", "Tone adjustment", "Summarization"]
+      "de": ["Umschreibungsfunktionen", "Ton-Anpassung", "Zusammenfassung", "Kreative Vorschläge", "Browser-Erweiterung"],
+      "en": ["Rewriting features", "Tone adjustment", "Summarization", "Creative suggestions", "Browser extension"]
     },
     "cons": {
-      "de": ["Begrenzte kostenlose Version", "Weniger umfassend als Grammarly"],
-      "en": ["Limited free version", "Less comprehensive than Grammarly"]
+      "de": ["Begrenzte kostenlose Version", "Weniger umfassend als Grammarly", "Teilweise unnatürliche Ergebnisse", "Teuer"],
+      "en": ["Limited free version", "Less comprehensive than Grammarly", "Sometimes unnatural results", "Expensive"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 10 Umschreibungen/Tag, Plus: €10/Monat, Unlimited: €15/Monat",
+      "en": "Free: 10 rewrites/day, Plus: $10/month, Unlimited: $15/month"
     }
   },
   {
@@ -1571,16 +1725,19 @@
     "name": "Rytr",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$9/mo",
+    "priceDisplay": {
+      "de": "ab €9/Monat",
+      "en": "from $9/month"
+    },
     "rating": 4.2,
     "description": {
-      "de": "Kostengünstiger KI Writer.",
-      "en": "Affordable AI writer."
+      "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
+      "en": "Affordable AI writer with templates and SEO features."
     },
-    "features": ["Templates", "Languages", "SEO"],
+    "features": ["Templates", "Languages", "SEO", "Plagiarism Check", "Image Generation"],
     "link": "https://rytr.me/",
     "badge": "free",
-    "useCases": ["copywriting", "blogging", "social"],
+    "useCases": ["copywriting", "blogging", "social", "emails", "seo"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1591,17 +1748,18 @@
       "de": "Rytr ist ein kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
       "en": "Rytr is an affordable AI writer with templates and SEO features."
     },
+    "alternatives": ["jasper", "writesonic", "copy-ai"],
     "pros": {
-      "de": ["Kostengünstig", "Viele Vorlagen", "SEO-Funktionen"],
-      "en": ["Affordable", "Many templates", "SEO features"]
+      "de": ["Kostengünstig", "Viele Vorlagen", "SEO-Funktionen", "Kostenlose Version", "Mehrsprachig"],
+      "en": ["Affordable", "Many templates", "SEO features", "Free version", "Multilingual"]
     },
     "cons": {
-      "de": ["Begrenzte Kreativität", "Einfachere Ergebnisse"],
-      "en": ["Limited creativity", "Simpler results"]
+      "de": ["Begrenzte Kreativität", "Einfachere Ergebnisse", "Qualität variiert", "Weniger Features als Konkurrenz"],
+      "en": ["Limited creativity", "Simpler results", "Quality varies", "Fewer features than competitors"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $9/Monat",
-      "en": "Free version available, From $9/month"
+      "de": "Kostenlos: 10.000 Zeichen/Monat, Saver: €9/Monat, Unlimited: €29/Monat",
+      "en": "Free: 10,000 characters/month, Saver: $9/month, Unlimited: $29/month"
     }
   },
   {
@@ -1610,16 +1768,19 @@
     "name": "Writesonic",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$13/mo",
+    "priceDisplay": {
+      "de": "ab €13/Monat",
+      "en": "from $13/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI für Marketing Content.",
-      "en": "AI for marketing content."
+      "de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
+      "en": "AI for marketing content with SEO and image generation."
     },
-    "features": ["Templates", "SEO", "Images"],
+    "features": ["Templates", "SEO", "Images", "Chatsonic", "Article Writer"],
     "link": "https://writesonic.com/",
     "badge": "popular",
-    "useCases": ["copywriting", "ads", "landing-pages"],
+    "useCases": ["copywriting", "ads", "landing-pages", "seo", "blogging"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -1630,17 +1791,18 @@
       "de": "Writesonic erstellt Marketing-Content mit KI, inklusive SEO und Bilder.",
       "en": "Writesonic creates marketing content with AI, including SEO and images."
     },
+    "alternatives": ["jasper", "copy-ai", "rytr"],
     "pros": {
-      "de": ["Marketing-fokussiert", "SEO-Tools", "Bildgenerierung"],
-      "en": ["Marketing-focused", "SEO tools", "Image generation"]
+      "de": ["Marketing-fokussiert", "SEO-Tools", "Bildgenerierung", "Chatsonic (ChatGPT Alternative)", "Kostenlose Version"],
+      "en": ["Marketing-focused", "SEO tools", "Image generation", "Chatsonic (ChatGPT alternative)", "Free version"]
     },
     "cons": {
-      "de": ["Qualität variiert", "Teilweise repetitive Inhalte"],
-      "en": ["Quality varies", "Sometimes repetitive content"]
+      "de": ["Qualität variiert", "Teilweise repetitive Inhalte", "Teuer für hohe Volumen", "Lernkurve"],
+      "en": ["Quality varies", "Sometimes repetitive content", "Expensive for high volume", "Learning curve"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $13/Monat",
-      "en": "Free version available, From $13/month"
+      "de": "Kostenlos: 10.000 Wörter/Monat, Pro: €13/Monat, Enterprise: auf Anfrage",
+      "en": "Free: 10,000 words/month, Pro: $13/month, Enterprise: custom pricing"
     }
   },
   {
@@ -1649,16 +1811,19 @@
     "name": "Copy.ai",
     "category": "text",
     "price": "freemium",
-    "priceDisplay": "$49/mo",
+    "priceDisplay": {
+      "de": "ab €49/Monat",
+      "en": "from $49/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI Copywriting Plattform.",
-      "en": "AI copywriting platform."
+      "de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
+      "en": "AI copywriting platform with workflows and brand customization."
     },
-    "features": ["Workflows", "Brand", "Collaboration"],
+    "features": ["Workflows", "Brand", "Collaboration", "Templates", "Content Calendar"],
     "link": "https://www.copy.ai/",
     "badge": "popular",
-    "useCases": ["marketing", "sales", "social"],
+    "useCases": ["marketing", "sales", "social", "email", "content-strategy"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1669,17 +1834,18 @@
       "de": "Copy.ai ist eine KI-Plattform für Copywriting mit Workflows und Markenanpassung.",
       "en": "Copy.ai is an AI platform for copywriting with workflows and brand customization."
     },
+    "alternatives": ["jasper", "writesonic", "rytr"],
     "pros": {
-      "de": ["Workflow-Optimierung", "Markenanpassung", "Kollaboration"],
-      "en": ["Workflow optimization", "Brand customization", "Collaboration"]
+      "de": ["Workflow-Optimierung", "Markenanpassung", "Kollaboration", "Inhaltskalender", "Team-Features"],
+      "en": ["Workflow optimization", "Brand customization", "Collaboration", "Content calendar", "Team features"]
     },
     "cons": {
-      "de": ["Teuer für Einzelpersonen", "Ähnlich wie andere Tools"],
-      "en": ["Expensive for individuals", "Similar to other tools"]
+      "de": ["Teuer für Einzelpersonen", "Ähnlich wie andere Tools", "Begrenzte kreative Freiheit", "Steile Lernkurve"],
+      "en": ["Expensive for individuals", "Similar to other tools", "Limited creative freedom", "Steep learning curve"]
     },
     "pricing": {
-      "de": "Kostenlose Testversion, Ab $49/Monat",
-      "en": "Free trial, From $49/month"
+      "de": "Kostenlose Testversion, Pro: €49/Monat, Team: €249/Monat, Enterprise: auf Anfrage",
+      "en": "Free trial, Pro: $49/month, Team: $249/month, Enterprise: custom pricing"
     }
   },
   {
@@ -1688,16 +1854,19 @@
     "name": "Surfer SEO",
     "category": "business",
     "price": "paid",
-    "priceDisplay": "$59/mo",
+    "priceDisplay": {
+      "de": "ab €59/Monat",
+      "en": "from $59/month"
+    },
     "rating": 4.4,
     "description": {
-      "de": "KI für SEO Content.",
-      "en": "AI for SEO content."
+      "de": "KI für SEO-Content mit Forschung und Optimierung.",
+      "en": "AI for SEO content with research and optimization."
     },
-    "features": ["SEO", "Research", "Optimization"],
+    "features": ["SEO", "Research", "Optimization", "Content Editor", "Keyword Research"],
     "link": "https://surferseo.com/",
     "badge": "popular",
-    "useCases": ["seo", "content", "blogging"],
+    "useCases": ["seo", "content", "blogging", "keyword-research", "competitor-analysis"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1708,17 +1877,18 @@
       "de": "Surfer SEO optimiert Content für Suchmaschinen mit KI und Forschung.",
       "en": "Surfer SEO optimizes content for search engines with AI and research."
     },
+    "alternatives": ["marketmuse", "clearscope", "frase"],
     "pros": {
-      "de": ["SEO-Optimierung", "Forschungstools", "Content-Optimierung"],
-      "en": ["SEO optimization", "Research tools", "Content optimization"]
+      "de": ["SEO-Optimierung", "Forschungstools", "Content-Optimierung", "Keyword-Analyse", "Konkurrenzanalyse"],
+      "en": ["SEO optimization", "Research tools", "Content optimization", "Keyword analysis", "Competitor analysis"]
     },
     "cons": {
-      "de": ["Teuer", "Spezifisch für SEO"],
-      "en": ["Expensive", "Specific to SEO"]
+      "de": ["Teuer", "Spezifisch für SEO", "Lernkurve", "Keine allgemeine Schreibhilfe"],
+      "en": ["Expensive", "Specific to SEO", "Learning curve", "No general writing help"]
     },
     "pricing": {
-      "de": "Ab $59/Monat",
-      "en": "From $59/month"
+      "de": "Basic: €59/Monat, Pro: €119/Monat, Business: €239/Monat",
+      "en": "Basic: $59/month, Pro: $119/month, Business: $239/month"
     }
   },
   {
@@ -1727,16 +1897,19 @@
     "name": "Jasper Art",
     "category": "image",
     "price": "paid",
-    "priceDisplay": "$20/mo",
+    "priceDisplay": {
+      "de": "€20/Monat",
+      "en": "$20/month"
+    },
     "rating": 4.2,
     "description": {
-      "de": "Bildgenerierung für Marken.",
-      "en": "Image generation for brands."
+      "de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
+      "en": "Image generation for brands with customization and commercial use."
     },
-    "features": ["Brand", "Styles", "Commercial"],
+    "features": ["Brand", "Styles", "Commercial", "Templates", "Customization"],
     "link": "https://www.jasper.ai/art",
     "badge": "popular",
-    "useCases": ["marketing", "ads", "branding"],
+    "useCases": ["marketing", "ads", "branding", "social-media", "product-images"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1747,17 +1920,18 @@
       "de": "Jasper Art generiert Bilder für Marken mit Anpassung und kommerzieller Nutzung.",
       "en": "Jasper Art generates images for brands with customization and commercial use."
     },
+    "alternatives": ["midjourney", "dalle-3", "firefly"],
     "pros": {
-      "de": ["Markenfokussiert", "Stil-Anpassung", "Kommerzielle Nutzung"],
-      "en": ["Brand-focused", "Style customization", "Commercial use"]
+      "de": ["Markenfokussiert", "Stil-Anpassung", "Kommerzielle Nutzung", "Jasper-Integration", "Einfache Bedienung"],
+      "en": ["Brand-focused", "Style customization", "Commercial use", "Jasper integration", "Easy to use"]
     },
     "cons": {
-      "de": ["Teuer", "Begrenzte Kreativität"],
-      "en": ["Expensive", "Limited creativity"]
+      "de": ["Teuer", "Begrenzte Kreativität", "Weniger Kontrolle als Midjourney", "Nur mit Jasper verfügbar"],
+      "en": ["Expensive", "Limited creativity", "Less control than Midjourney", "Only available with Jasper"]
     },
     "pricing": {
-      "de": "$20/Monat (Teil von Jasper)",
-      "en": "$20/month (Part of Jasper)"
+      "de": "€20/Monat (Teil von Jasper Creator-Plan oder höher)",
+      "en": "$20/month (Part of Jasper Creator plan or higher)"
     }
   },
   {
@@ -1766,16 +1940,19 @@
     "name": "Photosonic",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$10/mo",
+    "priceDisplay": {
+      "de": "ab €10/Monat",
+      "en": "from $10/month"
+    },
     "rating": 4.1,
     "description": {
-      "de": "Text-zu-Bild Generator.",
-      "en": "Text-to-image generator."
+      "de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
+      "en": "Text-to-image generator by Writesonic with artistic styles."
     },
-    "features": ["Art", "Styles", "Custom"],
+    "features": ["Art", "Styles", "Custom", "Upscaling", "Editing"],
     "link": "https://photosonic.writesonic.com/",
     "badge": "free",
-    "useCases": ["art", "design", "social"],
+    "useCases": ["art", "design", "social", "blogging", "personal"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1786,17 +1963,18 @@
       "de": "Photosonic ist ein Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
       "en": "Photosonic is a text-to-image generator by Writesonic with artistic styles."
     },
+    "alternatives": ["midjourney", "playground", "nightcafe"],
     "pros": {
-      "de": ["Künstlerische Stile", "Anpassbare Generierung", "Kostenlose Nutzung"],
-      "en": ["Artistic styles", "Customizable generation", "Free to use"]
+      "de": ["Künstlerische Stile", "Anpassbare Generierung", "Kostenlose Nutzung", "Writesonic-Integration", "Einfache Bedienung"],
+      "en": ["Artistic styles", "Customizable generation", "Free to use", "Writesonic integration", "Easy to use"]
     },
     "cons": {
-      "de": ["Begrenzte Qualität", "Weniger bekannt"],
-      "en": ["Limited quality", "Less known"]
+      "de": ["Begrenzte Qualität", "Weniger bekannt", "Wasserzeichen im Free-Tier", "Langsame Generierung"],
+      "en": ["Limited quality", "Less known", "Watermarks in free tier", "Slow generation"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $10/Monat",
-      "en": "Free version available, From $10/month"
+      "de": "Kostenlos: 10 Bilder, Premium: €10/Monat für 100 Bilder, Business: €25/Monat für 300 Bilder",
+      "en": "Free: 10 images, Premium: $10/month for 100 images, Business: $25/month for 300 images"
     }
   },
   {
@@ -1805,16 +1983,19 @@
     "name": "NightCafe",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$6/mo",
+    "priceDisplay": {
+      "de": "ab €6/Monat",
+      "en": "from $6/month"
+    },
     "rating": 4.3,
     "description": {
-      "de": "KI Kunst Generator.",
-      "en": "AI art generator."
+      "de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
+      "en": "AI art generator with community and various styles."
     },
-    "features": ["Art", "Styles", "Community"],
+    "features": ["Art", "Styles", "Community", "Challenges", "Printing"],
     "link": "https://creator.nightcafe.studio/",
     "badge": "free",
-    "useCases": ["art", "creativity", "prints"],
+    "useCases": ["art", "creativity", "prints", "community", "experimentation"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
@@ -1825,17 +2006,18 @@
       "de": "NightCafe ist ein KI-Kunstgenerator mit Community und verschiedenen Stilen.",
       "en": "NightCafe is an AI art generator with community and various styles."
     },
+    "alternatives": ["midjourney", "playground", "dreamstudio"],
     "pros": {
-      "de": ["Kunst-fokussiert", "Community", "Verschiedene Stile"],
-      "en": ["Art-focused", "Community", "Various styles"]
+      "de": ["Kunst-fokussiert", "Community", "Verschiedene Stile", "Kostenlose Credits täglich", "Kunstwettbewerbe"],
+      "en": ["Art-focused", "Community", "Various styles", "Free daily credits", "Art challenges"]
     },
     "cons": {
-      "de": ["Langsame Generierung", "Begrenzte kostenlose Credits"],
-      "en": ["Slow generation", "Limited free credits"]
+      "de": ["Langsame Generierung", "Begrenzte kostenlose Credits", "Weniger Qualität als Midjourney", "Wasserzeichen"],
+      "en": ["Slow generation", "Limited free credits", "Less quality than Midjourney", "Watermarks"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $6/Monat",
-      "en": "Free version available, From $6/month"
+      "de": "Kostenlos: 5 Credits/Tag, AI Beginner: €6/Monat, AI Hobbyist: €10/Monat, AI Enthusiast: €20/Monat",
+      "en": "Free: 5 credits/day, AI Beginner: $6/month, AI Hobbyist: $10/month, AI Enthusiast: $20/month"
     }
   },
   {
@@ -1844,16 +2026,19 @@
     "name": "DreamStudio",
     "category": "image",
     "price": "paid",
-    "priceDisplay": "$10/credits",
+    "priceDisplay": {
+      "de": "€10/Credits",
+      "en": "$10/credits"
+    },
     "rating": 4.4,
     "description": {
-      "de": "Stable Diffusion Web UI.",
-      "en": "Stable Diffusion web UI."
+      "de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
+      "en": "Official web UI for Stable Diffusion with SDXL and control features."
     },
-    "features": ["SDXL", "Control", "Custom"],
+    "features": ["SDXL", "Control", "Custom", "API", "Upscaling"],
     "link": "https://dreamstudio.ai/",
     "badge": "popular",
-    "useCases": ["art", "design", "prototyping"],
+    "useCases": ["art", "design", "prototyping", "commercial", "research"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1864,17 +2049,18 @@
       "de": "DreamStudio ist die offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
       "en": "DreamStudio is the official web UI for Stable Diffusion with SDXL and control features."
     },
+    "alternatives": ["midjourney", "leonardo", "playground"],
     "pros": {
-      "de": ["Offizielle Stable Diffusion UI", "SDXL Unterstützung", "Kontrollfunktionen"],
-      "en": ["Official Stable Diffusion UI", "SDXL support", "Control features"]
+      "de": ["Offizielle Stable Diffusion UI", "SDXL Unterstützung", "Kontrollfunktionen", "API verfügbar", "Hohe Qualität"],
+      "en": ["Official Stable Diffusion UI", "SDXL support", "Control features", "API available", "High quality"]
     },
     "cons": {
-      "de": ["Kredit-basiertes System", "Teuer für viele Bilder"],
-      "en": ["Credit-based system", "Expensive for many images"]
+      "de": ["Kredit-basiertes System", "Teuer für viele Bilder", "Keine kostenlose Version", "Technische Lernkurve"],
+      "en": ["Credit-based system", "Expensive for many images", "No free version", "Technical learning curve"]
     },
     "pricing": {
-      "de": "$10 für Credits (pay-as-you-go)",
-      "en": "$10 for credits (pay-as-you-go)"
+      "de": "€10 für 1000 Credits (Pay-as-you-go), Enterprise-Preise auf Anfrage",
+      "en": "$10 for 1000 credits (pay-as-you-go), enterprise pricing available"
     }
   },
   {
@@ -1883,16 +2069,19 @@
     "name": "BlueWillow",
     "category": "image",
     "price": "freemium",
-    "priceDisplay": "$5/mo",
+    "priceDisplay": {
+      "de": "ab €5/Monat",
+      "en": "from $5/month"
+    },
     "rating": 4.2,
     "description": {
-      "de": "KI Bildgenerierung Discord.",
-      "en": "AI image generation Discord."
+      "de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
+      "en": "AI image generation via Discord with community and fast generation."
     },
-    "features": ["Community", "Styles", "Fast"],
+    "features": ["Community", "Styles", "Fast", "Discord", "Templates"],
     "link": "https://www.bluewillow.ai/",
     "badge": "free",
-    "useCases": ["art", "social", "design"],
+    "useCases": ["art", "social", "design", "fun", "community"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1903,17 +2092,18 @@
       "de": "BlueWillow bietet KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
       "en": "BlueWillow offers AI image generation via Discord with community and fast generation."
     },
+    "alternatives": ["midjourney", "playground", "nightcafe"],
     "pros": {
-      "de": ["Discord-basiert", "Community", "Schnelle Generierung"],
-      "en": ["Discord-based", "Community", "Fast generation"]
+      "de": ["Discord-basiert", "Community", "Schnelle Generierung", "Kostenlose Version", "Einfache Bedienung"],
+      "en": ["Discord-based", "Community", "Fast generation", "Free version", "Easy to use"]
     },
     "cons": {
-      "de": ["Nur über Discord", "Begrenzte Kontrolle"],
-      "en": ["Only via Discord", "Limited control"]
+      "de": ["Nur über Discord", "Begrenzte Kontrolle", "Weniger Qualität als Midjourney", "Wasserzeichen"],
+      "en": ["Only via Discord", "Limited control", "Less quality than Midjourney", "Watermarks"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar, Ab $5/Monat",
-      "en": "Free version available, From $5/month"
+      "de": "Kostenlos: 10 Bilder/Tag, Basic: €5/Monat, Pro: €10/Monat, Premium: €25/Monat",
+      "en": "Free: 10 images/day, Basic: $5/month, Pro: $10/month, Premium: $25/month"
     }
   },
   {
@@ -1922,16 +2112,19 @@
     "name": "DeepDream",
     "category": "image",
     "price": "free",
-    "priceDisplay": "Free",
+    "priceDisplay": {
+      "de": "Kostenlos",
+      "en": "Free"
+    },
     "rating": 4.0,
     "description": {
-      "de": "Früher KI Bildgenerator.",
-      "en": "Early AI image generator."
+      "de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
+      "en": "Early AI image generator with neural networks and experimental styles."
     },
-    "features": ["Neural", "Art", "Experimental"],
+    "features": ["Neural", "Art", "Experimental", "Style Transfer", "Customization"],
     "link": "https://deepdreamgenerator.com/",
     "badge": "free",
-    "useCases": ["art", "experimental", "fun"],
+    "useCases": ["art", "experimental", "fun", "education", "style-transfer"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -1942,17 +2135,18 @@
       "de": "DeepDream ist ein früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
       "en": "DeepDream is an early AI image generator with neural networks and experimental styles."
     },
+    "alternatives": ["midjourney", "nightcafe", "playground"],
     "pros": {
-      "de": ["Kostenlos", "Experimentelle Stile", "Neurales Netzwerk-basiert"],
-      "en": ["Free", "Experimental styles", "Neural network-based"]
+      "de": ["Kostenlos", "Experimentelle Stile", "Neurales Netzwerk-basiert", "Open-Source", "Historische Bedeutung"],
+      "en": ["Free", "Experimental styles", "Neural network-based", "Open-source", "Historical significance"]
     },
     "cons": {
-      "de": ["Veraltete Technologie", "Begrenzte praktische Anwendung"],
-      "en": ["Outdated technology", "Limited practical application"]
+      "de": ["Veraltete Technologie", "Begrenzte praktische Anwendung", "Niedrige Qualität", "Langsam"],
+      "en": ["Outdated technology", "Limited practical application", "Low quality", "Slow"]
     },
     "pricing": {
-      "de": "Komplett kostenlos",
-      "en": "Completely free"
+      "de": "Komplett kostenlos, Premium-Optionen für erweiterte Features verfügbar",
+      "en": "Completely free, premium options for advanced features available"
     }
   }
 ]
