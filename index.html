@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://kffoeqqgurbptguqjdlq.supabase.co; base-uri 'self'; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
 <title>AI Finder 2026 - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -48,14 +48,14 @@
 }
 </script>
 <style>
-/* ===== RADICAL SIMPLICITY ===== */
+/* ===== MINIMALISTISCHES DESIGN MIT MAXIMALER INTELLIGENZ ===== */
 :root {
   --primary: #00d4ff;
   --primary-dark: #00a8cc;
   --secondary: #a855f7;
   --bg-dark: #0a0e17;
-  --bg-card: rgba(20, 24, 36, 0.95);
-  --bg-hover: rgba(26, 31, 46, 0.95);
+  --bg-card: #141824;
+  --bg-hover: #1a1f2e;
   --text-primary: #ffffff;
   --text-secondary: #a0aec0;
   --text-muted: #718096;
@@ -66,10 +66,10 @@
   --warning: #f59e0b;
   --gold: #fbbf24;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-hover: 0 8px 30px rgba(0, 212, 255, 0.15);
+  --shadow-hover: 0 8px 30px rgba(0, 212, 255, 0.2);
   --radius: 12px;
   --radius-lg: 16px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -100,27 +100,6 @@ body::before {
     radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
   z-index: -1;
   pointer-events: none;
-}
-
-/* ===== FOCUS MODE TRANSITIONS ===== */
-.header, .quick-nav-container, .search-container {
-  transition: var(--transition);
-}
-
-body.focus-mode .header {
-  opacity: 0.3;
-  transform: translateY(-20px);
-}
-
-body.focus-mode .quick-nav-container {
-  background: rgba(10, 14, 23, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-
-body.focus-mode .search-container {
-  opacity: 0.7;
-  transform: scale(0.98);
 }
 
 /* ===== LANGUAGE SWITCH ===== */
@@ -156,11 +135,10 @@ body.focus-mode .search-container {
 
 /* ===== HEADER ===== */
 .header {
-  padding: 60px 20px 30px;
+  padding: 80px 20px 40px;
   text-align: center;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  transition: var(--transition);
 }
 
 .badge {
@@ -177,7 +155,7 @@ body.focus-mode .search-container {
 }
 
 .header h1 {
-  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   margin-bottom: 16px;
   line-height: 1.1;
   background: linear-gradient(135deg, var(--text-primary), var(--primary));
@@ -187,10 +165,10 @@ body.focus-mode .search-container {
 }
 
 .header p {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   max-width: 650px;
-  margin: 0 auto 25px;
+  margin: 0 auto 30px;
   line-height: 1.6;
 }
 
@@ -199,7 +177,6 @@ body.focus-mode .search-container {
   max-width: 700px;
   margin: 0 auto 20px;
   position: relative;
-  transition: var(--transition);
 }
 
 .search-box {
@@ -212,7 +189,6 @@ body.focus-mode .search-container {
   font-size: 1rem;
   transition: var(--transition);
   font-family: 'Inter', sans-serif;
-  backdrop-filter: blur(10px);
 }
 
 .search-box:focus {
@@ -220,7 +196,6 @@ body.focus-mode .search-container {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
   background: var(--bg-hover);
-  transform: translateY(-2px);
 }
 
 .search-icon {
@@ -283,12 +258,6 @@ body.focus-mode .search-container {
   border-color: var(--primary);
 }
 
-.search-hint-chip.active {
-  background: rgba(0, 212, 255, 0.3);
-  border-color: var(--primary);
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-}
-
 .search-suggestions {
   position: absolute;
   top: 100%;
@@ -335,59 +304,53 @@ body.focus-mode .search-container {
   font-size: 1rem;
 }
 
-/* ===== QUICK NAVIGATION PILLS ===== */
-.quick-nav-container {
-  position: sticky;
-  top: 0;
-  z-index: 900;
-  background: rgba(10, 14, 23, 0.8);
-  backdrop-filter: blur(20px);
-  padding: 15px 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid transparent;
-  transition: var(--transition);
+/* ===== QUICK NAVIGATION ===== */
+.quick-navigation {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
 }
 
-.quick-nav-scroll {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 5px;
-  scrollbar-width: none;
-}
-
-.quick-nav-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.quick-pill {
+.quick-card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  padding: 10px 20px;
-  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 20px;
   transition: var(--transition);
-  white-space: nowrap;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  border: 1px solid var(--border);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
 }
 
-.quick-pill:hover {
+.quick-card:hover {
+  transform: translateY(-5px);
   border-color: var(--primary);
-  color: var(--primary);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  background: var(--bg-hover);
 }
 
-.quick-pill.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-color: transparent;
-  color: white;
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+.quick-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.quick-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.quick-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* ===== TOP CHARTS ===== */
@@ -401,7 +364,7 @@ body.focus-mode .search-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 20px;
@@ -415,10 +378,221 @@ body.focus-mode .search-container {
 .top-charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
 
-/* ===== COMPACT TOOLS HEADER ===== */
+/* ===== TOOL CARDS (Minimalistisch) ===== */
+.chart-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chart-rank {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chart-rank.rank-1 {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.chart-rank.rank-2 {
+  background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+}
+
+.chart-rank.rank-3 {
+  background: linear-gradient(135deg, #d97706, #92400e);
+}
+
+.chart-votes {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.chart-votes i {
+  color: var(--success);
+}
+
+.chart-tool-name {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.chart-category {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+
+.chart-price {
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 700;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ltd-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.chart-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ===== VOTE BUTTONS (Minimalistisch) ===== */
+.vote-btn {
+  flex: 1;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+}
+
+.vote-btn.up {
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn.up:hover,
+.vote-btn.up.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+}
+
+.vote-btn.down {
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.vote-btn.down:hover,
+.vote-btn.down.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--error);
+}
+
+.vote-btn i {
+  font-size: 1rem;
+}
+
+.favorite-btn,
+.compare-btn {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 10px;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.favorite-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.favorite-btn.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.compare-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.compare-btn.active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.15);
+}
+
+/* ===== TOOLS CONTAINER ===== */
 .tools-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -434,25 +608,11 @@ body.focus-mode .search-container {
   gap: 15px;
 }
 
-.tools-count {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-
-.tools-count span {
-  color: var(--primary);
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-/* ===== FILTERS ===== */
 .compact-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .filter-btn {
@@ -483,10 +643,6 @@ body.focus-mode .search-container {
   font-weight: 700;
 }
 
-.filter-group {
-  position: relative;
-}
-
 .filter-select {
   padding: 8px 30px 8px 12px;
   background: var(--bg-card);
@@ -507,6 +663,10 @@ body.focus-mode .search-container {
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
 }
 
+.filter-group {
+  position: relative;
+}
+
 .filter-group::after {
   content: '▼';
   position: absolute;
@@ -518,177 +678,59 @@ body.focus-mode .search-container {
   font-size: 0.65rem;
 }
 
-/* ===== HIGH-DENSITY TOOL GRID ===== */
-.tools-grid {
+.tools-count {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.tools-count span {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* ===== COMPACT TOOL LIST ===== */
+.compact-tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
-.tool-card {
+.compact-tool-row {
   background: var(--bg-card);
-  border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px;
-  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
   cursor: pointer;
-  transition: var(--transition);
-  backdrop-filter: blur(10px);
-  overflow: hidden;
 }
 
-.tool-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.tool-card:hover {
+.compact-tool-row:hover {
   border-color: var(--primary);
-  transform: translateY(-5px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
 
-.tool-card:hover::before {
-  opacity: 1;
-}
-
-.tool-card:hover .tool-preview {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.tool-header {
+.tool-vote-compact {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.tool-name {
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  padding-right: 60px;
-}
-
-.tool-category {
-  font-size: 0.75rem;
-  color: var(--primary);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* ===== RATING STARS - NEUE POSITION ===== */
-.tool-rating {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  font-size: 0.85rem;
-  color: var(--gold);
-  margin-top: 8px;
-}
-
-/* ===== NEW: UP-VOTE COUNTER ===== */
-.tool-votes {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 8px;
+  min-width: 70px;
 }
 
 .vote-count {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.vote-count i {
-  color: var(--success);
-}
-
-.vote-count.up {
-  color: var(--success);
-}
-
-.vote-count.down {
-  color: var(--error);
-}
-
-/* ===== AI RECOMMENDATION BADGE - NEUE POSITION (LINKS) ===== */
-.ai-recommended {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: linear-gradient(135deg, var(--secondary), var(--primary));
-  color: white;
-  padding: 6px 12px;
-  border-radius: 0 var(--radius) var(--radius) 0;
-  font-size: 0.7rem;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 2;
-  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
+  font-size: 1.1rem;
+  color: var(--text-primary);
 }
 
-.tool-description {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 15px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.tool-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid var(--border);
-}
-
-.tool-price {
-  font-size: 0.9rem;
-  color: var(--success);
-  font-weight: 700;
-}
-
-.ltd-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #f59e0b, #ef4444);
-  color: white;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 10px;
-  margin-left: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tool-actions {
+.vote-buttons-compact {
   display: flex;
   gap: 8px;
 }
@@ -734,45 +776,53 @@ body.focus-mode .search-container {
   border-color: var(--error);
 }
 
-.favorite-btn,
-.compare-btn {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: var(--transition);
-  padding: 10px;
-  border-radius: 8px;
-  width: 40px;
-  height: 40px;
+.tool-info-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.tool-name-compact {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1rem;
+  gap: 8px;
 }
 
-.favorite-btn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  transform: translateY(-2px);
-}
-
-.favorite-btn.active {
-  color: var(--gold);
-  border-color: var(--gold);
-  background: rgba(251, 191, 36, 0.15);
-}
-
-.compare-btn:hover {
-  border-color: var(--primary);
+.tool-category-compact {
+  font-size: 0.7rem;
   color: var(--primary);
-  transform: translateY(-2px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.compare-btn.active {
-  color: var(--primary);
-  border-color: var(--primary);
-  background: rgba(0, 212, 255, 0.15);
+.tool-desc-compact {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tool-meta-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 120px;
+}
+
+.tool-price-compact {
+  font-size: 0.9rem;
+  color: var(--success);
+  font-weight: 700;
+}
+
+.tool-actions-compact {
+  display: flex;
+  gap: 8px;
 }
 
 .tool-link-compact {
@@ -792,69 +842,42 @@ body.focus-mode .search-container {
   box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
 }
 
-/* ===== SMART PREVIEW ===== */
-.tool-preview {
+/* ===== AI RECOMMENDATION BADGE ===== */
+.ai-recommended {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(10, 14, 23, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: var(--transition);
-  border: 1px solid var(--primary);
-  text-align: center;
-  z-index: 1;
-}
-
-.preview-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin: 20px 0;
-  width: 100%;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.stat-value {
-  font-size: 1.5rem;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.65rem;
   font-weight: 800;
-  color: var(--primary);
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: pulse 2s infinite;
 }
 
-/* ===== MODAL STYLES ===== */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ===== MODAL STYLES (Minimalistisch) ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
   z-index: 2000;
   display: none;
-  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-overlay.active {
@@ -879,7 +902,7 @@ body.focus-mode .search-container {
   overflow-y: auto;
   position: relative;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideUp 0.3s ease;
 }
 
 @keyframes slideUp {
@@ -894,7 +917,7 @@ body.focus-mode .search-container {
 }
 
 .modal-header {
-  padding: 20px;
+  padding: 24px;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
@@ -907,7 +930,7 @@ body.focus-mode .search-container {
 }
 
 .modal-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--text-primary);
 }
@@ -1003,12 +1026,6 @@ body.focus-mode .search-container {
   background: rgba(251, 191, 36, 0.15);
   color: var(--gold);
   border: 1px solid rgba(251, 191, 36, 0.3);
-}
-
-.tool-badge.votes {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .tool-description-full {
@@ -1403,20 +1420,49 @@ body.focus-mode .search-container {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .tools-grid {
+  .header {
+    padding: 60px 15px 30px;
+  }
+  
+  .quick-navigation {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 15px;
+  }
+  
+  .top-charts {
     grid-template-columns: 1fr;
   }
   
-  .tool-card:hover .tool-preview {
-    display: none;
+  .tools-container {
+    padding: 0 15px 40px;
   }
   
-  .header {
-    padding: 40px 15px 20px;
+  .compact-tools-header {
+    flex-direction: column;
+    align-items: stretch;
   }
   
-  .quick-nav-container {
-    padding: 12px 15px;
+  .compact-filters {
+    justify-content: center;
+  }
+  
+  .compact-tool-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .tool-meta-compact {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .tool-vote-compact {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
   
   .modal {
@@ -1458,38 +1504,36 @@ body.focus-mode .search-container {
     width: 100%;
     justify-content: center;
   }
-  
-  .compact-tools-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .compact-filters {
-    justify-content: center;
-  }
-  
-  .ai-recommended {
-    font-size: 0.6rem;
-    padding: 4px 8px;
-  }
-  
-  .tool-rating {
-    position: static;
-    margin-top: 8px;
-  }
 }
 
 @media (max-width: 480px) {
   .header h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
   
   .search-box {
     padding: 14px 55px 14px 45px;
+    font-size: 0.95rem;
   }
   
-  .tools-grid {
-    gap: 12px;
+  .quick-navigation {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-actions {
+    gap: 6px;
+  }
+  
+  .vote-btn {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+  
+  .favorite-btn,
+  .compare-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
   }
   
   .modal-title {
@@ -1503,37 +1547,12 @@ body.focus-mode .search-container {
   .alternatives-grid {
     grid-template-columns: 1fr;
   }
-  
-  .tool-actions {
-    gap: 6px;
-  }
-  
-  .vote-btn-compact {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .favorite-btn,
-  .compare-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 0.9rem;
-  }
-  
-  .tool-votes {
-    font-size: 0.75rem;
-  }
-  
-  .tool-rating {
-    position: static;
-    margin-top: 8px;
-  }
 }
 
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -1542,29 +1561,11 @@ body.focus-mode .search-container {
 
 ::-webkit-scrollbar-thumb {
   background: var(--bg-card);
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bg-hover);
-}
-
-/* ===== PERFORMANCE OPTIMIZATIONS ===== */
-.tool-card {
-  will-change: transform;
-}
-
-.tools-grid {
-  contain: content;
-}
-
-.modal-overlay {
-  will-change: opacity;
-}
-
-/* ===== DEBOUNCE HELPER ===== */
-.debounce {
-  transition: none !important;
 }
 </style>
 </head>
@@ -1626,34 +1627,37 @@ body.focus-mode .search-container {
   </div>
 </header>
 
-<!-- Quick Navigation Pills -->
-<div class="quick-nav-container">
-  <div class="quick-nav-scroll">
-    <div class="quick-pill active" data-category="all">
-      <i class="fas fa-border-all"></i>
-      <span data-de="Alle" data-en="All">Alle</span>
-    </div>
-    <div class="quick-pill" data-category="text">
-      <i class="fas fa-pen"></i>
-      <span data-de="Text & Schreiben" data-en="Text & Writing">Text</span>
-    </div>
-    <div class="quick-pill" data-category="image">
-      <i class="fas fa-image"></i>
-      <span data-de="Bildgenerierung" data-en="Image Generation">Bild</span>
-    </div>
-    <div class="quick-pill" data-category="code">
-      <i class="fas fa-code"></i> Code
-    </div>
-    <div class="quick-pill" data-category="video">
-      <i class="fas fa-video"></i> Video
-    </div>
-    <div class="quick-pill" data-category="audio">
-      <i class="fas fa-music"></i> Audio
-    </div>
-    <div class="quick-pill" data-category="free">
-      <i class="fas fa-gift"></i>
-      <span data-de="Kostenlos" data-en="Free">Kostenlos</span>
-    </div>
+<!-- Quick Navigation -->
+<div class="quick-navigation">
+  <div class="quick-card" data-filter="text">
+    <div class="quick-icon">✍️</div>
+    <div class="quick-title" data-de="Text & Schreiben" data-en="Text & Writing">Text & Schreiben</div>
+    <div class="quick-desc" data-de="ChatGPT, Claude & mehr" data-en="ChatGPT, Claude & more">ChatGPT, Claude & mehr</div>
+  </div>
+  <div class="quick-card" data-filter="image">
+    <div class="quick-icon">🎨</div>
+    <div class="quick-title" data-de="Bildgenerierung" data-en="Image Generation">Bildgenerierung</div>
+    <div class="quick-desc" data-de="Midjourney, DALL·E 3" data-en="Midjourney, DALL·E 3">Midjourney, DALL·E 3</div>
+  </div>
+  <div class="quick-card" data-filter="code">
+    <div class="quick-icon">💻</div>
+    <div class="quick-title" data-de="Code" data-en="Code">Code</div>
+    <div class="quick-desc" data-de="GitHub Copilot, Cursor" data-en="GitHub Copilot, Cursor">GitHub Copilot, Cursor</div>
+  </div>
+  <div class="quick-card" data-filter="video">
+    <div class="quick-icon">🎬</div>
+    <div class="quick-title" data-de="Video" data-en="Video">Video</div>
+    <div class="quick-desc" data-de="Runway, Synthesia" data-en="Runway, Synthesia">Runway, Synthesia</div>
+  </div>
+  <div class="quick-card" data-filter="audio">
+    <div class="quick-icon">🎵</div>
+    <div class="quick-title" data-de="Audio" data-en="Audio">Audio</div>
+    <div class="quick-desc" data-de="ElevenLabs, Suno AI" data-en="ElevenLabs, Suno AI">ElevenLabs, Suno AI</div>
+  </div>
+  <div class="quick-card" data-filter="free">
+    <div class="quick-icon">🎁</div>
+    <div class="quick-title" data-de="Kostenlos" data-en="Free">Kostenlos</div>
+    <div class="quick-desc" data-de="100% gratis" data-en="100% free">100% gratis</div>
   </div>
 </div>
 
@@ -1695,13 +1699,16 @@ body.focus-mode .search-container {
       <span data-de="Bild" data-en="Image">Bild</span>
     </button>
     <button class="filter-btn" data-category="code">
-      <i class="fas fa-code"></i> Code
+      <i class="fas fa-code"></i>
+      Code
     </button>
     <button class="filter-btn" data-category="video">
-      <i class="fas fa-video"></i> Video
+      <i class="fas fa-video"></i>
+      Video
     </button>
     <button class="filter-btn" data-category="audio">
-      <i class="fas fa-music"></i> Audio
+      <i class="fas fa-music"></i>
+      Audio
     </button>
 
     <div class="filter-group">
@@ -1718,12 +1725,11 @@ body.focus-mode .search-container {
         <option value="votes" data-de="Beste Bewertung" data-en="Best Rated">Beste Bewertung</option>
         <option value="name" data-de="A-Z" data-en="A-Z">A-Z</option>
         <option value="rating">Rating</option>
-        <option value="trending" data-de="Trending" data-en="Trending">Trending</option>
       </select>
     </div>
   </div>
 
-  <div class="tools-grid" id="toolsGrid">
+  <div class="compact-tools-grid" id="toolsGrid">
     <!-- Dynamically filled -->
   </div>
 
@@ -1815,7 +1821,7 @@ body.focus-mode .search-container {
     </div>
     <div class="modal-content legal-content">
       <h2 data-de="1. Datenschutz auf einen Blick" data-en="1. Data protection at a glance">1. Datenschutz auf einen Blick</h2>
-        
+      
       <h3 data-de="Allgemeine Hinweise" data-en="General information">Allgemeine Hinweise</h3>
       <p data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen." data-en="The following information provides a simple overview of what happens to your personal data when you visit our website.">
         Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen.
@@ -1891,1056 +1897,7 @@ body.focus-mode .search-container {
   </div>
 </div>
 
-<!-- Embed AI Tools Data directly -->
 <script>
-window.aiToolsData = [
-  {
-    "id": "chatgpt",
-    "numericId": 1,
-    "name": "ChatGPT",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "Free/$20",
-    "rating": 4.9,
-    "description": {
-      "de": "Bester Allrounder für Texte, Ideen, Code.",
-      "en": "Best all-rounder for text, ideas, code."
-    },
-    "features": ["GPT-4", "Web", "Files"],
-    "link": "https://chat.openai.com/",
-    "badge": "popular",
-    "useCases": ["chatbot", "writing", "coding"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "ChatGPT Review 2026: Der ultimative KI-Allrounder",
-      "en": "ChatGPT Review 2026: The Ultimate AI All-Rounder"
-    },
-    "seoDesc": {
-      "de": "ChatGPT ist der beste KI-Allrounder für Texte, Code und Ideen. Erfahre alles über Vor- und Nachteile, Preise und Alternativen.",
-      "en": "ChatGPT is the best AI all-rounder for text, code and ideas. Learn about pros, cons, pricing and alternatives."
-    },
-    "alternatives": ["claude", "gemini", "perplexity"],
-    "pros": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support"],
-    "cons": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier"],
-    "pricing": {
-      "free": "Grundlegende Funktionen mit GPT-3.5",
-      "pro": "$20/Monat für GPT-4, Web-Zugang, Datei-Upload"
-    }
-  },
-  {
-    "id": "claude",
-    "numericId": 2,
-    "name": "Claude",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "Free/$20",
-    "rating": 4.8,
-    "description": {
-      "de": "Exzellent für lange Texte, Dokumente.",
-      "en": "Excellent for long-form, documents."
-    },
-    "features": ["200K", "Files", "Writing"],
-    "link": "https://claude.ai/",
-    "badge": "popular",
-    "useCases": ["chatbot", "writing", "analysis"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Claude AI Review: Der Experte für lange Texte und Dokumente",
-      "en": "Claude AI Review: The Expert for Long Texts and Documents"
-    },
-    "seoDesc": {
-      "de": "Claude ist spezialisiert auf lange Texte und Dokumentenanalyse. Ideal für Autoren, Forscher und Unternehmen.",
-      "en": "Claude specializes in long texts and document analysis. Ideal for writers, researchers and businesses."
-    },
-    "alternatives": ["chatgpt", "gemini", "notion-ai"],
-    "pros": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits"],
-    "cons": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution"]
-  },
-  {
-    "id": "midjourney",
-    "numericId": 3,
-    "name": "Midjourney",
-    "category": "image",
-    "price": "paid",
-    "priceDisplay": "$10/mo",
-    "rating": 4.9,
-    "description": {
-      "de": "Beste künstlerische Bildgenerierung.",
-      "en": "Best artistic image generation."
-    },
-    "features": ["Art", "Styles", "Quality"],
-    "link": "https://www.midjourney.com/",
-    "badge": "popular",
-    "useCases": ["image-generator", "art", "design"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "Midjourney Review 2026: Die beste KI für künstlerische Bilder",
-      "en": "Midjourney Review 2026: The Best AI for Artistic Images"
-    },
-    "seoDesc": {
-      "de": "Midjourney generiert die künstlerischsten KI-Bilder. Perfekt für Künstler, Designer und Kreative.",
-      "en": "Midjourney generates the most artistic AI images. Perfect for artists, designers and creatives."
-    },
-    "alternatives": ["dalle-3", "stable-diffusion", "firefly"],
-    "pros": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen"],
-    "cons": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse"],
-    "pricing": {
-      "basic": "$10/Monat für 200 Bilder",
-      "standard": "$30/Monat für unbegrenzte Bilder"
-    }
-  },
-  {
-    "id": "github-copilot",
-    "numericId": 4,
-    "name": "GitHub Copilot",
-    "category": "code",
-    "price": "paid",
-    "priceDisplay": "$10/mo",
-    "rating": 4.8,
-    "description": {
-      "de": "Bester Code-Assistent für Entwickler.",
-      "en": "Best code assistant for developers."
-    },
-    "features": ["Autocomplete", "Chat", "Multi-Lang"],
-    "link": "https://github.com/features/copilot",
-    "badge": "popular",
-    "useCases": ["coding-assistant", "debugging", "code-explanation"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "GitHub Copilot Review: Der KI-Pair-Programmierer",
-      "en": "GitHub Copilot Review: The AI Pair Programmer"
-    },
-    "seoDesc": {
-      "de": "GitHub Copilot ist der beste KI-Code-Assistent für Entwickler. Erhöht die Produktivität um bis zu 55%.",
-      "en": "GitHub Copilot is the best AI code assistant for developers. Increases productivity by up to 55%."
-    },
-    "alternatives": ["cursor", "tabnine", "codeium"],
-    "pros": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%"],
-    "cons": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code"],
-    "pricing": {
-      "individual": "$10/Monat pro Nutzer",
-      "business": "$19/Monat pro Nutzer"
-    }
-  },
-  {
-    "id": "elevenlabs",
-    "numericId": 5,
-    "name": "ElevenLabs",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "Free/$5",
-    "rating": 4.8,
-    "description": {
-      "de": "Realistische KI-Stimmen, Voice Cloning.",
-      "en": "Realistic AI voices, voice cloning."
-    },
-    "features": ["TTS", "Clone", "Emotion"],
-    "link": "https://elevenlabs.io/",
-    "badge": "popular",
-    "useCases": ["voice-generator", "text-to-speech", "voice-cloning"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "ElevenLabs Review: Die realistischsten KI-Stimmen",
-      "en": "ElevenLabs Review: The Most Realistic AI Voices"
-    },
-    "seoDesc": {
-      "de": "ElevenLabs bietet die realistischsten KI-Stimmen und Voice-Cloning. Ideal für Podcasts, Hörbücher und Videos.",
-      "en": "ElevenLabs offers the most realistic AI voices and voice cloning. Ideal for podcasts, audiobooks and videos."
-    },
-    "alternatives": ["murf", "descript", "suno"],
-    "pros": ["Die realistischsten KI-Stimmen", "Einfaches Voice-Cloning", "Emotionale Sprachausgabe", "Kostenlose Testversion"],
-    "cons": ["Teuer für professionelle Nutzung", "Limitierte kostenlose Nutzung", "Ethische Bedenken bei Voice-Cloning"],
-    "pricing": {
-      "free": "10.000 Zeichen/Monat",
-      "starter": "$5/Monat für 30.000 Zeichen",
-      "creator": "$22/Monat für 100.000 Zeichen"
-    }
-  },
-  {
-    "id": "runway",
-    "numericId": 6,
-    "name": "Runway",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "Free/$15",
-    "rating": 4.7,
-    "description": {
-      "de": "Text-zu-Video, KI-Video Editing.",
-      "en": "Text-to-video, AI video editing."
-    },
-    "features": ["Gen", "Edit", "FX"],
-    "link": "https://runwayml.com/",
-    "badge": "popular",
-    "useCases": ["video-editor", "video-generation", "editing"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Runway Review: KI-Video Editing der nächsten Generation",
-      "en": "Runway Review: Next-Gen AI Video Editing"
-    },
-    "seoDesc": {
-      "de": "Runway ist die führende KI-Video-Plattform mit Text-zu-Video, Objekt-Entfernung und Spezialeffekten.",
-      "en": "Runway is the leading AI video platform with text-to-video, object removal and special effects."
-    },
-    "alternatives": ["pika", "invideo", "heygen"],
-    "pros": ["30+ KI-Video-Tools in einer Plattform", "Professionelle Ergebnisse", "Einfache Benutzeroberfläche", "Kostenloser Plan verfügbar"],
-    "cons": ["Wasserzeichen im Free-Tier", "Teure Pro-Pläne", "Rechenintensiv (braucht gute Hardware)"],
-    "pricing": {
-      "free": "3 Projekte, Wasserzeichen",
-      "standard": "$15/Monat für 125 Credits",
-      "pro": "$35/Monat für 625 Credits"
-    }
-  },
-  {
-    "id": "gemini",
-    "numericId": 7,
-    "name": "Gemini",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "Free/$20",
-    "rating": 4.6,
-    "description": {
-      "de": "Googles KI mit Web Integration.",
-      "en": "Google's AI with web integration."
-    },
-    "features": ["Web", "Multimodal", "Apps"],
-    "link": "https://gemini.google.com/",
-    "badge": "new",
-    "useCases": ["chatbot", "research", "writing"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "perplexity",
-    "numericId": 8,
-    "name": "Perplexity",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "Free/$20",
-    "rating": 4.7,
-    "description": {
-      "de": "KI-Suche mit Quellenangaben.",
-      "en": "AI search with citations."
-    },
-    "features": ["Citations", "Web", "Sources"],
-    "link": "https://www.perplexity.ai/",
-    "badge": "new",
-    "useCases": ["chatbot", "research", "information"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "dalle-3",
-    "numericId": 9,
-    "name": "DALL·E 3",
-    "category": "image",
-    "price": "paid",
-    "priceDisplay": "In ChatGPT+",
-    "rating": 4.7,
-    "description": {
-      "de": "Text-zu-Bild in ChatGPT.",
-      "en": "Text-to-image in ChatGPT."
-    },
-    "features": ["Text", "Images", "ChatGPT"],
-    "link": "https://openai.com/dall-e-3",
-    "badge": "new",
-    "useCases": ["image-generator", "art", "design"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "stable-diffusion",
-    "numericId": 10,
-    "name": "Stable Diffusion",
-    "category": "image",
-    "price": "free",
-    "priceDisplay": "Free",
-    "rating": 4.7,
-    "description": {
-      "de": "Open-Source Bildgenerierung.",
-      "en": "Open-source image generation."
-    },
-    "features": ["Open", "Local", "Custom"],
-    "link": "https://stability.ai/",
-    "badge": "free",
-    "useCases": ["image-generator", "art", "custom-models"],
-    "votes": 0,
-    "hasLifetimeDeal": true
-  },
-  {
-    "id": "notion-ai",
-    "numericId": 11,
-    "name": "Notion AI",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.5,
-    "description": {
-      "de": "KI in deinem Workspace.",
-      "en": "AI in your workspace."
-    },
-    "features": ["Writing", "Summarize", "Translate"],
-    "link": "https://www.notion.so/product/ai",
-    "badge": "popular",
-    "useCases": ["writing", "notes", "organization"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "copy-ai",
-    "numericId": 12,
-    "name": "Copy.ai",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$49/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI für Marketing Texte.",
-      "en": "AI for marketing copy."
-    },
-    "features": ["Marketing", "Templates", "Workflows"],
-    "link": "https://www.copy.ai/",
-    "badge": "popular",
-    "useCases": ["copywriting", "marketing", "ads"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "jasper",
-    "numericId": 13,
-    "name": "Jasper",
-    "category": "text",
-    "price": "paid",
-    "priceDisplay": "$49/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI für Business Content.",
-      "en": "AI for business content."
-    },
-    "features": ["Brand", "Templates", "Collaboration"],
-    "link": "https://www.jasper.ai/",
-    "badge": "popular",
-    "useCases": ["copywriting", "blogging", "seo"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "firefly",
-    "numericId": 14,
-    "name": "Adobe Firefly",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$5/mo",
-    "rating": 4.5,
-    "description": {
-      "de": "Adobe's KI für Kreative.",
-      "en": "Adobe's AI for creatives."
-    },
-    "features": ["Photoshop", "Vector", "Text"],
-    "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
-    "badge": "new",
-    "useCases": ["design", "photo-editing", "illustration"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "leonardo",
-    "numericId": 15,
-    "name": "Leonardo AI",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$12/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "Bildgenerierung für Spiele.",
-      "en": "Image generation for games."
-    },
-    "features": ["Game", "Assets", "Models"],
-    "link": "https://leonardo.ai/",
-    "badge": "new",
-    "useCases": ["game-dev", "3d-models", "textures"],
-    "votes": 0,
-    "hasLifetimeDeal": true
-  },
-  {
-    "id": "playground",
-    "numericId": 16,
-    "name": "Playground AI",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$15/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "Kostenlose Bildgenerierung.",
-      "en": "Free image generation."
-    },
-    "features": ["Free", "Filters", "Editing"],
-    "link": "https://playgroundai.com/",
-    "badge": "free",
-    "useCases": ["image-generator", "art", "social-media"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "murf",
-    "numericId": 17,
-    "name": "Murf AI",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$19/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "Text-zu-Sprache für Videos.",
-      "en": "Text-to-speech for videos."
-    },
-    "features": ["Voice", "Video", "Commercial"],
-    "link": "https://murf.ai/",
-    "badge": "popular",
-    "useCases": ["voiceover", "video", "podcast"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "suno",
-    "numericId": 18,
-    "name": "Suno AI",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.6,
-    "description": {
-      "de": "KI Musik Generator.",
-      "en": "AI music generator."
-    },
-    "features": ["Music", "Lyrics", "Genres"],
-    "link": "https://www.suno.ai/",
-    "badge": "new",
-    "useCases": ["music", "songwriting", "audio"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "boomy",
-    "numericId": 19,
-    "name": "Boomy",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "Erstelle Musik in Sekunden.",
-      "en": "Create music in seconds."
-    },
-    "features": ["Instant", "Royalty", "Distribution"],
-    "link": "https://boomy.com/",
-    "badge": "free",
-    "useCases": ["music", "streaming", "content"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "synthesia",
-    "numericId": 20,
-    "name": "Synthesia",
-    "category": "video",
-    "price": "paid",
-    "priceDisplay": "$30/mo",
-    "rating": 4.5,
-    "description": {
-      "de": "KI Avatare für Videos.",
-      "en": "AI avatars for videos."
-    },
-    "features": ["Avatars", "Languages", "Templates"],
-    "link": "https://www.synthesia.io/",
-    "badge": "popular",
-    "useCases": ["training", "marketing", "explainer"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "heygen",
-    "numericId": 21,
-    "name": "HeyGen",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$30/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "Video mit KI Avataren.",
-      "en": "Video with AI avatars."
-    },
-    "features": ["Avatars", "Translation", "Templates"],
-    "link": "https://www.heygen.com/",
-    "badge": "new",
-    "useCases": ["presentation", "marketing", "education"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "pika",
-    "numericId": 22,
-    "name": "Pika Labs",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.6,
-    "description": {
-      "de": "Text-zu-Video Generator.",
-      "en": "Text-to-video generator."
-    },
-    "features": ["Text", "Editing", "Styles"],
-    "link": "https://www.pika.art/",
-    "badge": "new",
-    "useCases": ["video-generator", "animation", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": true
-  },
-  {
-    "id": "cursor",
-    "numericId": 23,
-    "name": "Cursor",
-    "category": "code",
-    "price": "freemium",
-    "priceDisplay": "$20/mo",
-    "rating": 4.7,
-    "description": {
-      "de": "KI IDE für Programmierer.",
-      "en": "AI IDE for programmers."
-    },
-    "features": ["Editor", "Chat", "Debug"],
-    "link": "https://www.cursor.so/",
-    "badge": "new",
-    "useCases": ["coding", "debugging", "learning"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "replit",
-    "numericId": 24,
-    "name": "Replit AI",
-    "category": "code",
-    "price": "freemium",
-    "priceDisplay": "$20/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI Coding in der Cloud.",
-      "en": "AI coding in the cloud."
-    },
-    "features": ["Cloud", "Collaboration", "Deploy"],
-    "link": "https://replit.com/site/ai",
-    "badge": "free",
-    "useCases": ["coding", "education", "prototyping"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "tabnine",
-    "numericId": 25,
-    "name": "Tabnine",
-    "category": "code",
-    "price": "freemium",
-    "priceDisplay": "$12/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI Code Completion.",
-      "en": "AI code completion."
-    },
-    "features": ["Autocomplete", "Privacy", "Multi-Lang"],
-    "link": "https://www.tabnine.com/",
-    "badge": "popular",
-    "useCases": ["coding", "productivity", "assistant"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "codeium",
-    "numericId": 26,
-    "name": "Codeium",
-    "category": "code",
-    "price": "free",
-    "priceDisplay": "Free",
-    "rating": 4.5,
-    "description": {
-      "de": "Kostenlose KI für Code.",
-      "en": "Free AI for code."
-    },
-    "features": ["Free", "Autocomplete", "Chat"],
-    "link": "https://codeium.com/",
-    "badge": "free",
-    "useCases": ["coding", "learning", "prototyping"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "canva-ai",
-    "numericId": 27,
-    "name": "Canva AI",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$12/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI Design für alle.",
-      "en": "AI design for everyone."
-    },
-    "features": ["Design", "Templates", "Magic"],
-    "link": "https://www.canva.com/ai-tools/",
-    "badge": "popular",
-    "useCases": ["design", "social-media", "presentation"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "tome",
-    "numericId": 28,
-    "name": "Tome",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$8/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI für Präsentationen.",
-      "en": "AI for presentations."
-    },
-    "features": ["Presentations", "Narrative", "Visual"],
-    "link": "https://tome.app/",
-    "badge": "new",
-    "useCases": ["presentation", "storytelling", "business"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "beautiful-ai",
-    "numericId": 29,
-    "name": "Beautiful.ai",
-    "category": "business",
-    "price": "paid",
-    "priceDisplay": "$12/mo",
-    "rating": 4.2,
-    "description": {
-      "de": "KI Präsentation Designer.",
-      "en": "AI presentation designer."
-    },
-    "features": ["Slides", "Design", "Collaboration"],
-    "link": "https://www.beautiful.ai/",
-    "badge": "popular",
-    "useCases": ["presentation", "sales", "pitch"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "gamma",
-    "numericId": 30,
-    "name": "Gamma",
-    "category": "business",
-    "price": "freemium",
-    "priceDisplay": "$8/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI für Dokumente & Präsentationen.",
-      "en": "AI for docs & presentations."
-    },
-    "features": ["Docs", "Presentations", "Websites"],
-    "link": "https://gamma.app/",
-    "badge": "new",
-    "useCases": ["documentation", "presentation", "content"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "invideo",
-    "numericId": 31,
-    "name": "InVideo AI",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$20/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "Text-zu-Video für Social Media.",
-      "en": "Text-to-video for social media."
-    },
-    "features": ["Templates", "Stock", "Automation"],
-    "link": "https://invideo.io/ai",
-    "badge": "popular",
-    "useCases": ["social-media", "marketing", "ads"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "fliki",
-    "numericId": 32,
-    "name": "Fliki",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$21/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "Text-zu-Video mit Stimmen.",
-      "en": "Text-to-video with voices."
-    },
-    "features": ["Voice", "Stock", "Script"],
-    "link": "https://fliki.ai/",
-    "badge": "new",
-    "useCases": ["video", "social-media", "explainer"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "pictory",
-    "numericId": 33,
-    "name": "Pictory",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$19/mo",
-    "rating": 4.2,
-    "description": {
-      "de": "Erstelle Videos aus Text.",
-      "en": "Create videos from text."
-    },
-    "features": ["Script", "Stock", "Automation"],
-    "link": "https://pictory.ai/",
-    "badge": "popular",
-    "useCases": ["marketing", "training", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "wondershare",
-    "numericId": 34,
-    "name": "Wondershare Filmora",
-    "category": "video",
-    "price": "freemium",
-    "priceDisplay": "$50/year",
-    "rating": 4.1,
-    "description": {
-      "de": "KI Video Editor.",
-      "en": "AI video editor."
-    },
-    "features": ["Editing", "Effects", "Templates"],
-    "link": "https://filmora.wondershare.com/ai-video-editor/",
-    "badge": "popular",
-    "useCases": ["video-editing", "youtube", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "descript",
-    "numericId": 35,
-    "name": "Descript",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$12/mo",
-    "rating": 4.5,
-    "description": {
-      "de": "Audio & Video Editor.",
-      "en": "Audio & video editor."
-    },
-    "features": ["Editing", "Transcription", "Voice"],
-    "link": "https://www.descript.com/",
-    "badge": "popular",
-    "useCases": ["podcast", "video", "transcription"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "otter",
-    "numericId": 36,
-    "name": "Otter.ai",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI Meeting Transkription.",
-      "en": "AI meeting transcription."
-    },
-    "features": ["Transcription", "Notes", "Collaboration"],
-    "link": "https://otter.ai/",
-    "badge": "popular",
-    "useCases": ["meetings", "notes", "interviews"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "krisp",
-    "numericId": 37,
-    "name": "Krisp",
-    "category": "audio",
-    "price": "freemium",
-    "priceDisplay": "$8/mo",
-    "rating": 4.5,
-    "description": {
-      "de": "KI Noise Cancellation.",
-      "en": "AI noise cancellation."
-    },
-    "features": ["Noise", "Voice", "Meetings"],
-    "link": "https://krisp.ai/",
-    "badge": "popular",
-    "useCases": ["meetings", "calls", "recording"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "quillbot",
-    "numericId": 38,
-    "name": "QuillBot",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI Paraphraser & Übersetzer.",
-      "en": "AI paraphraser & translator."
-    },
-    "features": ["Paraphrase", "Grammar", "Summarize"],
-    "link": "https://quillbot.com/",
-    "badge": "popular",
-    "useCases": ["writing", "academic", "content"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "grammarly",
-    "numericId": 39,
-    "name": "Grammarly",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$12/mo",
-    "rating": 4.6,
-    "description": {
-      "de": "KI Schreibassistent.",
-      "en": "AI writing assistant."
-    },
-    "features": ["Grammar", "Tone", "Plagiarism"],
-    "link": "https://www.grammarly.com/",
-    "badge": "popular",
-    "useCases": ["writing", "emails", "documents"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "wordtune",
-    "numericId": 40,
-    "name": "Wordtune",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI für besseres Schreiben.",
-      "en": "AI for better writing."
-    },
-    "features": ["Rewrite", "Tone", "Summarize"],
-    "link": "https://www.wordtune.com/",
-    "badge": "popular",
-    "useCases": ["writing", "emails", "creative"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "rytr",
-    "numericId": 41,
-    "name": "Rytr",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$9/mo",
-    "rating": 4.2,
-    "description": {
-      "de": "Kostengünstiger KI Writer.",
-      "en": "Affordable AI writer."
-    },
-    "features": ["Templates", "Languages", "SEO"],
-    "link": "https://rytr.me/",
-    "badge": "free",
-    "useCases": ["copywriting", "blogging", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "writesonic",
-    "numericId": 42,
-    "name": "Writesonic",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$13/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI für Marketing Content.",
-      "en": "AI for marketing content."
-    },
-    "features": ["Templates", "SEO", "Images"],
-    "link": "https://writesonic.com/",
-    "badge": "popular",
-    "useCases": ["copywriting", "ads", "landing-pages"],
-    "votes": 0,
-    "hasLifetimeDeal": true
-  },
-  {
-    "id": "copy",
-    "numericId": 43,
-    "name": "Copy.ai",
-    "category": "text",
-    "price": "freemium",
-    "priceDisplay": "$49/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI Copywriting Plattform.",
-      "en": "AI copywriting platform."
-    },
-    "features": ["Workflows", "Brand", "Collaboration"],
-    "link": "https://www.copy.ai/",
-    "badge": "popular",
-    "useCases": ["marketing", "sales", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "surfer",
-    "numericId": 44,
-    "name": "Surfer SEO",
-    "category": "business",
-    "price": "paid",
-    "priceDisplay": "$59/mo",
-    "rating": 4.4,
-    "description": {
-      "de": "KI für SEO Content.",
-      "en": "AI for SEO content."
-    },
-    "features": ["SEO", "Research", "Optimization"],
-    "link": "https://surferseo.com/",
-    "badge": "popular",
-    "useCases": ["seo", "content", "blogging"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "jasper-art",
-    "numericId": 45,
-    "name": "Jasper Art",
-    "category": "image",
-    "price": "paid",
-    "priceDisplay": "$20/mo",
-    "rating": 4.2,
-    "description": {
-      "de": "Bildgenerierung für Marken.",
-      "en": "Image generation for brands."
-    },
-    "features": ["Brand", "Styles", "Commercial"],
-    "link": "https://www.jasper.ai/art",
-    "badge": "popular",
-    "useCases": ["marketing", "ads", "branding"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "photosonic",
-    "numericId": 46,
-    "name": "Photosonic",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$10/mo",
-    "rating": 4.1,
-    "description": {
-      "de": "Text-zu-Bild Generator.",
-      "en": "Text-to-image generator."
-    },
-    "features": ["Art", "Styles", "Custom"],
-    "link": "https://photosonic.writesonic.com/",
-    "badge": "free",
-    "useCases": ["art", "design", "social"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "nightcafe",
-    "numericId": 47,
-    "name": "NightCafe",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$6/mo",
-    "rating": 4.3,
-    "description": {
-      "de": "KI Kunst Generator.",
-      "en": "AI art generator."
-    },
-    "features": ["Art", "Styles", "Community"],
-    "link": "https://creator.nightcafe.studio/",
-    "badge": "free",
-    "useCases": ["art", "creativity", "prints"],
-    "votes": 0,
-    "hasLifetimeDeal": true
-  },
-  {
-    "id": "dreamstudio",
-    "numericId": 48,
-    "name": "DreamStudio",
-    "category": "image",
-    "price": "paid",
-    "priceDisplay": "$10/credits",
-    "rating": 4.4,
-    "description": {
-      "de": "Stable Diffusion Web UI.",
-      "en": "Stable Diffusion web UI."
-    },
-    "features": ["SDXL", "Control", "Custom"],
-    "link": "https://dreamstudio.ai/",
-    "badge": "popular",
-    "useCases": ["art", "design", "prototyping"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "bluewillow",
-    "numericId": 49,
-    "name": "BlueWillow",
-    "category": "image",
-    "price": "freemium",
-    "priceDisplay": "$5/mo",
-    "rating": 4.2,
-    "description": {
-      "de": "KI Bildgenerierung Discord.",
-      "en": "AI image generation Discord."
-    },
-    "features": ["Community", "Styles", "Fast"],
-    "link": "https://www.bluewillow.ai/",
-    "badge": "free",
-    "useCases": ["art", "social", "design"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  },
-  {
-    "id": "deepdream",
-    "numericId": 50,
-    "name": "DeepDream",
-    "category": "image",
-    "price": "free",
-    "priceDisplay": "Free",
-    "rating": 4.0,
-    "description": {
-      "de": "Früher KI Bildgenerator.",
-      "en": "Early AI image generator."
-    },
-    "features": ["Neural", "Art", "Experimental"],
-    "link": "https://deepdreamgenerator.com/",
-    "badge": "free",
-    "useCases": ["art", "experimental", "fun"],
-    "votes": 0,
-    "hasLifetimeDeal": false
-  }
-];
-</script>
-
-<script>
-// ===== SUPABASE KONFIGURATION =====
-const supabaseUrl = 'https://kffoeqqgurbptguqjdlq.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmZm9lcXFndXJicHRndXFqZGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2ODc1NTEsImV4cCI6MjA1MDI2MzU1MX0.Uxv5ITF62i0lJbWf2EwOQOa58geCLVImRcYGP99w81g';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
 // ===== GLOBALE VARIABLEN =====
 let aiTools = [];
 let currentLang = 'de';
@@ -2948,171 +1905,20 @@ let currentCategory = 'all';
 let currentPriceFilter = 'all';
 let currentSort = 'votes';
 let searchQuery = '';
-let lastScrollY = 0;
-let isFocusMode = false;
-
-// ===== DEBOUNCE FUNCTION =====
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// ===== SUPABASE VOTING SYSTEM =====
-// Generiere eine anonyme User-ID
-function getUserId() {
-  let userId = localStorage.getItem('aiUserId');
-  if (!userId) {
-    // Erstelle eine eindeutige ID
-    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('aiUserId', userId);
-  }
-  return userId;
-}
-
-// Lade Votes von Supabase
-async function loadVotesFromSupabase() {
-  try {
-    const { data, error } = await supabase
-      .from('votes')
-      .select('*');
-    
-    if (error) {
-      console.error('Fehler beim Laden der Votes:', error);
-      return;
-    }
-    
-    // Setze alle Votes zurück
-    aiTools.forEach(tool => {
-      tool.upVotes = 0;
-      tool.downVotes = 0;
-      tool.votes = 0;
-      tool.userVote = null;
-    });
-    
-    const userId = getUserId();
-    
-    // Aggregiere Votes
-    if (data) {
-      data.forEach(vote => {
-        const tool = aiTools.find(t => t.id === vote.tool_id);
-        if (tool) {
-          if (vote.vote_type === 'up') {
-            tool.upVotes++;
-          } else if (vote.vote_type === 'down') {
-            tool.downVotes++;
-          }
-          
-          // Prüfe ob der aktuelle User bereits gevoted hat
-          if (vote.user_id === userId) {
-            tool.userVote = vote.vote_type;
-          }
-        }
-      });
-      
-      // Berechne Gesamtvotes
-      aiTools.forEach(tool => {
-        tool.votes = tool.upVotes + tool.downVotes;
-      });
-    }
-  } catch (error) {
-    console.error('Fehler beim Laden der Votes:', error);
-  }
-}
-
-// Speichere Vote in Supabase
-async function saveVoteToSupabase(toolId, voteType) {
-  const userId = getUserId();
-  
-  try {
-    // Prüfe ob bereits ein Vote existiert
-    const { data: existingVotes, error: fetchError } = await supabase
-      .from('votes')
-      .select('*')
-      .eq('tool_id', toolId)
-      .eq('user_id', userId);
-    
-    if (fetchError) {
-      console.error('Fehler beim Abrufen des Votes:', fetchError);
-      return false;
-    }
-    
-    if (existingVotes && existingVotes.length > 0) {
-      // Update bestehenden Vote
-      const existingVote = existingVotes[0];
-      
-      if (existingVote.vote_type === voteType) {
-        // Gleicher Vote - lösche ihn (Toggle)
-        const { error: deleteError } = await supabase
-          .from('votes')
-          .delete()
-          .eq('id', existingVote.id);
-        
-        if (deleteError) {
-          console.error('Fehler beim Löschen des Votes:', deleteError);
-          return false;
-        }
-        return 'deleted';
-      } else {
-        // Anderer Vote - update
-        const { error: updateError } = await supabase
-          .from('votes')
-          .update({ vote_type: voteType, updated_at: new Date().toISOString() })
-          .eq('id', existingVote.id);
-        
-        if (updateError) {
-          console.error('Fehler beim Aktualisieren des Votes:', updateError);
-          return false;
-        }
-        return 'updated';
-      }
-    } else {
-      // Erstelle neuen Vote
-      const { error: insertError } = await supabase
-        .from('votes')
-        .insert([
-          {
-            tool_id: toolId,
-            user_id: userId,
-            vote_type: voteType,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }
-        ]);
-      
-      if (insertError) {
-        console.error('Fehler beim Einfügen des Votes:', insertError);
-        return false;
-      }
-      return 'created';
-    }
-  } catch (error) {
-    console.error('Fehler beim Speichern des Votes:', error);
-    return false;
-  }
-}
 
 // ===== DATEN LADEN =====
 async function loadAITools() {
   try {
-    aiTools = window.aiToolsData;
+    const response = await fetch('./data.json');
+    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+    aiTools = await response.json();
     
-    // Initialize vote counts
+    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     aiTools.forEach(tool => {
-      tool.votes = 0;
-      tool.upVotes = 0;
-      tool.downVotes = 0;
-      tool.userVote = null;
+      if (savedVotes[tool.id]) {
+        tool.votes = savedVotes[tool.id];
+      }
     });
-    
-    // Load votes from Supabase
-    await loadVotesFromSupabase();
     
     addAIRecommendations();
     renderTopCharts();
@@ -3133,7 +1939,7 @@ async function loadAITools() {
 function addAIRecommendations() {
   const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-    
+  
   aiTools.forEach(tool => {
     let score = 0;
     if (tool.rating >= 4.7) score += 3;
@@ -3143,13 +1949,6 @@ function addAIRecommendations() {
     if (userHistory.includes(tool.category)) score += 2;
     if (favorites.includes(tool.id)) score += 3;
     
-    // Calculate vote ratio
-    const totalVotes = tool.upVotes + tool.downVotes;
-    if (totalVotes > 0) {
-      const voteRatio = tool.upVotes / totalVotes;
-      if (voteRatio > 0.8) score += 2;
-    }
-    
     tool.aiScore = score;
     tool.isAIRecommended = score >= 6;
   });
@@ -3158,88 +1957,41 @@ function addAIRecommendations() {
 // ===== TOP 5 CHARTS =====
 function renderTopCharts() {
   const topTools = [...aiTools]
-    .sort((a, b) => {
-      // Sort by votes, then by rating
-      if (b.votes !== a.votes) return b.votes - a.votes;
-      return (b.rating || 0) - (a.rating || 0);
-    })
+    .sort((a, b) => (b.votes || 0) - (a.votes || 0))
     .slice(0, 5);
 
   const topChartsHTML = topTools.map((tool, index) => {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const rankClass = 'rank-' + (index + 1);
     const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
     const aiRecommended = tool.isAIRecommended ? '<div class="ai-recommended"><i class="fas fa-robot"></i> AI Pick</div>' : '';
     
-    // Calculate net votes (up - down)
-    const netVotes = (tool.upVotes || 0) - (tool.downVotes || 0);
-    
     return `
-      <div class="tool-card" onclick="openToolDetail('${tool.id}')">
+      <div class="chart-card" onclick="openToolDetail('${tool.id}')">
         ${aiRecommended}
-        <div class="tool-header">
-          <div>
-            <div class="tool-name">${tool.name}</div>
-            <div class="tool-category">${getCategoryLabel(tool.category)}</div>
-            <div class="tool-votes">
-              <span class="vote-count up">
-                <i class="fas fa-thumbs-up"></i> ${tool.upVotes || 0}
-              </span>
-              <span class="vote-count down">
-                <i class="fas fa-thumbs-down"></i> ${tool.downVotes || 0}
-              </span>
-              <span class="vote-count" style="margin-left: 8px;">
-                <i class="fas fa-chart-line"></i> ${netVotes >= 0 ? '+' : ''}${netVotes}
-              </span>
-            </div>
+        <div class="chart-header">
+          <div class="chart-rank ${rankClass}">${index + 1}</div>
+          <div class="chart-votes">
+            <i class="fas fa-arrow-up"></i>
+            <span>${tool.votes || 0}</span>
           </div>
-          <div class="tool-rating">
+        </div>
+        <div class="chart-category">${getCategoryLabel(tool.category)}</div>
+        <div class="chart-tool-name">${tool.name}</div>
+        <div class="chart-price">💰 ${tool.priceDisplay}${ltdBadge}</div>
+        <div class="chart-description">${description}</div>
+        <div class="chart-actions" onclick="event.stopPropagation()">
+          <button class="vote-btn up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+          <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
             <i class="fas fa-star"></i>
-            <span>${tool.rating}/5</span>
-          </div>
-        </div>
-        <div class="tool-description">${description}</div>
-        <div class="tool-meta">
-          <div class="tool-price">${tool.priceDisplay}${ltdBadge}</div>
-          <div class="tool-actions">
-            <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'up')">
-              <i class="fas fa-arrow-up"></i>
-            </button>
-            <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="event.stopPropagation(); vote('${tool.id}', 'down')">
-              <i class="fas fa-arrow-down"></i>
-            </button>
-            <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${tool.id}')">
-              <i class="fas fa-star"></i>
-            </button>
-            <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleComparison('${tool.id}')">
-              <i class="fas fa-balance-scale"></i>
-            </button>
-          </div>
-        </div>
-          
-        <!-- Smart Preview -->
-        <div class="tool-preview">
-          <div class="tool-name">${tool.name}</div>
-          <div class="preview-stats">
-            <div class="stat-item">
-              <div class="stat-value">${tool.rating}/5</div>
-              <div class="stat-label" data-de="Bewertung" data-en="Rating">Bewertung</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">${tool.votes || 0}</div>
-              <div class="stat-label" data-de="Stimmen" data-en="Votes">Stimmen</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">${tool.priceDisplay}</div>
-              <div class="stat-label" data-de="Preis" data-en="Price">Preis</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value">${getCategoryLabel(tool.category)}</div>
-              <div class="stat-label" data-de="Kategorie" data-en="Category">Kategorie</div>
-            </div>
-          </div>
-          <button class="btn-primary" onclick="event.stopPropagation(); openToolDetail('${tool.id}')">
-            <i class="fas fa-external-link-alt"></i>
-            <span data-de="Details" data-en="Details">Details</span>
+          </button>
+          <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+            <i class="fas fa-balance-scale"></i>
           </button>
         </div>
       </div>
@@ -3251,15 +2003,7 @@ function renderTopCharts() {
 }
 
 // ===== ALLE TOOLS =====
-const renderToolsDebounced = debounce(() => {
-  renderToolsInternal();
-}, 50);
-
 function renderTools() {
-  renderToolsDebounced();
-}
-
-function renderToolsInternal() {
   let filteredTools = [...aiTools];
 
   if (currentCategory !== 'all') {
@@ -3278,9 +2022,536 @@ function renderToolsInternal() {
              tool.description.en.toLowerCase().includes(searchLower) ||
              tool.category.toLowerCase().includes(searchLower);
     });
-    
-    // Intent Search: Highlight matching category
-    highlightMatchingCategory(searchLower);
   }
 
-  // Apply
+  if (currentSort === 'votes') {
+    filteredTools.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  } else if (currentSort === 'name') {
+    filteredTools.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (currentSort === 'rating') {
+    filteredTools.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  }
+
+  const toolsHTML = filteredTools.map(tool => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge">LTD</span>' : '';
+    
+    return `
+      <div class="compact-tool-row" onclick="openToolDetail('${tool.id}')">
+        <div class="tool-vote-compact" onclick="event.stopPropagation()">
+          <div class="vote-count">${tool.votes || 0}</div>
+          <div class="vote-buttons-compact">
+            <button class="vote-btn-compact up ${tool.userVote === 'up' ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+              <i class="fas fa-arrow-up"></i>
+            </button>
+            <button class="vote-btn-compact down ${tool.userVote === 'down' ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+              <i class="fas fa-arrow-down"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="tool-info-compact">
+          <div class="tool-category-compact">${getCategoryLabel(tool.category)}</div>
+          <div class="tool-name-compact">
+            ${tool.name}
+            ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary);" title="AI Recommended"></i>' : ''}
+          </div>
+          <div class="tool-desc-compact">${description}</div>
+        </div>
+        
+        <div class="tool-meta-compact" onclick="event.stopPropagation()">
+          <div class="tool-price-compact">${tool.priceDisplay}${ltdBadge}</div>
+          <div class="tool-actions-compact">
+            <button class="favorite-btn ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+              <i class="fas fa-star"></i>
+            </button>
+            <button class="compare-btn ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+              <i class="fas fa-balance-scale"></i>
+            </button>
+            <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-link-compact" onclick="trackToolClick('${tool.id}')">
+              <span data-de="Öffnen" data-en="Open">Öffnen</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('toolsGrid').innerHTML = toolsHTML;
+  document.getElementById('toolCount').textContent = filteredTools.length;
+  updateLanguage();
+}
+
+// ===== TOOL DETAIL MODAL =====
+function openToolDetail(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  trackUserInteraction(tool.category);
+
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const seoTitle = currentLang === 'de' ? (tool.seoTitle?.de || tool.name) : (tool.seoTitle?.en || tool.name);
+  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
+  
+  const pros = tool.pros || [];
+  const cons = tool.cons || [];
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  const useCases = tool.useCases || [];
+  
+  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
+  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="feature-tag"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+  
+  const alternativesHTML = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    if (!altTool) return '';
+    return `
+      <div class="alternative-card" onclick="openToolDetail('${altTool.id}')">
+        <div class="alternative-card-name">${altTool.name}</div>
+        <div class="alternative-card-category">${getCategoryLabel(altTool.category)}</div>
+      </div>
+    `;
+  }).join('');
+
+  const useCasesText = currentLang === 'de' 
+    ? useCases.map(uc => getUseCaseLabelDE(uc)).join(', ')
+    : useCases.map(uc => getUseCaseLabelEN(uc)).join(', ');
+
+  const modalContent = `
+    <div class="tool-detail-hero">
+      <div class="tool-detail-icon">
+        ${getCategoryIcon(tool.category)}
+      </div>
+      <div class="tool-detail-info">
+        <h2 class="tool-detail-name">${tool.name}</h2>
+        <div class="tool-detail-meta">
+          <span class="tool-badge category">
+            <i class="fas fa-tag"></i>
+            ${getCategoryLabel(tool.category)}
+          </span>
+          <span class="tool-badge price">
+            <i class="fas fa-dollar-sign"></i>
+            ${tool.priceDisplay}
+          </span>
+          <span class="tool-badge rating">
+            <i class="fas fa-star"></i>
+            ${tool.rating}/5
+          </span>
+          ${tool.hasLifetimeDeal ? '<span class="ltd-badge">Lifetime Deal</span>' : ''}
+        </div>
+        <p class="tool-description-full">${seoDesc}</p>
+      </div>
+    </div>
+
+    ${pros.length > 0 || cons.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-balance-scale"></i> <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span></h3>
+      <div class="pros-cons-grid">
+        ${pros.length > 0 ? `
+        <div class="pros-list">
+          <h4><i class="fas fa-check-circle"></i> <span data-de="Vorteile" data-en="Pros">Vorteile</span></h4>
+          <ul>${prosHTML}</ul>
+        </div>
+        ` : ''}
+        ${cons.length > 0 ? `
+        <div class="cons-list">
+          <h4><i class="fas fa-times-circle"></i> <span data-de="Nachteile" data-en="Cons">Nachteile</span></h4>
+          <ul>${consHTML}</ul>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
+
+    ${features.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-rocket"></i> <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span></h3>
+      <div class="feature-tags">
+        ${featuresHTML}
+      </div>
+    </div>
+    ` : ''}
+
+    ${useCases.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-lightbulb"></i> <span data-de="Beste Anwendungsfälle" data-en="Best Use Cases">Beste Anwendungsfälle</span></h3>
+      <p style="color: var(--text-secondary); line-height: 1.6;">${useCasesText}</p>
+    </div>
+    ` : ''}
+
+    ${alternatives.length > 0 ? `
+    <div class="tool-section">
+      <h3><i class="fas fa-exchange-alt"></i> <span data-de="Vergleichbare Tools" data-en="Similar Tools">Vergleichbare Tools</span></h3>
+      <div class="alternatives-grid">
+        ${alternativesHTML}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="tool-actions-modal">
+      <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="btn-primary" onclick="trackToolClick('${tool.id}')">
+        <i class="fas fa-external-link-alt"></i>
+        <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
+      </a>
+      <button class="btn-secondary" onclick="shareToolDirectly('${tool.id}')">
+        <i class="fas fa-share-alt"></i>
+        <span data-de="Teilen" data-en="Share">Teilen</span>
+      </button>
+    </div>
+  `;
+
+  document.getElementById('modalTitle').textContent = seoTitle;
+  document.getElementById('modalContent').innerHTML = modalContent;
+  document.getElementById('toolModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  updateLanguage();
+}
+
+function closeToolModal() {
+  document.getElementById('toolModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== IMPRESSUM & DATENSCHUTZ =====
+function openImpressum() {
+  document.getElementById('impressumModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeImpressum() {
+  document.getElementById('impressumModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function openDatenschutz() {
+  document.getElementById('datenschutzModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updateLanguage();
+}
+
+function closeDatenschutz() {
+  document.getElementById('datenschutzModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// Close modals on ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+// ===== INTELLIGENTE FUNKTIONEN =====
+function trackUserInteraction(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
+}
+
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] || 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
+}
+
+function shareToolDirectly(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const shareData = {
+    title: tool.name + ' - AI Finder',
+    text: currentLang === 'de' ? tool.description.de : tool.description.en,
+    url: window.location.href + '?tool=' + toolId
+  };
+
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(shareData.url);
+    alert(currentLang === 'de' ? 'Link kopiert!' : 'Link copied!');
+  }
+}
+
+// ===== VOTING SYSTEM =====
+function vote(toolId, type) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  const userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
+
+  if (userVotes[toolId] === type) {
+    if (type === 'up') tool.votes--;
+    else tool.votes++;
+    delete userVotes[toolId];
+    tool.userVote = null;
+  } else {
+    if (userVotes[toolId] === 'up') tool.votes--;
+    else if (userVotes[toolId] === 'down') tool.votes++;
+    
+    if (type === 'up') tool.votes++;
+    else tool.votes--;
+    
+    userVotes[toolId] = type;
+    tool.userVote = type;
+  }
+
+  savedVotes[toolId] = tool.votes;
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  localStorage.setItem('userVotes', JSON.stringify(userVotes));
+
+  renderTopCharts();
+  renderTools();
+}
+
+// ===== FAVORITEN & VERGLEICH =====
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
+}
+
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+  } else {
+    favorites.push(toolId);
+  }
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  renderTopCharts();
+  renderTools();
+}
+
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+    } else {
+      alert(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!');
+      return;
+    }
+  }
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  renderTopCharts();
+  renderTools();
+}
+
+// ===== HELPER FUNCTIONS =====
+function getCategoryIcon(category) {
+  const icons = {
+    text: '✍️',
+    image: '🎨',
+    code: '💻',
+    video: '🎬',
+    audio: '🎵'
+  };
+  return icons[category] || '🤖';
+}
+
+function getCategoryLabel(category) {
+  const labels = {
+    de: {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    },
+    en: {
+      text: 'Text',
+      image: 'Image',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    }
+  };
+  return labels[currentLang][category] || category;
+}
+
+function getUseCaseLabelDE(useCase) {
+  const labels = {
+    'content-creation': 'Content-Erstellung',
+    'marketing': 'Marketing',
+    'development': 'Entwicklung',
+    'design': 'Design',
+    'productivity': 'Produktivität',
+    'education': 'Bildung',
+    'business': 'Business',
+    'entertainment': 'Unterhaltung'
+  };
+  return labels[useCase] || useCase;
+}
+
+function getUseCaseLabelEN(useCase) {
+  const labels = {
+    'content-creation': 'Content Creation',
+    'marketing': 'Marketing',
+    'development': 'Development',
+    'design': 'Design',
+    'productivity': 'Productivity',
+    'education': 'Education',
+    'business': 'Business',
+    'entertainment': 'Entertainment'
+  };
+  return labels[useCase] || useCase;
+}
+
+function updateToolCount() {
+  document.getElementById('toolCount').textContent = aiTools.length;
+}
+
+// ===== SEARCH FUNCTIONALITY =====
+const searchBox = document.getElementById('searchBox');
+const searchSuggestions = document.getElementById('searchSuggestions');
+
+searchBox.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderTools();
+  
+  if (searchQuery.length > 1) {
+    const matches = aiTools.filter(tool => 
+      tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.de.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tool.description.en.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 5);
+    
+    if (matches.length > 0) {
+      searchSuggestions.innerHTML = matches.map(tool => `
+        <div class="suggestion-item" onclick="openToolDetail('${tool.id}'); searchSuggestions.classList.remove('active');">
+          <span class="suggestion-icon">${getCategoryIcon(tool.category)}</span>
+          <span>${tool.name}</span>
+        </div>
+      `).join('');
+      searchSuggestions.classList.add('active');
+    } else {
+      searchSuggestions.classList.remove('active');
+    }
+  } else {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-container')) {
+    searchSuggestions.classList.remove('active');
+  }
+});
+
+// Search hints
+document.querySelectorAll('.search-hint-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const query = chip.getAttribute('data-query');
+    searchBox.value = query;
+    searchQuery = query;
+    renderTools();
+  });
+});
+
+// Surprise button
+document.getElementById('surpriseBtn').addEventListener('click', () => {
+  const randomTool = aiTools[Math.floor(Math.random() * aiTools.length)];
+  openToolDetail(randomTool.id);
+});
+
+// ===== FILTER FUNCTIONALITY =====
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCategory = btn.getAttribute('data-category');
+    renderTools();
+  });
+});
+
+document.querySelectorAll('.quick-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const filter = card.getAttribute('data-filter');
+    currentCategory = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.filter-btn[data-category="' + filter + '"]').classList.add('active');
+    renderTools();
+    window.scrollTo({ top: document.querySelector('.tools-container').offsetTop - 20, behavior: 'smooth' });
+  });
+});
+
+document.getElementById('priceFilter').addEventListener('change', (e) => {
+  currentPriceFilter = e.target.value;
+  renderTools();
+});
+
+document.getElementById('sortFilter').addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderTools();
+});
+
+// ===== LANGUAGE SWITCH =====
+document.getElementById('langToggle').addEventListener('click', () => {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+  updateLanguage();
+  renderTopCharts();
+  renderTools();
+});
+
+function updateLanguage() {
+  document.querySelectorAll('[data-de]').forEach(el => {
+    if (el.hasAttribute('placeholder')) {
+      el.placeholder = currentLang === 'de' ? el.getAttribute('data-placeholder-de') : el.getAttribute('data-placeholder-en');
+    } else {
+      el.textContent = currentLang === 'de' ? el.getAttribute('data-de') : el.getAttribute('data-en');
+    }
+  });
+}
+
+// ===== COOKIE BANNER =====
+const cookieBanner = document.getElementById('cookieBanner');
+const acceptCookies = document.getElementById('acceptCookies');
+const declineCookies = document.getElementById('declineCookies');
+
+if (!localStorage.getItem('cookieConsent')) {
+  setTimeout(() => {
+    cookieBanner.classList.add('show');
+  }, 1000);
+}
+
+acceptCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'accepted');
+  cookieBanner.classList.remove('show');
+});
+
+declineCookies.addEventListener('click', () => {
+  localStorage.setItem('cookieConsent', 'declined');
+  cookieBanner.classList.remove('show');
+});
+
+// ===== INIT =====
+loadAITools();
+</script>
+
+</body>
+</html>
