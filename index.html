@@ -1,2552 +1,3540 @@
-[
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://doicozkpdbkyvdkpujoh.supabase.co; base-uri 'self'; frame-ancestors 'none';">
+<title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
+<meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
+<meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
+<meta name="google-site-verification" content="Wo_6LQQ8LoGlobalzVMjBHh_Z-VD3N_dFdqCZb2BYxV0" />
+<link rel="canonical" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="de" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="en" href="https://ai-searcher.github.io/ai-tool-hub/">
+<link rel="alternate" hreflang="x-default" href="https://ai-searcher.github.io/ai-tool-hub/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Searcher - Finde sofort dein perfektes KI-Tool">
+<meta property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.">
+<meta property="og:url" content="https://ai-searcher.github.io/ai-tool-hub/">
+<meta property="og:site_name" content="AI Searcher">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Searcher">
+<meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
+<!-- Google Analytics wird nur nach Cookie-Consent geladen -->
+<script>
+  window.cookiePreferences = window.cookiePreferences || {};
+  window.cookiePreferences.analytics = false;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // SUPABASE FIX: Global initialisieren
+  const supabaseUrl = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+  const supabaseKey = 'sb_publishable_AbUAk0m1UhAEQtz9GL2Aww_3wd_NfZx';
+  window.supabase = window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script type="application/ld+json">
 {
-"id": "chatgpt",
-"numericId": 1,
-"name": "ChatGPT",
-"category": "text",
-"aiScore": 98,
-"popularityScore": 99,
-"quickPeek": {
-"de": "Führender KI-Allrounder für Text, Code und Kreativität.",
-"en": "Leading AI all-rounder for text, code and creativity."
-},
-"features": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
-"tags": ["text", "chat", "coding", "research", "multimodal", "popular", "freemium", "openai"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/€20",
-"en": "Free/$20"
-},
-"rating": 4.9,
-"description": {
-"de": "Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.",
-"en": "Best all-rounder for text, ideas, code that started the AI revolution."
-},
-"link": "https://chat.openai.com/",
-"badge": "popular",
-"useCases": ["chatbot", "writing", "coding", "research", "brainstorming"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "ChatGPT Review 2026: Der ultimative KI-Allrounder",
-"en": "ChatGPT Review 2026: The Ultimate AI All-Rounder"
-},
-"seoDesc": {
-"de": "ChatGPT ist der beste KI-Allrounder für Texte, Code und Ideen. Erfahre alles über Vor- und Nachteile, Preise und Alternativen.",
-"en": "ChatGPT is the best AI all-rounder for text, code and ideas. Learn about pros, cons, pricing and alternatives."
-},
-"alternatives": ["claude", "gemini", "perplexity"],
-"pros": {
-"de": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support", "Multimodal (Bild, Text, Code)"],
-"en": ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support", "Multimodal (image, text, code)"]
-},
-"cons": {
-"de": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier", "Warteschlangen im Free-Tier"],
-"en": ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier", "Queue times in free tier"]
-},
-"pricing": {
-"de": "Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext",
-"en": "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AI Searcher",
+  "url": "https://ai-searcher.github.io/ai-tool-hub/",
+  "description": "Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://ai-searcher.github.io/ai-tool-hub/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 }
-},
-{
-"id": "claude",
-"numericId": 2,
-"name": "Claude",
-"category": "text",
-"aiScore": 96,
-"popularityScore": 94,
-"quickPeek": {
-"de": "Experte für lange Texte und Dokumentenanalyse mit riesigem Kontextfenster.",
-"en": "Expert for long texts and document analysis with huge context window."
-},
-"features": ["200K Context", "File Upload", "Document Analysis", "API Access", "Web Search"],
-"tags": ["text", "document", "analysis", "long-form", "research", "popular", "freemium", "anthropic"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/€20",
-"en": "Free/$20"
-},
-"rating": 4.8,
-"description": {
-"de": "Exzellent für lange Texte und Dokumentenanalyse mit 200K-Token-Kontext.",
-"en": "Excellent for long-form writing and document analysis with 200K token context."
-},
-"link": "https://claude.ai/",
-"badge": "popular",
-"useCases": ["document-analysis", "academic-writing", "legal-documents", "research", "content-creation"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Claude AI Review: Der Experte für lange Texte und Dokumente",
-"en": "Claude AI Review: The Expert for Long Texts and Documents"
-},
-"seoDesc": {
-"de": "Claude ist spezialisiert auf lange Texte und Dokumentenanalyse. Ideal für Autoren, Forscher und Unternehmen.",
-"en": "Claude specializes in long texts and document analysis. Ideal for writers, researchers and businesses."
-},
-"alternatives": ["chatgpt", "gemini", "notion-ai"],
-"pros": {
-"de": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits", "Keine Trainingsdaten-Bias"],
-"en": ["Up to 200,000 token context", "Excellent document analysis", "Ethical AI development", "Free access with good limits", "No training data bias"]
-},
-"cons": {
-"de": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution", "Langsame Antwortzeiten bei großen Dokumenten"],
-"en": ["Less creative than ChatGPT", "Limited image generation", "No code execution", "Slow response times with large documents"]
-},
-"pricing": {
-"de": "Kostenloser Zugang mit Limits, Claude Pro für €20/Monat mit erweiterten Limits und Prioritätszugang",
-"en": "Free access with limits, Claude Pro for $20/month with extended limits and priority access"
+</script>
+<style>
+/* ===== FUTURISTISCHES DESIGN (30 JAHRE VORAUS) ===== */
+:root {
+  --primary: #00d4ff;
+  --primary-dark: #00a8cc;
+  --secondary: #a855f7;
+  --accent: #00ff9d;
+  --bg-dark: #0a0e17;
+  --bg-card: #141824;
+  --bg-hover: #1a1f2e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  --border: rgba(255, 255, 255, 0.05);
+  --border-hover: rgba(0, 212, 255, 0.3);
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --gold: #fbbf24;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 40px rgba(0, 212, 255, 0.15);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Density Variables */
+  --density-cozy: 1.2;
+  --density-compact: 1;
+  --density-future: 0.8;
+  --current-density: 1;
+  
+  /* Layout Variables */
+  --tool-row-height: calc(60px * var(--current-density));
+  --group-header-height: calc(52px * var(--current-density));
+  --header-height: 60px;
+  --drawer-width: 500px;
+  --hero-height: 280px;
 }
-},
-{
-"id": "midjourney",
-"numericId": 3,
-"name": "Midjourney",
-"category": "image",
-"aiScore": 98,
-"popularityScore": 97,
-"quickPeek": {
-"de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
-"en": "Best artistic image generation with unparalleled stylistic control."
-},
-"features": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
-"tags": ["image", "art", "generation", "artistic", "discord", "popular", "paid", "lifetime-deal"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.9,
-"description": {
-"de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
-"en": "Best artistic image generation with unparalleled stylistic control."
-},
-"link": "https://www.midjourney.com/",
-"badge": "popular",
-"useCases": ["concept-art", "illustration", "marketing-images", "book-covers", "character-design"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "Midjourney Review 2026: Die beste KI für künstlerische Bilder",
-"en": "Midjourney Review 2026: The Best AI for Artistic Images"
-},
-"seoDesc": {
-"de": "Midjourney generiert die künstlerischsten KI-Bilder. Perfekt für Künstler, Designer und Kreative.",
-"en": "Midjourney generates the most artistic AI images. Perfect for artists, designers and creatives."
-},
-"alternatives": ["dalle-3", "stable-diffusion", "firefly"],
-"pros": {
-"de": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen", "Hohe Auflösungen verfügbar"],
-"en": ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements", "High resolutions available"]
-},
-"cons": {
-"de": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse", "Kein direkter Web-Zugang"],
-"en": ["Only usable via Discord", "No free version", "Steep learning curve for optimal results", "No direct web access"]
-},
-"pricing": {
-"de": "Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung",
-"en": "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"
+
+/* Safari Safe Area */
+html, body {
+  height: 100%;
+  background-color: var(--bg-dark) !important;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
-},
-{
-"id": "github-copilot",
-"numericId": 4,
-"name": "GitHub Copilot",
-"category": "code",
-"aiScore": 96,
-"popularityScore": 95,
-"quickPeek": {
-"de": "Bester KI-Code-Assistent mit IDE-Integration für Entwickler.",
-"en": "Best AI code assistant with IDE integration for developers."
-},
-"features": ["Autocomplete", "Chat Interface", "Multi-Language", "IDE Integration", "Code Explanation"],
-"tags": ["code", "developer", "autocomplete", "ide", "productivity", "popular", "paid", "microsoft"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "€10/Monat",
-"en": "$10/month"
-},
-"rating": 4.8,
-"description": {
-"de": "Bester KI-Code-Assistent für Entwickler mit IDE-Integration.",
-"en": "Best AI code assistant for developers with IDE integration."
-},
-"link": "https://github.com/features/copilot",
-"badge": "popular",
-"useCases": ["coding", "debugging", "learning", "code-review", "documentation"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "GitHub Copilot Review: Der KI-Pair-Programmierer",
-"en": "GitHub Copilot Review: The AI Pair Programmer"
-},
-"seoDesc": {
-"de": "GitHub Copilot ist der beste KI-Code-Assistent für Entwickler. Erhöht die Produktivität um bis zu 55%.",
-"en": "GitHub Copilot is the best AI code assistant for developers. Increases productivity by up to 55%."
-},
-"alternatives": ["cursor", "tabnine", "codeium"],
-"pros": {
-"de": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%", "Unternehmenslizenzen verfügbar"],
-"en": ["Integrated into all popular IDEs", "Supports 50+ programming languages", "Learns from your coding style", "Time savings of up to 55%", "Enterprise licenses available"]
-},
-"cons": {
-"de": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code", "Internetverbindung erforderlich"],
-"en": ["Paid after 30 days", "Sometimes inefficient solutions", "Privacy concerns with proprietary code", "Internet connection required"]
-},
-"pricing": {
-"de": "€10/Monat pro Nutzer (Individual), €19/Monat pro Nutzer (Business), €39/Monat pro Nutzer (Enterprise)",
-"en": "$10/month per user (Individual), $19/month per user (Business), $39/month per user (Enterprise)"
+
+body {
+  min-height: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%) !important;
 }
-},
-{
-"id": "elevenlabs",
-"numericId": 5,
-"name": "ElevenLabs",
-"category": "audio",
-"aiScore": 96,
-"popularityScore": 92,
-"quickPeek": {
-"de": "Realistische KI-Stimmen und Voice Cloning für natürliche Sprachausgabe.",
-"en": "Realistic AI voices and voice cloning for natural speech output."
-},
-"features": ["Voice Cloning", "Emotional Speech", "Multilingual", "API Access", "Voice Library"],
-"tags": ["audio", "voice", "tts", "cloning", "realistic", "popular", "freemium", "lifetime-deal"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/ab €5",
-"en": "Free/from $5"
-},
-"rating": 4.8,
-"description": {
-"de": "Realistische KI-Stimmen und Voice Cloning für natürliche Sprachausgabe.",
-"en": "Realistic AI voices and voice cloning for natural speech output."
-},
-"link": "https://elevenlabs.io/",
-"badge": "popular",
-"useCases": ["voiceovers", "audiobooks", "podcasts", "video-narration", "accessibility"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "ElevenLabs Review: Die realistischsten KI-Stimmen",
-"en": "ElevenLabs Review: The Most Realistic AI Voices"
-},
-"seoDesc": {
-"de": "ElevenLabs bietet die realistischsten KI-Stimmen und Voice-Cloning. Ideal für Podcasts, Hörbücher und Videos.",
-"en": "ElevenLabs offers the most realistic AI voices and voice cloning. Ideal for podcasts, audiobooks and videos."
-},
-"alternatives": ["murf", "descript", "suno"],
-"pros": {
-"de": ["Die realistischsten KI-Stimmen", "Einfaches Voice-Cloning", "Emotionale Sprachausgabe", "Kostenlose Testversion", "Hohe Anpassbarkeit"],
-"en": ["Most realistic AI voices", "Easy voice cloning", "Emotional speech output", "Free trial", "High customization"]
-},
-"cons": {
-"de": ["Teuer für professionelle Nutzung", "Limitierte kostenlose Nutzung", "Ethische Bedenken bei Voice-Cloning", "Wasserzeichen in Free-Tier"],
-"en": ["Expensive for professional use", "Limited free usage", "Ethical concerns with voice cloning", "Watermarks in free tier"]
-},
-"pricing": {
-"de": "Kostenlos: 10.000 Zeichen/Monat, Starter: €5/Monat für 30.000 Zeichen, Creator: €22/Monat für 100.000 Zeichen",
-"en": "Free: 10,000 characters/month, Starter: $5/month for 30,000 characters, Creator: $22/month for 100,000 characters"
+
+/* Density Classes */
+.density-cozy {
+  --current-density: var(--density-cozy);
 }
-},
-{
-"id": "runway",
-"numericId": 6,
-"name": "Runway",
-"category": "video",
-"aiScore": 94,
-"popularityScore": 90,
-"quickPeek": {
-"de": "All-in-One KI-Video-Plattform mit Text-zu-Video und professionellen Editing-Tools.",
-"en": "All-in-One AI video platform with text-to-video and professional editing tools."
-},
-"features": ["Text-to-Video", "Video Editing", "Object Removal", "Motion Tracking", "Green Screen"],
-"tags": ["video", "editing", "generation", "effects", "all-in-one", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/ab €15",
-"en": "Free/from $15"
-},
-"rating": 4.7,
-"description": {
-"de": "All-in-One KI-Video-Plattform mit Text-zu-Video und professionellen Editing-Tools.",
-"en": "All-in-One AI video platform with text-to-video and professional editing tools."
-},
-"link": "https://runwayml.com/",
-"badge": "popular",
-"useCases": ["video-editing", "motion-graphics", "special-effects", "content-creation", "advertising"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Runway Review: KI-Video Editing der nächsten Generation",
-"en": "Runway Review: Next-Gen AI Video Editing"
-},
-"seoDesc": {
-"de": "Runway ist die führende KI-Video-Plattform mit Text-zu-Video, Objekt-Entfernung und Spezialeffekten.",
-"en": "Runway is the leading AI video platform with text-to-video, object removal and special effects."
-},
-"alternatives": ["pika", "invideo", "heygen"],
-"pros": {
-"de": ["30+ KI-Video-Tools in einer Plattform", "Professionelle Ergebnisse", "Einfache Benutzeroberfläche", "Kostenloser Plan verfügbar", "Regelmäßige neue Features"],
-"en": ["30+ AI video tools in one platform", "Professional results", "Easy user interface", "Free plan available", "Regular new features"]
-},
-"cons": {
-"de": ["Wasserzeichen im Free-Tier", "Teure Pro-Pläne", "Rechenintensiv (braucht gute Hardware)", "Lernkurve für alle Tools"],
-"en": ["Watermarks in free tier", "Expensive pro plans", "Computationally intensive (needs good hardware)", "Learning curve for all tools"]
-},
-"pricing": {
-"de": "Kostenlos: 3 Projekte, Wasserzeichen; Standard: €15/Monat für 125 Credits; Pro: €35/Monat für 450 Credits",
-"en": "Free: 3 projects, watermarks; Standard: $15/month for 125 credits; Pro: $35/month for 450 credits"
+
+.density-compact {
+  --current-density: var(--density-compact);
 }
-},
-{
-"id": "gemini",
-"numericId": 7,
-"name": "Gemini",
-"category": "text",
-"aiScore": 92,
-"popularityScore": 93,
-"quickPeek": {
-"de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
-"en": "Google's AI assistant with deep web integration and multimodal capabilities."
-},
-"features": ["Web Search", "Multimodal", "Google Apps", "Code Generation", "Image Analysis"],
-"tags": ["text", "google", "web-search", "multimodal", "free", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/€20",
-"en": "Free/$20"
-},
-"rating": 4.6,
-"description": {
-"de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
-"en": "Google's AI assistant with deep web integration and multimodal capabilities."
-},
-"link": "https://gemini.google.com/",
-"badge": "new",
-"useCases": ["research", "writing", "coding", "analysis", "productivity"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Gemini - Googles KI-Assistent mit Web-Integration",
-"en": "Gemini - Google's AI Assistant with Web Integration"
-},
-"seoDesc": {
-"de": "Gemini ist Googles KI mit Web-Integration und Multimodalität. Perfekt für Recherche und Produktivität.",
-"en": "Gemini is Google's AI with web integration and multimodality. Perfect for research and productivity."
-},
-"alternatives": ["chatgpt", "claude", "perplexity"],
-"pros": {
-"de": ["Kostenlose Nutzung", "Tiefe Web-Integration", "Multimodale Fähigkeiten", "Gute Google-Integration", "Aktuelle Informationen"],
-"en": ["Free to use", "Deep web integration", "Multimodal capabilities", "Good Google integration", "Current information"]
-},
-"cons": {
-"de": ["Noch nicht so ausgereift wie ChatGPT", "Begrenzte Funktionen in der kostenlosen Version", "Datenschutzbedenken bei Google"],
-"en": ["Not as mature as ChatGPT", "Limited features in free version", "Privacy concerns with Google"]
-},
-"pricing": {
-"de": "Gemini Basic: Kostenlos, Gemini Advanced: €20/Monat mit erweiterten Funktionen und 2TB Google One",
-"en": "Gemini Basic: Free, Gemini Advanced: $20/month with advanced features and 2TB Google One"
+
+.density-future {
+  --current-density: var(--density-future);
 }
-},
-{
-"id": "perplexity",
-"numericId": 8,
-"name": "Perplexity",
-"category": "text",
-"aiScore": 94,
-"popularityScore": 91,
-"quickPeek": {
-"de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
-"en": "AI search engine with citations and conversational answer formatting."
-},
-"features": ["Citations", "Web Search", "File Upload", "Collections", "Copilot"],
-"tags": ["text", "search", "research", "citations", "fact-checking", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/€20",
-"en": "Free/$20"
-},
-"rating": 4.7,
-"description": {
-"de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
-"en": "AI search engine with citations and conversational answer formatting."
-},
-"link": "https://www.perplexity.ai/",
-"badge": "new",
-"useCases": ["research", "academic-work", "fact-checking", "news", "learning"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Perplexity - KI-Suchmaschine mit Quellen",
-"en": "Perplexity - AI Search Engine with Sources"
-},
-"seoDesc": {
-"de": "Perplexity ist eine KI-Suchmaschine die Antworten mit Quellenangaben liefert. Ideal für Recherche und akademische Arbeit.",
-"en": "Perplexity is an AI search engine that provides answers with citations. Ideal for research and academic work."
-},
-"alternatives": ["gemini", "chatgpt", "claude"],
-"pros": {
-"de": ["Quellenangaben bei jeder Antwort", "Aktuelle Informationen", "Kostenlose Nutzung", "Keine Halluzinationen", "Fokus auf Fakten"],
-"en": ["Citations with every answer", "Current information", "Free to use", "No hallucinations", "Focus on facts"]
-},
-"cons": {
-"de": ["Begrenzte kreative Fähigkeiten", "Teilweise unvollständige Antworten", "Keine komplexen Aufgaben"],
-"en": ["Limited creative capabilities", "Sometimes incomplete answers", "No complex tasks"]
-},
-"pricing": {
-"de": "Kostenlos mit Limits, Pro für €20/Monat mit erweiterten Suchfunktionen und Datei-Upload",
-"en": "Free with limits, Pro for $20/month with advanced search features and file upload"
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-},
-{
-"id": "dalle-3",
-"numericId": 9,
-"name": "DALL·E 3",
-"category": "image",
-"aiScore": 94,
-"popularityScore": 92,
-"quickPeek": {
-"de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
-"en": "Text-to-image generator from OpenAI with excellent text understanding."
-},
-"features": ["Text-to-Image", "ChatGPT Integration", "High Quality", "Multiple Styles", "Editing"],
-"tags": ["image", "generation", "openai", "chatgpt", "text-to-image", "new", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "In ChatGPT+ (€20)",
-"en": "In ChatGPT+ ($20)"
-},
-"rating": 4.7,
-"description": {
-"de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
-"en": "Text-to-image generator from OpenAI with excellent text understanding."
-},
-"link": "https://openai.com/dall-e-3",
-"badge": "new",
-"useCases": ["image-generation", "concept-art", "social-media", "illustration", "design"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "DALL·E 3 - OpenAIs fortschrittlicher Bildgenerator",
-"en": "DALL·E 3 - OpenAI's Advanced Image Generator"
-},
-"seoDesc": {
-"de": "DALL·E 3 ist OpenAIs fortschrittlicher Text-zu-Bild Generator in ChatGPT integriert. Bestes Textverständnis aller Bild-KIs.",
-"en": "DALL·E 3 is OpenAI's advanced text-to-image generator integrated in ChatGPT. Best text understanding of all image AIs."
-},
-"alternatives": ["midjourney", "stable-diffusion", "firefly"],
-"pros": {
-"de": ["Hervorragendes Textverständnis", "Nahtlose Integration in ChatGPT", "Hohe Bildqualität", "Keine Lernkurve", "Schnelle Generierung"],
-"en": ["Excellent text understanding", "Seamless integration with ChatGPT", "High image quality", "No learning curve", "Fast generation"]
-},
-"cons": {
-"de": ["Nur über ChatGPT+ verfügbar", "Keine eigenständige Nutzung", "Weniger stilistische Kontrolle als Midjourney"],
-"en": ["Only available via ChatGPT+", "No standalone usage", "Less stylistic control than Midjourney"]
-},
-"pricing": {
-"de": "Teil von ChatGPT Plus (€20/Monat) inklusive 50 DALL·E 3 Generierungen pro Tag",
-"en": "Part of ChatGPT Plus ($20/month) including 50 DALL·E 3 generations per day"
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+  font-size: calc(0.9rem * var(--current-density));
 }
-},
-{
-"id": "stable-diffusion",
-"numericId": 10,
-"name": "Stable Diffusion",
-"category": "image",
-"aiScore": 94,
-"popularityScore": 89,
-"quickPeek": {
-"de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
-"en": "Open-source image generation with local installation and full control."
-},
-"features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "Inpainting"],
-"tags": ["image", "generation", "open-source", "local", "customizable", "free", "lifetime-deal"],
-"rankingHistory": [],
-"price": "free",
-"priceDisplay": {
-"de": "Kostenlos",
-"en": "Free"
-},
-"rating": 4.7,
-"description": {
-"de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
-"en": "Open-source image generation with local installation and full control."
-},
-"link": "https://stability.ai/",
-"badge": "free",
-"useCases": ["custom-models", "research", "commercial-use", "nsfw-content", "animation"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "Stable Diffusion - Open-Source KI-Bilder",
-"en": "Stable Diffusion - Open-Source AI Images"
-},
-"seoDesc": {
-"de": "Stable Diffusion ist ein Open-Source KI-Bildgenerator der lokal ausgeführt werden kann. Volle Kontrolle und Anpassung.",
-"en": "Stable Diffusion is an open-source AI image generator that can run locally. Full control and customization."
-},
-"alternatives": ["midjourney", "dalle-3", "leonardo"],
-"pros": {
-"de": ["Open-Source und kostenlos", "Lokal ausführbar", "Anpassbare Modelle", "Vollständige Datenschutzkontrolle", "Kommerzielle Nutzung erlaubt"],
-"en": ["Open-source and free", "Runnable locally", "Customizable models", "Complete privacy control", "Commercial use allowed"]
-},
-"cons": {
-"de": ["Technisches Know-how erforderlich", "Qualität variiert je nach Modell", "Kein Support", "Rechenintensiv"],
-"en": ["Technical knowledge required", "Quality varies by model", "No support", "Computationally intensive"]
-},
-"pricing": {
-"de": "Komplett kostenlos (Open-Source), Hosting-Lösungen ab €10/Monat verfügbar",
-"en": "Completely free (open-source), hosting solutions from $10/month available"
+
+/* Futuristic Animated Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(0, 255, 157, 0.05) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+  animation: pulseBackground 20s ease-in-out infinite alternate;
 }
-},
-{
-"id": "notion-ai",
-"numericId": 11,
-"name": "Notion AI",
-"category": "text",
-"aiScore": 90,
-"popularityScore": 88,
-"quickPeek": {
-"de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-"en": "AI directly in your Notion workspace for writing, summarization and more."
-},
-"features": ["Writing Assistant", "Summarization", "Translation", "Brainstorming", "Editing"],
-"tags": ["text", "notion", "productivity", "workspace", "writing", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "€10/Monat",
-"en": "$10/month"
-},
-"rating": 4.5,
-"description": {
-"de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-"en": "AI directly in your Notion workspace for writing, summarization and more."
-},
-"link": "https://www.notion.so/product/ai",
-"badge": "popular",
-"useCases": ["note-taking", "documentation", "project-management", "knowledge-base", "meeting-notes"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Notion AI - KI in deinem Workspace",
-"en": "Notion AI - AI in Your Workspace"
-},
-"seoDesc": {
-"de": "Notion AI bringt KI direkt in deinen Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-"en": "Notion AI brings AI directly into your Notion workspace for writing, summarization and more."
-},
-"alternatives": ["chatgpt", "claude", "gemini"],
-"pros": {
-"de": ["Nahtlose Notion-Integration", "Vielfältige Schreibhilfen", "Zusammenfassungsfunktionen", "Kein Kontextwechsel nötig", "Team-Kollaboration"],
-"en": ["Seamless Notion integration", "Various writing assistants", "Summarization features", "No context switching needed", "Team collaboration"]
-},
-"cons": {
-"de": ["Zusätzliche Kosten zu Notion", "Begrenzte KI-Fähigkeiten", "Keine Bildgenerierung", "Teuer für Einzelpersonen"],
-"en": ["Additional cost to Notion", "Limited AI capabilities", "No image generation", "Expensive for individuals"]
-},
-"pricing": {
-"de": "€10/Monat zusätzlich zu Notion (ab €8/Monat), Teams ab €15/Monat pro Benutzer",
-"en": "$10/month in addition to Notion (from $8/month), teams from $15/month per user"
+
+@keyframes pulseBackground {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
-},
-{
-"id": "copy-ai",
-"numericId": 12,
-"name": "Copy.ai",
-"category": "text",
-"aiScore": 88,
-"popularityScore": 85,
-"quickPeek": {
-"de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
-"en": "AI platform specialized in marketing copy and advertising text."
-},
-"features": ["Marketing Templates", "Workflows", "Brand Voice", "SEO Tools", "Content Calendar"],
-"tags": ["text", "marketing", "copywriting", "templates", "workflow", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €49/Monat",
-"en": "from $49/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
-"en": "AI platform specialized in marketing copy and advertising text."
-},
-"link": "https://www.copy.ai/",
-"badge": "popular",
-"useCases": ["copywriting", "social-media", "email-marketing", "ad-copy", "landing-pages"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Copy.ai - KI für Marketing-Texte",
-"en": "Copy.ai - AI for Marketing Copy"
-},
-"seoDesc": {
-"de": "Copy.ai ist eine KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte. Perfekt für Marketing-Teams.",
-"en": "Copy.ai is an AI platform specialized in marketing copy and advertising text. Perfect for marketing teams."
-},
-"alternatives": ["jasper", "writesonic", "rytr"],
-"pros": {
-"de": ["Spezialisiert auf Marketing", "90+ Vorlagen", "Workflow-Optimierung", "Team-Kollaboration", "Brand Voice Training"],
-"en": ["Specialized in marketing", "90+ templates", "Workflow optimization", "Team collaboration", "Brand voice training"]
-},
-"cons": {
-"de": ["Teuer für Einzelpersonen", "Begrenzte kostenlose Version", "Weniger allgemeine Anwendungen", "Fokus nur auf Marketing"],
-"en": ["Expensive for individuals", "Limited free version", "Less general applications", "Focus only on marketing"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Pro ab €49/Monat, Team ab €249/Monat, Enterprise auf Anfrage",
-"en": "Free trial, Pro from $49/month, Team from $249/month, Enterprise custom pricing"
+
+/* Futuristic Glow Effects */
+.glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  z-index: -1;
+  animation: floatGlow 15s infinite ease-in-out;
 }
-},
-{
-"id": "jasper",
-"numericId": 13,
-"name": "Jasper",
-"category": "text",
-"aiScore": 86,
-"popularityScore": 84,
-"quickPeek": {
-"de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-"en": "AI platform for business content with brand customization and collaboration."
-},
-"features": ["Brand Voice", "Templates", "Collaboration", "SEO", "Content Analytics"],
-"tags": ["text", "business", "marketing", "brand", "seo", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "ab €49/Monat",
-"en": "from $49/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-"en": "AI platform for business content with brand customization and collaboration."
-},
-"link": "https://www.jasper.ai/",
-"badge": "popular",
-"useCases": ["blog-writing", "seo-content", "social-media", "advertising", "product-descriptions"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Jasper - KI für Business-Content",
-"en": "Jasper - AI for Business Content"
-},
-"seoDesc": {
-"de": "Jasper ist eine KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-"en": "Jasper is an AI platform for business content with brand customization and collaboration."
-},
-"alternatives": ["copy-ai", "writesonic", "chatgpt"],
-"pros": {
-"de": ["Markenanpassung", "Team-Kollaboration", "Business-fokussiert", "SEO-Optimierung", "Lange Dokumente"],
-"en": ["Brand customization", "Team collaboration", "Business-focused", "SEO optimization", "Long documents"]
-},
-"cons": {
-"de": ["Teuer", "Überwiegend für Marketing", "Langsame Updates", "Weniger kreativ als ChatGPT"],
-"en": ["Expensive", "Mostly for marketing", "Slow updates", "Less creative than ChatGPT"]
-},
-"pricing": {
-"de": "Creator: €49/Monat, Teams: €125/Monat, Business: €500/Monat, Enterprise auf Anfrage",
-"en": "Creator: $49/month, Teams: $125/month, Business: $500/month, Enterprise custom pricing"
+
+.glow-1 {
+  background: var(--primary);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
 }
-},
-{
-"id": "firefly",
-"numericId": 14,
-"name": "Adobe Firefly",
-"category": "image",
-"aiScore": 90,
-"popularityScore": 87,
-"quickPeek": {
-"de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
-"en": "Adobe's AI for creative image generation and editing with professional tools."
-},
-"features": ["Text-to-Image", "Generative Fill", "Vector Recolor", "Text Effects", "3D to Image"],
-"tags": ["image", "adobe", "creative-cloud", "editing", "professional", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "€5/Monat",
-"en": "$5/month"
-},
-"rating": 4.5,
-"description": {
-"de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
-"en": "Adobe's AI for creative image generation and editing with professional tools."
-},
-"link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
-"badge": "new",
-"useCases": ["photo-editing", "graphic-design", "illustration", "social-media", "advertising"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Adobe Firefly - KI für Kreative",
-"en": "Adobe Firefly - AI for Creatives"
-},
-"seoDesc": {
-"de": "Adobe Firefly ist Adobes KI-Tool für kreative Bildgenerierung und -bearbeitung. Nahtlose Integration in Creative Cloud.",
-"en": "Adobe Firefly is Adobe's AI tool for creative image generation and editing. Seamless integration with Creative Cloud."
-},
-"alternatives": ["midjourney", "dalle-3", "canva-ai"],
-"pros": {
-"de": ["Adobe-Integration", "Professionelle Werkzeuge", "Rechtlich sichere Bilder", "Keine Lernkurve für Adobe-Nutzer", "Kommerzielle Nutzung inklusive"],
-"en": ["Adobe integration", "Professional tools", "Legally safe images", "No learning curve for Adobe users", "Commercial use included"]
-},
-"cons": {
-"de": ["Teilweise limitierte Kreativität", "Adobe-Abonnement nötig", "Weniger Kontrolle als Midjourney", "Langsamere Entwicklung"],
-"en": ["Somewhat limited creativity", "Adobe subscription needed", "Less control than Midjourney", "Slower development"]
-},
-"pricing": {
-"de": "In Adobe Creative Cloud enthalten (ab €5/Monat für Studenten, ab €25/Monat regulär)",
-"en": "Included in Adobe Creative Cloud (from $5/month for students, from $25/month regular)"
+
+.glow-2 {
+  background: var(--secondary);
+  top: 60%;
+  right: 10%;
+  animation-delay: 5s;
 }
-},
-{
-"id": "leonardo",
-"numericId": 15,
-"name": "Leonardo AI",
-"category": "image",
-"aiScore": 88,
-"popularityScore": 83,
-"quickPeek": {
-"de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
-"en": "Image generation specialized in game assets, textures and 3D models."
-},
-"features": ["Game Assets", "3D Texturing", "Model Training", "Canvas Editor", "AI Canvas"],
-"tags": ["image", "game", "3d", "assets", "textures", "new", "freemium", "lifetime-deal"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.4,
-"description": {
-"de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
-"en": "Image generation specialized in game assets, textures and 3D models."
-},
-"link": "https://leonardo.ai/",
-"badge": "new",
-"useCases": ["game-dev", "3d-models", "textures", "character-design", "concept-art"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "Leonardo AI - KI für Game-Design",
-"en": "Leonardo AI - AI for Game Design"
-},
-"seoDesc": {
-"de": "Leonardo AI ist spezialisiert auf Bildgenerierung für Spiele und 3D-Assets. Perfekt für Game-Entwickler.",
-"en": "Leonardo AI specializes in image generation for games and 3D assets. Perfect for game developers."
-},
-"alternatives": ["midjourney", "stable-diffusion", "playground"],
-"pros": {
-"de": ["Spezialisiert auf Game-Assets", "3D-Modell-Unterstützung", "Viele spezifische Modelle", "Eigene Modelle trainieren", "API verfügbar"],
-"en": ["Specialized in game assets", "3D model support", "Many specific models", "Train your own models", "API available"]
-},
-"cons": {
-"de": ["Lernkurve für optimale Ergebnisse", "Begrenzte allgemeine Anwendung", "Teilweise inkonsistente Qualität", "Community noch klein"],
-"en": ["Learning curve for optimal results", "Limited general application", "Somewhat inconsistent quality", "Community still small"]
-},
-"pricing": {
-"de": "Kostenlose Version verfügbar (150 Tokens/Tag), Apprentice: €12/Monat, Artisan: €30/Monat, Maestro: €60/Monat",
-"en": "Free version available (150 tokens/day), Apprentice: $12/month, Artisan: $30/month, Maestro: $60/month"
+
+.glow-3 {
+  background: var(--accent);
+  bottom: 20%;
+  left: 30%;
+  animation-delay: 10s;
 }
-},
-{
-"id": "playground",
-"numericId": 16,
-"name": "Playground AI",
-"category": "image",
-"aiScore": 86,
-"popularityScore": 82,
-"quickPeek": {
-"de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
-"en": "Free image generation with filters and advanced editing tools."
-},
-"features": ["Free Tier", "Filters", "Editing Tools", "Image to Image", "Upscaling"],
-"tags": ["image", "generation", "free", "editing", "filters", "free-tier", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "Kostenlos/ab €15",
-"en": "Free/from $15"
-},
-"rating": 4.3,
-"description": {
-"de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
-"en": "Free image generation with filters and advanced editing tools."
-},
-"link": "https://playgroundai.com/",
-"badge": "free",
-"useCases": ["social-media", "blog-images", "personal-projects", "experimentation", "education"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Playground AI - Kostenlose KI-Bilder",
-"en": "Playground AI - Free AI Images"
-},
-"seoDesc": {
-"de": "Playground AI bietet kostenlose Bildgenerierung mit Filtern und Bearbeitungswerkzeugen. Ideal für Einsteiger.",
-"en": "Playground AI offers free image generation with filters and editing tools. Ideal for beginners."
-},
-"alternatives": ["midjourney", "leonardo", "nightcafe"],
-"pros": {
-"de": ["Kostenlose Nutzung", "Filter und Bearbeitung", "Benutzerfreundlich", "Keine Kreditkarte nötig", "Schnelle Ergebnisse"],
-"en": ["Free to use", "Filters and editing", "User-friendly", "No credit card needed", "Fast results"]
-},
-"cons": {
-"de": ["Wasserzeichen in kostenloser Version", "Begrenzte tägliche Generierungen", "Weniger Qualität als Midjourney", "Keine kommerzielle Nutzung im Free-Tier"],
-"en": ["Watermarks in free version", "Limited daily generations", "Less quality than Midjourney", "No commercial use in free tier"]
-},
-"pricing": {
-"de": "Kostenlos: 500 Bilder/Tag mit Wasserzeichen, Pro: €15/Monat für 1000 Bilder/Tag, Premium: €45/Monat für unbegrenzt",
-"en": "Free: 500 images/day with watermarks, Pro: $15/month for 1000 images/day, Premium: $45/month for unlimited"
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.2);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.8);
+  }
 }
-},
-{
-"id": "murf",
-"numericId": 17,
-"name": "Murf AI",
-"category": "audio",
-"aiScore": 88,
-"popularityScore": 84,
-"quickPeek": {
-"de": "Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.",
-"en": "Text-to-speech for videos and commercial use with studio quality."
-},
-"features": ["Voice Cloning", "Voice Changer", "Video Integration", "Commercial Rights", "Collaboration"],
-"tags": ["audio", "tts", "voice", "commercial", "video", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €19/Monat",
-"en": "from $19/month"
-},
-"rating": 4.4,
-"description": {
-"de": "Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.",
-"en": "Text-to-speech for videos and commercial use with studio quality."
-},
-"link": "https://murf.ai/",
-"badge": "popular",
-"useCases": ["voiceover", "explainer-videos", "e-learning", "podcasts", "advertising"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Murf AI - Text-zu-Sprache für Videos",
-"en": "Murf AI - Text-to-Speech for Videos"
-},
-"seoDesc": {
-"de": "Murf AI bietet hochwertige Text-zu-Sprache Stimmen für Videos und kommerzielle Nutzung.",
-"en": "Murf AI offers high-quality text-to-speech voices for videos and commercial use."
-},
-"alternatives": ["elevenlabs", "descript", "suno"],
-"pros": {
-"de": ["Hohe Stimmenqualität", "Kommerzielle Nutzung", "Video-Integration", "Team-Kollaboration", "Voice Changer"],
-"en": ["High voice quality", "Commercial use", "Video integration", "Team collaboration", "Voice changer"]
-},
-"cons": {
-"de": ["Teuer für umfangreiche Nutzung", "Begrenzte kostenlose Version", "Keine Emotionen wie ElevenLabs", "Lernkurve für optimale Ergebnisse"],
-"en": ["Expensive for extensive use", "Limited free version", "No emotions like ElevenLabs", "Learning curve for optimal results"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Basic: €19/Monat, Pro: €26/Monat, Enterprise: €75/Monat",
-"en": "Free trial, Basic: $19/month, Pro: $26/month, Enterprise: $75/month"
+
+/* ===== STICKY SMART HEADER ===== */
+.sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: rgba(10, 14, 23, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
-},
-{
-"id": "suno",
-"numericId": 18,
-"name": "Suno AI",
-"category": "audio",
-"aiScore": 92,
-"popularityScore": 86,
-"quickPeek": {
-"de": "KI-Musikgenerator der vollständige Songs mit Gesang und Instrumenten erstellt.",
-"en": "AI music generator that creates complete songs with vocals and instruments."
-},
-"features": ["Music Generation", "Lyrics to Music", "Custom Instruments", "Style Control", "Download"],
-"tags": ["audio", "music", "generation", "songs", "lyrics", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.6,
-"description": {
-"de": "KI-Musikgenerator der vollständige Songs mit Gesang und Instrumenten erstellt.",
-"en": "AI music generator that creates complete songs with vocals and instruments."
-},
-"link": "https://www.suno.ai/",
-"badge": "new",
-"useCases": ["music-production", "songwriting", "background-music", "content-creation", "podcast-intros"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Suno AI - KI-Musikgenerator",
-"en": "Suno AI - AI Music Generator"
-},
-"seoDesc": {
-"de": "Suno AI generiert vollständige Musikstücke mit Gesang und Instrumenten. Revolutionär für Musikproduktion.",
-"en": "Suno AI generates complete music pieces with vocals and instruments. Revolutionary for music production."
-},
-"alternatives": ["boomy", "aiva", "soundraw"],
-"pros": {
-"de": ["Komplette Musikgenerierung", "Text-zu-Musik", "Verschiedene Genres", "Hohe Qualität", "Kostenlose Nutzung"],
-"en": ["Complete music generation", "Text-to-music", "Various genres", "High quality", "Free to use"]
-},
-"cons": {
-"de": ["Begrenzte kostenlose Nutzung", "Variable Qualität", "Keine professionelle Mastering", "Urheberrechtsfragen"],
-"en": ["Limited free usage", "Variable quality", "No professional mastering", "Copyright questions"]
-},
-"pricing": {
-"de": "Kostenlos: 50 Credits/Monat, Pro: €10/Monat für 500 Credits, Premier: €30/Monat für 2000 Credits",
-"en": "Free: 50 credits/month, Pro: $10/month for 500 credits, Premier: $30/month for 2000 credits"
+
+.site-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  cursor: default;
+  position: relative;
+  padding: 8px 0;
 }
-},
-{
-"id": "boomy",
-"numericId": 19,
-"name": "Boomy",
-"category": "audio",
-"aiScore": 86,
-"popularityScore": 81,
-"quickPeek": {
-"de": "Erstelle Musik in Sekunden und veröffentliche sie auf Streaming-Plattformen.",
-"en": "Create music in seconds and publish to streaming platforms."
-},
-"features": ["Instant Creation", "Streaming Distribution", "Royalty Collection", "Customization", "AI Mastering"],
-"tags": ["audio", "music", "streaming", "royalties", "quick", "free", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.3,
-"description": {
-"de": "Erstelle Musik in Sekunden und veröffentliche sie auf Streaming-Plattformen.",
-"en": "Create music in seconds and publish to streaming platforms."
-},
-"link": "https://boomy.com/",
-"badge": "free",
-"useCases": ["quick-music", "streaming", "royalty-income", "content-background", "experimentation"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Boomy - Schnelle Musikgenerierung",
-"en": "Boomy - Fast Music Generation"
-},
-"seoDesc": {
-"de": "Boomy ermöglicht das Erstellen von Musik in Sekunden mit KI und Veröffentlichung auf Streaming-Plattformen.",
-"en": "Boomy enables creating music in seconds with AI and publishing to streaming platforms."
-},
-"alternatives": ["suno", "soundraw", "aiva"],
-"pros": {
-"de": ["Sehr schnelle Generierung", "Streaming-Veröffentlichung", "Kostenlose Nutzung", "Royalty-Einnahmen", "Einfache Bedienung"],
-"en": ["Very fast generation", "Streaming publication", "Free to use", "Royalty earnings", "Easy to use"]
-},
-"cons": {
-"de": ["Begrenzte kreative Kontrolle", "Generische Klänge", "Keine professionelle Qualität", "Wenig Anpassung"],
-"en": ["Limited creative control", "Generic sounds", "No professional quality", "Little customization"]
-},
-"pricing": {
-"de": "Kostenlos mit Limits, Creator: €10/Monat, Pro: €30/Monat",
-"en": "Free with limits, Creator: $10/month, Pro: $30/month"
+
+.site-title:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(135deg, #00ff9d, #00d4ff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-},
-{
-"id": "synthesia",
-"numericId": 20,
-"name": "Synthesia",
-"category": "video",
-"aiScore": 90,
-"popularityScore": 88,
-"quickPeek": {
-"de": "Erstelle Videos mit KI-Avataren die in 120+ Sprachen sprechen.",
-"en": "Create videos with AI avatars that speak in 120+ languages."
-},
-"features": ["AI Avatars", "120+ Languages", "Custom Avatars", "Templates", "API"],
-"tags": ["video", "avatars", "multilingual", "corporate", "training", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "ab €30/Monat",
-"en": "from $30/month"
-},
-"rating": 4.5,
-"description": {
-"de": "Erstelle Videos mit KI-Avataren die in 120+ Sprachen sprechen.",
-"en": "Create videos with AI avatars that speak in 120+ languages."
-},
-"link": "https://www.synthesia.io/",
-"badge": "popular",
-"useCases": ["training-videos", "corporate-communications", "e-learning", "marketing", "how-to-videos"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Synthesia - KI-Avatare für Videos",
-"en": "Synthesia - AI Avatars for Videos"
-},
-"seoDesc": {
-"de": "Synthesia erstellt Videos mit KI-Avataren die in verschiedenen Sprachen sprechen. Ideal für Unternehmen.",
-"en": "Synthesia creates videos with AI avatars that speak in different languages. Ideal for businesses."
-},
-"alternatives": ["heygen", "elai", "pictory"],
-"pros": {
-"de": ["Realistische Avatare", "Mehrsprachige Unterstützung", "Professionelle Templates", "Enterprise-Features", "Skalierbar"],
-"en": ["Realistic avatars", "Multilingual support", "Professional templates", "Enterprise features", "Scalable"]
-},
-"cons": {
-"de": ["Teuer", "Begrenzte Avatar-Anpassung", "Keine kostenlose Version", "Lizenzierungskosten"],
-"en": ["Expensive", "Limited avatar customization", "No free version", "Licensing costs"]
-},
-"pricing": {
-"de": "Personal: €30/Monat, Business: ab €89/Monat, Enterprise: auf Anfrage",
-"en": "Personal: $30/month, Business: from $89/month, Enterprise: custom pricing"
+
+.site-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
 }
-},
-{
-"id": "heygen",
-"numericId": 21,
-"name": "HeyGen",
-"category": "video",
-"aiScore": 88,
-"popularityScore": 85,
-"quickPeek": {
-"de": "Video mit KI-Avataren und Sprachübersetzung für globale Kommunikation.",
-"en": "Video with AI avatars and voice translation for global communication."
-},
-"features": ["AI Avatars", "Voice Translation", "Templates", "Custom Avatars", "Team Collaboration"],
-"tags": ["video", "avatars", "translation", "multilingual", "business", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €30/Monat",
-"en": "from $30/month"
-},
-"rating": 4.4,
-"description": {
-"de": "Video mit KI-Avataren und Sprachübersetzung für globale Kommunikation.",
-"en": "Video with AI avatars and voice translation for global communication."
-},
-"link": "https://www.heygen.com/",
-"badge": "new",
-"useCases": ["multilingual-videos", "training", "marketing", "presentations", "education"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "HeyGen - KI-Video mit Avataren",
-"en": "HeyGen - AI Video with Avatars"
-},
-"seoDesc": {
-"de": "HeyGen erstellt Videos mit KI-Avataren und Sprachübersetzung für verschiedene Anwendungen.",
-"en": "HeyGen creates videos with AI avatars and voice translation for various applications."
-},
-"alternatives": ["synthesia", "pictory", "invideo"],
-"pros": {
-"de": ["Einfache Benutzung", "Sprachübersetzung", "Viele Vorlagen", "Schnelle Erstellung", "Kostenlose Testversion"],
-"en": ["Easy to use", "Voice translation", "Many templates", "Fast creation", "Free trial"]
-},
-"cons": {
-"de": ["Wasserzeichen in kostenloser Version", "Teure Pro-Version", "Limitierte Avatar-Auswahl", "Qualität variiert"],
-"en": ["Watermarks in free version", "Expensive pro version", "Limited avatar selection", "Quality varies"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Creator: €30/Monat, Business: €225/Monat, Enterprise: auf Anfrage",
-"en": "Free trial, Creator: $30/month, Business: $225/month, Enterprise: custom pricing"
+
+.site-title:hover::after {
+  width: 100%;
 }
-},
-{
-"id": "pika",
-"numericId": 22,
-"name": "Pika Labs",
-"category": "video",
-"aiScore": 92,
-"popularityScore": 87,
-"quickPeek": {
-"de": "Text-zu-Video Generator mit verschiedenen Stilen und Bearbeitungsoptionen.",
-"en": "Text-to-video generator with various styles and editing options."
-},
-"features": ["Text-to-Video", "Image-to-Video", "Video Editing", "Style Transfer", "Sound Effects"],
-"tags": ["video", "generation", "text-to-video", "editing", "styles", "new", "freemium", "lifetime-deal"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.6,
-"description": {
-"de": "Text-zu-Video Generator mit verschiedenen Stilen und Bearbeitungsoptionen.",
-"en": "Text-to-video generator with various styles and editing options."
-},
-"link": "https://www.pika.art/",
-"badge": "new",
-"useCases": ["short-clips", "social-media", "animation", "presentations", "creative-projects"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "Pika Labs - Text-zu-Video KI",
-"en": "Pika Labs - Text-to-Video AI"
-},
-"seoDesc": {
-"de": "Pika Labs generiert Videos aus Text mit verschiedenen Stilen und Bearbeitungsoptionen.",
-"en": "Pika Labs generates videos from text with various styles and editing options."
-},
-"alternatives": ["runway", "invideo", "fliki"],
-"pros": {
-"de": ["Text-zu-Video", "Verschiedene Stile", "Bearbeitungsfunktionen", "Kostenlose Version", "Aktive Community"],
-"en": ["Text-to-video", "Various styles", "Editing features", "Free version", "Active community"]
-},
-"cons": {
-"de": ["Begrenzte Videolänge", "Lernkurve für optimale Ergebnisse", "Qualität variiert", "Wasserzeichen im Free-Tier"],
-"en": ["Limited video length", "Learning curve for optimal results", "Quality varies", "Watermarks in free tier"]
-},
-"pricing": {
-"de": "Kostenlos: 30 Credits/Woche, Pro: €10/Monat für 180 Credits, Premium: €30/Monat für 600 Credits",
-"en": "Free: 30 credits/week, Pro: $10/month for 180 credits, Premium: $30/month for 600 credits"
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-},
-{
-"id": "cursor",
-"numericId": 23,
-"name": "Cursor",
-"category": "code",
-"aiScore": 94,
-"popularityScore": 89,
-"quickPeek": {
-"de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
-"en": "AI-powered IDE with integrated chat and debugging features."
-},
-"features": ["AI Chat", "Code Generation", "Debugging", "VSCode Based", "Context Awareness"],
-"tags": ["code", "ide", "vscode", "chat", "debugging", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €20/Monat",
-"en": "from $20/month"
-},
-"rating": 4.7,
-"description": {
-"de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
-"en": "AI-powered IDE with integrated chat and debugging features."
-},
-"link": "https://www.cursor.so/",
-"badge": "new",
-"useCases": ["coding", "debugging", "learning", "code-review", "refactoring"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Cursor - KI-IDE für Programmierer",
-"en": "Cursor - AI IDE for Programmers"
-},
-"seoDesc": {
-"de": "Cursor ist eine KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
-"en": "Cursor is an AI-powered IDE with integrated chat and debugging features."
-},
-"alternatives": ["github-copilot", "tabnine", "codeium"],
-"pros": {
-"de": ["KI-gestützte Entwicklung", "Integrierter Chat", "Debugging-Hilfen", "VSCode-Kompatibilität", "Lokaler Kontext"],
-"en": ["AI-assisted development", "Integrated chat", "Debugging assistance", "VSCode compatibility", "Local context"]
-},
-"cons": {
-"de": ["Kostenpflichtig für erweiterte Funktionen", "Noch in Entwicklung", "Performance-Probleme", "Begrenzte Sprachenunterstützung"],
-"en": ["Paid for advanced features", "Still in development", "Performance issues", "Limited language support"]
-},
-"pricing": {
-"de": "Kostenlos: 50 Anfragen/Monat, Pro: €20/Monat für unbegrenzte Anfragen, Business: €40/Monat pro Benutzer",
-"en": "Free: 50 requests/month, Pro: $20/month for unlimited requests, Business: $40/month per user"
+
+/* ===== HERO AREA ===== */
+.hero-area {
+  position: relative;
+  margin-top: var(--header-height);
+  height: var(--hero-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(10, 14, 23, 0.8) 0%, transparent 100%);
+  overflow: hidden;
 }
-},
-{
-"id": "replit",
-"numericId": 24,
-"name": "Replit AI",
-"category": "code",
-"aiScore": 88,
-"popularityScore": 83,
-"quickPeek": {
-"de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
-"en": "Cloud-based AI coding with collaboration and direct deployment."
-},
-"features": ["Cloud IDE", "AI Assistant", "Collaboration", "Deployment", "Multi-Language"],
-"tags": ["code", "cloud", "ide", "collaboration", "deployment", "free", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €20/Monat",
-"en": "from $20/month"
-},
-"rating": 4.4,
-"description": {
-"de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
-"en": "Cloud-based AI coding with collaboration and direct deployment."
-},
-"link": "https://replit.com/site/ai",
-"badge": "free",
-"useCases": ["learning", "prototyping", "collaborative-coding", "education", "hackathons"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Replit AI - Cloud-basiertes KI-Coding",
-"en": "Replit AI - Cloud-based AI Coding"
-},
-"seoDesc": {
-"de": "Replit AI bietet KI-gestütztes Coding in der Cloud mit Kollaboration und Deployment.",
-"en": "Replit AI offers AI-powered coding in the cloud with collaboration and deployment."
-},
-"alternatives": ["github-copilot", "cursor", "tabnine"],
-"pros": {
-"de": ["Cloud-basiert", "Kollaborationsfunktionen", "Direktes Deployment", "Kostenlose Version", "Browsergestützt"],
-"en": ["Cloud-based", "Collaboration features", "Direct deployment", "Free version", "Browser-based"]
-},
-"cons": {
-"de": ["Internetverbindung erforderlich", "Begrenzte lokale Kontrolle", "Performance abhängig von Server", "Datenschutzbedenken"],
-"en": ["Internet connection required", "Limited local control", "Performance depends on server", "Privacy concerns"]
-},
-"pricing": {
-"de": "Kostenlos: 500.000 Tokens/Monat, Core: €8/Monat, Pro: €20/Monat, Teams: €40/Monat pro Benutzer",
-"en": "Free: 500,000 tokens/month, Core: $8/month, Pro: $20/month, Teams: $40/month per user"
+
+.hero-title {
+  font-weight: 800;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: inline-block;
+  animation: titleGlow 3s infinite alternate;
 }
-},
-{
-"id": "tabnine",
-"numericId": 25,
-"name": "Tabnine",
-"category": "code",
-"aiScore": 86,
-"popularityScore": 84,
-"quickPeek": {
-"de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
-"en": "AI code completion with focus on privacy and local processing."
-},
-"features": ["Code Completion", "Local Processing", "Privacy Focus", "Multi-Language", "IDE Integration"],
-"tags": ["code", "autocomplete", "privacy", "local", "ide", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
-"en": "AI code completion with focus on privacy and local processing."
-},
-"link": "https://www.tabnine.com/",
-"badge": "popular",
-"useCases": ["coding", "productivity", "security", "enterprise", "education"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Tabnine - KI-Code-Vervollständigung",
-"en": "Tabnine - AI Code Completion"
-},
-"seoDesc": {
-"de": "Tabnine bietet KI-gestützte Code-Vervollständigung mit Fokus auf Privatsphäre.",
-"en": "Tabnine offers AI-powered code completion with a focus on privacy."
-},
-"alternatives": ["github-copilot", "cursor", "codeium"],
-"pros": {
-"de": ["Schnelle Code-Vervollständigung", "Privatsphäre-fokussiert", "Mehrsprachenunterstützung", "Lokale Verarbeitung", "Enterprise-Sicherheit"],
-"en": ["Fast code completion", "Privacy-focused", "Multi-language support", "Local processing", "Enterprise security"]
-},
-"cons": {
-"de": ["Begrenzte kostenlose Version", "Weniger Funktionen als Konkurrenz", "Teilweise ungenaue Vorschläge", "Langsamere Updates"],
-"en": ["Limited free version", "Fewer features than competitors", "Sometimes inaccurate suggestions", "Slow updates"]
-},
-"pricing": {
-"de": "Kostenlos: Basis-Vervollständigung, Pro: €12/Monat, Enterprise: auf Anfrage",
-"en": "Free: basic completion, Pro: $12/month, Enterprise: custom pricing"
+
+.hero-title::after {
+  content: '🤖';
+  position: absolute;
+  right: -45px;
+  top: 0;
+  font-size: 2rem;
+  animation: float 3s infinite ease-in-out;
 }
-},
-{
-"id": "codeium",
-"numericId": 26,
-"name": "Codeium",
-"category": "code",
-"aiScore": 90,
-"popularityScore": 85,
-"quickPeek": {
-"de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
-"en": "Free AI for code completion and chat features."
-},
-"features": ["Free", "Autocomplete", "Chat", "Multi-Language", "IDE Integration"],
-"tags": ["code", "free", "autocomplete", "chat", "ide", "free-tier", "open-source"],
-"rankingHistory": [],
-"price": "free",
-"priceDisplay": {
-"de": "Kostenlos",
-"en": "Free"
-},
-"rating": 4.5,
-"description": {
-"de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
-"en": "Free AI for code completion and chat features."
-},
-"link": "https://codeium.com/",
-"badge": "free",
-"useCases": ["learning", "prototyping", "education", "open-source", "personal-projects"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Codeium - Kostenlose KI für Code",
-"en": "Codeium - Free AI for Code"
-},
-"seoDesc": {
-"de": "Codeium ist eine kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
-"en": "Codeium is a free AI for code completion and chat features."
-},
-"alternatives": ["github-copilot", "tabnine", "cursor"],
-"pros": {
-"de": ["Komplett kostenlos", "Code-Vervollständigung", "Chat-Funktion", "Open-Source-Freundlich", "Keine Limits"],
-"en": ["Completely free", "Code completion", "Chat function", "Open-source friendly", "No limits"]
-},
-"cons": {
-"de": ["Begrenzte fortgeschrittene Funktionen", "Keine Enterprise-Features", "Weniger akkurat als Copilot", "Kein lokales Modell"],
-"en": ["Limited advanced features", "No enterprise features", "Less accurate than Copilot", "No local model"]
-},
-"pricing": {
-"de": "Komplett kostenlos für alle Funktionen",
-"en": "Completely free for all features"
+
+@keyframes titleGlow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7));
+  }
 }
-},
-{
-"id": "canva-ai",
-"numericId": 27,
-"name": "Canva AI",
-"category": "image",
-"aiScore": 88,
-"popularityScore": 90,
-"quickPeek": {
-"de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
-"en": "AI design tools integrated into the popular design platform for everyone."
-},
-"features": ["Magic Design", "Text-to-Image", "Magic Eraser", "Background Remover", "Magic Write"],
-"tags": ["image", "design", "canva", "templates", "editing", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
-"en": "AI design tools integrated into the popular design platform for everyone."
-},
-"link": "https://www.canva.com/ai-tools/",
-"badge": "popular",
-"useCases": ["social-media", "presentations", "marketing", "education", "personal-projects"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Canva AI - KI-Design für alle",
-"en": "Canva AI - AI Design for Everyone"
-},
-"seoDesc": {
-"de": "Canva AI integriert KI in die beliebte Design-Plattform für einfacheres Erstellen.",
-"en": "Canva AI integrates AI into the popular design platform for easier creation."
-},
-"alternatives": ["firefly", "playground", "photosonic"],
-"pros": {
-"de": ["Einfache Integration in Canva", "Viele Vorlagen", "Magic-Tools", "Kostenlose Version", "Team-Kollaboration"],
-"en": ["Easy integration with Canva", "Many templates", "Magic tools", "Free version", "Team collaboration"]
-},
-"cons": {
-"de": ["Begrenzte KI-Funktionen", "Canva-Abonnement benötigt", "Weniger Kontrolle als Pro-Tools", "Wasserzeichen im Free-Tier"],
-"en": ["Limited AI features", "Canva subscription needed", "Less control than pro tools", "Watermarks in free tier"]
-},
-"pricing": {
-"de": "Kostenlos: Basis-Funktionen, Canva Pro: €12/Monat, Teams: €14/Monat pro Benutzer",
-"en": "Free: basic features, Canva Pro: $12/month, Teams: $14/month per user"
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
-},
-{
-"id": "tome",
-"numericId": 28,
-"name": "Tome",
-"category": "text",
-"aiScore": 86,
-"popularityScore": 82,
-"quickPeek": {
-"de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
-"en": "AI for presentations and stories with visual support."
-},
-"features": ["Presentation AI", "Visual Generation", "Storytelling", "Templates", "Collaboration"],
-"tags": ["text", "presentations", "storytelling", "visual", "templates", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €8/Monat",
-"en": "from $8/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
-"en": "AI for presentations and stories with visual support."
-},
-"link": "https://tome.app/",
-"badge": "new",
-"useCases": ["presentations", "storytelling", "pitch-decks", "education", "reports"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Tome - KI für Präsentationen",
-"en": "Tome - AI for Presentations"
-},
-"seoDesc": {
-"de": "Tome erstellt Präsentationen und Geschichten mit KI-Unterstützung.",
-"en": "Tome creates presentations and stories with AI assistance."
-},
-"alternatives": ["beautiful-ai", "gamma", "pitch"],
-"pros": {
-"de": ["Schnelle Präsentationserstellung", "Visuelle Unterstützung", "Storytelling-Fokus", "Kostenlose Version", "Einfache Bedienung"],
-"en": ["Fast presentation creation", "Visual support", "Storytelling focus", "Free version", "Easy to use"]
-},
-"cons": {
-"de": ["Begrenzte Design-Kontrolle", "Teilweise generische Layouts", "Wenig Customization", "Export-Limits"],
-"en": ["Limited design control", "Somewhat generic layouts", "Little customization", "Export limits"]
-},
-"pricing": {
-"de": "Kostenlos: 500 AI Credits, Pro: €8/Monat, Business: €20/Monat pro Benutzer",
-"en": "Free: 500 AI credits, Pro: $8/month, Business: $20/month per user"
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  max-width: 600px;
+  font-weight: 400;
+  opacity: 0.9;
 }
-},
-{
-"id": "beautiful-ai",
-"numericId": 29,
-"name": "Beautiful.ai",
-"category": "business",
-"aiScore": 84,
-"popularityScore": 81,
-"quickPeek": {
-"de": "KI-Präsentationsdesigner der automatisch schöne Präsentationen erstellt.",
-"en": "AI presentation designer that automatically creates beautiful presentations."
-},
-"features": ["Auto Design", "Smart Templates", "Team Collaboration", "Analytics", "Brand Kits"],
-"tags": ["business", "presentations", "auto-design", "templates", "branding", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.2,
-"description": {
-"de": "KI-Präsentationsdesigner der automatisch schöne Präsentationen erstellt.",
-"en": "AI presentation designer that automatically creates beautiful presentations."
-},
-"link": "https://www.beautiful.ai/",
-"badge": "popular",
-"useCases": ["sales-presentations", "pitch-decks", "business-reports", "marketing", "investor-updates"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Beautiful.ai - KI-Präsentationsdesigner",
-"en": "Beautiful.ai - AI Presentation Designer"
-},
-"seoDesc": {
-"de": "Beautiful.ai erstellt automatisch schöne Präsentationen mit KI.",
-"en": "Beautiful.ai automatically creates beautiful presentations with AI."
-},
-"alternatives": ["tome", "gamma", "pitch"],
-"pros": {
-"de": ["Automatisches Design", "Team-Kollaboration", "Professionelle Ergebnisse", "Brand Consistency", "Analytics"],
-"en": ["Automatic design", "Team collaboration", "Professional results", "Brand consistency", "Analytics"]
-},
-"cons": {
-"de": ["Weniger kreative Kontrolle", "Keine kostenlose Version", "Teuer für Einzelpersonen", "Begrenzte Vorlagen"],
-"en": ["Less creative control", "No free version", "Expensive for individuals", "Limited templates"]
-},
-"pricing": {
-"de": "Pro: €12/Monat, Team: €50/Monat, Enterprise: auf Anfrage",
-"en": "Pro: $12/month, Team: $50/month, Enterprise: custom pricing"
+
+.hero-search-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  margin: 0 auto 16px;
 }
-},
-{
-"id": "gamma",
-"numericId": 30,
-"name": "Gamma",
-"category": "business",
-"aiScore": 88,
-"popularityScore": 83,
-"quickPeek": {
-"de": "KI für Dokumente, Präsentationen und Websites in einem Tool.",
-"en": "AI for documents, presentations and websites in one tool."
-},
-"features": ["Docs", "Presentations", "Websites", "Templates", "Collaboration"],
-"tags": ["business", "documents", "presentations", "websites", "all-in-one", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €8/Monat",
-"en": "from $8/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI für Dokumente, Präsentationen und Websites in einem Tool.",
-"en": "AI for documents, presentations and websites in one tool."
-},
-"link": "https://gamma.app/",
-"badge": "new",
-"useCases": ["documentation", "presentations", "landing-pages", "reports", "internal-communications"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Gamma - KI für Docs & Präsentationen",
-"en": "Gamma - AI for Docs & Presentations"
-},
-"seoDesc": {
-"de": "Gamma erstellt Dokumente, Präsentationen und Websites mit KI.",
-"en": "Gamma creates documents, presentations and websites with AI."
-},
-"alternatives": ["tome", "beautiful-ai", "notion"],
-"pros": {
-"de": ["Vielfältige Ausgabeformate", "Einfache Bedienung", "Website-Generierung", "Kostenlose Version", "Schnelle Erstellung"],
-"en": ["Multiple output formats", "Easy to use", "Website generation", "Free version", "Fast creation"]
-},
-"cons": {
-"de": ["Begrenzte fortgeschrittene Funktionen", "Design-Einschränkungen", "SEO-Limits für Websites", "Export-Probleme"],
-"en": ["Limited advanced features", "Design restrictions", "SEO limits for websites", "Export issues"]
-},
-"pricing": {
-"de": "Kostenlos: 400 AI Credits, Plus: €8/Monat, Pro: €20/Monat",
-"en": "Free: 400 AI credits, Plus: $8/month, Pro: $20/month"
+
+.hero-omnibox {
+  width: 100%;
+  position: relative;
 }
-},
-{
-"id": "invideo",
-"numericId": 31,
-"name": "InVideo AI",
-"category": "video",
-"aiScore": 86,
-"popularityScore": 84,
-"quickPeek": {
-"de": "Text-zu-Video für Social Media mit Vorlagen und Stock-Material.",
-"en": "Text-to-video for social media with templates and stock material."
-},
-"features": ["Templates", "Stock Media", "Automation", "Text-to-Video", "Social Media Formats"],
-"tags": ["video", "social-media", "templates", "stock-media", "automation", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €20/Monat",
-"en": "from $20/month"
-},
-"rating": 4.3,
-"description": {
-"de": "Text-zu-Video für Social Media mit Vorlagen und Stock-Material.",
-"en": "Text-to-video for social media with templates and stock material."
-},
-"link": "https://invideo.io/ai",
-"badge": "popular",
-"useCases": ["social-media", "marketing", "ads", "explainer-videos", "youtube"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "InVideo AI - Text-zu-Video für Social Media",
-"en": "InVideo AI - Text-to-Video for Social Media"
-},
-"seoDesc": {
-"de": "InVideo AI erstellt Social-Media-Videos aus Text mit Vorlagen und Stock-Material.",
-"en": "InVideo AI creates social media videos from text with templates and stock material."
-},
-"alternatives": ["pictory", "fliki", "runway"],
-"pros": {
-"de": ["Social-Media-fokussiert", "Viele Vorlagen", "Automatisierte Erstellung", "Stock-Medien inklusive", "Kostenlose Testversion"],
-"en": ["Social-media focused", "Many templates", "Automated creation", "Stock media included", "Free trial"]
-},
-"cons": {
-"de": ["Wasserzeichen in kostenloser Version", "Begrenzte kreative Kontrolle", "Teilweise generische Videos", "Export-Limits"],
-"en": ["Watermarks in free version", "Limited creative control", "Somewhat generic videos", "Export limits"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Plus: €20/Monat, Max: €60/Monat",
-"en": "Free trial, Plus: $20/month, Max: $60/month"
+
+.hero-omnibox-input {
+  width: 100%;
+  padding: 16px 24px;
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+  font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(10px);
 }
-},
-{
-"id": "fliki",
-"numericId": 32,
-"name": "Fliki",
-"category": "video",
-"aiScore": 86,
-"popularityScore": 82,
-"quickPeek": {
-"de": "Text-zu-Video mit realistischen KI-Stimmen und Stock-Material.",
-"en": "Text-to-video with realistic AI voices and stock material."
-},
-"features": ["Voice", "Stock Media", "Script to Video", "Templates", "AI Voices"],
-"tags": ["video", "text-to-video", "voice", "stock-media", "script", "new", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €21/Monat",
-"en": "from $21/month"
-},
-"rating": 4.3,
-"description": {
-"de": "Text-zu-Video mit realistischen KI-Stimmen und Stock-Material.",
-"en": "Text-to-video with realistic AI voices and stock material."
-},
-"link": "https://fliki.ai/",
-"badge": "new",
-"useCases": ["video", "social-media", "explainer", "e-learning", "marketing"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Fliki - Text-zu-Video mit Stimmen",
-"en": "Fliki - Text-to-Video with Voices"
-},
-"seoDesc": {
-"de": "Fliki erstellt Videos aus Text mit realistischen KI-Stimmen und Stock-Material.",
-"en": "Fliki creates videos from text with realistic AI voices and stock material."
-},
-"alternatives": ["invideo", "pictory", "synthesia"],
-"pros": {
-"de": ["Integrierte KI-Stimmen", "Stock-Material", "Skript-basiert", "Einfache Bedienung", "Kostenlose Version"],
-"en": ["Integrated AI voices", "Stock material", "Script-based", "Easy to use", "Free version"]
-},
-"cons": {
-"de": ["Teuer für professionelle Nutzung", "Begrenzte Videoeffekte", "Wasserzeichen im Free-Tier", "Langsame Rendering"],
-"en": ["Expensive for professional use", "Limited video effects", "Watermarks in free tier", "Slow rendering"]
-},
-"pricing": {
-"de": "Kostenlos: 5 Minuten Video/Monat, Basic: €21/Monat, Premium: €66/Monat",
-"en": "Free: 5 minutes video/month, Basic: $21/month, Premium: $66/month"
+
+.hero-omnibox-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 30px rgba(0, 212, 255, 0.2);
+  background: rgba(26, 31, 46, 0.9);
 }
-},
-{
-"id": "pictory",
-"numericId": 33,
-"name": "Pictory",
-"category": "video",
-"aiScore": 84,
-"popularityScore": 83,
-"quickPeek": {
-"de": "Wandelt Text und Blogs automatisch in Videos um.",
-"en": "Converts text and blogs automatically into videos."
-},
-"features": ["Script", "Stock Media", "Automation", "Blog to Video", "Social Media"],
-"tags": ["video", "text-to-video", "blog", "automation", "stock-media", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €19/Monat",
-"en": "from $19/month"
-},
-"rating": 4.2,
-"description": {
-"de": "Wandelt Text und Blogs automatisch in Videos um.",
-"en": "Converts text and blogs automatically into videos."
-},
-"link": "https://pictory.ai/",
-"badge": "popular",
-"useCases": ["marketing", "training", "social", "blogging", "content-repurposing"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Pictory - Videos aus Text erstellen",
-"en": "Pictory - Create Videos from Text"
-},
-"seoDesc": {
-"de": "Pictory wandelt Text in Videos um mit automatischer Skripterstellung und Stock-Material.",
-"en": "Pictory converts text to videos with automatic script creation and stock material."
-},
-"alternatives": ["invideo", "fliki", "heygen"],
-"pros": {
-"de": ["Einfache Texteingabe", "Stock-Material", "Automatisierte Erstellung", "Blog zu Video", "Kostenlose Testversion"],
-"en": ["Easy text input", "Stock material", "Automated creation", "Blog to video", "Free trial"]
-},
-"cons": {
-"de": ["Begrenzte Anpassungsmöglichkeiten", "Generische Ergebnisse", "Teuer für Einzelpersonen", "Wasserzeichen in Free-Version"],
-"en": ["Limited customization", "Generic results", "Expensive for individuals", "Watermarks in free version"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Standard: €19/Monat, Professional: €39/Monat, Teams: €99/Monat",
-"en": "Free trial, Standard: $19/month, Professional: $39/month, Teams: $99/month"
+
+.hero-omnibox-input::placeholder {
+  color: var(--text-muted);
 }
-},
-{
-"id": "wondershare",
-"numericId": 34,
-"name": "Wondershare Filmora",
-"category": "video",
-"aiScore": 82,
-"popularityScore": 85,
-"quickPeek": {
-"de": "Benutzerfreundlicher Videoeditor mit KI-Funktionen für Einsteiger.",
-"en": "User-friendly video editor with AI features for beginners."
-},
-"features": ["Editing", "Effects", "Templates", "AI Tools", "Audio Editing"],
-"tags": ["video", "editing", "effects", "templates", "beginner", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "€50/Jahr",
-"en": "$50/year"
-},
-"rating": 4.1,
-"description": {
-"de": "Benutzerfreundlicher Videoeditor mit KI-Funktionen für Einsteiger.",
-"en": "User-friendly video editor with AI features for beginners."
-},
-"link": "https://filmora.wondershare.com/ai-video-editor/",
-"badge": "popular",
-"useCases": ["video-editing", "youtube", "social", "personal-videos", "education"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Wondershare Filmora - KI-Videoeditor",
-"en": "Wondershare Filmora - AI Video Editor"
-},
-"seoDesc": {
-"de": "Wondershare Filmora ist ein benutzerfreundlicher Videoeditor mit KI-Funktionen.",
-"en": "Wondershare Filmora is a user-friendly video editor with AI features."
-},
-"alternatives": ["runway", "descript", "adobe-premiere"],
-"pros": {
-"de": ["Benutzerfreundlich", "Viele Effekte", "Vorlagen", "Kostenlose Version", "Keine Abo nötig (einmalige Zahlung)"],
-"en": ["User-friendly", "Many effects", "Templates", "Free version", "No subscription needed (one-time payment)"]
-},
-"cons": {
-"de": ["Wasserzeichen in kostenloser Version", "Begrenzte KI-Funktionen", "Weniger professionell als Adobe", "Performance-Probleme"],
-"en": ["Watermarks in free version", "Limited AI features", "Less professional than Adobe", "Performance issues"]
-},
-"pricing": {
-"de": "Kostenlose Version verfügbar, Filmora Pro: €50/Jahr oder €100 einmalig",
-"en": "Free version available, Filmora Pro: $50/year or $100 one-time"
+
+.search-hint-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  opacity: 0.8;
 }
-},
-{
-"id": "descript",
-"numericId": 35,
-"name": "Descript",
-"category": "audio",
-"aiScore": 90,
-"popularityScore": 87,
-"quickPeek": {
-"de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
-"en": "Audio and video editor with transcription and AI voices."
-},
-"features": ["Editing", "Transcription", "Voice", "Screen Recording", "Collaboration"],
-"tags": ["audio", "video", "editing", "transcription", "voice", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.5,
-"description": {
-"de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
-"en": "Audio and video editor with transcription and AI voices."
-},
-"link": "https://www.descript.com/",
-"badge": "popular",
-"useCases": ["podcast", "video", "transcription", "screen-recording", "voiceover"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Descript - Audio & Video Editor",
-"en": "Descript - Audio & Video Editor"
-},
-"seoDesc": {
-"de": "Descript ist ein Audio- und Videoeditor mit Transkription und KI-Stimmen.",
-"en": "Descript is an audio and video editor with transcription and AI voices."
-},
-"alternatives": ["otter", "murf", "adobe-audition"],
-"pros": {
-"de": ["Audio- und Videobearbeitung", "Transkription", "KI-Stimmen", "Screen Recording", "Team-Kollaboration"],
-"en": ["Audio and video editing", "Transcription", "AI voices", "Screen recording", "Team collaboration"]
-},
-"cons": {
-"de": ["Teilweise komplexe Bedienung", "Kostenpflichtig für volle Funktionen", "Performance-Probleme", "Begrenzte Export-Optionen"],
-"en": ["Somewhat complex operation", "Paid for full features", "Performance issues", "Limited export options"]
-},
-"pricing": {
-"de": "Kostenlos: 1 Stunde Transkription, Creator: €12/Monat, Pro: €30/Monat",
-"en": "Free: 1 hour transcription, Creator: $12/month, Pro: $30/month"
+
+.search-hint-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
-},
-{
-"id": "otter",
-"numericId": 36,
-"name": "Otter.ai",
-"category": "audio",
-"aiScore": 88,
-"popularityScore": 86,
-"quickPeek": {
-"de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
-"en": "AI meeting transcription with notes and summaries."
-},
-"features": ["Transcription", "Notes", "Collaboration", "Summarization", "Integration"],
-"tags": ["audio", "transcription", "meetings", "notes", "summarization", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
-"en": "AI meeting transcription with notes and summaries."
-},
-"link": "https://otter.ai/",
-"badge": "popular",
-"useCases": ["meetings", "notes", "interviews", "lectures", "customer-calls"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Otter.ai - KI-Meeting-Transkription",
-"en": "Otter.ai - AI Meeting Transcription"
-},
-"seoDesc": {
-"de": "Otter.ai transkribiert Meetings automatisch und erstellt Notizen.",
-"en": "Otter.ai automatically transcribes meetings and creates notes."
-},
-"alternatives": ["fireflies", "fathom", "notion-ai"],
-"pros": {
-"de": ["Automatische Transkription", "Notizen-Erstellung", "Kollaboration", "Integration mit Zoom/Teams", "Kostenlose Version"],
-"en": ["Automatic transcription", "Note creation", "Collaboration", "Integration with Zoom/Teams", "Free version"]
-},
-"cons": {
-"de": ["Genauigkeit variiert", "Begrenzte kostenlose Minuten", "Teuer für viele Meetings", "Datenschutzbedenken"],
-"en": ["Accuracy varies", "Limited free minutes", "Expensive for many meetings", "Privacy concerns"]
-},
-"pricing": {
-"de": "Kostenlos: 300 Minuten/Monat, Pro: €10/Monat, Business: €20/Monat pro Benutzer",
-"en": "Free: 300 minutes/month, Pro: $10/month, Business: $20/month per user"
+
+.search-examples {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-},
-{
-"id": "krisp",
-"numericId": 37,
-"name": "Krisp",
-"category": "audio",
-"aiScore": 90,
-"popularityScore": 88,
-"quickPeek": {
-"de": "KI-Geräuschunterdrückung für bessere Audioqualität in Meetings.",
-"en": "AI noise cancellation for better audio quality in meetings."
-},
-"features": ["Noise Cancellation", "Voice Clarity", "Meeting Notes", "Transcription", "Integration"],
-"tags": ["audio", "noise-cancellation", "meetings", "voice-clarity", "productivity", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €8/Monat",
-"en": "from $8/month"
-},
-"rating": 4.5,
-"description": {
-"de": "KI-Geräuschunterdrückung für bessere Audioqualität in Meetings.",
-"en": "AI noise cancellation for better audio quality in meetings."
-},
-"link": "https://krisp.ai/",
-"badge": "popular",
-"useCases": ["meetings", "calls", "recording", "podcasting", "streaming"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Krisp - KI-Geräuschunterdrückung",
-"en": "Krisp - AI Noise Cancellation"
-},
-"seoDesc": {
-"de": "Krisp entfernt Hintergrundgeräusche in Echtzeit für bessere Audioqualität.",
-"en": "Krisp removes background noise in real-time for better audio quality."
-},
-"alternatives": ["nvidia-rtx-voice", "sol-call", "microsoft-teams"],
-"pros": {
-"de": ["Echtzeit-Geräuschunterdrückung", "Verbessert Audioqualität", "Für Meetings und Aufnahmen", "Kostenlose Version", "Einfache Bedienung"],
-"en": ["Real-time noise cancellation", "Improves audio quality", "For meetings and recordings", "Free version", "Easy to use"]
-},
-"cons": {
-"de": ["Kostenpflichtig für unbegrenzte Nutzung", "Leichtes Audio-Artifacting", "Performance-Impact", "Begrenzte kostenlose Nutzung"],
-"en": ["Paid for unlimited use", "Slight audio artifacting", "Performance impact", "Limited free usage"]
-},
-"pricing": {
-"de": "Kostenlos: 60 Minuten/Woche, Pro: €8/Monat, Business: €12/Monat pro Benutzer",
-"en": "Free: 60 minutes/week, Pro: $8/month, Business: $12/month per user"
+
+.search-example {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+  cursor: pointer;
 }
-},
-{
-"id": "quillbot",
-"numericId": 38,
-"name": "QuillBot",
-"category": "text",
-"aiScore": 88,
-"popularityScore": 86,
-"quickPeek": {
-"de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
-"en": "AI paraphraser & translator for better writing."
-},
-"features": ["Paraphrase", "Grammar", "Summarize", "Translator", "Plagiarism Check"],
-"tags": ["text", "paraphrasing", "grammar", "translation", "summarization", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
-"en": "AI paraphraser & translator for better writing."
-},
-"link": "https://quillbot.com/",
-"badge": "popular",
-"useCases": ["writing", "academic", "content", "translation", "proofreading"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "QuillBot - KI-Paraphraser & Übersetzer",
-"en": "QuillBot - AI Paraphraser & Translator"
-},
-"seoDesc": {
-"de": "QuillBot paraphrasiert und übersetzt Text mit KI für besseres Schreiben.",
-"en": "QuillBot paraphrases and translates text with AI for better writing."
-},
-"alternatives": ["grammarly", "wordtune", "chatgpt"],
-"pros": {
-"de": ["Paraphrasierung", "Grammatikprüfung", "Zusammenfassung", "Übersetzung", "Kostenlose Version"],
-"en": ["Paraphrasing", "Grammar check", "Summarization", "Translation", "Free version"]
-},
-"cons": {
-"de": ["Begrenzte kostenlose Nutzung", "Manchmal unnatürliche Ergebnisse", "Weniger genau als Grammarly", "Performance-Probleme"],
-"en": ["Limited free usage", "Sometimes unnatural results", "Less accurate than Grammarly", "Performance issues"]
-},
-"pricing": {
-"de": "Kostenlos: 125 Wörter, Premium: €10/Monat, Team: €8/Monat pro Benutzer",
-"en": "Free: 125 words, Premium: $10/month, Team: $8/month per user"
+
+.search-example:hover {
+  color: var(--primary);
+  border-color: rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.05);
+  transform: translateY(-2px);
 }
-},
-{
-"id": "grammarly",
-"numericId": 39,
-"name": "Grammarly",
-"category": "text",
-"aiScore": 92,
-"popularityScore": 94,
-"quickPeek": {
-"de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-"en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
-},
-"features": ["Grammar", "Tone", "Plagiarism", "Clarity", "Engagement"],
-"tags": ["text", "grammar", "writing", "plagiarism", "tone", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €12/Monat",
-"en": "from $12/month"
-},
-"rating": 4.6,
-"description": {
-"de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-"en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
-},
-"link": "https://www.grammarly.com/",
-"badge": "popular",
-"useCases": ["writing", "emails", "documents", "academic", "business"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Grammarly - KI-Schreibassistent",
-"en": "Grammarly - AI Writing Assistant"
-},
-"seoDesc": {
-"de": "Grammarly verbessert Schreiben mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-"en": "Grammarly improves writing with grammar check, tone analysis and plagiarism check."
-},
-"alternatives": ["quillbot", "wordtune", "prowritingaid"],
-"pros": {
-"de": ["Umfassende Grammatikprüfung", "Ton-Analyse", "Plagiatsprüfung", "Browser-Integration", "Team-Features"],
-"en": ["Comprehensive grammar check", "Tone analysis", "Plagiarism check", "Browser integration", "Team features"]
-},
-"cons": {
-"de": ["Teuer für Premium-Funktionen", "Manchmal übermäßige Korrekturen", "Datenschutzbedenken", "Performance-Impact"],
-"en": ["Expensive for premium features", "Sometimes excessive corrections", "Privacy concerns", "Performance impact"]
-},
-"pricing": {
-"de": "Kostenlos: Basis-Korrekturen, Premium: €12/Monat, Business: €15/Monat pro Benutzer",
-"en": "Free: basic corrections, Premium: $12/month, Business: $15/month per user"
+
+.lang-btn {
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
 }
-},
-{
-"id": "wordtune",
-"numericId": 40,
-"name": "Wordtune",
-"category": "text",
-"aiScore": 86,
-"popularityScore": 84,
-"quickPeek": {
-"de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
-"en": "AI for better writing by rewriting and tone adjustment."
-},
-"features": ["Rewrite", "Tone", "Summarize", "Spices", "Translation"],
-"tags": ["text", "rewriting", "tone", "summarization", "writing", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
-"en": "AI for better writing by rewriting and tone adjustment."
-},
-"link": "https://www.wordtune.com/",
-"badge": "popular",
-"useCases": ["writing", "emails", "creative", "academic", "business"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Wordtune - KI für besseres Schreiben",
-"en": "Wordtune - AI for Better Writing"
-},
-"seoDesc": {
-"de": "Wordtune verbessert Schreiben durch Umschreiben, Ton-Anpassung und Zusammenfassung.",
-"en": "Wordtune improves writing by rewriting, tone adjustment and summarization."
-},
-"alternatives": ["quillbot", "grammarly", "chatgpt"],
-"pros": {
-"de": ["Umschreibungsfunktionen", "Ton-Anpassung", "Zusammenfassung", "Kreative Vorschläge", "Browser-Erweiterung"],
-"en": ["Rewriting features", "Tone adjustment", "Summarization", "Creative suggestions", "Browser extension"]
-},
-"cons": {
-"de": ["Begrenzte kostenlose Version", "Weniger umfassend als Grammarly", "Teilweise unnatürliche Ergebnisse", "Teuer"],
-"en": ["Limited free version", "Less comprehensive than Grammarly", "Sometimes unnatural results", "Expensive"]
-},
-"pricing": {
-"de": "Kostenlos: 10 Umschreibungen/Tag, Plus: €10/Monat, Unlimited: €15/Monat",
-"en": "Free: 10 rewrites/day, Plus: $10/month, Unlimited: $15/month"
+
+.lang-btn:hover {
+  background: rgba(26, 31, 46, 0.8);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
 }
-},
-{
-"id": "rytr",
-"numericId": 41,
-"name": "Rytr",
-"category": "text",
-"aiScore": 84,
-"popularityScore": 82,
-"quickPeek": {
-"de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-"en": "Affordable AI writer with templates and SEO features."
-},
-"features": ["Templates", "Languages", "SEO", "Plagiarism Check", "Image Generation"],
-"tags": ["text", "writing", "templates", "seo", "affordable", "free", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €9/Monat",
-"en": "from $9/month"
-},
-"rating": 4.2,
-"description": {
-"de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-"en": "Affordable AI writer with templates and SEO features."
-},
-"link": "https://rytr.me/",
-"badge": "free",
-"useCases": ["copywriting", "blogging", "social", "emails", "seo"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Rytr - Kostengünstiger KI-Writer",
-"en": "Rytr - Affordable AI Writer"
-},
-"seoDesc": {
-"de": "Rytr ist ein kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-"en": "Rytr is an affordable AI writer with templates and SEO features."
-},
-"alternatives": ["jasper", "writesonic", "copy-ai"],
-"pros": {
-"de": ["Kostengünstig", "Viele Vorlagen", "SEO-Funktionen", "Kostenlose Version", "Mehrsprachig"],
-"en": ["Affordable", "Many templates", "SEO features", "Free version", "Multilingual"]
-},
-"cons": {
-"de": ["Begrenzte Kreativität", "Einfachere Ergebnisse", "Qualität variiert", "Weniger Features als Konkurrenz"],
-"en": ["Limited creativity", "Simpler results", "Quality varies", "Fewer features than competitors"]
-},
-"pricing": {
-"de": "Kostenlos: 10.000 Zeichen/Monat, Saver: €9/Monat, Unlimited: €29/Monat",
-"en": "Free: 10,000 characters/month, Saver: $9/month, Unlimited: $29/month"
+
+/* ===== TOP 5 BAR ===== */
+.top5-bar {
+  background: rgba(20, 24, 36, 0.6);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 20px auto;
+  max-width: 1400px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: slideInUp 0.6s ease-out;
 }
-},
-{
-"id": "writesonic",
-"numericId": 42,
-"name": "Writesonic",
-"category": "text",
-"aiScore": 86,
-"popularityScore": 83,
-"quickPeek": {
-"de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
-"en": "AI for marketing content with SEO and image generation."
-},
-"features": ["Templates", "SEO", "Images", "Chatsonic", "Article Writer"],
-"tags": ["text", "marketing", "seo", "images", "chat", "popular", "freemium", "lifetime-deal"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €13/Monat",
-"en": "from $13/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
-"en": "AI for marketing content with SEO and image generation."
-},
-"link": "https://writesonic.com/",
-"badge": "popular",
-"useCases": ["copywriting", "ads", "landing-pages", "seo", "blogging"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "Writesonic - KI für Marketing-Content",
-"en": "Writesonic - AI for Marketing Content"
-},
-"seoDesc": {
-"de": "Writesonic erstellt Marketing-Content mit KI, inklusive SEO und Bilder.",
-"en": "Writesonic creates marketing content with AI, including SEO and images."
-},
-"alternatives": ["jasper", "copy-ai", "rytr"],
-"pros": {
-"de": ["Marketing-fokussiert", "SEO-Tools", "Bildgenerierung", "Chatsonic (ChatGPT Alternative)", "Kostenlose Version"],
-"en": ["Marketing-focused", "SEO tools", "Image generation", "Chatsonic (ChatGPT alternative)", "Free version"]
-},
-"cons": {
-"de": ["Qualität variiert", "Teilweise repetitive Inhalte", "Teuer für hohe Volumen", "Lernkurve"],
-"en": ["Quality varies", "Sometimes repetitive content", "Expensive for high volume", "Learning curve"]
-},
-"pricing": {
-"de": "Kostenlos: 10.000 Wörter/Monat, Pro: €13/Monat, Enterprise: auf Anfrage",
-"en": "Free: 10,000 words/month, Pro: $13/month, Enterprise: custom pricing"
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-},
-{
-"id": "copy",
-"numericId": 43,
-"name": "Copy.ai",
-"category": "text",
-"aiScore": 86,
-"popularityScore": 84,
-"quickPeek": {
-"de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
-"en": "AI copywriting platform with workflows and brand customization."
-},
-"features": ["Workflows", "Brand", "Collaboration", "Templates", "Content Calendar"],
-"tags": ["text", "copywriting", "workflows", "brand", "collaboration", "popular", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €49/Monat",
-"en": "from $49/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
-"en": "AI copywriting platform with workflows and brand customization."
-},
-"link": "https://www.copy.ai/",
-"badge": "popular",
-"useCases": ["marketing", "sales", "social", "email", "content-strategy"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Copy.ai - KI-Copywriting-Plattform",
-"en": "Copy.ai - AI Copywriting Platform"
-},
-"seoDesc": {
-"de": "Copy.ai ist eine KI-Plattform für Copywriting mit Workflows und Markenanpassung.",
-"en": "Copy.ai is an AI platform for copywriting with workflows and brand customization."
-},
-"alternatives": ["jasper", "writesonic", "rytr"],
-"pros": {
-"de": ["Workflow-Optimierung", "Markenanpassung", "Kollaboration", "Inhaltskalender", "Team-Features"],
-"en": ["Workflow optimization", "Brand customization", "Collaboration", "Content calendar", "Team features"]
-},
-"cons": {
-"de": ["Teuer für Einzelpersonen", "Ähnlich wie andere Tools", "Begrenzte kreative Freiheit", "Steile Lernkurve"],
-"en": ["Expensive for individuals", "Similar to other tools", "Limited creative freedom", "Steep learning curve"]
-},
-"pricing": {
-"de": "Kostenlose Testversion, Pro: €49/Monat, Team: €249/Monat, Enterprise: auf Anfrage",
-"en": "Free trial, Pro: $49/month, Team: $249/month, Enterprise: custom pricing"
+
+.top5-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-},
-{
-"id": "surfer",
-"numericId": 44,
-"name": "Surfer SEO",
-"category": "business",
-"aiScore": 88,
-"popularityScore": 85,
-"quickPeek": {
-"de": "KI für SEO-Content mit Forschung und Optimierung.",
-"en": "AI for SEO content with research and optimization."
-},
-"features": ["SEO", "Research", "Optimization", "Content Editor", "Keyword Research"],
-"tags": ["business", "seo", "research", "optimization", "keyword", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "ab €59/Monat",
-"en": "from $59/month"
-},
-"rating": 4.4,
-"description": {
-"de": "KI für SEO-Content mit Forschung und Optimierung.",
-"en": "AI for SEO content with research and optimization."
-},
-"link": "https://surferseo.com/",
-"badge": "popular",
-"useCases": ["seo", "content", "blogging", "keyword-research", "competitor-analysis"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Surfer SEO - KI für SEO-Content",
-"en": "Surfer SEO - AI for SEO Content"
-},
-"seoDesc": {
-"de": "Surfer SEO optimiert Content für Suchmaschinen mit KI und Forschung.",
-"en": "Surfer SEO optimizes content for search engines with AI and research."
-},
-"alternatives": ["marketmuse", "clearscope", "frase"],
-"pros": {
-"de": ["SEO-Optimierung", "Forschungstools", "Content-Optimierung", "Keyword-Analyse", "Konkurrenzanalyse"],
-"en": ["SEO optimization", "Research tools", "Content optimization", "Keyword analysis", "Competitor analysis"]
-},
-"cons": {
-"de": ["Teuer", "Spezifisch für SEO", "Lernkurve", "Keine allgemeine Schreibhilfe"],
-"en": ["Expensive", "Specific to SEO", "Learning curve", "No general writing help"]
-},
-"pricing": {
-"de": "Basic: €59/Monat, Pro: €119/Monat, Business: €239/Monat",
-"en": "Basic: $59/month, Pro: $119/month, Business: $239/month"
+
+.top5-header i {
+  color: var(--primary);
+  font-size: 0.9rem;
 }
-},
-{
-"id": "jasper-art",
-"numericId": 45,
-"name": "Jasper Art",
-"category": "image",
-"aiScore": 84,
-"popularityScore": 82,
-"quickPeek": {
-"de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
-"en": "Image generation for brands with customization and commercial use."
-},
-"features": ["Brand", "Styles", "Commercial", "Templates", "Customization"],
-"tags": ["image", "brand", "commercial", "templates", "jasper", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "€20/Monat",
-"en": "$20/month"
-},
-"rating": 4.2,
-"description": {
-"de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
-"en": "Image generation for brands with customization and commercial use."
-},
-"link": "https://www.jasper.ai/art",
-"badge": "popular",
-"useCases": ["marketing", "ads", "branding", "social-media", "product-images"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Jasper Art - Bildgenerierung für Marken",
-"en": "Jasper Art - Image Generation for Brands"
-},
-"seoDesc": {
-"de": "Jasper Art generiert Bilder für Marken mit Anpassung und kommerzieller Nutzung.",
-"en": "Jasper Art generates images for brands with customization and commercial use."
-},
-"alternatives": ["midjourney", "dalle-3", "firefly"],
-"pros": {
-"de": ["Markenfokussiert", "Stil-Anpassung", "Kommerzielle Nutzung", "Jasper-Integration", "Einfache Bedienung"],
-"en": ["Brand-focused", "Style customization", "Commercial use", "Jasper integration", "Easy to use"]
-},
-"cons": {
-"de": ["Teuer", "Begrenzte Kreativität", "Weniger Kontrolle als Midjourney", "Nur mit Jasper verfügbar"],
-"en": ["Expensive", "Limited creativity", "Less control than Midjourney", "Only available with Jasper"]
-},
-"pricing": {
-"de": "€20/Monat (Teil von Jasper Creator-Plan oder höher)",
-"en": "$20/month (Part of Jasper Creator plan or higher)"
+
+.top5-header span {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
 }
-},
-{
-"id": "photosonic",
-"numericId": 46,
-"name": "Photosonic",
-"category": "image",
-"aiScore": 82,
-"popularityScore": 80,
-"quickPeek": {
-"de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-"en": "Text-to-image generator by Writesonic with artistic styles."
-},
-"features": ["Art", "Styles", "Custom", "Upscaling", "Editing"],
-"tags": ["image", "text-to-image", "artistic", "writesonic", "free", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €10/Monat",
-"en": "from $10/month"
-},
-"rating": 4.1,
-"description": {
-"de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-"en": "Text-to-image generator by Writesonic with artistic styles."
-},
-"link": "https://photosonic.writesonic.com/",
-"badge": "free",
-"useCases": ["art", "design", "social", "blogging", "personal"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "Photosonic - Text-zu-Bild Generator",
-"en": "Photosonic - Text-to-Image Generator"
-},
-"seoDesc": {
-"de": "Photosonic ist ein Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-"en": "Photosonic is a text-to-image generator by Writesonic with artistic styles."
-},
-"alternatives": ["midjourney", "playground", "nightcafe"],
-"pros": {
-"de": ["Künstlerische Stile", "Anpassbare Generierung", "Kostenlose Nutzung", "Writesonic-Integration", "Einfache Bedienung"],
-"en": ["Artistic styles", "Customizable generation", "Free to use", "Writesonic integration", "Easy to use"]
-},
-"cons": {
-"de": ["Begrenzte Qualität", "Weniger bekannt", "Wasserzeichen im Free-Tier", "Langsame Generierung"],
-"en": ["Limited quality", "Less known", "Watermarks in free tier", "Slow generation"]
-},
-"pricing": {
-"de": "Kostenlos: 10 Bilder, Premium: €10/Monat für 100 Bilder, Business: €25/Monat für 300 Bilder",
-"en": "Free: 10 images, Premium: $10/month for 100 images, Business: $25/month for 300 images"
+
+.top5-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
-},
-{
-"id": "nightcafe",
-"numericId": 47,
-"name": "NightCafe",
-"category": "image",
-"aiScore": 86,
-"popularityScore": 81,
-"quickPeek": {
-"de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-"en": "AI art generator with community and various styles."
-},
-"features": ["Art", "Styles", "Community", "Challenges", "Printing"],
-"tags": ["image", "art", "community", "challenges", "printing", "free", "freemium", "lifetime-deal"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €6/Monat",
-"en": "from $6/month"
-},
-"rating": 4.3,
-"description": {
-"de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-"en": "AI art generator with community and various styles."
-},
-"link": "https://creator.nightcafe.studio/",
-"badge": "free",
-"useCases": ["art", "creativity", "prints", "community", "experimentation"],
-"votes": 0,
-"hasLifetimeDeal": true,
-"seoTitle": {
-"de": "NightCafe - KI-Kunstgenerator",
-"en": "NightCafe - AI Art Generator"
-},
-"seoDesc": {
-"de": "NightCafe ist ein KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-"en": "NightCafe is an AI art generator with community and various styles."
-},
-"alternatives": ["midjourney", "playground", "dreamstudio"],
-"pros": {
-"de": ["Kunst-fokussiert", "Community", "Verschiedene Stile", "Kostenlose Credits täglich", "Kunstwettbewerbe"],
-"en": ["Art-focused", "Community", "Various styles", "Free daily credits", "Art challenges"]
-},
-"cons": {
-"de": ["Langsame Generierung", "Begrenzte kostenlose Credits", "Weniger Qualität als Midjourney", "Wasserzeichen"],
-"en": ["Slow generation", "Limited free credits", "Less quality than Midjourney", "Watermarks"]
-},
-"pricing": {
-"de": "Kostenlos: 5 Credits/Tag, AI Beginner: €6/Monat, AI Hobbyist: €10/Monat, AI Enthusiast: €20/Monat",
-"en": "Free: 5 credits/day, AI Beginner: $6/month, AI Hobbyist: $10/month, AI Enthusiast: $20/month"
+
+.top5-list::-webkit-scrollbar {
+  height: 4px;
 }
-},
-{
-"id": "dreamstudio",
-"numericId": 48,
-"name": "DreamStudio",
-"category": "image",
-"aiScore": 88,
-"popularityScore": 83,
-"quickPeek": {
-"de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-"en": "Official web UI for Stable Diffusion with SDXL and control features."
-},
-"features": ["SDXL", "Control", "Custom", "API", "Upscaling"],
-"tags": ["image", "stable-diffusion", "sdxl", "control", "api", "popular", "paid"],
-"rankingHistory": [],
-"price": "paid",
-"priceDisplay": {
-"de": "€10/Credits",
-"en": "$10/credits"
-},
-"rating": 4.4,
-"description": {
-"de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-"en": "Official web UI for Stable Diffusion with SDXL and control features."
-},
-"link": "https://dreamstudio.ai/",
-"badge": "popular",
-"useCases": ["art", "design", "prototyping", "commercial", "research"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "DreamStudio - Stable Diffusion Web UI",
-"en": "DreamStudio - Stable Diffusion Web UI"
-},
-"seoDesc": {
-"de": "DreamStudio ist die offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-"en": "DreamStudio is the official web UI for Stable Diffusion with SDXL and control features."
-},
-"alternatives": ["midjourney", "leonardo", "playground"],
-"pros": {
-"de": ["Offizielle Stable Diffusion UI", "SDXL Unterstützung", "Kontrollfunktionen", "API verfügbar", "Hohe Qualität"],
-"en": ["Official Stable Diffusion UI", "SDXL support", "Control features", "API available", "High quality"]
-},
-"cons": {
-"de": ["Kredit-basiertes System", "Teuer für viele Bilder", "Keine kostenlose Version", "Technische Lernkurve"],
-"en": ["Credit-based system", "Expensive for many images", "No free version", "Technical learning curve"]
-},
-"pricing": {
-"de": "€10 für 1000 Credits (Pay-as-you-go), Enterprise-Preise auf Anfrage",
-"en": "$10 for 1000 credits (pay-as-you-go), enterprise pricing available"
+
+.top5-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
 }
-},
-{
-"id": "bluewillow",
-"numericId": 49,
-"name": "BlueWillow",
-"category": "image",
-"aiScore": 84,
-"popularityScore": 80,
-"quickPeek": {
-"de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-"en": "AI image generation via Discord with community and fast generation."
-},
-"features": ["Community", "Styles", "Fast", "Discord", "Templates"],
-"tags": ["image", "discord", "community", "fast", "templates", "free", "freemium"],
-"rankingHistory": [],
-"price": "freemium",
-"priceDisplay": {
-"de": "ab €5/Monat",
-"en": "from $5/month"
-},
-"rating": 4.2,
-"description": {
-"de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-"en": "AI image generation via Discord with community and fast generation."
-},
-"link": "https://www.bluewillow.ai/",
-"badge": "free",
-"useCases": ["art", "social", "design", "fun", "community"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "BlueWillow - KI-Bildgenerierung auf Discord",
-"en": "BlueWillow - AI Image Generation on Discord"
-},
-"seoDesc": {
-"de": "BlueWillow bietet KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-"en": "BlueWillow offers AI image generation via Discord with community and fast generation."
-},
-"alternatives": ["midjourney", "playground", "nightcafe"],
-"pros": {
-"de": ["Discord-basiert", "Community", "Schnelle Generierung", "Kostenlose Version", "Einfache Bedienung"],
-"en": ["Discord-based", "Community", "Fast generation", "Free version", "Easy to use"]
-},
-"cons": {
-"de": ["Nur über Discord", "Begrenzte Kontrolle", "Weniger Qualität als Midjourney", "Wasserzeichen"],
-"en": ["Only via Discord", "Limited control", "Less quality than Midjourney", "Watermarks"]
-},
-"pricing": {
-"de": "Kostenlos: 10 Bilder/Tag, Basic: €5/Monat, Pro: €10/Monat, Premium: €25/Monat",
-"en": "Free: 10 images/day, Basic: $5/month, Pro: $10/month, Premium: $25/month"
+
+.top5-list::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 2px;
 }
-},
-{
-"id": "deepdream",
-"numericId": 50,
-"name": "DeepDream",
-"category": "image",
-"aiScore": 80,
-"popularityScore": 78,
-"quickPeek": {
-"de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-"en": "Early AI image generator with neural networks and experimental styles."
-},
-"features": ["Neural", "Art", "Experimental", "Style Transfer", "Customization"],
-"tags": ["image", "neural", "experimental", "style-transfer", "historic", "free", "open-source"],
-"rankingHistory": [],
-"price": "free",
-"priceDisplay": {
-"de": "Kostenlos",
-"en": "Free"
-},
-"rating": 4.0,
-"description": {
-"de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-"en": "Early AI image generator with neural networks and experimental styles."
-},
-"link": "https://deepdreamgenerator.com/",
-"badge": "free",
-"useCases": ["art", "experimental", "fun", "education", "style-transfer"],
-"votes": 0,
-"hasLifetimeDeal": false,
-"seoTitle": {
-"de": "DeepDream - Früher KI-Bildgenerator",
-"en": "DeepDream - Early AI Image Generator"
-},
-"seoDesc": {
-"de": "DeepDream ist ein früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-"en": "DeepDream is an early AI image generator with neural networks and experimental styles."
-},
-"alternatives": ["midjourney", "nightcafe", "playground"],
-"pros": {
-"de": ["Kostenlos", "Experimentelle Stile", "Neurales Netzwerk-basiert", "Open-Source", "Historische Bedeutung"],
-"en": ["Free", "Experimental styles", "Neural network-based", "Open-source", "Historical significance"]
-},
-"cons": {
-"de": ["Veraltete Technologie", "Begrenzte praktische Anwendung", "Niedrige Qualität", "Langsam"],
-"en": ["Outdated technology", "Limited practical application", "Low quality", "Slow"]
-},
-"pricing": {
-"de": "Komplett kostenlos, Premium-Optionen für erweiterte Features verfügbar",
-"en": "Completely free, premium options for advanced features available"
+
+.top5-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(26, 31, 46, 0.5);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: var(--transition);
+  min-width: 180px;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
 }
+
+.top5-item:hover {
+  background: rgba(26, 31, 46, 0.8);
+  border-color: rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
 }
-]
+
+.top5-rank {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--primary);
+  width: 18px;
+  text-align: center;
+}
+
+.top5-icon {
+  font-size: 0.9rem;
+  width: 20px;
+  text-align: center;
+}
+
+.top5-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.top5-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top5-category {
+  font-size: 0.65rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.top5-votes {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  background: rgba(0, 212, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+  min-width: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.top5-votes.changed {
+  animation: pulseGlow 0.6s ease;
+}
+
+.top5-quickpeek {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .top5-quickpeek {
+    display: block;
+  }
+}
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin: 0 auto 20px;
+  max-width: 1400px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.filter-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-color: transparent;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  padding: 20px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 80px;
+}
+
+/* ===== GROUPED TOOL LIST ===== */
+.tool-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tool-group {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.tool-group:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.group-header {
+  padding: 16px 20px;
+  background: rgba(26, 31, 46, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition);
+  height: var(--group-header-height);
+}
+
+.group-header:hover {
+  background: rgba(26, 31, 46, 0.8);
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: calc(1rem * var(--current-density));
+  color: var(--text-primary);
+}
+
+.group-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.group-count {
+  color: var(--text-muted);
+  font-size: calc(0.8rem * var(--current-density));
+  margin-left: 8px;
+}
+
+.group-toggle {
+  color: var(--text-secondary);
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.group-toggle i {
+  transition: transform 0.3s ease;
+}
+
+.group-toggle.expanded i {
+  transform: rotate(180deg);
+}
+
+.group-content {
+  max-height: calc(var(--tool-row-height) * 2);
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.group-content.expanded {
+  max-height: 2000px;
+}
+
+.tool-row {
+  height: var(--tool-row-height);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.tool-row:last-child {
+  border-bottom: none;
+}
+
+.tool-row:hover {
+  background: var(--bg-hover);
+}
+
+.tool-row:hover .tool-peek {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.tool-vote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+  padding-right: 15px;
+}
+
+.vote-count {
+  font-weight: 800;
+  font-size: calc(1.1rem * var(--current-density));
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.vote-count.moving-up {
+  color: var(--success);
+  animation: countUp 0.5s ease;
+}
+
+.vote-count.moving-down {
+  color: var(--error);
+  animation: countDown 0.5s ease;
+}
+
+.vote-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.vote-btn-row {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 6px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.vote-btn-row:hover {
+  transform: translateY(-2px);
+}
+
+.vote-btn-row.up {
+  color: var(--success);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn-row.up:hover,
+.vote-btn-row.up.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--success);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.vote-btn-row.down {
+  color: var(--error);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.vote-btn-row.down:hover,
+.vote-btn-row.down.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--error);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.tool-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  padding-right: 20px;
+}
+
+.tool-name {
+  font-weight: 700;
+  font-size: calc(1rem * var(--current-density));
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-category {
+  font-size: calc(0.7rem * var(--current-density));
+  color: var(--primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-desc {
+  font-size: calc(0.85rem * var(--current-density));
+  color: var(--text-secondary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tool-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.tool-price {
+  font-size: calc(0.9rem * var(--current-density));
+  color: var(--success);
+  font-weight: 700;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.tool-action-btn {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 8px;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.tool-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tool-action-btn.favorite:hover,
+.tool-action-btn.favorite.active {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.tool-action-btn.compare:hover,
+.tool-action-btn.compare.active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.tool-action-btn.open:hover {
+  color: var(--success);
+  border-color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.show-more {
+  padding: 12px 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: calc(0.85rem * var(--current-density));
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.show-more:hover {
+  background: rgba(0, 212, 255, 0.05);
+}
+
+/* ===== TOOL PEEK (HOVER PREVIEW) ===== */
+.tool-peek {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  width: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-hover);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-left: 20px;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.tool-peek::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: var(--border);
+}
+
+.tool-peek::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-right-color: var(--bg-card);
+  margin-right: -1px;
+}
+
+.peek-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.peek-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.peek-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.peek-category {
+  font-size: 0.7rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.peek-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.peek-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.peek-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.peek-badge.price {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.peek-badge.rating {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.peek-badge.ltd {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  border: none;
+}
+
+/* ===== DRAWER (RIGHT SIDEBAR) ===== */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--drawer-width);
+  height: 100%;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  z-index: 2001;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.active {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.drawer-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.drawer-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* ===== FLOATING BUTTONS ===== */
+.floating-favorites-btn {
+  position: fixed;
+  left: 16px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: var(--transition);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(0, 212, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+  }
+}
+
+.floating-favorites-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3);
+}
+
+.floating-favorites-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--error);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.back-to-top.visible {
+  display: flex;
+}
+
+.back-to-top:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ===== FAVORITES OVERLAY ===== */
+.favorites-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1900;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.favorites-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.favorites-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  z-index: 1901;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.favorites-drawer.active {
+  transform: translateY(0);
+}
+
+.favorites-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.favorites-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.favorites-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.favorites-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.favorites-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.dock-section {
+  margin-bottom: 24px;
+}
+
+.dock-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.dock-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dock-item {
+  width: 60px;
+  height: 60px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.dock-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.dock-item-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: var(--error);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border: 2px solid var(--bg-card);
+}
+
+.dock-item:hover .dock-item-remove {
+  opacity: 1;
+}
+
+.dock-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.dock-action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  flex: 1;
+}
+
+.dock-action-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.dock-action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.dock-action-btn.secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.dock-action-btn.secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: rgba(10, 14, 23, 0.8);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.density-toggle {
+  display: flex;
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px;
+  gap: 4px;
+}
+
+.density-btn {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+}
+
+.density-btn:hover {
+  color: var(--primary);
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.density-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* ===== COOKIE CONSENT ===== */
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  z-index: 9999;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cookie-consent.active {
+  transform: translateY(0);
+}
+
+.cookie-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.cookie-text {
+  flex: 1;
+  min-width: 300px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.cookie-text a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.cookie-text a:hover {
+  text-decoration: underline;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cookie-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  min-width: 120px;
+}
+
+.cookie-btn.accept {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.cookie-btn.accept:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.cookie-btn.decline {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.cookie-btn.decline:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
+/* ===== IMPRINT & PRIVACY MODALS ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 3000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  z-index: 3001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.modal-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.modal-content h3 {
+  color: var(--text-primary);
+  margin: 20px 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.modal-content p {
+  margin-bottom: 15px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes countUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes countDown {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 212, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+}
+
+/* ===== LOADING ===== */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--primary);
+  display: none;
+}
+
+.loading i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  :root {
+    --drawer-width: 450px;
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --drawer-width: 400px;
+  }
+  
+  .sticky-header {
+    height: var(--header-height);
+    padding: 0 15px;
+  }
+  
+  .hero-area {
+    height: 260px;
+    padding: 0 15px;
+  }
+  
+  .hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero-search-container {
+    max-width: 500px;
+  }
+  
+  .site-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --drawer-width: 100%;
+    --header-height: 60px;
+    --hero-height: 240px;
+  }
+  
+  .main-content {
+    padding: 15px;
+  }
+  
+  .tool-row {
+    grid-template-columns: 1fr;
+    height: auto;
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .tool-vote {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: 0;
+  }
+  
+  .tool-meta {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .cookie-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cookie-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .cookie-btn {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .tool-peek {
+    display: none;
+  }
+  
+  .floating-favorites-btn {
+    bottom: 80px;
+  }
+  
+  .back-to-top {
+    bottom: 80px;
+  }
+  
+  .hero-area {
+    height: 220px;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  
+  .hero-title::after {
+    font-size: 1.5rem;
+    right: -35px;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .search-examples {
+    gap: 12px;
+  }
+  
+  .search-example {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+  }
+  
+  .footer-controls {
+    gap: 12px;
+  }
+  
+  .site-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-chips {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+  
+  .top5-list {
+    gap: 6px;
+  }
+  
+  .top5-item {
+    min-width: 140px;
+    padding: 6px 8px;
+  }
+  
+  .top5-quickpeek {
+    display: none;
+  }
+  
+  .hero-area {
+    height: 200px;
+  }
+  
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-title::after {
+    font-size: 1.3rem;
+    right: -30px;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+  
+  .hero-omnibox-input {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .search-examples {
+    gap: 8px;
+  }
+  
+  .search-example {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .site-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}
+
+/* ===== NOTIFICATIONS ===== */
+.notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 9999;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.notification.success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.notification.error {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.notification.info {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.notification-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1rem;
+}
+</style>
+</head>
+<body class="density-compact">
+
+<!-- Futuristic Glow Effects -->
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
+
+<!-- Cookie Consent -->
+<div class="cookie-consent" id="cookieConsent">
+  <div class="cookie-content">
+    <div class="cookie-text">
+      Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und anonyme Statistiken zu erstellen. 
+      <a href="#" id="privacyLinkCookie">Datenschutz</a>
+    </div>
+    <div class="cookie-buttons">
+      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
+      <button class="cookie-btn accept" id="cookieAccept">Akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sticky Smart Header -->
+<header class="sticky-header">
+  <div class="site-title">AI Searcher</div>
+  <div class="header-right">
+    <button class="lang-btn" id="langToggle">
+      <i class="fas fa-globe"></i>
+      <span id="langText">EN</span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero Area -->
+<div class="hero-area">
+  <h1 class="hero-title">AI Searcher</h1>
+  <div class="hero-subtitle" id="heroSubtitle">
+    Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.
+  </div>
+  
+  <div class="hero-search-container">
+    <div class="hero-omnibox">
+      <input 
+        type="text" 
+        class="hero-omnibox-input" 
+        id="omniboxInput"
+        placeholder="Ich suche nach..."
+        data-placeholder-de="Ich suche nach..."
+        data-placeholder-en="I'm looking for..."
+      >
+    </div>
+  </div>
+  
+  <div class="search-hint-grid">
+    <div class="search-hint-text" id="searchHintText">
+      Suche nach Toolnamen, Use-Cases oder Features
+    </div>
+    <div class="search-examples">
+      <div class="search-example">Text</div>
+      <div class="search-example">Bilder</div>
+      <div class="search-example">Stimme</div>
+      <div class="search-example">Code</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Top 5 Bar -->
+  <div class="top5-bar" id="top5Bar">
+    <div class="top5-header">
+      <i class="fas fa-trophy"></i>
+      <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
+    </div>
+    <div class="top5-list" id="top5List">
+      <!-- Dynamic top 5 items -->
+    </div>
+  </div>
+  
+  <!-- Filter Chips -->
+  <div class="filter-chips" id="filterChips">
+    <!-- Dynamic filter chips -->
+  </div>
+  
+  <!-- Grouped Tool List -->
+  <section class="tool-groups" id="toolGroups">
+    <!-- Dynamic tool groups -->
+  </section>
+  
+  <!-- Loading Indicator -->
+  <div class="loading" id="loading">
+    <i class="fas fa-circle-notch"></i>
+    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-controls">
+    <div class="density-toggle">
+      <button class="density-btn active" data-density="cozy">Cozy</button>
+      <button class="density-btn" data-density="compact">Compact</button>
+      <button class="density-btn" data-density="future">Future</button>
+    </div>
+  </div>
+  
+  <div class="footer-links">
+    <a href="#" id="imprintLink">Impressum</a>
+    <a href="#" id="privacyLink">Datenschutz</a>
+  </div>
+  <div class="footer-copyright">
+    © 2026 AI Searcher. Alle Rechte vorbehalten.
+  </div>
+</footer>
+
+<!-- Drawer for Detail View -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2 class="drawer-title" id="drawerTitle">Tool Details</h2>
+    <button class="drawer-close" id="drawerClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="drawer-content" id="drawerContent">
+    <!-- Dynamic drawer content -->
+  </div>
+</div>
+
+<!-- Favorites Overlay -->
+<div class="favorites-overlay" id="favoritesOverlay"></div>
+<div class="favorites-drawer" id="favoritesDrawer">
+  <div class="favorites-header">
+    <h2 class="favorites-title" data-de="Favoriten & Vergleich" data-en="Favorites & Compare">Favoriten & Vergleich</h2>
+    <button class="favorites-close" id="favoritesClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="favorites-content">
+    <div class="dock-section">
+      <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
+      <div class="dock-items" id="favoriteDock">
+        <!-- Dynamic favorite items -->
+      </div>
+    </div>
+    
+    <div class="dock-section">
+      <div class="dock-label" data-de="Vergleich" data-en="Compare">Vergleich</div>
+      <div class="dock-items" id="compareDock">
+        <!-- Dynamic compare items -->
+      </div>
+    </div>
+    
+    <div class="dock-actions">
+      <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
+      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Buttons -->
+<button class="floating-favorites-btn" id="floatingFavoritesBtn" aria-label="Favoriten anzeigen">
+  <i class="fas fa-star"></i>
+  <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
+</button>
+
+<button class="back-to-top" id="backToTop" aria-label="Nach oben">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- Modals -->
+<div class="modal-overlay" id="imprintModalOverlay"></div>
+<div class="modal" id="imprintModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Impressum</h2>
+    <button class="modal-close" id="imprintModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>Max Mustermann<br>
+    Musterstraße 123<br>
+    12345 Musterstadt</p>
+    
+    <h3>Kontakt</h3>
+    <p>Telefon: +49 (0) 123 456789<br>
+    E-Mail: info@ai-finder.example</p>
+    
+    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+    <p>Max Mustermann<br>
+    Musterstraße 123<br>
+    12345 Musterstadt</p>
+    
+    <h3>Haftungsausschluss</h3>
+    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="privacyModalOverlay"></div>
+<div class="modal" id="privacyModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Datenschutz</h2>
+    <button class="modal-close" id="privacyModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <h3>Datenschutzerklärung</h3>
+    <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
+    
+    <h3>Cookies</h3>
+    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwende Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
+    
+    <h3>Google Analytics</h3>
+    <p>Diese Website nutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet „Cookies", die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
+    
+    <h3>Ihre Rechte</h3>
+    <p>Ihnen stehen grundsätzlich die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerruf und Widerspruch zu. Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren.</p>
+  </div>
+</div>
+
+<script>
+// ===== GLOBALE VARIABLEN =====
+let aiTools = [];
+let currentLang = 'de';
+let currentCategory = 'all';
+let currentPriceFilter = 'all';
+let currentSort = 'votes';
+let searchQuery = '';
+let hoverTimeout = null;
+let peekElement = null;
+let isDrawerOpen = false;
+let supabaseRealtimeSubscription = null;
+let top5Tools = [];
+let pollInterval = null;
+let activeFilterId = null;
+
+// ===== BASELINE VOTES =====
+const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
+
+// ===== HELPER FUNCTIONS =====
+function safeNumber(val) {
+  const n = Number(val);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function getRawVotes(tool) {
+  return safeNumber(tool?.votes ?? tool?.total_votes ?? 0);
+}
+
+function getDisplayVotes(tool) {
+  return Math.max(getRawVotes(tool), 0);
+}
+
+// ===== SUPABASE CLIENT ÜBERPRÜFEN =====
+if (typeof window.supabase === 'undefined' && typeof window.supabaseClient !== 'undefined') {
+  window.supabase = window.supabaseClient;
+}
+
+if (typeof window.supabase === 'undefined') {
+  console.log('Supabase Client neu initialisieren...');
+  const supabaseUrl = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+  const supabaseKey = 'sb_publishable_AbUAk0m1UhAEQtz9GL2Aww_3wd_NfZx';
+  window.supabase = window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+}
+
+console.log('Supabase Client verfügbar?', typeof window.supabase !== 'undefined');
+
+// ===== INITIALISIERUNG =====
+async function init() {
+  await loadAITools();
+  setupEventListeners();
+  renderFilterChips();
+  updateTop5Bar();
+  updateFloatingBadge();
+  checkCookieConsent();
+  setupSupabaseRealtime();
+  startPolling();
+}
+
+// ===== DATEN LADEN =====
+async function loadAITools() {
+  try {
+    document.getElementById('loading').style.display = 'block';
+    
+    const response = await fetch('./data.json');
+    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+    aiTools = await response.json();
+    
+    await initializeUser();
+    await loadVotesFromSupabase();
+    
+    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    aiTools.forEach(tool => {
+      if (savedVotes[tool.id]) {
+        tool.userVote = savedVotes[tool.id].userVote ?? 0;
+      }
+    });
+    
+    addAIRecommendations();
+    renderToolGroups();
+    updateLanguage();
+    
+    document.getElementById('loading').style.display = 'none';
+  } catch (error) {
+    console.error('Fehler beim Laden:', error);
+    document.getElementById('loading').innerHTML = `
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>Fehler beim Laden. Bitte neu laden.</p>
+    `;
+  }
+}
+
+async function initializeUser() {
+  let userId = localStorage.getItem('aiUserId');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('aiUserId', userId);
+  }
+}
+
+async function loadVotesFromSupabase() {
+  try {
+    if (typeof window.supabase === 'undefined') return;
+    
+    const { data: votesData, error } = await window.supabase
+      .from('tool_votes')
+      .select('*');
+      
+    if (error) throw error;
+      
+    if (votesData) {
+      votesData.forEach(vote => {
+        const tool = aiTools.find(t => t.id === vote.tool_id);
+        if (tool) {
+          tool.votes = vote.total_votes ?? 0;
+          tool.upvotes = vote.upvotes ?? 0;
+          tool.downvotes = vote.downvotes ?? 0;
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error loading votes:', error);
+  }
+}
+
+// ===== AI EMPFEHLUNGEN =====
+function addAIRecommendations() {
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+      
+  aiTools.forEach(tool => {
+    let score = 0;
+    if (tool.rating >= 4.7) score += 3;
+    if (getRawVotes(tool) > 50) score += 2;
+    if (userHistory.includes(tool.category)) score += 2;
+    if (favorites.includes(tool.id)) score += 3;
+    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
+    if (tool.hasLifetimeDeal) score += 2;
+        
+    tool.aiScore = score;
+    tool.isAIRecommended = score >= 5;
+    tool.popularityScore = (tool.rating * 10) + getRawVotes(tool) + score;
+  });
+}
+
+// ===== TOP 5 BAR =====
+function updateTop5Bar() {
+  const sortedTools = [...aiTools]
+    .sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = getRawVotes(a) + BASELINE_VOTES;
+      const bVotesWithBaseline = getRawVotes(b) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
+    })
+    .slice(0, 5);
+  
+  top5Tools = sortedTools;
+  
+  const top5HTML = sortedTools.map((tool, index) => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const quickPeek = tool.quickPeek ? 
+      (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
+      (description.length > 60 ? description.substring(0, 60) + '...' : description);
+    
+    return `
+      <div class="top5-item" data-id="${tool.id}" 
+           onclick="openToolDrawer('${tool.id}')"
+           title="${tool.name}">
+        <div class="top5-rank">${index + 1}</div>
+        <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+        <div class="top5-info">
+          <div class="top5-name">${tool.name}</div>
+          <div class="top5-category">${getCategoryLabel(tool.category)}</div>
+        </div>
+        <div class="top5-votes" id="top5Votes-${tool.id}">${getDisplayVotes(tool)}</div>
+        <div class="top5-quickpeek">${quickPeek}</div>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('top5List').innerHTML = top5HTML;
+  updateLanguage();
+}
+
+function updateTop5VoteCount(toolId, newVotes) {
+  const voteElement = document.getElementById(`top5Votes-${toolId}`);
+  if (voteElement) {
+    const oldVotes = parseInt(voteElement.textContent);
+    const displayNewVotes = getDisplayVotes({ votes: newVotes });
+    if (displayNewVotes !== oldVotes) {
+      voteElement.textContent = displayNewVotes;
+      voteElement.classList.add('changed');
+      setTimeout(() => {
+        voteElement.classList.remove('changed');
+      }, 600);
+      
+      setTimeout(() => {
+        updateTop5Bar();
+      }, 100);
+    }
+  }
+}
+
+// ===== SUPABASE REALTIME =====
+function setupSupabaseRealtime() {
+  if (typeof window.supabase === 'undefined') return;
+  
+  try {
+    supabaseRealtimeSubscription = window.supabase
+      .channel('tool_votes_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'tool_votes' }, 
+        (payload) => {
+          console.log('Realtime vote payload:', payload);
+          handleVoteUpdate(payload);
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('Realtime subscription active');
+        } else {
+          console.log('Realtime subscription failed, falling back to polling');
+        }
+      });
+  } catch (error) {
+    console.error('Realtime subscription error:', error);
+  }
+}
+
+function handleVoteUpdate(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  const toolId = newRecord?.tool_id || oldRecord?.tool_id;
+  
+  if (!toolId) return;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (tool) {
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      tool.votes = safeNumber(newRecord?.total_votes);
+      tool.upvotes = safeNumber(newRecord?.upvotes);
+      tool.downvotes = safeNumber(newRecord?.downvotes);
+    } else if (eventType === 'DELETE') {
+      tool.votes = 0;
+      tool.upvotes = 0;
+      tool.downvotes = 0;
+    }
+    
+    updateTop5VoteCount(toolId, tool.votes);
+    updateToolRowVoteCount(toolId);
+  }
+}
+
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  
+  pollInterval = setInterval(async () => {
+    await loadVotesFromSupabase();
+    updateTop5Bar();
+    renderToolGroups();
+    updateFloatingBadge();
+  }, 30000);
+}
+
+function updateToolRowVoteCount(toolId) {
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (!voteCountElement) return;
+
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  voteCountElement.textContent = String(getDisplayVotes(tool));
+}
+
+// ===== GRUPPIERTE TOOL-LISTE (KORRIGIERT MIT BASELINE) =====
+function renderToolGroups() {
+  // Bestimme welche Kategorien angezeigt werden sollen
+  let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
+  
+  // Wenn ein Filter aktiv ist (außer 'all'), zeige nur diese Kategorie
+  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
+    categoriesToShow = [currentCategory];
+  }
+  
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  
+  const groupsHTML = categoriesToShow.map(category => {
+    // Filtere Tools nach Kategorie
+    let categoryTools = aiTools.filter(tool => tool.category === category);
+    
+    // Zusätzliche Filter für 'free' und 'ai'
+    if (currentCategory === 'free') {
+      categoryTools = categoryTools.filter(tool => tool.price === 'free');
+    } else if (currentCategory === 'ai') {
+      categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
+    }
+    
+    // Defensive Rendering: Leere Kategorie nicht ausblenden
+    if (categoryTools.length === 0) {
+      return `
+        <div class="tool-group" data-category="${category}">
+          <div class="group-header">
+            <div class="group-title">
+              <div class="group-icon">${getCategoryIcon(category)}</div>
+              <span>${getCategoryLabel(category)}</span>
+              <span class="group-count">0</span>
+            </div>
+          </div>
+          <div class="group-content expanded">
+            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Sortiere Tools nach votes MIT Baseline für Sortierung, ABER ohne Baseline für Anzeige
+    const sortedTools = [...categoryTools].sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = getRawVotes(a) + BASELINE_VOTES;
+      const bVotesWithBaseline = getRawVotes(b) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
+      // Bei gleichen Votes, sortiere nach Popularity Score
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
+    });
+    
+    const isExpanded = expandedGroups[category] || false;
+    
+    // Zeige alle Tools wenn ausgeklappt, sonst nur 2
+    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
+    
+    const groupHTML = displayTools.map(tool => {
+      const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+      const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
+          
+      return `
+        <div class="tool-row" data-id="${tool.id}" 
+             onmouseenter="showToolPeek(event, '${tool.id}')"
+             onmouseleave="hideToolPeek()"
+             onclick="openToolDrawer('${tool.id}')">
+          <div class="tool-vote" onclick="event.stopPropagation()">
+            <div class="vote-count" id="voteCount-${tool.id}">${getDisplayVotes(tool)}</div>
+            <div class="vote-buttons">
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+                <i class="fas fa-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="tool-info">
+            <div class="tool-category">${getCategoryLabel(tool.category)}</div>
+            <div class="tool-name">
+              ${tool.name}
+              ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
+            </div>
+            <div class="tool-desc">${description}</div>
+          </div>
+          
+          <div class="tool-meta" onclick="event.stopPropagation()">
+            <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
+            <div class="tool-actions">
+              <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+                <i class="fas fa-star"></i>
+              </button>
+              <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+                <i class="fas fa-balance-scale"></i>
+              </button>
+              <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-action-btn open" onclick="event.stopPropagation(); trackToolClick('${tool.id}')">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    // Berechne korrekte Anzahl für "mehr anzeigen" Button
+    const remainingCount = Math.max(0, sortedTools.length - 2);
+    const showMoreButton = sortedTools.length > 2 ? `
+      <div class="show-more" onclick="toggleGroup('${category}')">
+        <span>${isExpanded ? 
+          (currentLang === 'de' ? 'Weniger anzeigen' : 'Show less') : 
+          (currentLang === 'de' ? `+ ${remainingCount} mehr anzeigen` : `+ ${remainingCount} more`)}</span>
+        <i class="fas fa-chevron-${isExpanded ? 'up' : 'down'}"></i>
+      </div>
+    ` : '';
+    
+    return `
+      <div class="tool-group" data-category="${category}">
+        <div class="group-header" onclick="toggleGroup('${category}')">
+          <div class="group-title">
+            <div class="group-icon">${getCategoryIcon(category)}</div>
+            <span>${getCategoryLabel(category)}</span>
+            <span class="group-count">${categoryTools.length}</span>
+          </div>
+          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        <div class="group-content ${isExpanded ? 'expanded' : ''}">
+          ${groupHTML}
+        </div>
+        ${showMoreButton}
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('toolGroups').innerHTML = groupsHTML;
+  updateLanguage();
+}
+
+function toggleGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = !expandedGroups[category];
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+  renderToolGroups();
+  updateLanguage();
+}
+
+// ===== TOOL PEEK =====
+function showToolPeek(event, toolId) {
+  if (isDrawerOpen) return;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  hoverTimeout = setTimeout(() => {
+    createToolPeek(event, tool);
+  }, 300);
+}
+
+function createToolPeek(event, tool) {
+  if (peekElement) {
+    peekElement.remove();
+  }
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const ltdBadge = tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : '';
+  
+  peekElement = document.createElement('div');
+  peekElement.className = 'tool-peek';
+  peekElement.innerHTML = `
+    <div class="peek-header">
+      <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
+      <div>
+        <div class="peek-name">${tool.name}</div>
+        <div class="peek-category">${getCategoryLabel(tool.category)}</div>
+      </div>
+    </div>
+    <div class="peek-desc">${description}</div>
+    <div class="peek-meta">
+      <span class="peek-badge price">
+        <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
+        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+      </span>
+      <span class="peek-badge rating">
+        <i class="fas fa-star"></i>
+        ${tool.rating}/5
+      </span>
+      ${ltdBadge}
+    </div>
+  `;
+  
+  document.body.appendChild(peekElement);
+  
+  const rect = event.currentTarget.getBoundingClientRect();
+  const peekHeight = peekElement.offsetHeight;
+  const viewportHeight = window.innerHeight;
+  
+  let top = rect.top + rect.height / 2 - peekHeight / 2;
+  if (top < 20) top = 20;
+  if (top + peekHeight > viewportHeight - 20) {
+    top = viewportHeight - peekHeight - 20;
+  }
+  
+  peekElement.style.top = `${top}px`;
+  peekElement.style.left = `${rect.right + 20}px`;
+}
+
+function hideToolPeek() {
+  if (hoverTimeout) {
+    clearTimeout(hoverTimeout);
+    hoverTimeout = null;
+  }
+  
+  if (peekElement) {
+    peekElement.style.opacity = '0';
+    setTimeout(() => {
+      if (peekElement && peekElement.parentNode) {
+        peekElement.remove();
+        peekElement = null;
+      }
+    }, 200);
+  }
+}
+
+// ===== DRAWER =====
+function openToolDrawer(toolId) {
+  hideToolPeek();
+  isDrawerOpen = true;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  trackUserInteraction(tool.category);
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
+  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
+  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  
+  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
+  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="peek-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--secondary); border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+  
+  const alternativesHTML = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    if (!altTool) return '';
+    return `
+      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor: pointer;">
+        ${getCategoryIcon(altTool.category)}
+      </div>
+    `;
+  }).join('');
+  
+  const drawerContent = `
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
+        <div class="peek-icon" style="width: 60px; height: 60px; font-size: 1.8rem;">
+          ${getCategoryIcon(tool.category)}
+        </div>
+        <div style="flex: 1;">
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">${tool.name}</h3>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+            <span class="peek-badge category" style="background: rgba(0, 212, 255, 0.15); color: var(--primary); border: 1px solid rgba(0, 212, 255, 0.3);">
+              <i class="fas fa-tag"></i>
+              ${getCategoryLabel(tool.category)}
+            </span>
+            <span class="peek-badge price">
+              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
+              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+            </span>
+            <span class="peek-badge rating">
+              <i class="fas fa-star"></i>
+              ${tool.rating}/5
+            </span>
+            ${tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> Lifetime Deal</span>' : ''}
+          </div>
+        </div>
+      </div>
+      
+      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">${seoDesc}</p>
+      
+      <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+        <button class="dock-action-btn primary" onclick="window.open('${tool.link}', '_blank'); trackToolClick('${tool.id}')" style="flex: 1;">
+          <i class="fas fa-external-link-alt"></i>
+          <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
+        </button>
+        <button class="dock-action-btn secondary" onclick="toggleFavorite('${tool.id}')" style="width: auto;">
+          <i class="fas fa-star"></i>
+          <span>${isFavorite(tool.id) ? (currentLang === 'de' ? 'Entfernen' : 'Remove') : (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}</span>
+        </button>
+      </div>
+    </div>
+    
+    ${pros.length > 0 || cons.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-balance-scale"></i>
+        <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span>
+      </h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        ${pros.length > 0 ? `
+        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); padding: 16px;">
+          <h5 style="color: var(--success); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-check-circle"></i>
+            <span data-de="Vorteile" data-en="Pros">Vorteile</span>
+          </h5>
+          <ul style="color: var(--text-secondary); padding-left: 20px;">
+            ${prosHTML}
+          </ul>
+        </div>
+        ` : ''}
+        
+        ${cons.length > 0 ? `
+        <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius); padding: 16px;">
+          <h5 style="color: var(--error); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-times-circle"></i>
+            <span data-de="Nachteile" data-en="Cons">Nachteile</span>
+          </h5>
+          <ul style="color: var(--text-secondary); padding-left: 20px;">
+            ${consHTML}
+          </ul>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
+    
+    ${features.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-rocket"></i>
+        <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span>
+      </h4>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        ${featuresHTML}
+      </div>
+    </div>
+    ` : ''}
+    
+    ${alternatives.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-exchange-alt"></i>
+        <span data-de="Ähnliche Tools" data-en="Similar Tools">Ähnliche Tools</span>
+      </h4>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        ${alternativesHTML}
+      </div>
+    </div>
+    ` : ''}
+  `;
+  
+  document.getElementById('drawerTitle').textContent = tool.name;
+  document.getElementById('drawerContent').innerHTML = drawerContent;
+  document.getElementById('drawerOverlay').classList.add('active');
+  document.getElementById('drawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  updateLanguage();
+}
+
+function closeToolDrawer() {
+  isDrawerOpen = false;
+  document.getElementById('drawerOverlay').classList.remove('active');
+  document.getElementById('drawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== FILTER CHIPS (KORRIGIERT) =====
+function renderFilterChips() {
+  const filters = [
+    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
+    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
+    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
+    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
+    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
+    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
+    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
+    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
+  ];
+  
+  const chipsHTML = filters.map(filter => {
+    const isActive = currentCategory === filter.id;
+    return `
+      <div class="filter-chip ${isActive ? 'active' : ''}" 
+           data-filter="${filter.id}"
+           onclick="setActiveFilter('${filter.id}')">
+        <i class="${filter.icon}"></i>
+        <span data-de="${filter.label.de}" data-en="${filter.label.en}">${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('filterChips').innerHTML = chipsHTML;
+  updateLanguage();
+}
+
+function setActiveFilter(filterId) {
+  currentCategory = filterId;
+  activeFilterId = filterId;
+  
+  // Entferne active Klasse von allen Chips
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.remove('active');
+  });
+  
+  // Setze active Klasse auf geklickten Chip
+  document.querySelector(`[data-filter="${filterId}"]`).classList.add('active');
+  
+  renderToolGroups();
+}
+
+// ===== FAVORITES OVERLAY =====
+function openFavoritesOverlay() {
+  updateFavoritesOverlay();
+  document.getElementById('favoritesOverlay').classList.add('active');
+  document.getElementById('favoritesDrawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFavoritesOverlay() {
+  document.getElementById('favoritesOverlay').classList.remove('active');
+  document.getElementById('favoritesDrawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function updateFavoritesOverlay() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  
+  const favoriteHTML = favorites.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    if (!tool) return '';
+    return `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  const compareHTML = comparison.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    if (!tool) return '';
+    return `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleComparison('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('favoriteDock').innerHTML = favoriteHTML;
+  document.getElementById('compareDock').innerHTML = compareHTML;
+  
+  updateLanguage();
+}
+
+function updateFloatingBadge() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const totalCount = favorites.length + comparison.length;
+  
+  const badge = document.getElementById('floatingFavoritesBadge');
+  if (badge) {
+    badge.textContent = totalCount;
+    badge.style.display = totalCount > 0 ? 'flex' : 'none';
+  }
+}
+
+// ===== VOTING MIT BASELINE-KORREKTUR =====
+async function vote(toolId, type) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  if (typeof window.supabase === 'undefined') {
+    showNotification(currentLang === 'de' ? 'Fehler: Datenbank nicht verfügbar' : 'Error: Database not available', 'error');
+    return;
+  }
+  
+  const oldUserVote = tool.userVote ?? 0;
+  const voteValue = type === 'up' ? 1 : -1;
+  
+  // Berechne die Vote-Änderung
+  let voteChange = 0;
+  if (tool.userVote === voteValue) {
+    // User entfernt seinen Vote
+    tool.userVote = 0;
+    voteChange = -voteValue;
+  } else {
+    // User ändert seinen Vote oder stimmt zum ersten Mal ab
+    const previousVote = tool.userVote ?? 0;
+    tool.userVote = voteValue;
+    voteChange = voteValue - previousVote;
+  }
+  
+  // Update lokale Votes für sofortiges UI Feedback
+  const currentRawVotes = getRawVotes(tool);
+  const newRawVotes = currentRawVotes + voteChange;
+  
+  // Update UI immediately (optimistic)
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountElement) {
+    const displayVotes = Math.max(newRawVotes, 0);
+    voteCountElement.textContent = displayVotes;
+    voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      voteCountElement.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update Top 5 bar
+  updateTop5VoteCount(toolId, newRawVotes);
+  
+  // Save user's vote locally
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  savedVotes[toolId] = { userVote: tool.userVote };
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  
+  try {
+    // Update in Supabase
+    const { data: existingData, error: fetchError } = await window.supabase
+      .from('tool_votes')
+      .select('*')
+      .eq('tool_id', toolId);
+      
+    if (fetchError) throw fetchError;
+      
+    let upvotesChange = 0;
+    let downvotesChange = 0;
+    
+    // Berechne die Änderungen für upvotes/downvotes
+    if (oldUserVote === 1) {
+      upvotesChange -= 1; // Entferne Upvote
+    } else if (oldUserVote === -1) {
+      downvotesChange -= 1; // Entferne Downvote
+    }
+    
+    if (voteValue === 1) {
+      upvotesChange += 1; // Füge Upvote hinzu
+    } else if (voteValue === -1) {
+      downvotesChange += 1; // Füge Downvote hinzu
+    }
+      
+    if (existingData && existingData.length > 0) {
+      const current = existingData[0];
+      const newUpvotes = Math.max(0, safeNumber(current.upvotes) + upvotesChange);
+      const newDownvotes = Math.max(0, safeNumber(current.downvotes) + downvotesChange);
+      const newTotal = newUpvotes - newDownvotes;
+        
+      const { error: updateError } = await window.supabase
+        .from('tool_votes')
+        .update({
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+          total_votes: newTotal
+        })
+        .eq('tool_id', toolId);
+        
+      if (updateError) throw updateError;
+        
+      tool.votes = newTotal;
+      tool.upvotes = newUpvotes;
+      tool.downvotes = newDownvotes;
+    } else {
+      const initialUpvotes = voteValue === 1 ? 1 : 0;
+      const initialDownvotes = voteValue === -1 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
+        
+      const { error: insertError } = await window.supabase
+        .from('tool_votes')
+        .insert({
+          tool_id: toolId,
+          upvotes: initialUpvotes,
+          downvotes: initialDownvotes,
+          total_votes: initialTotal
+        });
+        
+      if (insertError) throw insertError;
+        
+      tool.votes = initialTotal;
+      tool.upvotes = initialUpvotes;
+      tool.downvotes = initialDownvotes;
+    }
+      
+    showNotification(
+      currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
+      'success'
+    );
+      
+  } catch (error) {
+    console.error('Voting Fehler:', error);
+    showNotification(
+      currentLang === 'de' ? 'Fehler: ' + (error.message || 'Unbekannter Fehler') : 'Error: ' + (error.message || 'Unknown error'), 
+      'error'
+    );
+      
+    // Rollback local changes
+    tool.userVote = oldUserVote;
+    
+    // Rollback UI
+    const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+    if (voteCountElement) {
+      voteCountElement.textContent = getDisplayVotes(tool);
+    }
+    updateTop5VoteCount(toolId, tool.votes);
+  }
+  
+  // WICHTIG: Die Tool-Liste NEU sortieren und rendern
+  updateTop5Bar();
+  renderToolGroups();
+  
+  // Aktualisiere auch die aktive Filteransicht, falls ein Filter aktiv ist
+  if (activeFilterId) {
+    setActiveFilter(activeFilterId);
+  }
+}
+
+// ===== FAVORITES & COMPARISON =====
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
+}
+
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites', 'info');
+  } else {
+    favorites.push(toolId);
+    showNotification(currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites', 'success');
+  }
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  updateFavoritesOverlay();
+  updateFloatingBadge();
+  renderToolGroups();
+}
+
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison', 'info');
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+      showNotification(currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison', 'success');
+    } else {
+      showNotification(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!', 'error');
+      return;
+    }
+  }
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  updateFavoritesOverlay();
+  updateFloatingBadge();
+  renderToolGroups();
+}
+
+// ===== COOKIE CONSENT =====
+function checkCookieConsent() {
+  const consent = localStorage.getItem('cookieConsent');
+  const consentBanner = document.getElementById('cookieConsent');
+  
+  if (consent === 'accepted') {
+    window.cookiePreferences.analytics = true;
+    loadGoogleAnalytics();
+    consentBanner.classList.remove('active');
+  } else if (consent === 'declined') {
+    window.cookiePreferences.analytics = false;
+    consentBanner.classList.remove('active');
+  } else {
+    consentBanner.classList.add('active');
+  }
+}
+
+function acceptCookies() {
+  localStorage.setItem('cookieConsent', 'accepted');
+  window.cookiePreferences.analytics = true;
+  loadGoogleAnalytics();
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(currentLang === 'de' ? 'Cookies akzeptiert' : 'Cookies accepted', 'success');
+}
+
+function declineCookies() {
+  localStorage.setItem('cookieConsent', 'declined');
+  window.cookiePreferences.analytics = false;
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined', 'info');
+}
+
+function loadGoogleAnalytics() {
+  if (!window.cookiePreferences.analytics) return;
+  
+  // Google Analytics Script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
+  document.head.appendChild(script);
+  
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
+}
+
+// ===== BACK TO TOP =====
+function setupBackToTop() {
+  const backToTopBtn = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > window.innerHeight) {
+      backToTopBtn.classList.add('visible');
+    } else {
+      backToTopBtn.classList.remove('visible');
+    }
+  });
+  
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// ===== HELPER FUNCTIONS =====
+function getCategoryIcon(category) {
+  const icons = {
+    text: '✍️',
+    image: '🎨',
+    code: '💻',
+    video: '🎬',
+    audio: '🎵'
+  };
+  return icons[category] || '🤖';
+}
+
+function getCategoryLabel(category) {
+  const labels = {
+    de: {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    },
+    en: {
+      text: 'Text',
+      image: 'Image',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    }
+  };
+  return labels[currentLang][category] || category;
+}
+
+function trackUserInteraction(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
+}
+
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] ?? 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
+}
+
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+    <span>${message}</span>
+    <button class="notification-close"><i class="fas fa-times"></i></button>
+  `;
+      
+  document.body.appendChild(notification);
+      
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+      
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.remove();
+  });
+}
+
+// ===== MODALS =====
+function openModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.add('active');
+  document.getElementById(modalId).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.remove('active');
+  document.getElementById(modalId).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== EVENT LISTENERS =====
+function setupEventListeners() {
+  // Omnibox search
+  const omniboxInput = document.getElementById('omniboxInput');
+  let searchDebounce;
+  
+  omniboxInput.addEventListener('input', (e) => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchQuery = e.target.value;
+      if (searchQuery.length > 0) {
+        filterBySearch(searchQuery);
+      } else {
+        renderToolGroups();
+      }
+    }, 300);
+  });
+  
+  // Enter key in omnibox
+  omniboxInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const query = omniboxInput.value;
+      if (query.trim()) {
+        filterBySearch(query);
+      }
+    }
+  });
+  
+  // Density toggle (now in footer)
+  document.querySelectorAll('.density-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.density-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      document.body.className = '';
+      document.body.classList.add(`density-${btn.dataset.density}`);
+      
+      renderToolGroups();
+      updateTop5Bar();
+    });
+  });
+  
+  // Language toggle
+  document.getElementById('langToggle').addEventListener('click', () => {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+    updateLanguage();
+    renderFilterChips();
+    updateTop5Bar();
+    renderToolGroups();
+  });
+  
+  // Drawer close
+  document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
+  document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
+  
+  // Favorites overlay
+  document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesOverlay);
+  document.getElementById('favoritesClose').addEventListener('click', closeFavoritesOverlay);
+  document.getElementById('favoritesOverlay').addEventListener('click', closeFavoritesOverlay);
+  
+  // Favorites overlay actions
+  document.getElementById('clearFavorites').addEventListener('click', () => {
+    localStorage.setItem('aiFavorites', JSON.stringify([]));
+    updateFavoritesOverlay();
+    updateFloatingBadge();
+    renderToolGroups();
+    showNotification(currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared', 'info');
+  });
+  
+  document.getElementById('compareAction').addEventListener('click', () => {
+    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+    if (comparison.length < 2) {
+      showNotification(currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare', 'error');
+      return;
+    }
+    
+    // Open comparison view
+    showNotification(currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...', 'info');
+  });
+  
+  // Back to top
+  setupBackToTop();
+  
+  // Cookie consent
+  document.getElementById('cookieAccept').addEventListener('click', acceptCookies);
+  document.getElementById('cookieDecline').addEventListener('click', declineCookies);
+  
+  // Modals
+  document.getElementById('imprintLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('imprintModal');
+  });
+  
+  document.getElementById('privacyLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('privacyLinkCookie').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('imprintModalClose').addEventListener('click', () => {
+    closeModal('imprintModal');
+  });
+  
+  document.getElementById('imprintModalOverlay').addEventListener('click', () => {
+    closeModal('imprintModal');
+  });
+  
+  document.getElementById('privacyModalClose').addEventListener('click', () => {
+    closeModal('privacyModal');
+  });
+  
+  document.getElementById('privacyModalOverlay').addEventListener('click', () => {
+    closeModal('privacyModal');
+  });
+  
+  // Close drawer on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (isDrawerOpen) {
+        closeToolDrawer();
+      }
+      if (document.getElementById('favoritesOverlay').classList.contains('active')) {
+        closeFavoritesOverlay();
+      }
+      if (document.getElementById('imprintModal').classList.contains('active')) {
+        closeModal('imprintModal');
+      }
+      if (document.getElementById('privacyModal').classList.contains('active')) {
+        closeModal('privacyModal');
+      }
+    }
+  });
+}
+
+function filterBySearch(query) {
+  const groups = document.querySelectorAll('.tool-group');
+  const searchLower = query.toLowerCase();
+  
+  groups.forEach(group => {
+    const rows = group.querySelectorAll('.tool-row');
+    let hasMatch = false;
+    
+    rows.forEach(row => {
+      const toolId = row.dataset.id;
+      const tool = aiTools.find(t => t.id === toolId);
+      if (tool) {
+        const matches = tool.name.toLowerCase().includes(searchLower) ||
+                       tool.description.de.toLowerCase().includes(searchLower) ||
+                       tool.description.en.toLowerCase().includes(searchLower) ||
+                       tool.category.toLowerCase().includes(searchLower);
+        
+        row.style.display = matches ? 'grid' : 'none';
+        if (matches) hasMatch = true;
+      }
+    });
+    
+    group.style.display = hasMatch ? 'block' : 'none';
+    
+    const showMore = group.querySelector('.show-more');
+    if (showMore) showMore.style.display = 'none';
+  });
+}
+
+function updateLanguage() {
+  document.querySelectorAll('[data-de]').forEach(el => {
+    if (el.hasAttribute('placeholder')) {
+      el.placeholder = currentLang === 'de' ? el.getAttribute('data-placeholder-de') : el.getAttribute('data-placeholder-en');
+    } else {
+      el.textContent = currentLang === 'de' ? el.getAttribute('data-de') : el.getAttribute('data-en');
+    }
+  });
+  
+  // Update search hint text
+  const searchHintText = document.getElementById('searchHintText');
+  if (searchHintText) {
+    searchHintText.textContent = currentLang === 'de' 
+      ? 'Suche nach Toolnamen, Use-Cases oder Features'
+      : 'Search for tool names, use cases or features';
+  }
+  
+  // Update hero subtitle
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  if (heroSubtitle) {
+    heroSubtitle.textContent = currentLang === 'de'
+      ? 'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.'
+      : 'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
+  }
+}
+
+// ===== INITIALIZE =====
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
