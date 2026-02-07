@@ -40,7 +40,13 @@
     "pricing": {
       "de": "Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext",
       "en": "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"
-    }
+    },
+    "shortDescription": {
+      "de": "Bester KI-Allrounder für Texte & Code",
+      "en": "Best AI all-rounder for text & code"
+    },
+    "icon": "🤖",
+    "tags": ["popular", "multimodal", "coding", "writing", "chat"]
   },
   {
     "id": "claude",
@@ -83,7 +89,13 @@
     "pricing": {
       "de": "Kostenloser Zugang mit Limits, Claude Pro für €20/Monat mit erweiterten Limits und Prioritätszugang",
       "en": "Free access with limits, Claude Pro for $20/month with extended limits and priority access"
-    }
+    },
+    "shortDescription": {
+      "de": "Exzellent für lange Texte und Dokumentenanalyse",
+      "en": "Excellent for long texts and document analysis"
+    },
+    "icon": "📄",
+    "tags": ["text", "long-form", "document-analysis", "research", "writing"]
   },
   {
     "id": "midjourney",
@@ -126,7 +138,13 @@
     "pricing": {
       "de": "Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung",
       "en": "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"
-    }
+    },
+    "shortDescription": {
+      "de": "Beste künstlerische Bildgenerierung",
+      "en": "Best artistic image generation"
+    },
+    "icon": "🎨",
+    "tags": ["image", "art", "design", "creative"]
   },
   {
     "id": "github-copilot",
@@ -169,7 +187,13 @@
     "pricing": {
       "de": "€10/Monat pro Nutzer (Individual), €19/Monat pro Nutzer (Business), €39/Monat pro Nutzer (Enterprise)",
       "en": "$10/month per user (Individual), $19/month per user (Business), $39/month per user (Enterprise)"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Code-Assistent für Entwickler",
+      "en": "AI code assistant for developers"
+    },
+    "icon": "💻",
+    "tags": ["code", "development", "programming", "productivity"]
   },
   {
     "id": "elevenlabs",
@@ -212,7 +236,13 @@
     "pricing": {
       "de": "Kostenlos: 10.000 Zeichen/Monat, Starter: €5/Monat für 30.000 Zeichen, Creator: €22/Monat für 100.000 Zeichen",
       "en": "Free: 10,000 characters/month, Starter: $5/month for 30,000 characters, Creator: $22/month for 100,000 characters"
-    }
+    },
+    "shortDescription": {
+      "de": "Realistische KI-Stimmen & Voice Cloning",
+      "en": "Realistic AI voices & voice cloning"
+    },
+    "icon": "🎤",
+    "tags": ["audio", "voice", "speech", "narration"]
   },
   {
     "id": "runway",
@@ -255,7 +285,13 @@
     "pricing": {
       "de": "Kostenlos: 3 Projekte, Wasserzeichen; Standard: €15/Monat für 125 Credits; Pro: €35/Monat für 450 Credits",
       "en": "Free: 3 projects, watermarks; Standard: $15/month for 125 credits; Pro: $35/month for 450 credits"
-    }
+    },
+    "shortDescription": {
+      "de": "All-in-One KI-Video-Plattform mit vielen Tools.",
+      "en": "All-in-One AI video platform with many tools."
+    },
+    "icon": "🎬",
+    "tags": ["video", "editing", "text-to-video", "creative", "professional"]
   },
   {
     "id": "gemini",
@@ -298,7 +334,13 @@
     "pricing": {
       "de": "Gemini Basic: Kostenlos, Gemini Advanced: €20/Monat mit erweiterten Funktionen und 2TB Google One",
       "en": "Gemini Basic: Free, Gemini Advanced: $20/month with advanced features and 2TB Google One"
-    }
+    },
+    "shortDescription": {
+      "de": "Googles KI-Assistent mit Web-Integration.",
+      "en": "Google's AI assistant with web integration."
+    },
+    "icon": "🔍",
+    "tags": ["text", "web-search", "multimodal", "google", "research"]
   },
   {
     "id": "perplexity",
@@ -341,7 +383,13 @@
     "pricing": {
       "de": "Kostenlos mit Limits, Pro für €20/Monat mit erweiterten Suchfunktionen und Datei-Upload",
       "en": "Free with limits, Pro for $20/month with advanced search features and file upload"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Suchmaschine mit Quellenangaben für Fakten.",
+      "en": "AI search engine with citations for facts."
+    },
+    "icon": "📚",
+    "tags": ["text", "search", "research", "citations", "facts"]
   },
   {
     "id": "dalle-3",
@@ -384,7 +432,13 @@
     "pricing": {
       "de": "Teil von ChatGPT Plus (€20/Monat) inklusive 50 DALL·E 3 Generierungen pro Tag",
       "en": "Part of ChatGPT Plus ($20/month) including 50 DALL·E 3 generations per day"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Bild Generator von OpenAI mit Top-Textverständnis.",
+      "en": "Text-to-image generator from OpenAI with top text understanding."
+    },
+    "icon": "🖼️",
+    "tags": ["image", "text-to-image", "openai", "chatgpt", "design"]
   },
   {
     "id": "stable-diffusion",
@@ -427,7 +481,13 @@
     "pricing": {
       "de": "Komplett kostenlos (Open-Source), Hosting-Lösungen ab €10/Monat verfügbar",
       "en": "Completely free (open-source), hosting solutions from $10/month available"
-    }
+    },
+    "shortDescription": {
+      "de": "Open-Source Bildgenerierung mit lokaler Kontrolle.",
+      "en": "Open-source image generation with local control."
+    },
+    "icon": "⚙️",
+    "tags": ["image", "open-source", "customizable", "local", "free"]
   },
   {
     "id": "notion-ai",
@@ -470,7 +530,13 @@
     "pricing": {
       "de": "€10/Monat zusätzlich zu Notion (ab €8/Monat), Teams ab €15/Monat pro Benutzer",
       "en": "$10/month in addition to Notion (from $8/month), teams from $15/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI direkt im Notion Workspace für Produktivität.",
+      "en": "AI directly in Notion workspace for productivity."
+    },
+    "icon": "📝",
+    "tags": ["text", "notion", "productivity", "writing", "summarization"]
   },
   {
     "id": "copy-ai",
@@ -513,7 +579,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Pro ab €49/Monat, Team ab €249/Monat, Enterprise auf Anfrage",
       "en": "Free trial, Pro from $49/month, Team from $249/month, Enterprise custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Plattform für Marketing-Texte und Werbung.",
+      "en": "AI platform for marketing copy and advertising."
+    },
+    "icon": "📢",
+    "tags": ["text", "marketing", "copywriting", "templates", "workflows"]
   },
   {
     "id": "jasper",
@@ -556,7 +628,13 @@
     "pricing": {
       "de": "Creator: €49/Monat, Teams: €125/Monat, Business: €500/Monat, Enterprise auf Anfrage",
       "en": "Creator: $49/month, Teams: $125/month, Business: $500/month, Enterprise custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Plattform für Business-Content mit Markenstimme.",
+      "en": "AI platform for business content with brand voice."
+    },
+    "icon": "💼",
+    "tags": ["text", "business", "marketing", "brand-voice", "seo"]
   },
   {
     "id": "firefly",
@@ -599,7 +677,13 @@
     "pricing": {
       "de": "In Adobe Creative Cloud enthalten (ab €5/Monat für Studenten, ab €25/Monat regulär)",
       "en": "Included in Adobe Creative Cloud (from $5/month for students, from $25/month regular)"
-    }
+    },
+    "shortDescription": {
+      "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung.",
+      "en": "Adobe's AI for creative image generation and editing."
+    },
+    "icon": "🎨",
+    "tags": ["image", "adobe", "creative", "design", "professional"]
   },
   {
     "id": "leonardo",
@@ -642,7 +726,13 @@
     "pricing": {
       "de": "Kostenlose Version verfügbar (150 Tokens/Tag), Apprentice: €12/Monat, Artisan: €30/Monat, Maestro: €60/Monat",
       "en": "Free version available (150 tokens/day), Apprentice: $12/month, Artisan: $30/month, Maestro: $60/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Bildgenerierung spezialisiert auf Game-Assets und 3D.",
+      "en": "Image generation specialized in game assets and 3D."
+    },
+    "icon": "🎮",
+    "tags": ["image", "game-dev", "3d", "assets", "textures"]
   },
   {
     "id": "playground",
@@ -685,7 +775,13 @@
     "pricing": {
       "de": "Kostenlos: 500 Bilder/Tag mit Wasserzeichen, Pro: €15/Monat für 1000 Bilder/Tag, Premium: €45/Monat für unbegrenzt",
       "en": "Free: 500 images/day with watermarks, Pro: $15/month for 1000 images/day, Premium: $45/month for unlimited"
-    }
+    },
+    "shortDescription": {
+      "de": "Kostenlose Bildgenerierung mit Filtern und Tools.",
+      "en": "Free image generation with filters and tools."
+    },
+    "icon": "🖼️",
+    "tags": ["image", "free", "filters", "editing", "beginner-friendly"]
   },
   {
     "id": "murf",
@@ -728,7 +824,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Basic: €19/Monat, Pro: €26/Monat, Enterprise: €75/Monat",
       "en": "Free trial, Basic: $19/month, Pro: $26/month, Enterprise: $75/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Sprache für Videos mit Studio-Qualität.",
+      "en": "Text-to-speech for videos with studio quality."
+    },
+    "icon": "🎥",
+    "tags": ["audio", "text-to-speech", "video", "commercial", "voiceover"]
   },
   {
     "id": "suno",
@@ -771,7 +873,13 @@
     "pricing": {
       "de": "Kostenlos: 50 Credits/Monat, Pro: €10/Monat für 500 Credits, Premier: €30/Monat für 2000 Credits",
       "en": "Free: 50 credits/month, Pro: $10/month for 500 credits, Premier: $30/month for 2000 credits"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Musikgenerator für vollständige Songs mit Gesang.",
+      "en": "AI music generator for complete songs with vocals."
+    },
+    "icon": "🎵",
+    "tags": ["audio", "music", "songwriting", "generation", "creative"]
   },
   {
     "id": "boomy",
@@ -814,7 +922,13 @@
     "pricing": {
       "de": "Kostenlos mit Limits, Creator: €10/Monat, Pro: €30/Monat",
       "en": "Free with limits, Creator: $10/month, Pro: $30/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Erstelle und veröffentliche Musik in Sekunden mit KI.",
+      "en": "Create and publish music in seconds with AI."
+    },
+    "icon": "⚡",
+    "tags": ["audio", "music", "streaming", "fast", "royalties"]
   },
   {
     "id": "synthesia",
@@ -857,7 +971,13 @@
     "pricing": {
       "de": "Personal: €30/Monat, Business: ab €89/Monat, Enterprise: auf Anfrage",
       "en": "Personal: $30/month, Business: from $89/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "Erstelle Videos mit KI-Avataren in vielen Sprachen.",
+      "en": "Create videos with AI avatars in many languages."
+    },
+    "icon": "👤",
+    "tags": ["video", "avatars", "multilingual", "corporate", "training"]
   },
   {
     "id": "heygen",
@@ -900,7 +1020,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Creator: €30/Monat, Business: €225/Monat, Enterprise: auf Anfrage",
       "en": "Free trial, Creator: $30/month, Business: $225/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "Video mit KI-Avataren und Sprachübersetzung.",
+      "en": "Video with AI avatars and voice translation."
+    },
+    "icon": "🗣️",
+    "tags": ["video", "avatars", "translation", "multilingual", "easy"]
   },
   {
     "id": "pika",
@@ -943,7 +1069,13 @@
     "pricing": {
       "de": "Kostenlos: 30 Credits/Woche, Pro: €10/Monat für 180 Credits, Premium: €30/Monat für 600 Credits",
       "en": "Free: 30 credits/week, Pro: $10/month for 180 credits, Premium: $30/month for 600 credits"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Video Generator mit Stilen und Bearbeitung.",
+      "en": "Text-to-video generator with styles and editing."
+    },
+    "icon": "🎥",
+    "tags": ["video", "text-to-video", "animation", "styles", "community"]
   },
   {
     "id": "cursor",
@@ -986,7 +1118,13 @@
     "pricing": {
       "de": "Kostenlos: 50 Anfragen/Monat, Pro: €20/Monat für unbegrenzte Anfragen, Business: €40/Monat pro Benutzer",
       "en": "Free: 50 requests/month, Pro: $20/month for unlimited requests, Business: $40/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-gestützte IDE mit Chat und Debugging.",
+      "en": "AI-powered IDE with chat and debugging."
+    },
+    "icon": "💻",
+    "tags": ["code", "ide", "debugging", "chat", "vscode"]
   },
   {
     "id": "replit",
@@ -1029,7 +1167,13 @@
     "pricing": {
       "de": "Kostenlos: 500.000 Tokens/Monat, Core: €8/Monat, Pro: €20/Monat, Teams: €40/Monat pro Benutzer",
       "en": "Free: 500,000 tokens/month, Core: $8/month, Pro: $20/month, Teams: $40/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "Cloud-basiertes KI-Coding mit Kollaboration.",
+      "en": "Cloud-based AI coding with collaboration."
+    },
+    "icon": "☁️",
+    "tags": ["code", "cloud", "collaboration", "deployment", "education"]
   },
   {
     "id": "tabnine",
@@ -1072,7 +1216,13 @@
     "pricing": {
       "de": "Kostenlos: Basis-Vervollständigung, Pro: €12/Monat, Enterprise: auf Anfrage",
       "en": "Free: basic completion, Pro: $12/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Code-Vervollständigung mit Privatsphäre-Fokus.",
+      "en": "AI code completion with privacy focus."
+    },
+    "icon": "🔒",
+    "tags": ["code", "completion", "privacy", "local", "enterprise"]
   },
   {
     "id": "codeium",
@@ -1115,7 +1265,13 @@
     "pricing": {
       "de": "Komplett kostenlos für alle Funktionen",
       "en": "Completely free for all features"
-    }
+    },
+    "shortDescription": {
+      "de": "Kostenlose KI für Code-Vervollständigung und Chat.",
+      "en": "Free AI for code completion and chat."
+    },
+    "icon": "🆓",
+    "tags": ["code", "free", "completion", "chat", "open-source"]
   },
   {
     "id": "canva-ai",
@@ -1158,7 +1314,13 @@
     "pricing": {
       "de": "Kostenlos: Basis-Funktionen, Canva Pro: €12/Monat, Teams: €14/Monat pro Benutzer",
       "en": "Free: basic features, Canva Pro: $12/month, Teams: $14/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Design-Tools integriert in Canva für alle.",
+      "en": "AI design tools integrated in Canva for everyone."
+    },
+    "icon": "✏️",
+    "tags": ["image", "design", "canva", "templates", "easy"]
   },
   {
     "id": "tome",
@@ -1201,7 +1363,13 @@
     "pricing": {
       "de": "Kostenlos: 500 AI Credits, Pro: €8/Monat, Business: €20/Monat pro Benutzer",
       "en": "Free: 500 AI credits, Pro: $8/month, Business: $20/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI für Präsentationen und Geschichten mit Visuals.",
+      "en": "AI for presentations and stories with visuals."
+    },
+    "icon": "📊",
+    "tags": ["text", "presentations", "storytelling", "visual", "templates"]
   },
   {
     "id": "beautiful-ai",
@@ -1244,7 +1412,13 @@
     "pricing": {
       "de": "Pro: €12/Monat, Team: €50/Monat, Enterprise: auf Anfrage",
       "en": "Pro: $12/month, Team: $50/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Präsentationsdesigner für automatisch schöne Slides.",
+      "en": "AI presentation designer for automatically beautiful slides."
+    },
+    "icon": "✨",
+    "tags": ["business", "presentations", "design", "automated", "professional"]
   },
   {
     "id": "gamma",
@@ -1287,7 +1461,13 @@
     "pricing": {
       "de": "Kostenlos: 400 AI Credits, Plus: €8/Monat, Pro: €20/Monat",
       "en": "Free: 400 AI credits, Plus: $8/month, Pro: $20/month"
-    }
+    },
+    "shortDescription": {
+      "de": "KI für Dokumente, Präsentationen und Websites in einem.",
+      "en": "AI for documents, presentations and websites in one."
+    },
+    "icon": "📑",
+    "tags": ["business", "documents", "presentations", "websites", "multipurpose"]
   },
   {
     "id": "invideo",
@@ -1330,7 +1510,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Plus: €20/Monat, Max: €60/Monat",
       "en": "Free trial, Plus: $20/month, Max: $60/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Video für Social Media mit Vorlagen.",
+      "en": "Text-to-video for social media with templates."
+    },
+    "icon": "📱",
+    "tags": ["video", "social-media", "templates", "automation", "marketing"]
   },
   {
     "id": "fliki",
@@ -1373,7 +1559,13 @@
     "pricing": {
       "de": "Kostenlos: 5 Minuten Video/Monat, Basic: €21/Monat, Premium: €66/Monat",
       "en": "Free: 5 minutes video/month, Basic: $21/month, Premium: $66/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Video mit KI-Stimmen und Stock-Material.",
+      "en": "Text-to-video with AI voices and stock material."
+    },
+    "icon": "🎙️",
+    "tags": ["video", "text-to-video", "voices", "stock-media", "script"]
   },
   {
     "id": "pictory",
@@ -1416,7 +1608,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Standard: €19/Monat, Professional: €39/Monat, Teams: €99/Monat",
       "en": "Free trial, Standard: $19/month, Professional: $39/month, Teams: $99/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Wandelt Text und Blogs automatisch in Videos um.",
+      "en": "Converts text and blogs automatically into videos."
+    },
+    "icon": "🔄",
+    "tags": ["video", "automation", "blog-to-video", "stock-media", "marketing"]
   },
   {
     "id": "wondershare",
@@ -1459,7 +1657,13 @@
     "pricing": {
       "de": "Kostenlose Version verfügbar, Filmora Pro: €50/Jahr oder €100 einmalig",
       "en": "Free version available, Filmora Pro: $50/year or $100 one-time"
-    }
+    },
+    "shortDescription": {
+      "de": "Benutzerfreundlicher Videoeditor mit KI für Einsteiger.",
+      "en": "User-friendly video editor with AI for beginners."
+    },
+    "icon": "🎞️",
+    "tags": ["video", "editing", "beginner-friendly", "effects", "templates"]
   },
   {
     "id": "descript",
@@ -1502,7 +1706,13 @@
     "pricing": {
       "de": "Kostenlos: 1 Stunde Transkription, Creator: €12/Monat, Pro: €30/Monat",
       "en": "Free: 1 hour transcription, Creator: $12/month, Pro: $30/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
+      "en": "Audio and video editor with transcription and AI voices."
+    },
+    "icon": "🎙️",
+    "tags": ["audio", "video", "editing", "transcription", "voices"]
   },
   {
     "id": "otter",
@@ -1545,7 +1755,13 @@
     "pricing": {
       "de": "Kostenlos: 300 Minuten/Monat, Pro: €10/Monat, Business: €20/Monat pro Benutzer",
       "en": "Free: 300 minutes/month, Pro: $10/month, Business: $20/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
+      "en": "AI meeting transcription with notes and summaries."
+    },
+    "icon": "📝",
+    "tags": ["audio", "transcription", "meetings", "notes", "collaboration"]
   },
   {
     "id": "krisp",
@@ -1588,7 +1804,13 @@
     "pricing": {
       "de": "Kostenlos: 60 Minuten/Woche, Pro: €8/Monat, Business: €12/Monat pro Benutzer",
       "en": "Free: 60 minutes/week, Pro: $8/month, Business: $12/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Geräuschunterdrückung für bessere Audioqualität.",
+      "en": "AI noise cancellation for better audio quality."
+    },
+    "icon": "🔇",
+    "tags": ["audio", "noise-cancellation", "meetings", "quality", "real-time"]
   },
   {
     "id": "quillbot",
@@ -1631,7 +1853,13 @@
     "pricing": {
       "de": "Kostenlos: 125 Wörter, Premium: €10/Monat, Team: €8/Monat pro Benutzer",
       "en": "Free: 125 words, Premium: $10/month, Team: $8/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
+      "en": "AI paraphraser & translator for better writing."
+    },
+    "icon": "🔄",
+    "tags": ["text", "paraphrasing", "translation", "grammar", "summarization"]
   },
   {
     "id": "grammarly",
@@ -1674,7 +1902,13 @@
     "pricing": {
       "de": "Kostenlos: Basis-Korrekturen, Premium: €12/Monat, Business: €15/Monat pro Benutzer",
       "en": "Free: basic corrections, Premium: $12/month, Business: $15/month per user"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Schreibassistent für Grammatik, Ton und Plagiate.",
+      "en": "AI writing assistant for grammar, tone and plagiarism."
+    },
+    "icon": "✍️",
+    "tags": ["text", "grammar", "plagiarism", "tone", "writing"]
   },
   {
     "id": "wordtune",
@@ -1717,7 +1951,13 @@
     "pricing": {
       "de": "Kostenlos: 10 Umschreibungen/Tag, Plus: €10/Monat, Unlimited: €15/Monat",
       "en": "Free: 10 rewrites/day, Plus: $10/month, Unlimited: $15/month"
-    }
+    },
+    "shortDescription": {
+      "de": "KI für besseres Schreiben durch Umschreiben und Ton.",
+      "en": "AI for better writing by rewriting and tone."
+    },
+    "icon": "🔄",
+    "tags": ["text", "rewriting", "tone", "summarization", "creative"]
   },
   {
     "id": "rytr",
@@ -1760,7 +2000,13 @@
     "pricing": {
       "de": "Kostenlos: 10.000 Zeichen/Monat, Saver: €9/Monat, Unlimited: €29/Monat",
       "en": "Free: 10,000 characters/month, Saver: $9/month, Unlimited: $29/month"
-    }
+    },
+    "shortDescription": {
+      "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO.",
+      "en": "Affordable AI writer with templates and SEO."
+    },
+    "icon": "💰",
+    "tags": ["text", "affordable", "templates", "seo", "multilingual"]
   },
   {
     "id": "writesonic",
@@ -1803,7 +2049,13 @@
     "pricing": {
       "de": "Kostenlos: 10.000 Wörter/Monat, Pro: €13/Monat, Enterprise: auf Anfrage",
       "en": "Free: 10,000 words/month, Pro: $13/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI für Marketing-Content mit SEO und Bildern.",
+      "en": "AI for marketing content with SEO and images."
+    },
+    "icon": "📈",
+    "tags": ["text", "marketing", "seo", "image-generation", "templates"]
   },
   {
     "id": "copy",
@@ -1846,7 +2098,13 @@
     "pricing": {
       "de": "Kostenlose Testversion, Pro: €49/Monat, Team: €249/Monat, Enterprise: auf Anfrage",
       "en": "Free trial, Pro: $49/month, Team: $249/month, Enterprise: custom pricing"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Copywriting-Plattform mit Workflows und Marke.",
+      "en": "AI copywriting platform with workflows and brand."
+    },
+    "icon": "📋",
+    "tags": ["text", "copywriting", "workflows", "brand", "collaboration"]
   },
   {
     "id": "surfer",
@@ -1889,7 +2147,13 @@
     "pricing": {
       "de": "Basic: €59/Monat, Pro: €119/Monat, Business: €239/Monat",
       "en": "Basic: $59/month, Pro: $119/month, Business: $239/month"
-    }
+    },
+    "shortDescription": {
+      "de": "KI für SEO-Content mit Forschung und Optimierung.",
+      "en": "AI for SEO content with research and optimization."
+    },
+    "icon": "📊",
+    "tags": ["business", "seo", "research", "optimization", "keywords"]
   },
   {
     "id": "jasper-art",
@@ -1932,7 +2196,13 @@
     "pricing": {
       "de": "€20/Monat (Teil von Jasper Creator-Plan oder höher)",
       "en": "$20/month (Part of Jasper Creator plan or higher)"
-    }
+    },
+    "shortDescription": {
+      "de": "Bildgenerierung für Marken mit Anpassung.",
+      "en": "Image generation for brands with customization."
+    },
+    "icon": "🏷️",
+    "tags": ["image", "brand", "commercial", "customization", "marketing"]
   },
   {
     "id": "photosonic",
@@ -1975,7 +2245,13 @@
     "pricing": {
       "de": "Kostenlos: 10 Bilder, Premium: €10/Monat für 100 Bilder, Business: €25/Monat für 300 Bilder",
       "en": "Free: 10 images, Premium: $10/month for 100 images, Business: $25/month for 300 images"
-    }
+    },
+    "shortDescription": {
+      "de": "Text-zu-Bild Generator von Writesonic mit Stilen.",
+      "en": "Text-to-image generator by Writesonic with styles."
+    },
+    "icon": "🎨",
+    "tags": ["image", "text-to-image", "artistic", "writesonic", "styles"]
   },
   {
     "id": "nightcafe",
@@ -2018,7 +2294,13 @@
     "pricing": {
       "de": "Kostenlos: 5 Credits/Tag, AI Beginner: €6/Monat, AI Hobbyist: €10/Monat, AI Enthusiast: €20/Monat",
       "en": "Free: 5 credits/day, AI Beginner: $6/month, AI Hobbyist: $10/month, AI Enthusiast: $20/month"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Kunstgenerator mit Community und Stilen.",
+      "en": "AI art generator with community and styles."
+    },
+    "icon": "🌃",
+    "tags": ["image", "art", "community", "styles", "challenges"]
   },
   {
     "id": "dreamstudio",
@@ -2061,7 +2343,13 @@
     "pricing": {
       "de": "€10 für 1000 Credits (Pay-as-you-go), Enterprise-Preise auf Anfrage",
       "en": "$10 for 1000 credits (pay-as-you-go), enterprise pricing available"
-    }
+    },
+    "shortDescription": {
+      "de": "Offizielle Web-UI für Stable Diffusion mit SDXL.",
+      "en": "Official web UI for Stable Diffusion with SDXL."
+    },
+    "icon": "🖥️",
+    "tags": ["image", "stable-diffusion", "sdxl", "control", "api"]
   },
   {
     "id": "bluewillow",
@@ -2104,7 +2392,13 @@
     "pricing": {
       "de": "Kostenlos: 10 Bilder/Tag, Basic: €5/Monat, Pro: €10/Monat, Premium: €25/Monat",
       "en": "Free: 10 images/day, Basic: $5/month, Pro: $10/month, Premium: $25/month"
-    }
+    },
+    "shortDescription": {
+      "de": "KI-Bildgenerierung über Discord mit Community.",
+      "en": "AI image generation via Discord with community."
+    },
+    "icon": "💬",
+    "tags": ["image", "discord", "community", "fast", "free"]
   },
   {
     "id": "deepdream",
@@ -2147,6 +2441,12 @@
     "pricing": {
       "de": "Komplett kostenlos, Premium-Optionen für erweiterte Features verfügbar",
       "en": "Completely free, premium options for advanced features available"
-    }
+    },
+    "shortDescription": {
+      "de": "Früher KI-Bildgenerator mit experimentellen Stilen.",
+      "en": "Early AI image generator with experimental styles."
+    },
+    "icon": "🧠",
+    "tags": ["image", "experimental", "neural", "historical", "free"]
   }
 ]
