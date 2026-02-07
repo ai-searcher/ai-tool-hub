@@ -741,8 +741,10 @@ body::before {
 }
 
 .group-content.expanded {
-  max-height: 2000px;
+  max-height: none; /* Zeigt unendlich viele Tools */
+  overflow: visible; /* Wichtig für Tooltips */
 }
+
 
 .tool-row {
   height: var(--tool-row-height);
@@ -2255,7 +2257,8 @@ let isDrawerOpen = false;
 let supabaseRealtimeSubscription = null;
 let top5Tools = [];
 let pollInterval = null;
-let activeFilterId = null;
+let isVoting = false; // NEU: Steuert die Polling-Pause
+
 
 // ===== BASELINE VOTES =====
 const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
@@ -2500,14 +2503,16 @@ function handleVoteUpdate(payload) {
 
 function startPolling() {
   if (pollInterval) clearInterval(pollInterval);
-  
   pollInterval = setInterval(async () => {
+    if (isVoting) return; // NEU: Wenn gerade gevotet wird, STOPP!
+    
     await loadVotesFromSupabase();
     updateTop5Bar();
     renderToolGroups();
     updateFloatingBadge();
   }, 30000);
 }
+
 
 function updateToolRowVoteCount(toolId) {
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -3143,7 +3148,7 @@ async function vote(toolId, type) {
   renderToolGroups();
   
   // Aktualisiere auch die aktive Filteransicht, falls ein Filter aktiv ist
-  if (activeFilterId) {
+    if (activeFilterId) {
     setActiveFilter(activeFilterId);
   }
 }
