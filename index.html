@@ -257,7 +257,7 @@ body::before {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary), var(--accent);
+  background: linear-gradient(90deg, var(--primary), var(--accent));
   transition: width 0.3s ease;
 }
 
@@ -2257,30 +2257,8 @@ let top5Tools = [];
 let pollInterval = null;
 let activeFilterId = null;
 
-// ===== INTELLIGENTES VOTING-SYSTEM =====
-const INTELLIGENT_VOTING = {
-  // Downvotes haben KEINEN Effekt auf das Ranking
-  downvoteEffectOnRanking: 0,
-  
-  // Minimale Position pro Kategorie (letzter Platz als Grenze)
-  minPositionPerCategory: {
-    text: 8,    // Mindestens Platz 8 in Text-Kategorie
-    image: 6,   // Mindestens Platz 6 in Bild-Kategorie
-    code: 5,    // Mindestens Platz 5 in Code-Kategorie
-    video: 4,   // Mindestens Platz 4 in Video-Kategorie
-    audio: 3    // Mindestens Platz 3 in Audio-Kategorie
-  },
-  
-  // Baseline für neue Tools
-  baselineVotes: 3,
-  
-  // Aktivitäts-Bonus (für Tools mit vielen Klicks)
-  activityBonusMultiplier: 0.1,
-  
-  // Zeit-basierter Bonus (neuere Tools bekommen Bonus)
-  timeBonusDays: 30,
-  timeBonusMultiplier: 0.5
-};
+// ===== BASELINE VOTES =====
+const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
 
 // ===== SUPABASE CLIENT ÜBERPRÜFEN =====
 if (typeof window.supabase === 'undefined' && typeof window.supabaseClient !== 'undefined') {
@@ -2328,7 +2306,6 @@ async function loadAITools() {
     });
     
     addAIRecommendations();
-    calculateIntelligentScores(); // NEU: Intelligente Scores berechnen
     renderToolGroups();
     updateLanguage();
     
@@ -2375,71 +2352,39 @@ async function loadVotesFromSupabase() {
   }
 }
 
-// ===== INTELLIGENTE SCORE-BERECHNUNG =====
-function calculateIntelligentScores() {
+// ===== AI EMPFEHLUNGEN =====
+function addAIRecommendations() {
   const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
   const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
-  const now = new Date();
       
   aiTools.forEach(tool => {
-    // Basis-Score aus Upvotes (Downvotes ignorieren wir für Ranking)
-    let score = (tool.upvotes || 0) * 10;
-    
-    // Baseline für neue Tools
-    score += INTELLIGENT_VOTING.baselineVotes * 10;
-    
-    // Aktivitäts-Bonus
-    const clicks = toolClicks[tool.id] || 0;
-    score += clicks * INTELLIGENT_VOTING.activityBonusMultiplier * 10;
-    
-    // Zeit-Bonus für neuere Tools
-    if (tool.createdAt) {
-      const createdDate = new Date(tool.createdAt);
-      const daysSinceCreation = (now - createdDate) / (1000 * 60 * 60 * 24);
-      if (daysSinceCreation < INTELLIGENT_VOTING.timeBonusDays) {
-        const timeBonus = (INTELLIGENT_VOTING.timeBonusDays - daysSinceCreation) * INTELLIGENT_VOTING.timeBonusMultiplier;
-        score += timeBonus * 10;
-      }
-    }
-    
-    // User-Engagement-Bonus
-    if (userHistory.includes(tool.category)) score += 15;
-    if (favorites.includes(tool.id)) score += 25;
-    if (tool.isAIRecommended) score += 20;
-    if (tool.rating >= 4.7) score += 15;
-    if (tool.hasLifetimeDeal) score += 10;
-    
-    // Kategorie-spezifischer Bonus
-    const categoryBonus = {
-      text: 5,
-      image: 8,
-      code: 10,
-      video: 6,
-      audio: 4
-    }[tool.category] || 0;
-    
-    score += categoryBonus;
-    
-    // Speichere intelligenten Score
-    tool.intelligentScore = Math.round(score);
-    tool.popularityScore = tool.intelligentScore;
+    let score = 0;
+    if (tool.rating >= 4.7) score += 3;
+    if (tool.votes > 50) score += 2;
+    if (userHistory.includes(tool.category)) score += 2;
+    if (favorites.includes(tool.id)) score += 3;
+    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
+    if (tool.hasLifetimeDeal) score += 2;
+        
+    tool.aiScore = score;
+    tool.isAIRecommended = score >= 5;
+    tool.popularityScore = (tool.rating * 10) + (tool.votes || 0) + score;
   });
 }
 
 // ===== TOP 5 BAR =====
 function updateTop5Bar() {
-  // Sortiere nach intelligentem Score statt nur Votes
   const sortedTools = [...aiTools]
     .sort((a, b) => {
-      const aScore = a.intelligentScore || 0;
-      const bScore = b.intelligentScore || 0;
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
       
-      if (bScore !== aScore) {
-        return bScore - aScore;
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
       }
-      // Bei gleichem Score, sortiere nach Upvotes
-      return (b.upvotes || 0) - (a.upvotes || 0);
+      return (b.popularityScore || 0) - (a.popularityScore || 0);
     })
     .slice(0, 5);
   
@@ -2533,7 +2478,6 @@ function handleVoteUpdate(payload) {
       tool.downvotes = 0;
     }
     
-    calculateIntelligentScores(); // Scores neu berechnen
     updateTop5VoteCount(toolId, tool.votes);
     updateToolRowVoteCount(toolId);
   }
@@ -2544,7 +2488,6 @@ function startPolling() {
   
   pollInterval = setInterval(async () => {
     await loadVotesFromSupabase();
-    calculateIntelligentScores();
     updateTop5Bar();
     renderToolGroups();
     updateFloatingBadge();
@@ -2561,7 +2504,7 @@ function updateToolRowVoteCount(toolId) {
   }
 }
 
-// ===== GRUPPIERTE TOOL-LISTE MIT INTELLIGENTEM RANKING =====
+// ===== GRUPPIERTE TOOL-LISTE (KORRIGIERT MIT BASELINE) =====
 function renderToolGroups() {
   // Bestimme welche Kategorien angezeigt werden sollen
   let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
@@ -2586,49 +2529,27 @@ function renderToolGroups() {
     
     if (categoryTools.length === 0) return '';
     
-    // Sortiere Tools nach intelligentem Score
-    let sortedTools = categoryTools.sort((a, b) => {
-      const aScore = a.intelligentScore || 0;
-      const bScore = b.intelligentScore || 0;
+    // Sortiere Tools nach votes MIT Baseline für Sortierung, ABER ohne Baseline für Anzeige
+    const sortedTools = categoryTools.sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
       
-      if (bScore !== aScore) {
-        return bScore - aScore;
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
       }
-      // Bei gleichem Score, sortiere nach Upvotes
-      return (b.upvotes || 0) - (a.upvotes || 0);
+      // Bei gleichen Votes, sortiere nach Popularity Score
+      return (b.popularityScore || 0) - (a.popularityScore || 0);
     });
-    
-    // WENDE MINIMALE POSITIONS-GRENZE AN
-    const minPosition = INTELLIGENT_VOTING.minPositionPerCategory[category] || Infinity;
-    if (sortedTools.length > minPosition) {
-      // Bewege die letzten Tools nach oben, um die Mindestposition zu erreichen
-      const toolsToProtect = sortedTools.slice(minPosition);
-      const protectedTools = toolsToProtect.map(tool => {
-        return {
-          ...tool,
-          isProtected: true,
-          protectedScore: (sortedTools[minPosition - 1]?.intelligentScore || 0) - 1
-        };
-      });
-      
-      // Füge die geschützten Tools wieder hinzu
-      sortedTools = [
-        ...sortedTools.slice(0, minPosition),
-        ...protectedTools
-      ];
-    }
     
     const isExpanded = expandedGroups[category] || false;
     
     // Zeige alle Tools wenn ausgeklappt, sonst nur 2
     const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
     
-    const groupHTML = displayTools.map((tool, index) => {
+    const groupHTML = displayTools.map(tool => {
       const description = currentLang === 'de' ? tool.description.de : tool.description.en;
       const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
-      
-      // Zeige geschützten Status an (optional)
-      const protectedBadge = tool.isProtected ? '<span style="margin-left: 6px; color: var(--warning); font-size: 0.7rem;" title="Geschützt vor weiterem Abstieg"><i class="fas fa-shield-alt"></i></span>' : '';
           
       return `
         <div class="tool-row" data-id="${tool.id}" 
@@ -2652,7 +2573,6 @@ function renderToolGroups() {
             <div class="tool-name">
               ${tool.name}
               ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
-              ${protectedBadge}
             </div>
             <div class="tool-desc">${description}</div>
           </div>
@@ -2941,7 +2861,7 @@ function closeToolDrawer() {
   document.body.style.overflow = '';
 }
 
-// ===== FILTER CHIPS =====
+// ===== FILTER CHIPS (KORRIGIERT) =====
 function renderFilterChips() {
   const filters = [
     { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
@@ -3047,7 +2967,7 @@ function updateFloatingBadge() {
   }
 }
 
-// ===== INTELLIGENTES VOTING-SYSTEM =====
+// ===== VOTING MIT BASELINE-KORREKTUR =====
 async function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
@@ -3060,40 +2980,21 @@ async function vote(toolId, type) {
   const oldUserVote = tool.userVote || 0;
   const voteValue = type === 'up' ? 1 : -1;
   
-  // INTELLIGENTE LOGIK: Downvotes haben KEINEN Effekt auf Ranking-Score
-  let upvotesChange = 0;
-  let downvotesChange = 0;
-  
-  if (oldUserVote === voteValue) {
+  // Berechne die Vote-Änderung
+  let voteChange = 0;
+  if (tool.userVote === voteValue) {
     // User entfernt seinen Vote
-    if (voteValue === 1) {
-      upvotesChange = -1;
-    } else if (voteValue === -1) {
-      downvotesChange = -1;
-    }
     tool.userVote = 0;
+    voteChange = -voteValue;
   } else {
-    // User ändert seinen Vote
-    if (oldUserVote === 1 && voteValue === -1) {
-      upvotesChange = -1;
-      downvotesChange = 1;
-    } else if (oldUserVote === -1 && voteValue === 1) {
-      downvotesChange = -1;
-      upvotesChange = 1;
-    } else if (oldUserVote === 0) {
-      if (voteValue === 1) {
-        upvotesChange = 1;
-      } else if (voteValue === -1) {
-        downvotesChange = 1;
-      }
-    }
+    // User ändert seinen Vote oder stimmt zum ersten Mal ab
+    const previousVote = tool.userVote || 0;
     tool.userVote = voteValue;
+    voteChange = voteValue - previousVote;
   }
   
-  // Update lokale Werte
-  tool.upvotes = Math.max(0, (tool.upvotes || 0) + upvotesChange);
-  tool.downvotes = Math.max(0, (tool.downvotes || 0) + downvotesChange);
-  tool.votes = tool.upvotes - tool.downvotes;
+  // Update lokale Votes für sofortiges UI Feedback
+  tool.votes = (tool.votes || 0) + voteChange;
   
   // Update UI immediately (optimistic)
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -3122,28 +3023,61 @@ async function vote(toolId, type) {
       
     if (fetchError) throw fetchError;
       
+    let upvotesChange = 0;
+    let downvotesChange = 0;
+    
+    // Berechne die Änderungen für upvotes/downvotes
+    if (oldUserVote === 1) {
+      upvotesChange -= 1; // Entferne Upvote
+    } else if (oldUserVote === -1) {
+      downvotesChange -= 1; // Entferne Downvote
+    }
+    
+    if (voteValue === 1) {
+      upvotesChange += 1; // Füge Upvote hinzu
+    } else if (voteValue === -1) {
+      downvotesChange += 1; // Füge Downvote hinzu
+    }
+      
     if (existingData && existingData.length > 0) {
+      const current = existingData[0];
+      const newUpvotes = Math.max(0, (current.upvotes || 0) + upvotesChange);
+      const newDownvotes = Math.max(0, (current.downvotes || 0) + downvotesChange);
+      const newTotal = newUpvotes - newDownvotes;
+        
       const { error: updateError } = await window.supabase
         .from('tool_votes')
         .update({
-          upvotes: tool.upvotes,
-          downvotes: tool.downvotes,
-          total_votes: tool.votes
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+          total_votes: newTotal
         })
         .eq('tool_id', toolId);
         
       if (updateError) throw updateError;
+        
+      tool.votes = newTotal;
+      tool.upvotes = newUpvotes;
+      tool.downvotes = newDownvotes;
     } else {
+      const initialUpvotes = voteValue === 1 ? 1 : 0;
+      const initialDownvotes = voteValue === -1 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
+        
       const { error: insertError } = await window.supabase
         .from('tool_votes')
         .insert({
           tool_id: toolId,
-          upvotes: tool.upvotes,
-          downvotes: tool.downvotes,
-          total_votes: tool.votes
+          upvotes: initialUpvotes,
+          downvotes: initialDownvotes,
+          total_votes: initialTotal
         });
         
       if (insertError) throw insertError;
+        
+      tool.votes = initialTotal;
+      tool.upvotes = initialUpvotes;
+      tool.downvotes = initialDownvotes;
     }
       
     showNotification(
@@ -3160,9 +3094,7 @@ async function vote(toolId, type) {
       
     // Rollback local changes
     tool.userVote = oldUserVote;
-    tool.upvotes = Math.max(0, (tool.upvotes || 0) - upvotesChange);
-    tool.downvotes = Math.max(0, (tool.downvotes || 0) - downvotesChange);
-    tool.votes = tool.upvotes - tool.downvotes;
+    tool.votes = (tool.votes || 0) - voteChange;
     
     // Rollback UI
     const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -3171,9 +3103,6 @@ async function vote(toolId, type) {
     }
     updateTop5VoteCount(toolId, tool.votes);
   }
-  
-  // INTELLIGENTES RANKING NEU BERECHNEN
-  calculateIntelligentScores();
   
   // WICHTIG: Die Tool-Liste NEU sortieren und rendern
   updateTop5Bar();
@@ -3201,7 +3130,6 @@ function toggleFavorite(toolId) {
     showNotification(currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites', 'success');
   }
   localStorage.setItem('aiFavorites', JSON.stringify(favorites));
-  calculateIntelligentScores(); // Scores neu berechnen
   updateFavoritesOverlay();
   updateFloatingBadge();
   renderToolGroups();
@@ -3227,7 +3155,6 @@ function toggleComparison(toolId) {
     }
   }
   localStorage.setItem('aiComparison', JSON.stringify(comparison));
-  calculateIntelligentScores(); // Scores neu berechnen
   updateFavoritesOverlay();
   updateFloatingBadge();
   renderToolGroups();
@@ -3337,18 +3264,12 @@ function trackUserInteraction(category) {
   history.push(category);
   if (history.length > 20) history = history.slice(-20);
   localStorage.setItem('userHistory', JSON.stringify(history));
-  
-  // Intelligente Scores neu berechnen
-  calculateIntelligentScores();
 }
 
 function trackToolClick(toolId) {
   let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
   clicks[toolId] = (clicks[toolId] || 0) + 1;
   localStorage.setItem('toolClicks', JSON.stringify(clicks));
-  
-  // Intelligente Scores neu berechnen
-  calculateIntelligentScores();
 }
 
 function showNotification(message, type = 'info') {
@@ -3448,7 +3369,6 @@ function setupEventListeners() {
   // Favorites overlay actions
   document.getElementById('clearFavorites').addEventListener('click', () => {
     localStorage.setItem('aiFavorites', JSON.stringify([]));
-    calculateIntelligentScores();
     updateFavoritesOverlay();
     updateFloatingBadge();
     renderToolGroups();
