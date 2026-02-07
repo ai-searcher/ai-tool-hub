@@ -3009,69 +3009,149 @@ function updateFloatingBadge() {
 async function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
-  
+
+  // Supabase Check
   if (typeof window.supabase === 'undefined') {
     showNotification(currentLang === 'de' ? 'Fehler: Datenbank nicht verfügbar' : 'Error: Database not available', 'error');
     return;
   }
   
-  const oldUserVote = tool.userVote ?? 0;
+  // Voting-Sperre aktivieren (stoppt Polling)
+  isVoting = true;
+
+  const oldUserVote = tool.userVote || 0;
   const voteValue = type === 'up' ? 1 : -1;
   
-  // Berechne die Vote-Änderung
+  // Berechne die Änderung
   let voteChange = 0;
   if (tool.userVote === voteValue) {
-    // User entfernt seinen Vote
+    // User nimmt Vote zurück
     tool.userVote = 0;
     voteChange = -voteValue;
   } else {
-    // User ändert seinen Vote oder stimmt zum ersten Mal ab
-    const previousVote = tool.userVote ?? 0;
+    // Neuer Vote oder Wechsel
+    const previousVote = tool.userVote || 0;
     tool.userVote = voteValue;
     voteChange = voteValue - previousVote;
   }
-  
-  // Update lokale Votes für sofortiges UI Feedback
+
+  // Update local data
   const currentRawVotes = getRawVotes(tool);
   const newRawVotes = currentRawVotes + voteChange;
   
-  // Update UI immediately (optimistic)
+  // Update Tool Object immediately
+  tool.votes = newRawVotes;
+  if (voteValue === 1) tool.upvotes = (tool.upvotes || 0) + voteChange; // Grobe Schätzung für UI
+  
+  // --- UI UPDATE (OHNE RE-RENDER) ---
+  const toolRow = document.querySelector(`.tool-row[data-id="${toolId}"]`);
+  
+  // 1. Zahl updaten
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
     const displayVotes = Math.max(newRawVotes, 0);
     voteCountElement.textContent = displayVotes;
+    
+    // Animation
+    voteCountElement.classList.remove('moving-up', 'moving-down');
+    void voteCountElement.offsetWidth; // Trigger Reflow
     voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
+    
     setTimeout(() => {
       voteCountElement.classList.remove('moving-up', 'moving-down');
     }, 500);
   }
-  
-  // Update Top 5 bar
+
+  // 2. Buttons updaten (Farben)
+  if (toolRow) {
+    const upBtn = toolRow.querySelector('.vote-btn-row.up');
+    const downBtn = toolRow.querySelector('.vote-btn-row.down');
+    
+    if (upBtn) {
+      upBtn.classList.remove('active');
+      if (tool.userVote === 1) upBtn.classList.add('active');
+    }
+    
+    if (downBtn) {
+      downBtn.classList.remove('active');
+      if (tool.userVote === -1) downBtn.classList.add('active');
+    }
+  }
+
+  // Update Top 5 (optional, falls Tool dort ist)
   updateTop5VoteCount(toolId, newRawVotes);
-  
-  // Save user's vote locally
-  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+
+  // Save locally
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes')) || {};
   savedVotes[toolId] = { userVote: tool.userVote };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
-  
+
   try {
-    // Update in Supabase
+    // Supabase Call
     const { data: existingData, error: fetchError } = await window.supabase
-      .from('tool_votes')
+      .from('toolvotes')
       .select('*')
-      .eq('tool_id', toolId);
-      
+      .eq('toolid', toolId);
+
     if (fetchError) throw fetchError;
-      
+
     let upvotesChange = 0;
     let downvotesChange = 0;
     
-    // Berechne die Änderungen für upvotes/downvotes
-    if (oldUserVote === 1) {
-      upvotesChange -= 1; // Entferne Upvote
-    } else if (oldUserVote === -1) {
-      downvotesChange -= 1; // Entferne Downvote
+    // Logik für DB-Update
+    if (oldUserVote === 1) upvotesChange = -1;
+    else if (oldUserVote === -1) downvotesChange = -1;
+    
+    if (tool.userVote === 1) upvotesChange += 1;
+    else if (tool.userVote === -1) downvotesChange += 1;
+
+    if (existingData && existingData.length > 0) {
+      const current = existingData[0];
+      const newUpvotes = Math.max(0, safeNumber(current.upvotes) + upvotesChange);
+      const newDownvotes = Math.max(0, safeNumber(current.downvotes) + downvotesChange);
+      const newTotal = newUpvotes - newDownvotes;
+
+      const { error: updateError } = await window.supabase
+        .from('toolvotes')
+        .update({ upvotes: newUpvotes, downvotes: newDownvotes, totalvotes: newTotal })
+        .eq('toolid', toolId);
+
+      if (updateError) throw updateError;
+      
+      // Korrekte Werte vom Server übernehmen
+      tool.votes = newTotal;
+      tool.upvotes = newUpvotes;
+      tool.downvotes = newDownvotes;
+
+    } else {
+      // Insert logic (falls Tool neu)
+      const initialUpvotes = tool.userVote === 1 ? 1 : 0;
+      const initialDownvotes = tool.userVote === -1 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
+
+      const { error: insertError } = await window.supabase
+        .from('toolvotes')
+        .insert([{ toolid: toolId, upvotes: initialUpvotes, downvotes: initialDownvotes, totalvotes: initialTotal }]);
+
+      if (insertError) throw insertError;
     }
+
+  } catch (error) {
+    console.error('Voting Fehler:', error);
+    showNotification(currentLang === 'de' ? 'Fehler beim Speichern' : 'Error saving vote', 'error');
+    
+    // Rollback bei Fehler
+    tool.userVote = oldUserVote;
+    if (voteCountElement) voteCountElement.textContent = getDisplayVotes(tool);
+    // Buttons resetten könnte man hier auch noch machen
+  } finally {
+    // Voting-Sperre nach 2 Sekunden aufheben (Sicherheitsbuffer)
+    setTimeout(() => {
+      isVoting = false;
+    }, 2000);
+  }
+}
+
     
     if (voteValue === 1) {
       upvotesChange += 1; // Füge Upvote hinzu
