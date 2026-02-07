@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://doicozkpdbkyvdkpujoh.supabase.co; base-uri 'self'; frame-ancestors 'none';">
-<title>AI Finder - Finde sofort dein perfektes KI-Tool</title>
+<title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
 <meta name="google-site-verification" content="Wo_6LQQ8LoGlobalzVMjBHh_Z-VD3N_dFdqCZb2BYxV0" />
@@ -14,12 +14,12 @@
 <link rel="alternate" hreflang="x-default" href="https://ai-searcher.github.io/ai-tool-hub/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta property="og:type" content="website">
-<meta property="og:title" content="AI Finder - Finde sofort dein perfektes KI-Tool">
+<meta property="og:title" content="AI Searcher - Finde sofort dein perfektes KI-Tool">
 <meta property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.">
 <meta property="og:url" content="https://ai-searcher.github.io/ai-tool-hub/">
-<meta property="og:site_name" content="AI Finder">
+<meta property="og:site_name" content="AI Searcher">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Finder">
+<meta name="twitter:title" content="AI Searcher">
 <meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
 <!-- Google Analytics wird nur nach Cookie-Consent geladen -->
 <script>
@@ -35,13 +35,13 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "AI Finder",
+  "name": "AI Searcher",
   "url": "https://ai-searcher.github.io/ai-tool-hub/",
   "description": "Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.",
   "potentialAction": {
@@ -222,8 +222,53 @@ body::before {
   padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 20px;
+}
+
+.site-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  cursor: default;
+  position: relative;
+  padding: 8px 0;
+}
+
+.site-title:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(135deg, #00ff9d, #00d4ff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.site-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+
+.site-title:hover::after {
+  width: 100%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ===== HERO AREA ===== */
@@ -364,12 +409,6 @@ body::before {
   border-color: rgba(0, 212, 255, 0.2);
   background: rgba(0, 212, 255, 0.05);
   transform: translateY(-2px);
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 .lang-btn {
@@ -1740,6 +1779,10 @@ body::before {
   .hero-search-container {
     max-width: 500px;
   }
+  
+  .site-title {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1831,6 +1874,10 @@ body::before {
   .footer-controls {
     gap: 12px;
   }
+  
+  .site-title {
+    font-size: 1.3rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1891,6 +1938,10 @@ body::before {
   .footer-links {
     flex-direction: column;
     gap: 10px;
+  }
+  
+  .site-title {
+    font-size: 1.1rem;
   }
 }
 
@@ -1992,6 +2043,7 @@ body::before {
 
 <!-- Sticky Smart Header -->
 <header class="sticky-header">
+  <div class="site-title">AI Searcher</div>
   <div class="header-right">
     <button class="lang-btn" id="langToggle">
       <i class="fas fa-globe"></i>
@@ -2002,7 +2054,7 @@ body::before {
 
 <!-- Hero Area -->
 <div class="hero-area">
-  <h1 class="hero-title">AI Finder</h1>
+  <h1 class="hero-title">AI Searcher</h1>
   <div class="hero-subtitle" id="heroSubtitle">
     Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.
   </div>
@@ -2078,7 +2130,7 @@ body::before {
     <a href="#" id="privacyLink">Datenschutz</a>
   </div>
   <div class="footer-copyright">
-    © 2026 AI Finder. Alle Rechte vorbehalten.
+    © 2026 AI Searcher. Alle Rechte vorbehalten.
   </div>
 </footer>
 
@@ -2179,7 +2231,7 @@ body::before {
     <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
     
     <h3>Cookies</h3>
-    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwenden Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
+    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwende Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
     
     <h3>Google Analytics</h3>
     <p>Diese Website nutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet „Cookies", die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
@@ -2203,7 +2255,10 @@ let isDrawerOpen = false;
 let supabaseRealtimeSubscription = null;
 let top5Tools = [];
 let pollInterval = null;
-let activeFilterId = null; // Neu: Speichert den aktiven Filter
+let activeFilterId = null;
+
+// ===== BASELINE VOTES =====
+const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
 
 // ===== SUPABASE CLIENT ÜBERPRÜFEN =====
 if (typeof window.supabase === 'undefined' && typeof window.supabaseClient !== 'undefined') {
@@ -2322,7 +2377,13 @@ function addAIRecommendations() {
 function updateTop5Bar() {
   const sortedTools = [...aiTools]
     .sort((a, b) => {
-      if (b.votes !== a.votes) return (b.votes || 0) - (a.votes || 0);
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
       return (b.popularityScore || 0) - (a.popularityScore || 0);
     })
     .slice(0, 5);
@@ -2443,7 +2504,7 @@ function updateToolRowVoteCount(toolId) {
   }
 }
 
-// ===== GRUPPIERTE TOOL-LISTE (KORRIGIERT) =====
+// ===== GRUPPIERTE TOOL-LISTE (KORRIGIERT MIT BASELINE) =====
 function renderToolGroups() {
   // Bestimme welche Kategorien angezeigt werden sollen
   let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
@@ -2468,8 +2529,18 @@ function renderToolGroups() {
     
     if (categoryTools.length === 0) return '';
     
-    // Sortiere Tools nach votes
-    const sortedTools = categoryTools.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+    // Sortiere Tools nach votes MIT Baseline für Sortierung, ABER ohne Baseline für Anzeige
+    const sortedTools = categoryTools.sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
+      // Bei gleichen Votes, sortiere nach Popularity Score
+      return (b.popularityScore || 0) - (a.popularityScore || 0);
+    });
     
     const isExpanded = expandedGroups[category] || false;
     
@@ -2821,7 +2892,7 @@ function renderFilterChips() {
 
 function setActiveFilter(filterId) {
   currentCategory = filterId;
-  activeFilterId = filterId; // Speichere aktiven Filter
+  activeFilterId = filterId;
   
   // Entferne active Klasse von allen Chips
   document.querySelectorAll('.filter-chip').forEach(chip => {
@@ -2896,7 +2967,7 @@ function updateFloatingBadge() {
   }
 }
 
-// ===== VOTING =====
+// ===== VOTING MIT BASELINE-KORREKTUR =====
 async function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
@@ -2909,14 +2980,21 @@ async function vote(toolId, type) {
   const oldUserVote = tool.userVote || 0;
   const voteValue = type === 'up' ? 1 : -1;
   
+  // Berechne die Vote-Änderung
+  let voteChange = 0;
   if (tool.userVote === voteValue) {
+    // User entfernt seinen Vote
     tool.userVote = 0;
-    tool.votes = (tool.votes || 0) - voteValue;
+    voteChange = -voteValue;
   } else {
-    const voteChange = voteValue - (tool.userVote || 0);
+    // User ändert seinen Vote oder stimmt zum ersten Mal ab
+    const previousVote = tool.userVote || 0;
     tool.userVote = voteValue;
-    tool.votes = (tool.votes || 0) + voteChange;
+    voteChange = voteValue - previousVote;
   }
+  
+  // Update lokale Votes für sofortiges UI Feedback
+  tool.votes = (tool.votes || 0) + voteChange;
   
   // Update UI immediately (optimistic)
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -2931,11 +3009,13 @@ async function vote(toolId, type) {
   // Update Top 5 bar
   updateTop5VoteCount(toolId, tool.votes);
   
+  // Save user's vote locally
   const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
   savedVotes[toolId] = { userVote: tool.userVote };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
   
   try {
+    // Update in Supabase
     const { data: existingData, error: fetchError } = await window.supabase
       .from('tool_votes')
       .select('*')
@@ -2943,29 +3023,26 @@ async function vote(toolId, type) {
       
     if (fetchError) throw fetchError;
       
-    let upvotes = 0;
-    let downvotes = 0;
-      
-    if (oldUserVote === 1 && voteValue === 1) {
-      upvotes = -1;
-    } else if (oldUserVote === -1 && voteValue === -1) {
-      downvotes = -1;
-    } else if (oldUserVote === 1 && voteValue === -1) {
-      upvotes = -1;
-      downvotes = 1;
-    } else if (oldUserVote === -1 && voteValue === 1) {
-      downvotes = -1;
-      upvotes = 1;
-    } else if (oldUserVote === 0 && voteValue === 1) {
-      upvotes = 1;
-    } else if (oldUserVote === 0 && voteValue === -1) {
-      downvotes = 1;
+    let upvotesChange = 0;
+    let downvotesChange = 0;
+    
+    // Berechne die Änderungen für upvotes/downvotes
+    if (oldUserVote === 1) {
+      upvotesChange -= 1; // Entferne Upvote
+    } else if (oldUserVote === -1) {
+      downvotesChange -= 1; // Entferne Downvote
+    }
+    
+    if (voteValue === 1) {
+      upvotesChange += 1; // Füge Upvote hinzu
+    } else if (voteValue === -1) {
+      downvotesChange += 1; // Füge Downvote hinzu
     }
       
     if (existingData && existingData.length > 0) {
       const current = existingData[0];
-      const newUpvotes = Math.max(0, (current.upvotes || 0) + upvotes);
-      const newDownvotes = Math.max(0, (current.downvotes || 0) + downvotes);
+      const newUpvotes = Math.max(0, (current.upvotes || 0) + upvotesChange);
+      const newDownvotes = Math.max(0, (current.downvotes || 0) + downvotesChange);
       const newTotal = newUpvotes - newDownvotes;
         
       const { error: updateError } = await window.supabase
@@ -2980,6 +3057,8 @@ async function vote(toolId, type) {
       if (updateError) throw updateError;
         
       tool.votes = newTotal;
+      tool.upvotes = newUpvotes;
+      tool.downvotes = newDownvotes;
     } else {
       const initialUpvotes = voteValue === 1 ? 1 : 0;
       const initialDownvotes = voteValue === -1 ? 1 : 0;
@@ -2997,6 +3076,8 @@ async function vote(toolId, type) {
       if (insertError) throw insertError;
         
       tool.votes = initialTotal;
+      tool.upvotes = initialUpvotes;
+      tool.downvotes = initialDownvotes;
     }
       
     showNotification(
@@ -3011,8 +3092,9 @@ async function vote(toolId, type) {
       'error'
     );
       
+    // Rollback local changes
     tool.userVote = oldUserVote;
-    tool.votes = (tool.votes || 0) - (voteValue - oldUserVote);
+    tool.votes = (tool.votes || 0) - voteChange;
     
     // Rollback UI
     const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -3022,8 +3104,14 @@ async function vote(toolId, type) {
     updateTop5VoteCount(toolId, tool.votes);
   }
   
+  // WICHTIG: Die Tool-Liste NEU sortieren und rendern
   updateTop5Bar();
   renderToolGroups();
+  
+  // Aktualisiere auch die aktive Filteransicht, falls ein Filter aktiv ist
+  if (activeFilterId) {
+    setActiveFilter(activeFilterId);
+  }
 }
 
 // ===== FAVORITES & COMPARISON =====
