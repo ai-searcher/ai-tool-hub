@@ -2341,9 +2341,9 @@ async function loadVotesFromSupabase() {
       votesData.forEach(vote => {
         const tool = aiTools.find(t => t.id === vote.tool_id);
         if (tool) {
-          tool.votes = vote.total_votes || 0;
-          tool.upvotes = vote.upvotes || 0;
-          tool.downvotes = vote.downvotes || 0;
+          tool.votes = vote.total_votes ?? 0;
+          tool.upvotes = vote.upvotes ?? 0;
+          tool.downvotes = vote.downvotes ?? 0;
         }
       });
     }
@@ -2378,13 +2378,13 @@ function updateTop5Bar() {
   const sortedTools = [...aiTools]
     .sort((a, b) => {
       // Für die Sortierung: echte Votes + Baseline
-      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
-      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
+      const aVotesWithBaseline = (a.votes ?? 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes ?? 0) + BASELINE_VOTES;
       
       if (bVotesWithBaseline !== aVotesWithBaseline) {
         return bVotesWithBaseline - aVotesWithBaseline;
       }
-      return (b.popularityScore || 0) - (a.popularityScore || 0);
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
     })
     .slice(0, 5);
   
@@ -2406,7 +2406,7 @@ function updateTop5Bar() {
           <div class="top5-name">${tool.name}</div>
           <div class="top5-category">${getCategoryLabel(tool.category)}</div>
         </div>
-        <div class="top5-votes" id="top5Votes-${tool.id}">${tool.votes || 0}</div>
+        <div class="top5-votes" id="top5Votes-${tool.id}">${Math.max(tool.votes ?? 0, 0)}</div>
         <div class="top5-quickpeek">${quickPeek}</div>
       </div>
     `;
@@ -2420,8 +2420,9 @@ function updateTop5VoteCount(toolId, newVotes) {
   const voteElement = document.getElementById(`top5Votes-${toolId}`);
   if (voteElement) {
     const oldVotes = parseInt(voteElement.textContent);
-    if (newVotes !== oldVotes) {
-      voteElement.textContent = newVotes;
+    const displayNewVotes = Math.max(newVotes ?? 0, 0);
+    if (displayNewVotes !== oldVotes) {
+      voteElement.textContent = displayNewVotes;
       voteElement.classList.add('changed');
       setTimeout(() => {
         voteElement.classList.remove('changed');
@@ -2444,7 +2445,7 @@ function setupSupabaseRealtime() {
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'tool_votes' }, 
         (payload) => {
-          console.log('Realtime update:', payload);
+          console.log('Realtime vote payload:', payload);
           handleVoteUpdate(payload);
         }
       )
@@ -2469,9 +2470,9 @@ function handleVoteUpdate(payload) {
   const tool = aiTools.find(t => t.id === toolId);
   if (tool) {
     if (eventType === 'INSERT' || eventType === 'UPDATE') {
-      tool.votes = newRecord.total_votes || 0;
-      tool.upvotes = newRecord.upvotes || 0;
-      tool.downvotes = newRecord.downvotes || 0;
+      tool.votes = newRecord.total_votes ?? 0;
+      tool.upvotes = newRecord.upvotes ?? 0;
+      tool.downvotes = newRecord.downvotes ?? 0;
     } else if (eventType === 'DELETE') {
       tool.votes = 0;
       tool.upvotes = 0;
@@ -2499,7 +2500,7 @@ function updateToolRowVoteCount(toolId) {
   if (voteCountElement) {
     const tool = aiTools.find(t => t.id === toolId);
     if (tool) {
-      voteCountElement.textContent = tool.votes || 0;
+      voteCountElement.textContent = String(Math.max(tool.votes ?? 0, 0));
     }
   }
 }
@@ -2527,19 +2528,37 @@ function renderToolGroups() {
       categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
     }
     
-    if (categoryTools.length === 0) return '';
+    // Defensive Rendering: Leere Kategorie nicht ausblenden
+    if (categoryTools.length === 0) {
+      return `
+        <div class="tool-group" data-category="${category}">
+          <div class="group-header">
+            <div class="group-title">
+              <div class="group-icon">${getCategoryIcon(category)}</div>
+              <span>${getCategoryLabel(category)}</span>
+              <span class="group-count">0</span>
+            </div>
+          </div>
+          <div class="group-content expanded">
+            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
     
     // Sortiere Tools nach votes MIT Baseline für Sortierung, ABER ohne Baseline für Anzeige
-    const sortedTools = categoryTools.sort((a, b) => {
+    const sortedTools = [...categoryTools].sort((a, b) => {
       // Für die Sortierung: echte Votes + Baseline
-      const aVotesWithBaseline = (a.votes || 0) + BASELINE_VOTES;
-      const bVotesWithBaseline = (b.votes || 0) + BASELINE_VOTES;
+      const aVotesWithBaseline = (a.votes ?? 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = (b.votes ?? 0) + BASELINE_VOTES;
       
       if (bVotesWithBaseline !== aVotesWithBaseline) {
         return bVotesWithBaseline - aVotesWithBaseline;
       }
       // Bei gleichen Votes, sortiere nach Popularity Score
-      return (b.popularityScore || 0) - (a.popularityScore || 0);
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
     });
     
     const isExpanded = expandedGroups[category] || false;
@@ -2550,6 +2569,7 @@ function renderToolGroups() {
     const groupHTML = displayTools.map(tool => {
       const description = currentLang === 'de' ? tool.description.de : tool.description.en;
       const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
+      const displayVotes = Math.max(tool.votes ?? 0, 0);
           
       return `
         <div class="tool-row" data-id="${tool.id}" 
@@ -2557,7 +2577,7 @@ function renderToolGroups() {
              onmouseleave="hideToolPeek()"
              onclick="openToolDrawer('${tool.id}')">
           <div class="tool-vote" onclick="event.stopPropagation()">
-            <div class="vote-count" id="voteCount-${tool.id}">${tool.votes || 0}</div>
+            <div class="vote-count" id="voteCount-${tool.id}">${displayVotes}</div>
             <div class="vote-buttons">
               <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
                 <i class="fas fa-arrow-up"></i>
@@ -2994,12 +3014,13 @@ async function vote(toolId, type) {
   }
   
   // Update lokale Votes für sofortiges UI Feedback
-  tool.votes = (tool.votes || 0) + voteChange;
+  tool.votes = (tool.votes ?? 0) + voteChange;
   
   // Update UI immediately (optimistic)
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
-    voteCountElement.textContent = tool.votes || 0;
+    const displayVotes = Math.max(tool.votes ?? 0, 0);
+    voteCountElement.textContent = displayVotes;
     voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
     setTimeout(() => {
       voteCountElement.classList.remove('moving-up', 'moving-down');
@@ -3041,8 +3062,8 @@ async function vote(toolId, type) {
       
     if (existingData && existingData.length > 0) {
       const current = existingData[0];
-      const newUpvotes = Math.max(0, (current.upvotes || 0) + upvotesChange);
-      const newDownvotes = Math.max(0, (current.downvotes || 0) + downvotesChange);
+      const newUpvotes = Math.max(0, (current.upvotes ?? 0) + upvotesChange);
+      const newDownvotes = Math.max(0, (current.downvotes ?? 0) + downvotesChange);
       const newTotal = newUpvotes - newDownvotes;
         
       const { error: updateError } = await window.supabase
@@ -3094,12 +3115,13 @@ async function vote(toolId, type) {
       
     // Rollback local changes
     tool.userVote = oldUserVote;
-    tool.votes = (tool.votes || 0) - voteChange;
+    tool.votes = (tool.votes ?? 0) - voteChange;
     
     // Rollback UI
     const voteCountElement = document.getElementById(`voteCount-${toolId}`);
     if (voteCountElement) {
-      voteCountElement.textContent = tool.votes || 0;
+      const displayVotes = Math.max(tool.votes ?? 0, 0);
+      voteCountElement.textContent = displayVotes;
     }
     updateTop5VoteCount(toolId, tool.votes);
   }
