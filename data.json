@@ -4,6 +4,15 @@
     "numericId": 1,
     "name": "ChatGPT",
     "category": "text",
+    "aiScore": 98,
+    "popularityScore": 99,
+    "quickPeek": {
+      "de": "Führender KI-Allrounder für Text, Code und Kreativität.",
+      "en": "Leading AI all-rounder for text, code and creativity."
+    },
+    "features": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
+    "tags": ["text", "chat", "coding", "research", "multimodal", "popular", "freemium", "openai"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/€20",
@@ -14,7 +23,6 @@
       "de": "Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.",
       "en": "Best all-rounder for text, ideas, code that started the AI revolution."
     },
-    "features": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
     "link": "https://chat.openai.com/",
     "badge": "popular",
     "useCases": ["chatbot", "writing", "coding", "research", "brainstorming"],
@@ -47,6 +55,15 @@
     "numericId": 2,
     "name": "Claude",
     "category": "text",
+    "aiScore": 96,
+    "popularityScore": 94,
+    "quickPeek": {
+      "de": "Experte für lange Texte und Dokumentenanalyse mit riesigem Kontextfenster.",
+      "en": "Expert for long texts and document analysis with huge context window."
+    },
+    "features": ["200K Context", "File Upload", "Document Analysis", "API Access", "Web Search"],
+    "tags": ["text", "document", "analysis", "long-form", "research", "popular", "freemium", "anthropic"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/€20",
@@ -57,7 +74,6 @@
       "de": "Exzellent für lange Texte und Dokumentenanalyse mit 200K-Token-Kontext.",
       "en": "Excellent for long-form writing and document analysis with 200K token context."
     },
-    "features": ["200K Context", "File Upload", "Document Analysis", "API Access", "Web Search"],
     "link": "https://claude.ai/",
     "badge": "popular",
     "useCases": ["document-analysis", "academic-writing", "legal-documents", "research", "content-creation"],
@@ -90,6 +106,15 @@
     "numericId": 3,
     "name": "Midjourney",
     "category": "image",
+    "aiScore": 98,
+    "popularityScore": 97,
+    "quickPeek": {
+      "de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
+      "en": "Best artistic image generation with unparalleled stylistic control."
+    },
+    "features": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
+    "tags": ["image", "art", "generation", "artistic", "discord", "popular", "paid", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -100,7 +125,6 @@
       "de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
       "en": "Best artistic image generation with unparalleled stylistic control."
     },
-    "features": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
     "link": "https://www.midjourney.com/",
     "badge": "popular",
     "useCases": ["concept-art", "illustration", "marketing-images", "book-covers", "character-design"],
@@ -133,6 +157,15 @@
     "numericId": 4,
     "name": "GitHub Copilot",
     "category": "code",
+    "aiScore": 96,
+    "popularityScore": 95,
+    "quickPeek": {
+      "de": "Bester KI-Code-Assistent mit IDE-Integration für Entwickler.",
+      "en": "Best AI code assistant with IDE integration for developers."
+    },
+    "features": ["Autocomplete", "Chat Interface", "Multi-Language", "IDE Integration", "Code Explanation"],
+    "tags": ["code", "developer", "autocomplete", "ide", "productivity", "popular", "paid", "microsoft"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "€10/Monat",
@@ -143,7 +176,6 @@
       "de": "Bester KI-Code-Assistent für Entwickler mit IDE-Integration.",
       "en": "Best AI code assistant for developers with IDE integration."
     },
-    "features": ["Autocomplete", "Chat Interface", "Multi-Language", "IDE Integration", "Code Explanation"],
     "link": "https://github.com/features/copilot",
     "badge": "popular",
     "useCases": ["coding", "debugging", "learning", "code-review", "documentation"],
@@ -176,6 +208,15 @@
     "numericId": 5,
     "name": "ElevenLabs",
     "category": "audio",
+    "aiScore": 96,
+    "popularityScore": 92,
+    "quickPeek": {
+      "de": "Realistische KI-Stimmen und Voice Cloning für natürliche Sprachausgabe.",
+      "en": "Realistic AI voices and voice cloning for natural speech output."
+    },
+    "features": ["Voice Cloning", "Emotional Speech", "Multilingual", "API Access", "Voice Library"],
+    "tags": ["audio", "voice", "tts", "cloning", "realistic", "popular", "freemium", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/ab €5",
@@ -186,7 +227,6 @@
       "de": "Realistische KI-Stimmen und Voice Cloning für natürliche Sprachausgabe.",
       "en": "Realistic AI voices and voice cloning for natural speech output."
     },
-    "features": ["Voice Cloning", "Emotional Speech", "Multilingual", "API Access", "Voice Library"],
     "link": "https://elevenlabs.io/",
     "badge": "popular",
     "useCases": ["voiceovers", "audiobooks", "podcasts", "video-narration", "accessibility"],
@@ -219,6 +259,15 @@
     "numericId": 6,
     "name": "Runway",
     "category": "video",
+    "aiScore": 94,
+    "popularityScore": 90,
+    "quickPeek": {
+      "de": "All-in-One KI-Video-Plattform mit Text-zu-Video und professionellen Editing-Tools.",
+      "en": "All-in-One AI video platform with text-to-video and professional editing tools."
+    },
+    "features": ["Text-to-Video", "Video Editing", "Object Removal", "Motion Tracking", "Green Screen"],
+    "tags": ["video", "editing", "generation", "effects", "all-in-one", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/ab €15",
@@ -229,7 +278,6 @@
       "de": "All-in-One KI-Video-Plattform mit Text-zu-Video und professionellen Editing-Tools.",
       "en": "All-in-One AI video platform with text-to-video and professional editing tools."
     },
-    "features": ["Text-to-Video", "Video Editing", "Object Removal", "Motion Tracking", "Green Screen"],
     "link": "https://runwayml.com/",
     "badge": "popular",
     "useCases": ["video-editing", "motion-graphics", "special-effects", "content-creation", "advertising"],
@@ -262,6 +310,15 @@
     "numericId": 7,
     "name": "Gemini",
     "category": "text",
+    "aiScore": 92,
+    "popularityScore": 93,
+    "quickPeek": {
+      "de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
+      "en": "Google's AI assistant with deep web integration and multimodal capabilities."
+    },
+    "features": ["Web Search", "Multimodal", "Google Apps", "Code Generation", "Image Analysis"],
+    "tags": ["text", "google", "web-search", "multimodal", "free", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/€20",
@@ -272,7 +329,6 @@
       "de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
       "en": "Google's AI assistant with deep web integration and multimodal capabilities."
     },
-    "features": ["Web Search", "Multimodal", "Google Apps", "Code Generation", "Image Analysis"],
     "link": "https://gemini.google.com/",
     "badge": "new",
     "useCases": ["research", "writing", "coding", "analysis", "productivity"],
@@ -305,6 +361,15 @@
     "numericId": 8,
     "name": "Perplexity",
     "category": "text",
+    "aiScore": 94,
+    "popularityScore": 91,
+    "quickPeek": {
+      "de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
+      "en": "AI search engine with citations and conversational answer formatting."
+    },
+    "features": ["Citations", "Web Search", "File Upload", "Collections", "Copilot"],
+    "tags": ["text", "search", "research", "citations", "fact-checking", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/€20",
@@ -315,7 +380,6 @@
       "de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
       "en": "AI search engine with citations and conversational answer formatting."
     },
-    "features": ["Citations", "Web Search", "File Upload", "Collections", "Copilot"],
     "link": "https://www.perplexity.ai/",
     "badge": "new",
     "useCases": ["research", "academic-work", "fact-checking", "news", "learning"],
@@ -348,6 +412,15 @@
     "numericId": 9,
     "name": "DALL·E 3",
     "category": "image",
+    "aiScore": 94,
+    "popularityScore": 92,
+    "quickPeek": {
+      "de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
+      "en": "Text-to-image generator from OpenAI with excellent text understanding."
+    },
+    "features": ["Text-to-Image", "ChatGPT Integration", "High Quality", "Multiple Styles", "Editing"],
+    "tags": ["image", "generation", "openai", "chatgpt", "text-to-image", "new", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "In ChatGPT+ (€20)",
@@ -358,7 +431,6 @@
       "de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
       "en": "Text-to-image generator from OpenAI with excellent text understanding."
     },
-    "features": ["Text-to-Image", "ChatGPT Integration", "High Quality", "Multiple Styles", "Editing"],
     "link": "https://openai.com/dall-e-3",
     "badge": "new",
     "useCases": ["image-generation", "concept-art", "social-media", "illustration", "design"],
@@ -391,6 +463,15 @@
     "numericId": 10,
     "name": "Stable Diffusion",
     "category": "image",
+    "aiScore": 94,
+    "popularityScore": 89,
+    "quickPeek": {
+      "de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
+      "en": "Open-source image generation with local installation and full control."
+    },
+    "features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "Inpainting"],
+    "tags": ["image", "generation", "open-source", "local", "customizable", "free", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "free",
     "priceDisplay": {
       "de": "Kostenlos",
@@ -401,7 +482,6 @@
       "de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
       "en": "Open-source image generation with local installation and full control."
     },
-    "features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "Inpainting"],
     "link": "https://stability.ai/",
     "badge": "free",
     "useCases": ["custom-models", "research", "commercial-use", "nsfw-content", "animation"],
@@ -434,6 +514,15 @@
     "numericId": 11,
     "name": "Notion AI",
     "category": "text",
+    "aiScore": 90,
+    "popularityScore": 88,
+    "quickPeek": {
+      "de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
+      "en": "AI directly in your Notion workspace for writing, summarization and more."
+    },
+    "features": ["Writing Assistant", "Summarization", "Translation", "Brainstorming", "Editing"],
+    "tags": ["text", "notion", "productivity", "workspace", "writing", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "€10/Monat",
@@ -444,7 +533,6 @@
       "de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
       "en": "AI directly in your Notion workspace for writing, summarization and more."
     },
-    "features": ["Writing Assistant", "Summarization", "Translation", "Brainstorming", "Editing"],
     "link": "https://www.notion.so/product/ai",
     "badge": "popular",
     "useCases": ["note-taking", "documentation", "project-management", "knowledge-base", "meeting-notes"],
@@ -477,6 +565,15 @@
     "numericId": 12,
     "name": "Copy.ai",
     "category": "text",
+    "aiScore": 88,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
+      "en": "AI platform specialized in marketing copy and advertising text."
+    },
+    "features": ["Marketing Templates", "Workflows", "Brand Voice", "SEO Tools", "Content Calendar"],
+    "tags": ["text", "marketing", "copywriting", "templates", "workflow", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €49/Monat",
@@ -487,7 +584,6 @@
       "de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
       "en": "AI platform specialized in marketing copy and advertising text."
     },
-    "features": ["Marketing Templates", "Workflows", "Brand Voice", "SEO Tools", "Content Calendar"],
     "link": "https://www.copy.ai/",
     "badge": "popular",
     "useCases": ["copywriting", "social-media", "email-marketing", "ad-copy", "landing-pages"],
@@ -520,6 +616,15 @@
     "numericId": 13,
     "name": "Jasper",
     "category": "text",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
+      "en": "AI platform for business content with brand customization and collaboration."
+    },
+    "features": ["Brand Voice", "Templates", "Collaboration", "SEO", "Content Analytics"],
+    "tags": ["text", "business", "marketing", "brand", "seo", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €49/Monat",
@@ -530,7 +635,6 @@
       "de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
       "en": "AI platform for business content with brand customization and collaboration."
     },
-    "features": ["Brand Voice", "Templates", "Collaboration", "SEO", "Content Analytics"],
     "link": "https://www.jasper.ai/",
     "badge": "popular",
     "useCases": ["blog-writing", "seo-content", "social-media", "advertising", "product-descriptions"],
@@ -563,6 +667,15 @@
     "numericId": 14,
     "name": "Adobe Firefly",
     "category": "image",
+    "aiScore": 90,
+    "popularityScore": 87,
+    "quickPeek": {
+      "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
+      "en": "Adobe's AI for creative image generation and editing with professional tools."
+    },
+    "features": ["Text-to-Image", "Generative Fill", "Vector Recolor", "Text Effects", "3D to Image"],
+    "tags": ["image", "adobe", "creative-cloud", "editing", "professional", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "€5/Monat",
@@ -573,7 +686,6 @@
       "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
       "en": "Adobe's AI for creative image generation and editing with professional tools."
     },
-    "features": ["Text-to-Image", "Generative Fill", "Vector Recolor", "Text Effects", "3D to Image"],
     "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
     "badge": "new",
     "useCases": ["photo-editing", "graphic-design", "illustration", "social-media", "advertising"],
@@ -606,6 +718,15 @@
     "numericId": 15,
     "name": "Leonardo AI",
     "category": "image",
+    "aiScore": 88,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
+      "en": "Image generation specialized in game assets, textures and 3D models."
+    },
+    "features": ["Game Assets", "3D Texturing", "Model Training", "Canvas Editor", "AI Canvas"],
+    "tags": ["image", "game", "3d", "assets", "textures", "new", "freemium", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -616,7 +737,6 @@
       "de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
       "en": "Image generation specialized in game assets, textures and 3D models."
     },
-    "features": ["Game Assets", "3D Texturing", "Model Training", "Canvas Editor", "AI Canvas"],
     "link": "https://leonardo.ai/",
     "badge": "new",
     "useCases": ["game-dev", "3d-models", "textures", "character-design", "concept-art"],
@@ -649,6 +769,15 @@
     "numericId": 16,
     "name": "Playground AI",
     "category": "image",
+    "aiScore": 86,
+    "popularityScore": 82,
+    "quickPeek": {
+      "de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
+      "en": "Free image generation with filters and advanced editing tools."
+    },
+    "features": ["Free Tier", "Filters", "Editing Tools", "Image to Image", "Upscaling"],
+    "tags": ["image", "generation", "free", "editing", "filters", "free-tier", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/ab €15",
@@ -659,7 +788,6 @@
       "de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
       "en": "Free image generation with filters and advanced editing tools."
     },
-    "features": ["Free Tier", "Filters", "Editing Tools", "Image to Image", "Upscaling"],
     "link": "https://playgroundai.com/",
     "badge": "free",
     "useCases": ["social-media", "blog-images", "personal-projects", "experimentation", "education"],
@@ -692,6 +820,15 @@
     "numericId": 17,
     "name": "Murf AI",
     "category": "audio",
+    "aiScore": 88,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.",
+      "en": "Text-to-speech for videos and commercial use with studio quality."
+    },
+    "features": ["Voice Cloning", "Voice Changer", "Video Integration", "Commercial Rights", "Collaboration"],
+    "tags": ["audio", "tts", "voice", "commercial", "video", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €19/Monat",
@@ -702,7 +839,6 @@
       "de": "Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.",
       "en": "Text-to-speech for videos and commercial use with studio quality."
     },
-    "features": ["Voice Cloning", "Voice Changer", "Video Integration", "Commercial Rights", "Collaboration"],
     "link": "https://murf.ai/",
     "badge": "popular",
     "useCases": ["voiceover", "explainer-videos", "e-learning", "podcasts", "advertising"],
@@ -735,6 +871,15 @@
     "numericId": 18,
     "name": "Suno AI",
     "category": "audio",
+    "aiScore": 92,
+    "popularityScore": 86,
+    "quickPeek": {
+      "de": "KI-Musikgenerator der vollständige Songs mit Gesang und Instrumenten erstellt.",
+      "en": "AI music generator that creates complete songs with vocals and instruments."
+    },
+    "features": ["Music Generation", "Lyrics to Music", "Custom Instruments", "Style Control", "Download"],
+    "tags": ["audio", "music", "generation", "songs", "lyrics", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -745,7 +890,6 @@
       "de": "KI-Musikgenerator der vollständige Songs mit Gesang und Instrumenten erstellt.",
       "en": "AI music generator that creates complete songs with vocals and instruments."
     },
-    "features": ["Music Generation", "Lyrics to Music", "Custom Instruments", "Style Control", "Download"],
     "link": "https://www.suno.ai/",
     "badge": "new",
     "useCases": ["music-production", "songwriting", "background-music", "content-creation", "podcast-intros"],
@@ -778,6 +922,15 @@
     "numericId": 19,
     "name": "Boomy",
     "category": "audio",
+    "aiScore": 86,
+    "popularityScore": 81,
+    "quickPeek": {
+      "de": "Erstelle Musik in Sekunden und veröffentliche sie auf Streaming-Plattformen.",
+      "en": "Create music in seconds and publish to streaming platforms."
+    },
+    "features": ["Instant Creation", "Streaming Distribution", "Royalty Collection", "Customization", "AI Mastering"],
+    "tags": ["audio", "music", "streaming", "royalties", "quick", "free", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -788,7 +941,6 @@
       "de": "Erstelle Musik in Sekunden und veröffentliche sie auf Streaming-Plattformen.",
       "en": "Create music in seconds and publish to streaming platforms."
     },
-    "features": ["Instant Creation", "Streaming Distribution", "Royalty Collection", "Customization", "AI Mastering"],
     "link": "https://boomy.com/",
     "badge": "free",
     "useCases": ["quick-music", "streaming", "royalty-income", "content-background", "experimentation"],
@@ -821,6 +973,15 @@
     "numericId": 20,
     "name": "Synthesia",
     "category": "video",
+    "aiScore": 90,
+    "popularityScore": 88,
+    "quickPeek": {
+      "de": "Erstelle Videos mit KI-Avataren die in 120+ Sprachen sprechen.",
+      "en": "Create videos with AI avatars that speak in 120+ languages."
+    },
+    "features": ["AI Avatars", "120+ Languages", "Custom Avatars", "Templates", "API"],
+    "tags": ["video", "avatars", "multilingual", "corporate", "training", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €30/Monat",
@@ -831,7 +992,6 @@
       "de": "Erstelle Videos mit KI-Avataren die in 120+ Sprachen sprechen.",
       "en": "Create videos with AI avatars that speak in 120+ languages."
     },
-    "features": ["AI Avatars", "120+ Languages", "Custom Avatars", "Templates", "API"],
     "link": "https://www.synthesia.io/",
     "badge": "popular",
     "useCases": ["training-videos", "corporate-communications", "e-learning", "marketing", "how-to-videos"],
@@ -864,6 +1024,15 @@
     "numericId": 21,
     "name": "HeyGen",
     "category": "video",
+    "aiScore": 88,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "Video mit KI-Avataren und Sprachübersetzung für globale Kommunikation.",
+      "en": "Video with AI avatars and voice translation for global communication."
+    },
+    "features": ["AI Avatars", "Voice Translation", "Templates", "Custom Avatars", "Team Collaboration"],
+    "tags": ["video", "avatars", "translation", "multilingual", "business", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €30/Monat",
@@ -874,7 +1043,6 @@
       "de": "Video mit KI-Avataren und Sprachübersetzung für globale Kommunikation.",
       "en": "Video with AI avatars and voice translation for global communication."
     },
-    "features": ["AI Avatars", "Voice Translation", "Templates", "Custom Avatars", "Team Collaboration"],
     "link": "https://www.heygen.com/",
     "badge": "new",
     "useCases": ["multilingual-videos", "training", "marketing", "presentations", "education"],
@@ -907,6 +1075,15 @@
     "numericId": 22,
     "name": "Pika Labs",
     "category": "video",
+    "aiScore": 92,
+    "popularityScore": 87,
+    "quickPeek": {
+      "de": "Text-zu-Video Generator mit verschiedenen Stilen und Bearbeitungsoptionen.",
+      "en": "Text-to-video generator with various styles and editing options."
+    },
+    "features": ["Text-to-Video", "Image-to-Video", "Video Editing", "Style Transfer", "Sound Effects"],
+    "tags": ["video", "generation", "text-to-video", "editing", "styles", "new", "freemium", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -917,7 +1094,6 @@
       "de": "Text-zu-Video Generator mit verschiedenen Stilen und Bearbeitungsoptionen.",
       "en": "Text-to-video generator with various styles and editing options."
     },
-    "features": ["Text-to-Video", "Image-to-Video", "Video Editing", "Style Transfer", "Sound Effects"],
     "link": "https://www.pika.art/",
     "badge": "new",
     "useCases": ["short-clips", "social-media", "animation", "presentations", "creative-projects"],
@@ -950,6 +1126,15 @@
     "numericId": 23,
     "name": "Cursor",
     "category": "code",
+    "aiScore": 94,
+    "popularityScore": 89,
+    "quickPeek": {
+      "de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
+      "en": "AI-powered IDE with integrated chat and debugging features."
+    },
+    "features": ["AI Chat", "Code Generation", "Debugging", "VSCode Based", "Context Awareness"],
+    "tags": ["code", "ide", "vscode", "chat", "debugging", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €20/Monat",
@@ -960,7 +1145,6 @@
       "de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
       "en": "AI-powered IDE with integrated chat and debugging features."
     },
-    "features": ["AI Chat", "Code Generation", "Debugging", "VSCode Based", "Context Awareness"],
     "link": "https://www.cursor.so/",
     "badge": "new",
     "useCases": ["coding", "debugging", "learning", "code-review", "refactoring"],
@@ -993,6 +1177,15 @@
     "numericId": 24,
     "name": "Replit AI",
     "category": "code",
+    "aiScore": 88,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
+      "en": "Cloud-based AI coding with collaboration and direct deployment."
+    },
+    "features": ["Cloud IDE", "AI Assistant", "Collaboration", "Deployment", "Multi-Language"],
+    "tags": ["code", "cloud", "ide", "collaboration", "deployment", "free", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €20/Monat",
@@ -1003,7 +1196,6 @@
       "de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
       "en": "Cloud-based AI coding with collaboration and direct deployment."
     },
-    "features": ["Cloud IDE", "AI Assistant", "Collaboration", "Deployment", "Multi-Language"],
     "link": "https://replit.com/site/ai",
     "badge": "free",
     "useCases": ["learning", "prototyping", "collaborative-coding", "education", "hackathons"],
@@ -1036,6 +1228,15 @@
     "numericId": 25,
     "name": "Tabnine",
     "category": "code",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
+      "en": "AI code completion with focus on privacy and local processing."
+    },
+    "features": ["Code Completion", "Local Processing", "Privacy Focus", "Multi-Language", "IDE Integration"],
+    "tags": ["code", "autocomplete", "privacy", "local", "ide", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -1046,7 +1247,6 @@
       "de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
       "en": "AI code completion with focus on privacy and local processing."
     },
-    "features": ["Code Completion", "Local Processing", "Privacy Focus", "Multi-Language", "IDE Integration"],
     "link": "https://www.tabnine.com/",
     "badge": "popular",
     "useCases": ["coding", "productivity", "security", "enterprise", "education"],
@@ -1079,6 +1279,15 @@
     "numericId": 26,
     "name": "Codeium",
     "category": "code",
+    "aiScore": 90,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
+      "en": "Free AI for code completion and chat features."
+    },
+    "features": ["Free", "Autocomplete", "Chat", "Multi-Language", "IDE Integration"],
+    "tags": ["code", "free", "autocomplete", "chat", "ide", "free-tier", "open-source"],
+    "rankingHistory": [],
     "price": "free",
     "priceDisplay": {
       "de": "Kostenlos",
@@ -1089,7 +1298,6 @@
       "de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
       "en": "Free AI for code completion and chat features."
     },
-    "features": ["Free", "Autocomplete", "Chat", "Multi-Language", "IDE Integration"],
     "link": "https://codeium.com/",
     "badge": "free",
     "useCases": ["learning", "prototyping", "education", "open-source", "personal-projects"],
@@ -1122,6 +1330,15 @@
     "numericId": 27,
     "name": "Canva AI",
     "category": "image",
+    "aiScore": 88,
+    "popularityScore": 90,
+    "quickPeek": {
+      "de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
+      "en": "AI design tools integrated into the popular design platform for everyone."
+    },
+    "features": ["Magic Design", "Text-to-Image", "Magic Eraser", "Background Remover", "Magic Write"],
+    "tags": ["image", "design", "canva", "templates", "editing", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -1132,7 +1349,6 @@
       "de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
       "en": "AI design tools integrated into the popular design platform for everyone."
     },
-    "features": ["Magic Design", "Text-to-Image", "Magic Eraser", "Background Remover", "Magic Write"],
     "link": "https://www.canva.com/ai-tools/",
     "badge": "popular",
     "useCases": ["social-media", "presentations", "marketing", "education", "personal-projects"],
@@ -1165,6 +1381,15 @@
     "numericId": 28,
     "name": "Tome",
     "category": "text",
+    "aiScore": 86,
+    "popularityScore": 82,
+    "quickPeek": {
+      "de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
+      "en": "AI for presentations and stories with visual support."
+    },
+    "features": ["Presentation AI", "Visual Generation", "Storytelling", "Templates", "Collaboration"],
+    "tags": ["text", "presentations", "storytelling", "visual", "templates", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €8/Monat",
@@ -1175,7 +1400,6 @@
       "de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
       "en": "AI for presentations and stories with visual support."
     },
-    "features": ["Presentation AI", "Visual Generation", "Storytelling", "Templates", "Collaboration"],
     "link": "https://tome.app/",
     "badge": "new",
     "useCases": ["presentations", "storytelling", "pitch-decks", "education", "reports"],
@@ -1208,6 +1432,15 @@
     "numericId": 29,
     "name": "Beautiful.ai",
     "category": "business",
+    "aiScore": 84,
+    "popularityScore": 81,
+    "quickPeek": {
+      "de": "KI-Präsentationsdesigner der automatisch schöne Präsentationen erstellt.",
+      "en": "AI presentation designer that automatically creates beautiful presentations."
+    },
+    "features": ["Auto Design", "Smart Templates", "Team Collaboration", "Analytics", "Brand Kits"],
+    "tags": ["business", "presentations", "auto-design", "templates", "branding", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -1218,7 +1451,6 @@
       "de": "KI-Präsentationsdesigner der automatisch schöne Präsentationen erstellt.",
       "en": "AI presentation designer that automatically creates beautiful presentations."
     },
-    "features": ["Auto Design", "Smart Templates", "Team Collaboration", "Analytics", "Brand Kits"],
     "link": "https://www.beautiful.ai/",
     "badge": "popular",
     "useCases": ["sales-presentations", "pitch-decks", "business-reports", "marketing", "investor-updates"],
@@ -1251,6 +1483,15 @@
     "numericId": 30,
     "name": "Gamma",
     "category": "business",
+    "aiScore": 88,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "KI für Dokumente, Präsentationen und Websites in einem Tool.",
+      "en": "AI for documents, presentations and websites in one tool."
+    },
+    "features": ["Docs", "Presentations", "Websites", "Templates", "Collaboration"],
+    "tags": ["business", "documents", "presentations", "websites", "all-in-one", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €8/Monat",
@@ -1261,7 +1502,6 @@
       "de": "KI für Dokumente, Präsentationen und Websites in einem Tool.",
       "en": "AI for documents, presentations and websites in one tool."
     },
-    "features": ["Docs", "Presentations", "Websites", "Templates", "Collaboration"],
     "link": "https://gamma.app/",
     "badge": "new",
     "useCases": ["documentation", "presentations", "landing-pages", "reports", "internal-communications"],
@@ -1294,6 +1534,15 @@
     "numericId": 31,
     "name": "InVideo AI",
     "category": "video",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "Text-zu-Video für Social Media mit Vorlagen und Stock-Material.",
+      "en": "Text-to-video for social media with templates and stock material."
+    },
+    "features": ["Templates", "Stock Media", "Automation", "Text-to-Video", "Social Media Formats"],
+    "tags": ["video", "social-media", "templates", "stock-media", "automation", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €20/Monat",
@@ -1304,7 +1553,6 @@
       "de": "Text-zu-Video für Social Media mit Vorlagen und Stock-Material.",
       "en": "Text-to-video for social media with templates and stock material."
     },
-    "features": ["Templates", "Stock Media", "Automation", "Text-to-Video", "Social Media Formats"],
     "link": "https://invideo.io/ai",
     "badge": "popular",
     "useCases": ["social-media", "marketing", "ads", "explainer-videos", "youtube"],
@@ -1337,6 +1585,15 @@
     "numericId": 32,
     "name": "Fliki",
     "category": "video",
+    "aiScore": 86,
+    "popularityScore": 82,
+    "quickPeek": {
+      "de": "Text-zu-Video mit realistischen KI-Stimmen und Stock-Material.",
+      "en": "Text-to-video with realistic AI voices and stock material."
+    },
+    "features": ["Voice", "Stock Media", "Script to Video", "Templates", "AI Voices"],
+    "tags": ["video", "text-to-video", "voice", "stock-media", "script", "new", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €21/Monat",
@@ -1347,7 +1604,6 @@
       "de": "Text-zu-Video mit realistischen KI-Stimmen und Stock-Material.",
       "en": "Text-to-video with realistic AI voices and stock material."
     },
-    "features": ["Voice", "Stock Media", "Script to Video", "Templates", "AI Voices"],
     "link": "https://fliki.ai/",
     "badge": "new",
     "useCases": ["video", "social-media", "explainer", "e-learning", "marketing"],
@@ -1380,6 +1636,15 @@
     "numericId": 33,
     "name": "Pictory",
     "category": "video",
+    "aiScore": 84,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "Wandelt Text und Blogs automatisch in Videos um.",
+      "en": "Converts text and blogs automatically into videos."
+    },
+    "features": ["Script", "Stock Media", "Automation", "Blog to Video", "Social Media"],
+    "tags": ["video", "text-to-video", "blog", "automation", "stock-media", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €19/Monat",
@@ -1390,7 +1655,6 @@
       "de": "Wandelt Text und Blogs automatisch in Videos um.",
       "en": "Converts text and blogs automatically into videos."
     },
-    "features": ["Script", "Stock Media", "Automation", "Blog to Video", "Social Media"],
     "link": "https://pictory.ai/",
     "badge": "popular",
     "useCases": ["marketing", "training", "social", "blogging", "content-repurposing"],
@@ -1423,6 +1687,15 @@
     "numericId": 34,
     "name": "Wondershare Filmora",
     "category": "video",
+    "aiScore": 82,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "Benutzerfreundlicher Videoeditor mit KI-Funktionen für Einsteiger.",
+      "en": "User-friendly video editor with AI features for beginners."
+    },
+    "features": ["Editing", "Effects", "Templates", "AI Tools", "Audio Editing"],
+    "tags": ["video", "editing", "effects", "templates", "beginner", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "€50/Jahr",
@@ -1433,7 +1706,6 @@
       "de": "Benutzerfreundlicher Videoeditor mit KI-Funktionen für Einsteiger.",
       "en": "User-friendly video editor with AI features for beginners."
     },
-    "features": ["Editing", "Effects", "Templates", "AI Tools", "Audio Editing"],
     "link": "https://filmora.wondershare.com/ai-video-editor/",
     "badge": "popular",
     "useCases": ["video-editing", "youtube", "social", "personal-videos", "education"],
@@ -1466,6 +1738,15 @@
     "numericId": 35,
     "name": "Descript",
     "category": "audio",
+    "aiScore": 90,
+    "popularityScore": 87,
+    "quickPeek": {
+      "de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
+      "en": "Audio and video editor with transcription and AI voices."
+    },
+    "features": ["Editing", "Transcription", "Voice", "Screen Recording", "Collaboration"],
+    "tags": ["audio", "video", "editing", "transcription", "voice", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -1476,7 +1757,6 @@
       "de": "Audio- und Videoeditor mit Transkription und KI-Stimmen.",
       "en": "Audio and video editor with transcription and AI voices."
     },
-    "features": ["Editing", "Transcription", "Voice", "Screen Recording", "Collaboration"],
     "link": "https://www.descript.com/",
     "badge": "popular",
     "useCases": ["podcast", "video", "transcription", "screen-recording", "voiceover"],
@@ -1509,6 +1789,15 @@
     "numericId": 36,
     "name": "Otter.ai",
     "category": "audio",
+    "aiScore": 88,
+    "popularityScore": 86,
+    "quickPeek": {
+      "de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
+      "en": "AI meeting transcription with notes and summaries."
+    },
+    "features": ["Transcription", "Notes", "Collaboration", "Summarization", "Integration"],
+    "tags": ["audio", "transcription", "meetings", "notes", "summarization", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -1519,7 +1808,6 @@
       "de": "KI-Meeting-Transkription mit Notizen und Zusammenfassungen.",
       "en": "AI meeting transcription with notes and summaries."
     },
-    "features": ["Transcription", "Notes", "Collaboration", "Summarization", "Integration"],
     "link": "https://otter.ai/",
     "badge": "popular",
     "useCases": ["meetings", "notes", "interviews", "lectures", "customer-calls"],
@@ -1552,6 +1840,15 @@
     "numericId": 37,
     "name": "Krisp",
     "category": "audio",
+    "aiScore": 90,
+    "popularityScore": 88,
+    "quickPeek": {
+      "de": "KI-Geräuschunterdrückung für bessere Audioqualität in Meetings.",
+      "en": "AI noise cancellation for better audio quality in meetings."
+    },
+    "features": ["Noise Cancellation", "Voice Clarity", "Meeting Notes", "Transcription", "Integration"],
+    "tags": ["audio", "noise-cancellation", "meetings", "voice-clarity", "productivity", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €8/Monat",
@@ -1562,7 +1859,6 @@
       "de": "KI-Geräuschunterdrückung für bessere Audioqualität in Meetings.",
       "en": "AI noise cancellation for better audio quality in meetings."
     },
-    "features": ["Noise Cancellation", "Voice Clarity", "Meeting Notes", "Transcription", "Integration"],
     "link": "https://krisp.ai/",
     "badge": "popular",
     "useCases": ["meetings", "calls", "recording", "podcasting", "streaming"],
@@ -1595,6 +1891,15 @@
     "numericId": 38,
     "name": "QuillBot",
     "category": "text",
+    "aiScore": 88,
+    "popularityScore": 86,
+    "quickPeek": {
+      "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
+      "en": "AI paraphraser & translator for better writing."
+    },
+    "features": ["Paraphrase", "Grammar", "Summarize", "Translator", "Plagiarism Check"],
+    "tags": ["text", "paraphrasing", "grammar", "translation", "summarization", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -1605,7 +1910,6 @@
       "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
       "en": "AI paraphraser & translator for better writing."
     },
-    "features": ["Paraphrase", "Grammar", "Summarize", "Translator", "Plagiarism Check"],
     "link": "https://quillbot.com/",
     "badge": "popular",
     "useCases": ["writing", "academic", "content", "translation", "proofreading"],
@@ -1638,6 +1942,15 @@
     "numericId": 39,
     "name": "Grammarly",
     "category": "text",
+    "aiScore": 92,
+    "popularityScore": 94,
+    "quickPeek": {
+      "de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
+      "en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
+    },
+    "features": ["Grammar", "Tone", "Plagiarism", "Clarity", "Engagement"],
+    "tags": ["text", "grammar", "writing", "plagiarism", "tone", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €12/Monat",
@@ -1648,7 +1961,6 @@
       "de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
       "en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
     },
-    "features": ["Grammar", "Tone", "Plagiarism", "Clarity", "Engagement"],
     "link": "https://www.grammarly.com/",
     "badge": "popular",
     "useCases": ["writing", "emails", "documents", "academic", "business"],
@@ -1681,6 +1993,15 @@
     "numericId": 40,
     "name": "Wordtune",
     "category": "text",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
+      "en": "AI for better writing by rewriting and tone adjustment."
+    },
+    "features": ["Rewrite", "Tone", "Summarize", "Spices", "Translation"],
+    "tags": ["text", "rewriting", "tone", "summarization", "writing", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -1691,7 +2012,6 @@
       "de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
       "en": "AI for better writing by rewriting and tone adjustment."
     },
-    "features": ["Rewrite", "Tone", "Summarize", "Spices", "Translation"],
     "link": "https://www.wordtune.com/",
     "badge": "popular",
     "useCases": ["writing", "emails", "creative", "academic", "business"],
@@ -1724,6 +2044,15 @@
     "numericId": 41,
     "name": "Rytr",
     "category": "text",
+    "aiScore": 84,
+    "popularityScore": 82,
+    "quickPeek": {
+      "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
+      "en": "Affordable AI writer with templates and SEO features."
+    },
+    "features": ["Templates", "Languages", "SEO", "Plagiarism Check", "Image Generation"],
+    "tags": ["text", "writing", "templates", "seo", "affordable", "free", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €9/Monat",
@@ -1734,7 +2063,6 @@
       "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
       "en": "Affordable AI writer with templates and SEO features."
     },
-    "features": ["Templates", "Languages", "SEO", "Plagiarism Check", "Image Generation"],
     "link": "https://rytr.me/",
     "badge": "free",
     "useCases": ["copywriting", "blogging", "social", "emails", "seo"],
@@ -1767,6 +2095,15 @@
     "numericId": 42,
     "name": "Writesonic",
     "category": "text",
+    "aiScore": 86,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
+      "en": "AI for marketing content with SEO and image generation."
+    },
+    "features": ["Templates", "SEO", "Images", "Chatsonic", "Article Writer"],
+    "tags": ["text", "marketing", "seo", "images", "chat", "popular", "freemium", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €13/Monat",
@@ -1777,7 +2114,6 @@
       "de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
       "en": "AI for marketing content with SEO and image generation."
     },
-    "features": ["Templates", "SEO", "Images", "Chatsonic", "Article Writer"],
     "link": "https://writesonic.com/",
     "badge": "popular",
     "useCases": ["copywriting", "ads", "landing-pages", "seo", "blogging"],
@@ -1810,6 +2146,15 @@
     "numericId": 43,
     "name": "Copy.ai",
     "category": "text",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
+      "en": "AI copywriting platform with workflows and brand customization."
+    },
+    "features": ["Workflows", "Brand", "Collaboration", "Templates", "Content Calendar"],
+    "tags": ["text", "copywriting", "workflows", "brand", "collaboration", "popular", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €49/Monat",
@@ -1820,7 +2165,6 @@
       "de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
       "en": "AI copywriting platform with workflows and brand customization."
     },
-    "features": ["Workflows", "Brand", "Collaboration", "Templates", "Content Calendar"],
     "link": "https://www.copy.ai/",
     "badge": "popular",
     "useCases": ["marketing", "sales", "social", "email", "content-strategy"],
@@ -1853,6 +2197,15 @@
     "numericId": 44,
     "name": "Surfer SEO",
     "category": "business",
+    "aiScore": 88,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "KI für SEO-Content mit Forschung und Optimierung.",
+      "en": "AI for SEO content with research and optimization."
+    },
+    "features": ["SEO", "Research", "Optimization", "Content Editor", "Keyword Research"],
+    "tags": ["business", "seo", "research", "optimization", "keyword", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €59/Monat",
@@ -1863,7 +2216,6 @@
       "de": "KI für SEO-Content mit Forschung und Optimierung.",
       "en": "AI for SEO content with research and optimization."
     },
-    "features": ["SEO", "Research", "Optimization", "Content Editor", "Keyword Research"],
     "link": "https://surferseo.com/",
     "badge": "popular",
     "useCases": ["seo", "content", "blogging", "keyword-research", "competitor-analysis"],
@@ -1896,6 +2248,15 @@
     "numericId": 45,
     "name": "Jasper Art",
     "category": "image",
+    "aiScore": 84,
+    "popularityScore": 82,
+    "quickPeek": {
+      "de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
+      "en": "Image generation for brands with customization and commercial use."
+    },
+    "features": ["Brand", "Styles", "Commercial", "Templates", "Customization"],
+    "tags": ["image", "brand", "commercial", "templates", "jasper", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "€20/Monat",
@@ -1906,7 +2267,6 @@
       "de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
       "en": "Image generation for brands with customization and commercial use."
     },
-    "features": ["Brand", "Styles", "Commercial", "Templates", "Customization"],
     "link": "https://www.jasper.ai/art",
     "badge": "popular",
     "useCases": ["marketing", "ads", "branding", "social-media", "product-images"],
@@ -1939,6 +2299,15 @@
     "numericId": 46,
     "name": "Photosonic",
     "category": "image",
+    "aiScore": 82,
+    "popularityScore": 80,
+    "quickPeek": {
+      "de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
+      "en": "Text-to-image generator by Writesonic with artistic styles."
+    },
+    "features": ["Art", "Styles", "Custom", "Upscaling", "Editing"],
+    "tags": ["image", "text-to-image", "artistic", "writesonic", "free", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €10/Monat",
@@ -1949,7 +2318,6 @@
       "de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
       "en": "Text-to-image generator by Writesonic with artistic styles."
     },
-    "features": ["Art", "Styles", "Custom", "Upscaling", "Editing"],
     "link": "https://photosonic.writesonic.com/",
     "badge": "free",
     "useCases": ["art", "design", "social", "blogging", "personal"],
@@ -1982,6 +2350,15 @@
     "numericId": 47,
     "name": "NightCafe",
     "category": "image",
+    "aiScore": 86,
+    "popularityScore": 81,
+    "quickPeek": {
+      "de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
+      "en": "AI art generator with community and various styles."
+    },
+    "features": ["Art", "Styles", "Community", "Challenges", "Printing"],
+    "tags": ["image", "art", "community", "challenges", "printing", "free", "freemium", "lifetime-deal"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €6/Monat",
@@ -1992,7 +2369,6 @@
       "de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
       "en": "AI art generator with community and various styles."
     },
-    "features": ["Art", "Styles", "Community", "Challenges", "Printing"],
     "link": "https://creator.nightcafe.studio/",
     "badge": "free",
     "useCases": ["art", "creativity", "prints", "community", "experimentation"],
@@ -2025,6 +2401,15 @@
     "numericId": 48,
     "name": "DreamStudio",
     "category": "image",
+    "aiScore": 88,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
+      "en": "Official web UI for Stable Diffusion with SDXL and control features."
+    },
+    "features": ["SDXL", "Control", "Custom", "API", "Upscaling"],
+    "tags": ["image", "stable-diffusion", "sdxl", "control", "api", "popular", "paid"],
+    "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "€10/Credits",
@@ -2035,7 +2420,6 @@
       "de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
       "en": "Official web UI for Stable Diffusion with SDXL and control features."
     },
-    "features": ["SDXL", "Control", "Custom", "API", "Upscaling"],
     "link": "https://dreamstudio.ai/",
     "badge": "popular",
     "useCases": ["art", "design", "prototyping", "commercial", "research"],
@@ -2068,6 +2452,15 @@
     "numericId": 49,
     "name": "BlueWillow",
     "category": "image",
+    "aiScore": 84,
+    "popularityScore": 80,
+    "quickPeek": {
+      "de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
+      "en": "AI image generation via Discord with community and fast generation."
+    },
+    "features": ["Community", "Styles", "Fast", "Discord", "Templates"],
+    "tags": ["image", "discord", "community", "fast", "templates", "free", "freemium"],
+    "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "ab €5/Monat",
@@ -2078,7 +2471,6 @@
       "de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
       "en": "AI image generation via Discord with community and fast generation."
     },
-    "features": ["Community", "Styles", "Fast", "Discord", "Templates"],
     "link": "https://www.bluewillow.ai/",
     "badge": "free",
     "useCases": ["art", "social", "design", "fun", "community"],
@@ -2111,6 +2503,15 @@
     "numericId": 50,
     "name": "DeepDream",
     "category": "image",
+    "aiScore": 80,
+    "popularityScore": 78,
+    "quickPeek": {
+      "de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
+      "en": "Early AI image generator with neural networks and experimental styles."
+    },
+    "features": ["Neural", "Art", "Experimental", "Style Transfer", "Customization"],
+    "tags": ["image", "neural", "experimental", "style-transfer", "historic", "free", "open-source"],
+    "rankingHistory": [],
     "price": "free",
     "priceDisplay": {
       "de": "Kostenlos",
@@ -2121,7 +2522,6 @@
       "de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
       "en": "Early AI image generator with neural networks and experimental styles."
     },
-    "features": ["Neural", "Art", "Experimental", "Style Transfer", "Customization"],
     "link": "https://deepdreamgenerator.com/",
     "badge": "free",
     "useCases": ["art", "experimental", "fun", "education", "style-transfer"],
