@@ -741,10 +741,8 @@ body::before {
 }
 
 .group-content.expanded {
-  max-height: none; /* Zeigt unendlich viele Tools */
-  overflow: visible; /* Wichtig für Tooltips */
+  max-height: 2000px;
 }
-
 
 .tool-row {
   height: var(--tool-row-height);
@@ -2257,8 +2255,7 @@ let isDrawerOpen = false;
 let supabaseRealtimeSubscription = null;
 let top5Tools = [];
 let pollInterval = null;
-let isVoting = false; // NEU: Steuert die Polling-Pause
-die P
+let activeFilterId = null;
 
 // ===== BASELINE VOTES =====
 const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
@@ -2503,16 +2500,14 @@ function handleVoteUpdate(payload) {
 
 function startPolling() {
   if (pollInterval) clearInterval(pollInterval);
+  
   pollInterval = setInterval(async () => {
-    if (isVoting) return; // NEU: Wenn gerade gevotet wird, STOPP!
-    
     await loadVotesFromSupabase();
     updateTop5Bar();
     renderToolGroups();
     updateFloatingBadge();
   }, 30000);
 }
-
 
 function updateToolRowVoteCount(toolId) {
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
@@ -3015,36 +3010,30 @@ async function vote(toolId, type) {
     return;
   }
   
-  // 1. Pausiere das Polling während wir voten
-  isVoting = true;
-  
   const oldUserVote = tool.userVote ?? 0;
   const voteValue = type === 'up' ? 1 : -1;
   
-  // 2. Berechne die neue Stimme korrekt
-  let newUserVote;
+  // Berechne die Vote-Änderung
   let voteChange = 0;
-  
-  if (oldUserVote === voteValue) {
-    // Benutzer entfernt seine Stimme
-    newUserVote = 0;
+  if (tool.userVote === voteValue) {
+    // User entfernt seinen Vote
+    tool.userVote = 0;
     voteChange = -voteValue;
   } else {
-    // Benutzer ändert seine Stimme oder stimmt zum ersten Mal
-    newUserVote = voteValue;
-    voteChange = voteValue - oldUserVote;
+    // User ändert seinen Vote oder stimmt zum ersten Mal ab
+    const previousVote = tool.userVote ?? 0;
+    tool.userVote = voteValue;
+    voteChange = voteValue - previousVote;
   }
   
-  tool.userVote = newUserVote;
-  
-  // 3. Update für sofortiges Feedback in der Anzeige
+  // Update lokale Votes für sofortiges UI Feedback
   const currentRawVotes = getRawVotes(tool);
-  const newRawVotes = Math.max(0, currentRawVotes + voteChange);
+  const newRawVotes = currentRawVotes + voteChange;
   
-  // 4. Aktualisiere die Anzeige SOFORT
+  // Update UI immediately (optimistic)
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
-    const displayVotes = newRawVotes;
+    const displayVotes = Math.max(newRawVotes, 0);
     voteCountElement.textContent = displayVotes;
     voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
     setTimeout(() => {
@@ -3052,45 +3041,43 @@ async function vote(toolId, type) {
     }, 500);
   }
   
-  // 5. Aktualisiere die Top 5 Bar
+  // Update Top 5 bar
   updateTop5VoteCount(toolId, newRawVotes);
   
-  // 6. Speichere lokal
+  // Save user's vote locally
   const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
   savedVotes[toolId] = { userVote: tool.userVote };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
   
   try {
-    // 7. Update in Supabase
+    // Update in Supabase
     const { data: existingData, error: fetchError } = await window.supabase
       .from('tool_votes')
       .select('*')
       .eq('tool_id', toolId);
       
     if (fetchError) throw fetchError;
+      
+    let upvotesChange = 0;
+    let downvotesChange = 0;
     
-    let newUpvotes = 0;
-    let newDownvotes = 0;
+    // Berechne die Änderungen für upvotes/downvotes
+    if (oldUserVote === 1) {
+      upvotesChange -= 1; // Entferne Upvote
+    } else if (oldUserVote === -1) {
+      downvotesChange -= 1; // Entferne Downvote
+    }
     
+    if (voteValue === 1) {
+      upvotesChange += 1; // Füge Upvote hinzu
+    } else if (voteValue === -1) {
+      downvotesChange += 1; // Füge Downvote hinzu
+    }
+      
     if (existingData && existingData.length > 0) {
       const current = existingData[0];
-      newUpvotes = safeNumber(current.upvotes);
-      newDownvotes = safeNumber(current.downvotes);
-      
-      // Entferne alte Stimme
-      if (oldUserVote === 1) {
-        newUpvotes = Math.max(0, newUpvotes - 1);
-      } else if (oldUserVote === -1) {
-        newDownvotes = Math.max(0, newDownvotes - 1);
-      }
-      
-      // Füge neue Stimme hinzu
-      if (newUserVote === 1) {
-        newUpvotes += 1;
-      } else if (newUserVote === -1) {
-        newDownvotes += 1;
-      }
-      
+      const newUpvotes = Math.max(0, safeNumber(current.upvotes) + upvotesChange);
+      const newDownvotes = Math.max(0, safeNumber(current.downvotes) + downvotesChange);
       const newTotal = newUpvotes - newDownvotes;
         
       const { error: updateError } = await window.supabase
@@ -3108,25 +3095,24 @@ async function vote(toolId, type) {
       tool.upvotes = newUpvotes;
       tool.downvotes = newDownvotes;
     } else {
-      // Neuer Eintrag
-      newUpvotes = newUserVote === 1 ? 1 : 0;
-      newDownvotes = newUserVote === -1 ? 1 : 0;
-      const initialTotal = newUpvotes - newDownvotes;
+      const initialUpvotes = voteValue === 1 ? 1 : 0;
+      const initialDownvotes = voteValue === -1 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
         
       const { error: insertError } = await window.supabase
         .from('tool_votes')
         .insert({
           tool_id: toolId,
-          upvotes: newUpvotes,
-          downvotes: newDownvotes,
+          upvotes: initialUpvotes,
+          downvotes: initialDownvotes,
           total_votes: initialTotal
         });
         
       if (insertError) throw insertError;
         
       tool.votes = initialTotal;
-      tool.upvotes = newUpvotes;
-      tool.downvotes = newDownvotes;
+      tool.upvotes = initialUpvotes;
+      tool.downvotes = initialDownvotes;
     }
       
     showNotification(
@@ -3141,10 +3127,10 @@ async function vote(toolId, type) {
       'error'
     );
       
-    // Rückgängig machen bei Fehler
+    // Rollback local changes
     tool.userVote = oldUserVote;
     
-    // UI zurücksetzen
+    // Rollback UI
     const voteCountElement = document.getElementById(`voteCount-${toolId}`);
     if (voteCountElement) {
       voteCountElement.textContent = getDisplayVotes(tool);
@@ -3152,19 +3138,13 @@ async function vote(toolId, type) {
     updateTop5VoteCount(toolId, tool.votes);
   }
   
-  // 8. Polling nach 2 Sekunden wieder aktivieren
-  setTimeout(() => {
-    isVoting = false;
-  }, 2000);
-  
-  // 9. Listen aktualisieren
+  // WICHTIG: Die Tool-Liste NEU sortieren und rendern
   updateTop5Bar();
   renderToolGroups();
-  }
   
-  // 10. Filteransicht aktualisieren
-  if (currentCategory) {
-    setActiveFilter(currentCategory);
+  // Aktualisiere auch die aktive Filteransicht, falls ein Filter aktiv ist
+  if (activeFilterId) {
+    setActiveFilter(activeFilterId);
   }
 }
 
