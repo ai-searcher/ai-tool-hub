@@ -738,6 +738,29 @@ body::before {
   max-height: 5000px;
 }
 
+/* Info Button Styling */
+.info-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: var(--transition);
+  margin-left: 6px;
+}
+
+.info-btn:hover {
+  color: var(--primary);
+  background: rgba(0, 212, 255, 0.1);
+  transform: scale(1.1);
+}
+
 /* ÄNDERUNG 1: Entferne Nachleucht-Effekte bei Buttons */
 .vote-btn-row,
 .tool-action-btn.favorite,
@@ -882,6 +905,9 @@ body::before {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tool-desc {
@@ -1649,6 +1675,133 @@ body::before {
   border-color: var(--primary);
 }
 
+/* ===== CATEGORY INFO MODAL ===== */
+.category-info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  z-index: 3002;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.category-info-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.category-info-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.category-info-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.category-info-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.category-info-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.category-info-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.category-info-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.category-info-section {
+  margin-bottom: 24px;
+}
+
+.category-info-section h3 {
+  color: var(--primary);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-info-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.category-info-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.category-info-tool {
+  padding: 8px 12px;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 8px;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.category-info-tool:hover {
+  background: rgba(0, 212, 255, 0.2);
+  transform: translateY(-2px);
+}
+
 /* ===== IMPRINT & PRIVACY MODALS ===== */
 .modal-overlay {
   position: fixed;
@@ -2179,6 +2332,23 @@ body::before {
   </div>
 </footer>
 
+<!-- Category Info Modal -->
+<div class="modal-overlay" id="categoryInfoModalOverlay"></div>
+<div class="category-info-modal" id="categoryInfoModal">
+  <div class="category-info-header">
+    <div class="category-info-title">
+      <div class="category-info-icon" id="categoryInfoIcon">🤖</div>
+      <span id="categoryInfoTitle">Kategorie-Info</span>
+    </div>
+    <button class="category-info-close" id="categoryInfoModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="category-info-content" id="categoryInfoContent">
+    <!-- Dynamic category info content -->
+  </div>
+</div>
+
 <!-- Drawer for Detail View -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="drawer" id="drawer">
@@ -2296,6 +2466,300 @@ let hoverTimeout = null;
 let peekElement = null;
 let isDrawerOpen = false;
 let scrollDebounceTimeout = null;
+
+// ===== KATEGORIE INFORMATIONEN =====
+const categoryInfo = {
+  text: {
+    title: {
+      de: "Text-KI-Tools",
+      en: "Text AI Tools"
+    },
+    description: {
+      de: "Text-KI-Tools revolutionieren das Schreiben, Editieren und Übersetzen von Texten. Sie helfen dir bei kreativem Schreiben, Zusammenfassungen, Grammatikprüfungen und mehr.",
+      en: "Text AI tools revolutionize writing, editing and translating. They help with creative writing, summaries, grammar checks and more."
+    },
+    useCases: {
+      de: [
+        "Kreatives Schreiben & Content-Erstellung",
+        "Übersetzungen zwischen Sprachen",
+        "Text-Zusammenfassungen & -Analyse",
+        "Grammatik- und Rechtschreibprüfung",
+        "Chatbots & Kundenservice-Automatisierung"
+      ],
+      en: [
+        "Creative writing & content creation",
+        "Translation between languages",
+        "Text summaries & analysis",
+        "Grammar and spell checking",
+        "Chatbots & customer service automation"
+      ]
+    },
+    bestFor: {
+      de: [
+        "Content Creator & Marketing-Experten",
+        "Autoren & Journalisten",
+        "Übersetzer & Sprachforscher",
+        "Studenten & Akademiker",
+        "Unternehmen für Kundenservice"
+      ],
+      en: [
+        "Content creators & marketing experts",
+        "Authors & journalists",
+        "Translators & language researchers",
+        "Students & academics",
+        "Companies for customer service"
+      ]
+    },
+    trends: {
+      de: [
+        "Multilinguale Modelle mit 100+ Sprachen",
+        "Echtzeit-Zusammenarbeit & Co-Writing",
+        "Personalisierte Schreibstile",
+        "Emotionale Intelligenz in Texten",
+        "Integration in bestehende Workflows"
+      ],
+      en: [
+        "Multilingual models with 100+ languages",
+        "Real-time collaboration & co-writing",
+        "Personalized writing styles",
+        "Emotional intelligence in texts",
+        "Integration into existing workflows"
+      ]
+    }
+  },
+  image: {
+    title: {
+      de: "Bild-KI-Tools",
+      en: "Image AI Tools"
+    },
+    description: {
+      de: "Bild-KI-Tools generieren, bearbeiten und optimieren Bilder aus Textbeschreibungen. Perfekt für Designer, Künstler und Marketing-Teams.",
+      en: "Image AI tools generate, edit and optimize images from text descriptions. Perfect for designers, artists and marketing teams."
+    },
+    useCases: {
+      de: [
+        "Bildgenerierung aus Text-Prompts",
+        "Bildbearbeitung & -Optimierung",
+        "Logo-Design & Branding",
+        "Artwork & digitale Kunst",
+        "Produktfotos & Marketing-Material"
+      ],
+      en: [
+        "Image generation from text prompts",
+        "Image editing & optimization",
+        "Logo design & branding",
+        "Artwork & digital art",
+        "Product photos & marketing material"
+      ]
+    },
+    bestFor: {
+      de: [
+        "Grafikdesigner & Illustratoren",
+        "Marketing- & Werbeagenturen",
+        "E-Commerce & Online-Shops",
+        "Künstler & Kreative",
+        "Social Media Manager"
+      ],
+      en: [
+        "Graphic designers & illustrators",
+        "Marketing & advertising agencies",
+        "E-commerce & online shops",
+        "Artists & creatives",
+        "Social media managers"
+      ]
+    },
+    trends: {
+      de: [
+        "4K+ Auflösung & Photorealismus",
+        "Konsistente Charakter-Generierung",
+        "3D-Modellierung aus 2D-Bildern",
+        "Video-zu-Bild-Konvertierung",
+        "Echtzeit-Generierung & Editing"
+      ],
+      en: [
+        "4K+ resolution & photorealism",
+        "Consistent character generation",
+        "3D modeling from 2D images",
+        "Video-to-image conversion",
+        "Real-time generation & editing"
+      ]
+    }
+  },
+  code: {
+    title: {
+      de: "Code-KI-Tools",
+      en: "Code AI Tools"
+    },
+    description: {
+      de: "Code-KI-Tools unterstützen Entwickler beim Schreiben, Debuggen und Optimieren von Code. Sie beschleunigen die Entwicklung und reduzieren Fehler.",
+      en: "Code AI tools support developers in writing, debugging and optimizing code. They accelerate development and reduce errors."
+    },
+    useCases: {
+      de: [
+        "Code-Vervollständigung & -Generierung",
+        "Bug-Finding & Debugging",
+        "Code-Optimierung & Refactoring",
+        "Dokumentation & Kommentare",
+        "Code-Übersetzung zwischen Sprachen"
+      ],
+      en: [
+        "Code completion & generation",
+        "Bug finding & debugging",
+        "Code optimization & refactoring",
+        "Documentation & comments",
+        "Code translation between languages"
+      ]
+    },
+    bestFor: {
+      de: [
+        "Software-Entwickler & -Ingenieure",
+        "Web- & App-Entwickler",
+        "Data Scientists & ML-Engineers",
+        "DevOps & Systemadministratoren",
+        "IT-Studenten & Bootcamp-Teilnehmer"
+      ],
+      en: [
+        "Software developers & engineers",
+        "Web & app developers",
+        "Data scientists & ML engineers",
+        "DevOps & system administrators",
+        "IT students & bootcamp participants"
+      ]
+    },
+    trends: {
+      de: [
+        "Kontextbewusste Code-Vorschläge",
+        "Automatische Test-Generierung",
+        "Sicherheitsanalyse & Vulnerability Scanning",
+        "Multi-Language Support",
+        "IDE-Integration & Pair Programming"
+      ],
+      en: [
+        "Context-aware code suggestions",
+        "Automatic test generation",
+        "Security analysis & vulnerability scanning",
+        "Multi-language support",
+        "IDE integration & pair programming"
+      ]
+    }
+  },
+  video: {
+    title: {
+      de: "Video-KI-Tools",
+      en: "Video AI Tools"
+    },
+    description: {
+      de: "Video-KI-Tools ermöglichen die Generierung und Bearbeitung von Videos aus Text oder Bildern. Ideal für Content Creator, Filmemacher und Unternehmen.",
+      en: "Video AI tools enable generation and editing of videos from text or images. Ideal for content creators, filmmakers and businesses."
+    },
+    useCases: {
+      de: [
+        "Video-Generierung aus Text/Images",
+        "Automatische Untertitel & Übersetzung",
+        "Video-Bearbeitung & -Optimierung",
+        "Animations- & Motion Graphics",
+        "Sprach-zu-Video Konvertierung"
+      ],
+      en: [
+        "Video generation from text/images",
+        "Automatic subtitles & translation",
+        "Video editing & optimization",
+        "Animation & motion graphics",
+        "Speech-to-video conversion"
+      ]
+    },
+    bestFor: {
+      de: [
+        "Video-Editoren & Filmemacher",
+        "Content Creator & YouTuber",
+        "Marketing- & Werbe-Teams",
+        "Unternehmen für Schulungsvideos",
+        "Event- & Wedding-Videografen"
+      ],
+      en: [
+        "Video editors & filmmakers",
+        "Content creators & YouTubers",
+        "Marketing & advertising teams",
+        "Companies for training videos",
+        "Event & wedding videographers"
+      ]
+    },
+    trends: {
+      de: [
+        "Text-zu-Video mit hoher Konsistenz",
+        "Emotionale Avatare & Deepfakes",
+        "Echtzeit-Video-Bearbeitung",
+        "3D-Animation aus 2D-Material",
+        "Personalisiertes Video-Marketing"
+      ],
+      en: [
+        "Text-to-video with high consistency",
+        "Emotional avatars & deepfakes",
+        "Real-time video editing",
+        "3D animation from 2D material",
+        "Personalized video marketing"
+      ]
+    }
+  },
+  audio: {
+    title: {
+      de: "Audio-KI-Tools",
+      en: "Audio AI Tools"
+    },
+    description: {
+      de: "Audio-KI-Tools generieren und bearbeiten Sprache, Musik und Soundeffekte. Perfekt für Podcaster, Musiker und Audio-Profis.",
+      en: "Audio AI tools generate and edit speech, music and sound effects. Perfect for podcasters, musicians and audio professionals."
+    },
+    useCases: {
+      de: [
+        "Text-zu-Sprache & Sprachsynthese",
+        "Musik-Generierung & -Komposition",
+        "Audio-Bearbeitung & -Bereinigung",
+        "Podcast-Produktion & -Optimierung",
+        "Voice Cloning & -Anpassung"
+      ],
+      en: [
+        "Text-to-speech & speech synthesis",
+        "Music generation & composition",
+        "Audio editing & cleanup",
+        "Podcast production & optimization",
+        "Voice cloning & customization"
+      ]
+    },
+    bestFor: {
+      de: [
+        "Podcaster & Radio-Moderatoren",
+        "Musiker & Komponisten",
+        "Audio-Editoren & Sound-Designer",
+        "Unternehmen für Voiceovers",
+        "Film- & Game-Audio-Profis"
+      ],
+      en: [
+        "Podcasters & radio hosts",
+        "Musicians & composers",
+        "Audio editors & sound designers",
+        "Companies for voiceovers",
+        "Film & game audio professionals"
+      ]
+    },
+    trends: {
+      de: [
+        "Emotionale Sprachsynthese",
+        "KI-generierte Musik in jedem Stil",
+        "Echtzeit-Audio-Bearbeitung",
+        "Mehrsprachige Voice Cloning",
+        "Binaurale Audio & 3D-Sound"
+      ],
+      en: [
+        "Emotional speech synthesis",
+        "AI-generated music in any style",
+        "Real-time audio editing",
+        "Multilingual voice cloning",
+        "Binaural audio & 3D sound"
+      ]
+    }
+  }
+};
 
 // ===== BASELINE VOTES =====
 const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
@@ -2524,7 +2988,12 @@ function renderToolGroups() {
           </div>
           
           <div class="tool-info">
-            <div class="tool-category">${getCategoryLabel(tool.category)}</div>
+            <div class="tool-category">
+              ${getCategoryLabel(tool.category)}
+              <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${tool.category}')">
+                <i class="fas fa-info-circle"></i>
+              </button>
+            </div>
             <div class="tool-name">
               ${tool.name}
               ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
@@ -2574,6 +3043,9 @@ function renderToolGroups() {
           <div class="group-title">
             <div class="group-icon">${getCategoryIcon(category)}</div>
             <span>${getCategoryLabel(category)}</span>
+            <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${category}')">
+              <i class="fas fa-info-circle"></i>
+            </button>
             <span class="group-count">${categoryTools.length}</span>
           </div>
           <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
@@ -2593,7 +3065,86 @@ function renderToolGroups() {
   updateLanguage();
 }
 
-// ÄNDERUNG 2: Neue Funktionen für intelligente "Mehr anzeigen"-Funktion
+// ===== KATEGORIE INFO MODAL =====
+function openCategoryInfoModal(category) {
+  const info = categoryInfo[category];
+  if (!info) return;
+  
+  const lang = currentLang;
+  
+  // Setze Titel und Icon
+  document.getElementById('categoryInfoTitle').textContent = info.title[lang];
+  document.getElementById('categoryInfoIcon').textContent = getCategoryIcon(category);
+  
+  // Hole die besten 3 Tools dieser Kategorie
+  const topTools = aiTools
+    .filter(tool => tool.category === category)
+    .sort((a, b) => {
+      const aVotes = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
+      const bVotes = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
+      return bVotes - aVotes;
+    })
+    .slice(0, 3);
+  
+  // Erstelle Tool-Liste HTML
+  const toolsHTML = topTools.map(tool => `
+    <div class="category-info-tool" onclick="openToolDrawer('${tool.id}'); closeCategoryInfoModal()">
+      ${tool.name}
+    </div>
+  `).join('');
+  
+  // Erstelle den Modal-Inhalt
+  const contentHTML = `
+    <div class="category-info-section">
+      <h3><i class="fas fa-info-circle"></i> ${lang === 'de' ? 'Beschreibung' : 'Description'}</h3>
+      <p>${info.description[lang]}</p>
+    </div>
+    
+    <div class="category-info-section">
+      <h3><i class="fas fa-lightbulb"></i> ${lang === 'de' ? 'Typische Anwendungen' : 'Common Use Cases'}</h3>
+      ${info.useCases[lang].map(useCase => `<p>• ${useCase}</p>`).join('')}
+    </div>
+    
+    <div class="category-info-section">
+      <h3><i class="fas fa-user-check"></i> ${lang === 'de' ? 'Ideal für' : 'Ideal For'}</h3>
+      ${info.bestFor[lang].map(target => `<p>• ${target}</p>`).join('')}
+    </div>
+    
+    <div class="category-info-section">
+      <h3><i class="fas fa-chart-line"></i> ${lang === 'de' ? 'Aktuelle Trends' : 'Current Trends'}</h3>
+      ${info.trends[lang].map(trend => `<p>• ${trend}</p>`).join('')}
+    </div>
+    
+    <div class="category-info-section">
+      <h3><i class="fas fa-trophy"></i> ${lang === 'de' ? 'Top Tools dieser Kategorie' : 'Top Tools in this Category'}</h3>
+      <div class="category-info-tools">
+        ${toolsHTML}
+      </div>
+    </div>
+    
+    <div class="category-info-section">
+      <h3><i class="fas fa-question-circle"></i> ${lang === 'de' ? 'Wie wähle ich aus?' : 'How to Choose?'}</h3>
+      <p>${lang === 'de' 
+        ? 'Vergleiche Tools anhand von Bewertungen, Preismodellen und spezifischen Features. Nutze unsere Favoriten- und Vergleichsfunktion für die besten Ergebnisse.' 
+        : 'Compare tools based on ratings, pricing models and specific features. Use our favorites and comparison function for best results.'}</p>
+    </div>
+  `;
+  
+  document.getElementById('categoryInfoContent').innerHTML = contentHTML;
+  
+  // Zeige das Modal an
+  document.getElementById('categoryInfoModalOverlay').classList.add('active');
+  document.getElementById('categoryInfoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCategoryInfoModal() {
+  document.getElementById('categoryInfoModalOverlay').classList.remove('active');
+  document.getElementById('categoryInfoModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== GRUPPEN FUNKTIONEN =====
 function expandGroup(category) {
   const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
   expandedGroups[category] = true;
@@ -3023,7 +3574,7 @@ async function vote(toolId, type) {
   };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
   
-  // Update UI - ÄNDERUNG 1: Keine Animation bei Button-Aktivierung
+  // Update UI
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
     voteCountElement.textContent = tool.votes;
@@ -3308,6 +3859,10 @@ function setupEventListeners() {
   document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
   document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
   
+  // Category info modal close
+  document.getElementById('categoryInfoModalClose').addEventListener('click', closeCategoryInfoModal);
+  document.getElementById('categoryInfoModalOverlay').addEventListener('click', closeCategoryInfoModal);
+  
   // Favorites overlay
   document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesOverlay);
   document.getElementById('favoritesClose').addEventListener('click', closeFavoritesOverlay);
@@ -3383,6 +3938,9 @@ function setupEventListeners() {
       }
       if (document.getElementById('privacyModal').classList.contains('active')) {
         closeModal('privacyModal');
+      }
+      if (document.getElementById('categoryInfoModal').classList.contains('active')) {
+        closeCategoryInfoModal();
       }
     }
   });
