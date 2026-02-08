@@ -254,6 +254,348 @@ body::before {
   box-shadow: 0 4px 15px rgba(0,212,255,.3);
 }
 
+/* Search Suggestions Dropdown */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-top: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1001;
+  display: none;
+  box-shadow: var(--shadow-hover);
+}
+
+.search-suggestions.active {
+  display: block;
+}
+
+.search-suggestion {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+
+.search-suggestion:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion:hover {
+  background: var(--bg-hover);
+}
+
+.search-suggestion.highlighted {
+  background: rgba(0,212,255,.1);
+}
+
+.search-suggestion-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.search-suggestion-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.search-suggestion-category {
+  font-size: .7rem;
+  color: var(--primary);
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.highlight {
+  background: rgba(0,212,255,.2);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Recently Viewed Section */
+.recently-viewed-section {
+  margin-bottom: 24px;
+}
+
+.recently-viewed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.clear-recent-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: .8rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.clear-recent-btn:hover {
+  color: var(--accent);
+}
+
+/* Advanced Filtering */
+.advanced-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-group label {
+  font-size: .8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: .85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.clear-filters-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: .85rem;
+}
+
+.clear-filters-btn:hover {
+  background: var(--bg-hover);
+  color: var(--primary);
+}
+
+/* Active Filters Display */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.active-filter {
+  background: rgba(0,212,255,.15);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.active-filter i {
+  cursor: pointer;
+  font-size: .8rem;
+}
+
+/* Comparison Indicators */
+.comparison-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  z-index: 899;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: none;
+}
+
+.comparison-indicator:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Personal Recommendations */
+.recommendations-section {
+  background: linear-gradient(135deg, rgba(168,85,247,.1), rgba(0,212,255,.1));
+  border: 1px solid rgba(168,85,247,.2);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.recommendations-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.recommendations-header i {
+  color: var(--secondary);
+  font-size: 1.2rem;
+}
+
+.recommendation-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+
+.recommendation-tooltip i {
+  color: var(--text-secondary);
+  cursor: help;
+}
+
+.recommendation-tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  width: 250px;
+  font-size: .8rem;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.recommendation-tooltip:hover .recommendation-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Shortcut Help Modal */
+.shortcut-help {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(.95);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  z-index: 3002;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.shortcut-help.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.shortcut-help-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.shortcut-key {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: .9rem;
+}
+
+/* Share Button */
+.share-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .85rem;
+}
+
+.share-btn:hover {
+  background: rgba(0,212,255,.1);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Analytics Opt-in */
+.analytics-optin {
+  background: rgba(16,185,129,.1);
+  border: 1px solid rgba(16,185,129,.3);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 20px;
+  display: none;
+}
+
+.analytics-optin.active {
+  display: block;
+}
+
 .sticky-header {
   position: fixed;
   top: 0;
@@ -2073,6 +2415,126 @@ input:checked + .slider:before {
     min-height: -webkit-fill-available;
   }
 }
+
+/* Swipe gestures for mobile drawer */
+.drawer {
+  touch-action: pan-y;
+}
+
+/* Vibration feedback (will only work on supported devices) */
+@media (hover: none) and (pointer: coarse) {
+  .vote-btn-row:active,
+  .tool-action-btn:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Pull-to-refresh indicator */
+.pull-to-refresh {
+  position: fixed;
+  top: -50px;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  z-index: 1000;
+  transition: transform 0.3s;
+}
+
+/* Comparison Modal */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.comparison-table th {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.comparison-feature {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Heatmap styles */
+.heatmap-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 15px 0;
+}
+
+.heatmap-item {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  cursor: help;
+}
+
+/* Social Features */
+.tool-stats {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: .85rem;
+  color: var(--text-secondary);
+}
+
+.tool-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tool-trend {
+  font-size: .7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.tool-trend.up {
+  background: rgba(16,185,129,.15);
+  color: var(--success);
+}
+
+.tool-trend.down {
+  background: rgba(239,68,68,.15);
+  color: var(--error);
+}
+
+/* Embeddable Card */
+.embeddable-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: var(--bg-card);
+  max-width: 300px;
+  margin: 10px 0;
+}
+
+/* Keyboard Shortcut Helper */
+.keyboard-shortcut {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: .85rem;
+}
 </style>
 </head>
 <body class="density-compact">
@@ -2084,15 +2546,17 @@ input:checked + .slider:before {
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      <strong>Cookie-Einstellungen</strong><br>
-      Technisch notwendige Cookies (Favoriten, Votes) sind aktiv. 
-      <button class="cookie-details-btn" id="cookieDetailsBtn">Details</button> 
-      <a href="#" id="privacyLinkCookie">Datenschutz</a>
+      <strong data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</strong><br>
+      <span data-de="Technisch notwendige Cookies (Favoriten, Votes) sind aktiv." data-en="Technically necessary cookies (favorites, votes) are active.">
+        Technisch notwendige Cookies (Favoriten, Votes) sind aktiv.
+      </span> 
+      <button class="cookie-details-btn" id="cookieDetailsBtn" data-de="Details" data-en="Details">Details</button> 
+      <a href="#" id="privacyLinkCookie" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
     </div>
     <div class="cookie-buttons">
-      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
-      <button class="cookie-btn settings" id="cookieSettings">Einstellungen</button>
-      <button class="cookie-btn accept" id="cookieAccept">Alle akzeptieren</button>
+      <button class="cookie-btn decline" id="cookieDecline" data-de="Ablehnen" data-en="Decline">Ablehnen</button>
+      <button class="cookie-btn settings" id="cookieSettings" data-de="Einstellungen" data-en="Settings">Einstellungen</button>
+      <button class="cookie-btn accept" id="cookieAccept" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
     </div>
   </div>
 </div>
@@ -2101,22 +2565,55 @@ input:checked + .slider:before {
 <div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
 <div class="modal" id="cookieSettingsModal">
   <div class="modal-header">
-    <h2 class="modal-title">Cookie-Einstellungen</h2>
+    <h2 class="modal-title" data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</h2>
     <button class="modal-close" id="cookieSettingsModalClose"><i class="fas fa-times"></i></button>
   </div>
   <div class="modal-content">
     <div class="cookie-setting">
-      <h3><i class="fas fa-chart-line"></i> Analyse-Cookies (Google Analytics)</h3>
-      <p>Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
+      <h3><i class="fas fa-chart-line"></i> <span data-de="Analyse-Cookies (Google Analytics)" data-en="Analytics Cookies (Google Analytics)">Analyse-Cookies (Google Analytics)</span></h3>
+      <p data-de="Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert." data-en="Help us understand how the website is used. Anonymized.">
+        Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.
+      </p>
       <label class="switch">
         <input type="checkbox" id="analyticsToggle" checked>
         <span class="slider"></span>
       </label>
-      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem">Aktiviert</p>
+      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem" data-de="Aktiviert" data-en="Enabled">Aktiviert</p>
     </div>
     <div class="cookie-buttons" style="margin-top:30px">
-      <button class="cookie-btn secondary" id="saveCookieSettings">Auswahl speichern</button>
-      <button class="cookie-btn accept" id="acceptAllCookies">Alle akzeptieren</button>
+      <button class="cookie-btn secondary" id="saveCookieSettings" data-de="Auswahl speichern" data-en="Save Selection">Auswahl speichern</button>
+      <button class="cookie-btn accept" id="acceptAllCookies" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Shortcut Help Modal -->
+<div class="modal-overlay" id="shortcutHelpModalOverlay"></div>
+<div class="shortcut-help" id="shortcutHelpModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Tastaturkürzel" data-en="Keyboard Shortcuts">Tastaturkürzel</h2>
+    <button class="modal-close" id="shortcutHelpModalClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="shortcut-help-content">
+    <div class="shortcut-item">
+      <span data-de="Fokus auf Suchfeld" data-en="Focus search field">Fokus auf Suchfeld</span>
+      <span class="shortcut-key">/</span>
+    </div>
+    <div class="shortcut-item">
+      <span data-de="Alle Modals/Drawer schließen" data-en="Close all modals/drawers">Alle Modals/Drawer schließen</span>
+      <span class="shortcut-key">ESC</span>
+    </div>
+    <div class="shortcut-item">
+      <span data-de="Favoriten öffnen" data-en="Open favorites">Favoriten öffnen</span>
+      <span class="shortcut-key">F</span>
+    </div>
+    <div class="shortcut-item">
+      <span data-de="Top 5 Tools öffnen" data-en="Open top 5 tools">Top 5 Tools öffnen</span>
+      <span class="shortcut-key">1-5</span>
+    </div>
+    <div class="shortcut-item">
+      <span data-de="Diese Hilfe anzeigen" data-en="Show this help">Diese Hilfe anzeigen</span>
+      <span class="shortcut-key">?</span>
     </div>
   </div>
 </div>
@@ -2136,6 +2633,7 @@ input:checked + .slider:before {
   <div class="hero-search-container">
     <div class="hero-omnibox">
       <input type="text" class="hero-omnibox-input" id="omniboxInput" placeholder="Ich suche nach..." data-placeholder-de="Ich suche nach..." data-placeholder-en="I'm looking for...">
+      <div class="search-suggestions" id="searchSuggestions"></div>
     </div>
   </div>
   <div class="search-hint-grid">
@@ -2150,12 +2648,63 @@ input:checked + .slider:before {
 </div>
 
 <main class="main-content">
+  <!-- Personal Recommendations -->
+  <div class="recommendations-section" id="recommendationsSection" style="display:none">
+    <div class="recommendations-header">
+      <i class="fas fa-robot"></i>
+      <h3 data-de="Für dich empfohlen" data-en="Recommended for you">Für dich empfohlen</h3>
+      <div class="recommendation-tooltip">
+        <i class="fas fa-question-circle"></i>
+        <div class="recommendation-tooltip-text" data-de="Basierend auf deinen bisherigen Aktivitäten: besuchte Kategorien, geklickte Tools, Votes und Favoriten." data-en="Based on your previous activities: visited categories, clicked tools, votes and favorites.">
+          Basierend auf deinen bisherigen Aktivitäten: besuchte Kategorien, geklickte Tools, Votes und Favoriten.
+        </div>
+      </div>
+    </div>
+    <div class="top5-list" id="recommendationsList"></div>
+  </div>
+  
   <div class="top5-bar" id="top5Bar">
     <div class="top5-header">
       <i class="fas fa-trophy"></i> <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
     </div>
     <div class="top5-list" id="top5List"></div>
   </div>
+  
+  <!-- Advanced Filtering -->
+  <div class="advanced-filters" id="advancedFilters">
+    <div class="filter-group">
+      <label data-de="Kategorie" data-en="Category">Kategorie</label>
+      <select class="filter-select" id="categoryFilter">
+        <option value="all" data-de="Alle Kategorien" data-en="All Categories">Alle Kategorien</option>
+        <option value="text" data-de="Text" data-en="Text">Text</option>
+        <option value="image" data-de="Bild" data-en="Image">Bild</option>
+        <option value="code" data-de="Code" data-en="Code">Code</option>
+        <option value="video" data-de="Video" data-en="Video">Video</option>
+        <option value="audio" data-de="Audio" data-en="Audio">Audio</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-de="Preis" data-en="Price">Preis</label>
+      <select class="filter-select" id="priceFilter">
+        <option value="all" data-de="Alle Preise" data-en="All Prices">Alle Preise</option>
+        <option value="free" data-de="Nur Free" data-en="Free Only">Nur Free</option>
+        <option value="freemium" data-de="Nur Freemium" data-en="Freemium Only">Nur Freemium</option>
+        <option value="paid" data-de="Nur Paid" data-en="Paid Only">Nur Paid</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-de="Bewertung" data-en="Rating">Bewertung</label>
+      <select class="filter-select" id="ratingFilter">
+        <option value="all" data-de="Alle Bewertungen" data-en="All Ratings">Alle Bewertungen</option>
+        <option value="4.5" data-de="4.5+ Sterne" data-en="4.5+ Stars">4.5+ Sterne</option>
+        <option value="top" data-de="Top Rated" data-en="Top Rated">Top Rated</option>
+      </select>
+    </div>
+    <button class="clear-filters-btn" id="clearFiltersBtn" data-de="Filter zurücksetzen" data-en="Reset Filters">Filter zurücksetzen</button>
+  </div>
+  
+  <!-- Active Filters Display -->
+  <div class="active-filters" id="activeFilters"></div>
   
   <div class="filter-chips" id="filterChips"></div>
   
@@ -2176,18 +2725,21 @@ input:checked + .slider:before {
     </div>
   </div>
   <div class="footer-links">
-    <a href="#" id="imprintLink">Impressum</a>
-    <a href="#" id="privacyLink">Datenschutz</a>
+    <a href="#" id="imprintLink" data-de="Impressum" data-en="Imprint">Impressum</a>
+    <a href="#" id="privacyLink" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
   </div>
   <div class="footer-legal-links">
-    <a href="#" id="legalDetailsBtn">Rechtliche Details</a> <span>•</span> 
+    <a href="#" id="legalDetailsBtn" data-de="Rechtliche Details" data-en="Legal Details">Rechtliche Details</a> <span>•</span> 
     <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a> <span>•</span> 
     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
   </div>
   <div class="footer-age-warning">
-    <i class="fas fa-exclamation-triangle"></i> Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
+    <i class="fas fa-exclamation-triangle"></i> 
+    <span data-de="Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll." data-en="This website is intended for users aged 16 and over. AI tools can generate unexpected content – use them responsibly.">
+      Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
+    </span>
   </div>
-  <div class="footer-copyright">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
+  <div class="footer-copyright">© 2026 AI Searcher. <span data-de="Alle Rechte vorbehalten." data-en="All rights reserved.">Alle Rechte vorbehalten.</span></div>
 </footer>
 
 <!-- Category Info Modal -->
@@ -2221,6 +2773,15 @@ input:checked + .slider:before {
     <button class="favorites-close" id="favoritesClose"><i class="fas fa-times"></i></button>
   </div>
   <div class="favorites-content">
+    <!-- Recently Viewed Section -->
+    <div class="recently-viewed-section">
+      <div class="recently-viewed-header">
+        <div class="dock-label" data-de="Zuletzt angesehen" data-en="Recently Viewed">Zuletzt angesehen</div>
+        <button class="clear-recent-btn" id="clearRecentBtn" data-de="Löschen" data-en="Clear">Löschen</button>
+      </div>
+      <div class="dock-items" id="recentlyViewedDock"></div>
+    </div>
+    
     <div class="dock-section">
       <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
       <div class="dock-items" id="favoriteDock"></div>
@@ -2231,8 +2792,38 @@ input:checked + .slider:before {
     </div>
     <div class="dock-actions">
       <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
-      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
+      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen (2-3 Tools)" data-en="Compare (2-3 Tools)">Vergleichen (2-3 Tools)</button>
     </div>
+  </div>
+</div>
+
+<!-- Comparison Modal -->
+<div class="modal-overlay" id="comparisonModalOverlay"></div>
+<div class="modal" id="comparisonModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Tool-Vergleich" data-en="Tool Comparison">Tool-Vergleich</h2>
+    <button class="modal-close" id="comparisonModalClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-content" id="comparisonContent">
+    <button class="share-btn" id="exportComparisonBtn" data-de="Vergleich als Text kopieren" data-en="Copy comparison as text">
+      <i class="fas fa-copy"></i> <span data-de="Als Text kopieren" data-en="Copy as text">Als Text kopieren</span>
+    </button>
+    <div id="comparisonTableContainer"></div>
+  </div>
+</div>
+
+<!-- Analytics Modal -->
+<div class="modal-overlay" id="analyticsModalOverlay"></div>
+<div class="modal" id="analyticsModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Meine Analytics" data-en="My Analytics">Meine Analytics</h2>
+    <button class="modal-close" id="analyticsModalClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-content" id="analyticsContent">
+    <button class="share-btn" id="exportAnalyticsBtn" data-de="Daten exportieren" data-en="Export data">
+      <i class="fas fa-download"></i> <span data-de="Daten exportieren" data-en="Export data">Daten exportieren</span>
+    </button>
+    <div id="analyticsData"></div>
   </div>
 </div>
 
@@ -2242,6 +2833,9 @@ input:checked + .slider:before {
   <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
 </button>
 <button class="back-to-top" id="backToTop" aria-label="Nach oben"><i class="fas fa-chevron-up"></i></button>
+<div class="comparison-indicator" id="comparisonIndicator" style="display:none">
+  <i class="fas fa-balance-scale"></i> <span id="comparisonCount">0</span> <span data-de="Tools zum Vergleich" data-en="tools for comparison">Tools zum Vergleich</span>
+</div>
 
 <!-- Imprint Modal -->
 <div class="modal-overlay" id="imprintModalOverlay"></div>
@@ -2250,25 +2844,8 @@ input:checked + .slider:before {
     <h2 class="modal-title">Impressum</h2>
     <button class="modal-close" id="imprintModalClose"><i class="fas fa-times"></i></button>
   </div>
-  <div class="modal-content">
-    <h2>Impressum</h2>
-    <h3>Angaben gemäß § 5 DDG</h3>
-    <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3>Kontakt</h3>
-    <p>Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small></p>
-    <h3>Aufsichtsbehörde</h3>
-    <p>Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland</p>
-    <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
-    <p>Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3>Haftungsausschluss & Streitbeilegung</h3>
-    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-    <h3>Affiliate-Hinweis</h3>
-    <p>Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <h3>Affiliate-Links & Haftungsausschluss</h3>
-    <p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <p><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
-    <h3>Urheberrecht & Marken</h3>
-    <p>Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
+  <div class="modal-content" id="imprintContent">
+    <!-- Content will be populated based on language -->
   </div>
 </div>
 
@@ -2279,26 +2856,8 @@ input:checked + .slider:before {
     <h2 class="modal-title">Datenschutz</h2>
     <button class="modal-close" id="privacyModalClose"><i class="fas fa-times"></i></button>
   </div>
-  <div class="modal-content">
-    <h2>Datenschutzerklärung</h2>
-    <h3>1. Verantwortliche Stelle</h3>
-    <p>Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
-    <h3>2. Datenerhebung bei Website-Nutzung</h3>
-    <p>Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
-    <h3>3. Cookies & Local Storage</h3>
-    <p>Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
-    <h3>4. Google Analytics (nur nach Einwilligung)</h3>
-    <p>Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
-    <p>Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
-    <h3>5. Externe Links & Affiliate-Links</h3>
-    <p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
-    <h3>6. Ihre Rechte (DSGVO)</h3>
-    <p>Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com</p>
-    <h3>7. Hosting auf GitHub Pages</h3>
-    <p>Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
-    <h3>8. Sicherheit</h3>
-    <p>Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
-    <p><em>Stand: Februar 2026</em></p>
+  <div class="modal-content" id="privacyContent">
+    <!-- Content will be populated based on language -->
   </div>
 </div>
 
@@ -2315,6 +2874,180 @@ let peekElement = null;
 let isDrawerOpen = false;
 let scrollDebounceTimeout = null;
 const BASELINE_VOTES = 2;
+
+// Extended language texts
+const translations = {
+  de: {
+    imprint: {
+      title: "Impressum",
+      sections: [
+        {
+          title: "Angaben gemäß § 5 DDG",
+          content: "Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin"
+        },
+        {
+          title: "Kontakt",
+          content: 'Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small>'
+        },
+        {
+          title: "Aufsichtsbehörde",
+          content: "Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland"
+        },
+        {
+          title: "Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",
+          content: "Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin"
+        },
+        {
+          title: "Haftungsausschluss & Streitbeilegung",
+          content: "Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
+        },
+        {
+          title: "Affiliate-Hinweis",
+          content: "Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten."
+        },
+        {
+          title: "Affiliate-Links & Haftungsausschluss",
+          content: "Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.<br><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter."
+        },
+        {
+          title: "Urheberrecht & Marken",
+          content: "Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken."
+        }
+      ]
+    },
+    privacy: {
+      title: "Datenschutzerklärung",
+      sections: [
+        {
+          title: "1. Verantwortliche Stelle",
+          content: "Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com"
+        },
+        {
+          title: "2. Datenerhebung bei Website-Nutzung",
+          content: "Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht."
+        },
+        {
+          title: "3. Cookies & Local Storage",
+          content: "Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren."
+        },
+        {
+          title: "4. Google Analytics (nur nach Einwilligung)",
+          content: 'Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.<br>Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a>'
+        },
+        {
+          title: "5. Externe Links & Affiliate-Links",
+          content: "Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen."
+        },
+        {
+          title: "6. Ihre Rechte (DSGVO)",
+          content: "Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com"
+        },
+        {
+          title: "7. Hosting auf GitHub Pages",
+          content: 'Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.'
+        },
+        {
+          title: "8. Sicherheit",
+          content: "Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy)."
+        },
+        {
+          title: "Stand",
+          content: "Februar 2026"
+        }
+      ]
+    }
+  },
+  en: {
+    imprint: {
+      title: "Imprint",
+      sections: [
+        {
+          title: "Information according to § 5 DDG",
+          content: "Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin"
+        },
+        {
+          title: "Contact",
+          content: 'Phone: +49 173 5489128 (No phone support)<br>Email: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Note: Support requests are processed exclusively by email.</i></small>'
+        },
+        {
+          title: "Supervisory Authority",
+          content: "State Media Authority of North Rhine-Westphalia<br>Location: Germany"
+        },
+        {
+          title: "Responsible for content according to § 18 Abs. 2 MStV",
+          content: "Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin"
+        },
+        {
+          title: "Disclaimer & Dispute Resolution",
+          content: "The contents of this page were created with the greatest care. However, no guarantee can be given for the accuracy, completeness and timeliness of the content. We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board."
+        },
+        {
+          title: "Affiliate Notice",
+          content: "This website contains affiliate links. If you purchase a product through these links, I receive a small commission. There are no additional costs for you."
+        },
+        {
+          title: "Affiliate Links & Disclaimer",
+          content: "Links to AI tools are marked as affiliate links (*). For purchases via these links, we receive a small commission. There are no additional costs for you.<br><strong>Important:</strong> We accept no liability for:<ul><li>Accuracy of tool descriptions (can change daily)</li><li>Availability or functionality of linked tools</li><li>Contract conclusions with third parties</li><li>Privacy practices of external providers</li></ul>The contractual relationship is exclusively between you and the tool provider."
+        },
+        {
+          title: "Copyright & Trademarks",
+          content: "All product names, logos and brands are property of their respective owners. Mention is for identification purposes only."
+        }
+      ]
+    },
+    privacy: {
+      title: "Privacy Policy",
+      sections: [
+        {
+          title: "1. Responsible Party",
+          content: "Responsible in terms of data protection laws:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>Email: ai.tool.hub.contact@gmail.com"
+        },
+        {
+          title: "2. Data Collection when Using the Website",
+          content: "For informational use, we do not collect any personal data. Server log files (IP, browser type, access time) are automatically collected by the hosting provider and deleted after 7 days."
+        },
+        {
+          title: "3. Cookies & Local Storage",
+          content: "We use technically necessary cookies for functions such as favorites and voting. These are stored locally in your browser and contain no personal data. You can optionally activate analytics cookies."
+        },
+        {
+          title: "4. Google Analytics (only with consent)",
+          content: 'This website uses Google Analytics 4, a web analytics service provided by Google LLC. IP anonymization is enabled. Your IP address is truncated before it reaches the USA. Data is stored for a maximum of 14 months.<br>You can disable analytics via: <a href="#" id="analyticsOptOut">Disable Analytics</a>'
+        },
+        {
+          title: "5. External Links & Affiliate Links",
+          content: "Links to AI tools are marked as affiliate links (*). When clicking, no personal data is transferred to us. For external pages, their respective privacy policies apply."
+        },
+        {
+          title: "6. Your Rights (GDPR)",
+          content: "You have the right to:<ul><li>Information about stored data</li><li>Correction of incorrect data</li><li>Deletion of your data</li><li>Restriction of processing</li><li>Data portability</li><li>Withdrawal of your consent</li></ul>Contact: ai.tool.hub.contact@gmail.com"
+        },
+        {
+          title: "7. Hosting on GitHub Pages",
+          content: 'This page is hosted on GitHub Pages. GitHub may process technical access data (IP, access time). Further information: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.'
+        },
+        {
+          title: "8. Security",
+          content: "We use technical measures to protect your data (HTTPS, Content Security Policy)."
+        },
+        {
+          title: "Status",
+          content: "February 2026"
+        }
+      ]
+    }
+  }
+};
+
+// Advanced filtering state
+let activeFilters = {
+  category: 'all',
+  price: 'all',
+  rating: 'all'
+};
+
+// Keyboard shortcuts state
+let shortcutHelpVisible = false;
 
 // Kategorie-Informationen
 const categoryInfo = {
@@ -2464,6 +3197,957 @@ function closeModal(modalId) {
 }
 
 // ==============================================
+// SPRACHUMSCHALTUNG ERWEITERT
+// ==============================================
+function updateLanguageElements() {
+  // Update all elements with data-de/data-en attributes
+  document.querySelectorAll('[data-de]').forEach(element => {
+    if (element.hasAttribute('placeholder')) {
+      element.placeholder = currentLang === 'de' ? 
+        element.getAttribute('data-placeholder-de') || element.getAttribute('data-de') : 
+        element.getAttribute('data-placeholder-en') || element.getAttribute('data-en');
+    } else if (element.tagName === 'INPUT' && element.type === 'button') {
+      element.value = currentLang === 'de' ? 
+        element.getAttribute('data-de') : 
+        element.getAttribute('data-en');
+    } else {
+      element.textContent = currentLang === 'de' ? 
+        element.getAttribute('data-de') : 
+        element.getAttribute('data-en');
+    }
+  });
+  
+  // Update select options
+  document.querySelectorAll('option[data-de]').forEach(option => {
+    option.textContent = currentLang === 'de' ? 
+      option.getAttribute('data-de') : 
+      option.getAttribute('data-en');
+  });
+  
+  // Update search hint
+  const searchHint = document.getElementById('searchHintText');
+  if (searchHint) {
+    searchHint.textContent = currentLang === 'de' ? 
+      'Suche nach Toolnamen, Use-Cases oder Features' : 
+      'Search for tool names, use cases or features';
+  }
+  
+  // Update hero subtitle
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  if (heroSubtitle) {
+    heroSubtitle.textContent = currentLang === 'de' ?
+      'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.' :
+      'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
+  }
+  
+  // Update language toggle text
+  const langText = document.getElementById('langText');
+  if (langText) {
+    langText.textContent = currentLang === 'de' ? 'EN' : 'DE';
+  }
+  
+  // Update modal contents
+  updateImprintContent();
+  updatePrivacyContent();
+  
+  // Update advanced filters
+  updateActiveFiltersDisplay();
+}
+
+function updateImprintContent() {
+  const imprint = translations[currentLang].imprint;
+  const content = document.getElementById('imprintContent');
+  if (!content) return;
+  
+  content.innerHTML = `
+    <h2>${imprint.title}</h2>
+    ${imprint.sections.map(section => `
+      <h3>${section.title}</h3>
+      <p>${section.content}</p>
+    `).join('')}
+  `;
+}
+
+function updatePrivacyContent() {
+  const privacy = translations[currentLang].privacy;
+  const content = document.getElementById('privacyContent');
+  if (!content) return;
+  
+  content.innerHTML = `
+    <h2>${privacy.title}</h2>
+    ${privacy.sections.map(section => `
+      <h3>${section.title}</h3>
+      <p>${section.content}</p>
+    `).join('')}
+  `;
+}
+
+function toggleLanguage() {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  updateLanguageElements();
+  renderFilterChips();
+  renderTop5();
+  renderToolGroups();
+  updateAdvancedFilters();
+  updateRecommendations();
+}
+
+// ==============================================
+// INTELLIGENTE SUCHVORSCHLÄGE
+// ==============================================
+function initSearchSuggestions() {
+  const searchInput = document.getElementById('omniboxInput');
+  const suggestionsContainer = document.getElementById('searchSuggestions');
+  let selectedSuggestionIndex = -1;
+  let suggestions = [];
+
+  function highlightText(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  }
+
+  function showSuggestions(query) {
+    if (!query || query.length < 2) {
+      suggestionsContainer.classList.remove('active');
+      return;
+    }
+
+    suggestions = aiTools.filter(tool => {
+      const searchStr = query.toLowerCase();
+      return (
+        tool.name.toLowerCase().includes(searchStr) ||
+        tool.category.toLowerCase().includes(searchStr) ||
+        tool.tags.some(tag => tag.toLowerCase().includes(searchStr)) ||
+        (currentLang === 'de' ? tool.description.de : tool.description.en).toLowerCase().includes(searchStr)
+      );
+    }).slice(0, 8);
+
+    if (suggestions.length === 0) {
+      suggestionsContainer.classList.remove('active');
+      return;
+    }
+
+    suggestionsContainer.innerHTML = suggestions.map((tool, index) => {
+      const name = highlightText(tool.name, query);
+      const category = getCategoryName(tool.category);
+      return `
+        <div class="search-suggestion ${index === selectedSuggestionIndex ? 'highlighted' : ''}" 
+             data-index="${index}" 
+             data-id="${tool.id}">
+          <div class="search-suggestion-icon">${getCategoryIcon(tool.category)}</div>
+          <div class="search-suggestion-name">${name}</div>
+          <div class="search-suggestion-category">${category}</div>
+        </div>
+      `;
+    }).join('');
+
+    suggestionsContainer.classList.add('active');
+  }
+
+  function selectSuggestion(index) {
+    document.querySelectorAll('.search-suggestion').forEach((suggestion, i) => {
+      suggestion.classList.toggle('highlighted', i === index);
+    });
+    selectedSuggestionIndex = index;
+  }
+
+  function useSelectedSuggestion() {
+    if (selectedSuggestionIndex >= 0 && suggestions[selectedSuggestionIndex]) {
+      const tool = suggestions[selectedSuggestionIndex];
+      searchInput.value = tool.name;
+      searchInput.blur();
+      suggestionsContainer.classList.remove('active');
+      performSearch(tool.name);
+      openToolDrawer(tool.id);
+    }
+  }
+
+  // Event Listeners
+  let debounceTimer;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      showSuggestions(e.target.value);
+    }, 200);
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (!suggestionsContainer.classList.contains('active')) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, suggestions.length - 1);
+        selectSuggestion(selectedSuggestionIndex);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
+        selectSuggestion(selectedSuggestionIndex);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        useSelectedSuggestion();
+        break;
+      case 'Escape':
+        suggestionsContainer.classList.remove('active');
+        break;
+    }
+  });
+
+  suggestionsContainer.addEventListener('click', (e) => {
+    const suggestion = e.target.closest('.search-suggestion');
+    if (suggestion) {
+      const toolId = suggestion.dataset.id;
+      const tool = aiTools.find(t => t.id === toolId);
+      if (tool) {
+        searchInput.value = tool.name;
+        suggestionsContainer.classList.remove('active');
+        performSearch(tool.name);
+        openToolDrawer(tool.id);
+      }
+    }
+  });
+
+  // Close suggestions when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+      suggestionsContainer.classList.remove('active');
+    }
+  });
+
+  // Touch support
+  suggestionsContainer.addEventListener('touchstart', (e) => {
+    const suggestion = e.target.closest('.search-suggestion');
+    if (suggestion) {
+      suggestion.classList.add('highlighted');
+    }
+  });
+
+  suggestionsContainer.addEventListener('touchend', (e) => {
+    const suggestion = e.target.closest('.search-suggestion');
+    if (suggestion) {
+      suggestion.classList.remove('highlighted');
+      const toolId = suggestion.dataset.id;
+      const tool = aiTools.find(t => t.id === toolId);
+      if (tool) {
+        searchInput.value = tool.name;
+        suggestionsContainer.classList.remove('active');
+        performSearch(tool.name);
+        openToolDrawer(tool.id);
+      }
+    }
+  });
+}
+
+// ==============================================
+// KÜRZLICH ANGESEHENE TOOLS
+// ==============================================
+function addToRecentlyViewed(toolId) {
+  let recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+  recent = recent.filter(id => id !== toolId);
+  recent.unshift(toolId);
+  if (recent.length > 10) recent = recent.slice(0, 10);
+  localStorage.setItem('recentlyViewed', JSON.stringify(recent));
+  updateRecentlyViewed();
+}
+
+function updateRecentlyViewed() {
+  const recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+  const dock = document.getElementById('recentlyViewedDock');
+  if (!dock) return;
+
+  dock.innerHTML = recent.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    return tool ? `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation();removeFromRecentlyViewed('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    ` : '';
+  }).join('') || '<div style="color:var(--text-secondary);font-size:.9rem;padding:10px">' + 
+    (currentLang === 'de' ? 'Noch keine Tools angesehen' : 'No tools viewed yet') + '</div>';
+}
+
+function removeFromRecentlyViewed(toolId) {
+  let recent = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+  recent = recent.filter(id => id !== toolId);
+  localStorage.setItem('recentlyViewed', JSON.stringify(recent));
+  updateRecentlyViewed();
+}
+
+function clearRecentlyViewed() {
+  localStorage.removeItem('recentlyViewed');
+  updateRecentlyViewed();
+  showNotification(
+    currentLang === 'de' ? 'Verlauf gelöscht' : 'History cleared',
+    'info'
+  );
+}
+
+// ==============================================
+// ERWEITERTE FILTERUNG
+// ==============================================
+function initAdvancedFilters() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  const priceFilter = document.getElementById('priceFilter');
+  const ratingFilter = document.getElementById('ratingFilter');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+
+  function updateFilters() {
+    activeFilters.category = categoryFilter.value;
+    activeFilters.price = priceFilter.value;
+    activeFilters.rating = ratingFilter.value;
+    
+    updateActiveFiltersDisplay();
+    renderToolGroups();
+  }
+
+  categoryFilter.addEventListener('change', updateFilters);
+  priceFilter.addEventListener('change', updateFilters);
+  ratingFilter.addEventListener('change', updateFilters);
+
+  clearFiltersBtn.addEventListener('click', () => {
+    categoryFilter.value = 'all';
+    priceFilter.value = 'all';
+    ratingFilter.value = 'all';
+    activeFilters = { category: 'all', price: 'all', rating: 'all' };
+    updateActiveFiltersDisplay();
+    renderToolGroups();
+    showNotification(
+      currentLang === 'de' ? 'Filter zurückgesetzt' : 'Filters reset',
+      'info'
+    );
+  });
+}
+
+function updateAdvancedFilters() {
+  // Update filter labels based on language
+  const categoryFilter = document.getElementById('categoryFilter');
+  const priceFilter = document.getElementById('priceFilter');
+  const ratingFilter = document.getElementById('ratingFilter');
+  
+  if (categoryFilter) {
+    categoryFilter.innerHTML = `
+      <option value="all" data-de="Alle Kategorien" data-en="All Categories">${currentLang === 'de' ? 'Alle Kategorien' : 'All Categories'}</option>
+      <option value="text" data-de="Text" data-en="Text">${currentLang === 'de' ? 'Text' : 'Text'}</option>
+      <option value="image" data-de="Bild" data-en="Image">${currentLang === 'de' ? 'Bild' : 'Image'}</option>
+      <option value="code" data-de="Code" data-en="Code">${currentLang === 'de' ? 'Code' : 'Code'}</option>
+      <option value="video" data-de="Video" data-en="Video">${currentLang === 'de' ? 'Video' : 'Video'}</option>
+      <option value="audio" data-de="Audio" data-en="Audio">${currentLang === 'de' ? 'Audio' : 'Audio'}</option>
+    `;
+  }
+}
+
+function updateActiveFiltersDisplay() {
+  const container = document.getElementById('activeFilters');
+  if (!container) return;
+
+  const filters = [];
+  
+  if (activeFilters.category !== 'all') {
+    filters.push({
+      key: 'category',
+      value: activeFilters.category,
+      label: currentLang === 'de' ? `Kategorie: ${getCategoryName(activeFilters.category)}` : `Category: ${getCategoryName(activeFilters.category)}`
+    });
+  }
+  
+  if (activeFilters.price !== 'all') {
+    const priceLabels = {
+      de: { free: 'Kostenlos', freemium: 'Freemium', paid: 'Bezahlt' },
+      en: { free: 'Free', freemium: 'Freemium', paid: 'Paid' }
+    };
+    filters.push({
+      key: 'price',
+      value: activeFilters.price,
+      label: currentLang === 'de' ? `Preis: ${priceLabels.de[activeFilters.price]}` : `Price: ${priceLabels.en[activeFilters.price]}`
+    });
+  }
+  
+  if (activeFilters.rating !== 'all') {
+    const ratingLabels = {
+      de: { '4.5': '4.5+ Sterne', top: 'Top Bewertet' },
+      en: { '4.5': '4.5+ Stars', top: 'Top Rated' }
+    };
+    filters.push({
+      key: 'rating',
+      value: activeFilters.rating,
+      label: currentLang === 'de' ? `Bewertung: ${ratingLabels.de[activeFilters.rating]}` : `Rating: ${ratingLabels.en[activeFilters.rating]}`
+    });
+  }
+
+  container.innerHTML = filters.map(filter => `
+    <div class="active-filter">
+      ${filter.label}
+      <i class="fas fa-times" onclick="removeFilter('${filter.key}')"></i>
+    </div>
+  `).join('');
+}
+
+function removeFilter(filterKey) {
+  const filterElement = document.getElementById(`${filterKey}Filter`);
+  if (filterElement) {
+    filterElement.value = 'all';
+    activeFilters[filterKey] = 'all';
+  }
+  updateActiveFiltersDisplay();
+  renderToolGroups();
+}
+
+function filterTools(tools) {
+  return tools.filter(tool => {
+    // Category filter
+    if (activeFilters.category !== 'all' && tool.category !== activeFilters.category) {
+      return false;
+    }
+    
+    // Price filter
+    if (activeFilters.price !== 'all') {
+      if (activeFilters.price === 'free' && tool.price !== 'free') return false;
+      if (activeFilters.price === 'freemium' && tool.price !== 'freemium') return false;
+      if (activeFilters.price === 'paid' && tool.price !== 'paid') return false;
+    }
+    
+    // Rating filter
+    if (activeFilters.rating !== 'all') {
+      if (activeFilters.rating === '4.5' && tool.rating < 4.5) return false;
+      if (activeFilters.rating === 'top' && tool.rating < 4.7) return false;
+    }
+    
+    return true;
+  });
+}
+
+// ==============================================
+// SMARTER TOOL-VERGLEICH
+// ==============================================
+function updateComparisonIndicator() {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const indicator = document.getElementById('comparisonIndicator');
+  const count = document.getElementById('comparisonCount');
+  
+  if (comparison.length > 0) {
+    indicator.style.display = 'flex';
+    count.textContent = comparison.length;
+  } else {
+    indicator.style.display = 'none';
+  }
+}
+
+function openComparisonModal() {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.length < 2) {
+    showNotification(
+      currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare',
+      'error'
+    );
+    return;
+  }
+
+  const tools = comparison.map(id => aiTools.find(t => t.id === id)).filter(Boolean);
+  
+  // Create comparison table
+  const features = ['Preis', 'Bewertung', 'Kategorie', 'LTD', 'Features'];
+  const rows = features.map(feature => {
+    const cells = tools.map(tool => {
+      switch(feature) {
+        case 'Preis':
+          return tool.priceDisplay[currentLang === 'de' ? 'de' : 'en'];
+        case 'Bewertung':
+          return `${tool.rating}/5`;
+        case 'Kategorie':
+          return getCategoryName(tool.category);
+        case 'LTD':
+          return tool.hasLifetimeDeal ? '✓' : '✗';
+        case 'Features':
+          return tool.features.slice(0, 3).join(', ');
+        default:
+          return '';
+      }
+    });
+    
+    return `
+      <tr>
+        <td class="comparison-feature">${feature}</td>
+        ${cells.map(cell => `<td>${cell}</td>`).join('')}
+      </tr>
+    `;
+  }).join('');
+
+  const table = `
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th></th>
+          ${tools.map(tool => `<th>${tool.name}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
+  `;
+
+  document.getElementById('comparisonTableContainer').innerHTML = table;
+  openModal('comparisonModal');
+}
+
+function exportComparison() {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const tools = comparison.map(id => aiTools.find(t => t.id === id)).filter(Boolean);
+  
+  let text = `${currentLang === 'de' ? 'Tool-Vergleich' : 'Tool Comparison'}:\n\n`;
+  
+  tools.forEach((tool, index) => {
+    text += `${index + 1}. ${tool.name}\n`;
+    text += `   ${currentLang === 'de' ? 'Preis' : 'Price'}: ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}\n`;
+    text += `   ${currentLang === 'de' ? 'Bewertung' : 'Rating'}: ${tool.rating}/5\n`;
+    text += `   ${currentLang === 'de' ? 'Kategorie' : 'Category'}: ${getCategoryName(tool.category)}\n`;
+    text += `   ${currentLang === 'de' ? 'LTD' : 'Lifetime Deal'}: ${tool.hasLifetimeDeal ? 'Ja' : 'Nein'}\n`;
+    text += `   ${currentLang === 'de' ? 'Features' : 'Features'}: ${tool.features.slice(0, 3).join(', ')}\n\n`;
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    showNotification(
+      currentLang === 'de' ? 'Vergleich in Zwischenablage kopiert' : 'Comparison copied to clipboard',
+      'success'
+    );
+  }).catch(() => {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showNotification(
+      currentLang === 'de' ? 'Vergleich in Zwischenablage kopiert' : 'Comparison copied to clipboard',
+      'success'
+    );
+  });
+}
+
+// ==============================================
+// PERSÖNLICHE EMPFEHLUNGEN
+// ==============================================
+function calculateRecommendations() {
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  const votes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  
+  // Calculate scores for each tool based on user behavior
+  const toolScores = aiTools.map(tool => {
+    let score = 0;
+    
+    // Category preference
+    const categoryCount = userHistory.filter(cat => cat === tool.category).length;
+    score += categoryCount * 2;
+    
+    // Favorites
+    if (favorites.includes(tool.id)) score += 5;
+    
+    // Tool clicks
+    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 3);
+    
+    // Votes
+    const toolVotes = votes[tool.id];
+    if (toolVotes && toolVotes.userVote === 1) score += 3;
+    if (toolVotes && toolVotes.userVote === -1) score -= 2;
+    
+    // Popularity bonus
+    score += Math.min(getToolVotes(tool) / 10, 5);
+    
+    // Rating bonus
+    score += tool.rating * 0.5;
+    
+    return { tool, score };
+  });
+  
+  // Sort by score and get top 5
+  return toolScores
+    .sort((a, b) => b.score - a.score)
+    .filter(item => item.score > 0)
+    .slice(0, 5)
+    .map(item => item.tool);
+}
+
+function updateRecommendations() {
+  const recommendations = calculateRecommendations();
+  const section = document.getElementById('recommendationsSection');
+  const list = document.getElementById('recommendationsList');
+  
+  if (recommendations.length > 0) {
+    section.style.display = 'block';
+    
+    list.innerHTML = recommendations.map(tool => {
+      const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+      const quickPeek = tool.quickPeek ? 
+        (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
+        (description.length > 60 ? description.substring(0, 60) + '...' : description);
+      
+      return `
+        <div class="top5-item" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')" title="${tool.name}">
+          <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+          <div class="top5-info">
+            <div class="top5-name">${tool.name}</div>
+            <div class="top5-category">${getCategoryName(tool.category)}</div>
+          </div>
+          <div class="top5-votes" id="recommendationVotes-${tool.id}">${getToolVotes(tool)}</div>
+          <div class="top5-quickpeek">${quickPeek}</div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    section.style.display = 'none';
+  }
+}
+
+// ==============================================
+// ERWEITERTE KEYBOARD-SHORTCUTS
+// ==============================================
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Don't trigger shortcuts if user is typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      // Allow ESC to close modals even when typing
+      if (e.key === 'Escape') {
+        closeAllModals();
+      }
+      return;
+    }
+    
+    switch(e.key) {
+      case '/':
+        e.preventDefault();
+        document.getElementById('omniboxInput').focus();
+        break;
+      case 'Escape':
+        closeAllModals();
+        break;
+      case 'f':
+      case 'F':
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          openFavoritesDrawer();
+        }
+        break;
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+        if (!e.ctrlKey && !e.metaKey) {
+          const index = parseInt(e.key) - 1;
+          const top5Items = document.querySelectorAll('.top5-item');
+          if (top5Items[index]) {
+            const toolId = top5Items[index].dataset.id;
+            openToolDrawer(toolId);
+          }
+        }
+        break;
+      case '?':
+        e.preventDefault();
+        toggleShortcutHelp();
+        break;
+    }
+  });
+}
+
+function closeAllModals() {
+  // Close all open modals and drawers
+  const modals = ['imprintModal', 'privacyModal', 'categoryInfoModal', 'cookieSettingsModal', 
+                  'shortcutHelpModal', 'comparisonModal', 'analyticsModal'];
+  modals.forEach(modal => {
+    if (document.getElementById(modal)?.classList.contains('active')) {
+      closeModal(modal);
+    }
+  });
+  
+  // Close drawers
+  if (isDrawerOpen) closeToolDrawer();
+  if (document.getElementById('favoritesOverlay').classList.contains('active')) closeFavoritesDrawer();
+}
+
+function toggleShortcutHelp() {
+  if (document.getElementById('shortcutHelpModal').classList.contains('active')) {
+    closeModal('shortcutHelpModal');
+  } else {
+    openModal('shortcutHelpModal');
+  }
+}
+
+// ==============================================
+// OFFLINE-FUNKTIONALITÄT
+// ==============================================
+function initServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      const swCode = `
+        self.addEventListener('install', (event) => {
+          event.waitUntil(
+            caches.open('ai-searcher-v1').then((cache) => {
+              return cache.addAll([
+                '/',
+                '/index.html',
+                '/data.json'
+              ]);
+            })
+          );
+        });
+
+        self.addEventListener('fetch', (event) => {
+          event.respondWith(
+            caches.match(event.request).then((response) => {
+              return response || fetch(event.request).then((fetchResponse) => {
+                return caches.open('ai-searcher-v1').then((cache) => {
+                  if (event.request.url.includes('data.json')) {
+                    cache.put(event.request, fetchResponse.clone());
+                  }
+                  return fetchResponse;
+                });
+              });
+            }).catch(() => {
+              // Offline fallback
+              return caches.match('/');
+            })
+          );
+        });
+      `;
+      
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swURL = URL.createObjectURL(blob);
+      
+      navigator.serviceWorker.register(swURL)
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+  }
+}
+
+// ==============================================
+// ERWEITERTE ANALYTICS (OPT-IN)
+// ==============================================
+function initAnalyticsOptIn() {
+  const analyticsOptOut = document.getElementById('analyticsOptOut');
+  if (analyticsOptOut) {
+    analyticsOptOut.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.setItem('cookieConsent', 'declined');
+      window.cookiePreferences.analytics = false;
+      document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+      showNotification(
+        currentLang === 'de' ? 'Google Analytics wurde deaktiviert' : 'Google Analytics has been disabled',
+        'success'
+      );
+    });
+  }
+}
+
+function openAnalyticsModal() {
+  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  
+  // Calculate category preferences
+  const categoryCounts = {};
+  userHistory.forEach(category => {
+    categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+  });
+  
+  // Get most clicked tools
+  const topClicked = Object.entries(toolClicks)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id, count]) => {
+      const tool = aiTools.find(t => t.id === id);
+      return tool ? { name: tool.name, count } : null;
+    })
+    .filter(Boolean);
+  
+  const content = `
+    <h3>${currentLang === 'de' ? 'Deine Aktivitäten' : 'Your Activities'}</h3>
+    <p>${currentLang === 'de' ? 'Tools angeklickt:' : 'Tools clicked:'} ${Object.keys(toolClicks).length}</p>
+    <p>${currentLang === 'de' ? 'Favoriten:' : 'Favorites:'} ${favorites.length}</p>
+    <p>${currentLang === 'de' ? 'Kategorien besucht:' : 'Categories visited:'} ${userHistory.length}</p>
+    
+    <h3>${currentLang === 'de' ? 'Beliebteste Kategorien' : 'Most Popular Categories'}</h3>
+    ${Object.entries(categoryCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([category, count]) => `
+        <p>${getCategoryName(category)}: ${count} ${currentLang === 'de' ? 'Besuche' : 'visits'}</p>
+      `).join('')}
+    
+    <h3>${currentLang === 'de' ? 'Am häufigsten angeklickt' : 'Most Clicked'}</h3>
+    ${topClicked.map(tool => `
+      <p>${tool.name}: ${tool.count} ${currentLang === 'de' ? 'Klicks' : 'clicks'}</p>
+    `).join('')}
+  `;
+  
+  document.getElementById('analyticsData').innerHTML = content;
+  openModal('analyticsModal');
+}
+
+function exportAnalyticsData() {
+  const data = {
+    toolClicks: JSON.parse(localStorage.getItem('toolClicks') || '{}'),
+    userHistory: JSON.parse(localStorage.getItem('userHistory') || '[]'),
+    favorites: JSON.parse(localStorage.getItem('aiFavorites') || '[]'),
+    comparison: JSON.parse(localStorage.getItem('aiComparison') || '[]'),
+    votes: JSON.parse(localStorage.getItem('aiToolVotes') || '{}'),
+    recentlyViewed: JSON.parse(localStorage.getItem('recentlyViewed') || '[]'),
+    timestamp: new Date().toISOString()
+  };
+  
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ai-searcher-data-${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  showNotification(
+    currentLang === 'de' ? 'Daten exportiert' : 'Data exported',
+    'success'
+  );
+}
+
+// ==============================================
+// SOCIAL FEATURES
+// ==============================================
+function shareTool(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  const text = `${currentLang === 'de' ? 'Schau dir dieses KI-Tool an:' : 'Check out this AI tool:'} ${tool.name} - ${currentLang === 'de' ? 'auf AI Searcher' : 'on AI Searcher'}`;
+  const url = window.location.href.split('#')[0] + `#tool=${toolId}`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: tool.name,
+      text: text,
+      url: url
+    }).catch(() => {
+      // Fallback to clipboard
+      navigator.clipboard.writeText(`${text} ${url}`).then(() => {
+        showNotification(
+          currentLang === 'de' ? 'Link in Zwischenablage kopiert' : 'Link copied to clipboard',
+          'success'
+        );
+      });
+    });
+  } else {
+    navigator.clipboard.writeText(`${text} ${url}`).then(() => {
+      showNotification(
+        currentLang === 'de' ? 'Link in Zwischenablage kopiert' : 'Link copied to clipboard',
+        'success'
+      );
+    });
+  }
+}
+
+function updateToolStats() {
+  // This would typically come from a backend
+  // For now, we'll simulate some stats
+  aiTools.forEach(tool => {
+    // Simulate trend based on votes
+    const trend = Math.random() > 0.5 ? 'up' : 'down';
+    tool.trend = trend;
+    tool.likes = getToolVotes(tool) + Math.floor(Math.random() * 50);
+  });
+}
+
+// ==============================================
+// ERWEITERTE MOBILE-OPTIMIERUNG
+// ==============================================
+function initMobileOptimizations() {
+  // Swipe gestures for drawer
+  let startX = 0;
+  let startY = 0;
+  
+  document.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+  
+  document.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = startX - endX;
+    const diffY = startY - endY;
+    
+    // Horizontal swipe (close drawer)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      if (diffX > 0 && isDrawerOpen) {
+        // Swipe left to close drawer
+        closeToolDrawer();
+      }
+    }
+  });
+  
+  // Vibration feedback for votes (if supported)
+  function vibrateFeedback() {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+  }
+  
+  // Add vibration to vote buttons
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.vote-btn-row')) {
+      vibrateFeedback();
+    }
+  });
+  
+  // Pull to refresh
+  let pullStartY = 0;
+  let pullDistance = 0;
+  const pullThreshold = 80;
+  
+  document.addEventListener('touchstart', (e) => {
+    if (window.scrollY === 0) {
+      pullStartY = e.touches[0].pageY;
+    }
+  });
+  
+  document.addEventListener('touchmove', (e) => {
+    if (pullStartY && window.scrollY === 0) {
+      pullDistance = e.touches[0].pageY - pullStartY;
+      if (pullDistance > 0) {
+        e.preventDefault();
+        // Show pull indicator
+      }
+    }
+  });
+  
+  document.addEventListener('touchend', () => {
+    if (pullDistance > pullThreshold) {
+      // Refresh content
+      loadTools();
+      showNotification(
+        currentLang === 'de' ? 'Tools aktualisiert' : 'Tools refreshed',
+        'success'
+      );
+    }
+    pullStartY = 0;
+    pullDistance = 0;
+  });
+}
+
+// ==============================================
 // HAUPT-FUNKTIONALITÄT
 // ==============================================
 async function loadTools() {
@@ -2519,17 +4203,21 @@ async function loadTools() {
     });
     
     calculateToolScores();
+    updateToolStats();
     renderTop5();
     renderFilterChips();
     renderToolGroups();
     updateFavoritesBadge();
+    updateComparisonIndicator();
+    updateRecentlyViewed();
+    updateRecommendations();
     document.getElementById('loading').style.display = 'none';
     
   } catch (error) {
     console.error('Error loading tools:', error);
     document.getElementById('loading').innerHTML = `
-      <p style="color:var(--error)">Fehler beim Laden der Tools.</p>
-      <button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">Erneut versuchen</button>
+      <p style="color:var(--error)">${currentLang === 'de' ? 'Fehler beim Laden der Tools.' : 'Error loading tools.'}</p>
+      <button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">${currentLang === 'de' ? 'Erneut versuchen' : 'Try again'}</button>
     `;
   }
 }
@@ -2588,7 +4276,11 @@ function renderTop5() {
 
 function renderToolGroups() {
   let categories = ['text', 'image', 'code', 'video', 'audio'];
-  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
+  
+  // Apply category filter
+  if (activeFilters.category !== 'all') {
+    categories = [activeFilters.category];
+  } else if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
     categories = [currentCategory];
   }
   
@@ -2597,11 +4289,28 @@ function renderToolGroups() {
   document.getElementById('toolGroups').innerHTML = categories.map(category => {
     let categoryTools = aiTools.filter(tool => tool.category === category);
     
+    // Apply advanced filters
+    categoryTools = filterTools(categoryTools);
+    
+    // Apply legacy filters
     if (currentCategory === 'free') {
       categoryTools = categoryTools.filter(tool => tool.price === 'free');
     }
     if (currentCategory === 'ai') {
       categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
+    }
+    
+    // Apply search query
+    if (searchQuery) {
+      categoryTools = categoryTools.filter(tool => {
+        const searchStr = searchQuery.toLowerCase();
+        return (
+          tool.name.toLowerCase().includes(searchStr) ||
+          (currentLang === 'de' ? tool.description.de : tool.description.en).toLowerCase().includes(searchStr) ||
+          tool.category.toLowerCase().includes(searchStr) ||
+          tool.tags.some(tag => tag.toLowerCase().includes(searchStr))
+        );
+      });
     }
     
     if (categoryTools.length === 0) {
@@ -2655,11 +4364,23 @@ function renderToolGroups() {
               '<span class="ltd-badge" style="margin-left:8px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:2px 6px;border-radius:10px;font-size:.65rem;font-weight:800">LTD</span>' : 
               '';
             
+            // Social stats
+            const stats = tool.trend ? `
+              <div class="tool-stats">
+                <div class="tool-stat">
+                  <i class="fas fa-thumbs-up"></i> ${tool.likes || 0}
+                </div>
+                <div class="tool-trend ${tool.trend}">
+                  <i class="fas fa-arrow-${tool.trend}"></i>
+                </div>
+              </div>
+            ` : '';
+            
             return `
               <div class="tool-row" data-id="${tool.id}" 
                    onmouseenter="showToolPeek(event, '${tool.id}')" 
                    onmouseleave="hideToolPeek()" 
-                   onclick="openToolDrawer('${tool.id}')">
+                   onclick="openToolDrawer('${tool.id}');addToRecentlyViewed('${tool.id}')">
                 <div class="tool-vote" onclick="event.stopPropagation()">
                   <div class="vote-count" id="voteCount-${tool.id}">${getToolVotes(tool)}</div>
                   <div class="vote-buttons">
@@ -2685,6 +4406,7 @@ function renderToolGroups() {
                     ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color:var(--secondary);font-size:.9rem"></i>' : ''}
                   </div>
                   <div class="tool-desc">${description}</div>
+                  ${stats}
                 </div>
                 <div class="tool-meta" onclick="event.stopPropagation()">
                   <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
@@ -2696,6 +4418,9 @@ function renderToolGroups() {
                     <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" 
                             onclick="toggleComparison('${tool.id}')">
                       <i class="fas fa-balance-scale"></i>
+                    </button>
+                    <button class="tool-action-btn share" onclick="shareTool('${tool.id}')">
+                      <i class="fas fa-share-alt"></i>
                     </button>
                     <a href="${tool.link}" target="_blank" rel="noopener noreferrer" 
                        class="tool-action-btn open" 
@@ -2798,10 +4523,62 @@ async function vote(toolId, direction) {
   
   updateTop5Vote(toolId, tool.votes);
   renderToolGroups();
+  updateRecommendations();
+  
+  // Update drawer if open
+  if (isDrawerOpen) {
+    const drawerToolId = document.getElementById('drawerTitle')?.closest('.drawer')?.querySelector('.tool-vote')?.dataset?.id;
+    if (drawerToolId === toolId) {
+      updateDrawerVote(tool);
+    }
+  }
+  
   showNotification(
     currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
     'success'
   );
+}
+
+function updateDrawerVote(tool) {
+  const drawerContent = document.getElementById('drawerContent');
+  const voteSection = drawerContent?.querySelector('.drawer-vote-section');
+  if (voteSection) {
+    voteSection.innerHTML = getVoteHTML(tool);
+  }
+}
+
+function getVoteHTML(tool) {
+  return `
+    <div class="drawer-vote-section" style="margin-bottom:24px">
+      <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+        <i class="fas fa-thumbs-up"></i>
+        <span data-de="Bewertung" data-en="Rating">Bewertung</span>
+      </h4>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="text-align:center">
+          <div class="vote-count" style="font-size:2rem">${getToolVotes(tool)}</div>
+          <div style="font-size:.85rem;color:var(--text-secondary)">
+            ${currentLang === 'de' ? 'Stimmen' : 'Votes'}
+          </div>
+        </div>
+        <div class="vote-buttons" style="transform:scale(1.2)">
+          <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                  onclick="vote('${tool.id}', 'up')">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                  onclick="vote('${tool.id}', 'down')">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+        <div style="margin-left:auto">
+          <div style="font-size:.85rem;color:var(--text-secondary)">
+            ${tool.upvotes || 0} 👍 ${tool.downvotes || 0} 👎
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function toggleFavorite(toolId) {
@@ -2825,6 +4602,7 @@ function toggleFavorite(toolId) {
   updateFavoritesDrawer();
   updateFavoritesBadge();
   renderToolGroups();
+  updateRecommendations();
 }
 
 function toggleComparison(toolId) {
@@ -2855,6 +4633,7 @@ function toggleComparison(toolId) {
   localStorage.setItem('aiComparison', JSON.stringify(comparison));
   updateFavoritesDrawer();
   updateFavoritesBadge();
+  updateComparisonIndicator();
 }
 
 function updateFavoritesDrawer() {
@@ -3019,6 +4798,8 @@ function openToolDrawer(toolId) {
   if (!tool) return;
   
   trackUserHistory(tool.category);
+  trackToolClick(toolId);
+  addToRecentlyViewed(toolId);
   
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
   const seoDesc = currentLang === 'de' ? tool.seoDesc?.de || description : tool.seoDesc?.en || description;
@@ -3083,6 +4864,12 @@ function openToolDrawer(toolId) {
           <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
         </button>
         <button class="dock-action-btn secondary" 
+                onclick="shareTool('${tool.id}')" 
+                style="width:auto">
+          <i class="fas fa-share-alt"></i>
+          <span data-de="Teilen" data-en="Share">Teilen</span>
+        </button>
+        <button class="dock-action-btn secondary" 
                 onclick="toggleFavorite('${tool.id}')" 
                 style="width:auto">
           <i class="fas fa-star"></i>
@@ -3093,6 +4880,8 @@ function openToolDrawer(toolId) {
         </button>
       </div>
     </div>
+    
+    ${getVoteHTML(tool)}
     
     ${pros.length > 0 || cons.length > 0 ? `
       <div style="margin-bottom:24px">
@@ -3272,54 +5061,11 @@ function performSearch(query) {
 }
 
 // ==============================================
-// SPRACH-UMSCHALTUNG
-// ==============================================
-function updateLanguageElements() {
-  document.querySelectorAll('[data-de]').forEach(element => {
-    if (element.hasAttribute('placeholder')) {
-      element.placeholder = currentLang === 'de' ? 
-        element.getAttribute('data-placeholder-de') : 
-        element.getAttribute('data-placeholder-en');
-    } else {
-      element.textContent = currentLang === 'de' ? 
-        element.getAttribute('data-de') : 
-        element.getAttribute('data-en');
-    }
-  });
-  
-  const searchHint = document.getElementById('searchHintText');
-  if (searchHint) {
-    searchHint.textContent = currentLang === 'de' ? 
-      'Suche nach Toolnamen, Use-Cases oder Features' : 
-      'Search for tool names, use cases or features';
-  }
-  
-  const heroSubtitle = document.getElementById('heroSubtitle');
-  if (heroSubtitle) {
-    heroSubtitle.textContent = currentLang === 'de' ?
-      'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.' :
-      'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
-  }
-  
-  const langText = document.getElementById('langText');
-  if (langText) {
-    langText.textContent = currentLang === 'de' ? 'EN' : 'DE';
-  }
-}
-
-function toggleLanguage() {
-  currentLang = currentLang === 'de' ? 'en' : 'de';
-  updateLanguageElements();
-  renderFilterChips();
-  renderTop5();
-  renderToolGroups();
-}
-
-// ==============================================
 // FAVORITEN-DRAWER
 // ==============================================
 function openFavoritesDrawer() {
   updateFavoritesDrawer();
+  updateRecentlyViewed();
   document.getElementById('favoritesOverlay').classList.add('active');
   document.getElementById('favoritesDrawer').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -3362,7 +5108,9 @@ function openCookieSettings() {
 function updateAnalyticsStatus(isEnabled) {
   const statusElement = document.getElementById('analyticsStatus');
   if (statusElement) {
-    statusElement.textContent = isEnabled ? 'Aktiviert' : 'Deaktiviert';
+    statusElement.textContent = currentLang === 'de' ? 
+      (isEnabled ? 'Aktiviert' : 'Deaktiviert') : 
+      (isEnabled ? 'Enabled' : 'Disabled');
     statusElement.style.color = isEnabled ? 'var(--success)' : 'var(--text-secondary)';
   }
 }
@@ -3374,11 +5122,17 @@ function saveCookieSettings() {
     localStorage.setItem('cookieConsent', 'accepted');
     window.cookiePreferences.analytics = true;
     initAnalytics();
-    showNotification('Analyse-Cookies aktiviert', 'success');
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies aktiviert' : 'Analytics cookies enabled',
+      'success'
+    );
   } else {
     localStorage.setItem('cookieConsent', 'declined');
     window.cookiePreferences.analytics = false;
-    showNotification('Analyse-Cookies deaktiviert', 'info');
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies deaktiviert' : 'Analytics cookies disabled',
+      'info'
+    );
   }
   
   closeModal('cookieSettingsModal');
@@ -3521,26 +5275,30 @@ function setupEventListeners() {
     updateFavoritesDrawer();
     updateFavoritesBadge();
     renderToolGroups();
+    updateRecommendations();
     showNotification(
       currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared',
       'info'
     );
   });
   
-  document.getElementById('compareAction').addEventListener('click', () => {
-    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-    if (comparison.length < 2) {
-      showNotification(
-        currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare',
-        'error'
-      );
-    } else {
-      showNotification(
-        currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...',
-        'info'
-      );
-    }
-  });
+  document.getElementById('clearRecentBtn').addEventListener('click', clearRecentlyViewed);
+  
+  document.getElementById('compareAction').addEventListener('click', openComparisonModal);
+  
+  // Comparison Modal
+  document.getElementById('comparisonModalClose').addEventListener('click', () => closeModal('comparisonModal'));
+  document.getElementById('comparisonModalOverlay').addEventListener('click', () => closeModal('comparisonModal'));
+  document.getElementById('exportComparisonBtn').addEventListener('click', exportComparison);
+  
+  // Analytics Modal
+  document.getElementById('analyticsModalClose').addEventListener('click', () => closeModal('analyticsModal'));
+  document.getElementById('analyticsModalOverlay').addEventListener('click', () => closeModal('analyticsModal'));
+  document.getElementById('exportAnalyticsBtn').addEventListener('click', exportAnalyticsData);
+  
+  // Shortcut Help Modal
+  document.getElementById('shortcutHelpModalClose').addEventListener('click', () => closeModal('shortcutHelpModal'));
+  document.getElementById('shortcutHelpModalOverlay').addEventListener('click', () => closeModal('shortcutHelpModal'));
   
   // Cookie-Funktionen
   document.getElementById('cookieSettings').addEventListener('click', openCookieSettings);
@@ -3573,15 +5331,6 @@ function setupEventListeners() {
   document.getElementById('privacyModalClose').addEventListener('click', () => closeModal('privacyModal'));
   document.getElementById('privacyModalOverlay').addEventListener('click', () => closeModal('privacyModal'));
   
-  // Analytics Opt-Out
-  document.getElementById('analyticsOptOut')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    localStorage.setItem('cookieConsent', 'declined');
-    window.cookiePreferences.analytics = false;
-    document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-    showNotification('Google Analytics wurde deaktiviert', 'success');
-  });
-  
   // Rechtliche Details
   document.getElementById('legalDetailsBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -3594,6 +5343,9 @@ function setupEventListeners() {
     window.open('https://docs.github.com/en/github/site-policy/github-privacy-statement', '_blank');
     window.open('https://policies.google.com/privacy', '_blank');
   });
+  
+  // Comparison indicator click
+  document.getElementById('comparisonIndicator').addEventListener('click', openComparisonModal);
   
   // Externe Links
   function setupExternalLinks() {
@@ -3608,18 +5360,6 @@ function setupEventListeners() {
     });
   }
   
-  // Escape-Taste zum Schließen von Modals
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      if (isDrawerOpen) closeToolDrawer();
-      if (document.getElementById('favoritesOverlay').classList.contains('active')) closeFavoritesDrawer();
-      if (document.getElementById('imprintModal').classList.contains('active')) closeModal('imprintModal');
-      if (document.getElementById('privacyModal').classList.contains('active')) closeModal('privacyModal');
-      if (document.getElementById('categoryInfoModal').classList.contains('active')) closeCategoryInfoModal();
-      if (document.getElementById('cookieSettingsModal').classList.contains('active')) closeModal('cookieSettingsModal');
-    }
-  });
-  
   setupExternalLinks();
 }
 
@@ -3631,6 +5371,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initCookieConsent();
   initBackToTop();
   setupEventListeners();
+  initSearchSuggestions();
+  initAdvancedFilters();
+  initKeyboardShortcuts();
+  initMobileOptimizations();
+  initAnalyticsOptIn();
+  initServiceWorker();
+  
+  // Initialize language
+  updateLanguageElements();
+  updateImprintContent();
+  updatePrivacyContent();
+  
+  // Check for tool parameter in URL
+  const hash = window.location.hash;
+  if (hash.startsWith('#tool=')) {
+    const toolId = hash.substring(6);
+    setTimeout(() => openToolDrawer(toolId), 1000);
+  }
   
   // Cookie-Banner nach 1 Sekunde anzeigen (falls nötig)
   setTimeout(() => {
