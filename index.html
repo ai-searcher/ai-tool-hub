@@ -956,23 +956,20 @@ body::before {
 
 /* ÄNDERUNG 2: Intelligenter Schließen-Button */
 .collapse-button {
-  position: sticky;
-  top: calc(var(--header-height) + 10px);
-  z-index: 10;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
   padding: 12px 20px;
   text-align: center;
+  border-top: 1px solid var(--border);
   cursor: pointer;
   color: var(--primary);
   font-weight: 600;
   font-size: calc(0.85rem * var(--current-density));
+  transition: var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  background: var(--bg-card);
   margin: 0;
-  transition: var(--transition);
 }
 
 .collapse-button:hover {
@@ -1264,10 +1261,11 @@ body::before {
   justify-content: center;
 }
 
+/* Mobile Back to Top Button */
 .back-to-top {
   position: fixed;
   right: 16px;
-  bottom: 20px;
+  bottom: 80px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -1281,11 +1279,15 @@ body::before {
   cursor: pointer;
   z-index: 900;
   box-shadow: var(--shadow);
-  transition: var(--transition);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 .back-to-top.visible {
   display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .back-to-top:hover {
@@ -1293,6 +1295,13 @@ body::before {
   border-color: var(--primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
+}
+
+/* Mobile Back to Top nur auf Mobilgeräten anzeigen */
+@media (min-width: 769px) {
+  .back-to-top {
+    display: none !important;
+  }
 }
 
 /* ===== FAVORITES OVERLAY ===== */
@@ -1880,10 +1889,6 @@ body::before {
     bottom: 80px;
   }
   
-  .back-to-top {
-    bottom: 80px;
-  }
-  
   .hero-area {
     height: 220px;
   }
@@ -1917,11 +1922,6 @@ body::before {
   
   .site-title {
     font-size: 1.3rem;
-  }
-  
-  /* Responsive Anpassungen für den Collapse-Button */
-  .collapse-button {
-    top: calc(var(--header-height) + 5px);
   }
 }
 
@@ -2295,6 +2295,7 @@ let searchQuery = '';
 let hoverTimeout = null;
 let peekElement = null;
 let isDrawerOpen = false;
+let scrollDebounceTimeout = null;
 
 // ===== BASELINE VOTES =====
 const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
@@ -2321,6 +2322,7 @@ async function init() {
   updateTop5Bar();
   updateFloatingBadge();
   checkCookieConsent();
+  setupMobileBackToTop();
 }
 
 // ===== DATEN LADEN =====
@@ -2500,13 +2502,6 @@ function renderToolGroups() {
     // Zeige alle Tools wenn ausgeklappt, sonst nur 2
     const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
     
-    // ÄNDERUNG 2: Füge Collapse-Button hinzu, wenn erweitert
-    const collapseButton = isExpanded ? `
-      <div class="collapse-button" onclick="collapseGroup('${category}')">
-        <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
-      </div>
-    ` : '';
-    
     const groupHTML = displayTools.map(tool => {
       const description = currentLang === 'de' ? tool.description.de : tool.description.en;
       const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
@@ -2557,7 +2552,15 @@ function renderToolGroups() {
     
     // Berechne korrekte Anzahl für "mehr anzeigen" Button
     const remainingCount = Math.max(0, sortedTools.length - 2);
-    // ÄNDERUNG 2: Zeige show-more Button nur, wenn NICHT erweitert
+    
+    // Füge den Collapse-Button als letztes Element in der Gruppe hinzu (wenn erweitert)
+    const collapseButton = isExpanded ? `
+      <div class="collapse-button" onclick="collapseGroup('${category}')">
+        <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
+      </div>
+    ` : '';
+    
+    // Füge show-more Button hinzu (wenn nicht erweitert)
     const showMoreButton = !isExpanded && sortedTools.length > 2 ? `
       <div class="show-more" onclick="expandGroup('${category}')">
         <span>${currentLang === 'de' ? `+ ${remainingCount} mehr anzeigen` : `+ ${remainingCount} more`}</span>
@@ -2578,8 +2581,8 @@ function renderToolGroups() {
           </div>
         </div>
         <div class="group-content ${isExpanded ? 'expanded' : ''}">
-          ${collapseButton}
           ${groupHTML}
+          ${collapseButton}
         </div>
         ${showMoreButton}
       </div>
@@ -3133,17 +3136,35 @@ function loadGoogleAnalytics() {
   gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
 }
 
-// ===== BACK TO TOP =====
-function setupBackToTop() {
+// ===== MOBILE BACK TO TOP =====
+function setupMobileBackToTop() {
   const backToTopBtn = document.getElementById('backToTop');
   
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > window.innerHeight) {
+  function checkScrollPosition() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile && scrollY > 300) {
       backToTopBtn.classList.add('visible');
     } else {
       backToTopBtn.classList.remove('visible');
     }
-  });
+  }
+  
+  // Debounced scroll event for better performance
+  function handleScroll() {
+    if (scrollDebounceTimeout) {
+      clearTimeout(scrollDebounceTimeout);
+    }
+    
+    scrollDebounceTimeout = setTimeout(checkScrollPosition, 100);
+  }
+  
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', handleScroll);
+  
+  // Initial check
+  checkScrollPosition();
   
   backToTopBtn.addEventListener('click', () => {
     window.scrollTo({
@@ -3311,9 +3332,6 @@ function setupEventListeners() {
     // Open comparison view
     showNotification(currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...', 'info');
   });
-  
-  // Back to top
-  setupBackToTop();
   
   // Cookie consent
   document.getElementById('cookieAccept').addEventListener('click', acceptCookies);
