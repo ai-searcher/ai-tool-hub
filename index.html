@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com ; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -21,6 +21,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI Searcher">
 <meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
+<!-- Google Analytics wird nur nach Cookie-Consent geladen -->
+<script>
+  window.cookiePreferences = window.cookiePreferences || {};
+  window.cookiePreferences.analytics = false;
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -40,6 +45,7 @@
 }
 </script>
 <style>
+/* ===== FUTURISTISCHES DESIGN (30 JAHRE VORAUS) ===== */
 :root {
   --primary: #00d4ff;
   --primary-dark: #00a8cc;
@@ -62,10 +68,14 @@
   --radius: 12px;
   --radius-lg: 16px;
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Density Variables */
   --density-cozy: 1.2;
   --density-compact: 1;
   --density-future: 0.8;
   --current-density: 1;
+  
+  /* Layout Variables */
   --tool-row-height: calc(60px * var(--current-density));
   --group-header-height: calc(52px * var(--current-density));
   --header-height: 60px;
@@ -73,6 +83,7 @@
   --hero-height: 280px;
 }
 
+/* Safari Safe Area */
 html, body {
   height: 100%;
   background-color: var(--bg-dark) !important;
@@ -85,16 +96,20 @@ body {
   min-height: 100%;
   padding-bottom: env(safe-area-inset-bottom);
   background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%) !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: var(--text-primary);
-  overflow-x: hidden;
-  line-height: 1.6;
-  font-size: calc(0.9rem * var(--current-density));
 }
 
-.density-cozy { --current-density: var(--density-cozy); }
-.density-compact { --current-density: var(--density-compact); }
-.density-future { --current-density: var(--density-future); }
+/* Density Classes */
+.density-cozy {
+  --current-density: var(--density-cozy);
+}
+
+.density-compact {
+  --current-density: var(--density-compact);
+}
+
+.density-future {
+  --current-density: var(--density-future);
+}
 
 * {
   margin: 0;
@@ -102,6 +117,18 @@ body {
   box-sizing: border-box;
 }
 
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+  font-size: calc(0.9rem * var(--current-density));
+}
+
+/* Futuristic Animated Background */
 body::before {
   content: '';
   position: fixed;
@@ -119,10 +146,62 @@ body::before {
 }
 
 @keyframes pulseBackground {
-  0% { opacity: 0.7; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.05); }
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
+/* Futuristic Glow Effects */
+.glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  z-index: -1;
+  animation: floatGlow 15s infinite ease-in-out;
+}
+
+.glow-1 {
+  background: var(--primary);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.glow-2 {
+  background: var(--secondary);
+  top: 60%;
+  right: 10%;
+  animation-delay: 5s;
+}
+
+.glow-3 {
+  background: var(--accent);
+  bottom: 20%;
+  left: 30%;
+  animation-delay: 10s;
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.2);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.8);
+  }
+}
+
+/* ===== STICKY SMART HEADER ===== */
 .sticky-header {
   position: fixed;
   top: 0;
@@ -150,14 +229,33 @@ body::before {
   background-clip: text;
   letter-spacing: 1px;
   transition: var(--transition);
-  cursor: pointer;
+  cursor: default;
   position: relative;
   padding: 8px 0;
 }
 
 .site-title:hover {
   transform: translateY(-2px);
-  filter: drop-shadow(0 5px 15px rgba(0, 212, 255, 0.4));
+  text-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(135deg, #00ff9d, #00d4ff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.site-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+
+.site-title:hover::after {
+  width: 100%;
 }
 
 .header-right {
@@ -166,28 +264,7 @@ body::before {
   gap: 12px;
 }
 
-.lang-btn {
-  background: rgba(20, 24, 36, 0.8);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px 16px;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.lang-btn:hover {
-  background: rgba(26, 31, 46, 0.8);
-  border-color: var(--primary);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-}
-
+/* ===== HERO AREA ===== */
 .hero-area {
   position: relative;
   margin-top: var(--header-height);
@@ -225,13 +302,21 @@ body::before {
 }
 
 @keyframes titleGlow {
-  0% { filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
-  100% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7)); }
+  0% {
+    filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7));
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .hero-subtitle {
@@ -319,6 +404,29 @@ body::before {
   transform: translateY(-2px);
 }
 
+.lang-btn {
+  background: rgba(20, 24, 36, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.lang-btn:hover {
+  background: rgba(26, 31, 46, 0.8);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+/* ===== TOP 5 BAR ===== */
 .top5-bar {
   background: rgba(20, 24, 36, 0.6);
   border: 1px solid rgba(0, 212, 255, 0.1);
@@ -332,8 +440,14 @@ body::before {
 }
 
 @keyframes slideInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .top5-header {
@@ -453,10 +567,20 @@ body::before {
   animation: pulseGlow 0.6s ease;
 }
 
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(0, 212, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+.top5-quickpeek {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .top5-quickpeek {
+    display: block;
+  }
 }
 
 .filter-chips {
@@ -505,6 +629,7 @@ body::before {
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
 }
 
+/* ===== MAIN CONTENT ===== */
 .main-content {
   padding: 20px;
   max-width: 1400px;
@@ -513,6 +638,7 @@ body::before {
   padding-bottom: 80px;
 }
 
+/* ===== GROUPED TOOL LIST ===== */
 .tool-groups {
   display: flex;
   flex-direction: column;
@@ -535,8 +661,14 @@ body::before {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .group-header {
@@ -625,6 +757,11 @@ body::before {
   background: var(--bg-hover);
 }
 
+.tool-row:hover .tool-peek {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
 .tool-vote {
   display: flex;
   flex-direction: column;
@@ -649,18 +786,6 @@ body::before {
 .vote-count.moving-down {
   color: var(--error);
   animation: countDown 0.5s ease;
-}
-
-@keyframes countUp {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-@keyframes countDown {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.8); }
-  100% { transform: scale(1); }
 }
 
 .vote-buttons {
@@ -826,6 +951,218 @@ body::before {
   background: rgba(0, 212, 255, 0.05);
 }
 
+/* ===== TOOL PEEK (HOVER PREVIEW) ===== */
+.tool-peek {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  width: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-hover);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-left: 20px;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: translateY(-50%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.tool-peek::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: var(--border);
+}
+
+.tool-peek::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-right-color: var(--bg-card);
+  margin-right: -1px;
+}
+
+.peek-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.peek-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.peek-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.peek-category {
+  font-size: 0.7rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.peek-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.peek-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.peek-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.peek-badge.price {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.peek-badge.rating {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.peek-badge.ltd {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: white;
+  border: none;
+}
+
+/* ===== DRAWER (RIGHT SIDEBAR) ===== */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--drawer-width);
+  height: 100%;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  z-index: 2001;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.active {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.drawer-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.drawer-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* ===== FLOATING BUTTONS ===== */
 .floating-favorites-btn {
   position: fixed;
   left: 16px;
@@ -848,9 +1185,15 @@ body::before {
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4); }
-  50% { box-shadow: 0 4px 30px rgba(0, 212, 255, 0.8); }
-  100% { box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4); }
+  0% {
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(0, 212, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+  }
 }
 
 .floating-favorites-btn:hover {
@@ -905,6 +1248,7 @@ body::before {
   box-shadow: var(--shadow-hover);
 }
 
+/* ===== FAVORITES OVERLAY ===== */
 .favorites-overlay {
   position: fixed;
   top: 0;
@@ -1089,6 +1433,7 @@ body::before {
   transform: translateY(-2px);
 }
 
+/* ===== FOOTER ===== */
 .site-footer {
   background: rgba(10, 14, 23, 0.8);
   border-top: 1px solid var(--border);
@@ -1164,6 +1509,7 @@ body::before {
   opacity: 0.7;
 }
 
+/* ===== COOKIE CONSENT ===== */
 .cookie-consent {
   position: fixed;
   bottom: 0;
@@ -1247,6 +1593,7 @@ body::before {
   border-color: var(--primary);
 }
 
+/* ===== IMPRINT & PRIVACY MODALS ===== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1345,6 +1692,36 @@ body::before {
   margin-bottom: 15px;
 }
 
+/* ===== ANIMATIONS ===== */
+@keyframes countUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes countDown {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 212, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+}
+
+/* ===== LOADING ===== */
 .loading {
   text-align: center;
   padding: 40px;
@@ -1359,6 +1736,46 @@ body::before {
 
 @keyframes spin {
   100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  :root {
+    --drawer-width: 450px;
+  }
+}
+
+@media (max-width: 992px) {
+  :root {
+    --drawer-width: 400px;
+  }
+  
+  .sticky-header {
+    height: var(--header-height);
+    padding: 0 15px;
+  }
+  
+  .hero-area {
+    height: 260px;
+    padding: 0 15px;
+  }
+  
+  .hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero-search-container {
+    max-width: 500px;
+  }
+  
+  .site-title {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1408,6 +1825,10 @@ body::before {
     min-width: 0;
   }
   
+  .tool-peek {
+    display: none;
+  }
+  
   .floating-favorites-btn {
     bottom: 80px;
   }
@@ -1443,682 +1864,1481 @@ body::before {
     padding: 3px 10px;
   }
   
+  .footer-controls {
+    gap: 12px;
+  }
+  
   .site-title {
     font-size: 1.3rem;
   }
+}
+
+@media (max-width: 480px) {
+  .filter-chips {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+  
+  .top5-list {
+    gap: 6px;
+  }
+  
+  .top5-item {
+    min-width: 140px;
+    padding: 6px 8px;
+  }
+  
+  .top5-quickpeek {
+    display: none;
+  }
+  
+  .hero-area {
+    height: 200px;
+  }
+  
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-title::after {
+    font-size: 1.3rem;
+    right: -30px;
+  }
+  
+  .hero-subtitle {
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+  
+  .hero-omnibox-input {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .search-examples {
+    gap: 8px;
+  }
+  
+  .search-example {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .site-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}
+
+/* ===== NOTIFICATIONS ===== */
+.notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 9999;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.notification.success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.notification.error {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.notification.info {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.notification-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 1rem;
 }
 </style>
 </head>
 <body class="density-compact">
 
-<!-- Sticky Header -->
-<header class="sticky-header">
-  <div class="site-title" onclick="scrollToTop()">AI Searcher</div>
-  <div class="header-right">
-    <button class="lang-btn" onclick="toggleLanguage()">
-      <i class="fas fa-globe"></i>
-      <span id="lang-text">DE</span>
-    </button>
-  </div>
-</header>
-
-<!-- Hero Area -->
-<section class="hero-area">
-  <h1 class="hero-title">Finde dein perfektes KI-Tool</h1>
-  <p class="hero-subtitle">Durchsuche hunderte KI-Tools mit Echtzeit-Bewertungen und finde in Sekunden die beste Lösung für deine Bedürfnisse</p>
-  
-  <div class="hero-search-container">
-    <div class="hero-omnibox">
-      <input type="text" id="heroSearch" class="hero-omnibox-input" placeholder="Suche nach KI-Tools..." oninput="handleSearch(this.value)">
-    </div>
-  </div>
-  
-  <div class="search-hint-grid">
-    <span class="search-hint-text">Beliebte Suchen:</span>
-    <div class="search-examples">
-      <span class="search-example" onclick="setSearch('Bildgenerator')">Bildgenerator</span>
-      <span class="search-example" onclick="setSearch('ChatGPT')">ChatGPT</span>
-      <span class="search-example" onclick="setSearch('Video')">Video</span>
-      <span class="search-example" onclick="setSearch('Kostenlos')">Kostenlos</span>
-    </div>
-  </div>
-</section>
-
-<!-- Top 5 Bar -->
-<div class="main-content">
-  <div class="top5-bar">
-    <div class="top5-header">
-      <i class="fas fa-fire"></i>
-      <span>Top 5 Tools der Woche</span>
-    </div>
-    <div class="top5-list" id="top5List"></div>
-  </div>
-
-  <!-- Filter Chips -->
-  <div class="filter-chips" id="filterChips"></div>
-
-  <!-- Tool Groups -->
-  <div class="tool-groups" id="toolGroups"></div>
-  
-  <!-- Loading -->
-  <div class="loading" id="loading">
-    <i class="fas fa-spinner"></i>
-    <p>Tools werden geladen...</p>
-  </div>
-</div>
-
-<!-- Floating Favorites Button -->
-<button class="floating-favorites-btn" onclick="toggleFavorites()">
-  <i class="fas fa-star"></i>
-  <span class="floating-favorites-badge" id="favBadge" style="display:none;">0</span>
-</button>
-
-<!-- Back to Top Button -->
-<button class="back-to-top" id="backToTop" onclick="scrollToTop()">
-  <i class="fas fa-arrow-up"></i>
-</button>
-
-<!-- Favorites Drawer -->
-<div class="favorites-overlay" id="favoritesOverlay" onclick="toggleFavorites()"></div>
-<div class="favorites-drawer" id="favoritesDrawer">
-  <div class="favorites-header">
-    <h2 class="favorites-title">Meine Favoriten</h2>
-    <button class="favorites-close" onclick="toggleFavorites()">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="favorites-content">
-    <div class="dock-section">
-      <label class="dock-label">Favorisierte Tools</label>
-      <div class="dock-items" id="dockItems"></div>
-    </div>
-    <div class="dock-actions">
-      <button class="dock-action-btn secondary" onclick="clearAllFavorites()">
-        <i class="fas fa-trash"></i> Alle löschen
-      </button>
-      <button class="dock-action-btn primary" onclick="exportFavorites()">
-        <i class="fas fa-download"></i> Exportieren
-      </button>
-    </div>
-  </div>
-</div>
+<!-- Futuristic Glow Effects -->
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
 
 <!-- Cookie Consent -->
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      Diese Website nutzt Cookies für Funktionen und anonyme Statistiken. 
-      <a href="#" onclick="openModal('privacyModal')">Mehr erfahren</a>
+      Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und anonyme Statistiken zu erstellen. 
+      <a href="#" id="privacyLinkCookie">Datenschutz</a>
     </div>
     <div class="cookie-buttons">
-      <button class="cookie-btn decline" onclick="declineCookies()">Ablehnen</button>
-      <button class="cookie-btn accept" onclick="acceptCookies()">Akzeptieren</button>
+      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
+      <button class="cookie-btn accept" id="cookieAccept">Akzeptieren</button>
     </div>
   </div>
 </div>
 
-<!-- Imprint Modal -->
-<div class="modal-overlay" id="imprintOverlay" onclick="closeModal('imprintModal')"></div>
-<div class="modal" id="imprintModal">
-  <div class="modal-header">
-    <h2 class="modal-title">Impressum</h2>
-    <button class="modal-close" onclick="closeModal('imprintModal')">
-      <i class="fas fa-times"></i>
+<!-- Sticky Smart Header -->
+<header class="sticky-header">
+  <div class="site-title">AI Searcher</div>
+  <div class="header-right">
+    <button class="lang-btn" id="langToggle">
+      <i class="fas fa-globe"></i>
+      <span id="langText">EN</span>
     </button>
   </div>
-  <div class="modal-content">
-    <h3>Angaben gemäß § 5 TMG</h3>
-    <p><strong>AI Searcher</strong><br>
-    Musterstraße 123<br>
-    12345 Musterstadt<br>
-    Deutschland</p>
-    
-    <h3>Kontakt</h3>
-    <p>E-Mail: kontakt@ai-searcher.de</p>
-    
-    <h3>Haftungsausschluss</h3>
-    <p>Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+</header>
+
+<!-- Hero Area -->
+<div class="hero-area">
+  <h1 class="hero-title">AI Searcher</h1>
+  <div class="hero-subtitle" id="heroSubtitle">
+    Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.
+  </div>
+  
+  <div class="hero-search-container">
+    <div class="hero-omnibox">
+      <input 
+        type="text" 
+        class="hero-omnibox-input" 
+        id="omniboxInput"
+        placeholder="Ich suche nach..."
+        data-placeholder-de="Ich suche nach..."
+        data-placeholder-en="I'm looking for..."
+      >
+    </div>
+  </div>
+  
+  <div class="search-hint-grid">
+    <div class="search-hint-text" id="searchHintText">
+      Suche nach Toolnamen, Use-Cases oder Features
+    </div>
+    <div class="search-examples">
+      <div class="search-example">Text</div>
+      <div class="search-example">Bilder</div>
+      <div class="search-example">Stimme</div>
+      <div class="search-example">Code</div>
+    </div>
   </div>
 </div>
 
-<!-- Privacy Modal -->
-<div class="modal-overlay" id="privacyOverlay" onclick="closeModal('privacyModal')"></div>
-<div class="modal" id="privacyModal">
-  <div class="modal-header">
-    <h2 class="modal-title">Datenschutzerklärung</h2>
-    <button class="modal-close" onclick="closeModal('privacyModal')">
-      <i class="fas fa-times"></i>
-    </button>
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Top 5 Bar -->
+  <div class="top5-bar" id="top5Bar">
+    <div class="top5-header">
+      <i class="fas fa-trophy"></i>
+      <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
+    </div>
+    <div class="top5-list" id="top5List">
+      <!-- Dynamic top 5 items -->
+    </div>
   </div>
-  <div class="modal-content">
-    <h3>1. Datenschutz auf einen Blick</h3>
-    <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen.</p>
-    
-    <h3>2. Cookies</h3>
-    <p>Wir verwenden Cookies, um Ihre Präferenzen zu speichern (Favoriten, Voting-Status). Diese Daten bleiben auf Ihrem Gerät und werden nicht an Server übertragen.</p>
-    
-    <h3>3. LocalStorage</h3>
-    <p>Ihre Favoriten und Votes werden im LocalStorage Ihres Browsers gespeichert und verlassen niemals Ihr Gerät.</p>
-    
-    <h3>4. Google Analytics (optional)</h3>
-    <p>Wenn Sie Cookies akzeptieren, verwenden wir Google Analytics zur anonymen Analyse der Nutzung. Sie können dem jederzeit widersprechen.</p>
+  
+  <!-- Filter Chips -->
+  <div class="filter-chips" id="filterChips">
+    <!-- Dynamic filter chips -->
   </div>
-</div>
+  
+  <!-- Grouped Tool List -->
+  <section class="tool-groups" id="toolGroups">
+    <!-- Dynamic tool groups -->
+  </section>
+  
+  <!-- Loading Indicator -->
+  <div class="loading" id="loading">
+    <i class="fas fa-circle-notch"></i>
+    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
+  </div>
+</main>
 
 <!-- Footer -->
 <footer class="site-footer">
   <div class="footer-controls">
     <div class="density-toggle">
-      <button class="density-btn" onclick="setDensity('cozy')">Cozy</button>
-      <button class="density-btn active" onclick="setDensity('compact')">Compact</button>
-      <button class="density-btn" onclick="setDensity('future')">Future</button>
+      <button class="density-btn active" data-density="cozy">Cozy</button>
+      <button class="density-btn" data-density="compact">Compact</button>
+      <button class="density-btn" data-density="future">Future</button>
     </div>
   </div>
   
   <div class="footer-links">
-    <a href="#" onclick="openModal('imprintModal'); return false;">Impressum</a>
-    <a href="#" onclick="openModal('privacyModal'); return false;">Datenschutz</a>
-    <a href="https://github.com/ai-searcher" target="_blank">GitHub</a>
+    <a href="#" id="imprintLink">Impressum</a>
+    <a href="#" id="privacyLink">Datenschutz</a>
   </div>
-  
   <div class="footer-copyright">
-    © 2026 AI Searcher. Made with 💙 for the AI Community
+    © 2026 AI Searcher. Alle Rechte vorbehalten.
   </div>
 </footer>
 
+<!-- Drawer for Detail View -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2 class="drawer-title" id="drawerTitle">Tool Details</h2>
+    <button class="drawer-close" id="drawerClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="drawer-content" id="drawerContent">
+    <!-- Dynamic drawer content -->
+  </div>
+</div>
+
+<!-- Favorites Overlay -->
+<div class="favorites-overlay" id="favoritesOverlay"></div>
+<div class="favorites-drawer" id="favoritesDrawer">
+  <div class="favorites-header">
+    <h2 class="favorites-title" data-de="Favoriten & Vergleich" data-en="Favorites & Compare">Favoriten & Vergleich</h2>
+    <button class="favorites-close" id="favoritesClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="favorites-content">
+    <div class="dock-section">
+      <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
+      <div class="dock-items" id="favoriteDock">
+        <!-- Dynamic favorite items -->
+      </div>
+    </div>
+    
+    <div class="dock-section">
+      <div class="dock-label" data-de="Vergleich" data-en="Compare">Vergleich</div>
+      <div class="dock-items" id="compareDock">
+        <!-- Dynamic compare items -->
+      </div>
+    </div>
+    
+    <div class="dock-actions">
+      <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
+      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Buttons -->
+<button class="floating-favorites-btn" id="floatingFavoritesBtn" aria-label="Favoriten anzeigen">
+  <i class="fas fa-star"></i>
+  <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
+</button>
+
+<button class="back-to-top" id="backToTop" aria-label="Nach oben">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- Modals -->
+<div class="modal-overlay" id="imprintModalOverlay"></div>
+<div class="modal" id="imprintModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Impressum</h2>
+    <button class="modal-close" id="imprintModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <h3>Angaben gemäß § 5 TMG</h3>
+    <p>Max Mustermann<br>
+    Musterstraße 123<br>
+    12345 Musterstadt</p>
+    
+    <h3>Kontakt</h3>
+    <p>Telefon: +49 (0) 123 456789<br>
+    E-Mail: info@ai-finder.example</p>
+    
+    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+    <p>Max Mustermann<br>
+    Musterstraße 123<br>
+    12345 Musterstadt</p>
+    
+    <h3>Haftungsausschluss</h3>
+    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="privacyModalOverlay"></div>
+<div class="modal" id="privacyModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Datenschutz</h2>
+    <button class="modal-close" id="privacyModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <h3>Datenschutzerklärung</h3>
+    <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
+    
+    <h3>Cookies</h3>
+    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwende Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
+    
+    <h3>Google Analytics</h3>
+    <p>Diese Website nutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet „Cookies", die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
+    
+    <h3>Ihre Rechte</h3>
+    <p>Ihnen stehen grundsätzlich die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerruf und Widerspruch zu. Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren.</p>
+  </div>
+</div>
+
 <script>
-// ===== GLOBAL STATE =====
-let allTools = [];
-let filteredTools = [];
-let currentFilter = 'all';
+// ===== GLOBALE VARIABLEN =====
+let aiTools = [];
+let currentLang = 'de';
+let currentCategory = 'all';
 let searchQuery = '';
-let favorites = [];
-let votes = {};
+let hoverTimeout = null;
+let peekElement = null;
+let isDrawerOpen = false;
 
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-  loadLocalStorage();
-  loadTools();
-  initScrollListener();
-  checkCookieConsent();
-});
+// ===== BASELINE VOTES =====
+const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
 
-// ===== LOAD TOOLS =====
-async function loadTools() {
-  document.getElementById('loading').style.display = 'block';
-  
-  try {
-    const response = await fetch('data.json');
-    
-    if (!response.ok) {
-      throw new Error('data.json nicht gefunden');
-    }
-    
-    const data = await response.json();
-    allTools = data.tools || [];
-    
-    if (allTools.length === 0) {
-      allTools = generateDemoTools();
-    }
-    
-    filteredTools = [...allTools];
-    renderAll();
-    
-  } catch (error) {
-    console.warn('Fehler beim Laden von data.json:', error);
-    allTools = generateDemoTools();
-    filteredTools = [...allTools];
-    renderAll();
-  }
-  
-  document.getElementById('loading').style.display = 'none';
+// ===== HELPER FUNCTIONS =====
+function safeNumber(val) {
+  const n = Number(val);
+  return Number.isFinite(n) ? n : 0;
 }
 
-// ===== DEMO DATA GENERATOR =====
-function generateDemoTools() {
-  const categories = ['Chat & Assistenten', 'Bildgenerierung', 'Video & Animation', 'Coding & Development', 'Produktivität', 'Audio & Musik'];
-  const tools = [];
-  
-  const toolData = [
-    { name: 'ChatGPT', category: 'Chat & Assistenten', desc: 'Der bekannteste KI-Chatbot von OpenAI mit GPT-4 Technologie', price: 'Freemium', icon: '🤖', url: 'https://chat.openai.com' },
-    { name: 'Claude', category: 'Chat & Assistenten', desc: 'Anthropics sicherer und hilfreicher KI-Assistent', price: 'Freemium', icon: '🧠', url: 'https://claude.ai' },
-    { name: 'Midjourney', category: 'Bildgenerierung', desc: 'Premium KI-Bildgenerator mit fotorealistischen Ergebnissen', price: 'Ab $10/Monat', icon: '🎨', url: 'https://midjourney.com' },
-    { name: 'DALL-E 3', category: 'Bildgenerierung', desc: 'OpenAIs neuester Bildgenerator mit präziser Textumsetzung', price: 'Freemium', icon: '🖼️', url: 'https://openai.com/dall-e-3' },
-    { name: 'Runway', category: 'Video & Animation', desc: 'KI-Video-Editor mit Gen-2 Technologie', price: 'Ab $12/Monat', icon: '🎬', url: 'https://runwayml.com' },
-    { name: 'GitHub Copilot', category: 'Coding & Development', desc: 'KI-Coding-Assistent für Entwickler', price: 'Ab $10/Monat', icon: '💻', url: 'https://github.com/features/copilot' },
-    { name: 'Notion AI', category: 'Produktivität', desc: 'KI-Integration in Notion für smartere Notizen', price: 'Ab $8/Monat', icon: '📝', url: 'https://notion.so/ai' },
-    { name: 'Perplexity', category: 'Chat & Assistenten', desc: 'KI-Suchmaschine mit Quellenangaben', price: 'Freemium', icon: '🔍', url: 'https://perplexity.ai' },
-    { name: 'Stable Diffusion', category: 'Bildgenerierung', desc: 'Open-Source Bildgenerator zum Selbsthosten', price: 'Kostenlos', icon: '🎭', url: 'https://stability.ai' },
-    { name: 'ElevenLabs', category: 'Audio & Musik', desc: 'Realistische Text-to-Speech KI-Stimmen', price: 'Freemium', icon: '🎙️', url: 'https://elevenlabs.io' },
-    { name: 'Cursor', category: 'Coding & Development', desc: 'KI-First Code-Editor für Entwickler', price: 'Freemium', icon: '⌨️', url: 'https://cursor.sh' },
-    { name: 'Synthesia', category: 'Video & Animation', desc: 'Erstelle KI-Videos mit virtuellen Avataren', price: 'Ab $30/Monat', icon: '🎥', url: 'https://synthesia.io' }
-  ];
-  
-  toolData.forEach((tool, index) => {
-    tools.push({
-      id: `tool-${index + 1}`,
-      name: tool.name,
-      category: tool.category,
-      description: tool.desc,
-      price: tool.price,
-      icon: tool.icon,
-      url: tool.url,
-      votes: Math.floor(Math.random() * 100) + 10
-    });
-  });
-  
-  return tools;
+function getRawVotes(tool) {
+  return safeNumber(tool?.votes ?? 0);
 }
 
-// ===== RENDER ALL =====
-function renderAll() {
+function getDisplayVotes(tool) {
+  return Math.max(getRawVotes(tool), 0);
+}
+
+// ===== INITIALISIERUNG =====
+async function init() {
+  await loadAITools();
+  setupEventListeners();
   renderFilterChips();
-  renderToolGroups();
-  renderTop5();
-  updateFavoritesBadge();
+  updateTop5Bar();
+  updateFloatingBadge();
+  checkCookieConsent();
 }
 
-// ===== RENDER FILTER CHIPS =====
-function renderFilterChips() {
-  const categories = ['all', ...new Set(allTools.map(t => t.category))];
-  const chipsHTML = categories.map(cat => {
-    const isActive = cat === currentFilter;
-    const icon = getCategoryIcon(cat);
+// ===== DATEN LADEN =====
+async function loadAITools() {
+  try {
+    document.getElementById('loading').style.display = 'block';
+    
+    const response = await fetch('./data.json');
+    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
+    aiTools = await response.json();
+    
+    // Lade Votes aus LocalStorage
+    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    
+    // Initialisiere jedes Tool mit gespeicherten Votes
+    aiTools.forEach(tool => {
+      const saved = savedVotes[tool.id];
+      if (saved) {
+        tool.userVote = saved.userVote ?? 0;
+        tool.votes = saved.totalVotes ?? 0;
+        tool.upvotes = saved.upvotes ?? 0;
+        tool.downvotes = saved.downvotes ?? 0;
+      } else {
+        tool.userVote = 0;
+        tool.votes = 0;
+        tool.upvotes = 0;
+        tool.downvotes = 0;
+      }
+    });
+    
+    addAIRecommendations();
+    renderToolGroups();
+    updateLanguage();
+    
+    document.getElementById('loading').style.display = 'none';
+  } catch (error) {
+    console.error('Fehler beim Laden:', error);
+    document.getElementById('loading').innerHTML = `
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>Fehler beim Laden. Bitte neu laden.</p>
+    `;
+  }
+}
+
+// ===== AI EMPFEHLUNGEN =====
+function addAIRecommendations() {
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+      
+  aiTools.forEach(tool => {
+    let score = 0;
+    if (tool.rating >= 4.7) score += 3;
+    if (getRawVotes(tool) > 50) score += 2;
+    if (userHistory.includes(tool.category)) score += 2;
+    if (favorites.includes(tool.id)) score += 3;
+    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
+    if (tool.hasLifetimeDeal) score += 2;
+        
+    tool.aiScore = score;
+    tool.isAIRecommended = score >= 5;
+    tool.popularityScore = (tool.rating * 10) + getRawVotes(tool) + score;
+  });
+}
+
+// ===== TOP 5 BAR =====
+function updateTop5Bar() {
+  const sortedTools = [...aiTools]
+    .sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
+    })
+    .slice(0, 5);
+  
+  const top5HTML = sortedTools.map((tool, index) => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const quickPeek = tool.quickPeek ? 
+      (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
+      (description.length > 60 ? description.substring(0, 60) + '...' : description);
+    
     return `
-      <div class="filter-chip ${isActive ? 'active' : ''}" onclick="filterByCategory('${cat}')">
-        ${icon} ${cat === 'all' ? 'Alle Tools' : cat}
+      <div class="top5-item" data-id="${tool.id}" 
+           onclick="openToolDrawer('${tool.id}')"
+           title="${tool.name}">
+        <div class="top5-rank">${index + 1}</div>
+        <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+        <div class="top5-info">
+          <div class="top5-name">${tool.name}</div>
+          <div class="top5-category">${getCategoryLabel(tool.category)}</div>
+        </div>
+        <div class="top5-votes" id="top5Votes-${tool.id}">${getDisplayVotes(tool)}</div>
+        <div class="top5-quickpeek">${quickPeek}</div>
       </div>
     `;
   }).join('');
   
-  document.getElementById('filterChips').innerHTML = chipsHTML;
+  document.getElementById('top5List').innerHTML = top5HTML;
+  updateLanguage();
 }
 
-// ===== RENDER TOOL GROUPS =====
+function updateTop5VoteCount(toolId, newVotes) {
+  const voteElement = document.getElementById(`top5Votes-${toolId}`);
+  if (voteElement) {
+    const displayNewVotes = Math.max(newVotes, 0);
+    voteElement.textContent = displayNewVotes;
+    voteElement.classList.add('changed');
+    setTimeout(() => {
+      voteElement.classList.remove('changed');
+    }, 600);
+  }
+}
+
+// ===== GRUPPIERTE TOOL-LISTE =====
 function renderToolGroups() {
-  const groups = {};
+  // Bestimme welche Kategorien angezeigt werden sollen
+  let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
   
-  filteredTools.forEach(tool => {
-    if (!groups[tool.category]) {
-      groups[tool.category] = [];
+  // Wenn ein Filter aktiv ist (außer 'all'), zeige nur diese Kategorie
+  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
+    categoriesToShow = [currentCategory];
+  }
+  
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  
+  const groupsHTML = categoriesToShow.map(category => {
+    // Filtere Tools nach Kategorie
+    let categoryTools = aiTools.filter(tool => tool.category === category);
+    
+    // Zusätzliche Filter für 'free' und 'ai'
+    if (currentCategory === 'free') {
+      categoryTools = categoryTools.filter(tool => tool.price === 'free');
+    } else if (currentCategory === 'ai') {
+      categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
     }
-    groups[tool.category].push(tool);
-  });
-  
-  const groupsHTML = Object.entries(groups).map(([category, tools]) => {
-    const toolsHTML = tools.map((tool, index) => {
-      const userVote = votes[tool.id];
-      const isFavorite = favorites.includes(tool.id);
-      
+    
+    // Defensive Rendering: Leere Kategorie nicht ausblenden
+    if (categoryTools.length === 0) {
       return `
-        <div class="tool-row" data-tool-id="${tool.id}">
-          <div class="tool-vote">
-            <div class="vote-count" id="vote-${tool.id}">${tool.votes || 0}</div>
+        <div class="tool-group" data-category="${category}">
+          <div class="group-header">
+            <div class="group-title">
+              <div class="group-icon">${getCategoryIcon(category)}</div>
+              <span>${getCategoryLabel(category)}</span>
+              <span class="group-count">0</span>
+            </div>
+          </div>
+          <div class="group-content expanded">
+            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Sortiere Tools nach votes MIT Baseline für Sortierung
+    const sortedTools = [...categoryTools].sort((a, b) => {
+      // Für die Sortierung: echte Votes + Baseline
+      const aVotesWithBaseline = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
+      const bVotesWithBaseline = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
+      
+      if (bVotesWithBaseline !== aVotesWithBaseline) {
+        return bVotesWithBaseline - aVotesWithBaseline;
+      }
+      // Bei gleichen Votes, sortiere nach Popularity Score
+      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
+    });
+    
+    const isExpanded = expandedGroups[category] || false;
+    
+    // Zeige alle Tools wenn ausgeklappt, sonst nur 2
+    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
+    
+    const groupHTML = displayTools.map(tool => {
+      const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+      const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
+          
+      return `
+        <div class="tool-row" data-id="${tool.id}" 
+             onmouseenter="showToolPeek(event, '${tool.id}')"
+             onmouseleave="hideToolPeek()"
+             onclick="openToolDrawer('${tool.id}')">
+          <div class="tool-vote" onclick="event.stopPropagation()">
+            <div class="vote-count" id="voteCount-${tool.id}">${getDisplayVotes(tool)}</div>
             <div class="vote-buttons">
-              <button class="vote-btn-row up ${userVote === 'up' ? 'active' : ''}" onclick="handleVote('${tool.id}', 'up')">
-                <i class="fas fa-chevron-up"></i>
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+                <i class="fas fa-arrow-up"></i>
               </button>
-              <button class="vote-btn-row down ${userVote === 'down' ? 'active' : ''}" onclick="handleVote('${tool.id}', 'down')">
-                <i class="fas fa-chevron-down"></i>
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+                <i class="fas fa-arrow-down"></i>
               </button>
             </div>
           </div>
           
-          <div class="tool-info" onclick="openTool('${tool.url}')">
+          <div class="tool-info">
+            <div class="tool-category">${getCategoryLabel(tool.category)}</div>
             <div class="tool-name">
-              <span>${tool.icon || '🔧'}</span>
               ${tool.name}
+              ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
             </div>
-            <div class="tool-category">${tool.category}</div>
-            <div class="tool-desc">${tool.description}</div>
+            <div class="tool-desc">${description}</div>
           </div>
           
-          <div class="tool-meta">
-            <div class="tool-price">${tool.price}</div>
+          <div class="tool-meta" onclick="event.stopPropagation()">
+            <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
             <div class="tool-actions">
-              <button class="tool-action-btn favorite ${isFavorite ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+              <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
                 <i class="fas fa-star"></i>
               </button>
-              <button class="tool-action-btn open" onclick="openTool('${tool.url}')">
-                <i class="fas fa-external-link-alt"></i>
+              <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+                <i class="fas fa-balance-scale"></i>
               </button>
+              <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-action-btn open" onclick="event.stopPropagation(); trackToolClick('${tool.id}')">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
             </div>
           </div>
         </div>
       `;
     }).join('');
     
-    const groupId = category.replace(/\s+/g, '-').toLowerCase();
+    // Berechne korrekte Anzahl für "mehr anzeigen" Button
+    const remainingCount = Math.max(0, sortedTools.length - 2);
+    const showMoreButton = sortedTools.length > 2 ? `
+      <div class="show-more" onclick="toggleGroup('${category}')">
+        <span>${isExpanded ? 
+          (currentLang === 'de' ? 'Weniger anzeigen' : 'Show less') : 
+          (currentLang === 'de' ? `+ ${remainingCount} mehr anzeigen` : `+ ${remainingCount} more`)}</span>
+        <i class="fas fa-chevron-${isExpanded ? 'up' : 'down'}"></i>
+      </div>
+    ` : '';
     
     return `
-      <div class="tool-group" id="group-${groupId}">
-        <div class="group-header" onclick="toggleGroup('${groupId}')">
+      <div class="tool-group" data-category="${category}">
+        <div class="group-header" onclick="toggleGroup('${category}')">
           <div class="group-title">
             <div class="group-icon">${getCategoryIcon(category)}</div>
-            <span>${category}</span>
-            <span class="group-count">(${tools.length})</span>
+            <span>${getCategoryLabel(category)}</span>
+            <span class="group-count">${categoryTools.length}</span>
           </div>
-          <div class="group-toggle" id="toggle-${groupId}">
+          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
             <i class="fas fa-chevron-down"></i>
           </div>
         </div>
-        <div class="group-content" id="content-${groupId}">
-          ${toolsHTML}
+        <div class="group-content ${isExpanded ? 'expanded' : ''}">
+          ${groupHTML}
+        </div>
+        ${showMoreButton}
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('toolGroups').innerHTML = groupsHTML;
+  updateLanguage();
+}
+
+function toggleGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = !expandedGroups[category];
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+  renderToolGroups();
+  updateLanguage();
+}
+
+// ===== TOOL PEEK =====
+function showToolPeek(event, toolId) {
+  if (isDrawerOpen) return;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  hoverTimeout = setTimeout(() => {
+    createToolPeek(event, tool);
+  }, 300);
+}
+
+function createToolPeek(event, tool) {
+  if (peekElement) {
+    peekElement.remove();
+  }
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const ltdBadge = tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : '';
+  
+  peekElement = document.createElement('div');
+  peekElement.className = 'tool-peek';
+  peekElement.innerHTML = `
+    <div class="peek-header">
+      <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
+      <div>
+        <div class="peek-name">${tool.name}</div>
+        <div class="peek-category">${getCategoryLabel(tool.category)}</div>
+      </div>
+    </div>
+    <div class="peek-desc">${description}</div>
+    <div class="peek-meta">
+      <span class="peek-badge price">
+        <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
+        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+      </span>
+      <span class="peek-badge rating">
+        <i class="fas fa-star"></i>
+        ${tool.rating}/5
+      </span>
+      ${ltdBadge}
+    </div>
+  `;
+  
+  document.body.appendChild(peekElement);
+  
+  const rect = event.currentTarget.getBoundingClientRect();
+  const peekHeight = peekElement.offsetHeight;
+  const viewportHeight = window.innerHeight;
+  
+  let top = rect.top + rect.height / 2 - peekHeight / 2;
+  if (top < 20) top = 20;
+  if (top + peekHeight > viewportHeight - 20) {
+    top = viewportHeight - peekHeight - 20;
+  }
+  
+  peekElement.style.top = `${top}px`;
+  peekElement.style.left = `${rect.right + 20}px`;
+}
+
+function hideToolPeek() {
+  if (hoverTimeout) {
+    clearTimeout(hoverTimeout);
+    hoverTimeout = null;
+  }
+  
+  if (peekElement) {
+    peekElement.style.opacity = '0';
+    setTimeout(() => {
+      if (peekElement && peekElement.parentNode) {
+        peekElement.remove();
+        peekElement = null;
+      }
+    }, 200);
+  }
+}
+
+// ===== DRAWER =====
+function openToolDrawer(toolId) {
+  hideToolPeek();
+  isDrawerOpen = true;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  trackUserInteraction(tool.category);
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
+  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
+  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  
+  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
+  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="peek-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--secondary); border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+  
+  const alternativesHTML = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    if (!altTool) return '';
+    return `
+      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor: pointer;">
+        ${getCategoryIcon(altTool.category)}
+      </div>
+    `;
+  }).join('');
+  
+  const drawerContent = `
+    <div style="margin-bottom: 24px;">
+      <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
+        <div class="peek-icon" style="width: 60px; height: 60px; font-size: 1.8rem;">
+          ${getCategoryIcon(tool.category)}
+        </div>
+        <div style="flex: 1;">
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">${tool.name}</h3>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+            <span class="peek-badge category" style="background: rgba(0, 212, 255, 0.15); color: var(--primary); border: 1px solid rgba(0, 212, 255, 0.3);">
+              <i class="fas fa-tag"></i>
+              ${getCategoryLabel(tool.category)}
+            </span>
+            <span class="peek-badge price">
+              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
+              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+            </span>
+            <span class="peek-badge rating">
+              <i class="fas fa-star"></i>
+              ${tool.rating}/5
+            </span>
+            ${tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> Lifetime Deal</span>' : ''}
+          </div>
+        </div>
+      </div>
+      
+      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">${seoDesc}</p>
+      
+      <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+        <button class="dock-action-btn primary" onclick="window.open('${tool.link}', '_blank'); trackToolClick('${tool.id}')" style="flex: 1;">
+          <i class="fas fa-external-link-alt"></i>
+          <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
+        </button>
+        <button class="dock-action-btn secondary" onclick="toggleFavorite('${tool.id}')" style="width: auto;">
+          <i class="fas fa-star"></i>
+          <span>${isFavorite(tool.id) ? (currentLang === 'de' ? 'Entfernen' : 'Remove') : (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}</span>
+        </button>
+      </div>
+    </div>
+    
+    ${pros.length > 0 || cons.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-balance-scale"></i>
+        <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span>
+      </h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        ${pros.length > 0 ? `
+        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); padding: 16px;">
+          <h5 style="color: var(--success); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-check-circle"></i>
+            <span data-de="Vorteile" data-en="Pros">Vorteile</span>
+          </h5>
+          <ul style="color: var(--text-secondary); padding-left: 20px;">
+            ${prosHTML}
+          </ul>
+        </div>
+        ` : ''}
+        
+        ${cons.length > 0 ? `
+        <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius); padding: 16px;">
+          <h5 style="color: var(--error); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-times-circle"></i>
+            <span data-de="Nachteile" data-en="Cons">Nachteile</span>
+          </h5>
+          <ul style="color: var(--text-secondary); padding-left: 20px;">
+            ${consHTML}
+          </ul>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    ` : ''}
+    
+    ${features.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-rocket"></i>
+        <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span>
+      </h4>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        ${featuresHTML}
+      </div>
+    </div>
+    ` : ''}
+    
+    ${alternatives.length > 0 ? `
+    <div style="margin-bottom: 24px;">
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
+        <i class="fas fa-exchange-alt"></i>
+        <span data-de="Ähnliche Tools" data-en="Similar Tools">Ähnliche Tools</span>
+      </h4>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        ${alternativesHTML}
+      </div>
+    </div>
+    ` : ''}
+  `;
+  
+  document.getElementById('drawerTitle').textContent = tool.name;
+  document.getElementById('drawerContent').innerHTML = drawerContent;
+  document.getElementById('drawerOverlay').classList.add('active');
+  document.getElementById('drawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  updateLanguage();
+}
+
+function closeToolDrawer() {
+  isDrawerOpen = false;
+  document.getElementById('drawerOverlay').classList.remove('active');
+  document.getElementById('drawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== FILTER CHIPS =====
+function renderFilterChips() {
+  const filters = [
+    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
+    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
+    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
+    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
+    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
+    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
+    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
+    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
+  ];
+  
+  const chipsHTML = filters.map(filter => {
+    const isActive = currentCategory === filter.id;
+    return `
+      <div class="filter-chip ${isActive ? 'active' : ''}" 
+           data-filter="${filter.id}"
+           onclick="setActiveFilter('${filter.id}')">
+        <i class="${filter.icon}"></i>
+        <span data-de="${filter.label.de}" data-en="${filter.label.en}">${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('filterChips').innerHTML = chipsHTML;
+  updateLanguage();
+}
+
+function setActiveFilter(filterId) {
+  currentCategory = filterId;
+  
+  // Entferne active Klasse von allen Chips
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.remove('active');
+  });
+  
+  // Setze active Klasse auf geklickten Chip
+  const targetChip = document.querySelector(`[data-filter="${filterId}"]`);
+  if (targetChip) {
+    targetChip.classList.add('active');
+  }
+  
+  renderToolGroups();
+}
+
+// ===== FAVORITES OVERLAY =====
+function openFavoritesOverlay() {
+  updateFavoritesOverlay();
+  document.getElementById('favoritesOverlay').classList.add('active');
+  document.getElementById('favoritesDrawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFavoritesOverlay() {
+  document.getElementById('favoritesOverlay').classList.remove('active');
+  document.getElementById('favoritesDrawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function updateFavoritesOverlay() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  
+  const favoriteHTML = favorites.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    if (!tool) return '';
+    return `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${toolId}')">
+          <i class="fas fa-times"></i>
         </div>
       </div>
     `;
   }).join('');
   
-  document.getElementById('toolGroups').innerHTML = groupsHTML || '<p style="text-align:center;color:var(--text-muted);padding:40px;">Keine Tools gefunden</p>';
-}
-
-// ===== RENDER TOP 5 =====
-function renderTop5() {
-  const sortedTools = [...allTools].sort((a, b) => (b.votes || 0) - (a.votes || 0)).slice(0, 5);
-  
-  const top5HTML = sortedTools.map((tool, index) => `
-    <div class="top5-item" onclick="openTool('${tool.url}')">
-      <div class="top5-rank">${index + 1}</div>
-      <div class="top5-icon">${tool.icon || '🔧'}</div>
-      <div class="top5-info">
-        <div class="top5-name">${tool.name}</div>
-        <div class="top5-category">${tool.category}</div>
+  const compareHTML = comparison.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    if (!tool) return '';
+    return `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleComparison('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
       </div>
-      <div class="top5-votes" id="top5-votes-${tool.id}">${tool.votes || 0}</div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
   
-  document.getElementById('top5List').innerHTML = top5HTML;
+  document.getElementById('favoriteDock').innerHTML = favoriteHTML;
+  document.getElementById('compareDock').innerHTML = compareHTML;
+  
+  updateLanguage();
 }
 
-// ===== CATEGORY ICON =====
-function getCategoryIcon(category) {
-  const icons = {
-    'all': '🌐',
-    'Chat & Assistenten': '💬',
-    'Bildgenerierung': '🎨',
-    'Video & Animation': '🎬',
-    'Coding & Development': '💻',
-    'Produktivität': '📊',
-    'Audio & Musik': '🎵'
-  };
-  return icons[category] || '🔧';
-}
-
-// ===== FILTER BY CATEGORY =====
-function filterByCategory(category) {
-  currentFilter = category;
+function updateFloatingBadge() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const totalCount = favorites.length + comparison.length;
   
-  if (category === 'all') {
-    filteredTools = [...allTools];
-  } else {
-    filteredTools = allTools.filter(t => t.category === category);
-  }
-  
-  if (searchQuery) {
-    filteredTools = filteredTools.filter(t => 
-      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-  
-  renderAll();
-}
-
-// ===== SEARCH =====
-function handleSearch(query) {
-  searchQuery = query.trim();
-  filterByCategory(currentFilter);
-}
-
-function setSearch(query) {
-  document.getElementById('heroSearch').value = query;
-  handleSearch(query);
-}
-
-// ===== TOGGLE GROUP =====
-function toggleGroup(groupId) {
-  const content = document.getElementById(`content-${groupId}`);
-  const toggle = document.getElementById(`toggle-${groupId}`);
-  
-  if (content.classList.contains('expanded')) {
-    content.classList.remove('expanded');
-    toggle.classList.remove('expanded');
-  } else {
-    content.classList.add('expanded');
-    toggle.classList.add('expanded');
+  const badge = document.getElementById('floatingFavoritesBadge');
+  if (badge) {
+    badge.textContent = totalCount;
+    badge.style.display = totalCount > 0 ? 'flex' : 'none';
   }
 }
 
 // ===== VOTING =====
-function handleVote(toolId, direction) {
-  const tool = allTools.find(t => t.id === toolId);
+async function vote(toolId, type) {
+  const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
   
-  const currentVote = votes[toolId];
-  const voteCountEl = document.getElementById(`vote-${toolId}`);
-  const top5VoteEl = document.getElementById(`top5-votes-${toolId}`);
+  const oldUserVote = tool.userVote ?? 0;
+  const voteValue = type === 'up' ? 1 : -1;
   
-  if (currentVote === direction) {
-    delete votes[toolId];
-    tool.votes += (direction === 'up' ? -1 : 1);
+  // Berechne die Vote-Änderung
+  let voteChange = 0;
+  if (tool.userVote === voteValue) {
+    // User entfernt seinen Vote
+    tool.userVote = 0;
+    voteChange = -voteValue;
   } else {
-    if (currentVote) {
-      tool.votes += (currentVote === 'up' ? -1 : 1);
-    }
-    votes[toolId] = direction;
-    tool.votes += (direction === 'up' ? 1 : -1);
+    // User ändert seinen Vote oder stimmt zum ersten Mal ab
+    const previousVote = tool.userVote ?? 0;
+    tool.userVote = voteValue;
+    voteChange = voteValue - previousVote;
   }
   
-  voteCountEl.textContent = tool.votes;
-  voteCountEl.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-  setTimeout(() => {
-    voteCountEl.classList.remove('moving-up', 'moving-down');
-  }, 500);
-  
-  if (top5VoteEl) {
-    top5VoteEl.textContent = tool.votes;
-    top5VoteEl.classList.add('changed');
-    setTimeout(() => {
-      top5VoteEl.classList.remove('changed');
-    }, 600);
-  }
-  
-  saveToLocalStorage();
-  renderAll();
-}
-
-// ===== FAVORITES =====
-function toggleFavorite(toolId) {
-  const index = favorites.indexOf(toolId);
-  
-  if (index === -1) {
-    favorites.push(toolId);
-  } else {
-    favorites.splice(index, 1);
-  }
-  
-  saveToLocalStorage();
-  renderAll();
-  renderFavorites();
-}
-
-function toggleFavorites() {
-  const overlay = document.getElementById('favoritesOverlay');
-  const drawer = document.getElementById('favoritesDrawer');
-  
-  overlay.classList.toggle('active');
-  drawer.classList.toggle('active');
-  
-  if (drawer.classList.contains('active')) {
-    renderFavorites();
-  }
-}
-
-function renderFavorites() {
-  const favoriteTools = allTools.filter(t => favorites.includes(t.id));
-  
-  const favHTML = favoriteTools.map(tool => `
-    <div class="dock-item" onclick="openTool('${tool.url}')" title="${tool.name}">
-      <span>${tool.icon || '🔧'}</span>
-      <button class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${tool.id}')">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-  `).join('');
-  
-  document.getElementById('dockItems').innerHTML = favHTML || '<p style="color:var(--text-muted);font-size:0.9rem;">Keine Favoriten vorhanden</p>';
-}
-
-function clearAllFavorites() {
-  if (confirm('Alle Favoriten löschen?')) {
-    favorites = [];
-    saveToLocalStorage();
-    renderAll();
-    renderFavorites();
-  }
-}
-
-function exportFavorites() {
-  const favoriteTools = allTools.filter(t => favorites.includes(t.id));
-  const dataStr = JSON.stringify(favoriteTools, null, 2);
-  const dataBlob = new Blob([dataStr], { type: 'application/json' });
-  const url = URL.createObjectURL(dataBlob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'ai-searcher-favorites.json';
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function updateFavoritesBadge() {
-  const badge = document.getElementById('favBadge');
-  if (favorites.length > 0) {
-    badge.style.display = 'flex';
-    badge.textContent = favorites.length;
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-// ===== OPEN TOOL =====
-function openTool(url) {
-  if (url) {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  }
-}
-
-// ===== DENSITY TOGGLE =====
-function setDensity(density) {
-  document.body.className = `density-${density}`;
-  
-  document.querySelectorAll('.density-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  event.target.classList.add('active');
-  
-  localStorage.setItem('density', density);
-}
-
-// ===== SCROLL =====
-function initScrollListener() {
-  window.addEventListener('scroll', () => {
-    const backToTop = document.getElementById('backToTop');
-    if (window.scrollY > 300) {
-      backToTop.classList.add('visible');
+  // Aktualisiere die Vote-Zahlen des Tools
+  if (voteValue === 1) {
+    // Upvote
+    if (oldUserVote === 1) {
+      // Entferne Upvote
+      tool.upvotes -= 1;
+    } else if (oldUserVote === -1) {
+      // Wechsel von Downvote zu Upvote
+      tool.downvotes -= 1;
+      tool.upvotes += 1;
     } else {
-      backToTop.classList.remove('visible');
+      // Neuer Upvote
+      tool.upvotes += 1;
     }
-  });
+  } else {
+    // Downvote
+    if (oldUserVote === -1) {
+      // Entferne Downvote
+      tool.downvotes -= 1;
+    } else if (oldUserVote === 1) {
+      // Wechsel von Upvote zu Downvote
+      tool.upvotes -= 1;
+      tool.downvotes += 1;
+    } else {
+      // Neuer Downvote
+      tool.downvotes += 1;
+    }
+  }
+  
+  tool.votes = tool.upvotes - tool.downvotes;
+  
+  // Speichere in LocalStorage
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  savedVotes[toolId] = {
+    userVote: tool.userVote,
+    totalVotes: tool.votes,
+    upvotes: tool.upvotes,
+    downvotes: tool.downvotes
+  };
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  
+  // Update UI
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountElement) {
+    voteCountElement.textContent = tool.votes;
+    voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      voteCountElement.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  updateTop5VoteCount(toolId, tool.votes);
+  updateTop5Bar();
+  renderToolGroups();
+  
+  showNotification(
+    currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
+    'success'
+  );
 }
 
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// ===== FAVORITES & COMPARISON =====
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
 }
 
-// ===== MODALS =====
-function openModal(modalId) {
-  const overlayId = modalId.replace('Modal', 'Overlay');
-  document.getElementById(overlayId).classList.add('active');
-  document.getElementById(modalId).classList.add('active');
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites', 'info');
+  } else {
+    favorites.push(toolId);
+    showNotification(currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites', 'success');
+  }
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  updateFavoritesOverlay();
+  updateFloatingBadge();
+  renderToolGroups();
 }
 
-function closeModal(modalId) {
-  const overlayId = modalId.replace('Modal', 'Overlay');
-  document.getElementById(overlayId).classList.remove('active');
-  document.getElementById(modalId).classList.remove('active');
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
 }
 
-// ===== COOKIES =====
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+    showNotification(currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison', 'info');
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+      showNotification(currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison', 'success');
+    } else {
+      showNotification(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!', 'error');
+      return;
+    }
+  }
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  updateFavoritesOverlay();
+  updateFloatingBadge();
+  renderToolGroups();
+}
+
+// ===== COOKIE CONSENT =====
 function checkCookieConsent() {
   const consent = localStorage.getItem('cookieConsent');
-  if (!consent) {
-    setTimeout(() => {
-      document.getElementById('cookieConsent').classList.add('active');
-    }, 1000);
-  } else if (consent === 'accepted') {
+  const consentBanner = document.getElementById('cookieConsent');
+  
+  if (consent === 'accepted') {
+    window.cookiePreferences.analytics = true;
     loadGoogleAnalytics();
+    consentBanner.classList.remove('active');
+  } else if (consent === 'declined') {
+    window.cookiePreferences.analytics = false;
+    consentBanner.classList.remove('active');
+  } else {
+    consentBanner.classList.add('active');
   }
 }
 
 function acceptCookies() {
   localStorage.setItem('cookieConsent', 'accepted');
-  document.getElementById('cookieConsent').classList.remove('active');
+  window.cookiePreferences.analytics = true;
   loadGoogleAnalytics();
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(currentLang === 'de' ? 'Cookies akzeptiert' : 'Cookies accepted', 'success');
 }
 
 function declineCookies() {
   localStorage.setItem('cookieConsent', 'declined');
+  window.cookiePreferences.analytics = false;
   document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined', 'info');
 }
 
 function loadGoogleAnalytics() {
-  const gaScript = document.createElement('script');
-  gaScript.async = true;
-  gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
-  document.head.appendChild(gaScript);
+  if (!window.cookiePreferences.analytics) return;
+  
+  // Google Analytics Script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
+  document.head.appendChild(script);
   
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+  gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
 }
 
-// ===== LANGUAGE TOGGLE =====
-function toggleLanguage() {
-  const langText = document.getElementById('lang-text');
-  if (langText.textContent === 'DE') {
-    langText.textContent = 'EN';
-    alert('English version coming soon!');
-  } else {
-    langText.textContent = 'DE';
+// ===== BACK TO TOP =====
+function setupBackToTop() {
+  const backToTopBtn = document.getElementById('backToTop');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > window.innerHeight) {
+      backToTopBtn.classList.add('visible');
+    } else {
+      backToTopBtn.classList.remove('visible');
+    }
+  });
+  
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// ===== HELPER FUNCTIONS =====
+function getCategoryIcon(category) {
+  const icons = {
+    text: '✍️',
+    image: '🎨',
+    code: '💻',
+    video: '🎬',
+    audio: '🎵'
+  };
+  return icons[category] || '🤖';
+}
+
+function getCategoryLabel(category) {
+  const labels = {
+    de: {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    },
+    en: {
+      text: 'Text',
+      image: 'Image',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio'
+    }
+  };
+  return labels[currentLang][category] || category;
+}
+
+function trackUserInteraction(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
+}
+
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] ?? 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
+}
+
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+    <span>${message}</span>
+    <button class="notification-close"><i class="fas fa-times"></i></button>
+  `;
+      
+  document.body.appendChild(notification);
+      
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+      
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.remove();
+  });
+}
+
+// ===== MODALS =====
+function openModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.add('active');
+  document.getElementById(modalId).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.remove('active');
+  document.getElementById(modalId).classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== EVENT LISTENERS =====
+function setupEventListeners() {
+  // Omnibox search
+  const omniboxInput = document.getElementById('omniboxInput');
+  let searchDebounce;
+  
+  omniboxInput.addEventListener('input', (e) => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchQuery = e.target.value;
+      if (searchQuery.length > 0) {
+        filterBySearch(searchQuery);
+      } else {
+        renderToolGroups();
+      }
+    }, 300);
+  });
+  
+  // Enter key in omnibox
+  omniboxInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const query = omniboxInput.value;
+      if (query.trim()) {
+        filterBySearch(query);
+      }
+    }
+  });
+  
+  // Density toggle (now in footer)
+  document.querySelectorAll('.density-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.density-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      document.body.className = '';
+      document.body.classList.add(`density-${btn.dataset.density}`);
+      
+      renderToolGroups();
+      updateTop5Bar();
+    });
+  });
+  
+  // Language toggle
+  document.getElementById('langToggle').addEventListener('click', () => {
+    currentLang = currentLang === 'de' ? 'en' : 'de';
+    document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
+    updateLanguage();
+    renderFilterChips();
+    updateTop5Bar();
+    renderToolGroups();
+  });
+  
+  // Drawer close
+  document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
+  document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
+  
+  // Favorites overlay
+  document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesOverlay);
+  document.getElementById('favoritesClose').addEventListener('click', closeFavoritesOverlay);
+  document.getElementById('favoritesOverlay').addEventListener('click', closeFavoritesOverlay);
+  
+  // Favorites overlay actions
+  document.getElementById('clearFavorites').addEventListener('click', () => {
+    localStorage.setItem('aiFavorites', JSON.stringify([]));
+    updateFavoritesOverlay();
+    updateFloatingBadge();
+    renderToolGroups();
+    showNotification(currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared', 'info');
+  });
+  
+  document.getElementById('compareAction').addEventListener('click', () => {
+    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+    if (comparison.length < 2) {
+      showNotification(currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare', 'error');
+      return;
+    }
+    
+    // Open comparison view
+    showNotification(currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...', 'info');
+  });
+  
+  // Back to top
+  setupBackToTop();
+  
+  // Cookie consent
+  document.getElementById('cookieAccept').addEventListener('click', acceptCookies);
+  document.getElementById('cookieDecline').addEventListener('click', declineCookies);
+  
+  // Modals
+  document.getElementById('imprintLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('imprintModal');
+  });
+  
+  document.getElementById('privacyLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('privacyLinkCookie').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('imprintModalClose').addEventListener('click', () => {
+    closeModal('imprintModal');
+  });
+  
+  document.getElementById('imprintModalOverlay').addEventListener('click', () => {
+    closeModal('imprintModal');
+  });
+  
+  document.getElementById('privacyModalClose').addEventListener('click', () => {
+    closeModal('privacyModal');
+  });
+  
+  document.getElementById('privacyModalOverlay').addEventListener('click', () => {
+    closeModal('privacyModal');
+  });
+  
+  // Close drawer on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (isDrawerOpen) {
+        closeToolDrawer();
+      }
+      if (document.getElementById('favoritesOverlay').classList.contains('active')) {
+        closeFavoritesOverlay();
+      }
+      if (document.getElementById('imprintModal').classList.contains('active')) {
+        closeModal('imprintModal');
+      }
+      if (document.getElementById('privacyModal').classList.contains('active')) {
+        closeModal('privacyModal');
+      }
+    }
+  });
+}
+
+function filterBySearch(query) {
+  const groups = document.querySelectorAll('.tool-group');
+  const searchLower = query.toLowerCase();
+  
+  groups.forEach(group => {
+    const rows = group.querySelectorAll('.tool-row');
+    let hasMatch = false;
+    
+    rows.forEach(row => {
+      const toolId = row.dataset.id;
+      const tool = aiTools.find(t => t.id === toolId);
+      if (tool) {
+        const matches = tool.name.toLowerCase().includes(searchLower) ||
+                       tool.description.de.toLowerCase().includes(searchLower) ||
+                       tool.description.en.toLowerCase().includes(searchLower) ||
+                       tool.category.toLowerCase().includes(searchLower);
+        
+        row.style.display = matches ? 'grid' : 'none';
+        if (matches) hasMatch = true;
+      }
+    });
+    
+    group.style.display = hasMatch ? 'block' : 'none';
+    
+    const showMore = group.querySelector('.show-more');
+    if (showMore) showMore.style.display = 'none';
+  });
+}
+
+function updateLanguage() {
+  document.querySelectorAll('[data-de]').forEach(el => {
+    if (el.hasAttribute('placeholder')) {
+      el.placeholder = currentLang === 'de' ? el.getAttribute('data-placeholder-de') : el.getAttribute('data-placeholder-en');
+    } else {
+      el.textContent = currentLang === 'de' ? el.getAttribute('data-de') : el.getAttribute('data-en');
+    }
+  });
+  
+  // Update search hint text
+  const searchHintText = document.getElementById('searchHintText');
+  if (searchHintText) {
+    searchHintText.textContent = currentLang === 'de' 
+      ? 'Suche nach Toolnamen, Use-Cases oder Features'
+      : 'Search for tool names, use cases or features';
+  }
+  
+  // Update hero subtitle
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  if (heroSubtitle) {
+    heroSubtitle.textContent = currentLang === 'de'
+      ? 'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.'
+      : 'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
   }
 }
 
-// ===== LOCAL STORAGE =====
-function loadLocalStorage() {
-  const storedFavorites = localStorage.getItem('favorites');
-  const storedVotes = localStorage.getItem('votes');
-  const storedDensity = localStorage.getItem('density');
-  
-  if (storedFavorites) {
-    favorites = JSON.parse(storedFavorites);
-  }
-  
-  if (storedVotes) {
-    votes = JSON.parse(storedVotes);
-  }
-  
-  if (storedDensity) {
-    setDensity(storedDensity);
-  }
-}
-
-function saveToLocalStorage() {
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-  localStorage.setItem('votes', JSON.stringify(votes));
-}
+// ===== INITIALIZE =====
+document.addEventListener('DOMContentLoaded', init);
 </script>
-
 </body>
 </html>
