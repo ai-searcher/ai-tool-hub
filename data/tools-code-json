@@ -1,1 +1,257 @@
-
+[
+  {
+    "id": "github-copilot",
+    "numericId": 4,
+    "name": "GitHub Copilot",
+    "category": "code",
+    "aiScore": 96,
+    "popularityScore": 95,
+    "quickPeek": {
+      "de": "Bester KI-Code-Assistent mit IDE-Integration für Entwickler.",
+      "en": "Best AI code assistant with IDE integration for developers."
+    },
+    "features": ["Autocomplete", "Chat Interface", "Multi-Language", "IDE Integration", "Code Explanation"],
+    "tags": ["code", "developer", "autocomplete", "ide", "productivity", "popular", "paid", "microsoft"],
+    "rankingHistory": [],
+    "price": "paid",
+    "priceDisplay": {
+      "de": "€10/Monat",
+      "en": "$10/month"
+    },
+    "rating": 4.8,
+    "description": {
+      "de": "Bester KI-Code-Assistent für Entwickler mit IDE-Integration.",
+      "en": "Best AI code assistant for developers with IDE integration."
+    },
+    "link": "https://github.com/features/copilot",
+    "badge": "popular",
+    "useCases": ["coding", "debugging", "learning", "code-review", "documentation"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "GitHub Copilot Review: Der KI-Pair-Programmierer",
+      "en": "GitHub Copilot Review: The AI Pair Programmer"
+    },
+    "seoDesc": {
+      "de": "GitHub Copilot ist der beste KI-Code-Assistent für Entwickler. Erhöht die Produktivität um bis zu 55%.",
+      "en": "GitHub Copilot is the best AI code assistant for developers. Increases productivity by up to 55%."
+    },
+    "alternatives": ["cursor", "tabnine", "codeium"],
+    "pros": {
+      "de": ["Integriert in alle gängigen IDEs", "Unterstützt 50+ Programmiersprachen", "Lernt aus deinem Code-Stil", "Zeitersparnis von bis zu 55%", "Unternehmenslizenzen verfügbar"],
+      "en": ["Integrated into all popular IDEs", "Supports 50+ programming languages", "Learns from your coding style", "Time savings of up to 55%", "Enterprise licenses available"]
+    },
+    "cons": {
+      "de": ["Kostenpflichtig nach 30 Tagen", "Manchmal ineffiziente Lösungen", "Datenschutzbedenken bei firmeninternem Code", "Internetverbindung erforderlich"],
+      "en": ["Paid after 30 days", "Sometimes inefficient solutions", "Privacy concerns with proprietary code", "Internet connection required"]
+    },
+    "pricing": {
+      "de": "€10/Monat pro Nutzer (Individual), €19/Monat pro Nutzer (Business), €39/Monat pro Nutzer (Enterprise)",
+      "en": "$10/month per user (Individual), $19/month per user (Business), $39/month per user (Enterprise)"
+    }
+  },
+  {
+    "id": "cursor",
+    "numericId": 23,
+    "name": "Cursor",
+    "category": "code",
+    "aiScore": 94,
+    "popularityScore": 89,
+    "quickPeek": {
+      "de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
+      "en": "AI-powered IDE with integrated chat and debugging features."
+    },
+    "features": ["AI Chat", "Code Generation", "Debugging", "VSCode Based", "Context Awareness"],
+    "tags": ["code", "ide", "vscode", "chat", "debugging", "new", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
+    },
+    "rating": 4.7,
+    "description": {
+      "de": "KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
+      "en": "AI-powered IDE with integrated chat and debugging features."
+    },
+    "link": "https://www.cursor.so/",
+    "badge": "new",
+    "useCases": ["coding", "debugging", "learning", "code-review", "refactoring"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Cursor - KI-IDE für Programmierer",
+      "en": "Cursor - AI IDE for Programmers"
+    },
+    "seoDesc": {
+      "de": "Cursor ist eine KI-gestützte IDE mit integriertem Chat und Debugging-Funktionen.",
+      "en": "Cursor is an AI-powered IDE with integrated chat and debugging features."
+    },
+    "alternatives": ["github-copilot", "tabnine", "codeium"],
+    "pros": {
+      "de": ["KI-gestützte Entwicklung", "Integrierter Chat", "Debugging-Hilfen", "VSCode-Kompatibilität", "Lokaler Kontext"],
+      "en": ["AI-assisted development", "Integrated chat", "Debugging assistance", "VSCode compatibility", "Local context"]
+    },
+    "cons": {
+      "de": ["Kostenpflichtig für erweiterte Funktionen", "Noch in Entwicklung", "Performance-Probleme", "Begrenzte Sprachenunterstützung"],
+      "en": ["Paid for advanced features", "Still in development", "Performance issues", "Limited language support"]
+    },
+    "pricing": {
+      "de": "Kostenlos: 50 Anfragen/Monat, Pro: €20/Monat für unbegrenzte Anfragen, Business: €40/Monat pro Benutzer",
+      "en": "Free: 50 requests/month, Pro: $20/month for unlimited requests, Business: $40/month per user"
+    }
+  },
+  {
+    "id": "replit",
+    "numericId": 24,
+    "name": "Replit AI",
+    "category": "code",
+    "aiScore": 88,
+    "popularityScore": 83,
+    "quickPeek": {
+      "de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
+      "en": "Cloud-based AI coding with collaboration and direct deployment."
+    },
+    "features": ["Cloud IDE", "AI Assistant", "Collaboration", "Deployment", "Multi-Language"],
+    "tags": ["code", "cloud", "ide", "collaboration", "deployment", "free", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
+    },
+    "rating": 4.4,
+    "description": {
+      "de": "Cloud-basiertes KI-Coding mit Kollaboration und direkter Deployment.",
+      "en": "Cloud-based AI coding with collaboration and direct deployment."
+    },
+    "link": "https://replit.com/site/ai",
+    "badge": "free",
+    "useCases": ["learning", "prototyping", "collaborative-coding", "education", "hackathons"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Replit AI - Cloud-basiertes KI-Coding",
+      "en": "Replit AI - Cloud-based AI Coding"
+    },
+    "seoDesc": {
+      "de": "Replit AI bietet KI-gestütztes Coding in der Cloud mit Kollaboration und Deployment.",
+      "en": "Replit AI offers AI-powered coding in the cloud with collaboration and deployment."
+    },
+    "alternatives": ["github-copilot", "cursor", "tabnine"],
+    "pros": {
+      "de": ["Cloud-basiert", "Kollaborationsfunktionen", "Direktes Deployment", "Kostenlose Version", "Browsergestützt"],
+      "en": ["Cloud-based", "Collaboration features", "Direct deployment", "Free version", "Browser-based"]
+    },
+    "cons": {
+      "de": ["Internetverbindung erforderlich", "Begrenzte lokale Kontrolle", "Performance abhängig von Server", "Datenschutzbedenken"],
+      "en": ["Internet connection required", "Limited local control", "Performance depends on server", "Privacy concerns"]
+    },
+    "pricing": {
+      "de": "Kostenlos: 500.000 Tokens/Monat, Core: €8/Monat, Pro: €20/Monat, Teams: €40/Monat pro Benutzer",
+      "en": "Free: 500,000 tokens/month, Core: $8/month, Pro: $20/month, Teams: $40/month per user"
+    }
+  },
+  {
+    "id": "tabnine",
+    "numericId": 25,
+    "name": "Tabnine",
+    "category": "code",
+    "aiScore": 86,
+    "popularityScore": 84,
+    "quickPeek": {
+      "de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
+      "en": "AI code completion with focus on privacy and local processing."
+    },
+    "features": ["Code Completion", "Local Processing", "Privacy Focus", "Multi-Language", "IDE Integration"],
+    "tags": ["code", "autocomplete", "privacy", "local", "ide", "popular", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "ab €12/Monat",
+      "en": "from $12/month"
+    },
+    "rating": 4.3,
+    "description": {
+      "de": "KI-Code-Vervollständigung mit Fokus auf Privatsphäre und lokaler Verarbeitung.",
+      "en": "AI code completion with focus on privacy and local processing."
+    },
+    "link": "https://www.tabnine.com/",
+    "badge": "popular",
+    "useCases": ["coding", "productivity", "security", "enterprise", "education"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Tabnine - KI-Code-Vervollständigung",
+      "en": "Tabnine - AI Code Completion"
+    },
+    "seoDesc": {
+      "de": "Tabnine bietet KI-gestützte Code-Vervollständigung mit Fokus auf Privatsphäre.",
+      "en": "Tabnine offers AI-powered code completion with a focus on privacy."
+    },
+    "alternatives": ["github-copilot", "cursor", "codeium"],
+    "pros": {
+      "de": ["Schnelle Code-Vervollständigung", "Privatsphäre-fokussiert", "Mehrsprachenunterstützung", "Lokale Verarbeitung", "Enterprise-Sicherheit"],
+      "en": ["Fast code completion", "Privacy-focused", "Multi-language support", "Local processing", "Enterprise security"]
+    },
+    "cons": {
+      "de": ["Begrenzte kostenlose Version", "Weniger Funktionen als Konkurrenz", "Teilweise ungenaue Vorschläge", "Langsamere Updates"],
+      "en": ["Limited free version", "Fewer features than competitors", "Sometimes inaccurate suggestions", "Slow updates"]
+    },
+    "pricing": {
+      "de": "Kostenlos: Basis-Vervollständigung, Pro: €12/Monat, Enterprise: auf Anfrage",
+      "en": "Free: basic completion, Pro: $12/month, Enterprise: custom pricing"
+    }
+  },
+  {
+    "id": "codeium",
+    "numericId": 26,
+    "name": "Codeium",
+    "category": "code",
+    "aiScore": 90,
+    "popularityScore": 85,
+    "quickPeek": {
+      "de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
+      "en": "Free AI for code completion and chat features."
+    },
+    "features": ["Free", "Autocomplete", "Chat", "Multi-Language", "IDE Integration"],
+    "tags": ["code", "free", "autocomplete", "chat", "ide", "free-tier", "open-source"],
+    "rankingHistory": [],
+    "price": "free",
+    "priceDisplay": {
+      "de": "Kostenlos",
+      "en": "Free"
+    },
+    "rating": 4.5,
+    "description": {
+      "de": "Kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
+      "en": "Free AI for code completion and chat features."
+    },
+    "link": "https://codeium.com/",
+    "badge": "free",
+    "useCases": ["learning", "prototyping", "education", "open-source", "personal-projects"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Codeium - Kostenlose KI für Code",
+      "en": "Codeium - Free AI for Code"
+    },
+    "seoDesc": {
+      "de": "Codeium ist eine kostenlose KI für Code-Vervollständigung und Chat-Funktionen.",
+      "en": "Codeium is a free AI for code completion and chat features."
+    },
+    "alternatives": ["github-copilot", "tabnine", "cursor"],
+    "pros": {
+      "de": ["Komplett kostenlos", "Code-Vervollständigung", "Chat-Funktion", "Open-Source-Freundlich", "Keine Limits"],
+      "en": ["Completely free", "Code completion", "Chat function", "Open-source friendly", "No limits"]
+    },
+    "cons": {
+      "de": ["Begrenzte fortgeschrittene Funktionen", "Keine Enterprise-Features", "Weniger akkurat als Copilot", "Kein lokales Modell"],
+      "en": ["Limited advanced features", "No enterprise features", "Less accurate than Copilot", "No local model"]
+    },
+    "pricing": {
+      "de": "Komplett kostenlos für alle Funktionen",
+      "en": "Completely free for all features"
+    }
+  }
+]
