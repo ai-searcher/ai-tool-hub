@@ -2793,41 +2793,58 @@ async function init() {
 async function loadAITools() {
   try {
     document.getElementById('loading').style.display = 'block';
-    
-    const response = await fetch('./data.json');
+    const response = await fetch('data.json');
     if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-    aiTools = await response.json();
-    
-    // Lade Votes aus LocalStorage
+    const rawData = await response.json();
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-    
-    // Initialisiere jedes Tool mit gespeicherten Votes
-    aiTools.forEach(tool => {
-      const saved = savedVotes[tool.id];
-      if (saved) {
-        tool.userVote = saved.userVote ?? 0;
-        tool.votes = saved.totalVotes ?? 0;
-        tool.upvotes = saved.upvotes ?? 0;
-        tool.downvotes = saved.downvotes ?? 0;
-      } else {
-        tool.userVote = 0;
-        tool.votes = 0;
-        tool.upvotes = 0;
-        tool.downvotes = 0;
-      }
+
+    aiTools = rawData.map((item, index) => {
+      const saved = savedVotes[item.id] || {};
+      return {
+        id: item.id,
+        name: item.name,
+        link: item.link,
+        rating: item.rate || 0,
+        price: item.price || "freemium",
+        badge: item.badge || "",
+        hasLifetimeDeal: item.ltd || false,
+        category: item.cat,
+        features: item.f || [],
+        tags: item.tags || [],
+        alternatives: item.alt || [],
+        useCases: item.tags || [],
+        description: { de: item.d[0], en: item.d[1] },
+        priceDisplay: {
+          de: item.cost ? item.cost[0] : (item.price === 'paid' ? 'Kostenpflichtig' : 'Kostenlos'),
+          en: item.cost ? item.cost[1] : (item.price === 'paid' ? 'Paid' : 'Free')
+        },
+        pros: { de: item.pros ? item.pros[0] : [], en: item.pros ? item.pros[1] : [] },
+        cons: { de: item.cons ? item.cons[0] : [], en: item.cons ? item.cons[1] : [] },
+        quickPeek: {
+          de: item.q ? item.q[0] : (item.d[0] ? item.d[0].substring(0, 75) + "..." : ""),
+          en: item.q ? item.q[1] : (item.d[1] ? item.d[1].substring(0, 75) + "..." : "")
+        },
+        seoTitle: { de: `${item.name} Review 2026`, en: `${item.name} Review 2026` },
+        seoDesc: { de: item.d[0], en: item.d[1] },
+        numericId: index + 1,
+        aiScore: 90,
+        popularityScore: 90,
+        rankingHistory: [],
+        votes: saved.totalVotes || 0,
+        userVote: saved.userVote || 0,
+        upvotes: saved.upvotes || 0,
+        downvotes: saved.downvotes || 0,
+        pricing: { de: `Modell: ${item.price}`, en: `Model: ${item.price}` }
+      };
     });
-    
+
     addAIRecommendations();
     renderToolGroups();
     updateLanguage();
-    
     document.getElementById('loading').style.display = 'none';
   } catch (error) {
-    console.error('Fehler beim Laden:', error);
-    document.getElementById('loading').innerHTML = `
-      <i class="fas fa-exclamation-triangle"></i>
-      <p>Fehler beim Laden. Bitte neu laden.</p>
-    `;
+    console.error('Error:', error);
+    document.getElementById('loading').innerHTML = `<p>Fehler beim Laden.</p>`;
   }
 }
 
