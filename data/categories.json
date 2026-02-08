@@ -8,7 +8,7 @@
         "de": "Text-KI-Tools für Schreiben, Übersetzen, Zusammenfassen",
         "en": "Text AI tools for writing, translating, summarizing"
       },
-      "dataFile": "tools-text.json"
+      "dataFile": "data/tools-text.json"
     },
     {
       "id": "image",
@@ -18,7 +18,7 @@
         "de": "Bildgenerierung und -bearbeitung mit KI",
         "en": "AI image generation and editing"
       },
-      "dataFile": "tools-image.json"
+      "dataFile": "data/tools-image.json"
     },
     {
       "id": "code",
@@ -28,7 +28,7 @@
         "de": "KI-Tools für Code-Generierung und -Analyse",
         "en": "AI tools for code generation and analysis"
       },
-      "dataFile": "tools-code.json"
+      "dataFile": "data/tools-code.json"
     },
     {
       "id": "video",
@@ -38,7 +38,7 @@
         "de": "KI für Video-Erstellung und -Bearbeitung",
         "en": "AI for video creation and editing"
       },
-      "dataFile": "tools-video.json"
+      "dataFile": "data/tools-video.json"
     },
     {
       "id": "audio",
@@ -48,8 +48,18 @@
         "de": "KI für Audio- und Musikgenerierung",
         "en": "AI for audio and music generation"
       },
-      "dataFile": "tools-audio.json"
+      "dataFile": "data/tools-audio.json"
+    },
+    {
+      "id": "productivity",
+      "name": { "de": "Produktivität", "en": "Productivity" },
+      "icon": "⚡",
+      "description": {
+        "de": "KI-Tools für Workflow-Optimierung und Organisation",
+        "en": "AI tools for workflow optimization and organization"
+      },
+      "dataFile": "data/tools-productivity.json"
     }
   ],
-  "featured": "tools-featured.json"
+  "featured": "data/tools-featured.json"
 }
