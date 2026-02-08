@@ -2466,6 +2466,8 @@ let hoverTimeout = null;
 let peekElement = null;
 let isDrawerOpen = false;
 let scrollDebounceTimeout = null;
+let loadedCategories = [];
+let featuredToolIds = [];
 
 // ===== KATEGORIE INFORMATIONEN =====
 const categoryInfo = {
@@ -2794,9 +2796,39 @@ async function loadAITools() {
   try {
     document.getElementById('loading').style.display = 'block';
     
-    const response = await fetch('./data.json');
-    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
-    aiTools = await response.json();
+    // Lade alle 7 JSON-Dateien parallel aus dem data/ Ordner
+    const categoriesResponse = await fetch('data/categories.json');
+    if (!categoriesResponse.ok) throw new Error('HTTP error! status: ' + categoriesResponse.status);
+    const categoriesData = await categoriesResponse.json();
+    
+    // Lade die Kategorien
+    loadedCategories = categoriesData.categories;
+    
+    // Lade alle Tool-Dateien parallel
+    const toolPromises = loadedCategories.map(category => 
+      fetch(category.dataFile).then(r => {
+        if (!r.ok) throw new Error('HTTP error! status: ' + r.status);
+        return r.json();
+      })
+    );
+    
+    // Lade featured Tools
+    const featuredResponse = await fetch('data/tools-featured.json');
+    if (!featuredResponse.ok) throw new Error('HTTP error! status: ' + featuredResponse.status);
+    featuredToolIds = await featuredResponse.json();
+    
+    // Warte auf alle Tool-Dateien
+    const allToolArrays = await Promise.all(toolPromises);
+    
+    // Kombiniere alle Tools und setze Kategorie
+    aiTools = [];
+    loadedCategories.forEach((category, index) => {
+      const tools = allToolArrays[index];
+      tools.forEach(tool => {
+        tool.category = category.id; // Kategorie setzen
+      });
+      aiTools = aiTools.concat(tools);
+    });
     
     // Lade Votes aus LocalStorage
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
@@ -2908,45 +2940,42 @@ function updateTop5VoteCount(toolId, newVotes) {
 // ===== GRUPPIERTE TOOL-LISTE =====
 function renderToolGroups() {
   // Bestimme welche Kategorien angezeigt werden sollen
-  let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
+  let categoriesToShow = loadedCategories.map(cat => cat.id);
   
-  // Wenn ein Filter aktiv ist (außer 'all'), zeige nur diese Kategorie
-  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
+  // Wenn ein Filter aktiv ist (außer 'all', 'free', 'ai', 'featured'), zeige nur diese Kategorie
+  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai' && currentCategory !== 'featured') {
     categoriesToShow = [currentCategory];
+  }
+  
+  // Wenn 'featured' Filter aktiv ist, zeige nur die Featured Tools
+  if (currentCategory === 'featured') {
+    categoriesToShow = loadedCategories.map(cat => cat.id); // Alle Kategorien für Featured-Suche
   }
   
   const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
   
-  const groupsHTML = categoriesToShow.map(category => {
+  const groupsHTML = categoriesToShow.map(categoryId => {
     // Filtere Tools nach Kategorie
-    let categoryTools = aiTools.filter(tool => tool.category === category);
+    let categoryTools = aiTools.filter(tool => tool.category === categoryId);
     
-    // Zusätzliche Filter für 'free' und 'ai'
+    // Zusätzliche Filter für 'free' und 'ai' und 'featured'
     if (currentCategory === 'free') {
       categoryTools = categoryTools.filter(tool => tool.price === 'free');
     } else if (currentCategory === 'ai') {
       categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
+    } else if (currentCategory === 'featured') {
+      categoryTools = categoryTools.filter(tool => featuredToolIds.includes(tool.id));
     }
     
-    // Defensive Rendering: Leere Kategorie nicht ausblenden
+    // Wenn keine Tools in dieser Kategorie nach Filterung, überspringe die Kategorie
     if (categoryTools.length === 0) {
-      return `
-        <div class="tool-group" data-category="${category}">
-          <div class="group-header">
-            <div class="group-title">
-              <div class="group-icon">${getCategoryIcon(category)}</div>
-              <span>${getCategoryLabel(category)}</span>
-              <span class="group-count">0</span>
-            </div>
-          </div>
-          <div class="group-content expanded">
-            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
-              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
-            </div>
-          </div>
-        </div>
-      `;
+      return '';
     }
+    
+    // Finde Kategorie-Informationen
+    const categoryInfo = loadedCategories.find(cat => cat.id === categoryId);
+    const categoryName = categoryInfo ? (currentLang === 'de' ? categoryInfo.name.de : categoryInfo.name.en) : categoryId;
+    const categoryIcon = categoryInfo ? categoryInfo.icon : getCategoryIcon(categoryId);
     
     // Sortiere Tools nach votes MIT Baseline für Sortierung
     const sortedTools = [...categoryTools].sort((a, b) => {
@@ -2961,7 +2990,7 @@ function renderToolGroups() {
       return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
     });
     
-    const isExpanded = expandedGroups[category] || false;
+    const isExpanded = expandedGroups[categoryId] || false;
     
     // Zeige alle Tools wenn ausgeklappt, sonst nur 2
     const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
@@ -3024,26 +3053,26 @@ function renderToolGroups() {
     
     // Füge den Collapse-Button als letztes Element in der Gruppe hinzu (wenn erweitert)
     const collapseButton = isExpanded ? `
-      <div class="collapse-button" onclick="collapseGroup('${category}')">
+      <div class="collapse-button" onclick="collapseGroup('${categoryId}')">
         <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
       </div>
     ` : '';
     
     // Füge show-more Button hinzu (wenn nicht erweitert)
     const showMoreButton = !isExpanded && sortedTools.length > 2 ? `
-      <div class="show-more" onclick="expandGroup('${category}')">
+      <div class="show-more" onclick="expandGroup('${categoryId}')">
         <span>${currentLang === 'de' ? `+ ${remainingCount} mehr anzeigen` : `+ ${remainingCount} more`}</span>
         <i class="fas fa-chevron-down"></i>
       </div>
     ` : '';
     
     return `
-      <div class="tool-group" data-category="${category}">
-        <div class="group-header" onclick="toggleGroup('${category}')">
+      <div class="tool-group" data-category="${categoryId}">
+        <div class="group-header" onclick="toggleGroup('${categoryId}')">
           <div class="group-title">
-            <div class="group-icon">${getCategoryIcon(category)}</div>
-            <span>${getCategoryLabel(category)}</span>
-            <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${category}')">
+            <div class="group-icon">${categoryIcon}</div>
+            <span>${categoryName}</span>
+            <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${categoryId}')">
               <i class="fas fa-info-circle"></i>
             </button>
             <span class="group-count">${categoryTools.length}</span>
@@ -3406,31 +3435,53 @@ function closeToolDrawer() {
 
 // ===== FILTER CHIPS =====
 function renderFilterChips() {
+  // Start mit den Basis-Filtern
   const filters = [
-    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
-    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
-    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
-    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
-    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
-    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
-    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
-    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
+    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } }
   ];
+  
+  // Füge alle Kategorien hinzu
+  loadedCategories.forEach(category => {
+    filters.push({
+      id: category.id,
+      icon: getFilterIcon(category.id),
+      label: { de: category.name.de, en: category.name.en }
+    });
+  });
+  
+  // Füge spezielle Filter hinzu
+  filters.push(
+    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
+    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } },
+    { id: 'featured', icon: 'fas fa-trophy', label: { de: 'Featured', en: 'Featured' } }
+  );
   
   const chipsHTML = filters.map(filter => {
     const isActive = currentCategory === filter.id;
+    const labelText = currentLang === 'de' ? filter.label.de : filter.label.en;
+    
     return `
       <div class="filter-chip ${isActive ? 'active' : ''}" 
            data-filter="${filter.id}"
            onclick="setActiveFilter('${filter.id}')">
         <i class="${filter.icon}"></i>
-        <span data-de="${filter.label.de}" data-en="${filter.label.en}">${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
+        <span>${labelText}</span>
       </div>
     `;
   }).join('');
   
   document.getElementById('filterChips').innerHTML = chipsHTML;
-  updateLanguage();
+}
+
+function getFilterIcon(categoryId) {
+  const iconMap = {
+    'text': 'fas fa-pen',
+    'image': 'fas fa-image',
+    'code': 'fas fa-code',
+    'video': 'fas fa-video',
+    'audio': 'fas fa-music'
+  };
+  return iconMap[categoryId] || 'fas fa-circle';
 }
 
 function setActiveFilter(filterId) {
@@ -3727,6 +3778,13 @@ function setupMobileBackToTop() {
 
 // ===== HELPER FUNCTIONS =====
 function getCategoryIcon(category) {
+  // Versuche zuerst die geladenen Kategorien zu verwenden
+  const cat = loadedCategories.find(c => c.id === category);
+  if (cat) {
+    return cat.icon;
+  }
+  
+  // Fallback auf das alte Mapping
   const icons = {
     text: '✍️',
     image: '🎨',
@@ -3738,6 +3796,13 @@ function getCategoryIcon(category) {
 }
 
 function getCategoryLabel(category) {
+  // Versuche zuerst die geladenen Kategorien zu verwenden
+  const cat = loadedCategories.find(c => c.id === category);
+  if (cat) {
+    return currentLang === 'de' ? cat.name.de : cat.name.en;
+  }
+  
+  // Fallback auf das alte Mapping
   const labels = {
     de: {
       text: 'Text',
