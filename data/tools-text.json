@@ -1,490 +1,337 @@
 [
   {
     "id": "chatgpt",
-    "numericId": 1,
+    "numericId": 27,
     "name": "ChatGPT",
     "category": "text",
-    "aiScore": 98,
-    "popularityScore": 99,
+    "aiScore": 99,
+    "popularityScore": 98,
     "quickPeek": {
-      "de": "Führender KI-Allrounder für Text, Code und Kreativität.",
-      "en": "Leading AI all-rounder for text, code and creativity."
+      "de": "Der bekannteste KI-Chatbot für Gespräche und Textaufgaben aller Art.",
+      "en": "The most famous AI chatbot for conversations and all kinds of text tasks."
     },
-    "features": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
-    "tags": ["text", "chat", "coding", "research", "multimodal", "popular", "freemium", "openai"],
+    "features": ["Chat", "Code", "Analysis", "Creative Writing", "Translation", "Summarization"],
+    "tags": ["text", "chat", "gpt", "openai", "assistant", "popular", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "Kostenlos/€20",
-      "en": "Free/$20"
+      "de": "Kostenlos/ab €22",
+      "en": "Free/from $22"
     },
-    "rating": 4.9,
+    "rating": 4.8,
     "description": {
-      "de": "Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.",
-      "en": "Best all-rounder for text, ideas, code that started the AI revolution."
+      "de": "Der bekannteste KI-Chatbot für Gespräche und Textaufgaben aller Art.",
+      "en": "The most famous AI chatbot for conversations and all kinds of text tasks."
     },
     "link": "https://chat.openai.com/",
     "badge": "popular",
-    "useCases": ["chatbot", "writing", "coding", "research", "brainstorming"],
+    "useCases": ["chat", "writing", "coding", "analysis", "translation", "learning"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "ChatGPT Review 2026: Der ultimative KI-Allrounder",
-      "en": "ChatGPT Review 2026: The Ultimate AI All-Rounder"
+      "de": "ChatGPT - Der KI-Chatbot von OpenAI",
+      "en": "ChatGPT - The AI Chatbot by OpenAI"
     },
     "seoDesc": {
-      "de": "ChatGPT ist der beste KI-Allrounder für Texte, Code und Ideen. Erfahre alles über Vor- und Nachteile, Preise und Alternativen.",
-      "en": "ChatGPT is the best AI all-rounder for text, code and ideas. Learn about pros, cons, pricing and alternatives."
+      "de": "ChatGPT ist der bekannteste KI-Chatbot für Gespräche, Texterstellung, Codierung und Analyse.",
+      "en": "ChatGPT is the most famous AI chatbot for conversations, text creation, coding and analysis."
     },
     "alternatives": ["claude", "gemini", "perplexity"],
     "pros": {
-      "de": ["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support", "Multimodal (Bild, Text, Code)"],
-      "en": ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support", "Multimodal (image, text, code)"]
+      "de": ["Beste natürliche Sprachverarbeitung", "Multifunktional", "Kostenlose Version", "Ständige Verbesserungen", "Große Community"],
+      "en": ["Best natural language processing", "Multifunctional", "Free version", "Constant improvements", "Large community"]
     },
     "cons": {
-      "de": ["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier", "Warteschlangen im Free-Tier"],
-      "en": ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier", "Queue times in free tier"]
+      "de": ["Manchmal ungenau", "Wissensstand begrenzt", "Überlastete Server", "Datenschutzbedenken", "Keine Echtzeit-Daten"],
+      "en": ["Sometimes inaccurate", "Knowledge limited", "Overloaded servers", "Privacy concerns", "No real-time data"]
     },
     "pricing": {
-      "de": "Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext",
-      "en": "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"
+      "de": "Kostenlos, ChatGPT Plus: €22/Monat, Enterprise: auf Anfrage",
+      "en": "Free, ChatGPT Plus: $22/month, Enterprise: custom pricing"
     }
   },
   {
     "id": "claude",
-    "numericId": 2,
+    "numericId": 28,
     "name": "Claude",
     "category": "text",
     "aiScore": 96,
-    "popularityScore": 94,
+    "popularityScore": 92,
     "quickPeek": {
-      "de": "Experte für lange Texte und Dokumentenanalyse mit riesigem Kontextfenster.",
-      "en": "Expert for long texts and document analysis with huge context window."
+      "de": "KI-Assistent mit Fokus auf Sicherheit, Ethik und längeren Kontexten.",
+      "en": "AI assistant focused on safety, ethics, and longer contexts."
     },
-    "features": ["200K Context", "File Upload", "Document Analysis", "API Access", "Web Search"],
-    "tags": ["text", "document", "analysis", "long-form", "research", "popular", "freemium", "anthropic"],
+    "features": ["Long Context", "File Upload", "Ethical AI", "Analysis", "Writing"],
+    "tags": ["text", "anthropic", "ethical", "long-context", "analysis", "popular", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "Kostenlos/€20",
-      "en": "Free/$20"
+      "de": "ab €22/Monat",
+      "en": "from $22/month"
     },
-    "rating": 4.8,
+    "rating": 4.7,
     "description": {
-      "de": "Exzellent für lange Texte und Dokumentenanalyse mit 200K-Token-Kontext.",
-      "en": "Excellent for long-form writing and document analysis with 200K token context."
+      "de": "KI-Assistent mit Fokus auf Sicherheit, Ethik und längeren Kontexten.",
+      "en": "AI assistant focused on safety, ethics, and longer contexts."
     },
     "link": "https://claude.ai/",
     "badge": "popular",
-    "useCases": ["document-analysis", "academic-writing", "legal-documents", "research", "content-creation"],
+    "useCases": ["long-docs", "analysis", "ethical-ai", "research", "writing"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Claude AI Review: Der Experte für lange Texte und Dokumente",
-      "en": "Claude AI Review: The Expert for Long Texts and Documents"
+      "de": "Claude - Der ethische KI-Assistent",
+      "en": "Claude - The Ethical AI Assistant"
     },
     "seoDesc": {
-      "de": "Claude ist spezialisiert auf lange Texte und Dokumentenanalyse. Ideal für Autoren, Forscher und Unternehmen.",
-      "en": "Claude specializes in long texts and document analysis. Ideal for writers, researchers and businesses."
+      "de": "Claude ist ein KI-Assistent von Anthropic mit Fokus auf Sicherheit, Ethik und längeren Kontexten.",
+      "en": "Claude is an AI assistant by Anthropic focused on safety, ethics and longer contexts."
     },
-    "alternatives": ["chatgpt", "gemini", "notion-ai"],
+    "alternatives": ["chatgpt", "gemini", "perplexity"],
     "pros": {
-      "de": ["Bis zu 200.000 Token Kontext", "Exzellente Dokumentenanalyse", "Ethische KI-Entwicklung", "Kostenloser Zugang mit guten Limits", "Keine Trainingsdaten-Bias"],
-      "en": ["Up to 200,000 token context", "Excellent document analysis", "Ethical AI development", "Free access with good limits", "No training data bias"]
+      "de": ["Lange Kontextlänge", "Ethische Ausrichtung", "Datei-Upload", "Gute Analysefähigkeiten", "Sicherheitsfokus"],
+      "en": ["Long context length", "Ethical orientation", "File upload", "Good analysis capabilities", "Safety focus"]
     },
     "cons": {
-      "de": ["Weniger kreativ als ChatGPT", "Eingeschränkte Bildgenerierung", "Keine Code-Execution", "Langsame Antwortzeiten bei großen Dokumenten"],
-      "en": ["Less creative than ChatGPT", "Limited image generation", "No code execution", "Slow response times with large documents"]
+      "de": ["Weniger kreativ als ChatGPT", "Langsame Antworten", "Teurer", "Begrenzte Integrationen", "Neuer am Markt"],
+      "en": ["Less creative than ChatGPT", "Slow responses", "Expensive", "Limited integrations", "Newer to market"]
     },
     "pricing": {
-      "de": "Kostenloser Zugang mit Limits, Claude Pro für €20/Monat mit erweiterten Limits und Prioritätszugang",
-      "en": "Free access with limits, Claude Pro for $20/month with extended limits and priority access"
+      "de": "Kostenlos (begrenzt), Claude Pro: €22/Monat, Team: auf Anfrage",
+      "en": "Free (limited), Claude Pro: $22/month, Team: custom pricing"
     }
   },
   {
     "id": "gemini",
-    "numericId": 7,
+    "numericId": 29,
     "name": "Gemini",
     "category": "text",
-    "aiScore": 92,
-    "popularityScore": 93,
+    "aiScore": 95,
+    "popularityScore": 91,
     "quickPeek": {
-      "de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
-      "en": "Google's AI assistant with deep web integration and multimodal capabilities."
+      "de": "Googles KI-Assistent mit Integration in Google Workspace.",
+      "en": "Google's AI assistant with integration into Google Workspace."
     },
-    "features": ["Web Search", "Multimodal", "Google Apps", "Code Generation", "Image Analysis"],
-    "tags": ["text", "google", "web-search", "multimodal", "free", "new", "freemium"],
+    "features": ["Google Integration", "Real-time Web", "Multimodal", "Coding", "Analysis"],
+    "tags": ["text", "google", "multimodal", "workspace", "real-time", "popular", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "Kostenlos/€20",
-      "en": "Free/$20"
+      "de": "Kostenlos/ab €22",
+      "en": "Free/from $22"
     },
     "rating": 4.6,
     "description": {
-      "de": "Googles KI-Assistent mit tiefer Web-Integration und multimodalen Fähigkeiten.",
-      "en": "Google's AI assistant with deep web integration and multimodal capabilities."
+      "de": "Googles KI-Assistent mit Integration in Google Workspace.",
+      "en": "Google's AI assistant with integration into Google Workspace."
     },
     "link": "https://gemini.google.com/",
-    "badge": "new",
-    "useCases": ["research", "writing", "coding", "analysis", "productivity"],
+    "badge": "popular",
+    "useCases": ["research", "writing", "coding", "google-workspace", "real-time-info"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Gemini - Googles KI-Assistent mit Web-Integration",
-      "en": "Gemini - Google's AI Assistant with Web Integration"
+      "de": "Gemini - Googles KI-Assistent",
+      "en": "Gemini - Google's AI Assistant"
     },
     "seoDesc": {
-      "de": "Gemini ist Googles KI mit Web-Integration und Multimodalität. Perfekt für Recherche und Produktivität.",
-      "en": "Gemini is Google's AI with web integration and multimodality. Perfect for research and productivity."
+      "de": "Gemini ist Googles KI-Assistent mit Integration in Google Workspace und Echtzeit-Internetzugriff.",
+      "en": "Gemini is Google's AI assistant with integration into Google Workspace and real-time internet access."
     },
     "alternatives": ["chatgpt", "claude", "perplexity"],
     "pros": {
-      "de": ["Kostenlose Nutzung", "Tiefe Web-Integration", "Multimodale Fähigkeiten", "Gute Google-Integration", "Aktuelle Informationen"],
-      "en": ["Free to use", "Deep web integration", "Multimodal capabilities", "Good Google integration", "Current information"]
+      "de": ["Google Integration", "Echtzeit-Internetzugriff", "Multimodal", "Kostenlose Version", "Gute Recherche"],
+      "en": ["Google integration", "Real-time internet access", "Multimodal", "Free version", "Good research"]
     },
     "cons": {
-      "de": ["Noch nicht so ausgereift wie ChatGPT", "Begrenzte Funktionen in der kostenlosen Version", "Datenschutzbedenken bei Google"],
-      "en": ["Not as mature as ChatGPT", "Limited features in free version", "Privacy concerns with Google"]
+      "de": ["Weniger kreativ", "Google-Bias", "Datenschutzbedenken", "Begrenzte Antwortlänge", "Neue Updates"],
+      "en": ["Less creative", "Google bias", "Privacy concerns", "Limited response length", "New updates"]
     },
     "pricing": {
-      "de": "Gemini Basic: Kostenlos, Gemini Advanced: €20/Monat mit erweiterten Funktionen und 2TB Google One",
-      "en": "Gemini Basic: Free, Gemini Advanced: $20/month with advanced features and 2TB Google One"
+      "de": "Kostenlos, Gemini Advanced: €22/Monat (inkl. Google One AI Premium)",
+      "en": "Free, Gemini Advanced: $22/month (includes Google One AI Premium)"
     }
   },
   {
     "id": "perplexity",
-    "numericId": 8,
-    "name": "Perplexity",
+    "numericId": 30,
+    "name": "Perplexity AI",
     "category": "text",
-    "aiScore": 94,
-    "popularityScore": 91,
+    "aiScore": 92,
+    "popularityScore": 89,
     "quickPeek": {
-      "de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
-      "en": "AI search engine with citations and conversational answer formatting."
+      "de": "KI-Suchmaschine mit Quellenangaben für genaue Recherchen.",
+      "en": "AI search engine with citations for accurate research."
     },
-    "features": ["Citations", "Web Search", "File Upload", "Collections", "Copilot"],
-    "tags": ["text", "search", "research", "citations", "fact-checking", "new", "freemium"],
+    "features": ["Search", "Citations", "Real-time", "File Upload", "Conversational"],
+    "tags": ["text", "search", "research", "citations", "real-time", "popular", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "Kostenlos/€20",
-      "en": "Free/$20"
-    },
-    "rating": 4.7,
-    "description": {
-      "de": "KI-Suchmaschine mit Quellenangaben und konversationeller Antwortformatierung.",
-      "en": "AI search engine with citations and conversational answer formatting."
-    },
-    "link": "https://www.perplexity.ai/",
-    "badge": "new",
-    "useCases": ["research", "academic-work", "fact-checking", "news", "learning"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Perplexity - KI-Suchmaschine mit Quellen",
-      "en": "Perplexity - AI Search Engine with Sources"
-    },
-    "seoDesc": {
-      "de": "Perplexity ist eine KI-Suchmaschine die Antworten mit Quellenangaben liefert. Ideal für Recherche und akademische Arbeit.",
-      "en": "Perplexity is an AI search engine that provides answers with citations. Ideal for research and academic work."
-    },
-    "alternatives": ["gemini", "chatgpt", "claude"],
-    "pros": {
-      "de": ["Quellenangaben bei jeder Antwort", "Aktuelle Informationen", "Kostenlose Nutzung", "Keine Halluzinationen", "Fokus auf Fakten"],
-      "en": ["Citations with every answer", "Current information", "Free to use", "No hallucinations", "Focus on facts"]
-    },
-    "cons": {
-      "de": ["Begrenzte kreative Fähigkeiten", "Teilweise unvollständige Antworten", "Keine komplexen Aufgaben"],
-      "en": ["Limited creative capabilities", "Sometimes incomplete answers", "No complex tasks"]
-    },
-    "pricing": {
-      "de": "Kostenlos mit Limits, Pro für €20/Monat mit erweiterten Suchfunktionen und Datei-Upload",
-      "en": "Free with limits, Pro for $20/month with advanced search features and file upload"
-    }
-  },
-  {
-    "id": "notion-ai",
-    "numericId": 11,
-    "name": "Notion AI",
-    "category": "text",
-    "aiScore": 90,
-    "popularityScore": 88,
-    "quickPeek": {
-      "de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-      "en": "AI directly in your Notion workspace for writing, summarization and more."
-    },
-    "features": ["Writing Assistant", "Summarization", "Translation", "Brainstorming", "Editing"],
-    "tags": ["text", "notion", "productivity", "workspace", "writing", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "€10/Monat",
-      "en": "$10/month"
+      "de": "ab €20/Monat",
+      "en": "from $20/month"
     },
     "rating": 4.5,
     "description": {
-      "de": "KI direkt in deinem Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-      "en": "AI directly in your Notion workspace for writing, summarization and more."
+      "de": "KI-Suchmaschine mit Quellenangaben für genaue Recherchen.",
+      "en": "AI search engine with citations for accurate research."
     },
-    "link": "https://www.notion.so/product/ai",
+    "link": "https://www.perplexity.ai/",
     "badge": "popular",
-    "useCases": ["note-taking", "documentation", "project-management", "knowledge-base", "meeting-notes"],
+    "useCases": ["research", "learning", "fact-checking", "writing", "analysis"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Notion AI - KI in deinem Workspace",
-      "en": "Notion AI - AI in Your Workspace"
+      "de": "Perplexity AI - KI-Suchmaschine",
+      "en": "Perplexity AI - AI Search Engine"
     },
     "seoDesc": {
-      "de": "Notion AI bringt KI direkt in deinen Notion Workspace für Schreiben, Zusammenfassungen und mehr.",
-      "en": "Notion AI brings AI directly into your Notion workspace for writing, summarization and more."
+      "de": "Perplexity AI ist eine KI-Suchmaschine, die Antworten mit Quellenangaben liefert. Ideal für Recherche.",
+      "en": "Perplexity AI is an AI search engine that provides answers with citations. Ideal for research."
     },
     "alternatives": ["chatgpt", "claude", "gemini"],
     "pros": {
-      "de": ["Nahtlose Notion-Integration", "Vielfältige Schreibhilfen", "Zusammenfassungsfunktionen", "Kein Kontextwechsel nötig", "Team-Kollaboration"],
-      "en": ["Seamless Notion integration", "Various writing assistants", "Summarization features", "No context switching needed", "Team collaboration"]
+      "de": ["Quellenangaben", "Echtzeit-Suche", "Präzise Antworten", "Datei-Upload", "Kostenlose Version"],
+      "en": ["Citations", "Real-time search", "Precise answers", "File upload", "Free version"]
     },
     "cons": {
-      "de": ["Zusätzliche Kosten zu Notion", "Begrenzte KI-Fähigkeiten", "Keine Bildgenerierung", "Teuer für Einzelpersonen"],
-      "en": ["Additional cost to Notion", "Limited AI capabilities", "No image generation", "Expensive for individuals"]
+      "de": ["Begrenzte Konversation", "Teilweise oberflächlich", "Weniger kreativ", "Teuer für Pro-Version", "Neue Features"],
+      "en": ["Limited conversation", "Sometimes superficial", "Less creative", "Expensive for pro version", "New features"]
     },
     "pricing": {
-      "de": "€10/Monat zusätzlich zu Notion (ab €8/Monat), Teams ab €15/Monat pro Benutzer",
-      "en": "$10/month in addition to Notion (from $8/month), teams from $15/month per user"
-    }
-  },
-  {
-    "id": "copy-ai",
-    "numericId": 12,
-    "name": "Copy.ai",
-    "category": "text",
-    "aiScore": 88,
-    "popularityScore": 85,
-    "quickPeek": {
-      "de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
-      "en": "AI platform specialized in marketing copy and advertising text."
-    },
-    "features": ["Marketing Templates", "Workflows", "Brand Voice", "SEO Tools", "Content Calendar"],
-    "tags": ["text", "marketing", "copywriting", "templates", "workflow", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €49/Monat",
-      "en": "from $49/month"
-    },
-    "rating": 4.4,
-    "description": {
-      "de": "KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte.",
-      "en": "AI platform specialized in marketing copy and advertising text."
-    },
-    "link": "https://www.copy.ai/",
-    "badge": "popular",
-    "useCases": ["copywriting", "social-media", "email-marketing", "ad-copy", "landing-pages"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Copy.ai - KI für Marketing-Texte",
-      "en": "Copy.ai - AI for Marketing Copy"
-    },
-    "seoDesc": {
-      "de": "Copy.ai ist eine KI-Plattform spezialisiert auf Marketing-Texte und Werbetexte. Perfekt für Marketing-Teams.",
-      "en": "Copy.ai is an AI platform specialized in marketing copy and advertising text. Perfect for marketing teams."
-    },
-    "alternatives": ["jasper", "writesonic", "rytr"],
-    "pros": {
-      "de": ["Spezialisiert auf Marketing", "90+ Vorlagen", "Workflow-Optimierung", "Team-Kollaboration", "Brand Voice Training"],
-      "en": ["Specialized in marketing", "90+ templates", "Workflow optimization", "Team collaboration", "Brand voice training"]
-    },
-    "cons": {
-      "de": ["Teuer für Einzelpersonen", "Begrenzte kostenlose Version", "Weniger allgemeine Anwendungen", "Fokus nur auf Marketing"],
-      "en": ["Expensive for individuals", "Limited free version", "Less general applications", "Focus only on marketing"]
-    },
-    "pricing": {
-      "de": "Kostenlose Testversion, Pro ab €49/Monat, Team ab €249/Monat, Enterprise auf Anfrage",
-      "en": "Free trial, Pro from $49/month, Team from $249/month, Enterprise custom pricing"
+      "de": "Kostenlos, Pro: €20/Monat, Enterprise: auf Anfrage",
+      "en": "Free, Pro: $20/month, Enterprise: custom pricing"
     }
   },
   {
     "id": "jasper",
-    "numericId": 13,
+    "numericId": 31,
     "name": "Jasper",
     "category": "text",
-    "aiScore": 86,
-    "popularityScore": 84,
+    "aiScore": 88,
+    "popularityScore": 85,
     "quickPeek": {
-      "de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-      "en": "AI platform for business content with brand customization and collaboration."
+      "de": "KI-Schreibassistent für Marketing und kommerzielle Inhalte.",
+      "en": "AI writing assistant for marketing and commercial content."
     },
-    "features": ["Brand Voice", "Templates", "Collaboration", "SEO", "Content Analytics"],
-    "tags": ["text", "business", "marketing", "brand", "seo", "popular", "paid"],
+    "features": ["Templates", "Brand Voice", "SEO", "Collaboration", "Content Calendar"],
+    "tags": ["text", "writing", "marketing", "seo", "commercial", "freemium", "lifetime-deal"],
     "rankingHistory": [],
-    "price": "paid",
+    "price": "freemium",
     "priceDisplay": {
       "de": "ab €49/Monat",
       "en": "from $49/month"
     },
     "rating": 4.3,
     "description": {
-      "de": "KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-      "en": "AI platform for business content with brand customization and collaboration."
+      "de": "KI-Schreibassistent für Marketing und kommerzielle Inhalte.",
+      "en": "AI writing assistant for marketing and commercial content."
     },
     "link": "https://www.jasper.ai/",
-    "badge": "popular",
-    "useCases": ["blog-writing", "seo-content", "social-media", "advertising", "product-descriptions"],
+    "badge": "featured",
+    "useCases": ["marketing", "ads", "blogging", "social-media", "seo"],
     "votes": 0,
-    "hasLifetimeDeal": false,
+    "hasLifetimeDeal": true,
     "seoTitle": {
-      "de": "Jasper - KI für Business-Content",
-      "en": "Jasper - AI for Business Content"
+      "de": "Jasper - KI-Schreibassistent für Marketing",
+      "en": "Jasper - AI Writing Assistant for Marketing"
     },
     "seoDesc": {
-      "de": "Jasper ist eine KI-Plattform für Business-Content mit Markenanpassung und Kollaboration.",
-      "en": "Jasper is an AI platform for business content with brand customization and collaboration."
+      "de": "Jasper ist ein KI-Schreibassistent spezialisiert auf Marketing, Werbung und kommerzielle Inhalte.",
+      "en": "Jasper is an AI writing assistant specialized in marketing, advertising and commercial content."
     },
     "alternatives": ["copy-ai", "writesonic", "chatgpt"],
     "pros": {
-      "de": ["Markenanpassung", "Team-Kollaboration", "Business-fokussiert", "SEO-Optimierung", "Lange Dokumente"],
-      "en": ["Brand customization", "Team collaboration", "Business-focused", "SEO optimization", "Long documents"]
+      "de": ["Marketing-Templates", "Brand Voice", "SEO-Optimierung", "Team-Kollaboration", "Lifetime-Deal verfügbar"],
+      "en": ["Marketing templates", "Brand voice", "SEO optimization", "Team collaboration", "Lifetime deal available"]
     },
     "cons": {
-      "de": ["Teuer", "Überwiegend für Marketing", "Langsame Updates", "Weniger kreativ als ChatGPT"],
-      "en": ["Expensive", "Mostly for marketing", "Slow updates", "Less creative than ChatGPT"]
+      "de": ["Teuer", "Weniger flexibel als ChatGPT", "Wiederholende Inhalte", "Begrenzte kostenlose Version", "Wettbewerbsdruck"],
+      "en": ["Expensive", "Less flexible than ChatGPT", "Repetitive content", "Limited free version", "Competitive pressure"]
     },
     "pricing": {
-      "de": "Creator: €49/Monat, Teams: €125/Monat, Business: €500/Monat, Enterprise auf Anfrage",
-      "en": "Creator: $49/month, Teams: $125/month, Business: $500/month, Enterprise custom pricing"
+      "de": "Creator: €49/Monat, Teams: €125/Monat, Business: auf Anfrage",
+      "en": "Creator: $49/month, Teams: $125/month, Business: custom pricing"
     }
   },
   {
-    "id": "tome",
-    "numericId": 28,
-    "name": "Tome",
+    "id": "copy-ai",
+    "numericId": 32,
+    "name": "Copy.ai",
     "category": "text",
-    "aiScore": 86,
+    "aiScore": 85,
     "popularityScore": 82,
     "quickPeek": {
-      "de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
-      "en": "AI for presentations and stories with visual support."
+      "de": "KI für Werbetexte und Marketing-Inhalte mit vielen Vorlagen.",
+      "en": "AI for ad copy and marketing content with many templates."
     },
-    "features": ["Presentation AI", "Visual Generation", "Storytelling", "Templates", "Collaboration"],
-    "tags": ["text", "presentations", "storytelling", "visual", "templates", "new", "freemium"],
+    "features": ["Templates", "Workflows", "Brand Voice", "SEO", "Collaboration"],
+    "tags": ["text", "copywriting", "marketing", "ads", "templates", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "ab €8/Monat",
-      "en": "from $8/month"
+      "de": "Kostenlos/ab €49",
+      "en": "Free/from $49"
     },
-    "rating": 4.3,
+    "rating": 4.2,
     "description": {
-      "de": "KI für Präsentationen und Geschichten mit visueller Unterstützung.",
-      "en": "AI for presentations and stories with visual support."
+      "de": "KI für Werbetexte und Marketing-Inhalte mit vielen Vorlagen.",
+      "en": "AI for ad copy and marketing content with many templates."
     },
-    "link": "https://tome.app/",
-    "badge": "new",
-    "useCases": ["presentations", "storytelling", "pitch-decks", "education", "reports"],
+    "link": "https://www.copy.ai/",
+    "badge": "free",
+    "useCases": ["ad-copy", "social-media", "email-marketing", "product-descriptions", "blogging"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Tome - KI für Präsentationen",
-      "en": "Tome - AI for Presentations"
+      "de": "Copy.ai - KI für Werbetexte",
+      "en": "Copy.ai - AI for Ad Copy"
     },
     "seoDesc": {
-      "de": "Tome erstellt Präsentationen und Geschichten mit KI-Unterstützung.",
-      "en": "Tome creates presentations and stories with AI assistance."
+      "de": "Copy.ai ist eine KI-Plattform für Werbetexte, Marketing-Inhalte und Social Media Posts.",
+      "en": "Copy.ai is an AI platform for ad copy, marketing content and social media posts."
     },
-    "alternatives": ["beautiful-ai", "gamma", "pitch"],
+    "alternatives": ["jasper", "writesonic", "chatgpt"],
     "pros": {
-      "de": ["Schnelle Präsentationserstellung", "Visuelle Unterstützung", "Storytelling-Fokus", "Kostenlose Version", "Einfache Bedienung"],
-      "en": ["Fast presentation creation", "Visual support", "Storytelling focus", "Free version", "Easy to use"]
+      "de": ["Viele Vorlagen", "Kostenlose Version", "Workflow-Automatisierung", "Einfache Bedienung", "Schnelle Ergebnisse"],
+      "en": ["Many templates", "Free version", "Workflow automation", "Easy to use", "Fast results"]
     },
     "cons": {
-      "de": ["Begrenzte Design-Kontrolle", "Teilweise generische Layouts", "Wenig Customization", "Export-Limits"],
-      "en": ["Limited design control", "Somewhat generic layouts", "Little customization", "Export limits"]
+      "de": ["Qualität variiert", "Wiederholende Inhalte", "Teure Pro-Version", "Begrenzte Kreativität", "Kein Code-Support"],
+      "en": ["Quality varies", "Repetitive content", "Expensive pro version", "Limited creativity", "No code support"]
     },
     "pricing": {
-      "de": "Kostenlos: 500 AI Credits, Pro: €8/Monat, Business: €20/Monat pro Benutzer",
-      "en": "Free: 500 AI credits, Pro: $8/month, Business: $20/month per user"
-    }
-  },
-  {
-    "id": "quillbot",
-    "numericId": 38,
-    "name": "QuillBot",
-    "category": "text",
-    "aiScore": 88,
-    "popularityScore": 86,
-    "quickPeek": {
-      "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
-      "en": "AI paraphraser & translator for better writing."
-    },
-    "features": ["Paraphrase", "Grammar", "Summarize", "Translator", "Plagiarism Check"],
-    "tags": ["text", "paraphrasing", "grammar", "translation", "summarization", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €10/Monat",
-      "en": "from $10/month"
-    },
-    "rating": 4.4,
-    "description": {
-      "de": "KI-Paraphraser & Übersetzer für besseres Schreiben.",
-      "en": "AI paraphraser & translator for better writing."
-    },
-    "link": "https://quillbot.com/",
-    "badge": "popular",
-    "useCases": ["writing", "academic", "content", "translation", "proofreading"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "QuillBot - KI-Paraphraser & Übersetzer",
-      "en": "QuillBot - AI Paraphraser & Translator"
-    },
-    "seoDesc": {
-      "de": "QuillBot paraphrasiert und übersetzt Text mit KI für besseres Schreiben.",
-      "en": "QuillBot paraphrases and translates text with AI for better writing."
-    },
-    "alternatives": ["grammarly", "wordtune", "chatgpt"],
-    "pros": {
-      "de": ["Paraphrasierung", "Grammatikprüfung", "Zusammenfassung", "Übersetzung", "Kostenlose Version"],
-      "en": ["Paraphrasing", "Grammar check", "Summarization", "Translation", "Free version"]
-    },
-    "cons": {
-      "de": ["Begrenzte kostenlose Nutzung", "Manchmal unnatürliche Ergebnisse", "Weniger genau als Grammarly", "Performance-Probleme"],
-      "en": ["Limited free usage", "Sometimes unnatural results", "Less accurate than Grammarly", "Performance issues"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 125 Wörter, Premium: €10/Monat, Team: €8/Monat pro Benutzer",
-      "en": "Free: 125 words, Premium: $10/month, Team: $8/month per user"
+      "de": "Kostenlos, Pro: €49/Monat, Enterprise: auf Anfrage",
+      "en": "Free, Pro: $49/month, Enterprise: custom pricing"
     }
   },
   {
     "id": "grammarly",
-    "numericId": 39,
+    "numericId": 33,
     "name": "Grammarly",
     "category": "text",
-    "aiScore": 92,
-    "popularityScore": 94,
+    "aiScore": 90,
+    "popularityScore": 93,
     "quickPeek": {
-      "de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-      "en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
+      "de": "KI-gestützte Grammatik- und Schreibprüfung für bessere Texte.",
+      "en": "AI-powered grammar and writing checker for better texts."
     },
-    "features": ["Grammar", "Tone", "Plagiarism", "Clarity", "Engagement"],
-    "tags": ["text", "grammar", "writing", "plagiarism", "tone", "popular", "freemium"],
+    "features": ["Grammar Check", "Style Suggestions", "Plagiarism Check", "Tone Detection", "Integration"],
+    "tags": ["text", "grammar", "writing", "proofreading", "plagiarism", "popular", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "ab €12/Monat",
-      "en": "from $12/month"
+      "de": "Kostenlos/ab €12",
+      "en": "Free/from $12"
     },
-    "rating": 4.6,
+    "rating": 4.7,
     "description": {
-      "de": "KI-Schreibassistent mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-      "en": "AI writing assistant with grammar check, tone analysis and plagiarism check."
+      "de": "KI-gestützte Grammatik- und Schreibprüfung für bessere Texte.",
+      "en": "AI-powered grammar and writing checker for better texts."
     },
     "link": "https://www.grammarly.com/",
     "badge": "popular",
-    "useCases": ["writing", "emails", "documents", "academic", "business"],
+    "useCases": ["proofreading", "writing", "emails", "academic", "business"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
@@ -492,225 +339,21 @@
       "en": "Grammarly - AI Writing Assistant"
     },
     "seoDesc": {
-      "de": "Grammarly verbessert Schreiben mit Grammatikprüfung, Ton-Analyse und Plagiatsprüfung.",
-      "en": "Grammarly improves writing with grammar check, tone analysis and plagiarism check."
+      "de": "Grammarly ist ein KI-gestützter Schreibassistent für Grammatik, Stil und Plagiatsprüfung.",
+      "en": "Grammarly is an AI-powered writing assistant for grammar, style and plagiarism checking."
     },
-    "alternatives": ["quillbot", "wordtune", "prowritingaid"],
+    "alternatives": ["prowritingaid", "quillbot", "language-tool"],
     "pros": {
-      "de": ["Umfassende Grammatikprüfung", "Ton-Analyse", "Plagiatsprüfung", "Browser-Integration", "Team-Features"],
-      "en": ["Comprehensive grammar check", "Tone analysis", "Plagiarism check", "Browser integration", "Team features"]
+      "de": ["Exzellente Grammatikprüfung", "Stilvorschläge", "Plagiatsprüfung", "Breite Integration", "Kostenlose Version"],
+      "en": ["Excellent grammar check", "Style suggestions", "Plagiarism check", "Wide integration", "Free version"]
     },
     "cons": {
-      "de": ["Teuer für Premium-Funktionen", "Manchmal übermäßige Korrekturen", "Datenschutzbedenken", "Performance-Impact"],
-      "en": ["Expensive for premium features", "Sometimes excessive corrections", "Privacy concerns", "Performance impact"]
+      "de": ["Teilweise überkorrigiert", "Datenschutzbedenken", "Teuer für Premium", "Begrenzte Sprachunterstützung", "KI-Schreiben limitiert"],
+      "en": ["Sometimes overcorrects", "Privacy concerns", "Expensive for premium", "Limited language support", "Limited AI writing"]
     },
     "pricing": {
-      "de": "Kostenlos: Basis-Korrekturen, Premium: €12/Monat, Business: €15/Monat pro Benutzer",
-      "en": "Free: basic corrections, Premium: $12/month, Business: $15/month per user"
-    }
-  },
-  {
-    "id": "wordtune",
-    "numericId": 40,
-    "name": "Wordtune",
-    "category": "text",
-    "aiScore": 86,
-    "popularityScore": 84,
-    "quickPeek": {
-      "de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
-      "en": "AI for better writing by rewriting and tone adjustment."
-    },
-    "features": ["Rewrite", "Tone", "Summarize", "Spices", "Translation"],
-    "tags": ["text", "rewriting", "tone", "summarization", "writing", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €10/Monat",
-      "en": "from $10/month"
-    },
-    "rating": 4.3,
-    "description": {
-      "de": "KI für besseres Schreiben durch Umschreiben und Ton-Anpassung.",
-      "en": "AI for better writing by rewriting and tone adjustment."
-    },
-    "link": "https://www.wordtune.com/",
-    "badge": "popular",
-    "useCases": ["writing", "emails", "creative", "academic", "business"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Wordtune - KI für besseres Schreiben",
-      "en": "Wordtune - AI for Better Writing"
-    },
-    "seoDesc": {
-      "de": "Wordtune verbessert Schreiben durch Umschreiben, Ton-Anpassung und Zusammenfassung.",
-      "en": "Wordtune improves writing by rewriting, tone adjustment and summarization."
-    },
-    "alternatives": ["quillbot", "grammarly", "chatgpt"],
-    "pros": {
-      "de": ["Umschreibungsfunktionen", "Ton-Anpassung", "Zusammenfassung", "Kreative Vorschläge", "Browser-Erweiterung"],
-      "en": ["Rewriting features", "Tone adjustment", "Summarization", "Creative suggestions", "Browser extension"]
-    },
-    "cons": {
-      "de": ["Begrenzte kostenlose Version", "Weniger umfassend als Grammarly", "Teilweise unnatürliche Ergebnisse", "Teuer"],
-      "en": ["Limited free version", "Less comprehensive than Grammarly", "Sometimes unnatural results", "Expensive"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 10 Umschreibungen/Tag, Plus: €10/Monat, Unlimited: €15/Monat",
-      "en": "Free: 10 rewrites/day, Plus: $10/month, Unlimited: $15/month"
-    }
-  },
-  {
-    "id": "rytr",
-    "numericId": 41,
-    "name": "Rytr",
-    "category": "text",
-    "aiScore": 84,
-    "popularityScore": 82,
-    "quickPeek": {
-      "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-      "en": "Affordable AI writer with templates and SEO features."
-    },
-    "features": ["Templates", "Languages", "SEO", "Plagiarism Check", "Image Generation"],
-    "tags": ["text", "writing", "templates", "seo", "affordable", "free", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €9/Monat",
-      "en": "from $9/month"
-    },
-    "rating": 4.2,
-    "description": {
-      "de": "Kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-      "en": "Affordable AI writer with templates and SEO features."
-    },
-    "link": "https://rytr.me/",
-    "badge": "free",
-    "useCases": ["copywriting", "blogging", "social", "emails", "seo"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Rytr - Kostengünstiger KI-Writer",
-      "en": "Rytr - Affordable AI Writer"
-    },
-    "seoDesc": {
-      "de": "Rytr ist ein kostengünstiger KI-Writer mit Vorlagen und SEO-Funktionen.",
-      "en": "Rytr is an affordable AI writer with templates and SEO features."
-    },
-    "alternatives": ["jasper", "writesonic", "copy-ai"],
-    "pros": {
-      "de": ["Kostengünstig", "Viele Vorlagen", "SEO-Funktionen", "Kostenlose Version", "Mehrsprachig"],
-      "en": ["Affordable", "Many templates", "SEO features", "Free version", "Multilingual"]
-    },
-    "cons": {
-      "de": ["Begrenzte Kreativität", "Einfachere Ergebnisse", "Qualität variiert", "Weniger Features als Konkurrenz"],
-      "en": ["Limited creativity", "Simpler results", "Quality varies", "Fewer features than competitors"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 10.000 Zeichen/Monat, Saver: €9/Monat, Unlimited: €29/Monat",
-      "en": "Free: 10,000 characters/month, Saver: $9/month, Unlimited: $29/month"
-    }
-  },
-  {
-    "id": "writesonic",
-    "numericId": 42,
-    "name": "Writesonic",
-    "category": "text",
-    "aiScore": 86,
-    "popularityScore": 83,
-    "quickPeek": {
-      "de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
-      "en": "AI for marketing content with SEO and image generation."
-    },
-    "features": ["Templates", "SEO", "Images", "Chatsonic", "Article Writer"],
-    "tags": ["text", "marketing", "seo", "images", "chat", "popular", "freemium", "lifetime-deal"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €13/Monat",
-      "en": "from $13/month"
-    },
-    "rating": 4.3,
-    "description": {
-      "de": "KI für Marketing-Content mit SEO und Bildgenerierung.",
-      "en": "AI for marketing content with SEO and image generation."
-    },
-    "link": "https://writesonic.com/",
-    "badge": "popular",
-    "useCases": ["copywriting", "ads", "landing-pages", "seo", "blogging"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "Writesonic - KI für Marketing-Content",
-      "en": "Writesonic - AI for Marketing Content"
-    },
-    "seoDesc": {
-      "de": "Writesonic erstellt Marketing-Content mit KI, inklusive SEO und Bilder.",
-      "en": "Writesonic creates marketing content with AI, including SEO and images."
-    },
-    "alternatives": ["jasper", "copy-ai", "rytr"],
-    "pros": {
-      "de": ["Marketing-fokussiert", "SEO-Tools", "Bildgenerierung", "Chatsonic (ChatGPT Alternative)", "Kostenlose Version"],
-      "en": ["Marketing-focused", "SEO tools", "Image generation", "Chatsonic (ChatGPT alternative)", "Free version"]
-    },
-    "cons": {
-      "de": ["Qualität variiert", "Teilweise repetitive Inhalte", "Teuer für hohe Volumen", "Lernkurve"],
-      "en": ["Quality varies", "Sometimes repetitive content", "Expensive for high volume", "Learning curve"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 10.000 Wörter/Monat, Pro: €13/Monat, Enterprise: auf Anfrage",
-      "en": "Free: 10,000 words/month, Pro: $13/month, Enterprise: custom pricing"
-    }
-  },
-  {
-    "id": "copy",
-    "numericId": 43,
-    "name": "Copy.ai",
-    "category": "text",
-    "aiScore": 86,
-    "popularityScore": 84,
-    "quickPeek": {
-      "de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
-      "en": "AI copywriting platform with workflows and brand customization."
-    },
-    "features": ["Workflows", "Brand", "Collaboration", "Templates", "Content Calendar"],
-    "tags": ["text", "copywriting", "workflows", "brand", "collaboration", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €49/Monat",
-      "en": "from $49/month"
-    },
-    "rating": 4.3,
-    "description": {
-      "de": "KI-Copywriting-Plattform mit Workflows und Markenanpassung.",
-      "en": "AI copywriting platform with workflows and brand customization."
-    },
-    "link": "https://www.copy.ai/",
-    "badge": "popular",
-    "useCases": ["marketing", "sales", "social", "email", "content-strategy"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Copy.ai - KI-Copywriting-Plattform",
-      "en": "Copy.ai - AI Copywriting Platform"
-    },
-    "seoDesc": {
-      "de": "Copy.ai ist eine KI-Plattform für Copywriting mit Workflows und Markenanpassung.",
-      "en": "Copy.ai is an AI platform for copywriting with workflows and brand customization."
-    },
-    "alternatives": ["jasper", "writesonic", "rytr"],
-    "pros": {
-      "de": ["Workflow-Optimierung", "Markenanpassung", "Kollaboration", "Inhaltskalender", "Team-Features"],
-      "en": ["Workflow optimization", "Brand customization", "Collaboration", "Content calendar", "Team features"]
-    },
-    "cons": {
-      "de": ["Teuer für Einzelpersonen", "Ähnlich wie andere Tools", "Begrenzte kreative Freiheit", "Steile Lernkurve"],
-      "en": ["Expensive for individuals", "Similar to other tools", "Limited creative freedom", "Steep learning curve"]
-    },
-    "pricing": {
-      "de": "Kostenlose Testversion, Pro: €49/Monat, Team: €249/Monat, Enterprise: auf Anfrage",
-      "en": "Free trial, Pro: $49/month, Team: $249/month, Enterprise: custom pricing"
+      "de": "Kostenlos, Premium: €12/Monat, Business: €15/Monat pro Benutzer",
+      "en": "Free, Premium: $12/month, Business: $15/month per user"
     }
   }
 ]
