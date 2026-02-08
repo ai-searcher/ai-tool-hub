@@ -3,49 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
-<title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
-<meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
-<meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
-<meta name="google-site-verification" content="Wo_6LQQ8LoGlobalzVMjBHh_Z-VD3N_dFdqCZb2BYxV0" />
-<link rel="canonical" href="https://ai-searcher.github.io/ai-tool-hub/">
-<link rel="alternate" hreflang="de" href="https://ai-searcher.github.io/ai-tool-hub/">
-<link rel="alternate" hreflang="en" href="https://ai-searcher.github.io/ai-tool-hub/">
-<link rel="alternate" hreflang="x-default" href="https://ai-searcher.github.io/ai-tool-hub/">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AI Searcher - Finde sofort dein perfektes KI-Tool">
-<meta property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.">
-<meta property="og:url" content="https://ai-searcher.github.io/ai-tool-hub/">
-<meta property="og:site_name" content="AI Searcher">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Searcher">
-<meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
-<!-- Google Analytics wird nur nach Cookie-Consent geladen -->
-<script>
-  window.cookiePreferences = window.cookiePreferences || {};
-  window.cookiePreferences.analytics = false;
-</script>
+<title>AI Searcher - Finde dein perfektes KI-Tool</title>
+<meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.">
+<meta property="og:title" content="AI Searcher">
+<meta property="og:description" content="Finde in 2 Klicks dein perfektes KI-Tool.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "AI Searcher",
-  "url": "https://ai-searcher.github.io/ai-tool-hub/",
-  "description": "Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://ai-searcher.github.io/ai-tool-hub/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
 <style>
-/* ===== FUTURISTISCHES DESIGN (30 JAHRE VORAUS) ===== */
 :root {
   --primary: #00d4ff;
   --primary-dark: #00a8cc;
@@ -58,7 +24,6 @@
   --text-secondary: #a0aec0;
   --text-muted: #718096;
   --border: rgba(255, 255, 255, 0.05);
-  --border-hover: rgba(0, 212, 255, 0.3);
   --success: #10b981;
   --error: #ef4444;
   --warning: #f59e0b;
@@ -68,47 +33,9 @@
   --radius: 12px;
   --radius-lg: 16px;
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Density Variables */
-  --density-cozy: 1.2;
-  --density-compact: 1;
-  --density-future: 0.8;
   --current-density: 1;
-  
-  /* Layout Variables */
-  --tool-row-height: calc(60px * var(--current-density));
-  --group-header-height: calc(52px * var(--current-density));
   --header-height: 60px;
-  --drawer-width: 500px;
   --hero-height: 280px;
-}
-
-/* Safari Safe Area */
-html, body {
-  height: 100%;
-  background-color: var(--bg-dark) !important;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-body {
-  min-height: 100%;
-  padding-bottom: env(safe-area-inset-bottom);
-  background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%) !important;
-}
-
-/* Density Classes */
-.density-cozy {
-  --current-density: var(--density-cozy);
-}
-
-.density-compact {
-  --current-density: var(--density-compact);
-}
-
-.density-future {
-  --current-density: var(--density-future);
 }
 
 * {
@@ -118,17 +45,13 @@ body {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #0a0e17 0%, #12151f 100%);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
   line-height: 1.6;
-  position: relative;
-  font-size: calc(0.9rem * var(--current-density));
 }
 
-/* Futuristic Animated Background */
 body::before {
   content: '';
   position: fixed;
@@ -138,70 +61,11 @@ body::before {
   height: 100%;
   background: 
     radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(0, 255, 157, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
   z-index: -1;
   pointer-events: none;
-  animation: pulseBackground 20s ease-in-out infinite alternate;
 }
 
-@keyframes pulseBackground {
-  0% {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-/* Futuristic Glow Effects */
-.glow {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.15;
-  z-index: -1;
-  animation: floatGlow 15s infinite ease-in-out;
-}
-
-.glow-1 {
-  background: var(--primary);
-  top: 10%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.glow-2 {
-  background: var(--secondary);
-  top: 60%;
-  right: 10%;
-  animation-delay: 5s;
-}
-
-.glow-3 {
-  background: var(--accent);
-  bottom: 20%;
-  left: 30%;
-  animation-delay: 10s;
-}
-
-@keyframes floatGlow {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -30px) scale(1.2);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.8);
-  }
-}
-
-/* ===== STICKY SMART HEADER ===== */
 .sticky-header {
   position: fixed;
   top: 0;
@@ -216,7 +80,6 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
 }
 
 .site-title {
@@ -228,45 +91,9 @@ body::before {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 1px;
-  transition: var(--transition);
-  cursor: default;
-  position: relative;
-  padding: 8px 0;
 }
 
-.site-title:hover {
-  transform: translateY(-2px);
-  text-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
-  background: linear-gradient(135deg, #00ff9d, #00d4ff, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.site-title::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  transition: width 0.3s ease;
-}
-
-.site-title:hover::after {
-  width: 100%;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* ===== HERO AREA ===== */
 .hero-area {
-  position: relative;
   margin-top: var(--header-height);
   height: var(--hero-height);
   display: flex;
@@ -276,7 +103,6 @@ body::before {
   padding: 0 20px;
   text-align: center;
   background: linear-gradient(180deg, rgba(10, 14, 23, 0.8) 0%, transparent 100%);
-  overflow: hidden;
 }
 
 .hero-title {
@@ -286,37 +112,6 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 24px;
-  letter-spacing: -0.5px;
-  position: relative;
-  display: inline-block;
-  animation: titleGlow 3s infinite alternate;
-}
-
-.hero-title::after {
-  content: '🤖';
-  position: absolute;
-  right: -45px;
-  top: 0;
-  font-size: 2rem;
-  animation: float 3s infinite ease-in-out;
-}
-
-@keyframes titleGlow {
-  0% {
-    filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
-  }
-  100% {
-    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7));
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
 }
 
 .hero-subtitle {
@@ -324,20 +119,12 @@ body::before {
   color: var(--text-secondary);
   margin-bottom: 32px;
   max-width: 600px;
-  font-weight: 400;
-  opacity: 0.9;
 }
 
 .hero-search-container {
   width: 100%;
   max-width: 600px;
-  position: relative;
   margin: 0 auto 16px;
-}
-
-.hero-omnibox {
-  width: 100%;
-  position: relative;
 }
 
 .hero-omnibox-input {
@@ -349,7 +136,6 @@ body::before {
   color: var(--text-primary);
   font-size: 1rem;
   transition: var(--transition);
-  font-family: 'Inter', sans-serif;
   backdrop-filter: blur(10px);
 }
 
@@ -357,76 +143,8 @@ body::before {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 30px rgba(0, 212, 255, 0.2);
-  background: rgba(26, 31, 46, 0.9);
 }
 
-.hero-omnibox-input::placeholder {
-  color: var(--text-muted);
-}
-
-.search-hint-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  opacity: 0.8;
-}
-
-.search-hint-text {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.search-examples {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.search-example {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: var(--transition);
-  cursor: pointer;
-}
-
-.search-example:hover {
-  color: var(--primary);
-  border-color: rgba(0, 212, 255, 0.2);
-  background: rgba(0, 212, 255, 0.05);
-  transform: translateY(-2px);
-}
-
-.lang-btn {
-  background: rgba(20, 24, 36, 0.8);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px 16px;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.lang-btn:hover {
-  background: rgba(26, 31, 46, 0.8);
-  border-color: var(--primary);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-}
-
-/* ===== TOP 5 BAR ===== */
 .top5-bar {
   background: rgba(20, 24, 36, 0.6);
   border: 1px solid rgba(0, 212, 255, 0.1);
@@ -435,19 +153,6 @@ body::before {
   margin: 20px auto;
   max-width: 1400px;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  animation: slideInUp 0.6s ease-out;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .top5-header {
@@ -459,38 +164,12 @@ body::before {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.top5-header i {
-  color: var(--primary);
-  font-size: 0.9rem;
-}
-
-.top5-header span {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-}
-
 .top5-list {
   display: flex;
   gap: 10px;
   overflow-x: auto;
   padding: 4px 0;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-.top5-list::-webkit-scrollbar {
-  height: 4px;
-}
-
-.top5-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-}
-
-.top5-list::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 2px;
 }
 
 .top5-item {
@@ -505,82 +184,11 @@ body::before {
   min-width: 180px;
   flex-shrink: 0;
   cursor: pointer;
-  position: relative;
 }
 
 .top5-item:hover {
   background: rgba(26, 31, 46, 0.8);
   border-color: rgba(0, 212, 255, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-}
-
-.top5-rank {
-  font-weight: 800;
-  font-size: 0.9rem;
-  color: var(--primary);
-  width: 18px;
-  text-align: center;
-}
-
-.top5-icon {
-  font-size: 0.9rem;
-  width: 20px;
-  text-align: center;
-}
-
-.top5-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.top5-name {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.top5-category {
-  font-size: 0.65rem;
-  color: var(--primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.top5-votes {
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--text-primary);
-  background: rgba(0, 212, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 6px;
-  min-width: 24px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.top5-votes.changed {
-  animation: pulseGlow 0.6s ease;
-}
-
-.top5-quickpeek {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .top5-quickpeek {
-    display: block;
-  }
 }
 
 .filter-chips {
@@ -592,11 +200,6 @@ body::before {
   margin: 0 auto 20px;
   max-width: 1400px;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.filter-chips::-webkit-scrollbar {
-  display: none;
 }
 
 .filter-chip {
@@ -615,34 +218,19 @@ body::before {
   gap: 6px;
 }
 
-.filter-chip:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateY(-2px);
-}
-
 .filter-chip.active {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-color: transparent;
   color: white;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
 }
 
-/* ===== MAIN CONTENT ===== */
 .main-content {
   padding: 20px;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 80px;
-}
-
-/* ===== GROUPED TOOL LIST ===== */
-.tool-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .tool-group {
@@ -652,23 +240,7 @@ body::before {
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: var(--transition);
-  animation: fadeIn 0.4s ease-out;
-}
-
-.tool-group:hover {
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin-bottom: 12px;
 }
 
 .group-header {
@@ -680,11 +252,6 @@ body::before {
   cursor: pointer;
   user-select: none;
   transition: var(--transition);
-  height: var(--group-header-height);
-}
-
-.group-header:hover {
-  background: rgba(26, 31, 46, 0.8);
 }
 
 .group-title {
@@ -713,77 +280,7 @@ body::before {
   margin-left: 8px;
 }
 
-.group-toggle {
-  color: var(--text-secondary);
-  transition: var(--transition);
-  font-size: 0.9rem;
-}
-
-.group-toggle i {
-  transition: transform 0.3s ease;
-}
-
-.group-toggle.expanded i {
-  transform: rotate(180deg);
-}
-
-.group-content {
-  max-height: calc(var(--tool-row-height) * 2);
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.group-content.expanded {
-  max-height: 5000px;
-}
-
-/* Info Button Styling */
-.info-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  transition: var(--transition);
-  margin-left: 6px;
-}
-
-.info-btn:hover {
-  color: var(--primary);
-  background: rgba(0, 212, 255, 0.1);
-  transform: scale(1.1);
-}
-
-/* ÄNDERUNG 1: Entferne Nachleucht-Effekte bei Buttons */
-.vote-btn-row,
-.tool-action-btn.favorite,
-.tool-action-btn.compare {
-  transition: var(--transition);
-}
-
-/* Entferne Transitions beim aktiven Zustand */
-.vote-btn-row.active,
-.tool-action-btn.favorite.active,
-.tool-action-btn.compare.active {
-  transition: none !important;
-  animation: none !important;
-}
-
-/* Entferne Animationen beim Aktivieren */
-.vote-btn-row.up.active,
-.vote-btn-row.down.active {
-  box-shadow: none;
-}
-
 .tool-row {
-  height: var(--tool-row-height);
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
@@ -791,20 +288,11 @@ body::before {
   border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: var(--transition);
-  position: relative;
-}
-
-.tool-row:last-child {
-  border-bottom: none;
+  min-height: 60px;
 }
 
 .tool-row:hover {
   background: var(--bg-hover);
-}
-
-.tool-row:hover .tool-peek {
-  opacity: 1;
-  transform: translateY(-50%) scale(1);
 }
 
 .tool-vote {
@@ -820,17 +308,6 @@ body::before {
   font-weight: 800;
   font-size: calc(1.1rem * var(--current-density));
   color: var(--text-primary);
-  transition: all 0.3s ease;
-}
-
-.vote-count.moving-up {
-  color: var(--success);
-  animation: countUp 0.5s ease;
-}
-
-.vote-count.moving-down {
-  color: var(--error);
-  animation: countDown 0.5s ease;
 }
 
 .vote-buttons {
@@ -851,35 +328,6 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-}
-
-.vote-btn-row:hover {
-  transform: translateY(-2px);
-}
-
-.vote-btn-row.up {
-  color: var(--success);
-  border-color: rgba(16, 185, 129, 0.2);
-}
-
-.vote-btn-row.up:hover,
-.vote-btn-row.up.active {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: var(--success);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
-
-.vote-btn-row.down {
-  color: var(--error);
-  border-color: rgba(239, 68, 68, 0.2);
-}
-
-.vote-btn-row.down:hover,
-.vote-btn-row.down.active {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: var(--error);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .tool-info {
@@ -905,9 +353,6 @@ body::before {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .tool-desc {
@@ -952,57 +397,9 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
 }
 
-.tool-action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.tool-action-btn.favorite:hover,
-.tool-action-btn.favorite.active {
-  color: var(--gold);
-  border-color: var(--gold);
-  background: rgba(251, 191, 36, 0.1);
-}
-
-.tool-action-btn.compare:hover,
-.tool-action-btn.compare.active {
-  color: var(--primary);
-  border-color: var(--primary);
-  background: rgba(0, 212, 255, 0.1);
-}
-
-.tool-action-btn.open:hover {
-  color: var(--success);
-  border-color: var(--success);
-  background: rgba(16, 185, 129, 0.1);
-}
-
-/* ÄNDERUNG 2: Intelligenter Schließen-Button */
-.collapse-button {
-  padding: 12px 20px;
-  text-align: center;
-  border-top: 1px solid var(--border);
-  cursor: pointer;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: calc(0.85rem * var(--current-density));
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--bg-card);
-  margin: 0;
-}
-
-.collapse-button:hover {
-  background: rgba(0, 212, 255, 0.05);
-}
-
-.show-more {
+.collapse-button, .show-more {
   padding: 12px 20px;
   text-align: center;
   border-top: 1px solid var(--border);
@@ -1017,222 +414,10 @@ body::before {
   gap: 8px;
 }
 
-.show-more:hover {
+.collapse-button:hover, .show-more:hover {
   background: rgba(0, 212, 255, 0.05);
 }
 
-/* ===== TOOL PEEK (HOVER PREVIEW) ===== */
-.tool-peek {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) scale(0.95);
-  width: 300px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow-hover);
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  margin-left: 20px;
-  animation: popIn 0.3s ease;
-}
-
-@keyframes popIn {
-  0% {
-    transform: translateY(-50%) scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(-50%) scale(1);
-    opacity: 1;
-  }
-}
-
-.tool-peek::before {
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: var(--border);
-}
-
-.tool-peek::after {
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 7px solid transparent;
-  border-right-color: var(--bg-card);
-  margin-right: -1px;
-}
-
-.peek-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.peek-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.peek-name {
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-}
-
-.peek-category {
-  font-size: 0.7rem;
-  color: var(--primary);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.peek-desc {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.peek-meta {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.peek-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.peek-badge.price {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.peek-badge.rating {
-  background: rgba(251, 191, 36, 0.15);
-  color: var(--gold);
-  border: 1px solid rgba(251, 191, 36, 0.3);
-}
-
-.peek-badge.ltd {
-  background: linear-gradient(135deg, #f59e0b, #ef4444);
-  color: white;
-  border: none;
-}
-
-/* ===== DRAWER (RIGHT SIDEBAR) ===== */
-.drawer-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 2000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.drawer-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: var(--drawer-width);
-  height: 100%;
-  background: var(--bg-card);
-  border-left: 1px solid var(--border);
-  z-index: 2001;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-.drawer.active {
-  transform: translateX(0);
-}
-
-.drawer-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.drawer-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.drawer-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.drawer-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.drawer-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-/* ===== FLOATING BUTTONS ===== */
 .floating-favorites-btn {
   position: fixed;
   left: 16px;
@@ -1250,25 +435,6 @@ body::before {
   cursor: pointer;
   z-index: 900;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: var(--transition);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
-  }
-  50% {
-    box-shadow: 0 4px 30px rgba(0, 212, 255, 0.8);
-  }
-  100% {
-    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
-  }
-}
-
-.floating-favorites-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.3);
 }
 
 .floating-favorites-badge {
@@ -1287,235 +453,6 @@ body::before {
   justify-content: center;
 }
 
-/* Mobile Back to Top Button */
-.back-to-top {
-  position: fixed;
-  right: 16px;
-  bottom: 80px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--primary);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 900;
-  box-shadow: var(--shadow);
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.back-to-top.visible {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.back-to-top:hover {
-  background: var(--bg-hover);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-/* Mobile Back to Top nur auf Mobilgeräten anzeigen */
-@media (min-width: 769px) {
-  .back-to-top {
-    display: none !important;
-  }
-}
-
-/* ===== FAVORITES OVERLAY ===== */
-.favorites-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 1900;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.favorites-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.favorites-drawer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  z-index: 1901;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.favorites-drawer.active {
-  transform: translateY(0);
-}
-
-.favorites-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.favorites-title {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.favorites-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.favorites-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.favorites-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.dock-section {
-  margin-bottom: 24px;
-}
-
-.dock-label {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  display: block;
-}
-
-.dock-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.dock-item {
-  width: 60px;
-  height: 60px;
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-}
-
-.dock-item:hover {
-  transform: translateY(-2px);
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-}
-
-.dock-item-remove {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  background: var(--error);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6rem;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  border: 2px solid var(--bg-card);
-}
-
-.dock-item:hover .dock-item-remove {
-  opacity: 1;
-}
-
-.dock-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.dock-action-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
-  flex: 1;
-}
-
-.dock-action-btn.primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-}
-
-.dock-action-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-}
-
-.dock-action-btn.secondary {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border);
-}
-
-.dock-action-btn.secondary:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-/* ===== FOOTER ===== */
 .site-footer {
   background: rgba(10, 14, 23, 0.8);
   border-top: 1px solid var(--border);
@@ -1524,48 +461,6 @@ body::before {
   text-align: center;
   color: var(--text-secondary);
   font-size: 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.footer-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.density-toggle {
-  display: flex;
-  background: rgba(20, 24, 36, 0.8);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px;
-  gap: 4px;
-}
-
-.density-btn {
-  padding: 6px 12px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 600;
-}
-
-.density-btn:hover {
-  color: var(--primary);
-  background: rgba(0, 212, 255, 0.1);
-}
-
-.density-btn.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
 }
 
 .footer-links {
@@ -1578,751 +473,57 @@ body::before {
 .footer-links a {
   color: var(--primary);
   text-decoration: none;
-  transition: var(--transition);
-}
-
-.footer-links a:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
-
-.footer-copyright {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-/* ===== COOKIE CONSENT ===== */
-.cookie-consent {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  padding: 20px;
-  z-index: 9999;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.cookie-consent.active {
-  transform: translateY(0);
-}
-
-.cookie-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.cookie-text {
-  flex: 1;
-  min-width: 300px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.cookie-text a {
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.cookie-text a:hover {
-  text-decoration: underline;
-}
-
-.cookie-buttons {
-  display: flex;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.cookie-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
-  min-width: 120px;
-}
-
-.cookie-btn.accept {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-}
-
-.cookie-btn.accept:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-}
-
-.cookie-btn.decline {
-  background: transparent;
-  color: var(--text-secondary);
-  border-color: var(--border);
-}
-
-.cookie-btn.decline:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--primary);
-}
-
-/* ===== CATEGORY INFO MODAL ===== */
-.category-info-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  z-index: 3002;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.category-info-modal.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.category-info-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(168, 85, 247, 0.1));
-}
-
-.category-info-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.category-info-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.category-info-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.category-info-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.category-info-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.category-info-section {
-  margin-bottom: 24px;
-}
-
-.category-info-section h3 {
-  color: var(--primary);
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.category-info-section p {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-
-.category-info-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.category-info-tool {
-  padding: 8px 12px;
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 8px;
-  color: var(--primary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.category-info-tool:hover {
-  background: rgba(0, 212, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-/* ===== IMPRINT & PRIVACY MODALS ===== */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 3000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  z-index: 3001;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.modal-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.modal-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.modal-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.modal-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.modal-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.modal-content h3 {
-  color: var(--text-primary);
-  margin: 20px 0 10px 0;
-  font-size: 1.1rem;
-}
-
-.modal-content p {
-  margin-bottom: 15px;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes countUp {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-@keyframes countDown {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.8); }
-  100% { transform: scale(1); }
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-@keyframes slideOutRight {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(0, 212, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
-}
-
-/* ===== LOADING ===== */
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: var(--primary);
-  display: none;
-}
-
-.loading i {
-  font-size: 2.5rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1200px) {
-  :root {
-    --drawer-width: 450px;
-  }
-}
-
-@media (max-width: 992px) {
-  :root {
-    --drawer-width: 400px;
-  }
-  
-  .sticky-header {
-    height: var(--header-height);
-    padding: 0 15px;
-  }
-  
-  .hero-area {
-    height: 260px;
-    padding: 0 15px;
-  }
-  
-  .hero-title {
-    font-size: 2.4rem;
-    margin-bottom: 20px;
-  }
-  
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-  
-  .hero-search-container {
-    max-width: 500px;
-  }
-  
-  .site-title {
-    font-size: 1.5rem;
-  }
 }
 
 @media (max-width: 768px) {
-  :root {
-    --drawer-width: 100%;
-    --header-height: 60px;
-    --hero-height: 240px;
-  }
-  
-  .main-content {
-    padding: 15px;
-  }
-  
-  .tool-row {
-    grid-template-columns: 1fr;
-    height: auto;
-    padding: 15px;
-    gap: 12px;
-  }
-  
-  .tool-vote {
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    padding-right: 0;
-  }
-  
-  .tool-meta {
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-  }
-  
-  .cookie-content {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .cookie-buttons {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .cookie-btn {
-    flex: 1;
-    min-width: 0;
-  }
-  
-  .tool-peek {
-    display: none;
-  }
-  
-  .floating-favorites-btn {
-    bottom: 80px;
-  }
-  
-  .hero-area {
-    height: 220px;
-  }
-  
-  .hero-title {
-    font-size: 2rem;
-    margin-bottom: 16px;
-  }
-  
-  .hero-title::after {
-    font-size: 1.5rem;
-    right: -35px;
-  }
-  
-  .hero-subtitle {
-    font-size: 0.95rem;
-  }
-  
-  .search-examples {
-    gap: 12px;
-  }
-  
-  .search-example {
-    font-size: 0.75rem;
-    padding: 3px 10px;
-  }
-  
-  .footer-controls {
-    gap: 12px;
-  }
-  
-  .site-title {
-    font-size: 1.3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .filter-chips {
-    max-width: 100%;
-    overflow-x: auto;
-  }
-  
-  .header-right {
-    gap: 8px;
-  }
-  
-  .top5-list {
-    gap: 6px;
-  }
-  
-  .top5-item {
-    min-width: 140px;
-    padding: 6px 8px;
-  }
-  
-  .top5-quickpeek {
-    display: none;
-  }
-  
-  .hero-area {
-    height: 200px;
-  }
-  
-  .hero-title {
-    font-size: 1.8rem;
-  }
-  
-  .hero-title::after {
-    font-size: 1.3rem;
-    right: -30px;
-  }
-  
-  .hero-subtitle {
-    font-size: 0.9rem;
-    padding: 0 10px;
-  }
-  
-  .hero-omnibox-input {
-    padding: 12px 16px;
-    font-size: 0.95rem;
-  }
-  
-  .search-examples {
-    gap: 8px;
-  }
-  
-  .search-example {
-    font-size: 0.7rem;
-    padding: 2px 8px;
-  }
-  
-  .footer-links {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .site-title {
-    font-size: 1.1rem;
-  }
-}
-
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--bg-card);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-hover);
-}
-
-/* ===== NOTIFICATIONS ===== */
-.notification {
-  position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  padding: 12px 18px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  z-index: 9999;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-.notification.success {
-  border-color: var(--success);
-  color: var(--success);
-}
-
-.notification.error {
-  border-color: var(--error);
-  color: var(--error);
-}
-
-.notification.info {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.notification-close {
-  background: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  margin-left: 10px;
-  font-size: 1rem;
+  .hero-title { font-size: 2rem; }
+  .hero-subtitle { font-size: 0.95rem; }
+  .tool-row { grid-template-columns: 1fr; gap: 12px; padding: 15px; }
+  .tool-vote { flex-direction: row; justify-content: space-between; width: 100%; }
+  .tool-meta { flex-direction: row; justify-content: space-between; width: 100%; }
 }
 </style>
 </head>
-<body class="density-compact">
+<body>
 
-<!-- Futuristic Glow Effects -->
-<div class="glow glow-1"></div>
-<div class="glow glow-2"></div>
-<div class="glow glow-3"></div>
-
-<!-- Cookie Consent -->
-<div class="cookie-consent" id="cookieConsent">
-  <div class="cookie-content">
-    <div class="cookie-text">
-      Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und anonyme Statistiken zu erstellen. 
-      <a href="#" id="privacyLinkCookie">Datenschutz</a>
-    </div>
-    <div class="cookie-buttons">
-      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
-      <button class="cookie-btn accept" id="cookieAccept">Akzeptieren</button>
-    </div>
-  </div>
-</div>
-
-<!-- Sticky Smart Header -->
 <header class="sticky-header">
   <div class="site-title">AI Searcher</div>
-  <div class="header-right">
-    <button class="lang-btn" id="langToggle">
-      <i class="fas fa-globe"></i>
-      <span id="langText">EN</span>
-    </button>
-  </div>
+  <button class="lang-btn" id="langToggle">
+    <i class="fas fa-globe"></i>
+    <span id="langText">EN</span>
+  </button>
 </header>
 
-<!-- Hero Area -->
 <div class="hero-area">
   <h1 class="hero-title">AI Searcher</h1>
   <div class="hero-subtitle" id="heroSubtitle">
     Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.
   </div>
-  
   <div class="hero-search-container">
-    <div class="hero-omnibox">
-      <input 
-        type="text" 
-        class="hero-omnibox-input" 
-        id="omniboxInput"
-        placeholder="Ich suche nach..."
-        data-placeholder-de="Ich suche nach..."
-        data-placeholder-en="I'm looking for..."
-      >
-    </div>
-  </div>
-  
-  <div class="search-hint-grid">
-    <div class="search-hint-text" id="searchHintText">
-      Suche nach Toolnamen, Use-Cases oder Features
-    </div>
-    <div class="search-examples">
-      <div class="search-example">Text</div>
-      <div class="search-example">Bilder</div>
-      <div class="search-example">Stimme</div>
-      <div class="search-example">Code</div>
-    </div>
+    <input type="text" class="hero-omnibox-input" id="omniboxInput" placeholder="Ich suche nach...">
   </div>
 </div>
 
-<!-- Main Content -->
 <main class="main-content">
-  <!-- Top 5 Bar -->
   <div class="top5-bar" id="top5Bar">
     <div class="top5-header">
       <i class="fas fa-trophy"></i>
-      <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
+      <span>Top 5 Tools</span>
     </div>
-    <div class="top5-list" id="top5List">
-      <!-- Dynamic top 5 items -->
-    </div>
+    <div class="top5-list" id="top5List"></div>
   </div>
   
-  <!-- Filter Chips -->
-  <div class="filter-chips" id="filterChips">
-    <!-- Dynamic filter chips -->
-  </div>
+  <div class="filter-chips" id="filterChips"></div>
   
-  <!-- Grouped Tool List -->
-  <section class="tool-groups" id="toolGroups">
-    <!-- Dynamic tool groups -->
-  </section>
+  <div id="tools-container"></div>
   
-  <!-- Loading Indicator -->
   <div class="loading" id="loading">
     <i class="fas fa-circle-notch"></i>
-    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
+    <p>Lade KI-Tools...</p>
   </div>
 </main>
 
-<!-- Footer -->
 <footer class="site-footer">
-  <div class="footer-controls">
-    <div class="density-toggle">
-      <button class="density-btn active" data-density="cozy">Cozy</button>
-      <button class="density-btn" data-density="compact">Compact</button>
-      <button class="density-btn" data-density="future">Future</button>
-    </div>
-  </div>
-  
   <div class="footer-links">
     <a href="#" id="imprintLink">Impressum</a>
     <a href="#" id="privacyLink">Datenschutz</a>
@@ -2332,469 +533,42 @@ body::before {
   </div>
 </footer>
 
-<!-- Category Info Modal -->
-<div class="modal-overlay" id="categoryInfoModalOverlay"></div>
-<div class="category-info-modal" id="categoryInfoModal">
-  <div class="category-info-header">
-    <div class="category-info-title">
-      <div class="category-info-icon" id="categoryInfoIcon">🤖</div>
-      <span id="categoryInfoTitle">Kategorie-Info</span>
-    </div>
-    <button class="category-info-close" id="categoryInfoModalClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="category-info-content" id="categoryInfoContent">
-    <!-- Dynamic category info content -->
-  </div>
-</div>
-
-<!-- Drawer for Detail View -->
-<div class="drawer-overlay" id="drawerOverlay"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-header">
-    <h2 class="drawer-title" id="drawerTitle">Tool Details</h2>
-    <button class="drawer-close" id="drawerClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="drawer-content" id="drawerContent">
-    <!-- Dynamic drawer content -->
-  </div>
-</div>
-
-<!-- Favorites Overlay -->
-<div class="favorites-overlay" id="favoritesOverlay"></div>
-<div class="favorites-drawer" id="favoritesDrawer">
-  <div class="favorites-header">
-    <h2 class="favorites-title" data-de="Favoriten & Vergleich" data-en="Favorites & Compare">Favoriten & Vergleich</h2>
-    <button class="favorites-close" id="favoritesClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="favorites-content">
-    <div class="dock-section">
-      <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
-      <div class="dock-items" id="favoriteDock">
-        <!-- Dynamic favorite items -->
-      </div>
-    </div>
-    
-    <div class="dock-section">
-      <div class="dock-label" data-de="Vergleich" data-en="Compare">Vergleich</div>
-      <div class="dock-items" id="compareDock">
-        <!-- Dynamic compare items -->
-      </div>
-    </div>
-    
-    <div class="dock-actions">
-      <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
-      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
-    </div>
-  </div>
-</div>
-
-<!-- Floating Buttons -->
-<button class="floating-favorites-btn" id="floatingFavoritesBtn" aria-label="Favoriten anzeigen">
+<button class="floating-favorites-btn" id="floatingFavoritesBtn">
   <i class="fas fa-star"></i>
   <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
 </button>
 
-<button class="back-to-top" id="backToTop" aria-label="Nach oben">
-  <i class="fas fa-chevron-up"></i>
-</button>
-
-<!-- Modals -->
-<div class="modal-overlay" id="imprintModalOverlay"></div>
-<div class="modal" id="imprintModal">
-  <div class="modal-header">
-    <h2 class="modal-title">Impressum</h2>
-    <button class="modal-close" id="imprintModalClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="modal-content">
-    <h3>Angaben gemäß § 5 TMG</h3>
-    <p>Max Mustermann<br>
-    Musterstraße 123<br>
-    12345 Musterstadt</p>
-    
-    <h3>Kontakt</h3>
-    <p>Telefon: +49 (0) 123 456789<br>
-    E-Mail: ai.tool.hub.contact [at] gmail [Punkt] com</p>
-    
-    <h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
-    <p>Max Mustermann<br>
-    Musterstraße 123<br>
-    12345 Musterstadt</p>
-    
-    <h3>Haftungsausschluss</h3>
-    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
-  </div>
-</div>
-
-<div class="modal-overlay" id="privacyModalOverlay"></div>
-<div class="modal" id="privacyModal">
-  <div class="modal-header">
-    <h2 class="modal-title">Datenschutz</h2>
-    <button class="modal-close" id="privacyModalClose">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="modal-content">
-    <h3>Datenschutzerklärung</h3>
-    <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
-    
-    <h3>Cookies</h3>
-    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwende Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
-    
-    <h3>Google Analytics</h3>
-    <p>Diese Website nutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet „Cookies", die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
-    
-    <h3>Ihre Rechte</h3>
-    <p>Ihnen stehen grundsätzlich die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerruf und Widerspruch zu. Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren.</p>
-  </div>
-</div>
-
 <script>
-// ===== GLOBALE VARIABLEN =====
+// ===== KONFIGURATION =====
+const CATEGORY_CONFIG = {
+  text: { icon: '✍️', de: 'Text', en: 'Text' },
+  image: { icon: '🎨', de: 'Bild', en: 'Image' },
+  code: { icon: '💻', de: 'Code', en: 'Code' },
+  video: { icon: '🎬', de: 'Video', en: 'Video' },
+  audio: { icon: '🎵', de: 'Audio', en: 'Audio' }
+};
+
+const FILTERS = [
+  { id: 'all', icon: 'fas fa-border-all', de: 'Alle', en: 'All' },
+  { id: 'text', icon: 'fas fa-pen', de: 'Text', en: 'Text' },
+  { id: 'image', icon: 'fas fa-image', de: 'Bild', en: 'Image' },
+  { id: 'code', icon: 'fas fa-code', de: 'Code', en: 'Code' },
+  { id: 'video', icon: 'fas fa-video', de: 'Video', en: 'Video' },
+  { id: 'audio', icon: 'fas fa-music', de: 'Audio', en: 'Audio' },
+  { id: 'free', icon: 'fas fa-gift', de: 'Kostenlos', en: 'Free' },
+  { id: 'ai', icon: 'fas fa-robot', de: 'AI Pick', en: 'AI Pick' }
+];
+
+// ===== STATE =====
 let aiTools = [];
 let currentLang = 'de';
 let currentCategory = 'all';
 let searchQuery = '';
-let hoverTimeout = null;
-let peekElement = null;
-let isDrawerOpen = false;
-let scrollDebounceTimeout = null;
-
-// ===== KATEGORIE INFORMATIONEN =====
-const categoryInfo = {
-  text: {
-    title: {
-      de: "Text-KI-Tools",
-      en: "Text AI Tools"
-    },
-    description: {
-      de: "Text-KI-Tools revolutionieren das Schreiben, Editieren und Übersetzen von Texten. Sie helfen dir bei kreativem Schreiben, Zusammenfassungen, Grammatikprüfungen und mehr.",
-      en: "Text AI tools revolutionize writing, editing and translating. They help with creative writing, summaries, grammar checks and more."
-    },
-    useCases: {
-      de: [
-        "Kreatives Schreiben & Content-Erstellung",
-        "Übersetzungen zwischen Sprachen",
-        "Text-Zusammenfassungen & -Analyse",
-        "Grammatik- und Rechtschreibprüfung",
-        "Chatbots & Kundenservice-Automatisierung"
-      ],
-      en: [
-        "Creative writing & content creation",
-        "Translation between languages",
-        "Text summaries & analysis",
-        "Grammar and spell checking",
-        "Chatbots & customer service automation"
-      ]
-    },
-    bestFor: {
-      de: [
-        "Content Creator & Marketing-Experten",
-        "Autoren & Journalisten",
-        "Übersetzer & Sprachforscher",
-        "Studenten & Akademiker",
-        "Unternehmen für Kundenservice"
-      ],
-      en: [
-        "Content creators & marketing experts",
-        "Authors & journalists",
-        "Translators & language researchers",
-        "Students & academics",
-        "Companies for customer service"
-      ]
-    },
-    trends: {
-      de: [
-        "Multilinguale Modelle mit 100+ Sprachen",
-        "Echtzeit-Zusammenarbeit & Co-Writing",
-        "Personalisierte Schreibstile",
-        "Emotionale Intelligenz in Texten",
-        "Integration in bestehende Workflows"
-      ],
-      en: [
-        "Multilingual models with 100+ languages",
-        "Real-time collaboration & co-writing",
-        "Personalized writing styles",
-        "Emotional intelligence in texts",
-        "Integration into existing workflows"
-      ]
-    }
-  },
-  image: {
-    title: {
-      de: "Bild-KI-Tools",
-      en: "Image AI Tools"
-    },
-    description: {
-      de: "Bild-KI-Tools generieren, bearbeiten und optimieren Bilder aus Textbeschreibungen. Perfekt für Designer, Künstler und Marketing-Teams.",
-      en: "Image AI tools generate, edit and optimize images from text descriptions. Perfect for designers, artists and marketing teams."
-    },
-    useCases: {
-      de: [
-        "Bildgenerierung aus Text-Prompts",
-        "Bildbearbeitung & -Optimierung",
-        "Logo-Design & Branding",
-        "Artwork & digitale Kunst",
-        "Produktfotos & Marketing-Material"
-      ],
-      en: [
-        "Image generation from text prompts",
-        "Image editing & optimization",
-        "Logo design & branding",
-        "Artwork & digital art",
-        "Product photos & marketing material"
-      ]
-    },
-    bestFor: {
-      de: [
-        "Grafikdesigner & Illustratoren",
-        "Marketing- & Werbeagenturen",
-        "E-Commerce & Online-Shops",
-        "Künstler & Kreative",
-        "Social Media Manager"
-      ],
-      en: [
-        "Graphic designers & illustrators",
-        "Marketing & advertising agencies",
-        "E-commerce & online shops",
-        "Artists & creatives",
-        "Social media managers"
-      ]
-    },
-    trends: {
-      de: [
-        "4K+ Auflösung & Photorealismus",
-        "Konsistente Charakter-Generierung",
-        "3D-Modellierung aus 2D-Bildern",
-        "Video-zu-Bild-Konvertierung",
-        "Echtzeit-Generierung & Editing"
-      ],
-      en: [
-        "4K+ resolution & photorealism",
-        "Consistent character generation",
-        "3D modeling from 2D images",
-        "Video-to-image conversion",
-        "Real-time generation & editing"
-      ]
-    }
-  },
-  code: {
-    title: {
-      de: "Code-KI-Tools",
-      en: "Code AI Tools"
-    },
-    description: {
-      de: "Code-KI-Tools unterstützen Entwickler beim Schreiben, Debuggen und Optimieren von Code. Sie beschleunigen die Entwicklung und reduzieren Fehler.",
-      en: "Code AI tools support developers in writing, debugging and optimizing code. They accelerate development and reduce errors."
-    },
-    useCases: {
-      de: [
-        "Code-Vervollständigung & -Generierung",
-        "Bug-Finding & Debugging",
-        "Code-Optimierung & Refactoring",
-        "Dokumentation & Kommentare",
-        "Code-Übersetzung zwischen Sprachen"
-      ],
-      en: [
-        "Code completion & generation",
-        "Bug finding & debugging",
-        "Code optimization & refactoring",
-        "Documentation & comments",
-        "Code translation between languages"
-      ]
-    },
-    bestFor: {
-      de: [
-        "Software-Entwickler & -Ingenieure",
-        "Web- & App-Entwickler",
-        "Data Scientists & ML-Engineers",
-        "DevOps & Systemadministratoren",
-        "IT-Studenten & Bootcamp-Teilnehmer"
-      ],
-      en: [
-        "Software developers & engineers",
-        "Web & app developers",
-        "Data scientists & ML engineers",
-        "DevOps & system administrators",
-        "IT students & bootcamp participants"
-      ]
-    },
-    trends: {
-      de: [
-        "Kontextbewusste Code-Vorschläge",
-        "Automatische Test-Generierung",
-        "Sicherheitsanalyse & Vulnerability Scanning",
-        "Multi-Language Support",
-        "IDE-Integration & Pair Programming"
-      ],
-      en: [
-        "Context-aware code suggestions",
-        "Automatic test generation",
-        "Security analysis & vulnerability scanning",
-        "Multi-language support",
-        "IDE integration & pair programming"
-      ]
-    }
-  },
-  video: {
-    title: {
-      de: "Video-KI-Tools",
-      en: "Video AI Tools"
-    },
-    description: {
-      de: "Video-KI-Tools ermöglichen die Generierung und Bearbeitung von Videos aus Text oder Bildern. Ideal für Content Creator, Filmemacher und Unternehmen.",
-      en: "Video AI tools enable generation and editing of videos from text or images. Ideal for content creators, filmmakers and businesses."
-    },
-    useCases: {
-      de: [
-        "Video-Generierung aus Text/Images",
-        "Automatische Untertitel & Übersetzung",
-        "Video-Bearbeitung & -Optimierung",
-        "Animations- & Motion Graphics",
-        "Sprach-zu-Video Konvertierung"
-      ],
-      en: [
-        "Video generation from text/images",
-        "Automatic subtitles & translation",
-        "Video editing & optimization",
-        "Animation & motion graphics",
-        "Speech-to-video conversion"
-      ]
-    },
-    bestFor: {
-      de: [
-        "Video-Editoren & Filmemacher",
-        "Content Creator & YouTuber",
-        "Marketing- & Werbe-Teams",
-        "Unternehmen für Schulungsvideos",
-        "Event- & Wedding-Videografen"
-      ],
-      en: [
-        "Video editors & filmmakers",
-        "Content creators & YouTubers",
-        "Marketing & advertising teams",
-        "Companies for training videos",
-        "Event & wedding videographers"
-      ]
-    },
-    trends: {
-      de: [
-        "Text-zu-Video mit hoher Konsistenz",
-        "Emotionale Avatare & Deepfakes",
-        "Echtzeit-Video-Bearbeitung",
-        "3D-Animation aus 2D-Material",
-        "Personalisiertes Video-Marketing"
-      ],
-      en: [
-        "Text-to-video with high consistency",
-        "Emotional avatars & deepfakes",
-        "Real-time video editing",
-        "3D animation from 2D material",
-        "Personalized video marketing"
-      ]
-    }
-  },
-  audio: {
-    title: {
-      de: "Audio-KI-Tools",
-      en: "Audio AI Tools"
-    },
-    description: {
-      de: "Audio-KI-Tools generieren und bearbeiten Sprache, Musik und Soundeffekte. Perfekt für Podcaster, Musiker und Audio-Profis.",
-      en: "Audio AI tools generate and edit speech, music and sound effects. Perfect for podcasters, musicians and audio professionals."
-    },
-    useCases: {
-      de: [
-        "Text-zu-Sprache & Sprachsynthese",
-        "Musik-Generierung & -Komposition",
-        "Audio-Bearbeitung & -Bereinigung",
-        "Podcast-Produktion & -Optimierung",
-        "Voice Cloning & -Anpassung"
-      ],
-      en: [
-        "Text-to-speech & speech synthesis",
-        "Music generation & composition",
-        "Audio editing & cleanup",
-        "Podcast production & optimization",
-        "Voice cloning & customization"
-      ]
-    },
-    bestFor: {
-      de: [
-        "Podcaster & Radio-Moderatoren",
-        "Musiker & Komponisten",
-        "Audio-Editoren & Sound-Designer",
-        "Unternehmen für Voiceovers",
-        "Film- & Game-Audio-Profis"
-      ],
-      en: [
-        "Podcasters & radio hosts",
-        "Musicians & composers",
-        "Audio editors & sound designers",
-        "Companies for voiceovers",
-        "Film & game audio professionals"
-      ]
-    },
-    trends: {
-      de: [
-        "Emotionale Sprachsynthese",
-        "KI-generierte Musik in jedem Stil",
-        "Echtzeit-Audio-Bearbeitung",
-        "Mehrsprachige Voice Cloning",
-        "Binaurale Audio & 3D-Sound"
-      ],
-      en: [
-        "Emotional speech synthesis",
-        "AI-generated music in any style",
-        "Real-time audio editing",
-        "Multilingual voice cloning",
-        "Binaural audio & 3D sound"
-      ]
-    }
-  }
-};
-
-// ===== BASELINE VOTES =====
-const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
-
-// ===== HELPER FUNCTIONS =====
-function safeNumber(val) {
-  const n = Number(val);
-  return Number.isFinite(n) ? n : 0;
-}
-
-function getRawVotes(tool) {
-  return safeNumber(tool?.votes ?? 0);
-}
-
-function getDisplayVotes(tool) {
-  return Math.max(getRawVotes(tool), 0);
-}
-
-// ===== INITIALISIERUNG =====
-async function init() {
-  await loadAITools();
-  setupEventListeners();
-  renderFilterChips();
-  updateTop5Bar();
-  updateFloatingBadge();
-  checkCookieConsent();
-  setupMobileBackToTop();
-}
 
 // ===== DATEN LADEN =====
 async function loadAITools() {
   try {
-    document.getElementById('loading').style.display = 'block';
     const response = await fetch('data.json');
-    if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
     const rawData = await response.json();
     const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
 
@@ -2803,197 +577,116 @@ async function loadAITools() {
       return {
         id: item.id,
         name: item.name,
+        category: item.cat,
         link: item.link,
         rating: item.rate || 0,
         price: item.price || "freemium",
-        badge: item.badge || "",
         hasLifetimeDeal: item.ltd || false,
-        category: item.cat,
+        description: { de: item.d[0], en: item.d[1] },
+        priceDisplay: { de: item.cost[0], en: item.cost[1] },
+        pros: { de: item.pros[0], en: item.pros[1] },
+        cons: { de: item.cons[0], en: item.cons[1] },
         features: item.f || [],
         tags: item.tags || [],
         alternatives: item.alt || [],
-        useCases: item.tags || [],
-        description: { de: item.d[0], en: item.d[1] },
-        priceDisplay: {
-          de: item.cost ? item.cost[0] : (item.price === 'paid' ? 'Kostenpflichtig' : 'Kostenlos'),
-          en: item.cost ? item.cost[1] : (item.price === 'paid' ? 'Paid' : 'Free')
-        },
-        pros: { de: item.pros ? item.pros[0] : [], en: item.pros ? item.pros[1] : [] },
-        cons: { de: item.cons ? item.cons[0] : [], en: item.cons ? item.cons[1] : [] },
-        quickPeek: {
-          de: item.q ? item.q[0] : (item.d[0] ? item.d[0].substring(0, 75) + "..." : ""),
-          en: item.q ? item.q[1] : (item.d[1] ? item.d[1].substring(0, 75) + "..." : "")
-        },
-        seoTitle: { de: `${item.name} Review 2026`, en: `${item.name} Review 2026` },
-        seoDesc: { de: item.d[0], en: item.d[1] },
-        numericId: index + 1,
-        aiScore: 90,
-        popularityScore: 90,
-        rankingHistory: [],
         votes: saved.totalVotes || 0,
         userVote: saved.userVote || 0,
         upvotes: saved.upvotes || 0,
-        downvotes: saved.downvotes || 0,
-        pricing: { de: `Modell: ${item.price}`, en: `Model: ${item.price}` }
+        downvotes: saved.downvotes || 0
       };
     });
 
     addAIRecommendations();
+    renderFilterChips();
+    updateTop5Bar();
     renderToolGroups();
-    updateLanguage();
-    document.getElementById('loading').style.display = 'none';
   } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('loading').innerHTML = `<p>Fehler beim Laden.</p>`;
+    document.getElementById('loading').innerHTML = '<p>Fehler beim Laden.</p>';
   }
 }
 
-// ===== AI EMPFEHLUNGEN =====
 function addAIRecommendations() {
-  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
-      
   aiTools.forEach(tool => {
     let score = 0;
     if (tool.rating >= 4.7) score += 3;
-    if (getRawVotes(tool) > 50) score += 2;
-    if (userHistory.includes(tool.category)) score += 2;
+    if (tool.votes > 50) score += 2;
     if (favorites.includes(tool.id)) score += 3;
-    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
     if (tool.hasLifetimeDeal) score += 2;
-        
     tool.aiScore = score;
     tool.isAIRecommended = score >= 5;
-    tool.popularityScore = (tool.rating * 10) + getRawVotes(tool) + score;
   });
 }
 
-// ===== TOP 5 BAR =====
+// ===== RENDERING =====
+function renderFilterChips() {
+  const chipsHTML = FILTERS.map(filter => `
+    <div class="filter-chip ${currentCategory === filter.id ? 'active' : ''}" 
+         data-filter="${filter.id}"
+         onclick="setActiveFilter('${filter.id}')">
+      <i class="${filter.icon}"></i>
+      <span>${currentLang === 'de' ? filter.de : filter.en}</span>
+    </div>
+  `).join('');
+  
+  document.getElementById('filterChips').innerHTML = chipsHTML;
+}
+
 function updateTop5Bar() {
   const sortedTools = [...aiTools]
-    .sort((a, b) => {
-      // Für die Sortierung: echte Votes + Baseline
-      const aVotesWithBaseline = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
-      const bVotesWithBaseline = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
-      
-      if (bVotesWithBaseline !== aVotesWithBaseline) {
-        return bVotesWithBaseline - aVotesWithBaseline;
-      }
-      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
-    })
+    .sort((a, b) => b.votes - a.votes)
     .slice(0, 5);
   
   const top5HTML = sortedTools.map((tool, index) => {
-    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-    const quickPeek = tool.quickPeek ? 
-      (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
-      (description.length > 60 ? description.substring(0, 60) + '...' : description);
-    
+    const description = tool.description[currentLang];
     return `
-      <div class="top5-item" data-id="${tool.id}" 
-           onclick="openToolDrawer('${tool.id}')"
-           title="${tool.name}">
+      <div class="top5-item" onclick="openToolDrawer('${tool.id}')">
         <div class="top5-rank">${index + 1}</div>
-        <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+        <div class="top5-icon">${CATEGORY_CONFIG[tool.category].icon}</div>
         <div class="top5-info">
           <div class="top5-name">${tool.name}</div>
-          <div class="top5-category">${getCategoryLabel(tool.category)}</div>
+          <div class="top5-category">${CATEGORY_CONFIG[tool.category][currentLang]}</div>
         </div>
-        <div class="top5-votes" id="top5Votes-${tool.id}">${getDisplayVotes(tool)}</div>
-        <div class="top5-quickpeek">${quickPeek}</div>
+        <div class="top5-votes">${Math.max(tool.votes, 0)}</div>
       </div>
     `;
   }).join('');
   
   document.getElementById('top5List').innerHTML = top5HTML;
-  updateLanguage();
 }
 
-function updateTop5VoteCount(toolId, newVotes) {
-  const voteElement = document.getElementById(`top5Votes-${toolId}`);
-  if (voteElement) {
-    const displayNewVotes = Math.max(newVotes, 0);
-    voteElement.textContent = displayNewVotes;
-    voteElement.classList.add('changed');
-    setTimeout(() => {
-      voteElement.classList.remove('changed');
-    }, 600);
-  }
-}
-
-// ===== GRUPPIERTE TOOL-LISTE =====
 function renderToolGroups() {
-  // Bestimme welche Kategorien angezeigt werden sollen
-  let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
-  
-  // Wenn ein Filter aktiv ist (außer 'all'), zeige nur diese Kategorie
-  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
-    categoriesToShow = [currentCategory];
-  }
-  
+  const categories = Object.keys(CATEGORY_CONFIG);
   const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  const container = document.getElementById('tools-container');
   
-  const groupsHTML = categoriesToShow.map(category => {
-    // Filtere Tools nach Kategorie
+  let groupsHTML = '';
+  
+  categories.forEach(category => {
     let categoryTools = aiTools.filter(tool => tool.category === category);
     
-    // Zusätzliche Filter für 'free' und 'ai'
     if (currentCategory === 'free') {
       categoryTools = categoryTools.filter(tool => tool.price === 'free');
     } else if (currentCategory === 'ai') {
       categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
     }
     
-    // Defensive Rendering: Leere Kategorie nicht ausblenden
-    if (categoryTools.length === 0) {
-      return `
-        <div class="tool-group" data-category="${category}">
-          <div class="group-header">
-            <div class="group-title">
-              <div class="group-icon">${getCategoryIcon(category)}</div>
-              <span>${getCategoryLabel(category)}</span>
-              <span class="group-count">0</span>
-            </div>
-          </div>
-          <div class="group-content expanded">
-            <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
-              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
-            </div>
-          </div>
-        </div>
-      `;
-    }
+    if (categoryTools.length === 0 && currentCategory !== 'all') return;
     
-    // Sortiere Tools nach votes MIT Baseline für Sortierung
-    const sortedTools = [...categoryTools].sort((a, b) => {
-      // Für die Sortierung: echte Votes + Baseline
-      const aVotesWithBaseline = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
-      const bVotesWithBaseline = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
-      
-      if (bVotesWithBaseline !== aVotesWithBaseline) {
-        return bVotesWithBaseline - aVotesWithBaseline;
-      }
-      // Bei gleichen Votes, sortiere nach Popularity Score
-      return (b.popularityScore ?? 0) - (a.popularityScore ?? 0);
-    });
-    
+    const sortedTools = [...categoryTools].sort((a, b) => b.votes - a.votes);
     const isExpanded = expandedGroups[category] || false;
-    
-    // Zeige alle Tools wenn ausgeklappt, sonst nur 2
     const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
+    const remainingCount = Math.max(0, sortedTools.length - 2);
     
-    const groupHTML = displayTools.map(tool => {
-      const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-      const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
-          
+    const toolsHTML = displayTools.map(tool => {
+      const votes = Math.max(tool.votes, 0);
+      const isFavorite = JSON.parse(localStorage.getItem('aiFavorites') || '[]').includes(tool.id);
+      const isInCompare = JSON.parse(localStorage.getItem('aiComparison') || '[]').includes(tool.id);
+      
       return `
-        <div class="tool-row" data-id="${tool.id}" 
-             onmouseenter="showToolPeek(event, '${tool.id}')"
-             onmouseleave="hideToolPeek()"
-             onclick="openToolDrawer('${tool.id}')">
+        <div class="tool-row" onclick="openToolDrawer('${tool.id}')">
           <div class="tool-vote" onclick="event.stopPropagation()">
-            <div class="vote-count" id="voteCount-${tool.id}">${getDisplayVotes(tool)}</div>
+            <div class="vote-count">${votes}</div>
             <div class="vote-buttons">
               <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
                 <i class="fas fa-arrow-up"></i>
@@ -3005,29 +698,24 @@ function renderToolGroups() {
           </div>
           
           <div class="tool-info">
-            <div class="tool-category">
-              ${getCategoryLabel(tool.category)}
-              <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${tool.category}')">
-                <i class="fas fa-info-circle"></i>
-              </button>
-            </div>
+            <div class="tool-category">${CATEGORY_CONFIG[tool.category][currentLang]}</div>
             <div class="tool-name">
               ${tool.name}
-              ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
+              ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary);"></i>' : ''}
             </div>
-            <div class="tool-desc">${description}</div>
+            <div class="tool-desc">${tool.description[currentLang]}</div>
           </div>
           
           <div class="tool-meta" onclick="event.stopPropagation()">
-            <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
+            <div class="tool-price">${tool.priceDisplay[currentLang]}</div>
             <div class="tool-actions">
-              <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+              <button class="tool-action-btn favorite ${isFavorite ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
                 <i class="fas fa-star"></i>
               </button>
-              <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+              <button class="tool-action-btn compare ${isInCompare ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
                 <i class="fas fa-balance-scale"></i>
               </button>
-              <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-action-btn open" onclick="event.stopPropagation(); trackToolClick('${tool.id}')">
+              <a href="${tool.link}" target="_blank" class="tool-action-btn open" onclick="event.stopPropagation()">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -3036,33 +724,24 @@ function renderToolGroups() {
       `;
     }).join('');
     
-    // Berechne korrekte Anzahl für "mehr anzeigen" Button
-    const remainingCount = Math.max(0, sortedTools.length - 2);
-    
-    // Füge den Collapse-Button als letztes Element in der Gruppe hinzu (wenn erweitert)
     const collapseButton = isExpanded ? `
       <div class="collapse-button" onclick="collapseGroup('${category}')">
         <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
       </div>
     ` : '';
     
-    // Füge show-more Button hinzu (wenn nicht erweitert)
     const showMoreButton = !isExpanded && sortedTools.length > 2 ? `
       <div class="show-more" onclick="expandGroup('${category}')">
         <span>${currentLang === 'de' ? `+ ${remainingCount} mehr anzeigen` : `+ ${remainingCount} more`}</span>
-        <i class="fas fa-chevron-down"></i>
       </div>
     ` : '';
     
-    return `
+    groupsHTML += `
       <div class="tool-group" data-category="${category}">
         <div class="group-header" onclick="toggleGroup('${category}')">
           <div class="group-title">
-            <div class="group-icon">${getCategoryIcon(category)}</div>
-            <span>${getCategoryLabel(category)}</span>
-            <button class="info-btn" onclick="event.stopPropagation(); openCategoryInfoModal('${category}')">
-              <i class="fas fa-info-circle"></i>
-            </button>
+            <div class="group-icon">${CATEGORY_CONFIG[category].icon}</div>
+            <span>${CATEGORY_CONFIG[category][currentLang]}</span>
             <span class="group-count">${categoryTools.length}</span>
           </div>
           <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
@@ -3070,110 +749,31 @@ function renderToolGroups() {
           </div>
         </div>
         <div class="group-content ${isExpanded ? 'expanded' : ''}">
-          ${groupHTML}
+          ${toolsHTML}
           ${collapseButton}
         </div>
         ${showMoreButton}
       </div>
     `;
-  }).join('');
+  });
   
-  document.getElementById('toolGroups').innerHTML = groupsHTML;
-  updateLanguage();
+  container.innerHTML = groupsHTML;
+  document.getElementById('loading').style.display = 'none';
 }
 
-// ===== KATEGORIE INFO MODAL =====
-function openCategoryInfoModal(category) {
-  const info = categoryInfo[category];
-  if (!info) return;
-  
-  const lang = currentLang;
-  
-  // Setze Titel und Icon
-  document.getElementById('categoryInfoTitle').textContent = info.title[lang];
-  document.getElementById('categoryInfoIcon').textContent = getCategoryIcon(category);
-  
-  // Hole die besten 3 Tools dieser Kategorie
-  const topTools = aiTools
-    .filter(tool => tool.category === category)
-    .sort((a, b) => {
-      const aVotes = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
-      const bVotes = Math.max(getRawVotes(b), 0) + BASELINE_VOTES;
-      return bVotes - aVotes;
-    })
-    .slice(0, 3);
-  
-  // Erstelle Tool-Liste HTML
-  const toolsHTML = topTools.map(tool => `
-    <div class="category-info-tool" onclick="openToolDrawer('${tool.id}'); closeCategoryInfoModal()">
-      ${tool.name}
-    </div>
-  `).join('');
-  
-  // Erstelle den Modal-Inhalt
-  const contentHTML = `
-    <div class="category-info-section">
-      <h3><i class="fas fa-info-circle"></i> ${lang === 'de' ? 'Beschreibung' : 'Description'}</h3>
-      <p>${info.description[lang]}</p>
-    </div>
-    
-    <div class="category-info-section">
-      <h3><i class="fas fa-lightbulb"></i> ${lang === 'de' ? 'Typische Anwendungen' : 'Common Use Cases'}</h3>
-      ${info.useCases[lang].map(useCase => `<p>• ${useCase}</p>`).join('')}
-    </div>
-    
-    <div class="category-info-section">
-      <h3><i class="fas fa-user-check"></i> ${lang === 'de' ? 'Ideal für' : 'Ideal For'}</h3>
-      ${info.bestFor[lang].map(target => `<p>• ${target}</p>`).join('')}
-    </div>
-    
-    <div class="category-info-section">
-      <h3><i class="fas fa-chart-line"></i> ${lang === 'de' ? 'Aktuelle Trends' : 'Current Trends'}</h3>
-      ${info.trends[lang].map(trend => `<p>• ${trend}</p>`).join('')}
-    </div>
-    
-    <div class="category-info-section">
-      <h3><i class="fas fa-trophy"></i> ${lang === 'de' ? 'Top Tools dieser Kategorie' : 'Top Tools in this Category'}</h3>
-      <div class="category-info-tools">
-        ${toolsHTML}
-      </div>
-    </div>
-    
-    <div class="category-info-section">
-      <h3><i class="fas fa-question-circle"></i> ${lang === 'de' ? 'Wie wähle ich aus?' : 'How to Choose?'}</h3>
-      <p>${lang === 'de' 
-        ? 'Vergleiche Tools anhand von Bewertungen, Preismodellen und spezifischen Features. Nutze unsere Favoriten- und Vergleichsfunktion für die besten Ergebnisse.' 
-        : 'Compare tools based on ratings, pricing models and specific features. Use our favorites and comparison function for best results.'}</p>
-    </div>
-  `;
-  
-  document.getElementById('categoryInfoContent').innerHTML = contentHTML;
-  
-  // Zeige das Modal an
-  document.getElementById('categoryInfoModalOverlay').classList.add('active');
-  document.getElementById('categoryInfoModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
+// ===== FUNKTIONALITÄT =====
+function setActiveFilter(filterId) {
+  currentCategory = filterId;
+  document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+  document.querySelector(`[data-filter="${filterId}"]`).classList.add('active');
+  renderToolGroups();
 }
 
-function closeCategoryInfoModal() {
-  document.getElementById('categoryInfoModalOverlay').classList.remove('active');
-  document.getElementById('categoryInfoModal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ===== GRUPPEN FUNKTIONEN =====
 function expandGroup(category) {
   const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
   expandedGroups[category] = true;
   localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
   renderToolGroups();
-  updateLanguage();
-  
-  // Scrollt sanft zur Gruppe
-  const groupElement = document.querySelector(`[data-category="${category}"]`);
-  if (groupElement) {
-    groupElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
 }
 
 function collapseGroup(category) {
@@ -3181,13 +781,6 @@ function collapseGroup(category) {
   expandedGroups[category] = false;
   localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
   renderToolGroups();
-  updateLanguage();
-  
-  // Scrollt sanft zum Gruppen-Header
-  const groupHeader = document.querySelector(`[data-category="${category}"] .group-header`);
-  if (groupHeader) {
-    groupHeader.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
 }
 
 function toggleGroup(category) {
@@ -3195,830 +788,99 @@ function toggleGroup(category) {
   expandedGroups[category] = !expandedGroups[category];
   localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
   renderToolGroups();
-  updateLanguage();
 }
 
-// ===== TOOL PEEK =====
-function showToolPeek(event, toolId) {
-  if (isDrawerOpen) return;
-  
+function vote(toolId, type) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
   
-  hoverTimeout = setTimeout(() => {
-    createToolPeek(event, tool);
-  }, 300);
-}
-
-function createToolPeek(event, tool) {
-  if (peekElement) {
-    peekElement.remove();
-  }
-  
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  const ltdBadge = tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : '';
-  
-  peekElement = document.createElement('div');
-  peekElement.className = 'tool-peek';
-  peekElement.innerHTML = `
-    <div class="peek-header">
-      <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
-      <div>
-        <div class="peek-name">${tool.name}</div>
-        <div class="peek-category">${getCategoryLabel(tool.category)}</div>
-      </div>
-    </div>
-    <div class="peek-desc">${description}</div>
-    <div class="peek-meta">
-      <span class="peek-badge price">
-        <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
-        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
-      </span>
-      <span class="peek-badge rating">
-        <i class="fas fa-star"></i>
-        ${tool.rating}/5
-      </span>
-      ${ltdBadge}
-    </div>
-  `;
-  
-  document.body.appendChild(peekElement);
-  
-  const rect = event.currentTarget.getBoundingClientRect();
-  const peekHeight = peekElement.offsetHeight;
-  const viewportHeight = window.innerHeight;
-  
-  let top = rect.top + rect.height / 2 - peekHeight / 2;
-  if (top < 20) top = 20;
-  if (top + peekHeight > viewportHeight - 20) {
-    top = viewportHeight - peekHeight - 20;
-  }
-  
-  peekElement.style.top = `${top}px`;
-  peekElement.style.left = `${rect.right + 20}px`;
-}
-
-function hideToolPeek() {
-  if (hoverTimeout) {
-    clearTimeout(hoverTimeout);
-    hoverTimeout = null;
-  }
-  
-  if (peekElement) {
-    peekElement.style.opacity = '0';
-    setTimeout(() => {
-      if (peekElement && peekElement.parentNode) {
-        peekElement.remove();
-        peekElement = null;
-      }
-    }, 200);
-  }
-}
-
-// ===== DRAWER =====
-function openToolDrawer(toolId) {
-  hideToolPeek();
-  isDrawerOpen = true;
-  
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  trackUserInteraction(tool.category);
-  
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  const seoDesc = currentLang === 'de' ? (tool.seoDesc?.de || description) : (tool.seoDesc?.en || description);
-  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
-  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
-  const features = tool.features || [];
-  const alternatives = tool.alternatives || [];
-  
-  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
-  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
-  const featuresHTML = features.map(f => '<span class="peek-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--secondary); border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
-  
-  const alternativesHTML = alternatives.map(altId => {
-    const altTool = aiTools.find(t => t.id === altId);
-    if (!altTool) return '';
-    return `
-      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor: pointer;">
-        ${getCategoryIcon(altTool.category)}
-      </div>
-    `;
-  }).join('');
-  
-  const drawerContent = `
-    <div style="margin-bottom: 24px;">
-      <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px;">
-        <div class="peek-icon" style="width: 60px; height: 60px; font-size: 1.8rem;">
-          ${getCategoryIcon(tool.category)}
-        </div>
-        <div style="flex: 1;">
-          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">${tool.name}</h3>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
-            <span class="peek-badge category" style="background: rgba(0, 212, 255, 0.15); color: var(--primary); border: 1px solid rgba(0, 212, 255, 0.3);">
-              <i class="fas fa-tag"></i>
-              ${getCategoryLabel(tool.category)}
-            </span>
-            <span class="peek-badge price">
-              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
-              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
-            </span>
-            <span class="peek-badge rating">
-              <i class="fas fa-star"></i>
-              ${tool.rating}/5
-            </span>
-            ${tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> Lifetime Deal</span>' : ''}
-          </div>
-        </div>
-      </div>
-      
-      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">${seoDesc}</p>
-      
-      <div style="display: flex; gap: 12px; margin-bottom: 24px;">
-        <button class="dock-action-btn primary" onclick="window.open('${tool.link}', '_blank'); trackToolClick('${tool.id}')" style="flex: 1;">
-          <i class="fas fa-external-link-alt"></i>
-          <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
-        </button>
-        <button class="dock-action-btn secondary" onclick="toggleFavorite('${tool.id}')" style="width: auto;">
-          <i class="fas fa-star"></i>
-          <span>${isFavorite(tool.id) ? (currentLang === 'de' ? 'Entfernen' : 'Remove') : (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}</span>
-        </button>
-      </div>
-    </div>
-    
-    ${pros.length > 0 || cons.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
-        <i class="fas fa-balance-scale"></i>
-        <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span>
-      </h4>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        ${pros.length > 0 ? `
-        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius); padding: 16px;">
-          <h5 style="color: var(--success); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <i class="fas fa-check-circle"></i>
-            <span data-de="Vorteile" data-en="Pros">Vorteile</span>
-          </h5>
-          <ul style="color: var(--text-secondary); padding-left: 20px;">
-            ${prosHTML}
-          </ul>
-        </div>
-        ` : ''}
-        
-        ${cons.length > 0 ? `
-        <div style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius); padding: 16px;">
-          <h5 style="color: var(--error); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <i class="fas fa-times-circle"></i>
-            <span data-de="Nachteile" data-en="Cons">Nachteile</span>
-          </h5>
-          <ul style="color: var(--text-secondary); padding-left: 20px;">
-            ${consHTML}
-          </ul>
-        </div>
-        ` : ''}
-      </div>
-    </div>
-    ` : ''}
-    
-    ${features.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
-        <i class="fas fa-rocket"></i>
-        <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span>
-      </h4>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-        ${featuresHTML}
-      </div>
-    </div>
-    ` : ''}
-    
-    ${alternatives.length > 0 ? `
-    <div style="margin-bottom: 24px;">
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">
-        <i class="fas fa-exchange-alt"></i>
-        <span data-de="Ähnliche Tools" data-en="Similar Tools">Ähnliche Tools</span>
-      </h4>
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        ${alternativesHTML}
-      </div>
-    </div>
-    ` : ''}
-  `;
-  
-  document.getElementById('drawerTitle').textContent = tool.name;
-  document.getElementById('drawerContent').innerHTML = drawerContent;
-  document.getElementById('drawerOverlay').classList.add('active');
-  document.getElementById('drawer').classList.add('active');
-  document.body.style.overflow = 'hidden';
-  
-  updateLanguage();
-}
-
-function closeToolDrawer() {
-  isDrawerOpen = false;
-  document.getElementById('drawerOverlay').classList.remove('active');
-  document.getElementById('drawer').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ===== FILTER CHIPS =====
-function renderFilterChips() {
-  const filters = [
-    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
-    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
-    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
-    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
-    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
-    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
-    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
-    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
-  ];
-  
-  const chipsHTML = filters.map(filter => {
-    const isActive = currentCategory === filter.id;
-    return `
-      <div class="filter-chip ${isActive ? 'active' : ''}" 
-           data-filter="${filter.id}"
-           onclick="setActiveFilter('${filter.id}')">
-        <i class="${filter.icon}"></i>
-        <span data-de="${filter.label.de}" data-en="${filter.label.en}">${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
-      </div>
-    `;
-  }).join('');
-  
-  document.getElementById('filterChips').innerHTML = chipsHTML;
-  updateLanguage();
-}
-
-function setActiveFilter(filterId) {
-  currentCategory = filterId;
-  
-  // Entferne active Klasse von allen Chips
-  document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.classList.remove('active');
-  });
-  
-  // Setze active Klasse auf geklickten Chip
-  const targetChip = document.querySelector(`[data-filter="${filterId}"]`);
-  if (targetChip) {
-    targetChip.classList.add('active');
-  }
-  
-  renderToolGroups();
-}
-
-// ===== FAVORITES OVERLAY =====
-function openFavoritesOverlay() {
-  updateFavoritesOverlay();
-  document.getElementById('favoritesOverlay').classList.add('active');
-  document.getElementById('favoritesDrawer').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeFavoritesOverlay() {
-  document.getElementById('favoritesOverlay').classList.remove('active');
-  document.getElementById('favoritesDrawer').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-function updateFavoritesOverlay() {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  
-  const favoriteHTML = favorites.map(toolId => {
-    const tool = aiTools.find(t => t.id === toolId);
-    if (!tool) return '';
-    return `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
-        ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${toolId}')">
-          <i class="fas fa-times"></i>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  const compareHTML = comparison.map(toolId => {
-    const tool = aiTools.find(t => t.id === toolId);
-    if (!tool) return '';
-    return `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
-        ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleComparison('${toolId}')">
-          <i class="fas fa-times"></i>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  document.getElementById('favoriteDock').innerHTML = favoriteHTML;
-  document.getElementById('compareDock').innerHTML = compareHTML;
-  
-  updateLanguage();
-}
-
-function updateFloatingBadge() {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  const totalCount = favorites.length + comparison.length;
-  
-  const badge = document.getElementById('floatingFavoritesBadge');
-  if (badge) {
-    badge.textContent = totalCount;
-    badge.style.display = totalCount > 0 ? 'flex' : 'none';
-  }
-}
-
-// ===== VOTING =====
-async function vote(toolId, type) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  const oldUserVote = tool.userVote ?? 0;
   const voteValue = type === 'up' ? 1 : -1;
+  const oldVote = tool.userVote || 0;
   
-  // Berechne die Vote-Änderung
-  let voteChange = 0;
-  if (tool.userVote === voteValue) {
-    // User entfernt seinen Vote
+  if (oldVote === voteValue) {
     tool.userVote = 0;
-    voteChange = -voteValue;
+    tool.votes -= voteValue;
   } else {
-    // User ändert seinen Vote oder stimmt zum ersten Mal ab
-    const previousVote = tool.userVote ?? 0;
     tool.userVote = voteValue;
-    voteChange = voteValue - previousVote;
+    tool.votes += voteValue - oldVote;
   }
   
-  // Aktualisiere die Vote-Zahlen des Tools
-  if (voteValue === 1) {
-    // Upvote
-    if (oldUserVote === 1) {
-      // Entferne Upvote
-      tool.upvotes -= 1;
-    } else if (oldUserVote === -1) {
-      // Wechsel von Downvote zu Upvote
-      tool.downvotes -= 1;
-      tool.upvotes += 1;
-    } else {
-      // Neuer Upvote
-      tool.upvotes += 1;
-    }
-  } else {
-    // Downvote
-    if (oldUserVote === -1) {
-      // Entferne Downvote
-      tool.downvotes -= 1;
-    } else if (oldUserVote === 1) {
-      // Wechsel von Upvote zu Downvote
-      tool.upvotes -= 1;
-      tool.downvotes += 1;
-    } else {
-      // Neuer Downvote
-      tool.downvotes += 1;
-    }
-  }
-  
-  tool.votes = tool.upvotes - tool.downvotes;
-  
-  // Speichere in LocalStorage
   const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  savedVotes[toolId] = {
-    userVote: tool.userVote,
-    totalVotes: tool.votes,
-    upvotes: tool.upvotes,
-    downvotes: tool.downvotes
-  };
+  savedVotes[toolId] = { userVote: tool.userVote, totalVotes: tool.votes };
   localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
   
-  // Update UI
-  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountElement) {
-    voteCountElement.textContent = tool.votes;
-    voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      voteCountElement.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  updateTop5VoteCount(toolId, tool.votes);
   updateTop5Bar();
   renderToolGroups();
-  
-  showNotification(
-    currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
-    'success'
-  );
-}
-
-// ===== FAVORITES & COMPARISON =====
-function isFavorite(toolId) {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  return favorites.includes(toolId);
 }
 
 function toggleFavorite(toolId) {
   let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
   if (favorites.includes(toolId)) {
     favorites = favorites.filter(id => id !== toolId);
-    showNotification(currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites', 'info');
   } else {
     favorites.push(toolId);
-    showNotification(currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites', 'success');
   }
   localStorage.setItem('aiFavorites', JSON.stringify(favorites));
-  updateFavoritesOverlay();
-  updateFloatingBadge();
   renderToolGroups();
-}
-
-function isInComparison(toolId) {
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  return comparison.includes(toolId);
+  updateFloatingBadge();
 }
 
 function toggleComparison(toolId) {
   let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
   if (comparison.includes(toolId)) {
     comparison = comparison.filter(id => id !== toolId);
-    showNotification(currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison', 'info');
   } else {
-    if (comparison.length < 3) {
-      comparison.push(toolId);
-      showNotification(currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison', 'success');
-    } else {
-      showNotification(currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!', 'error');
-      return;
-    }
+    if (comparison.length < 3) comparison.push(toolId);
   }
   localStorage.setItem('aiComparison', JSON.stringify(comparison));
-  updateFavoritesOverlay();
-  updateFloatingBadge();
   renderToolGroups();
+  updateFloatingBadge();
 }
 
-// ===== COOKIE CONSENT =====
-function checkCookieConsent() {
-  const consent = localStorage.getItem('cookieConsent');
-  const consentBanner = document.getElementById('cookieConsent');
+function updateFloatingBadge() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const total = favorites.length + comparison.length;
+  document.getElementById('floatingFavoritesBadge').textContent = total;
+}
+
+function openToolDrawer(toolId) {
+  alert(`Detailansicht für ${toolId} würde hier geöffnet`);
+}
+
+// ===== INITIALISIERUNG =====
+function init() {
+  loadAITools();
+  updateFloatingBadge();
   
-  if (consent === 'accepted') {
-    window.cookiePreferences.analytics = true;
-    loadGoogleAnalytics();
-    consentBanner.classList.remove('active');
-  } else if (consent === 'declined') {
-    window.cookiePreferences.analytics = false;
-    consentBanner.classList.remove('active');
-  } else {
-    consentBanner.classList.add('active');
-  }
-}
-
-function acceptCookies() {
-  localStorage.setItem('cookieConsent', 'accepted');
-  window.cookiePreferences.analytics = true;
-  loadGoogleAnalytics();
-  document.getElementById('cookieConsent').classList.remove('active');
-  showNotification(currentLang === 'de' ? 'Cookies akzeptiert' : 'Cookies accepted', 'success');
-}
-
-function declineCookies() {
-  localStorage.setItem('cookieConsent', 'declined');
-  window.cookiePreferences.analytics = false;
-  document.getElementById('cookieConsent').classList.remove('active');
-  showNotification(currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined', 'info');
-}
-
-function loadGoogleAnalytics() {
-  if (!window.cookiePreferences.analytics) return;
-  
-  // Google Analytics Script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
-  document.head.appendChild(script);
-  
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
-}
-
-// ===== MOBILE BACK TO TOP =====
-function setupMobileBackToTop() {
-  const backToTopBtn = document.getElementById('backToTop');
-  
-  function checkScrollPosition() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile && scrollY > 300) {
-      backToTopBtn.classList.add('visible');
-    } else {
-      backToTopBtn.classList.remove('visible');
-    }
-  }
-  
-  // Debounced scroll event for better performance
-  function handleScroll() {
-    if (scrollDebounceTimeout) {
-      clearTimeout(scrollDebounceTimeout);
-    }
-    
-    scrollDebounceTimeout = setTimeout(checkScrollPosition, 100);
-  }
-  
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('resize', handleScroll);
-  
-  // Initial check
-  checkScrollPosition();
-  
-  backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-}
-
-// ===== HELPER FUNCTIONS =====
-function getCategoryIcon(category) {
-  const icons = {
-    text: '✍️',
-    image: '🎨',
-    code: '💻',
-    video: '🎬',
-    audio: '🎵'
-  };
-  return icons[category] || '🤖';
-}
-
-function getCategoryLabel(category) {
-  const labels = {
-    de: {
-      text: 'Text',
-      image: 'Bild',
-      code: 'Code',
-      video: 'Video',
-      audio: 'Audio'
-    },
-    en: {
-      text: 'Text',
-      image: 'Image',
-      code: 'Code',
-      video: 'Video',
-      audio: 'Audio'
-    }
-  };
-  return labels[currentLang][category] || category;
-}
-
-function trackUserInteraction(category) {
-  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
-  history.push(category);
-  if (history.length > 20) history = history.slice(-20);
-  localStorage.setItem('userHistory', JSON.stringify(history));
-}
-
-function trackToolClick(toolId) {
-  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
-  clicks[toolId] = (clicks[toolId] ?? 0) + 1;
-  localStorage.setItem('toolClicks', JSON.stringify(clicks));
-}
-
-function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.innerHTML = `
-    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-    <span>${message}</span>
-    <button class="notification-close"><i class="fas fa-times"></i></button>
-  `;
-      
-  document.body.appendChild(notification);
-      
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
-      
-  notification.querySelector('.notification-close').addEventListener('click', () => {
-    notification.remove();
-  });
-}
-
-// ===== MODALS =====
-function openModal(modalId) {
-  document.getElementById(`${modalId}Overlay`).classList.add('active');
-  document.getElementById(modalId).classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(modalId) {
-  document.getElementById(`${modalId}Overlay`).classList.remove('active');
-  document.getElementById(modalId).classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ===== EVENT LISTENERS =====
-function setupEventListeners() {
-  // Omnibox search
-  const omniboxInput = document.getElementById('omniboxInput');
-  let searchDebounce;
-  
-  omniboxInput.addEventListener('input', (e) => {
-    clearTimeout(searchDebounce);
-    searchDebounce = setTimeout(() => {
-      searchQuery = e.target.value;
-      if (searchQuery.length > 0) {
-        filterBySearch(searchQuery);
-      } else {
-        renderToolGroups();
-      }
-    }, 300);
-  });
-  
-  // Enter key in omnibox
-  omniboxInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const query = omniboxInput.value;
-      if (query.trim()) {
-        filterBySearch(query);
-      }
-    }
-  });
-  
-  // Density toggle (now in footer)
-  document.querySelectorAll('.density-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.density-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      document.body.className = '';
-      document.body.classList.add(`density-${btn.dataset.density}`);
-      
-      renderToolGroups();
-      updateTop5Bar();
-    });
-  });
-  
-  // Language toggle
   document.getElementById('langToggle').addEventListener('click', () => {
     currentLang = currentLang === 'de' ? 'en' : 'de';
     document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
-    updateLanguage();
+    document.getElementById('heroSubtitle').textContent = currentLang === 'de' 
+      ? 'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.'
+      : 'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
+    document.getElementById('omniboxInput').placeholder = currentLang === 'de' 
+      ? 'Ich suche nach...' 
+      : 'I\'m looking for...';
     renderFilterChips();
     updateTop5Bar();
     renderToolGroups();
   });
   
-  // Drawer close
-  document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
-  document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
-  
-  // Category info modal close
-  document.getElementById('categoryInfoModalClose').addEventListener('click', closeCategoryInfoModal);
-  document.getElementById('categoryInfoModalOverlay').addEventListener('click', closeCategoryInfoModal);
-  
-  // Favorites overlay
-  document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesOverlay);
-  document.getElementById('favoritesClose').addEventListener('click', closeFavoritesOverlay);
-  document.getElementById('favoritesOverlay').addEventListener('click', closeFavoritesOverlay);
-  
-  // Favorites overlay actions
-  document.getElementById('clearFavorites').addEventListener('click', () => {
-    localStorage.setItem('aiFavorites', JSON.stringify([]));
-    updateFavoritesOverlay();
-    updateFloatingBadge();
-    renderToolGroups();
-    showNotification(currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared', 'info');
+  document.getElementById('floatingFavoritesBtn').addEventListener('click', () => {
+    alert('Favoriten-Overlay würde hier geöffnet');
   });
   
-  document.getElementById('compareAction').addEventListener('click', () => {
-    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-    if (comparison.length < 2) {
-      showNotification(currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare', 'error');
-      return;
-    }
-    
-    // Open comparison view
-    showNotification(currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...', 'info');
-  });
-  
-  // Cookie consent
-  document.getElementById('cookieAccept').addEventListener('click', acceptCookies);
-  document.getElementById('cookieDecline').addEventListener('click', declineCookies);
-  
-  // Modals
-  document.getElementById('imprintLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('imprintModal');
-  });
-  
-  document.getElementById('privacyLink').addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('privacyModal');
-  });
-  
-  document.getElementById('privacyLinkCookie').addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('privacyModal');
-  });
-  
-  document.getElementById('imprintModalClose').addEventListener('click', () => {
-    closeModal('imprintModal');
-  });
-  
-  document.getElementById('imprintModalOverlay').addEventListener('click', () => {
-    closeModal('imprintModal');
-  });
-  
-  document.getElementById('privacyModalClose').addEventListener('click', () => {
-    closeModal('privacyModal');
-  });
-  
-  document.getElementById('privacyModalOverlay').addEventListener('click', () => {
-    closeModal('privacyModal');
-  });
-  
-  // Close drawer on ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (isDrawerOpen) {
-        closeToolDrawer();
-      }
-      if (document.getElementById('favoritesOverlay').classList.contains('active')) {
-        closeFavoritesOverlay();
-      }
-      if (document.getElementById('imprintModal').classList.contains('active')) {
-        closeModal('imprintModal');
-      }
-      if (document.getElementById('privacyModal').classList.contains('active')) {
-        closeModal('privacyModal');
-      }
-      if (document.getElementById('categoryInfoModal').classList.contains('active')) {
-        closeCategoryInfoModal();
-      }
-    }
-  });
-}
-
-function filterBySearch(query) {
-  const groups = document.querySelectorAll('.tool-group');
-  const searchLower = query.toLowerCase();
-  
-  groups.forEach(group => {
-    const rows = group.querySelectorAll('.tool-row');
-    let hasMatch = false;
-    
+  document.getElementById('omniboxInput').addEventListener('input', (e) => {
+    searchQuery = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('.tool-row');
     rows.forEach(row => {
-      const toolId = row.dataset.id;
-      const tool = aiTools.find(t => t.id === toolId);
-      if (tool) {
-        const matches = tool.name.toLowerCase().includes(searchLower) ||
-                       tool.description.de.toLowerCase().includes(searchLower) ||
-                       tool.description.en.toLowerCase().includes(searchLower) ||
-                       tool.category.toLowerCase().includes(searchLower);
-        
-        row.style.display = matches ? 'grid' : 'none';
-        if (matches) hasMatch = true;
-      }
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(searchQuery) ? 'grid' : 'none';
     });
-    
-    group.style.display = hasMatch ? 'block' : 'none';
-    
-    const showMore = group.querySelector('.show-more');
-    if (showMore) showMore.style.display = 'none';
   });
 }
 
-function updateLanguage() {
-  document.querySelectorAll('[data-de]').forEach(el => {
-    if (el.hasAttribute('placeholder')) {
-      el.placeholder = currentLang === 'de' ? el.getAttribute('data-placeholder-de') : el.getAttribute('data-placeholder-en');
-    } else {
-      el.textContent = currentLang === 'de' ? el.getAttribute('data-de') : el.getAttribute('data-en');
-    }
-  });
-  
-  // Update search hint text
-  const searchHintText = document.getElementById('searchHintText');
-  if (searchHintText) {
-    searchHintText.textContent = currentLang === 'de' 
-      ? 'Suche nach Toolnamen, Use-Cases oder Features'
-      : 'Search for tool names, use cases or features';
-  }
-  
-  // Update hero subtitle
-  const heroSubtitle = document.getElementById('heroSubtitle');
-  if (heroSubtitle) {
-    heroSubtitle.textContent = currentLang === 'de'
-      ? 'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.'
-      : 'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
-  }
-}
-
-// ===== INITIALIZE =====
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
