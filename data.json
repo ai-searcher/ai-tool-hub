@@ -1,5 +1,5 @@
-[
-  {
+    [
+    {
     "id": "chatgpt",
     "numericId": 1,
     "name": "ChatGPT",
@@ -7316,5 +7316,5 @@
     "de": "Kostenlos: 1.000 Operationen/Monat, Core: €9/Monat, Pro: €29/Monat, Teams: €59/Monat",
     "en": "Free: 1,000 operations/month, Core: $9/month, Pro: $29/month, Teams: $59/month"
   }
-}
-]
+  }
+  ]
