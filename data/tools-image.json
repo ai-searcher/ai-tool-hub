@@ -1,665 +1,359 @@
 [
   {
     "id": "midjourney",
-    "numericId": 3,
+    "numericId": 38,
     "name": "Midjourney",
     "category": "image",
-    "aiScore": 98,
-    "popularityScore": 97,
+    "aiScore": 97,
+    "popularityScore": 95,
     "quickPeek": {
-      "de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
-      "en": "Best artistic image generation with unparalleled stylistic control."
+      "de": "Künstlerische Bildgenerierung mit einzigartigem Stil und hoher Qualität.",
+      "en": "Artistic image generation with unique style and high quality."
     },
-    "features": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
-    "tags": ["image", "art", "generation", "artistic", "discord", "popular", "paid", "lifetime-deal"],
+    "features": ["Artistic Style", "High Quality", "Customization", "Upscaling", "Community"],
+    "tags": ["image", "art", "generation", "discord", "artistic", "popular", "paid"],
     "rankingHistory": [],
     "price": "paid",
     "priceDisplay": {
       "de": "ab €10/Monat",
       "en": "from $10/month"
     },
-    "rating": 4.9,
+    "rating": 4.8,
     "description": {
-      "de": "Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.",
-      "en": "Best artistic image generation with unparalleled stylistic control."
+      "de": "Künstlerische Bildgenerierung mit einzigartigem Stil und hoher Qualität.",
+      "en": "Artistic image generation with unique style and high quality."
     },
     "link": "https://www.midjourney.com/",
     "badge": "popular",
-    "useCases": ["concept-art", "illustration", "marketing-images", "book-covers", "character-design"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "Midjourney Review 2026: Die beste KI für künstlerische Bilder",
-      "en": "Midjourney Review 2026: The Best AI for Artistic Images"
-    },
-    "seoDesc": {
-      "de": "Midjourney generiert die künstlerischsten KI-Bilder. Perfekt für Künstler, Designer und Kreative.",
-      "en": "Midjourney generates the most artistic AI images. Perfect for artists, designers and creatives."
-    },
-    "alternatives": ["dalle-3", "stable-diffusion", "firefly"],
-    "pros": {
-      "de": ["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen", "Hohe Auflösungen verfügbar"],
-      "en": ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements", "High resolutions available"]
-    },
-    "cons": {
-      "de": ["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse", "Kein direkter Web-Zugang"],
-      "en": ["Only usable via Discord", "No free version", "Steep learning curve for optimal results", "No direct web access"]
-    },
-    "pricing": {
-      "de": "Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung",
-      "en": "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"
-    }
-  },
-  {
-    "id": "dalle-3",
-    "numericId": 9,
-    "name": "DALL·E 3",
-    "category": "image",
-    "aiScore": 94,
-    "popularityScore": 92,
-    "quickPeek": {
-      "de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
-      "en": "Text-to-image generator from OpenAI with excellent text understanding."
-    },
-    "features": ["Text-to-Image", "ChatGPT Integration", "High Quality", "Multiple Styles", "Editing"],
-    "tags": ["image", "generation", "openai", "chatgpt", "text-to-image", "new", "paid"],
-    "rankingHistory": [],
-    "price": "paid",
-    "priceDisplay": {
-      "de": "In ChatGPT+ (€20)",
-      "en": "In ChatGPT+ ($20)"
-    },
-    "rating": 4.7,
-    "description": {
-      "de": "Text-zu-Bild Generator von OpenAI mit hervorragendem Textverständnis.",
-      "en": "Text-to-image generator from OpenAI with excellent text understanding."
-    },
-    "link": "https://openai.com/dall-e-3",
-    "badge": "new",
-    "useCases": ["image-generation", "concept-art", "social-media", "illustration", "design"],
+    "useCases": ["art", "concept-art", "illustration", "marketing", "social-media"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "DALL·E 3 - OpenAIs fortschrittlicher Bildgenerator",
-      "en": "DALL·E 3 - OpenAI's Advanced Image Generator"
+      "de": "Midjourney - Künstlerische KI-Bildgenerierung",
+      "en": "Midjourney - Artistic AI Image Generation"
     },
     "seoDesc": {
-      "de": "DALL·E 3 ist OpenAIs fortschrittlicher Text-zu-Bild Generator in ChatGPT integriert. Bestes Textverständnis aller Bild-KIs.",
-      "en": "DALL·E 3 is OpenAI's advanced text-to-image generator integrated in ChatGPT. Best text understanding of all image AIs."
+      "de": "Midjourney ist der beste KI-Bildgenerator für künstlerische, einzigartige Bilder mit hoher Qualität.",
+      "en": "Midjourney is the best AI image generator for artistic, unique images with high quality."
     },
-    "alternatives": ["midjourney", "stable-diffusion", "firefly"],
+    "alternatives": ["dalle", "stable-diffusion", "leonardo"],
     "pros": {
-      "de": ["Hervorragendes Textverständnis", "Nahtlose Integration in ChatGPT", "Hohe Bildqualität", "Keine Lernkurve", "Schnelle Generierung"],
-      "en": ["Excellent text understanding", "Seamless integration with ChatGPT", "High image quality", "No learning curve", "Fast generation"]
+      "de": ["Einzigartiger künstlerischer Stil", "Hohe Bildqualität", "Aktive Community", "Starke Customization", "Konsistente Ergebnisse"],
+      "en": ["Unique artistic style", "High image quality", "Active community", "Strong customization", "Consistent results"]
     },
     "cons": {
-      "de": ["Nur über ChatGPT+ verfügbar", "Keine eigenständige Nutzung", "Weniger stilistische Kontrolle als Midjourney"],
-      "en": ["Only available via ChatGPT+", "No standalone usage", "Less stylistic control than Midjourney"]
+      "de": ["Nur über Discord", "Keine kostenlose Version", "Schwierige Steuerung", "Langsame Generierung", "Teuer für viele Bilder"],
+      "en": ["Only via Discord", "No free version", "Difficult control", "Slow generation", "Expensive for many images"]
     },
     "pricing": {
-      "de": "Teil von ChatGPT Plus (€20/Monat) inklusive 50 DALL·E 3 Generierungen pro Tag",
-      "en": "Part of ChatGPT Plus ($20/month) including 50 DALL·E 3 generations per day"
+      "de": "Basic: €10/Monat, Standard: €30/Monat, Pro: €60/Monat",
+      "en": "Basic: $10/month, Standard: $30/month, Pro: $60/month"
+    }
+  },
+  {
+    "id": "dalle",
+    "numericId": 39,
+    "name": "DALL-E 3",
+    "category": "image",
+    "aiScore": 95,
+    "popularityScore": 94,
+    "quickPeek": {
+      "de": "OpenAIs Bildgenerator mit ausgezeichnetem Textverständnis und Integration.",
+      "en": "OpenAI's image generator with excellent text understanding and integration."
+    },
+    "features": ["Text Understanding", "ChatGPT Integration", "Editing", "Variations", "High Quality"],
+    "tags": ["image", "openai", "chatgpt", "text-to-image", "integration", "popular", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €22",
+      "en": "Free/from $22"
+    },
+    "rating": 4.7,
+    "description": {
+      "de": "OpenAIs Bildgenerator mit ausgezeichnetem Textverständnis und Integration.",
+      "en": "OpenAI's image generator with excellent text understanding and integration."
+    },
+    "link": "https://openai.com/dall-e-3",
+    "badge": "popular",
+    "useCases": ["illustration", "marketing", "social-media", "concepts", "design"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "DALL-E 3 - OpenAIs Bildgenerator",
+      "en": "DALL-E 3 - OpenAI's Image Generator"
+    },
+    "seoDesc": {
+      "de": "DALL-E 3 ist OpenAIs Bildgenerator mit exzellentem Textverständnis und ChatGPT-Integration.",
+      "en": "DALL-E 3 is OpenAI's image generator with excellent text understanding and ChatGPT integration."
+    },
+    "alternatives": ["midjourney", "stable-diffusion", "leonardo"],
+    "pros": {
+      "de": ["Exzellentes Textverständnis", "ChatGPT Integration", "Kostenlos mit ChatGPT Plus", "Hohe Qualität", "Schnelle Generierung"],
+      "en": ["Excellent text understanding", "ChatGPT integration", "Free with ChatGPT Plus", "High quality", "Fast generation"]
+    },
+    "cons": {
+      "de": ["Weniger künstlerisch als Midjourney", "Inhaltsfilter streng", "Keine kostenlose Standalone-Version", "Begrenzte Customization", "Wasserzeichen"],
+      "en": ["Less artistic than Midjourney", "Strict content filters", "No free standalone version", "Limited customization", "Watermarks"]
+    },
+    "pricing": {
+      "de": "In ChatGPT Plus enthalten (€22/Monat), API: Pay-per-use",
+      "en": "Included in ChatGPT Plus ($22/month), API: Pay-per-use"
     }
   },
   {
     "id": "stable-diffusion",
-    "numericId": 10,
+    "numericId": 40,
     "name": "Stable Diffusion",
     "category": "image",
-    "aiScore": 94,
-    "popularityScore": 89,
+    "aiScore": 93,
+    "popularityScore": 90,
     "quickPeek": {
-      "de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
-      "en": "Open-source image generation with local installation and full control."
+      "de": "Open-Source Bildgenerierung mit voller Kontrolle und lokaler Installation.",
+      "en": "Open-source image generation with full control and local installation."
     },
-    "features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "Inpainting"],
-    "tags": ["image", "generation", "open-source", "local", "customizable", "free", "lifetime-deal"],
+    "features": ["Open Source", "Local Installation", "Custom Models", "ControlNet", "High Customization"],
+    "tags": ["image", "open-source", "local", "custom", "control", "popular", "free"],
     "rankingHistory": [],
     "price": "free",
     "priceDisplay": {
       "de": "Kostenlos",
       "en": "Free"
     },
-    "rating": 4.7,
-    "description": {
-      "de": "Open-Source Bildgenerierung mit lokaler Installation und voller Kontrolle.",
-      "en": "Open-source image generation with local installation and full control."
-    },
-    "link": "https://stability.ai/",
-    "badge": "free",
-    "useCases": ["custom-models", "research", "commercial-use", "nsfw-content", "animation"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "Stable Diffusion - Open-Source KI-Bilder",
-      "en": "Stable Diffusion - Open-Source AI Images"
-    },
-    "seoDesc": {
-      "de": "Stable Diffusion ist ein Open-Source KI-Bildgenerator der lokal ausgeführt werden kann. Volle Kontrolle und Anpassung.",
-      "en": "Stable Diffusion is an open-source AI image generator that can run locally. Full control and customization."
-    },
-    "alternatives": ["midjourney", "dalle-3", "leonardo"],
-    "pros": {
-      "de": ["Open-Source und kostenlos", "Lokal ausführbar", "Anpassbare Modelle", "Vollständige Datenschutzkontrolle", "Kommerzielle Nutzung erlaubt"],
-      "en": ["Open-source and free", "Runnable locally", "Customizable models", "Complete privacy control", "Commercial use allowed"]
-    },
-    "cons": {
-      "de": ["Technisches Know-how erforderlich", "Qualität variiert je nach Modell", "Kein Support", "Rechenintensiv"],
-      "en": ["Technical knowledge required", "Quality varies by model", "No support", "Computationally intensive"]
-    },
-    "pricing": {
-      "de": "Komplett kostenlos (Open-Source), Hosting-Lösungen ab €10/Monat verfügbar",
-      "en": "Completely free (open-source), hosting solutions from $10/month available"
-    }
-  },
-  {
-    "id": "firefly",
-    "numericId": 14,
-    "name": "Adobe Firefly",
-    "category": "image",
-    "aiScore": 90,
-    "popularityScore": 87,
-    "quickPeek": {
-      "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
-      "en": "Adobe's AI for creative image generation and editing with professional tools."
-    },
-    "features": ["Text-to-Image", "Generative Fill", "Vector Recolor", "Text Effects", "3D to Image"],
-    "tags": ["image", "adobe", "creative-cloud", "editing", "professional", "new", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "€5/Monat",
-      "en": "$5/month"
-    },
     "rating": 4.5,
     "description": {
-      "de": "Adobes KI für kreative Bildgenerierung und -bearbeitung mit professionellen Tools.",
-      "en": "Adobe's AI for creative image generation and editing with professional tools."
+      "de": "Open-Source Bildgenerierung mit voller Kontrolle und lokaler Installation.",
+      "en": "Open-source image generation with full control and local installation."
     },
-    "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
-    "badge": "new",
-    "useCases": ["photo-editing", "graphic-design", "illustration", "social-media", "advertising"],
+    "link": "https://stability.ai/stable-diffusion",
+    "badge": "free",
+    "useCases": ["custom-models", "local-generation", "research", "commercial", "art"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Adobe Firefly - KI für Kreative",
-      "en": "Adobe Firefly - AI for Creatives"
+      "de": "Stable Diffusion - Open-Source KI-Bildgenerierung",
+      "en": "Stable Diffusion - Open Source AI Image Generation"
     },
     "seoDesc": {
-      "de": "Adobe Firefly ist Adobes KI-Tool für kreative Bildgenerierung und -bearbeitung. Nahtlose Integration in Creative Cloud.",
-      "en": "Adobe Firefly is Adobe's AI tool for creative image generation and editing. Seamless integration with Creative Cloud."
+      "de": "Stable Diffusion ist ein Open-Source KI-Bildgenerator mit lokaler Installation und voller Kontrolle.",
+      "en": "Stable Diffusion is an open source AI image generator with local installation and full control."
     },
-    "alternatives": ["midjourney", "dalle-3", "canva-ai"],
+    "alternatives": ["midjourney", "dalle", "leonardo"],
     "pros": {
-      "de": ["Adobe-Integration", "Professionelle Werkzeuge", "Rechtlich sichere Bilder", "Keine Lernkurve für Adobe-Nutzer", "Kommerzielle Nutzung inklusive"],
-      "en": ["Adobe integration", "Professional tools", "Legally safe images", "No learning curve for Adobe users", "Commercial use included"]
+      "de": ["Open Source", "Lokale Installation", "Volle Kontrolle", "Kostenlos", "Custom Models"],
+      "en": ["Open source", "Local installation", "Full control", "Free", "Custom models"]
     },
     "cons": {
-      "de": ["Teilweise limitierte Kreativität", "Adobe-Abonnement nötig", "Weniger Kontrolle als Midjourney", "Langsamere Entwicklung"],
-      "en": ["Somewhat limited creativity", "Adobe subscription needed", "Less control than Midjourney", "Slower development"]
+      "de": ["Technische Hürden", "Hardware-Anforderungen", "Qualität variiert", "Kein Support", "Steile Lernkurve"],
+      "en": ["Technical hurdles", "Hardware requirements", "Quality varies", "No support", "Steep learning curve"]
     },
     "pricing": {
-      "de": "In Adobe Creative Cloud enthalten (ab €5/Monat für Studenten, ab €25/Monat regulär)",
-      "en": "Included in Adobe Creative Cloud (from $5/month for students, from $25/month regular)"
+      "de": "Komplett kostenlos (Open Source)",
+      "en": "Completely free (Open Source)"
     }
   },
   {
     "id": "leonardo",
-    "numericId": 15,
-    "name": "Leonardo AI",
+    "numericId": 41,
+    "name": "Leonardo.ai",
     "category": "image",
-    "aiScore": 88,
-    "popularityScore": 83,
+    "aiScore": 91,
+    "popularityScore": 88,
     "quickPeek": {
-      "de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
-      "en": "Image generation specialized in game assets, textures and 3D models."
+      "de": "Spiele- und 3D-Kunstgenerierung mit speziellen Tools für Designer.",
+      "en": "Game and 3D art generation with special tools for designers."
     },
-    "features": ["Game Assets", "3D Texturing", "Model Training", "Canvas Editor", "AI Canvas"],
-    "tags": ["image", "game", "3d", "assets", "textures", "new", "freemium", "lifetime-deal"],
+    "features": ["Game Art", "3D Textures", "Model Training", "Canvas Editor", "Community Models"],
+    "tags": ["image", "game-art", "3d", "textures", "design", "freemium", "lifetime-deal"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
-      "de": "ab €12/Monat",
-      "en": "from $12/month"
+      "de": "Kostenlos/ab €12",
+      "en": "Free/from $12"
     },
-    "rating": 4.4,
+    "rating": 4.6,
     "description": {
-      "de": "Bildgenerierung spezialisiert auf Game-Assets, Texturen und 3D-Modelle.",
-      "en": "Image generation specialized in game assets, textures and 3D models."
+      "de": "Spiele- und 3D-Kunstgenerierung mit speziellen Tools für Designer.",
+      "en": "Game and 3D art generation with special tools for designers."
     },
     "link": "https://leonardo.ai/",
-    "badge": "new",
-    "useCases": ["game-dev", "3d-models", "textures", "character-design", "concept-art"],
+    "badge": "featured",
+    "useCases": ["game-art", "3d-models", "textures", "concept-art", "design"],
     "votes": 0,
     "hasLifetimeDeal": true,
     "seoTitle": {
-      "de": "Leonardo AI - KI für Game-Design",
-      "en": "Leonardo AI - AI for Game Design"
+      "de": "Leonardo.ai - KI für Spielekunst und 3D",
+      "en": "Leonardo.ai - AI for Game Art and 3D"
     },
     "seoDesc": {
-      "de": "Leonardo AI ist spezialisiert auf Bildgenerierung für Spiele und 3D-Assets. Perfekt für Game-Entwickler.",
-      "en": "Leonardo AI specializes in image generation for games and 3D assets. Perfect for game developers."
+      "de": "Leonardo.ai ist ein KI-Bildgenerator spezialisiert auf Spielekunst, 3D-Modelle und Texturen.",
+      "en": "Leonardo.ai is an AI image generator specialized in game art, 3D models and textures."
     },
-    "alternatives": ["midjourney", "stable-diffusion", "playground"],
+    "alternatives": ["midjourney", "stable-diffusion", "dalle"],
     "pros": {
-      "de": ["Spezialisiert auf Game-Assets", "3D-Modell-Unterstützung", "Viele spezifische Modelle", "Eigene Modelle trainieren", "API verfügbar"],
-      "en": ["Specialized in game assets", "3D model support", "Many specific models", "Train your own models", "API available"]
+      "de": ["Spezialisiert auf Spielekunst", "3D Texturen", "Eigene Modelle trainieren", "Kostenlose Version", "Lifetime-Deal verfügbar"],
+      "en": ["Specialized in game art", "3D textures", "Train own models", "Free version", "Lifetime deal available"]
     },
     "cons": {
-      "de": ["Lernkurve für optimale Ergebnisse", "Begrenzte allgemeine Anwendung", "Teilweise inkonsistente Qualität", "Community noch klein"],
-      "en": ["Learning curve for optimal results", "Limited general application", "Somewhat inconsistent quality", "Community still small"]
+      "de": ["Weniger allgemein", "Qualität variiert", "Begrenzte kostenlose Tokens", "Neue Plattform", "Community noch wachsend"],
+      "en": ["Less general purpose", "Quality varies", "Limited free tokens", "New platform", "Community still growing"]
     },
     "pricing": {
-      "de": "Kostenlose Version verfügbar (150 Tokens/Tag), Apprentice: €12/Monat, Artisan: €30/Monat, Maestro: €60/Monat",
-      "en": "Free version available (150 tokens/day), Apprentice: $12/month, Artisan: $30/month, Maestro: $60/month"
+      "de": "Kostenlos (150 Tokens/Tag), Apprentice: €12/Monat, Artisan: €30/Monat",
+      "en": "Free (150 tokens/day), Apprentice: $12/month, Artisan: $30/month"
     }
   },
   {
-    "id": "playground",
-    "numericId": 16,
-    "name": "Playground AI",
+    "id": "canva-ai",
+    "numericId": 42,
+    "name": "Canva AI",
     "category": "image",
-    "aiScore": 86,
-    "popularityScore": 82,
+    "aiScore": 89,
+    "popularityScore": 92,
     "quickPeek": {
-      "de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
-      "en": "Free image generation with filters and advanced editing tools."
+      "de": "KI-Bildgenerierung und Design in der beliebten Canva Plattform.",
+      "en": "AI image generation and design in the popular Canva platform."
     },
-    "features": ["Free Tier", "Filters", "Editing Tools", "Image to Image", "Upscaling"],
-    "tags": ["image", "generation", "free", "editing", "filters", "free-tier", "freemium"],
+    "features": ["Design Tools", "Templates", "Magic Edit", "Background Removal", "Collaboration"],
+    "tags": ["image", "design", "templates", "easy", "collaboration", "popular", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €13",
+      "en": "Free/from $13"
+    },
+    "rating": 4.4,
+    "description": {
+      "de": "KI-Bildgenerierung und Design in der beliebten Canva Plattform.",
+      "en": "AI image generation and design in the popular Canva platform."
+    },
+    "link": "https://www.canva.com/ai-tools/",
+    "badge": "popular",
+    "useCases": ["design", "social-media", "marketing", "presentations", "branding"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Canva AI - KI-Design-Tools",
+      "en": "Canva AI - AI Design Tools"
+    },
+    "seoDesc": {
+      "de": "Canva AI bietet KI-Bildgenerierung und Design-Tools in der bekannten Canva Plattform.",
+      "en": "Canva AI offers AI image generation and design tools in the well-known Canva platform."
+    },
+    "alternatives": ["adobe-firefly", "leonardo", "dalle"],
+    "pros": {
+      "de": ["Einfache Bedienung", "Viele Vorlagen", "Kollaboration", "Kostenlose Version", "All-in-One Design"],
+      "en": ["Easy to use", "Many templates", "Collaboration", "Free version", "All-in-one design"]
+    },
+    "cons": {
+      "de": ["Weniger mächtige KI", "Wasserzeichen in Free", "Begrenzte Kontrolle", "Teilweise langsam", "Abhängig von Internet"],
+      "en": ["Less powerful AI", "Watermarks in free", "Limited control", "Sometimes slow", "Internet dependent"]
+    },
+    "pricing": {
+      "de": "Kostenlos, Canva Pro: €13/Monat, Teams: €17/Monat pro Benutzer",
+      "en": "Free, Canva Pro: $13/month, Teams: $17/month per user"
+    }
+  },
+  {
+    "id": "adobe-firefly",
+    "numericId": 43,
+    "name": "Adobe Firefly",
+    "category": "image",
+    "aiScore": 94,
+    "popularityScore": 87,
+    "quickPeek": {
+      "de": "KI-Bildgenerierung von Adobe mit Fokus auf kommerzielle Nutzung.",
+      "en": "AI image generation by Adobe with focus on commercial use."
+    },
+    "features": ["Commercial Safe", "Adobe Integration", "Generative Fill", "Text Effects", "Style Transfer"],
+    "tags": ["image", "adobe", "commercial", "photoshop", "safe", "popular", "freemium"],
+    "rankingHistory": [],
+    "price": "freemium",
+    "priceDisplay": {
+      "de": "Kostenlos/ab €25",
+      "en": "Free/from $25"
+    },
+    "rating": 4.6,
+    "description": {
+      "de": "KI-Bildgenerierung von Adobe mit Fokus auf kommerzielle Nutzung.",
+      "en": "AI image generation by Adobe with focus on commercial use."
+    },
+    "link": "https://www.adobe.com/sensei/generative-ai/firefly.html",
+    "badge": "popular",
+    "useCases": ["commercial", "design", "editing", "photoshop", "marketing"],
+    "votes": 0,
+    "hasLifetimeDeal": false,
+    "seoTitle": {
+      "de": "Adobe Firefly - Kommerzielle KI-Bilder",
+      "en": "Adobe Firefly - Commercial AI Images"
+    },
+    "seoDesc": {
+      "de": "Adobe Firefly ist ein KI-Bildgenerator von Adobe mit Fokus auf kommerziell sichere Nutzung.",
+      "en": "Adobe Firefly is an AI image generator by Adobe with focus on commercially safe use."
+    },
+    "alternatives": ["dalle", "midjourney", "canva-ai"],
+    "pros": {
+      "de": ["Kommerziell sicher", "Adobe Integration", "Generative Fill", "Hohe Qualität", "Kostenlose Credits"],
+      "en": ["Commercially safe", "Adobe integration", "Generative fill", "High quality", "Free credits"]
+    },
+    "cons": {
+      "de": ["Weniger kreativ", "Strenge Filter", "Teure Abos", "Neue Plattform", "Begrenzte kostenlose Nutzung"],
+      "en": ["Less creative", "Strict filters", "Expensive subscriptions", "New platform", "Limited free use"]
+    },
+    "pricing": {
+      "de": "Kostenlos (25 Credits), Adobe Creative Cloud: ab €25/Monat",
+      "en": "Free (25 credits), Adobe Creative Cloud: from $25/month"
+    }
+  },
+  {
+    "id": "runway-ml",
+    "numericId": 44,
+    "name": "Runway ML",
+    "category": "image",
+    "aiScore": 92,
+    "popularityScore": 86,
+    "quickPeek": {
+      "de": "KI-Kreativsuite für Bilder und Video mit professionellen Tools.",
+      "en": "AI creative suite for images and video with professional tools."
+    },
+    "features": ["Image to Video", "Inpainting", "Style Transfer", "Motion Brush", "3D Textures"],
+    "tags": ["image", "video", "creative", "professional", "editing", "new", "freemium"],
     "rankingHistory": [],
     "price": "freemium",
     "priceDisplay": {
       "de": "Kostenlos/ab €15",
       "en": "Free/from $15"
     },
-    "rating": 4.3,
+    "rating": 4.5,
     "description": {
-      "de": "Kostenlose Bildgenerierung mit Filtern und erweiterten Bearbeitungswerkzeugen.",
-      "en": "Free image generation with filters and advanced editing tools."
+      "de": "KI-Kreativsuite für Bilder und Video mit professionellen Tools.",
+      "en": "AI creative suite for images and video with professional tools."
     },
-    "link": "https://playgroundai.com/",
-    "badge": "free",
-    "useCases": ["social-media", "blog-images", "personal-projects", "experimentation", "education"],
+    "link": "https://runwayml.com/",
+    "badge": "new",
+    "useCases": ["video", "creative", "editing", "motion-graphics", "design"],
     "votes": 0,
     "hasLifetimeDeal": false,
     "seoTitle": {
-      "de": "Playground AI - Kostenlose KI-Bilder",
-      "en": "Playground AI - Free AI Images"
+      "de": "Runway ML - KI-Kreativsuite",
+      "en": "Runway ML - AI Creative Suite"
     },
     "seoDesc": {
-      "de": "Playground AI bietet kostenlose Bildgenerierung mit Filtern und Bearbeitungswerkzeugen. Ideal für Einsteiger.",
-      "en": "Playground AI offers free image generation with filters and editing tools. Ideal for beginners."
+      "de": "Runway ML ist eine KI-Kreativsuite für Bild- und Videobearbeitung mit professionellen Tools.",
+      "en": "Runway ML is an AI creative suite for image and video editing with professional tools."
     },
-    "alternatives": ["midjourney", "leonardo", "nightcafe"],
+    "alternatives": ["leonardo", "stable-diffusion", "pika-labs"],
     "pros": {
-      "de": ["Kostenlose Nutzung", "Filter und Bearbeitung", "Benutzerfreundlich", "Keine Kreditkarte nötig", "Schnelle Ergebnisse"],
-      "en": ["Free to use", "Filters and editing", "User-friendly", "No credit card needed", "Fast results"]
+      "de": ["Viele KI-Tools", "Video-Unterstützung", "Professionell", "Kostenlose Version", "Innovative Features"],
+      "en": ["Many AI tools", "Video support", "Professional", "Free version", "Innovative features"]
     },
     "cons": {
-      "de": ["Wasserzeichen in kostenloser Version", "Begrenzte tägliche Generierungen", "Weniger Qualität als Midjourney", "Keine kommerzielle Nutzung im Free-Tier"],
-      "en": ["Watermarks in free version", "Limited daily generations", "Less quality than Midjourney", "No commercial use in free tier"]
+      "de": ["Teuer für volle Nutzung", "Komplexe Bedienung", "Lernkurve", "Begrenzte kostenlose Credits", "Neue Features"],
+      "en": ["Expensive for full use", "Complex operation", "Learning curve", "Limited free credits", "New features"]
     },
     "pricing": {
-      "de": "Kostenlos: 500 Bilder/Tag mit Wasserzeichen, Pro: €15/Monat für 1000 Bilder/Tag, Premium: €45/Monat für unbegrenzt",
-      "en": "Free: 500 images/day with watermarks, Pro: $15/month for 1000 images/day, Premium: $45/month for unlimited"
-    }
-  },
-  {
-    "id": "canva-ai",
-    "numericId": 27,
-    "name": "Canva AI",
-    "category": "image",
-    "aiScore": 88,
-    "popularityScore": 90,
-    "quickPeek": {
-      "de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
-      "en": "AI design tools integrated into the popular design platform for everyone."
-    },
-    "features": ["Magic Design", "Text-to-Image", "Magic Eraser", "Background Remover", "Magic Write"],
-    "tags": ["image", "design", "canva", "templates", "editing", "popular", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €12/Monat",
-      "en": "from $12/month"
-    },
-    "rating": 4.4,
-    "description": {
-      "de": "KI-Design-Tools integriert in die beliebte Design-Plattform für alle.",
-      "en": "AI design tools integrated into the popular design platform for everyone."
-    },
-    "link": "https://www.canva.com/ai-tools/",
-    "badge": "popular",
-    "useCases": ["social-media", "presentations", "marketing", "education", "personal-projects"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Canva AI - KI-Design für alle",
-      "en": "Canva AI - AI Design for Everyone"
-    },
-    "seoDesc": {
-      "de": "Canva AI integriert KI in die beliebte Design-Plattform für einfacheres Erstellen.",
-      "en": "Canva AI integrates AI into the popular design platform for easier creation."
-    },
-    "alternatives": ["firefly", "playground", "photosonic"],
-    "pros": {
-      "de": ["Einfache Integration in Canva", "Viele Vorlagen", "Magic-Tools", "Kostenlose Version", "Team-Kollaboration"],
-      "en": ["Easy integration with Canva", "Many templates", "Magic tools", "Free version", "Team collaboration"]
-    },
-    "cons": {
-      "de": ["Begrenzte KI-Funktionen", "Canva-Abonnement benötigt", "Weniger Kontrolle als Pro-Tools", "Wasserzeichen im Free-Tier"],
-      "en": ["Limited AI features", "Canva subscription needed", "Less control than pro tools", "Watermarks in free tier"]
-    },
-    "pricing": {
-      "de": "Kostenlos: Basis-Funktionen, Canva Pro: €12/Monat, Teams: €14/Monat pro Benutzer",
-      "en": "Free: basic features, Canva Pro: $12/month, Teams: $14/month per user"
-    }
-  },
-  {
-    "id": "jasper-art",
-    "numericId": 45,
-    "name": "Jasper Art",
-    "category": "image",
-    "aiScore": 84,
-    "popularityScore": 82,
-    "quickPeek": {
-      "de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
-      "en": "Image generation for brands with customization and commercial use."
-    },
-    "features": ["Brand", "Styles", "Commercial", "Templates", "Customization"],
-    "tags": ["image", "brand", "commercial", "templates", "jasper", "popular", "paid"],
-    "rankingHistory": [],
-    "price": "paid",
-    "priceDisplay": {
-      "de": "€20/Monat",
-      "en": "$20/month"
-    },
-    "rating": 4.2,
-    "description": {
-      "de": "Bildgenerierung für Marken mit Anpassung und kommerzieller Nutzung.",
-      "en": "Image generation for brands with customization and commercial use."
-    },
-    "link": "https://www.jasper.ai/art",
-    "badge": "popular",
-    "useCases": ["marketing", "ads", "branding", "social-media", "product-images"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Jasper Art - Bildgenerierung für Marken",
-      "en": "Jasper Art - Image Generation for Brands"
-    },
-    "seoDesc": {
-      "de": "Jasper Art generiert Bilder für Marken mit Anpassung und kommerzieller Nutzung.",
-      "en": "Jasper Art generates images for brands with customization and commercial use."
-    },
-    "alternatives": ["midjourney", "dalle-3", "firefly"],
-    "pros": {
-      "de": ["Markenfokussiert", "Stil-Anpassung", "Kommerzielle Nutzung", "Jasper-Integration", "Einfache Bedienung"],
-      "en": ["Brand-focused", "Style customization", "Commercial use", "Jasper integration", "Easy to use"]
-    },
-    "cons": {
-      "de": ["Teuer", "Begrenzte Kreativität", "Weniger Kontrolle als Midjourney", "Nur mit Jasper verfügbar"],
-      "en": ["Expensive", "Limited creativity", "Less control than Midjourney", "Only available with Jasper"]
-    },
-    "pricing": {
-      "de": "€20/Monat (Teil von Jasper Creator-Plan oder höher)",
-      "en": "$20/month (Part of Jasper Creator plan or higher)"
-    }
-  },
-  {
-    "id": "photosonic",
-    "numericId": 46,
-    "name": "Photosonic",
-    "category": "image",
-    "aiScore": 82,
-    "popularityScore": 80,
-    "quickPeek": {
-      "de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-      "en": "Text-to-image generator by Writesonic with artistic styles."
-    },
-    "features": ["Art", "Styles", "Custom", "Upscaling", "Editing"],
-    "tags": ["image", "text-to-image", "artistic", "writesonic", "free", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €10/Monat",
-      "en": "from $10/month"
-    },
-    "rating": 4.1,
-    "description": {
-      "de": "Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-      "en": "Text-to-image generator by Writesonic with artistic styles."
-    },
-    "link": "https://photosonic.writesonic.com/",
-    "badge": "free",
-    "useCases": ["art", "design", "social", "blogging", "personal"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "Photosonic - Text-zu-Bild Generator",
-      "en": "Photosonic - Text-to-Image Generator"
-    },
-    "seoDesc": {
-      "de": "Photosonic ist ein Text-zu-Bild Generator von Writesonic mit künstlerischen Stilen.",
-      "en": "Photosonic is a text-to-image generator by Writesonic with artistic styles."
-    },
-    "alternatives": ["midjourney", "playground", "nightcafe"],
-    "pros": {
-      "de": ["Künstlerische Stile", "Anpassbare Generierung", "Kostenlose Nutzung", "Writesonic-Integration", "Einfache Bedienung"],
-      "en": ["Artistic styles", "Customizable generation", "Free to use", "Writesonic integration", "Easy to use"]
-    },
-    "cons": {
-      "de": ["Begrenzte Qualität", "Weniger bekannt", "Wasserzeichen im Free-Tier", "Langsame Generierung"],
-      "en": ["Limited quality", "Less known", "Watermarks in free tier", "Slow generation"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 10 Bilder, Premium: €10/Monat für 100 Bilder, Business: €25/Monat für 300 Bilder",
-      "en": "Free: 10 images, Premium: $10/month for 100 images, Business: $25/month for 300 images"
-    }
-  },
-  {
-    "id": "nightcafe",
-    "numericId": 47,
-    "name": "NightCafe",
-    "category": "image",
-    "aiScore": 86,
-    "popularityScore": 81,
-    "quickPeek": {
-      "de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-      "en": "AI art generator with community and various styles."
-    },
-    "features": ["Art", "Styles", "Community", "Challenges", "Printing"],
-    "tags": ["image", "art", "community", "challenges", "printing", "free", "freemium", "lifetime-deal"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €6/Monat",
-      "en": "from $6/month"
-    },
-    "rating": 4.3,
-    "description": {
-      "de": "KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-      "en": "AI art generator with community and various styles."
-    },
-    "link": "https://creator.nightcafe.studio/",
-    "badge": "free",
-    "useCases": ["art", "creativity", "prints", "community", "experimentation"],
-    "votes": 0,
-    "hasLifetimeDeal": true,
-    "seoTitle": {
-      "de": "NightCafe - KI-Kunstgenerator",
-      "en": "NightCafe - AI Art Generator"
-    },
-    "seoDesc": {
-      "de": "NightCafe ist ein KI-Kunstgenerator mit Community und verschiedenen Stilen.",
-      "en": "NightCafe is an AI art generator with community and various styles."
-    },
-    "alternatives": ["midjourney", "playground", "dreamstudio"],
-    "pros": {
-      "de": ["Kunst-fokussiert", "Community", "Verschiedene Stile", "Kostenlose Credits täglich", "Kunstwettbewerbe"],
-      "en": ["Art-focused", "Community", "Various styles", "Free daily credits", "Art challenges"]
-    },
-    "cons": {
-      "de": ["Langsame Generierung", "Begrenzte kostenlose Credits", "Weniger Qualität als Midjourney", "Wasserzeichen"],
-      "en": ["Slow generation", "Limited free credits", "Less quality than Midjourney", "Watermarks"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 5 Credits/Tag, AI Beginner: €6/Monat, AI Hobbyist: €10/Monat, AI Enthusiast: €20/Monat",
-      "en": "Free: 5 credits/day, AI Beginner: $6/month, AI Hobbyist: $10/month, AI Enthusiast: $20/month"
-    }
-  },
-  {
-    "id": "dreamstudio",
-    "numericId": 48,
-    "name": "DreamStudio",
-    "category": "image",
-    "aiScore": 88,
-    "popularityScore": 83,
-    "quickPeek": {
-      "de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-      "en": "Official web UI for Stable Diffusion with SDXL and control features."
-    },
-    "features": ["SDXL", "Control", "Custom", "API", "Upscaling"],
-    "tags": ["image", "stable-diffusion", "sdxl", "control", "api", "popular", "paid"],
-    "rankingHistory": [],
-    "price": "paid",
-    "priceDisplay": {
-      "de": "€10/Credits",
-      "en": "$10/credits"
-    },
-    "rating": 4.4,
-    "description": {
-      "de": "Offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-      "en": "Official web UI for Stable Diffusion with SDXL and control features."
-    },
-    "link": "https://dreamstudio.ai/",
-    "badge": "popular",
-    "useCases": ["art", "design", "prototyping", "commercial", "research"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "DreamStudio - Stable Diffusion Web UI",
-      "en": "DreamStudio - Stable Diffusion Web UI"
-    },
-    "seoDesc": {
-      "de": "DreamStudio ist die offizielle Web-UI für Stable Diffusion mit SDXL und Kontrollfunktionen.",
-      "en": "DreamStudio is the official web UI for Stable Diffusion with SDXL and control features."
-    },
-    "alternatives": ["midjourney", "leonardo", "playground"],
-    "pros": {
-      "de": ["Offizielle Stable Diffusion UI", "SDXL Unterstützung", "Kontrollfunktionen", "API verfügbar", "Hohe Qualität"],
-      "en": ["Official Stable Diffusion UI", "SDXL support", "Control features", "API available", "High quality"]
-    },
-    "cons": {
-      "de": ["Kredit-basiertes System", "Teuer für viele Bilder", "Keine kostenlose Version", "Technische Lernkurve"],
-      "en": ["Credit-based system", "Expensive for many images", "No free version", "Technical learning curve"]
-    },
-    "pricing": {
-      "de": "€10 für 1000 Credits (Pay-as-you-go), Enterprise-Preise auf Anfrage",
-      "en": "$10 for 1000 credits (pay-as-you-go), enterprise pricing available"
-    }
-  },
-  {
-    "id": "bluewillow",
-    "numericId": 49,
-    "name": "BlueWillow",
-    "category": "image",
-    "aiScore": 84,
-    "popularityScore": 80,
-    "quickPeek": {
-      "de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-      "en": "AI image generation via Discord with community and fast generation."
-    },
-    "features": ["Community", "Styles", "Fast", "Discord", "Templates"],
-    "tags": ["image", "discord", "community", "fast", "templates", "free", "freemium"],
-    "rankingHistory": [],
-    "price": "freemium",
-    "priceDisplay": {
-      "de": "ab €5/Monat",
-      "en": "from $5/month"
-    },
-    "rating": 4.2,
-    "description": {
-      "de": "KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-      "en": "AI image generation via Discord with community and fast generation."
-    },
-    "link": "https://www.bluewillow.ai/",
-    "badge": "free",
-    "useCases": ["art", "social", "design", "fun", "community"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "BlueWillow - KI-Bildgenerierung auf Discord",
-      "en": "BlueWillow - AI Image Generation on Discord"
-    },
-    "seoDesc": {
-      "de": "BlueWillow bietet KI-Bildgenerierung über Discord mit Community und schneller Generierung.",
-      "en": "BlueWillow offers AI image generation via Discord with community and fast generation."
-    },
-    "alternatives": ["midjourney", "playground", "nightcafe"],
-    "pros": {
-      "de": ["Discord-basiert", "Community", "Schnelle Generierung", "Kostenlose Version", "Einfache Bedienung"],
-      "en": ["Discord-based", "Community", "Fast generation", "Free version", "Easy to use"]
-    },
-    "cons": {
-      "de": ["Nur über Discord", "Begrenzte Kontrolle", "Weniger Qualität als Midjourney", "Wasserzeichen"],
-      "en": ["Only via Discord", "Limited control", "Less quality than Midjourney", "Watermarks"]
-    },
-    "pricing": {
-      "de": "Kostenlos: 10 Bilder/Tag, Basic: €5/Monat, Pro: €10/Monat, Premium: €25/Monat",
-      "en": "Free: 10 images/day, Basic: $5/month, Pro: $10/month, Premium: $25/month"
-    }
-  },
-  {
-    "id": "deepdream",
-    "numericId": 50,
-    "name": "DeepDream",
-    "category": "image",
-    "aiScore": 80,
-    "popularityScore": 78,
-    "quickPeek": {
-      "de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-      "en": "Early AI image generator with neural networks and experimental styles."
-    },
-    "features": ["Neural", "Art", "Experimental", "Style Transfer", "Customization"],
-    "tags": ["image", "neural", "experimental", "style-transfer", "historic", "free", "open-source"],
-    "rankingHistory": [],
-    "price": "free",
-    "priceDisplay": {
-      "de": "Kostenlos",
-      "en": "Free"
-    },
-    "rating": 4.0,
-    "description": {
-      "de": "Früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-      "en": "Early AI image generator with neural networks and experimental styles."
-    },
-    "link": "https://deepdreamgenerator.com/",
-    "badge": "free",
-    "useCases": ["art", "experimental", "fun", "education", "style-transfer"],
-    "votes": 0,
-    "hasLifetimeDeal": false,
-    "seoTitle": {
-      "de": "DeepDream - Früher KI-Bildgenerator",
-      "en": "DeepDream - Early AI Image Generator"
-    },
-    "seoDesc": {
-      "de": "DeepDream ist ein früher KI-Bildgenerator mit neuralen Netzwerken und experimentellen Stilen.",
-      "en": "DeepDream is an early AI image generator with neural networks and experimental styles."
-    },
-    "alternatives": ["midjourney", "nightcafe", "playground"],
-    "pros": {
-      "de": ["Kostenlos", "Experimentelle Stile", "Neurales Netzwerk-basiert", "Open-Source", "Historische Bedeutung"],
-      "en": ["Free", "Experimental styles", "Neural network-based", "Open-source", "Historical significance"]
-    },
-    "cons": {
-      "de": ["Veraltete Technologie", "Begrenzte praktische Anwendung", "Niedrige Qualität", "Langsam"],
-      "en": ["Outdated technology", "Limited practical application", "Low quality", "Slow"]
-    },
-    "pricing": {
-      "de": "Komplett kostenlos, Premium-Optionen für erweiterte Features verfügbar",
-      "en": "Completely free, premium options for advanced features available"
+      "de": "Kostenlos (125 Credits), Standard: €15/Monat, Pro: €35/Monat",
+      "en": "Free (125 credits), Standard: $15/month, Pro: $35/month"
     }
   }
 ]
