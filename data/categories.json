@@ -1,1 +1,55 @@
-
+{
+  "categories": [
+    {
+      "id": "text",
+      "name": { "de": "Text", "en": "Text" },
+      "icon": "✍️",
+      "description": {
+        "de": "Text-KI-Tools für Schreiben, Übersetzen, Zusammenfassen",
+        "en": "Text AI tools for writing, translating, summarizing"
+      },
+      "dataFile": "tools-text.json"
+    },
+    {
+      "id": "image",
+      "name": { "de": "Bild", "en": "Image" },
+      "icon": "🎨",
+      "description": {
+        "de": "Bildgenerierung und -bearbeitung mit KI",
+        "en": "AI image generation and editing"
+      },
+      "dataFile": "tools-image.json"
+    },
+    {
+      "id": "code",
+      "name": { "de": "Code", "en": "Code" },
+      "icon": "💻",
+      "description": {
+        "de": "KI-Tools für Code-Generierung und -Analyse",
+        "en": "AI tools for code generation and analysis"
+      },
+      "dataFile": "tools-code.json"
+    },
+    {
+      "id": "video",
+      "name": { "de": "Video", "en": "Video" },
+      "icon": "🎬",
+      "description": {
+        "de": "KI für Video-Erstellung und -Bearbeitung",
+        "en": "AI for video creation and editing"
+      },
+      "dataFile": "tools-video.json"
+    },
+    {
+      "id": "audio",
+      "name": { "de": "Audio", "en": "Audio" },
+      "icon": "🎵",
+      "description": {
+        "de": "KI für Audio- und Musikgenerierung",
+        "en": "AI for audio and music generation"
+      },
+      "dataFile": "tools-audio.json"
+    }
+  ],
+  "featured": "tools-featured.json"
+}
