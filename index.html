@@ -3160,10 +3160,11 @@ async function vote(toolId, type) {
   // 9. Listen aktualisieren
   updateTop5Bar();
   renderToolGroups();
+  }
   
   // 10. Filteransicht aktualisieren
-  if (activeFilterId) {
-    setActiveFilter(activeFilterId);
+  if (currentCategory) {
+    setActiveFilter(currentCategory);
   }
 }
 
