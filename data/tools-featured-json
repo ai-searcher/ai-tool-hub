@@ -1,1 +1,12 @@
-
+[
+  "chatgpt",
+  "midjourney",
+  "claude",
+  "github-copilot",
+  "elevenlabs",
+  "dalle-3",
+  "stable-diffusion",
+  "perplexity",
+  "pika",
+  "suno"
+]
