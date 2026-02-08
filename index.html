@@ -2084,15 +2084,15 @@ input:checked + .slider:before {
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      <strong>Cookie-Einstellungen</strong><br>
-      Technisch notwendige Cookies (Favoriten, Votes) sind aktiv. 
-      <button class="cookie-details-btn" id="cookieDetailsBtn">Details</button> 
-      <a href="#" id="privacyLinkCookie">Datenschutz</a>
+      <strong data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</strong><br>
+      <span data-de="Technisch notwendige Cookies (Favoriten, Votes) sind aktiv." data-en="Technically required cookies (favorites, votes) are active.">Technisch notwendige Cookies (Favoriten, Votes) sind aktiv.</span> 
+      <button class="cookie-details-btn" id="cookieDetailsBtn" data-de="Details" data-en="Details">Details</button> 
+      <a href="#" id="privacyLinkCookie" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
     </div>
     <div class="cookie-buttons">
-      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
-      <button class="cookie-btn settings" id="cookieSettings">Einstellungen</button>
-      <button class="cookie-btn accept" id="cookieAccept">Alle akzeptieren</button>
+      <button class="cookie-btn decline" id="cookieDecline" data-de="Ablehnen" data-en="Decline">Ablehnen</button>
+      <button class="cookie-btn settings" id="cookieSettings" data-de="Einstellungen" data-en="Settings">Einstellungen</button>
+      <button class="cookie-btn accept" id="cookieAccept" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
     </div>
   </div>
 </div>
@@ -2101,22 +2101,22 @@ input:checked + .slider:before {
 <div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
 <div class="modal" id="cookieSettingsModal">
   <div class="modal-header">
-    <h2 class="modal-title">Cookie-Einstellungen</h2>
+    <h2 class="modal-title" data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</h2>
     <button class="modal-close" id="cookieSettingsModalClose"><i class="fas fa-times"></i></button>
   </div>
   <div class="modal-content">
     <div class="cookie-setting">
-      <h3><i class="fas fa-chart-line"></i> Analyse-Cookies (Google Analytics)</h3>
-      <p>Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
+      <h3><i class="fas fa-chart-line"></i> <span data-de="Analyse-Cookies (Google Analytics)" data-en="Analytics Cookies (Google Analytics)">Analyse-Cookies (Google Analytics)</span></h3>
+      <p data-de="Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert." data-en="Help us understand how the website is used. Anonymized.">Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
       <label class="switch">
         <input type="checkbox" id="analyticsToggle" checked>
         <span class="slider"></span>
       </label>
-      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem">Aktiviert</p>
+      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem"><span data-de="Aktiviert" data-en="Active">Aktiviert</span></p>
     </div>
     <div class="cookie-buttons" style="margin-top:30px">
-      <button class="cookie-btn secondary" id="saveCookieSettings">Auswahl speichern</button>
-      <button class="cookie-btn accept" id="acceptAllCookies">Alle akzeptieren</button>
+      <button class="cookie-btn secondary" id="saveCookieSettings" data-de="Auswahl speichern" data-en="Save Selection">Auswahl speichern</button>
+      <button class="cookie-btn accept" id="acceptAllCookies" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
     </div>
   </div>
 </div>
@@ -2176,18 +2176,18 @@ input:checked + .slider:before {
     </div>
   </div>
   <div class="footer-links">
-    <a href="#" id="imprintLink">Impressum</a>
-    <a href="#" id="privacyLink">Datenschutz</a>
+    <a href="#" id="imprintLink" data-de="Impressum" data-en="Imprint">Impressum</a>
+    <a href="#" id="privacyLink" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
   </div>
   <div class="footer-legal-links">
-    <a href="#" id="legalDetailsBtn">Rechtliche Details</a> <span>•</span> 
+    <a href="#" id="legalDetailsBtn" data-de="Rechtliche Details" data-en="Legal Details">Rechtliche Details</a> <span>•</span> 
     <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a> <span>•</span> 
     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
   </div>
-  <div class="footer-age-warning">
+  <div class="footer-age-warning" data-de="Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll." data-en="This website is intended for users aged 16 and over. AI tools can generate unexpected content - use them responsibly.">
     <i class="fas fa-exclamation-triangle"></i> Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
   </div>
-  <div class="footer-copyright">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
+  <div class="footer-copyright" data-de="© 2026 AI Searcher. Alle Rechte vorbehalten." data-en="© 2026 AI Searcher. All rights reserved.">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
 </footer>
 
 <!-- Category Info Modal -->
@@ -2247,28 +2247,28 @@ input:checked + .slider:before {
 <div class="modal-overlay" id="imprintModalOverlay"></div>
 <div class="modal" id="imprintModal">
   <div class="modal-header">
-    <h2 class="modal-title">Impressum</h2>
+    <h2 class="modal-title" data-de="Impressum" data-en="Imprint">Impressum</h2>
     <button class="modal-close" id="imprintModalClose"><i class="fas fa-times"></i></button>
   </div>
   <div class="modal-content">
-    <h2>Impressum</h2>
-    <h3>Angaben gemäß § 5 DDG</h3>
+    <h2 data-de="Impressum" data-en="Imprint">Impressum</h2>
+    <h3 data-de="Angaben gemäß § 5 DDG" data-en="Information according to § 5 DDG">Angaben gemäß § 5 DDG</h3>
     <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3>Kontakt</h3>
-    <p>Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small></p>
-    <h3>Aufsichtsbehörde</h3>
-    <p>Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland</p>
-    <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+    <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
+    <p data-de="Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small>" data-en="Phone: +49 173 5489128 (No phone support)<br>Email: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Note: Support requests are handled exclusively by email.</i></small>">Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small></p>
+    <h3 data-de="Aufsichtsbehörde" data-en="Supervisory Authority">Aufsichtsbehörde</h3>
+    <p data-de="Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland" data-en="State Media Authority North Rhine-Westphalia<br>Location: Germany">Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland</p>
+    <h3 data-de="Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV" data-en="Responsible for content according to § 18 para. 2 MStV">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
     <p>Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3>Haftungsausschluss & Streitbeilegung</h3>
-    <p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-    <h3>Affiliate-Hinweis</h3>
-    <p>Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <h3>Affiliate-Links & Haftungsausschluss</h3>
-    <p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <p><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
-    <h3>Urheberrecht & Marken</h3>
-    <p>Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
+    <h3 data-de="Haftungsausschluss & Streitbeilegung" data-en="Disclaimer & Dispute Resolution">Haftungsausschluss & Streitbeilegung</h3>
+    <p data-de="Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen." data-en="The contents of this page have been created with the greatest care. However, no guarantee can be given for the correctness, completeness and topicality of the contents. We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.">Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <h3 data-de="Affiliate-Hinweis" data-en="Affiliate Notice">Affiliate-Hinweis</h3>
+    <p data-de="Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="This website contains affiliate links. If you purchase a product through these links, I receive a small commission. There are no additional costs for you.">Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+    <h3 data-de="Affiliate-Links & Haftungsausschluss" data-en="Affiliate Links & Disclaimer">Affiliate-Links & Haftungsausschluss</h3>
+    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="Links to AI tools are marked as affiliate links (*). For purchases through these links we receive a small commission. There are no additional costs for you.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+    <p data-de="<strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter." data-en="<strong>Important:</strong> We accept no liability for:<ul><li>Accuracy of tool descriptions (may change daily)</li><li>Availability or functionality of linked tools</li><li>Contract agreements with third-party providers</li><li>Privacy practices of external providers</li></ul>The contractual relationship is solely between you and the tool provider."><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
+    <h3 data-de="Urheberrecht & Marken" data-en="Copyright & Trademarks">Urheberrecht & Marken</h3>
+    <p data-de="Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken." data-en="All mentioned product names, logos and trademarks are property of their respective owners. Mention is for identification purposes only.">Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
   </div>
 </div>
 
@@ -2276,29 +2276,29 @@ input:checked + .slider:before {
 <div class="modal-overlay" id="privacyModalOverlay"></div>
 <div class="modal" id="privacyModal">
   <div class="modal-header">
-    <h2 class="modal-title">Datenschutz</h2>
+    <h2 class="modal-title" data-de="Datenschutz" data-en="Privacy">Datenschutz</h2>
     <button class="modal-close" id="privacyModalClose"><i class="fas fa-times"></i></button>
   </div>
   <div class="modal-content">
-    <h2>Datenschutzerklärung</h2>
-    <h3>1. Verantwortliche Stelle</h3>
-    <p>Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
-    <h3>2. Datenerhebung bei Website-Nutzung</h3>
-    <p>Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
-    <h3>3. Cookies & Local Storage</h3>
-    <p>Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
-    <h3>4. Google Analytics (nur nach Einwilligung)</h3>
-    <p>Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
-    <p>Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
-    <h3>5. Externe Links & Affiliate-Links</h3>
-    <p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
-    <h3>6. Ihre Rechte (DSGVO)</h3>
-    <p>Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com</p>
-    <h3>7. Hosting auf GitHub Pages</h3>
-    <p>Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
-    <h3>8. Sicherheit</h3>
-    <p>Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
-    <p><em>Stand: Februar 2026</em></p>
+    <h2 data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
+    <h3 data-de="1. Verantwortliche Stelle" data-en="1. Responsible Party">1. Verantwortliche Stelle</h3>
+    <p data-de="Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com" data-en="Responsible in terms of data protection laws:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>Email: ai.tool.hub.contact@gmail.com">Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
+    <h3 data-de="2. Datenerhebung bei Website-Nutzung" data-en="2. Data Collection when Using the Website">2. Datenerhebung bei Website-Nutzung</h3>
+    <p data-de="Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht." data-en="For informational use, we do not collect personal data. Server log files (IP, browser type, access time) are automatically collected by the hosting provider and deleted after 7 days.">Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
+    <h3 data-de="3. Cookies & Local Storage" data-en="3. Cookies & Local Storage">3. Cookies & Local Storage</h3>
+    <p data-de="Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren." data-en="We use technically necessary cookies for functions such as favorites and voting. These are stored locally in your browser and contain no personal data. Optionally you can activate analytics cookies.">Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
+    <h3 data-de="4. Google Analytics (nur nach Einwilligung)" data-en="4. Google Analytics (only with consent)">4. Google Analytics (nur nach Einwilligung)</h3>
+    <p data-de="Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert." data-en="This website uses Google Analytics 4, a web analytics service from Google LLC. IP anonymization is enabled. Your IP address is shortened before reaching the USA. Data is stored for a maximum of 14 months.">Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
+    <p data-de="Sie können Analytics deaktivieren über: <a href='#' id='analyticsOptOut'>Analytics deaktivieren</a>" data-en="You can disable analytics via: <a href='#' id='analyticsOptOut'>Disable Analytics</a>">Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
+    <h3 data-de="5. Externe Links & Affiliate-Links" data-en="5. External Links & Affiliate Links">5. Externe Links & Affiliate-Links</h3>
+    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen." data-en="Links to AI tools are marked as affiliate links (*). When clicking, no personal data is transferred to us. External pages are subject to their own privacy policies.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
+    <h3 data-de="6. Ihre Rechte (DSGVO)" data-en="6. Your Rights (GDPR)">6. Ihre Rechte (DSGVO)</h3>
+    <p data-de="Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com" data-en="You have the right to:<ul><li>Information about stored data</li><li>Correction of incorrect data</li><li>Deletion of your data</li><li>Restriction of processing</li><li>Data portability</li><li>Revocation of your consent</li></ul>Contact: ai.tool.hub.contact@gmail.com">Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com</p>
+    <h3 data-de="7. Hosting auf GitHub Pages" data-en="7. Hosting on GitHub Pages">7. Hosting auf GitHub Pages</h3>
+    <p data-de="Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>." data-en="This page is hosted on GitHub Pages. GitHub may process technical access data (IP, access time). Further information: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>.">Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
+    <h3 data-de="8. Sicherheit" data-en="8. Security">8. Sicherheit</h3>
+    <p data-de="Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy)." data-en="We implement technical measures to protect your data (HTTPS, Content Security Policy).">Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
+    <p><em data-de="Stand: Februar 2026" data-en="Status: February 2026">Stand: Februar 2026</em></p>
   </div>
 </div>
 
@@ -2787,17 +2787,42 @@ async function vote(toolId, direction) {
   };
   localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
   
+  // Update list vote count
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
-    voteCountElement.textContent = tool.votes;
+    voteCountElement.textContent = Math.max(tool.votes, 0);
     voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
     setTimeout(() => {
       voteCountElement.classList.remove('moving-up', 'moving-down');
     }, 500);
   }
   
+  // Update drawer vote count
+  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (drawerVoteCount) {
+    drawerVoteCount.textContent = Math.max(tool.votes, 0);
+    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      drawerVoteCount.classList.remove('moving-up', 'moving-down');
+    }, 500);
+    
+    // Update vote buttons in drawer
+    const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
+    const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
+    if (drawerUpButton && drawerDownButton) {
+      drawerUpButton.className = `vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}`;
+      drawerDownButton.className = `vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}`;
+    }
+  }
+  
   updateTop5Vote(toolId, tool.votes);
-  renderToolGroups();
+  
+  // Update list vote buttons
+  const upButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
+  const downButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
+  if (upButton) upButton.className = `vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}`;
+  if (downButton) downButton.className = `vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}`;
+  
   showNotification(
     currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
     'success'
@@ -2825,6 +2850,17 @@ function toggleFavorite(toolId) {
   updateFavoritesDrawer();
   updateFavoritesBadge();
   renderToolGroups();
+  
+  // Update drawer favorite button
+  const drawerFavoriteButton = document.getElementById(`drawer-favorite-${toolId}`);
+  if (drawerFavoriteButton) {
+    drawerFavoriteButton.innerHTML = isFavorite(toolId) ? 
+      '<i class="fas fa-star"></i> ' + (currentLang === 'de' ? 'Entfernen' : 'Remove') :
+      '<i class="far fa-star"></i> ' + (currentLang === 'de' ? 'Favorisieren' : 'Favorite');
+    drawerFavoriteButton.className = isFavorite(toolId) ? 
+      'dock-action-btn secondary active' : 
+      'dock-action-btn secondary';
+  }
 }
 
 function toggleComparison(toolId) {
@@ -3072,6 +3108,35 @@ function openToolDrawer(toolId) {
           </div>
         </div>
       </div>
+      
+      <!-- VOTING SECTION IN DRAWER -->
+      <div style="background:var(--bg-hover);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-weight:700;color:var(--text-primary);">
+              <span data-de="Community-Bewertung" data-en="Community Rating">Community-Bewertung</span>:
+            </span>
+            <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:1.5rem;">${getToolVotes(tool)}</div>
+            <div class="vote-buttons" style="display:flex;gap:6px;">
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                      id="drawer-vote-up-${tool.id}"
+                      onclick="vote('${tool.id}', 'up')">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                      id="drawer-vote-down-${tool.id}"
+                      onclick="vote('${tool.id}', 'down')">
+                <i class="fas fa-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+          <div style="color:var(--text-secondary);font-size:.85rem;">
+            <i class="fas fa-info-circle"></i>
+            <span data-de="Deine Stimme zählt!" data-en="Your vote counts!">Deine Stimme zählt!</span>
+          </div>
+        </div>
+      </div>
+      
       <p style="color:var(--text-secondary);line-height:1.6;margin-bottom:24px">
         ${seoDesc}
       </p>
@@ -3083,13 +3148,12 @@ function openToolDrawer(toolId) {
           <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
         </button>
         <button class="dock-action-btn secondary" 
+                id="drawer-favorite-${tool.id}"
                 onclick="toggleFavorite('${tool.id}')" 
                 style="width:auto">
-          <i class="fas fa-star"></i>
-          <span>${isFavorite(tool.id) ? 
-            (currentLang === 'de' ? 'Entfernen' : 'Remove') : 
-            (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}
-          </span>
+          ${isFavorite(tool.id) ? 
+            '<i class="fas fa-star"></i> ' + (currentLang === 'de' ? 'Entfernen' : 'Remove') :
+            '<i class="far fa-star"></i> ' + (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}
         </button>
       </div>
     </div>
@@ -3362,7 +3426,7 @@ function openCookieSettings() {
 function updateAnalyticsStatus(isEnabled) {
   const statusElement = document.getElementById('analyticsStatus');
   if (statusElement) {
-    statusElement.textContent = isEnabled ? 'Aktiviert' : 'Deaktiviert';
+    statusElement.textContent = isEnabled ? (currentLang === 'de' ? 'Aktiviert' : 'Active') : (currentLang === 'de' ? 'Deaktiviert' : 'Disabled');
     statusElement.style.color = isEnabled ? 'var(--success)' : 'var(--text-secondary)';
   }
 }
@@ -3374,11 +3438,17 @@ function saveCookieSettings() {
     localStorage.setItem('cookieConsent', 'accepted');
     window.cookiePreferences.analytics = true;
     initAnalytics();
-    showNotification('Analyse-Cookies aktiviert', 'success');
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies aktiviert' : 'Analytics cookies activated',
+      'success'
+    );
   } else {
     localStorage.setItem('cookieConsent', 'declined');
     window.cookiePreferences.analytics = false;
-    showNotification('Analyse-Cookies deaktiviert', 'info');
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies deaktiviert' : 'Analytics cookies deactivated',
+      'info'
+    );
   }
   
   closeModal('cookieSettingsModal');
@@ -3579,7 +3649,10 @@ function setupEventListeners() {
     localStorage.setItem('cookieConsent', 'declined');
     window.cookiePreferences.analytics = false;
     document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-    showNotification('Google Analytics wurde deaktiviert', 'success');
+    showNotification(
+      currentLang === 'de' ? 'Google Analytics wurde deaktiviert' : 'Google Analytics has been disabled',
+      'success'
+    );
   });
   
   // Rechtliche Details
