@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; base-uri 'self'; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://doicozkpdbkyvdkpujoh.supabase.co; base-uri 'self'; frame-ancestors 'none';">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -25,6 +25,14 @@
 <script>
   window.cookiePreferences = window.cookiePreferences || {};
   window.cookiePreferences.analytics = false;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // SUPABASE FIX: Global initialisieren
+  // WICHTIG: Dieser Key muss durch einen echten Supabase Anon Key ersetzt werden!
+  const supabaseUrl = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI'
+  window.supabase = window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -835,6 +843,12 @@ body::before {
   background: rgba(239, 68, 68, 0.15);
   border-color: var(--error);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.vote-btn-row:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 .tool-info {
@@ -2239,10 +2253,19 @@ body::before {
 let aiTools = [];
 let currentLang = 'de';
 let currentCategory = 'all';
+let currentPriceFilter = 'all';
+let currentSort = 'votes';
 let searchQuery = '';
 let hoverTimeout = null;
 let peekElement = null;
 let isDrawerOpen = false;
+let supabaseRealtimeSubscription = null;
+let top5Tools = [];
+let pollInterval = null;
+let activeFilterId = null;
+
+// Voting state management - verhindert Race Conditions
+let votingInProgress = new Set();
 
 // ===== BASELINE VOTES =====
 const BASELINE_VOTES = 2; // Jedes Tool startet mit 2 unsichtbaren Votes für stabilere Sortierung
@@ -2254,21 +2277,54 @@ function safeNumber(val) {
 }
 
 function getRawVotes(tool) {
-  return safeNumber(tool?.votes ?? 0);
+  return safeNumber(tool?.votes ?? tool?.total_votes ?? 0);
 }
 
 function getDisplayVotes(tool) {
   return Math.max(getRawVotes(tool), 0);
 }
 
+// HTML Sanitization für XSS-Schutz
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return String(text).replace(/[&<>"']/g, m => map[m]);
+}
+
+// ===== SUPABASE CLIENT ÜBERPRÜFEN =====
+if (typeof window.supabase === 'undefined' && typeof window.supabaseClient !== 'undefined') {
+  window.supabase = window.supabaseClient;
+}
+
+if (typeof window.supabase === 'undefined') {
+  console.log('Supabase Client neu initialisieren...');
+  const supabaseUrl = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk2NzMxMDAsImV4cCI6MjAyNTI0OTEwMH0.PLACEHOLDER-REPLACE-WITH-YOUR-REAL-KEY';
+  window.supabase = window.supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+}
+
+console.log('Supabase Client verfügbar?', typeof window.supabase !== 'undefined');
+
 // ===== INITIALISIERUNG =====
 async function init() {
-  await loadAITools();
-  setupEventListeners();
-  renderFilterChips();
-  updateTop5Bar();
-  updateFloatingBadge();
-  checkCookieConsent();
+  try {
+    await loadAITools();
+    setupEventListeners();
+    renderFilterChips();
+    updateTop5Bar();
+    updateFloatingBadge();
+    checkCookieConsent();
+    setupSupabaseRealtime();
+    startPolling();
+  } catch (error) {
+    console.error('Initialisierungsfehler:', error);
+    showNotification('Fehler beim Laden der Anwendung', 'error');
+  }
 }
 
 // ===== DATEN LADEN =====
@@ -2280,22 +2336,13 @@ async function loadAITools() {
     if (!response.ok) throw new Error('HTTP error! status: ' + response.status);
     aiTools = await response.json();
     
-    // Lade Votes aus LocalStorage
-    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    await initializeUser();
+    await loadVotesFromSupabase();
     
-    // Initialisiere jedes Tool mit gespeicherten Votes
+    const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     aiTools.forEach(tool => {
-      const saved = savedVotes[tool.id];
-      if (saved) {
-        tool.userVote = saved.userVote ?? 0;
-        tool.votes = saved.totalVotes ?? 0;
-        tool.upvotes = saved.upvotes ?? 0;
-        tool.downvotes = saved.downvotes ?? 0;
-      } else {
-        tool.userVote = 0;
-        tool.votes = 0;
-        tool.upvotes = 0;
-        tool.downvotes = 0;
+      if (savedVotes[tool.id]) {
+        tool.userVote = savedVotes[tool.id].userVote ?? 0;
       }
     });
     
@@ -2310,6 +2357,39 @@ async function loadAITools() {
       <i class="fas fa-exclamation-triangle"></i>
       <p>Fehler beim Laden. Bitte neu laden.</p>
     `;
+  }
+}
+
+async function initializeUser() {
+  let userId = localStorage.getItem('aiUserId');
+  if (!userId) {
+    userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('aiUserId', userId);
+  }
+}
+
+async function loadVotesFromSupabase() {
+  try {
+    if (typeof window.supabase === 'undefined') return;
+    
+    const { data: votesData, error } = await window.supabase
+      .from('tool_votes')
+      .select('*');
+      
+    if (error) throw error;
+      
+    if (votesData) {
+      votesData.forEach(vote => {
+        const tool = aiTools.find(t => t.id === vote.tool_id);
+        if (tool) {
+          tool.votes = vote.total_votes ?? 0;
+          tool.upvotes = vote.upvotes ?? 0;
+          tool.downvotes = vote.downvotes ?? 0;
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error loading votes:', error);
   }
 }
 
@@ -2349,24 +2429,29 @@ function updateTop5Bar() {
     })
     .slice(0, 5);
   
+  top5Tools = sortedTools;
+  
   const top5HTML = sortedTools.map((tool, index) => {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
     const quickPeek = tool.quickPeek ? 
       (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
       (description.length > 60 ? description.substring(0, 60) + '...' : description);
     
+    const safeName = escapeHtml(tool.name);
+    const safeQuickPeek = escapeHtml(quickPeek);
+    
     return `
-      <div class="top5-item" data-id="${tool.id}" 
-           onclick="openToolDrawer('${tool.id}')"
-           title="${tool.name}">
+      <div class="top5-item" data-id="${escapeHtml(tool.id)}" 
+           onclick="openToolDrawer('${escapeHtml(tool.id)}')"
+           title="${safeName}">
         <div class="top5-rank">${index + 1}</div>
         <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
         <div class="top5-info">
-          <div class="top5-name">${tool.name}</div>
+          <div class="top5-name">${safeName}</div>
           <div class="top5-category">${getCategoryLabel(tool.category)}</div>
         </div>
-        <div class="top5-votes" id="top5Votes-${tool.id}">${getDisplayVotes(tool)}</div>
-        <div class="top5-quickpeek">${quickPeek}</div>
+        <div class="top5-votes" id="top5Votes-${escapeHtml(tool.id)}">${getDisplayVotes(tool)}</div>
+        <div class="top5-quickpeek">${safeQuickPeek}</div>
       </div>
     `;
   }).join('');
@@ -2378,16 +2463,97 @@ function updateTop5Bar() {
 function updateTop5VoteCount(toolId, newVotes) {
   const voteElement = document.getElementById(`top5Votes-${toolId}`);
   if (voteElement) {
+    const oldVotes = parseInt(voteElement.textContent);
     const displayNewVotes = Math.max(newVotes, 0);
-    voteElement.textContent = displayNewVotes;
-    voteElement.classList.add('changed');
-    setTimeout(() => {
-      voteElement.classList.remove('changed');
-    }, 600);
+    if (displayNewVotes !== oldVotes) {
+      voteElement.textContent = displayNewVotes;
+      voteElement.classList.add('changed');
+      setTimeout(() => {
+        voteElement.classList.remove('changed');
+      }, 600);
+      
+      setTimeout(() => {
+        updateTop5Bar();
+      }, 100);
+    }
   }
 }
 
-// ===== GRUPPIERTE TOOL-LISTE =====
+// ===== SUPABASE REALTIME =====
+function setupSupabaseRealtime() {
+  if (typeof window.supabase === 'undefined') return;
+  
+  try {
+    supabaseRealtimeSubscription = window.supabase
+      .channel('tool_votes_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'tool_votes' }, 
+        (payload) => {
+          console.log('Realtime vote payload:', payload);
+          handleVoteUpdate(payload);
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('Realtime subscription active');
+        } else {
+          console.log('Realtime subscription failed, falling back to polling');
+        }
+      });
+  } catch (error) {
+    console.error('Realtime subscription error:', error);
+  }
+}
+
+function handleVoteUpdate(payload) {
+  const { eventType, new: newRecord, old: oldRecord } = payload;
+  const toolId = newRecord?.tool_id || oldRecord?.tool_id;
+  
+  if (!toolId) return;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (tool) {
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      tool.votes = safeNumber(newRecord?.total_votes);
+      tool.upvotes = safeNumber(newRecord?.upvotes);
+      tool.downvotes = safeNumber(newRecord?.downvotes);
+    } else if (eventType === 'DELETE') {
+      tool.votes = 0;
+      tool.upvotes = 0;
+      tool.downvotes = 0;
+    }
+    
+    updateTop5VoteCount(toolId, tool.votes);
+    updateToolRowVoteCount(toolId);
+  }
+}
+
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  
+  pollInterval = setInterval(async () => {
+    try {
+      await loadVotesFromSupabase();
+      updateTop5Bar();
+      renderToolGroups();
+      updateFloatingBadge();
+    } catch (error) {
+      console.error('Polling error:', error);
+    }
+  }, 30000);
+}
+
+function updateToolRowVoteCount(toolId) {
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (!voteCountElement) return;
+
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  voteCountElement.textContent = String(getDisplayVotes(tool));
+}
+
+// ===== GRUPPIERTE TOOL-LISTE (KORRIGIERT MIT BASELINE) =====
 function renderToolGroups() {
   // Bestimme welche Kategorien angezeigt werden sollen
   let categoriesToShow = ['text', 'image', 'code', 'video', 'audio'];
@@ -2430,7 +2596,7 @@ function renderToolGroups() {
       `;
     }
     
-    // Sortiere Tools nach votes MIT Baseline für Sortierung
+    // Sortiere Tools nach votes MIT Baseline für Sortierung, ABER ohne Baseline für Anzeige
     const sortedTools = [...categoryTools].sort((a, b) => {
       // Für die Sortierung: echte Votes + Baseline
       const aVotesWithBaseline = Math.max(getRawVotes(a), 0) + BASELINE_VOTES;
@@ -2451,19 +2617,22 @@ function renderToolGroups() {
     const groupHTML = displayTools.map(tool => {
       const description = currentLang === 'de' ? tool.description.de : tool.description.en;
       const ltdBadge = tool.hasLifetimeDeal ? '<span class="ltd-badge" style="margin-left: 8px; background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem; font-weight: 800;">LTD</span>' : '';
-          
+      
+      const safeName = escapeHtml(tool.name);
+      const safeDesc = escapeHtml(description);
+      
       return `
-        <div class="tool-row" data-id="${tool.id}" 
-             onmouseenter="showToolPeek(event, '${tool.id}')"
+        <div class="tool-row" data-id="${escapeHtml(tool.id)}" 
+             onmouseenter="showToolPeek(event, '${escapeHtml(tool.id)}')"
              onmouseleave="hideToolPeek()"
-             onclick="openToolDrawer('${tool.id}')">
+             onclick="openToolDrawer('${escapeHtml(tool.id)}')">
           <div class="tool-vote" onclick="event.stopPropagation()">
-            <div class="vote-count" id="voteCount-${tool.id}">${getDisplayVotes(tool)}</div>
+            <div class="vote-count" id="voteCount-${escapeHtml(tool.id)}">${getDisplayVotes(tool)}</div>
             <div class="vote-buttons">
-              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${tool.id}', 'up')">
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" onclick="vote('${escapeHtml(tool.id)}', 'up')">
                 <i class="fas fa-arrow-up"></i>
               </button>
-              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${tool.id}', 'down')">
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" onclick="vote('${escapeHtml(tool.id)}', 'down')">
                 <i class="fas fa-arrow-down"></i>
               </button>
             </div>
@@ -2472,22 +2641,22 @@ function renderToolGroups() {
           <div class="tool-info">
             <div class="tool-category">${getCategoryLabel(tool.category)}</div>
             <div class="tool-name">
-              ${tool.name}
+              ${safeName}
               ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color: var(--secondary); font-size: 0.9rem;"></i>' : ''}
             </div>
-            <div class="tool-desc">${description}</div>
+            <div class="tool-desc">${safeDesc}</div>
           </div>
           
           <div class="tool-meta" onclick="event.stopPropagation()">
-            <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
+            <div class="tool-price">${escapeHtml(tool.priceDisplay[currentLang === 'de' ? 'de' : 'en'])}${ltdBadge}</div>
             <div class="tool-actions">
-              <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${tool.id}')">
+              <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" onclick="toggleFavorite('${escapeHtml(tool.id)}')">
                 <i class="fas fa-star"></i>
               </button>
-              <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${tool.id}')">
+              <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" onclick="toggleComparison('${escapeHtml(tool.id)}')">
                 <i class="fas fa-balance-scale"></i>
               </button>
-              <a href="${tool.link}" target="_blank" rel="noopener noreferrer" class="tool-action-btn open" onclick="event.stopPropagation(); trackToolClick('${tool.id}')">
+              <a href="${escapeHtml(tool.link)}" target="_blank" rel="noopener noreferrer" class="tool-action-btn open" onclick="event.stopPropagation(); trackToolClick('${escapeHtml(tool.id)}')">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -2559,21 +2728,25 @@ function createToolPeek(event, tool) {
   const description = currentLang === 'de' ? tool.description.de : tool.description.en;
   const ltdBadge = tool.hasLifetimeDeal ? '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : '';
   
+  const safeName = escapeHtml(tool.name);
+  const safeDesc = escapeHtml(description);
+  const safePrice = escapeHtml(tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']);
+  
   peekElement = document.createElement('div');
   peekElement.className = 'tool-peek';
   peekElement.innerHTML = `
     <div class="peek-header">
       <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
       <div>
-        <div class="peek-name">${tool.name}</div>
+        <div class="peek-name">${safeName}</div>
         <div class="peek-category">${getCategoryLabel(tool.category)}</div>
       </div>
     </div>
-    <div class="peek-desc">${description}</div>
+    <div class="peek-desc">${safeDesc}</div>
     <div class="peek-meta">
       <span class="peek-badge price">
         <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
-        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+        ${safePrice}
       </span>
       <span class="peek-badge rating">
         <i class="fas fa-star"></i>
@@ -2633,19 +2806,24 @@ function openToolDrawer(toolId) {
   const features = tool.features || [];
   const alternatives = tool.alternatives || [];
   
-  const prosHTML = pros.map(pro => '<li>' + pro + '</li>').join('');
-  const consHTML = cons.map(con => '<li>' + con + '</li>').join('');
-  const featuresHTML = features.map(f => '<span class="peek-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--secondary); border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fas fa-check-circle"></i> ' + f + '</span>').join('');
+  const prosHTML = pros.map(pro => '<li>' + escapeHtml(pro) + '</li>').join('');
+  const consHTML = cons.map(con => '<li>' + escapeHtml(con) + '</li>').join('');
+  const featuresHTML = features.map(f => '<span class="peek-badge" style="background: rgba(168, 85, 247, 0.15); color: var(--secondary); border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fas fa-check-circle"></i> ' + escapeHtml(f) + '</span>').join('');
   
   const alternativesHTML = alternatives.map(altId => {
     const altTool = aiTools.find(t => t.id === altId);
     if (!altTool) return '';
     return `
-      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor: pointer;">
+      <div class="dock-item" onclick="openToolDrawer('${escapeHtml(altTool.id)}')" style="cursor: pointer;">
         ${getCategoryIcon(altTool.category)}
       </div>
     `;
   }).join('');
+  
+  const safeName = escapeHtml(tool.name);
+  const safeSeoDesc = escapeHtml(seoDesc);
+  const safeLink = escapeHtml(tool.link);
+  const safePrice = escapeHtml(tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']);
   
   const drawerContent = `
     <div style="margin-bottom: 24px;">
@@ -2654,7 +2832,7 @@ function openToolDrawer(toolId) {
           ${getCategoryIcon(tool.category)}
         </div>
         <div style="flex: 1;">
-          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">${tool.name}</h3>
+          <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">${safeName}</h3>
           <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
             <span class="peek-badge category" style="background: rgba(0, 212, 255, 0.15); color: var(--primary); border: 1px solid rgba(0, 212, 255, 0.3);">
               <i class="fas fa-tag"></i>
@@ -2662,7 +2840,7 @@ function openToolDrawer(toolId) {
             </span>
             <span class="peek-badge price">
               <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i>
-              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+              ${safePrice}
             </span>
             <span class="peek-badge rating">
               <i class="fas fa-star"></i>
@@ -2673,14 +2851,14 @@ function openToolDrawer(toolId) {
         </div>
       </div>
       
-      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">${seoDesc}</p>
+      <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">${safeSeoDesc}</p>
       
       <div style="display: flex; gap: 12px; margin-bottom: 24px;">
-        <button class="dock-action-btn primary" onclick="window.open('${tool.link}', '_blank'); trackToolClick('${tool.id}')" style="flex: 1;">
+        <button class="dock-action-btn primary" onclick="window.open('${safeLink}', '_blank'); trackToolClick('${escapeHtml(tool.id)}')" style="flex: 1;">
           <i class="fas fa-external-link-alt"></i>
           <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
         </button>
-        <button class="dock-action-btn secondary" onclick="toggleFavorite('${tool.id}')" style="width: auto;">
+        <button class="dock-action-btn secondary" onclick="toggleFavorite('${escapeHtml(tool.id)}')" style="width: auto;">
           <i class="fas fa-star"></i>
           <span>${isFavorite(tool.id) ? (currentLang === 'de' ? 'Entfernen' : 'Remove') : (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}</span>
         </button>
@@ -2762,7 +2940,7 @@ function closeToolDrawer() {
   document.body.style.overflow = '';
 }
 
-// ===== FILTER CHIPS =====
+// ===== FILTER CHIPS (KORRIGIERT) =====
 function renderFilterChips() {
   const filters = [
     { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
@@ -2793,6 +2971,7 @@ function renderFilterChips() {
 
 function setActiveFilter(filterId) {
   currentCategory = filterId;
+  activeFilterId = filterId;
   
   // Entferne active Klasse von allen Chips
   document.querySelectorAll('.filter-chip').forEach(chip => {
@@ -2800,9 +2979,9 @@ function setActiveFilter(filterId) {
   });
   
   // Setze active Klasse auf geklickten Chip
-  const targetChip = document.querySelector(`[data-filter="${filterId}"]`);
-  if (targetChip) {
-    targetChip.classList.add('active');
+  const activeChip = document.querySelector(`[data-filter="${filterId}"]`);
+  if (activeChip) {
+    activeChip.classList.add('active');
   }
   
   renderToolGroups();
@@ -2830,9 +3009,9 @@ function updateFavoritesOverlay() {
     const tool = aiTools.find(t => t.id === toolId);
     if (!tool) return '';
     return `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+      <div class="dock-item" data-id="${escapeHtml(toolId)}" onclick="openToolDrawer('${escapeHtml(toolId)}')">
         ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${toolId}')">
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleFavorite('${escapeHtml(toolId)}')">
           <i class="fas fa-times"></i>
         </div>
       </div>
@@ -2843,9 +3022,9 @@ function updateFavoritesOverlay() {
     const tool = aiTools.find(t => t.id === toolId);
     if (!tool) return '';
     return `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+      <div class="dock-item" data-id="${escapeHtml(toolId)}" onclick="openToolDrawer('${escapeHtml(toolId)}')">
         ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleComparison('${toolId}')">
+        <div class="dock-item-remove" onclick="event.stopPropagation(); toggleComparison('${escapeHtml(toolId)}')">
           <i class="fas fa-times"></i>
         </div>
       </div>
@@ -2870,10 +3049,28 @@ function updateFloatingBadge() {
   }
 }
 
-// ===== VOTING =====
+// ===== VOTING MIT BASELINE-KORREKTUR UND DEBOUNCE =====
 async function vote(toolId, type) {
+  // Prüfe ob bereits ein Vote für dieses Tool läuft
+  if (votingInProgress.has(toolId)) {
+    showNotification(currentLang === 'de' ? 'Bitte warten...' : 'Please wait...', 'info');
+    return;
+  }
+  
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
+  
+  if (typeof window.supabase === 'undefined') {
+    showNotification(currentLang === 'de' ? 'Fehler: Datenbank nicht verfügbar' : 'Error: Database not available', 'error');
+    return;
+  }
+  
+  // Markiere dass Vote läuft
+  votingInProgress.add(toolId);
+  
+  // Disable vote buttons
+  const voteButtons = document.querySelectorAll(`[data-id="${toolId}"] .vote-btn-row`);
+  voteButtons.forEach(btn => btn.disabled = true);
   
   const oldUserVote = tool.userVote ?? 0;
   const voteValue = type === 'up' ? 1 : -1;
@@ -2891,65 +3088,133 @@ async function vote(toolId, type) {
     voteChange = voteValue - previousVote;
   }
   
-  // Aktualisiere die Vote-Zahlen des Tools
-  if (voteValue === 1) {
-    // Upvote
-    if (oldUserVote === 1) {
-      // Entferne Upvote
-      tool.upvotes -= 1;
-    } else if (oldUserVote === -1) {
-      // Wechsel von Downvote zu Upvote
-      tool.downvotes -= 1;
-      tool.upvotes += 1;
-    } else {
-      // Neuer Upvote
-      tool.upvotes += 1;
-    }
-  } else {
-    // Downvote
-    if (oldUserVote === -1) {
-      // Entferne Downvote
-      tool.downvotes -= 1;
-    } else if (oldUserVote === 1) {
-      // Wechsel von Upvote zu Downvote
-      tool.upvotes -= 1;
-      tool.downvotes += 1;
-    } else {
-      // Neuer Downvote
-      tool.downvotes += 1;
-    }
-  }
+  // Update lokale Votes für sofortiges UI Feedback
+  const currentRawVotes = getRawVotes(tool);
+  const newRawVotes = currentRawVotes + voteChange;
   
-  tool.votes = tool.upvotes - tool.downvotes;
-  
-  // Speichere in LocalStorage
-  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  savedVotes[toolId] = {
-    userVote: tool.userVote,
-    totalVotes: tool.votes,
-    upvotes: tool.upvotes,
-    downvotes: tool.downvotes
-  };
-  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
-  
-  // Update UI
+  // Update UI immediately (optimistic)
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
-    voteCountElement.textContent = tool.votes;
+    const displayVotes = Math.max(newRawVotes, 0);
+    voteCountElement.textContent = displayVotes;
     voteCountElement.classList.add(type === 'up' ? 'moving-up' : 'moving-down');
     setTimeout(() => {
       voteCountElement.classList.remove('moving-up', 'moving-down');
     }, 500);
   }
   
-  updateTop5VoteCount(toolId, tool.votes);
+  // Update Top 5 bar
+  updateTop5VoteCount(toolId, newRawVotes);
+  
+  // Save user's vote locally
+  const savedVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  savedVotes[toolId] = { userVote: tool.userVote };
+  localStorage.setItem('aiToolVotes', JSON.stringify(savedVotes));
+  
+  try {
+    // Update in Supabase
+    const { data: existingData, error: fetchError } = await window.supabase
+      .from('tool_votes')
+      .select('*')
+      .eq('tool_id', toolId);
+      
+    if (fetchError) throw fetchError;
+      
+    let upvotesChange = 0;
+    let downvotesChange = 0;
+    
+    // Berechne die Änderungen für upvotes/downvotes
+    if (oldUserVote === 1) {
+      upvotesChange -= 1; // Entferne Upvote
+    } else if (oldUserVote === -1) {
+      downvotesChange -= 1; // Entferne Downvote
+    }
+    
+    if (tool.userVote === 1) {
+      upvotesChange += 1; // Füge Upvote hinzu
+    } else if (tool.userVote === -1) {
+      downvotesChange += 1; // Füge Downvote hinzu
+    }
+      
+    if (existingData && existingData.length > 0) {
+      const current = existingData[0];
+      const newUpvotes = Math.max(0, safeNumber(current.upvotes) + upvotesChange);
+      const newDownvotes = Math.max(0, safeNumber(current.downvotes) + downvotesChange);
+      const newTotal = newUpvotes - newDownvotes;
+        
+      const { error: updateError } = await window.supabase
+        .from('tool_votes')
+        .update({
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+          total_votes: newTotal
+        })
+        .eq('tool_id', toolId);
+        
+      if (updateError) throw updateError;
+        
+      tool.votes = newTotal;
+      tool.upvotes = newUpvotes;
+      tool.downvotes = newDownvotes;
+    } else {
+      const initialUpvotes = tool.userVote === 1 ? 1 : 0;
+      const initialDownvotes = tool.userVote === -1 ? 1 : 0;
+      const initialTotal = initialUpvotes - initialDownvotes;
+        
+      const { error: insertError } = await window.supabase
+        .from('tool_votes')
+        .insert({
+          tool_id: toolId,
+          upvotes: initialUpvotes,
+          downvotes: initialDownvotes,
+          total_votes: initialTotal
+        });
+        
+      if (insertError) throw insertError;
+        
+      tool.votes = initialTotal;
+      tool.upvotes = initialUpvotes;
+      tool.downvotes = initialDownvotes;
+    }
+      
+    showNotification(
+      currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
+      'success'
+    );
+      
+  } catch (error) {
+    console.error('Voting Fehler:', error);
+    showNotification(
+      currentLang === 'de' ? 'Fehler beim Voten' : 'Error voting', 
+      'error'
+    );
+      
+    // Rollback local changes
+    tool.userVote = oldUserVote;
+    
+    // Rollback UI
+    if (voteCountElement) {
+      voteCountElement.textContent = getDisplayVotes(tool);
+    }
+    updateTop5VoteCount(toolId, tool.votes);
+  } finally {
+    // Re-enable vote buttons
+    voteButtons.forEach(btn => btn.disabled = false);
+    
+    // Entferne Vote-Lock nach kurzer Verzögerung
+    setTimeout(() => {
+      votingInProgress.delete(toolId);
+    }, 500);
+  }
+  
+  // WICHTIG: Die Tool-Liste NEU sortieren und rendern
   updateTop5Bar();
   renderToolGroups();
   
-  showNotification(
-    currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓', 
-    'success'
-  );
+  // Aktualisiere auch die aktive Filteransicht, falls ein Filter aktiv ist
+  if (activeFilterId) {
+    setActiveFilter(activeFilterId);
+  }
 }
 
 // ===== FAVORITES & COMPARISON =====
@@ -3115,17 +3380,18 @@ function showNotification(message, type = 'info') {
   notification.className = `notification ${type}`;
   notification.innerHTML = `
     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-    <span>${message}</span>
+    <span>${escapeHtml(message)}</span>
     <button class="notification-close"><i class="fas fa-times"></i></button>
   `;
       
   document.body.appendChild(notification);
       
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     notification.remove();
   }, 3000);
       
   notification.querySelector('.notification-close').addEventListener('click', () => {
+    clearTimeout(timeout);
     notification.remove();
   });
 }
