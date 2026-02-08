@@ -4512,6 +4512,7 @@ async function vote(toolId, direction) {
   };
   localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
   
+  // Update main list vote count
   const voteCountElement = document.getElementById(`voteCount-${toolId}`);
   if (voteCountElement) {
     voteCountElement.textContent = tool.votes;
@@ -4521,17 +4522,39 @@ async function vote(toolId, direction) {
     }, 500);
   }
   
+  // Update top5 vote count
   updateTop5Vote(toolId, tool.votes);
+  
+  // Update drawer vote section
+  updateDrawerVote(toolId);
+  
+  // Update vote buttons in main list
+  const voteButtonsRow = document.querySelector(`.tool-row[data-id="${toolId}"] .vote-buttons`);
+  if (voteButtonsRow) {
+    const upBtn = voteButtonsRow.querySelector('.up');
+    const downBtn = voteButtonsRow.querySelector('.down');
+    
+    if (upBtn) {
+      upBtn.classList.toggle('active', tool.userVote === 1);
+    }
+    if (downBtn) {
+      downBtn.classList.toggle('active', tool.userVote === -1);
+    }
+  }
+  
   renderToolGroups();
   updateRecommendations();
   
-  // Update drawer if open
-  if (isDrawerOpen) {
-    const drawerToolId = document.getElementById('drawerTitle')?.closest('.drawer')?.querySelector('.tool-vote')?.dataset?.id;
-    if (drawerToolId === toolId) {
-      updateDrawerVote(tool);
-    }
+  // Vibration feedback for mobile
+  if ('vibrate' in navigator) {
+    navigator.vibrate(50);
   }
+  
+  showNotification(
+    currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
+    'success'
+  );
+}
   
   showNotification(
     currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
@@ -4869,11 +4892,11 @@ function openToolDrawer(toolId) {
           <i class="fas fa-share-alt"></i>
           <span data-de="Teilen" data-en="Share">Teilen</span>
         </button>
-        <button class="dock-action-btn secondary" 
-                onclick="toggleFavorite('${tool.id}')" 
+         <button class="dock-action-btn secondary favorite-drawer-btn" 
+                data-tool-id="${tool.id}"
                 style="width:auto">
           <i class="fas fa-star"></i>
-          <span>${isFavorite(tool.id) ? 
+          <span class="favorite-text">${isFavorite(tool.id) ? 
             (currentLang === 'de' ? 'Entfernen' : 'Remove') : 
             (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}
           </span>
@@ -4881,9 +4904,38 @@ function openToolDrawer(toolId) {
       </div>
     </div>
     
-    ${getVoteHTML(tool)}
-    
-    ${pros.length > 0 || cons.length > 0 ? `
+        <!-- VOTE SECTION - FIXED -->
+    <div class="drawer-vote-section" style="margin-bottom:24px" data-tool-id="${tool.id}">
+      <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+        <i class="fas fa-thumbs-up"></i>
+        <span data-de="Bewertung" data-en="Rating">Bewertung</span>
+      </h4>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="text-align:center">
+          <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:2rem">${getToolVotes(tool)}</div>
+          <div style="font-size:.85rem;color:var(--text-secondary)">
+            ${currentLang === 'de' ? 'Stimmen' : 'Votes'}
+          </div>
+        </div>
+        <div class="vote-buttons" style="transform:scale(1.2)">
+          <button class="vote-btn-row up drawer-vote-btn ${tool.userVote === 1 ? 'active' : ''}" 
+                  data-tool-id="${tool.id}"
+                  data-direction="up">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn-row down drawer-vote-btn ${tool.userVote === -1 ? 'active' : ''}" 
+                  data-tool-id="${tool.id}"
+                  data-direction="down">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+        <div style="margin-left:auto">
+          <div style="font-size:.85rem;color:var(--text-secondary)">
+            ${tool.upvotes || 0} 👍 ${tool.downvotes || 0} 👎
+          </div>
+        </div>
+      </div>
+    </div>
       <div style="margin-bottom:24px">
         <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
           <i class="fas fa-balance-scale"></i>
@@ -4932,6 +4984,29 @@ function openToolDrawer(toolId) {
       </div>
     ` : ''}
   `;
+    // Event-Listener für Drawer-Vote-Buttons und Favoriten-Button hinzufügen
+  setTimeout(() => {
+    // Vote-Buttons
+    document.querySelectorAll('.drawer-vote-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const toolId = btn.dataset.toolId;
+        const direction = btn.dataset.direction;
+        vote(toolId, direction);
+      });
+    });
+    
+    // Favoriten-Button
+    const favoriteBtn = document.querySelector('.favorite-drawer-btn');
+    if (favoriteBtn) {
+      favoriteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const toolId = favoriteBtn.dataset.toolId;
+        toggleFavorite(toolId);
+        updateDrawerFavoriteButton(toolId);
+      });
+    }
+  }, 100);
   
   updateLanguageElements();
   
@@ -5399,6 +5474,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 1000);
 });
+ // ==============================================
+// DRAWER VOTE UPDATE FUNKTION
+// ==============================================
+function updateDrawerVote(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  // Update vote count in drawer
+  const voteCountElement = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (voteCountElement) {
+    voteCountElement.textContent = getToolVotes(tool);
+    voteCountElement.classList.add(tool.userVote === 1 ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      voteCountElement.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update vote buttons in drawer
+  const voteSection = document.querySelector(`.drawer-vote-section[data-tool-id="${toolId}"]`);
+  if (voteSection) {
+    const upBtn = voteSection.querySelector('.vote-btn-row.up');
+    const downBtn = voteSection.querySelector('.vote-btn-row.down');
+    
+    if (upBtn) {
+      upBtn.classList.toggle('active', tool.userVote === 1);
+    }
+    if (downBtn) {
+      downBtn.classList.toggle('active', tool.userVote === -1);
+    }
+    
+    // Update upvotes/downvotes display
+    const statsDiv = voteSection.querySelector('div[style*="margin-left:auto"]');
+    if (statsDiv) {
+      statsDiv.innerHTML = `
+        <div style="font-size:.85rem;color:var(--text-secondary)">
+          ${tool.upvotes || 0} 👍 ${tool.downvotes || 0} 👎
+        </div>
+      `;
+    }
+  }
+}
+
+// ==============================================
+// DRAWER FAVORITE UPDATE FUNKTION
+// ==============================================
+function updateDrawerFavoriteButton(toolId) {
+  const favoriteBtn = document.querySelector(`.favorite-drawer-btn[data-tool-id="${toolId}"]`);
+  if (favoriteBtn) {
+    const isFav = isFavorite(toolId);
+    const starIcon = favoriteBtn.querySelector('i');
+    const textSpan = favoriteBtn.querySelector('.favorite-text');
+    
+    if (starIcon) {
+      starIcon.className = isFav ? 'fas fa-star' : 'far fa-star';
+    }
+    
+    if (textSpan) {
+      textSpan.textContent = isFav ? 
+        (currentLang === 'de' ? 'Entfernen' : 'Remove') : 
+        (currentLang === 'de' ? 'Favorisieren' : 'Favorite');
+    }
+    
+    favoriteBtn.classList.toggle('active', isFav);
+  }
+}
 </script>
 </body>
 </html>
