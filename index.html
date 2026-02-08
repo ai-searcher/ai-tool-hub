@@ -1,3 +1,5 @@
+Searcher redesign
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -1592,87 +1594,162 @@ body::before {
 }
 
 /* ===== COOKIE CONSENT ===== */
-.cookie-consent {
-  position: fixed;
-  bottom: 0;
+<div class="cookie-consent" id="cookieConsent">
+  <div class="cookie-content">
+    <div class="cookie-text">
+      <strong>Cookie-Einstellungen</strong><br>
+      Technisch notwendige Cookies (Favoriten, Votes) sind aktiv. 
+      <button class="cookie-details-btn" id="cookieDetailsBtn">Details</button>
+      <a href="#" id="privacyLinkCookie">Datenschutz</a>
+    </div>
+    <div class="cookie-buttons">
+      <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
+      <button class="cookie-btn settings" id="cookieSettings">Einstellungen</button>
+      <button class="cookie-btn accept" id="cookieAccept">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Neues Cookie-Einstellungs-Modal -->
+<div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
+<div class="modal" id="cookieSettingsModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Cookie-Einstellungen</h2>
+    <button class="modal-close" id="cookieSettingsModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <div class="cookie-setting">
+      <h3><i class="fas fa-chart-line"></i> Analyse-Cookies (Google Analytics)</h3>
+      <p>Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
+      <label class="switch">
+        <input type="checkbox" id="analyticsToggle" checked>
+        <span class="slider"></span>
+      </label>
+      <p id="analyticsStatus" style="color: var(--success); font-size: 0.9rem;">Aktiviert</p>
+    </div>
+    <div class="cookie-buttons" style="margin-top: 30px;">
+      <button class="cookie-btn secondary" id="saveCookieSettings">Auswahl speichern</button>
+      <button class="cookie-btn accept" id="acceptAllCookies">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+/* Cookie-Einstellungen Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 10px 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
   left: 0;
   right: 0;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  padding: 20px;
-  z-index: 9999;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  bottom: 0;
+  background-color: var(--bg-hover);
+  transition: .4s;
+  border-radius: 24px;
+  border: 1px solid var(--border);
 }
 
-.cookie-consent.active {
-  transform: translateY(0);
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--text-secondary);
+  transition: .4s;
+  border-radius: 50%;
 }
 
-.cookie-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
+input:checked + .slider {
+  background-color: var(--primary);
 }
 
-.cookie-text {
-  flex: 1;
-  min-width: 300px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: white;
 }
 
-.cookie-text a {
+/* Footer Ergänzungen */
+.footer-legal-links {
+  margin: 15px 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-legal-links a {
   color: var(--primary);
   text-decoration: none;
 }
 
-.cookie-text a:hover {
-  text-decoration: underline;
+.footer-legal-links span {
+  margin: 0 8px;
+  opacity: 0.5;
 }
 
-.cookie-buttons {
-  display: flex;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.cookie-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
+.footer-age-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-top: 20px;
   font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
-  min-width: 120px;
+  color: var(--warning);
+  text-align: center;
 }
 
-.cookie-btn.accept {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
+.footer-age-warning i {
+  margin-right: 8px;
 }
 
-.cookie-btn.accept:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-}
-
-.cookie-btn.decline {
+/* Cookie Details Button */
+.cookie-details-btn {
   background: transparent;
-  color: var(--text-secondary);
-  border-color: var(--border);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin: 0 8px;
+  cursor: pointer;
 }
 
-.cookie-btn.decline:hover {
-  background: var(--bg-hover);
+.cookie-setting {
+  background: rgba(20, 24, 36, 0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.cookie-setting h3 {
   color: var(--text-primary);
-  border-color: var(--primary);
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cookie-setting p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
 }
 
 /* ===== CATEGORY INFO MODAL ===== */
@@ -2229,12 +2306,41 @@ body::before {
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      Wir verwenden Cookies, um die Nutzererfahrung zu verbessern und anonyme Statistiken zu erstellen. 
+      <strong>Cookie-Einstellungen</strong><br>
+      Technisch notwendige Cookies (Favoriten, Votes) sind aktiv. 
+      <button class="cookie-details-btn" id="cookieDetailsBtn">Details</button>
       <a href="#" id="privacyLinkCookie">Datenschutz</a>
     </div>
     <div class="cookie-buttons">
       <button class="cookie-btn decline" id="cookieDecline">Ablehnen</button>
-      <button class="cookie-btn accept" id="cookieAccept">Akzeptieren</button>
+      <button class="cookie-btn settings" id="cookieSettings">Einstellungen</button>
+      <button class="cookie-btn accept" id="cookieAccept">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Neues Cookie-Einstellungs-Modal -->
+<div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
+<div class="modal" id="cookieSettingsModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Cookie-Einstellungen</h2>
+    <button class="modal-close" id="cookieSettingsModalClose">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-content">
+    <div class="cookie-setting">
+      <h3><i class="fas fa-chart-line"></i> Analyse-Cookies (Google Analytics)</h3>
+      <p>Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
+      <label class="switch">
+        <input type="checkbox" id="analyticsToggle" checked>
+        <span class="slider"></span>
+      </label>
+      <p id="analyticsStatus" style="color: var(--success); font-size: 0.9rem;">Aktiviert</p>
+    </div>
+    <div class="cookie-buttons" style="margin-top: 30px;">
+      <button class="cookie-btn secondary" id="saveCookieSettings">Auswahl speichern</button>
+      <button class="cookie-btn accept" id="acceptAllCookies">Alle akzeptieren</button>
     </div>
   </div>
 </div>
@@ -2327,6 +2433,20 @@ body::before {
     <a href="#" id="imprintLink">Impressum</a>
     <a href="#" id="privacyLink">Datenschutz</a>
   </div>
+  
+  <div class="footer-legal-links">
+    <a href="#" id="legalDetailsBtn">Rechtliche Details</a>
+    <span>•</span>
+    <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a>
+    <span>•</span>
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
+  </div>
+
+  <div class="footer-age-warning">
+    <i class="fas fa-exclamation-triangle"></i>
+    Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
+  </div>
+  
   <div class="footer-copyright">
     © 2026 AI Searcher. Alle Rechte vorbehalten.
   </div>
@@ -2427,7 +2547,7 @@ body::before {
     <h3>Kontakt</h3>
     <p>
         Telefon: +49 173 5489128 (Kein Telefonsupport)<br>
-        E-Mail: <a href="mailto:&#x61;&#x69;&#x2E;&#x74;&#x6F;&#x6F;&#x6C;&#x2E;&#x68;&#x75;&#x62;&#x2E;&#x63;&#x6F;&#x6E;&#x74;&#x61;&#x63;&#x74;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;</a><br>
+        E-Mail: <a href="mailto:ai.tool.hub.contact&#64;gmail&#46;com">ai.tool.hub.contact&#64;gmail&#46;com</a><br>
         <small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small>
     </p>
 
@@ -2450,6 +2570,20 @@ body::before {
 
     <h3>Affiliate-Hinweis</h3>
     <p>Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+
+<h3>Affiliate-Links & Haftungsausschluss</h3>
+<p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+<p><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:
+<ul>
+  <li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li>
+  <li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li>
+  <li>Vertragsabschlüsse mit Drittanbietern</li>
+  <li>Datenschutzpraktiken externer Anbieter</li>
+</ul>
+Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
+
+<h3>Urheberrecht & Marken</h3>
+<p>Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
 </div>
 
 <div class="modal-overlay" id="privacyModalOverlay"></div>
@@ -2461,18 +2595,49 @@ body::before {
     </button>
   </div>
   <div class="modal-content">
-    <h3>Datenschutzerklärung</h3>
-    <p>Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.</p>
-    
-    <h3>Cookies</h3>
-    <p>Diese Website verwendet Cookies. Das sind kleine Textdateien, die auf Ihrem Endgerät gespeichert werden. Sie richten keinen Schaden an. Wir verwende Cookies, um unser Angebot nutzerfreundlich zu gestalten. Einige Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese löschen.</p>
-    
-    <h3>Google Analytics</h3>
-    <p>Diese Website nutzt Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet „Cookies", die eine Analyse der Benutzung der Website durch Sie ermöglicht. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.</p>
-    
-    <h3>Ihre Rechte</h3>
-    <p>Ihnen stehen grundsätzlich die Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerruf und Widerspruch zu. Wenn Sie glauben, dass die Verarbeitung Ihrer Daten gegen das Datenschutzrecht verstößt oder Ihre datenschutzrechtlichen Ansprüche sonst in einer Weise verletzt worden sind, können Sie sich bei der Aufsichtsbehörde beschweren.</p>
-  </div>
+  <h2>Datenschutzerklärung</h2>
+  
+  <h3>1. Verantwortliche Stelle</h3>
+  <p>Verantwortlich im Sinne der Datenschutzgesetze:<br>
+  Qerim Banulla<br>
+  c/o Online-Impressum.de #6292<br>
+  Europaring 90<br>
+  53757 Sankt Augustin<br>
+  E-Mail: ai.tool.hub.contact&#64;gmail&#46;com</p>
+
+  <h3>2. Datenerhebung bei Website-Nutzung</h3>
+  <p>Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
+
+  <h3>3. Cookies & Local Storage</h3>
+  <p>Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
+
+  <h3>4. Google Analytics (nur nach Einwilligung)</h3>
+  <p>Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
+  <p>Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
+
+  <h3>5. Externe Links & Affiliate-Links</h3>
+  <p>Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
+
+  <h3>6. Ihre Rechte (DSGVO)</h3>
+  <p>Sie haben Recht auf:
+  <ul>
+    <li>Auskunft über gespeicherte Daten</li>
+    <li>Berichtigung falscher Daten</li>
+    <li>Löschung Ihrer Daten</li>
+    <li>Einschränkung der Verarbeitung</li>
+    <li>Datenübertragbarkeit</li>
+    <li>Widerruf Ihrer Einwilligung</li>
+  </ul>
+  Kontakt: ai.tool.hub.contact&#64;gmail&#46;com</p>
+
+  <h3>7. Hosting auf GitHub Pages</h3>
+  <p>Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
+
+  <h3>8. Sicherheit</h3>
+  <p>Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
+
+  <p><em>Stand: Februar 2026</em></p>
+</div>
 </div>
 
 <script>
@@ -3693,6 +3858,53 @@ function checkCookieConsent() {
   }
 }
 
+// COOKIE-EINSTELLUNGEN
+function openCookieSettings() {
+  document.getElementById('cookieSettingsModalOverlay').classList.add('active');
+  document.getElementById('cookieSettingsModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  // Aktuellen Status laden
+  const analyticsAllowed = localStorage.getItem('cookieConsent') === 'accepted';
+  document.getElementById('analyticsToggle').checked = analyticsAllowed;
+  updateAnalyticsStatus(analyticsAllowed);
+}
+
+function closeCookieSettings() {
+  document.getElementById('cookieSettingsModalOverlay').classList.remove('active');
+  document.getElementById('cookieSettingsModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function saveCookieSettings() {
+  const analyticsAllowed = document.getElementById('analyticsToggle').checked;
+  
+  if (analyticsAllowed) {
+    localStorage.setItem('cookieConsent', 'accepted');
+    window.cookiePreferences.analytics = true;
+    loadGoogleAnalytics();
+    showNotification('Analyse-Cookies aktiviert', 'success');
+  } else {
+    localStorage.setItem('cookieConsent', 'declined');
+    window.cookiePreferences.analytics = false;
+    showNotification('Analyse-Cookies deaktiviert', 'info');
+  }
+  
+  closeCookieSettings();
+  document.getElementById('cookieConsent').classList.remove('active');
+}
+
+function updateAnalyticsStatus(enabled) {
+  const status = document.getElementById('analyticsStatus');
+  if (enabled) {
+    status.textContent = 'Aktiviert';
+    status.style.color = 'var(--success)';
+  } else {
+    status.textContent = 'Deaktiviert';
+    status.style.color = 'var(--text-secondary)';
+  }
+}
+
 function acceptCookies() {
   localStorage.setItem('cookieConsent', 'accepted');
   window.cookiePreferences.analytics = true;
@@ -3708,10 +3920,67 @@ function declineCookies() {
   showNotification(currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined', 'info');
 }
 
+// ANALYTICS OPT-OUT
+function setupAnalyticsOptOut() {
+  const optOutLink = document.getElementById('analyticsOptOut');
+  if (optOutLink) {
+    optOutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.setItem('cookieConsent', 'declined');
+      window.cookiePreferences.analytics = false;
+      showNotification('Google Analytics wurde deaktiviert', 'success');
+      
+      // Google Analytics Opt-Out Cookie setzen
+      document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+    });
+  }
+}
+
+// RECHTLICHE DETAILS MODAL
+function setupLegalDetails() {
+  const legalBtn = document.getElementById('legalDetailsBtn');
+  if (legalBtn) {
+    legalBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      showNotification('Rechtliche Dokumente werden in neuen Tabs geöffnet', 'info');
+      
+      // Öffne alle rechtlichen Dokumente in neuen Tabs
+      window.open('#', '_blank'); // Für Impressum
+      window.open('#', '_blank'); // Für Datenschutz
+      window.open('https://docs.github.com/en/github/site-policy/github-privacy-statement', '_blank');
+      window.open('https://policies.google.com/privacy', '_blank');
+    });
+  }
+}
+
+// EXTERNE LINKS KENNZEICHNEN
+function markExternalLinks() {
+  document.querySelectorAll('a[href^="http"]').forEach(link => {
+    if (!link.href.includes(window.location.hostname)) {
+      link.setAttribute('rel', 'noopener noreferrer nofollow');
+      link.setAttribute('target', '_blank');
+      
+      // Füge Icon für externe Links hinzu
+      if (!link.querySelector('.external-link-icon')) {
+        const icon = document.createElement('i');
+        icon.className = 'fas fa-external-link-alt external-link-icon';
+        icon.style.marginLeft = '4px';
+        icon.style.fontSize = '0.8em';
+        link.appendChild(icon);
+      }
+    }
+  });
+}
+
 function loadGoogleAnalytics() {
   if (!window.cookiePreferences.analytics) return;
   
-  // Google Analytics Script
+  // Opt-Out Cookie prüfen
+  if (document.cookie.includes('_ga_optout=1')) {
+    console.log('Analytics opt-out aktiv');
+    return;
+  }
+  
   const script = document.createElement('script');
   script.async = true;
   script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
@@ -3720,7 +3989,18 @@ function loadGoogleAnalytics() {
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-53RF07VYJ8', { anonymize_ip: true });
+  
+  // DSGVO-konfiguriertes Tracking
+  gtag('config', 'G-53RF07VYJ8', {
+    anonymize_ip: true,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false,
+    restrict_domain_processing: true,
+    client_storage: 'none',
+    retention: '14 months'
+  });
+  
+  console.log('Google Analytics geladen (DSGVO-konform)');
 }
 
 // ===== MOBILE BACK TO TOP =====
@@ -3924,6 +4204,14 @@ function setupEventListeners() {
     showNotification(currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...', 'info');
   });
   
+  // Cookie-Einstellungen
+document.getElementById('cookieSettings').addEventListener('click', openCookieSettings);
+document.getElementById('cookieDetailsBtn').addEventListener('click', openCookieSettings);
+document.getElementById('cookieSettingsModalClose').addEventListener('click', closeCookieSettings);
+document.getElementById('cookieSettingsModalOverlay').addEventListener('click', closeCookieSettings);
+document.getElementById('saveCookieSettings').addEventListener('click', saveCookieSettings);
+document.getElementById('acceptAllCookies').addEventListener('click', acceptCookies);
+  
   // Cookie consent
   document.getElementById('cookieAccept').addEventListener('click', acceptCookies);
   document.getElementById('cookieDecline').addEventListener('click', declineCookies);
@@ -3977,6 +4265,9 @@ function setupEventListeners() {
       }
       if (document.getElementById('categoryInfoModal').classList.contains('active')) {
         closeCategoryInfoModal();
+      }
+      if (document.getElementById('cookieSettingsModal').classList.contains('active')) {
+        closeCookieSettings();
       }
     }
   });
@@ -4038,7 +4329,12 @@ function updateLanguage() {
 }
 
 // ===== INITIALIZE =====
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+  init();
+  setupAnalyticsOptOut();
+  setupLegalDetails();
+  markExternalLinks();
+});
 </script>
 </body>
 </html>
