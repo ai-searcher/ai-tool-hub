@@ -1,1 +1,251 @@
- 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tool Hub - Futuristic Cyberpunk Interface</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Variables & Main Styles -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Google Analytics 4 Platzhalter -->
+    <!-- GA4-TAG-HIER-EINFÜGEN -->
+</head>
+<body>
+    <!-- Header mit Logo und Dark-Mode Toggle -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1 class="logo-text">AI<span>Tool</span>Hub</h1>
+            </div>
+            
+            <div class="header-controls">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Dark Mode umschalten">
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-sun"></i>
+                        </div>
+                    </div>
+                    <span class="toggle-label">Neon Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Bereich mit Suchleiste -->
+    <section id="hero" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2 class="hero-title">
+                    <span class="title-line">Entdecke die</span>
+                    <span class="title-line highlight">KI-Werkzeuge von Morgen</span>
+                </h2>
+                
+                <p class="hero-slogan" id="animated-slogan">
+                    <span class="slogan-text">Algorithmen, die</span>
+                    <span class="slogan-words">
+                        <span class="word">die Zukunft formen</span>
+                        <span class="word">Grenzen überschreiten</span>
+                        <span class="word">Innovation vorantreiben</span>
+                        <span class="word">Ideen revolutionieren</span>
+                    </span>
+                </p>
+                
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            class="search-input" 
+                            placeholder="KI-Tools durchsuchen..." 
+                            autocomplete="off"
+                            aria-label="KI-Tools durchsuchen"
+                        >
+                        <button class="search-clear" id="search-clear" aria-label="Suche löschen">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button class="search-button" id="search-button">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-tools">0</span>
+                        <span class="stat-label">Aktive Tools</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="updated-today">0</span>
+                        <span class="stat-label">Heute aktualisiert</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="free-tools">0</span>
+                        <span class="stat-label">Kostenlos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Navigationsleiste -->
+    <nav id="filter-bar" class="filter-nav" aria-label="Tool-Kategorien">
+        <div class="filter-container" id="filter-container">
+            <!-- Kategorien werden dynamisch geladen -->
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-th-large"></i>
+                <span>Alle Tools</span>
+            </button>
+        </div>
+        
+        <div class="filter-controls">
+            <button class="filter-sort" id="sort-toggle" aria-label="Sortieroptionen">
+                <i class="fas fa-sort-amount-down"></i>
+                <span>Sortieren</span>
+            </button>
+            <button class="filter-view" id="view-toggle" aria-label="Ansicht umschalten">
+                <i class="fas fa-th"></i>
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hauptbereich mit Tool-Grid -->
+    <main class="main-content">
+        <div class="content-container">
+            <div class="tool-grid" id="tool-grid">
+                <!-- Tool-Karten werden dynamisch geladen -->
+            </div>
+            
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="empty-title">Keine Tools gefunden</h3>
+                <p class="empty-description">
+                    Versuche, andere Suchbegriffe zu verwenden oder filtere nach einer anderen Kategorie.
+                </p>
+            </div>
+            
+            <div class="loading-spinner" id="loading-spinner">
+                <div class="spinner-container">
+                    <div class="cyber-spinner"></div>
+                    <p class="spinner-text">Lade KI-Tools...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sidebar für Top 3 Ranking -->
+    <aside id="sidebar" class="ranking-sidebar">
+        <div class="sidebar-container">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">
+                    <i class="fas fa-trophy"></i>
+                    <span>Top 3 Ranking</span>
+                </h3>
+                <button class="sidebar-refresh" id="refresh-ranking" aria-label="Ranking aktualisieren">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            
+            <div class="ranking-container" id="ranking-container">
+                <!-- Ranking-Einträge werden dynamisch geladen -->
+                <div class="ranking-placeholder">
+                    <p>Ranking wird geladen...</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="update-info">
+                    <i class="fas fa-clock"></i>
+                    <span>Aktualisiert: <span id="last-update">--:--</span></span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <p class="footer-copyright">
+                    &copy; <span id="current-year">2024</span> AI Tool Hub. 
+                    <span class="highlight">Die Zukunft der KI ist hier.</span>
+                </p>
+            </div>
+            
+            <div class="footer-links">
+                <button class="footer-link" id="imprint-btn">Impressum</button>
+                <span class="footer-separator">|</span>
+                <button class="footer-link" id="privacy-btn">Datenschutz</button>
+            </div>
+            
+            <div class="footer-actions">
+                <button class="scroll-top" id="scroll-top" aria-label="Nach oben scrollen">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal für Impressum -->
+    <div class="modal" id="imprint-modal" aria-hidden="true" aria-labelledby="imprint-title">
+        <div class="modal-overlay" id="imprint-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="imprint-title">
+                    <i class="fas fa-file-contract"></i>
+                    Impressum
+                </h3>
+                <button class="modal-close" id="imprint-close" aria-label="Modal schließen">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="imprint-content">
+                <!-- Impressum-Inhalt wird dynamisch geladen -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal für Datenschutz -->
+    <div class="modal" id="privacy-modal" aria-hidden="true" aria-labelledby="privacy-title">
+        <div class="modal-overlay" id="privacy-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="privacy-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Datenschutzerklärung
+                </h3>
+                <button class="modal-close" id="privacy-close" aria-label="Modal schließen">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="privacy-content">
+                <!-- Datenschutz-Inhalt wird dynamisch geladen -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Externe Scripts -->
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Haupt-JavaScript als Modul -->
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
