@@ -1294,6 +1294,11 @@ body.light-mode .toggle-thumb .fa-sun {
     .modal-content {
         padding: var(--spacing-4);
     }
+    @media (max-width: 480px) {
+    .word {
+        min-width: 200px;
+        font-size: var(--text-base);
+    }
 }
 
 /* ===== UTILITY CLASSES ===== */
