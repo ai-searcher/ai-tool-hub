@@ -8,8 +8,8 @@
 // Hier die Verbindungsdaten zu deiner Supabase-Datenbank eintragen
 // Diese findest du in deinem Supabase Dashboard unter Settings > API
 
-export const SUPABASE_URL = 'https://your-project-url.supabase.co';  // Deine Supabase URL
-export const SUPABASE_ANON_KEY = 'your-anon-key-here';               // Dein Anon Key
+export const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';  // Deine Supabase URL
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';               // Dein Anon Key
 export const SUPABASE_TABLE_TOOLS = 'ai_tools';                      // Tabellenname für KI-Tools
 export const SUPABASE_TABLE_CATEGORIES = 'categories';               // Tabellenname für Kategorien
 export const SUPABASE_TABLE_RANKINGS = 'rankings';                   // Tabellenname für Rankings
@@ -18,7 +18,7 @@ export const SUPABASE_TABLE_RANKINGS = 'rankings';                   // Tabellen
 // ------------------------------
 // Deine GA4 Measurement ID (beginnt mit "G-")
 
-export const GA_TRACKING_ID = 'G-XXXXXXXXXX';  // Deine Google Analytics 4 ID
+export const GA_TRACKING_ID = 'G-53RF07VYJ8';  // Deine Google Analytics 4 ID
 
 // Application Configuration
 // -------------------------
@@ -141,7 +141,7 @@ export const COLORS = {
 export const validateConfig = () => {
     const errors = [];
     
-    if (!SUPABASE_URL || SUPABASE_URL.includes('your-project-url')) {
+    if (!SUPABASE_URL || SUPABASE_URL.includes('https://doicozkpdbkyvdkpujoh.supabase.co')) {
         errors.push('SUPABASE_URL ist nicht konfiguriert. Bitte trage deine Supabase-URL ein.');
     }
     
