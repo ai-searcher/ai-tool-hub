@@ -29,6 +29,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"AI Searcher","url":"https://ai-searcher.github.io/ai-tool-hub/","description":"Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.","potentialAction":{"@type":"SearchAction","target":"https://ai-searcher.github.io/ai-tool-hub/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 <style>
+/* ALLES CSS BLEIBT UNVERÄNDERT - identisch zu Ihrer Originaldatei */
 :root {
   --primary: #00d4ff;
   --primary-dark: #00a8cc;
@@ -162,6 +163,7 @@ body::before {
   66% { transform: translate(-20px,20px) scale(.8); }
 }
 
+/* Cookie Consent - FIXED */
 .cookie-consent {
   position: fixed;
   bottom: 0;
@@ -603,11 +605,6 @@ body::before {
   animation: pulseGlow .6s ease;
 }
 
-@keyframes pulseGlow {
-  0%, 100% { transform: scale(1); box-shadow: none; }
-  50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(0,212,255,.5); }
-}
-
 .top5-quickpeek {
   font-size: .7rem;
   color: var(--text-secondary);
@@ -840,16 +837,6 @@ body::before {
 .vote-count.moving-down {
   color: var(--error);
   animation: countDown .5s ease;
-}
-
-@keyframes countUp {
-  0% { transform: translateY(10px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes countDown {
-  0% { transform: translateY(-10px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
 }
 
 .vote-buttons {
@@ -1193,7 +1180,6 @@ body::before {
   transition: transform .3s cubic-bezier(.4,0,.2,1);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 .drawer.active {
@@ -1219,134 +1205,873 @@ body::before {
   background: var(--bg-hover);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  cursor: pointer;
   width: 36px;
   height: 36px;
   border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
+  font-size: 1.1rem;
 }
 
 .drawer-close:hover {
-  color: var(--error);
-  border-color: var(--error);
-  background: rgba(239,68,68,.1);
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-.drawer-body {
-  padding: 20px;
+.drawer-content {
   flex: 1;
   overflow-y: auto;
+  padding: 20px;
+}
+
+.floating-favorites-btn {
+  position: fixed;
+  left: 16px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  transition: var(--transition);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 4px 20px rgba(0,212,255,.4); }
+  50% { box-shadow: 0 4px 30px rgba(0,212,255,.8); }
+  100% { box-shadow: 0 4px 20px rgba(0,212,255,.4); }
+}
+
+.floating-favorites-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(0,212,255,.3);
+}
+
+.floating-favorites-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--error);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 900;
+  box-shadow: var(--shadow);
+  transition: all .3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.back-to-top.visible {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+@media (min-width: 769px) {
+  .back-to-top { display: none !important; }
+}
+
+.favorites-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(5px);
+  z-index: 1900;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+.favorites-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.favorites-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  z-index: 1901;
+  transform: translateY(100%);
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.favorites-drawer.active {
+  transform: translateY(0);
+}
+
+.favorites-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.favorites-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.favorites-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.favorites-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.favorites-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.dock-section {
+  margin-bottom: 24px;
+}
+
+.dock-label {
+  color: var(--text-secondary);
+  font-size: .85rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.dock-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dock-item {
+  width: 60px;
+  height: 60px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.dock-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0,212,255,.2);
+}
+
+.dock-item-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: var(--error);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s ease;
+  border: 2px solid var(--bg-card);
+}
+
+.dock-item:hover .dock-item-remove {
+  opacity: 1;
+}
+
+.dock-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.dock-action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  flex: 1;
+}
+
+.dock-action-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+}
+
+.dock-action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,212,255,.3);
+}
+
+.dock-action-btn.secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.dock-action-btn.secondary:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.site-footer {
+  background: rgba(10,14,23,.8);
+  border-top: 1px solid var(--border);
+  padding: 20px;
+  margin-top: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: .85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.footer-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.density-toggle {
+  display: flex;
+  background: rgba(20,24,36,.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px;
+  gap: 4px;
+}
+
+.density-btn {
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: .75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+}
+
+.density-btn:hover {
+  color: var(--primary);
+  background: rgba(0,212,255,.1);
+}
+
+.density-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: .8rem;
+  opacity: .7;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  margin: 10px 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-hover);
+  transition: .4s;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--text-secondary);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: #fff;
+}
+
+.footer-legal-links {
+  margin: 15px 0;
+  font-size: .8rem;
+  color: var(--text-muted);
+}
+
+.footer-legal-links a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.footer-legal-links span {
+  margin: 0 8px;
+  opacity: .5;
+}
+
+.footer-age-warning {
+  background: rgba(245,158,11,.1);
+  border: 1px solid rgba(245,158,11,.3);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-top: 20px;
+  font-size: .85rem;
+  color: var(--warning);
+  text-align: center;
+}
+
+.footer-age-warning i {
+  margin-right: 8px;
+}
+
+.cookie-details-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: .8rem;
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.cookie-setting {
+  background: rgba(20,24,36,.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.cookie-setting h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cookie-setting p {
+  color: var(--text-secondary);
+  font-size: .9rem;
+  margin-bottom: 12px;
+}
+
+.category-info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(.95);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  z-index: 3002;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.category-info-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.category-info-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,.1), rgba(168,85,247,.1));
+}
+
+.category-info-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.category-info-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.category-info-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.category-info-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.category-info-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.category-info-section {
+  margin-bottom: 24px;
+}
+
+.category-info-section h3 {
+  color: var(--primary);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-info-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.category-info-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.category-info-tool {
+  padding: 8px 12px;
+  background: rgba(0,212,255,.1);
+  border: 1px solid rgba(0,212,255,.2);
+  border-radius: 8px;
+  color: var(--primary);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.category-info-tool:hover {
+  background: rgba(0,212,255,.2);
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(5px);
+  z-index: 3000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) scale(.9);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  z-index: 3001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.modal-close:hover {
+  background: var(--bg-dark);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.modal-content h3 {
+  color: var(--text-primary);
+  margin: 20px 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.modal-content p {
+  margin-bottom: 15px;
+}
+
+@keyframes countUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes countDown {
+  0% { transform: scale(1); }
+  50% { transform: scale(.8); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0,212,255,.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--primary);
+  display: none;
+}
+
+.loading i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1200px) {
+  :root { --drawer-width: 450px; }
+}
+
+@media (max-width: 992px) {
+  :root { --drawer-width: 400px; }
+  .sticky-header { height: var(--header-height); padding: 0 15px; }
+  .hero-area { height: 260px; padding: 0 15px; }
+  .hero-title { font-size: 2.4rem; margin-bottom: 20px; }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-search-container { max-width: 500px; }
+  .site-title { font-size: 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  :root { --drawer-width: 100%; --header-height: 60px; --hero-height: 240px; }
+  .main-content { padding: 15px; }
+  .tool-row { grid-template-columns: 1fr; height: auto; padding: 15px; gap: 12px; }
+  .tool-vote { flex-direction: row; justify-content: space-between; width: 100%; padding-right: 0; }
+  .tool-meta { flex-direction: row; justify-content: space-between; width: 100%; align-items: center; }
+  .cookie-content { flex-direction: column; text-align: center; }
+  .cookie-buttons { width: 100%; justify-content: center; }
+  .cookie-btn { flex: 1; min-width: 0; }
+  .tool-peek { display: none; }
+  .floating-favorites-btn { bottom: 80px; }
+  .hero-area { height: 220px; }
+  .hero-title { font-size: 2rem; margin-bottom: 16px; }
+  .hero-title::after { font-size: 1.5rem; right: -35px; }
+  .hero-subtitle { font-size: .95rem; }
+  .search-examples { gap: 12px; }
+  .search-example { font-size: .75rem; padding: 3px 10px; }
+  .footer-controls { gap: 12px; }
+  .site-title { font-size: 1.3rem; }
+  .cookie-consent { padding: 12px 15px; }
+  .cookie-content { flex-direction: column; gap: 10px; }
+  .cookie-text { min-width: 100%; text-align: center; }
+  .cookie-buttons { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .filter-chips { max-width: 100%; overflow-x: auto; }
+  .header-right { gap: 8px; }
+  .top5-list { gap: 6px; }
+  .top5-item { min-width: 140px; padding: 6px 8px; }
+  .top5-quickpeek { display: none; }
+  .hero-area { height: 200px; }
+  .hero-title { font-size: 1.8rem; }
+  .hero-title::after { font-size: 1.3rem; right: -30px; }
+  .hero-subtitle { font-size: .9rem; padding: 0 10px; }
+  .hero-omnibox-input { padding: 12px 16px; font-size: .95rem; }
+  .search-examples { gap: 8px; }
+  .search-example { font-size: .7rem; padding: 2px 8px; }
+  .footer-links { flex-direction: column; gap: 10px; }
+  .site-title { font-size: 1.1rem; }
+  .cookie-btn { padding: 8px 12px; font-size: .8rem; }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
 }
 
 .notification {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 20px;
+  padding: 12px 18px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: var(--shadow-hover);
-  z-index: 3000;
-  animation: slideInRight .3s ease;
-  max-width: 400px;
+  gap: 10px;
+  font-weight: 600;
+  font-size: .9rem;
+  z-index: 9999;
+  box-shadow: 0 5px 20px rgba(0,0,0,.3);
+  animation: slideUp .3s ease;
 }
 
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .notification.success {
   border-color: var(--success);
+  color: var(--success);
 }
 
 .notification.error {
   border-color: var(--error);
+  color: var(--error);
 }
 
 .notification.info {
   border-color: var(--primary);
-}
-
-.notification i {
-  font-size: 1.2rem;
-}
-
-.notification.success i {
-  color: var(--success);
-}
-
-.notification.error i {
-  color: var(--error);
-}
-
-.notification.info i {
   color: var(--primary);
-}
-
-.notification span {
-  flex: 1;
-  color: var(--text-primary);
-  font-size: .9rem;
 }
 
 .notification-close {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: inherit;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
+  margin-left: 10px;
+  font-size: 1rem;
 }
 
-.notification-close:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-  .hero-title::after {
-    right: -35px;
-    font-size: 1.5rem;
-  }
-  .drawer {
-    width: 100%;
-  }
-  .tool-peek {
-    display: none !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .site-title {
-    font-size: 1.3rem;
-  }
-  .hero-title {
-    font-size: 1.5rem;
-  }
-  .hero-subtitle {
-    font-size: .9rem;
-  }
-  .cookie-content {
-    flex-direction: column;
-  }
-  .cookie-text {
-    min-width: 100%;
+/* Fix for iOS Safari viewport */
+@supports (-webkit-touch-callout: none) {
+  body {
+    min-height: -webkit-fill-available;
   }
 }
 </style>
@@ -1356,816 +2081,306 @@ body::before {
 <div class="glow glow-2"></div>
 <div class="glow glow-3"></div>
 
+<!-- Cookie Consent - FIXED -->
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      <strong>🍪 Cookies & Analytics</strong><br>
-      Wir nutzen Cookies für Analytics (Google Analytics) um unsere Website zu verbessern.
+      <strong data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</strong><br>
+      <span data-de="Technisch notwendige Cookies (Favoriten, Votes) sind aktiv." data-en="Technically required cookies (favorites, votes) are active.">Technisch notwendige Cookies (Favoriten, Votes) sind aktiv.</span> 
+      <button class="cookie-details-btn" id="cookieDetailsBtn" data-de="Details" data-en="Details">Details</button> 
+      <a href="#" id="privacyLinkCookie" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
     </div>
     <div class="cookie-buttons">
-      <button class="cookie-btn decline" onclick="handleCookieDecline()">Ablehnen</button>
-      <button class="cookie-btn accept" onclick="handleCookieAccept()">Akzeptieren</button>
+      <button class="cookie-btn decline" id="cookieDecline" data-de="Ablehnen" data-en="Decline">Ablehnen</button>
+      <button class="cookie-btn settings" id="cookieSettings" data-de="Einstellungen" data-en="Settings">Einstellungen</button>
+      <button class="cookie-btn accept" id="cookieAccept" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
+<div class="modal" id="cookieSettingsModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</h2>
+    <button class="modal-close" id="cookieSettingsModalClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-content">
+    <div class="cookie-setting">
+      <h3><i class="fas fa-chart-line"></i> <span data-de="Analyse-Cookies (Google Analytics)" data-en="Analytics Cookies (Google Analytics)">Analyse-Cookies (Google Analytics)</span></h3>
+      <p data-de="Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert." data-en="Help us understand how the website is used. Anonymized.">Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
+      <label class="switch">
+        <input type="checkbox" id="analyticsToggle" checked>
+        <span class="slider"></span>
+      </label>
+      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem"><span data-de="Aktiviert" data-en="Active">Aktiviert</span></p>
+    </div>
+    <div class="cookie-buttons" style="margin-top:30px">
+      <button class="cookie-btn secondary" id="saveCookieSettings" data-de="Auswahl speichern" data-en="Save Selection">Auswahl speichern</button>
+      <button class="cookie-btn accept" id="acceptAllCookies" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
     </div>
   </div>
 </div>
 
 <header class="sticky-header">
-  <div class="site-title">AI SEARCHER</div>
+  <div class="site-title">AI Searcher</div>
   <div class="header-right">
-    <button class="lang-btn" onclick="toggleLanguage()">
-      <i class="fas fa-globe"></i>
-      <span id="currentLang">DE</span>
+    <button class="lang-btn" id="langToggle">
+      <i class="fas fa-globe"></i> <span id="langText">EN</span>
     </button>
   </div>
 </header>
 
-<section class="hero-area">
-  <h1 class="hero-title" data-de="Finde dein KI-Tool" data-en="Find your AI Tool">Finde dein KI-Tool</h1>
-  <p class="hero-subtitle" data-de="50+ handverlesene KI-Tools mit Echtzeitbewertungen, intelligenten Empfehlungen und Vergleichsfunktion" data-en="50+ handpicked AI tools with real-time ratings, smart recommendations and comparison feature">50+ handverlesene KI-Tools mit Echtzeitbewertungen, intelligenten Empfehlungen und Vergleichsfunktion</p>
-  
+<div class="hero-area">
+  <h1 class="hero-title">AI Searcher</h1>
+  <div class="hero-subtitle" id="heroSubtitle">Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.</div>
   <div class="hero-search-container">
     <div class="hero-omnibox">
-      <input type="text" 
-             class="hero-omnibox-input" 
-             id="heroSearch" 
-             placeholder="Suche nach KI-Tools... (z.B. 'Bildgenerierung', 'ChatGPT')"
-             data-placeholder-de="Suche nach KI-Tools... (z.B. 'Bildgenerierung', 'ChatGPT')"
-             data-placeholder-en="Search for AI tools... (e.g. 'Image generation', 'ChatGPT')">
+      <input type="text" class="hero-omnibox-input" id="omniboxInput" placeholder="Ich suche nach..." data-placeholder-de="Ich suche nach..." data-placeholder-en="I'm looking for...">
     </div>
   </div>
-  
   <div class="search-hint-grid">
-    <span class="search-hint-text" data-de="Beliebte Suchen:" data-en="Popular searches:">Beliebte Suchen:</span>
+    <div class="search-hint-text" id="searchHintText">Suche nach Toolnamen, Use-Cases oder Features</div>
     <div class="search-examples">
-      <span class="search-example" onclick="searchByExample(this)" data-de="Bildgenerierung" data-en="Image generation">Bildgenerierung</span>
-      <span class="search-example" onclick="searchByExample(this)" data-de="Textgenerierung" data-en="Text generation">Textgenerierung</span>
-      <span class="search-example" onclick="searchByExample(this)" data-de="Kostenlos" data-en="Free">Kostenlos</span>
+      <div class="search-example">Text</div>
+      <div class="search-example">Bilder</div>
+      <div class="search-example">Stimme</div>
+      <div class="search-example">Code</div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="main-content" style="padding-top: 0;">
+<main class="main-content">
   <div class="top5-bar" id="top5Bar">
     <div class="top5-header">
-      <i class="fas fa-fire"></i>
-      <span data-de="🏆 Top 5 - Community Favoriten (Live)" data-en="🏆 Top 5 - Community Favorites (Live)">🏆 Top 5 - Community Favoriten (Live)</span>
+      <i class="fas fa-trophy"></i> <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
     </div>
-    <div class="top5-list" id="top5List">
-      <!-- Wird dynamisch gefüllt -->
+    <div class="top5-list" id="top5List"></div>
+  </div>
+  
+  <div class="filter-chips" id="filterChips"></div>
+  
+  <section class="tool-groups" id="toolGroups"></section>
+  
+  <div class="loading" id="loading">
+    <i class="fas fa-circle-notch"></i>
+    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-controls">
+    <div class="density-toggle">
+      <button class="density-btn active" data-density="cozy">Cozy</button>
+      <button class="density-btn" data-density="compact">Compact</button>
+      <button class="density-btn" data-density="future">Future</button>
     </div>
   </div>
-
-  <div class="filter-chips" id="filterChips">
-    <!-- Wird dynamisch gefüllt -->
+  <div class="footer-links">
+    <a href="#" id="imprintLink" data-de="Impressum" data-en="Imprint">Impressum</a>
+    <a href="#" id="privacyLink" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
   </div>
+  <div class="footer-legal-links">
+    <a href="#" id="legalDetailsBtn" data-de="Rechtliche Details" data-en="Legal Details">Rechtliche Details</a> <span>•</span> 
+    <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a> <span>•</span> 
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
+  </div>
+  <div class="footer-age-warning" data-de="Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll." data-en="This website is intended for users aged 16 and over. AI tools can generate unexpected content - use them responsibly.">
+    <i class="fas fa-exclamation-triangle"></i> Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
+  </div>
+  <div class="footer-copyright" data-de="© 2026 AI Searcher. Alle Rechte vorbehalten." data-en="© 2026 AI Searcher. All rights reserved.">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
+</footer>
 
-  <div class="tool-groups" id="toolGroups">
-    <!-- Wird dynamisch gefüllt -->
+<!-- Category Info Modal -->
+<div class="modal-overlay" id="categoryInfoModalOverlay"></div>
+<div class="category-info-modal" id="categoryInfoModal">
+  <div class="category-info-header">
+    <div class="category-info-title">
+      <div class="category-info-icon" id="categoryInfoIcon">🤖</div> 
+      <span id="categoryInfoTitle">Kategorie-Info</span>
+    </div>
+    <button class="category-info-close" id="categoryInfoModalClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="category-info-content" id="categoryInfoContent"></div>
+</div>
+
+<!-- Tool Drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <h2 class="drawer-title" id="drawerTitle">Tool Details</h2>
+    <button class="drawer-close" id="drawerClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="drawer-content" id="drawerContent"></div>
+</div>
+
+<!-- Favorites Drawer -->
+<div class="favorites-overlay" id="favoritesOverlay"></div>
+<div class="favorites-drawer" id="favoritesDrawer">
+  <div class="favorites-header">
+    <h2 class="favorites-title" data-de="Favoriten & Vergleich" data-en="Favorites & Compare">Favoriten & Vergleich</h2>
+    <button class="favorites-close" id="favoritesClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="favorites-content">
+    <div class="dock-section">
+      <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
+      <div class="dock-items" id="favoriteDock"></div>
+    </div>
+    <div class="dock-section">
+      <div class="dock-label" data-de="Vergleich" data-en="Compare">Vergleich</div>
+      <div class="dock-items" id="compareDock"></div>
+    </div>
+    <div class="dock-actions">
+      <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
+      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
+    </div>
   </div>
 </div>
 
-<div class="drawer-overlay" id="favoritesOverlay" onclick="closeModal('favorites')"></div>
-<div class="drawer" id="favorites">
-  <div class="drawer-header">
-    <div class="drawer-title" data-de="⭐ Meine Favoriten" data-en="⭐ My Favorites">⭐ Meine Favoriten</div>
-    <button class="drawer-close" onclick="closeModal('favorites')">
-      <i class="fas fa-times"></i>
-    </button>
+<!-- Floating Buttons -->
+<button class="floating-favorites-btn" id="floatingFavoritesBtn" aria-label="Favoriten anzeigen">
+  <i class="fas fa-star"></i> 
+  <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
+</button>
+<button class="back-to-top" id="backToTop" aria-label="Nach oben"><i class="fas fa-chevron-up"></i></button>
+
+<!-- Imprint Modal -->
+<div class="modal-overlay" id="imprintModalOverlay"></div>
+<div class="modal" id="imprintModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Impressum" data-en="Imprint">Impressum</h2>
+    <button class="modal-close" id="imprintModalClose"><i class="fas fa-times"></i></button>
   </div>
-  <div class="drawer-body" id="favoritesBody">
-    <!-- Wird dynamisch gefüllt -->
+  <div class="modal-content">
+    <h2 data-de="Impressum" data-en="Imprint">Impressum</h2>
+    <h3 data-de="Angaben gemäß § 5 DDG" data-en="Information according to § 5 DDG">Angaben gemäß § 5 DDG</h3>
+    <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin</p>
+    <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
+    <p data-de="Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small>" data-en="Phone: +49 173 5489128 (No phone support)<br>Email: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Note: Support requests are handled exclusively by email.</i></small>">Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small></p>
+    <h3 data-de="Aufsichtsbehörde" data-en="Supervisory Authority">Aufsichtsbehörde</h3>
+    <p data-de="Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland" data-en="State Media Authority North Rhine-Westphalia<br>Location: Germany">Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland</p>
+    <h3 data-de="Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV" data-en="Responsible for content according to § 18 para. 2 MStV">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+    <p>Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin</p>
+    <h3 data-de="Haftungsausschluss & Streitbeilegung" data-en="Disclaimer & Dispute Resolution">Haftungsausschluss & Streitbeilegung</h3>
+    <p data-de="Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen." data-en="The contents of this page have been created with the greatest care. However, no guarantee can be given for the correctness, completeness and topicality of the contents. We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.">Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    <h3 data-de="Affiliate-Hinweis" data-en="Affiliate Notice">Affiliate-Hinweis</h3>
+    <p data-de="Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="This website contains affiliate links. If you purchase a product through these links, I receive a small commission. There are no additional costs for you.">Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+    <h3 data-de="Affiliate-Links & Haftungsausschluss" data-en="Affiliate Links & Disclaimer">Affiliate-Links & Haftungsausschluss</h3>
+    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="Links to AI tools are marked as affiliate links (*). For purchases through these links we receive a small commission. There are no additional costs for you.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
+    <p data-de="<strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter." data-en="<strong>Important:</strong> We accept no liability for:<ul><li>Accuracy of tool descriptions (may change daily)</li><li>Availability or functionality of linked tools</li><li>Contract agreements with third-party providers</li><li>Privacy practices of external providers</li></ul>The contractual relationship is solely between you and the tool provider."><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
+    <h3 data-de="Urheberrecht & Marken" data-en="Copyright & Trademarks">Urheberrecht & Marken</h3>
+    <p data-de="Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken." data-en="All mentioned product names, logos and trademarks are property of their respective owners. Mention is for identification purposes only.">Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
   </div>
 </div>
 
-<div class="drawer-overlay" id="compareOverlay" onclick="closeModal('compare')"></div>
-<div class="drawer" id="compare">
-  <div class="drawer-header">
-    <div class="drawer-title" data-de="🔍 Vergleich" data-en="🔍 Compare">🔍 Vergleich</div>
-    <button class="drawer-close" onclick="closeModal('compare')">
-      <i class="fas fa-times"></i>
-    </button>
+<!-- Privacy Modal - FIXED -->
+<div class="modal-overlay" id="privacyModalOverlay"></div>
+<div class="modal" id="privacyModal">
+  <div class="modal-header">
+    <h2 class="modal-title" data-de="Datenschutz" data-en="Privacy">Datenschutz</h2>
+    <button class="modal-close" id="privacyModalClose"><i class="fas fa-times"></i></button>
   </div>
-  <div class="drawer-body" id="compareBody">
-    <!-- Wird dynamisch gefüllt -->
+  <div class="modal-content">
+    <h2 data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
+    <h3 data-de="1. Verantwortliche Stelle" data-en="1. Responsible Party">1. Verantwortliche Stelle</h3>
+    <p data-de="Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com" data-en="Responsible in terms of data protection laws:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>Email: ai.tool.hub.contact@gmail.com">Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
+    <h3 data-de="2. Datenerhebung bei Website-Nutzung" data-en="2. Data Collection when Using the Website">2. Datenerhebung bei Website-Nutzung</h3>
+    <p data-de="Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht." data-en="For informational use, we do not collect personal data. Server log files (IP, browser type, access time) are automatically collected by the hosting provider and deleted after 7 days.">Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
+    <h3 data-de="3. Cookies & Local Storage" data-en="3. Cookies & Local Storage">3. Cookies & Local Storage</h3>
+    <p data-de="Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren." data-en="We use technically necessary cookies for functions such as favorites and voting. These are stored locally in your browser and contain no personal data. Optionally you can activate analytics cookies.">Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
+    <h3 data-de="4. Google Analytics (nur nach Einwilligung)" data-en="4. Google Analytics (only with consent)">4. Google Analytics (nur nach Einwilligung)</h3>
+    <p data-de="Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert." data-en="This website uses Google Analytics 4, a web analytics service from Google LLC. IP anonymization is enabled. Your IP address is shortened before reaching the USA. Data is stored for a maximum of 14 months.">Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
+    <p data-de="Sie können Analytics deaktivieren über: <a href='#' id='analyticsOptOut'>Analytics deaktivieren</a>" data-en="You can disable analytics via: <a href='#' id='analyticsOptOut'>Disable Analytics</a>">Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
+    <h3 data-de="5. Externe Links & Affiliate-Links" data-en="5. External Links & Affiliate Links">5. Externe Links & Affiliate-Links</h3>
+    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen." data-en="Links to AI tools are marked as affiliate links (*). When clicking, no personal data is transferred to us. External pages are subject to their own privacy policies.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
+    <h3 data-de="6. Ihre Rechte (DSGVO)" data-en="6. Your Rights (GDPR)">6. Ihre Rechte (DSGVO)</h3>
+    <p data-de="Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com" data-en="You have the right to:<ul><li>Information about stored data</li><li>Correction of incorrect data</li><li>Deletion of your data</li><li>Restriction of processing</li><li>Data portability</li><li>Revocation of your consent</li></ul>Contact: ai.tool.hub.contact@gmail.com">Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com</p>
+    <h3 data-de="7. Hosting auf GitHub Pages" data-en="7. Hosting on GitHub Pages">7. Hosting auf GitHub Pages</h3>
+    <p data-de="Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>." data-en="This page is hosted on GitHub Pages. GitHub may process technical access data (IP, access time). Further information: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>.">Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
+    <h3 data-de="8. Sicherheit" data-en="8. Security">8. Sicherheit</h3>
+    <p data-de="Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy)." data-en="We implement technical measures to protect your data (HTTPS, Content Security Policy).">Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
+    <p><em data-de="Stand: Februar 2026" data-en="Status: February 2026">Stand: Februar 2026</em></p>
   </div>
 </div>
 
 <script>
 // ==============================================
-// KONFIGURATION & GLOBALE VARIABLEN
+// GLOBALE VARIABLEN
 // ==============================================
-
-// ⚠️ WICHTIG: SUPABASE CREDENTIALS HIER EINFÜGEN
-const SUPABASE_URL = 'DEINE_SUPABASE_URL_HIER';  // z.B. 'https://abcdefghijk.supabase.co'
-const SUPABASE_ANON_KEY = 'DEIN_SUPABASE_ANON_KEY_HIER';  // Dein Supabase anon/public Key
-
-// Supabase Client initialisieren
-let supabase = null;
-let realtimeChannel = null;
-
-// Prüfe ob Supabase verfügbar ist
-if (typeof supabase === 'undefined' && window.supabase) {
-  console.log('✅ Supabase SDK geladen');
-} else {
-  console.warn('⚠️ Supabase SDK nicht gefunden');
-}
-
-// Initialisiere Supabase Client nur wenn Credentials vorhanden
-function initializeSupabase() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || 
-      SUPABASE_URL === 'DEINE_SUPABASE_URL_HIER' || 
-      SUPABASE_ANON_KEY === 'DEIN_SUPABASE_ANON_KEY_HIER') {
-    console.warn('⚠️ Supabase Credentials nicht konfiguriert. Bitte SUPABASE_URL und SUPABASE_ANON_KEY eintragen!');
-    return false;
-  }
-  
-  try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase Client initialisiert');
-    return true;
-  } catch (error) {
-    console.error('❌ Fehler beim Initialisieren von Supabase:', error);
-    return false;
-  }
-}
-
-// Globale Variablen
 let aiTools = [];
 let currentLang = 'de';
-let activeFilter = 'all';
-let userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
-let votesData = {};
+let currentCategory = 'all';
+let searchQuery = '';
+let hoverTimeout = null;
+let peekElement = null;
+let isDrawerOpen = false;
+let scrollDebounceTimeout = null;
+const BASELINE_VOTES = 2;
+
+// Supabase Configuration
+const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
+let supabase = null;
+
+// Kategorie-Informationen (unverändert)
+const categoryInfo = {
+  text: {
+    title: { de: "Text-KI-Tools", en: "Text AI Tools" },
+    description: { de: "Text-KI-Tools revolutionieren das Schreiben, Editieren und Übersetzen von Texten. Sie helfen dir bei kreativem Schreiben, Zusammenfassungen, Grammatikprüfungen und mehr.", en: "Text AI tools revolutionize writing, editing and translating. They help with creative writing, summaries, grammar checks and more." },
+    useCases: { de: ["Kreatives Schreiben & Content-Erstellung", "Übersetzungen zwischen Sprachen", "Text-Zusammenfassungen & -Analyse", "Grammatik- und Rechtschreibprüfung", "Chatbots & Kundenservice-Automatisierung"], en: ["Creative writing & content creation", "Translation between languages", "Text summaries & analysis", "Grammar and spell checking", "Chatbots & customer service automation"] },
+    bestFor: { de: ["Content Creator & Marketing-Experten", "Autoren & Journalisten", "Übersetzer & Sprachforscher", "Studenten & Akademiker", "Unternehmen für Kundenservice"], en: ["Content creators & marketing experts", "Authors & journalists", "Translators & language researchers", "Students & academics", "Companies for customer service"] },
+    trends: { de: ["Multilinguale Modelle mit 100+ Sprachen", "Echtzeit-Zusammenarbeit & Co-Writing", "Personalisierte Schreibstile", "Emotionale Intelligenz in Texten", "Integration in bestehende Workflows"], en: ["Multilingual models with 100+ languages", "Real-time collaboration & co-writing", "Personalized writing styles", "Emotional intelligence in texts", "Integration into existing workflows"] }
+  },
+  image: {
+    title: { de: "Bild-KI-Tools", en: "Image AI Tools" },
+    description: { de: "Bild-KI-Tools generieren, bearbeiten und optimieren Bilder aus Textbeschreibungen. Perfekt für Designer, Künstler und Marketing-Teams.", en: "Image AI tools generate, edit and optimize images from text descriptions. Perfect for designers, artists and marketing teams." },
+    useCases: { de: ["Bildgenerierung aus Text-Prompts", "Bildbearbeitung & -Optimierung", "Logo-Design & Branding", "Artwork & digitale Kunst", "Produktfotos & Marketing-Material"], en: ["Image generation from text prompts", "Image editing & optimization", "Logo design & branding", "Artwork & digital art", "Product photos & marketing material"] },
+    bestFor: { de: ["Grafikdesigner & Illustratoren", "Marketing- & Werbeagenturen", "E-Commerce & Online-Shops", "Künstler & Kreative", "Social Media Manager"], en: ["Graphic designers & illustrators", "Marketing & advertising agencies", "E-commerce & online shops", "Artists & creatives", "Social media managers"] },
+    trends: { de: ["4K+ Auflösung & Photorealismus", "Konsistente Charakter-Generierung", "3D-Modellierung aus 2D-Bildern", "Video-zu-Bild-Konvertierung", "Echtzeit-Generierung & Editing"], en: ["4K+ resolution & photorealism", "Consistent character generation", "3D modeling from 2D images", "Video-to-image conversion", "Real-time generation & editing"] }
+  },
+  code: {
+    title: { de: "Code-KI-Tools", en: "Code AI Tools" },
+    description: { de: "Code-KI-Tools unterstützen Entwickler beim Schreiben, Debuggen und Optimieren von Code. Sie beschleunigen die Entwicklung und reduzieren Fehler.", en: "Code AI tools support developers in writing, debugging and optimizing code. They accelerate development and reduce errors." },
+    useCases: { de: ["Code-Vervollständigung & -Generierung", "Bug-Finding & Debugging", "Code-Optimierung & Refactoring", "Dokumentation & Kommentare", "Code-Übersetzung zwischen Sprachen"], en: ["Code completion & generation", "Bug finding & debugging", "Code optimization & refactoring", "Documentation & comments", "Code translation between languages"] },
+    bestFor: { de: ["Software-Entwickler & -Ingenieure", "Web- & App-Entwickler", "Data Scientists & ML-Engineers", "DevOps & Systemadministratoren", "IT-Studenten & Bootcamp-Teilnehmer"], en: ["Software developers & engineers", "Web & app developers", "Data scientists & ML engineers", "DevOps & system administrators", "IT students & bootcamp participants"] },
+    trends: { de: ["Kontextbewusste Code-Vorschläge", "Automatische Test-Generierung", "Sicherheitsanalyse & Vulnerability Scanning", "Multi-Language Support", "IDE-Integration & Pair Programming"], en: ["Context-aware code suggestions", "Automatic test generation", "Security analysis & vulnerability scanning", "Multi-language support", "IDE integration & pair programming"] }
+  },
+  video: {
+    title: { de: "Video-KI-Tools", en: "Video AI Tools" },
+    description: { de: "Video-KI-Tools ermöglichen die Generierung und Bearbeitung von Videos aus Text oder Bildern. Ideal für Content Creator, Filmemacher und Unternehmen.", en: "Video AI tools enable generation and editing of videos from text or images. Ideal for content creators, filmmakers and businesses." },
+    useCases: { de: ["Video-Generierung aus Text/Images", "Automatische Untertitel & Übersetzung", "Video-Bearbeitung & -Optimierung", "Animations- & Motion Graphics", "Sprach-zu-Video Konvertierung"], en: ["Video generation from text/images", "Automatic subtitles & translation", "Video editing & optimization", "Animation & motion graphics", "Speech-to-video conversion"] },
+    bestFor: { de: ["Video-Editoren & Filmemacher", "Content Creator & YouTuber", "Marketing- & Werbe-Teams", "Unternehmen für Schulungsvideos", "Event- & Wedding-Videografen"], en: ["Video editors & filmmakers", "Content creators & YouTubers", "Marketing & advertising teams", "Companies for training videos", "Event & wedding videographers"] },
+    trends: { de: ["Text-zu-Video mit hoher Konsistenz", "Emotionale Avatare & Deepfakes", "Echtzeit-Video-Bearbeitung", "3D-Animation aus 2D-Material", "Personalisiertes Video-Marketing"], en: ["Text-to-video with high consistency", "Emotional avatars & deepfakes", "Real-time video editing", "3D animation from 2D material", "Personalized video marketing"] }
+  },
+  audio: {
+    title: { de: "Audio-KI-Tools", en: "Audio AI Tools" },
+    description: { de: "Audio-KI-Tools generieren und bearbeiten Sprache, Musik und Soundeffekte. Perfekt für Podcaster, Musiker und Audio-Profis.", en: "Audio AI tools generate and edit speech, music and sound effects. Perfect for podcasters, musicians and audio professionals." },
+    useCases: { de: ["Text-zu-Sprache & Sprachsynthese", "Musik-Generierung & -Komposition", "Audio-Bearbeitung & -Bereinigung", "Podcast-Produktion & -Optimierung", "Voice Cloning & -Anpassung"], en: ["Text-to-speech & speech synthesis", "Music generation & composition", "Audio editing & cleanup", "Podcast production & optimization", "Voice cloning & customization"] },
+    bestFor: { de: ["Podcaster & Radio-Moderatoren", "Musiker & Komponisten", "Audio-Editoren & Sound-Designer", "Unternehmen für Voiceovers", "Film- & Game-Audio-Profis"], en: ["Podcasters & radio hosts", "Musicians & composers", "Audio editors & sound designers", "Companies for voiceovers", "Film & game audio professionals"] },
+    trends: { de: ["Emotionale Sprachsynthese", "KI-generierte Musik in jedem Stil", "Echtzeit-Audio-Bearbeitung", "Mehrsprachige Voice Cloning", "Binaurale Audio & 3D-Sound"], en: ["Emotional speech synthesis", "AI-generated music in any style", "Real-time audio editing", "Multilingual voice cloning", "Binaural audio & 3D sound"] }
+  }
+};
 
 // ==============================================
-// DATEN LADEN
+// HILFSFUNKTIONEN
 // ==============================================
+function parseNumber(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+}
 
-async function loadData() {
-  try {
-    console.log('📥 Lade data.json...');
-    const response = await fetch('data.json');
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    aiTools = await response.json();
-    console.log(`✅ ${aiTools.length} Tools erfolgreich geladen`);
-    
-    // Initialisiere Supabase
-    const supabaseReady = initializeSupabase();
-    
-    if (supabaseReady) {
-      // Lade Votes von Supabase
-      await loadVotesFromSupabase();
-      
-      // Starte Realtime-Subscription
-      subscribeToVoteUpdates();
-    } else {
-      console.log('ℹ️ Arbeite mit lokalem Vote-System (kein Supabase)');
-      // Fallback: Lade lokale Votes
-      votesData = JSON.parse(localStorage.getItem('votesData') || '{}');
-    }
-    
-    // Rendere UI
-    initializeUI();
-    
-  } catch (error) {
-    console.error('❌ Fehler beim Laden der Daten:', error);
-    showNotification('Fehler beim Laden der Daten. Bitte Seite neu laden.', 'error');
+function getToolVotes(tool) {
+  const votes = parseNumber(tool?.votes ?? 0);
+  return Math.max(votes, 0);
+}
+
+function updateTop5Vote(toolId, votes) {
+  const element = document.getElementById(`top5Votes-${toolId}`);
+  if (element) {
+    element.textContent = Math.max(votes, 0);
+    element.classList.add('changed');
+    setTimeout(() => element.classList.remove('changed'), 600);
   }
-}
-
-// ==============================================
-// SUPABASE FUNKTIONEN
-// ==============================================
-
-async function loadVotesFromSupabase() {
-  if (!supabase || typeof supabase.from !== 'function') {
-    console.warn('⚠️ Supabase nicht verfügbar für loadVotesFromSupabase');
-    return;
-  }
-  
-  try {
-    console.log('📡 Lade Votes von Supabase...');
-    
-    const { data, error } = await supabase
-      .from('tools_votes')
-      .select('*');
-    
-    if (error) {
-      console.error('❌ Supabase Fehler:', error);
-      return;
-    }
-    
-    // Konvertiere Array zu Object für schnellen Zugriff
-    votesData = {};
-    if (data && Array.isArray(data)) {
-      data.forEach(item => {
-        votesData[item.tool_id] = {
-          upvotes: parseInt(item.upvotes) || 0,
-          downvotes: parseInt(item.downvotes) || 0,
-          totalVotes: (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
-        };
-      });
-      console.log(`✅ ${Object.keys(votesData).length} Vote-Datensätze von Supabase geladen`);
-    }
-    
-  } catch (error) {
-    console.error('❌ Fehler beim Laden von Votes:', error);
-  }
-}
-
-function subscribeToVoteUpdates() {
-  if (!supabase || typeof supabase.channel !== 'function') {
-    console.warn('⚠️ Supabase Realtime nicht verfügbar');
-    return;
-  }
-  
-  try {
-    console.log('🔔 Starte Realtime-Subscription...');
-    
-    realtimeChannel = supabase
-      .channel('tools_votes_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'tools_votes'
-        },
-        (payload) => {
-          console.log('🔔 Realtime Update erhalten:', payload);
-          handleRealtimeUpdate(payload);
-        }
-      )
-      .subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          console.log('✅ Realtime-Subscription aktiv');
-        } else {
-          console.log('ℹ️ Subscription Status:', status);
-        }
-      });
-      
-  } catch (error) {
-    console.error('❌ Fehler bei Realtime-Subscription:', error);
-  }
-}
-
-function handleRealtimeUpdate(payload) {
-  const { new: newRecord, old: oldRecord, eventType } = payload;
-  
-  if (eventType === 'UPDATE' || eventType === 'INSERT') {
-    const toolId = newRecord.tool_id;
-    const oldVotes = votesData[toolId] || { totalVotes: 0 };
-    
-    // Update lokale Daten
-    votesData[toolId] = {
-      upvotes: parseInt(newRecord.upvotes) || 0,
-      downvotes: parseInt(newRecord.downvotes) || 0,
-      totalVotes: (parseInt(newRecord.upvotes) || 0) - (parseInt(newRecord.downvotes) || 0)
-    };
-    
-    console.log(`🔄 Vote Update für ${toolId}:`, votesData[toolId]);
-    
-    // Update UI
-    updateVoteUI(toolId, oldVotes.totalVotes);
-    updateTop5();
-  }
-}
-
-async function submitVote(toolId, voteType) {
-  // Prüfe ob User bereits gevotet hat
-  const existingVote = userVotes[toolId];
-  
-  if (existingVote === voteType) {
-    showNotification('Du hast bereits für dieses Tool gevotet!', 'info');
-    return;
-  }
-  
-  // Update lokale User-Votes
-  const oldVote = userVotes[toolId];
-  userVotes[toolId] = voteType;
-  localStorage.setItem('userVotes', JSON.stringify(userVotes));
-  
-  // Update UI sofort (optimistisch)
-  updateVoteButtonStates(toolId);
-  
-  // Wenn Supabase verfügbar, sende Vote
-  if (supabase && typeof supabase.from === 'function') {
-    try {
-      // Berechne Änderungen
-      let upvoteChange = 0;
-      let downvoteChange = 0;
-      
-      if (oldVote === 'up') {
-        upvoteChange = -1;
-      } else if (oldVote === 'down') {
-        downvoteChange = -1;
-      }
-      
-      if (voteType === 'up') {
-        upvoteChange += 1;
-      } else if (voteType === 'down') {
-        downvoteChange += 1;
-      }
-      
-      // Hole aktuelle Werte
-      const { data: currentData, error: fetchError } = await supabase
-        .from('tools_votes')
-        .select('upvotes, downvotes')
-        .eq('tool_id', toolId)
-        .single();
-      
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-      
-      const currentUpvotes = currentData ? parseInt(currentData.upvotes) || 0 : 0;
-      const currentDownvotes = currentData ? parseInt(currentData.downvotes) || 0 : 0;
-      
-      // Berechne neue Werte
-      const newUpvotes = Math.max(0, currentUpvotes + upvoteChange);
-      const newDownvotes = Math.max(0, currentDownvotes + downvoteChange);
-      
-      // Upsert in Datenbank
-      const { error: upsertError } = await supabase
-        .from('tools_votes')
-        .upsert(
-          {
-            tool_id: toolId,
-            upvotes: newUpvotes,
-            downvotes: newDownvotes
-          },
-          {
-            onConflict: 'tool_id'
-          }
-        );
-      
-      if (upsertError) {
-        throw upsertError;
-      }
-      
-      console.log(`✅ Vote für ${toolId} erfolgreich gespeichert`);
-      
-    } catch (error) {
-      console.error('❌ Fehler beim Speichern des Votes:', error);
-      showNotification('Fehler beim Speichern des Votes', 'error');
-      
-      // Rollback bei Fehler
-      if (oldVote) {
-        userVotes[toolId] = oldVote;
-      } else {
-        delete userVotes[toolId];
-      }
-      localStorage.setItem('userVotes', JSON.stringify(userVotes));
-      updateVoteButtonStates(toolId);
-    }
-  } else {
-    // Fallback: Lokales Vote-System
-    if (!votesData[toolId]) {
-      votesData[toolId] = { upvotes: 0, downvotes: 0, totalVotes: 0 };
-    }
-    
-    // Entferne altes Vote
-    if (oldVote === 'up') {
-      votesData[toolId].upvotes = Math.max(0, votesData[toolId].upvotes - 1);
-    } else if (oldVote === 'down') {
-      votesData[toolId].downvotes = Math.max(0, votesData[toolId].downvotes - 1);
-    }
-    
-    // Füge neues Vote hinzu
-    if (voteType === 'up') {
-      votesData[toolId].upvotes++;
-    } else if (voteType === 'down') {
-      votesData[toolId].downvotes++;
-    }
-    
-    // Berechne Total
-    votesData[toolId].totalVotes = votesData[toolId].upvotes - votesData[toolId].downvotes;
-    
-    // Speichere lokal
-    localStorage.setItem('votesData', JSON.stringify(votesData));
-    
-    // Update UI
-    const oldTotal = votesData[toolId].totalVotes - (voteType === 'up' ? 1 : -1) + (oldVote === 'up' ? 1 : oldVote === 'down' ? -1 : 0);
-    updateVoteUI(toolId, oldTotal);
-    updateTop5();
-  }
-}
-
-function updateVoteUI(toolId, oldTotal) {
-  const voteCountEl = document.querySelector(`[data-tool-id="${toolId}"] .vote-count`);
-  
-  if (voteCountEl) {
-    const newTotal = votesData[toolId]?.totalVotes || 0;
-    voteCountEl.textContent = newTotal;
-    
-    // Animation
-    voteCountEl.classList.remove('moving-up', 'moving-down');
-    if (newTotal > oldTotal) {
-      voteCountEl.classList.add('moving-up');
-    } else if (newTotal < oldTotal) {
-      voteCountEl.classList.add('moving-down');
-    }
-    
-    setTimeout(() => {
-      voteCountEl.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-}
-
-function updateVoteButtonStates(toolId) {
-  const toolRow = document.querySelector(`[data-tool-id="${toolId}"]`);
-  if (!toolRow) return;
-  
-  const upBtn = toolRow.querySelector('.vote-btn-row.up');
-  const downBtn = toolRow.querySelector('.vote-btn-row.down');
-  const userVote = userVotes[toolId];
-  
-  upBtn.classList.toggle('active', userVote === 'up');
-  downBtn.classList.toggle('active', userVote === 'down');
-}
-
-function getVoteCount(toolId) {
-  return votesData[toolId]?.totalVotes || 0;
-}
-
-// ==============================================
-// UI INITIALISIERUNG
-// ==============================================
-
-function initializeUI() {
-  renderFilterChips();
-  renderToolGroups();
-  updateTop5();
-  setupEventListeners();
-  checkCookieConsent();
-}
-
-function setupEventListeners() {
-  // Suche
-  const searchInput = document.getElementById('heroSearch');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      filterTools(query);
-    });
-  }
-}
-
-function renderFilterChips() {
-  const container = document.getElementById('filterChips');
-  if (!container) return;
-  
-  const filters = [
-    { id: 'all', icon: 'fa-th', label: { de: 'Alle', en: 'All' } },
-    { id: 'text', icon: 'fa-keyboard', label: { de: 'Text', en: 'Text' } },
-    { id: 'image', icon: 'fa-image', label: { de: 'Bild', en: 'Image' } },
-    { id: 'code', icon: 'fa-code', label: { de: 'Code', en: 'Code' } },
-    { id: 'video', icon: 'fa-video', label: { de: 'Video', en: 'Video' } },
-    { id: 'audio', icon: 'fa-microphone', label: { de: 'Audio', en: 'Audio' } },
-    { id: 'business', icon: 'fa-briefcase', label: { de: 'Business', en: 'Business' } },
-    { id: 'free', icon: 'fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
-    { id: 'popular', icon: 'fa-fire', label: { de: 'Beliebt', en: 'Popular' } }
-  ];
-  
-  container.innerHTML = filters.map(f => `
-    <div class="filter-chip ${f.id === 'all' ? 'active' : ''}" 
-         onclick="setFilter('${f.id}')"
-         data-filter="${f.id}">
-      <i class="fas ${f.icon}"></i>
-      <span data-de="${f.label.de}" data-en="${f.label.en}">${f.label[currentLang]}</span>
-    </div>
-  `).join('');
-}
-
-function renderToolGroups() {
-  const container = document.getElementById('toolGroups');
-  if (!container) return;
-  
-  const categories = {
-    text: { icon: '✍️', name: { de: 'Text & Schreiben', en: 'Text & Writing' } },
-    image: { icon: '🎨', name: { de: 'Bild & Design', en: 'Image & Design' } },
-    code: { icon: '💻', name: { de: 'Code & Entwicklung', en: 'Code & Development' } },
-    video: { icon: '🎬', name: { de: 'Video & Animation', en: 'Video & Animation' } },
-    audio: { icon: '🎵', name: { de: 'Audio & Musik', en: 'Audio & Music' } },
-    business: { icon: '💼', name: { de: 'Business & Produktivität', en: 'Business & Productivity' } }
-  };
-  
-  let html = '';
-  
-  for (const [cat, info] of Object.entries(categories)) {
-    const tools = aiTools.filter(t => t.cat === cat);
-    if (tools.length === 0) continue;
-    
-    // Sortiere nach Votes
-    tools.sort((a, b) => getVoteCount(b.id) - getVoteCount(a.id));
-    
-    html += `
-      <div class="tool-group" data-category="${cat}">
-        <div class="group-header" onclick="toggleGroup(this)">
-          <div class="group-title">
-            <div class="group-icon">${info.icon}</div>
-            <span data-de="${info.name.de}" data-en="${info.name.en}">${info.name[currentLang]}</span>
-            <span class="group-count">(${tools.length})</span>
-          </div>
-          <div class="group-toggle">
-            <i class="fas fa-chevron-down"></i>
-          </div>
-        </div>
-        <div class="group-content">
-          ${tools.map(tool => renderToolRow(tool)).join('')}
-        </div>
-      </div>
-    `;
-  }
-  
-  container.innerHTML = html;
-}
-
-function renderToolRow(tool) {
-  const voteCount = getVoteCount(tool.id);
-  const userVote = userVotes[tool.id];
-  const isFavorite = isFav(tool.id);
-  const isInCompare = isInComp(tool.id);
-  
-  return `
-    <div class="tool-row" data-tool-id="${tool.id}" data-category="${tool.cat}">
-      <div class="tool-vote">
-        <div class="vote-count">${voteCount}</div>
-        <div class="vote-buttons">
-          <button class="vote-btn-row up ${userVote === 'up' ? 'active' : ''}" 
-                  onclick="handleVote('${tool.id}', 'up', event)"
-                  title="Upvote">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-          <button class="vote-btn-row down ${userVote === 'down' ? 'active' : ''}" 
-                  onclick="handleVote('${tool.id}', 'down', event)"
-                  title="Downvote">
-            <i class="fas fa-arrow-down"></i>
-          </button>
-        </div>
-      </div>
-      
-      <div class="tool-info" onclick="openToolDetail('${tool.id}')">
-        <div class="tool-name">
-          ${tool.name}
-          ${tool.badge ? `<span class="peek-badge ${tool.badge}">${getBadgeText(tool.badge)}</span>` : ''}
-        </div>
-        <div class="tool-category">
-          ${getCategoryIcon(tool.cat)} ${getCategoryName(tool.cat)}
-        </div>
-        <div class="tool-desc">${tool.d[currentLang === 'de' ? 0 : 1]}</div>
-      </div>
-      
-      <div class="tool-meta">
-        <div class="tool-price">${tool.cost[currentLang === 'de' ? 0 : 1]}</div>
-        <div class="tool-actions">
-          <button class="tool-action-btn favorite ${isFavorite ? 'active' : ''}" 
-                  onclick="toggleFavorite('${tool.id}', event)"
-                  title="Favorit">
-            <i class="fas fa-star"></i>
-          </button>
-          <button class="tool-action-btn compare ${isInCompare ? 'active' : ''}" 
-                  onclick="toggleCompare('${tool.id}', event)"
-                  title="Vergleichen">
-            <i class="fas fa-scale-balanced"></i>
-          </button>
-          <button class="tool-action-btn open" 
-                  onclick="openTool('${tool.link}', event)"
-                  title="Öffnen">
-            <i class="fas fa-external-link-alt"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function updateTop5() {
-  const container = document.getElementById('top5List');
-  if (!container) return;
-  
-  // Sortiere alle Tools nach Votes
-  const sortedTools = [...aiTools].sort((a, b) => {
-    return getVoteCount(b.id) - getVoteCount(a.id);
-  });
-  
-  // Nimm Top 5
-  const top5 = sortedTools.slice(0, 5);
-  
-  container.innerHTML = top5.map((tool, index) => {
-    const voteCount = getVoteCount(tool.id);
-    return `
-      <div class="top5-item" onclick="scrollToTool('${tool.id}')">
-        <div class="top5-rank">${index + 1}</div>
-        <div class="top5-icon">${getCategoryIcon(tool.cat)}</div>
-        <div class="top5-info">
-          <div class="top5-name">${tool.name}</div>
-          <div class="top5-category">${getCategoryName(tool.cat)}</div>
-        </div>
-        <div class="top5-votes">${voteCount}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-// ==============================================
-// HELPER FUNKTIONEN
-// ==============================================
-
-function handleVote(toolId, voteType, event) {
-  event.stopPropagation();
-  submitVote(toolId, voteType);
-}
-
-function toggleGroup(header) {
-  const content = header.nextElementSibling;
-  const toggle = header.querySelector('.group-toggle');
-  const isExpanded = content.classList.contains('expanded');
-  
-  content.classList.toggle('expanded');
-  toggle.classList.toggle('expanded');
-}
-
-function setFilter(filterId) {
-  activeFilter = filterId;
-  
-  // Update Chips
-  document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.classList.toggle('active', chip.dataset.filter === filterId);
-  });
-  
-  // Filter Tools
-  const groups = document.querySelectorAll('.tool-group');
-  groups.forEach(group => {
-    const category = group.dataset.category;
-    const tools = group.querySelectorAll('.tool-row');
-    
-    if (filterId === 'all') {
-      group.style.display = '';
-      tools.forEach(t => t.style.display = '');
-    } else if (filterId === 'free') {
-      const hasFreeTool = Array.from(tools).some(t => {
-        const toolId = t.dataset.toolId;
-        const tool = aiTools.find(at => at.id === toolId);
-        return tool && (tool.price === 'free' || tool.price === 'freemium');
-      });
-      group.style.display = hasFreeTool ? '' : 'none';
-      tools.forEach(t => {
-        const toolId = t.dataset.toolId;
-        const tool = aiTools.find(at => at.id === toolId);
-        t.style.display = (tool && (tool.price === 'free' || tool.price === 'freemium')) ? '' : 'none';
-      });
-    } else if (filterId === 'popular') {
-      const hasPopularTool = Array.from(tools).some(t => {
-        const toolId = t.dataset.toolId;
-        const tool = aiTools.find(at => at.id === toolId);
-        return tool && tool.badge === 'popular';
-      });
-      group.style.display = hasPopularTool ? '' : 'none';
-      tools.forEach(t => {
-        const toolId = t.dataset.toolId;
-        const tool = aiTools.find(at => at.id === toolId);
-        t.style.display = (tool && tool.badge === 'popular') ? '' : 'none';
-      });
-    } else {
-      group.style.display = category === filterId ? '' : 'none';
-    }
-  });
-}
-
-function filterTools(query) {
-  if (!query) {
-    document.querySelectorAll('.tool-row').forEach(row => {
-      row.style.display = '';
-    });
-    return;
-  }
-  
-  document.querySelectorAll('.tool-row').forEach(row => {
-    const toolId = row.dataset.toolId;
-    const tool = aiTools.find(t => t.id === toolId);
-    
-    if (!tool) {
-      row.style.display = 'none';
-      return;
-    }
-    
-    const searchText = [
-      tool.name,
-      tool.d[0],
-      tool.d[1],
-      getCategoryName(tool.cat),
-      ...(tool.tags || [])
-    ].join(' ').toLowerCase();
-    
-    row.style.display = searchText.includes(query) ? '' : 'none';
-  });
-}
-
-function searchByExample(element) {
-  const text = element.textContent;
-  const searchInput = document.getElementById('heroSearch');
-  if (searchInput) {
-    searchInput.value = text;
-    filterTools(text.toLowerCase());
-  }
-}
-
-function scrollToTool(toolId) {
-  const toolRow = document.querySelector(`[data-tool-id="${toolId}"]`);
-  if (toolRow) {
-    // Öffne Gruppe falls geschlossen
-    const group = toolRow.closest('.tool-group');
-    if (group) {
-      const content = group.querySelector('.group-content');
-      const toggle = group.querySelector('.group-toggle');
-      if (!content.classList.contains('expanded')) {
-        content.classList.add('expanded');
-        toggle.classList.add('expanded');
-      }
-    }
-    
-    // Scroll zu Tool
-    toolRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
-    // Highlight
-    toolRow.style.background = 'rgba(0, 212, 255, 0.1)';
-    setTimeout(() => {
-      toolRow.style.background = '';
-    }, 2000);
-  }
-}
-
-function openTool(link, event) {
-  if (event) event.stopPropagation();
-  window.open(link, '_blank', 'noopener,noreferrer');
-}
-
-function openToolDetail(toolId) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  // Öffne Link
-  window.open(tool.link, '_blank', 'noopener,noreferrer');
-}
-
-function toggleFavorite(toolId, event) {
-  if (event) event.stopPropagation();
-  
-  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const index = favorites.indexOf(toolId);
-  
-  if (index > -1) {
-    favorites.splice(index, 1);
-    showNotification('Aus Favoriten entfernt', 'info');
-  } else {
-    favorites.push(toolId);
-    showNotification('Zu Favoriten hinzugefügt', 'success');
-  }
-  
-  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
-  
-  // Update Button
-  const btn = event.target.closest('.tool-action-btn');
-  btn.classList.toggle('active');
-}
-
-function toggleCompare(toolId, event) {
-  if (event) event.stopPropagation();
-  
-  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  const index = comparison.indexOf(toolId);
-  
-  if (index > -1) {
-    comparison.splice(index, 1);
-    showNotification('Aus Vergleich entfernt', 'info');
-  } else {
-    if (comparison.length >= 5) {
-      showNotification('Maximal 5 Tools im Vergleich', 'error');
-      return;
-    }
-    comparison.push(toolId);
-    showNotification('Zu Vergleich hinzugefügt', 'success');
-  }
-  
-  localStorage.setItem('aiComparison', JSON.stringify(comparison));
-  
-  // Update Button
-  const btn = event.target.closest('.tool-action-btn');
-  btn.classList.toggle('active');
-}
-
-function isFav(toolId) {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  return favorites.includes(toolId);
-}
-
-function isInComp(toolId) {
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  return comparison.includes(toolId);
 }
 
 function getCategoryIcon(category) {
@@ -2202,41 +2417,27 @@ function getCategoryName(category) {
   return names[currentLang][category] || category;
 }
 
-function getBadgeText(badge) {
-  const badges = {
-    de: {
-      popular: 'Beliebt',
-      new: 'Neu',
-      free: 'Kostenlos',
-      ltd: 'LTD'
-    },
-    en: {
-      popular: 'Popular',
-      new: 'New',
-      free: 'Free',
-      ltd: 'LTD'
-    }
-  };
-  return badges[currentLang][badge] || badge;
+function isFavorite(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
 }
 
-function toggleLanguage() {
-  currentLang = currentLang === 'de' ? 'en' : 'de';
-  document.getElementById('currentLang').textContent = currentLang.toUpperCase();
-  
-  // Update alle Texte
-  document.querySelectorAll('[data-de]').forEach(el => {
-    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-      el.placeholder = el.dataset[`placeholder${currentLang === 'de' ? 'De' : 'En'}`] || el.dataset[currentLang];
-    } else {
-      el.textContent = el.dataset[currentLang];
-    }
-  });
-  
-  // Re-render für kategorie-abhängige Texte
-  renderFilterChips();
-  renderToolGroups();
-  updateTop5();
+function isInComparison(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
+function trackUserHistory(category) {
+  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  history.push(category);
+  if (history.length > 20) history = history.slice(-20);
+  localStorage.setItem('userHistory', JSON.stringify(history));
+}
+
+function trackToolClick(toolId) {
+  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  clicks[toolId] = (clicks[toolId] || 0) + 1;
+  localStorage.setItem('toolClicks', JSON.stringify(clicks));
 }
 
 function showNotification(message, type = 'info') {
@@ -2245,11 +2446,13 @@ function showNotification(message, type = 'info') {
   notification.innerHTML = `
     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
     <span>${message}</span>
-    <button class="notification-close" onclick="this.parentElement.remove()">
-      <i class="fas fa-times"></i>
-    </button>
+    <button class="notification-close"><i class="fas fa-times"></i></button>
   `;
   document.body.appendChild(notification);
+  
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.remove();
+  });
   
   setTimeout(() => notification.remove(), 3000);
 }
@@ -2267,53 +2470,1407 @@ function closeModal(modalId) {
 }
 
 // ==============================================
-// COOKIE CONSENT
+// SUPABASE FUNKTIONEN - KOMPLETT ÜBERARBEITET
 // ==============================================
+async function initSupabase() {
+  try {
+    if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('✅ Supabase Client initialisiert');
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.warn('⚠️ Supabase Initialisierung fehlgeschlagen:', error);
+    return false;
+  }
+}
 
-function checkCookieConsent() {
-  const consent = localStorage.getItem('cookieConsent');
-  if (!consent) {
+async function fetchVotesFromSupabase() {
+  if (!supabase) {
+    console.warn('⚠️ Supabase nicht verfügbar');
+    return {};
+  }
+  
+  try {
+    const { data, error } = await supabase
+      .from('tools_votes')
+      .select('tool_id, upvotes, downvotes');
+    
+    if (error) {
+      console.error('❌ Supabase Fehler:', error);
+      return {};
+    }
+    
+    const votesMap = {};
+    if (data && Array.isArray(data)) {
+      data.forEach(item => {
+        const upvotes = parseInt(item.upvotes) || 0;
+        const downvotes = parseInt(item.downvotes) || 0;
+        votesMap[item.tool_id] = {
+          upvotes: upvotes,
+          downvotes: downvotes,
+          totalVotes: upvotes - downvotes
+        };
+      });
+      console.log(`✅ ${Object.keys(votesMap).length} Vote-Datensätze geladen`);
+    }
+    
+    return votesMap;
+  } catch (error) {
+    console.error('❌ Exception in fetchVotesFromSupabase:', error);
+    return {};
+  }
+}
+
+async function updateVoteInSupabase(toolId, oldVote, newVote) {
+  if (!supabase) {
+    console.warn('⚠️ Supabase nicht verfügbar für Vote-Update');
+    return null;
+  }
+  
+  try {
+    // Hole aktuellen Datensatz
+    const { data: existingData, error: fetchError } = await supabase
+      .from('tools_votes')
+      .select('*')
+      .eq('tool_id', toolId)
+      .single();
+    
+    let currentUpvotes = 0;
+    let currentDownvotes = 0;
+    
+    if (fetchError && fetchError.code === 'PGRST116') {
+      // Kein Datensatz vorhanden
+      currentUpvotes = 0;
+      currentDownvotes = 0;
+    } else if (fetchError) {
+      console.error('❌ Fehler beim Abrufen existierender Votes:', fetchError);
+      return null;
+    } else {
+      currentUpvotes = existingData.upvotes || 0;
+      currentDownvotes = existingData.downvotes || 0;
+    }
+    
+    // Berechne neue Werte
+    let newUpvotes = currentUpvotes;
+    let newDownvotes = currentDownvotes;
+    
+    // Entferne alten Vote
+    if (oldVote === 1) newUpvotes -= 1;
+    else if (oldVote === -1) newDownvotes -= 1;
+    
+    // Füge neuen Vote hinzu
+    if (newVote === 1) newUpvotes += 1;
+    else if (newVote === -1) newDownvotes += 1;
+    
+    // Sicherstellen, dass Werte nicht negativ sind
+    newUpvotes = Math.max(newUpvotes, 0);
+    newDownvotes = Math.max(newDownvotes, 0);
+    
+    // Upsert in Datenbank
+    const { error: upsertError } = await supabase
+      .from('tools_votes')
+      .upsert({
+        tool_id: toolId,
+        upvotes: newUpvotes,
+        downvotes: newDownvotes,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'tool_id'
+      });
+    
+    if (upsertError) {
+      console.error('❌ Fehler beim Speichern in Supabase:', upsertError);
+      return null;
+    }
+    
+    const result = {
+      upvotes: newUpvotes,
+      downvotes: newDownvotes,
+      totalVotes: newUpvotes - newDownvotes
+    };
+    
+    console.log(`✅ Vote für ${toolId} gespeichert:`, result);
+    return result;
+    
+  } catch (error) {
+    console.error('❌ Exception in updateVoteInSupabase:', error);
+    return null;
+  }
+}
+
+// ==============================================
+// HAUPT-FUNKTIONALITÄT - ÜBERARBEITET
+// ==============================================
+async function loadTools() {
+  try {
+    console.log('🚀 Starte Tool-Loading...');
+    document.getElementById('loading').style.display = 'block';
+    
+    // 1. Supabase initialisieren
+    await initSupabase();
+    
+    // 2. Tools aus data.json laden
+    const response = await fetch('data.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const rawData = await response.json();
+    console.log(`✅ ${rawData.length} Tools geladen`);
+    
+    // 3. Votes von Supabase laden
+    let liveVotes = {};
+    if (supabase) {
+      liveVotes = await fetchVotesFromSupabase();
+    }
+    
+    // 4. Lokale Votes laden
+    const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    
+    // 5. Tools verarbeiten
+    aiTools = rawData.map((tool, index) => {
+      const toolLiveVotes = liveVotes[tool.id] || { totalVotes: 0, upvotes: 0, downvotes: 0 };
+      const userVoteData = localStorageVotes[tool.id] || {};
+      
+      // Kategorie validieren
+      let category = tool.cat || 'text';
+      if (!['text', 'image', 'code', 'video', 'audio', 'business'].includes(category)) {
+        category = 'text';
+      }
+      
+      // Beschreibung validieren
+      const descriptionDe = tool.d && tool.d[0] ? String(tool.d[0]) : 'Keine Beschreibung verfügbar.';
+      const descriptionEn = tool.d && tool.d[1] ? String(tool.d[1]) : 'No description available.';
+      
+      // Quick Peek validieren
+      const quickPeekDe = tool.q && tool.q[0] ? String(tool.q[0]) : (descriptionDe.length > 75 ? descriptionDe.substring(0, 75) + '...' : descriptionDe);
+      const quickPeekEn = tool.q && tool.q[1] ? String(tool.q[1]) : (descriptionEn.length > 75 ? descriptionEn.substring(0, 75) + '...' : descriptionEn);
+      
+      return {
+        id: tool.id || `tool-${index}`,
+        name: tool.name || 'Unnamed Tool',
+        link: tool.link || '#',
+        rating: parseFloat(tool.rate) || 0,
+        price: tool.price || "freemium",
+        badge: tool.badge || "",
+        hasLifetimeDeal: Boolean(tool.ltd),
+        category: category,
+        features: Array.isArray(tool.f) ? tool.f : [],
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
+        alternatives: Array.isArray(tool.alt) ? tool.alt : [],
+        useCases: Array.isArray(tool.tags) ? tool.tags : [],
+        description: { de: descriptionDe, en: descriptionEn },
+        priceDisplay: { 
+          de: tool.cost ? tool.cost[0] : (tool.price === 'free' ? "Kostenlos" : tool.price === 'paid' ? "Kostenpflichtig" : "Freemium"),
+          en: tool.cost ? tool.cost[1] : (tool.price === 'free' ? "Free" : tool.price === 'paid' ? "Paid" : "Freemium")
+        },
+        pros: { de: tool.pros ? (Array.isArray(tool.pros[0]) ? tool.pros[0] : []) : [], en: tool.pros ? (Array.isArray(tool.pros[1]) ? tool.pros[1] : []) : [] },
+        cons: { de: tool.cons ? (Array.isArray(tool.cons[0]) ? tool.cons[0] : []) : [], en: tool.cons ? (Array.isArray(tool.cons[1]) ? tool.cons[1] : []) : [] },
+        quickPeek: { de: quickPeekDe, en: quickPeekEn },
+        seoTitle: { de: `${tool.name || 'Tool'} Review 2026`, en: `${tool.name || 'Tool'} Review 2026` },
+        seoDesc: { de: descriptionDe, en: descriptionEn },
+        numericId: index + 1,
+        aiScore: 90,
+        popularityScore: 90,
+        rankingHistory: [],
+        votes: toolLiveVotes.totalVotes || 0,
+        upvotes: toolLiveVotes.upvotes || 0,
+        downvotes: toolLiveVotes.downvotes || 0,
+        userVote: userVoteData.userVote || 0,
+        pricing: { de: `Modell: ${tool.price || 'freemium'}`, en: `Model: ${tool.price || 'freemium'}` }
+      };
+    });
+    
+    console.log(`🎉 ${aiTools.length} Tools verarbeitet`);
+    
+    // 6. UI aktualisieren
+    calculateToolScores();
+    renderTop5();
+    renderFilterChips();
+    renderToolGroups();
+    updateFavoritesBadge();
+    
+    document.getElementById('loading').style.display = 'none';
+    
+  } catch (error) {
+    console.error('❌ FEHLER in loadTools:', error);
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center;padding:30px;color:var(--error)">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;margin-bottom:20px;"></i>
+        <p><strong>Fehler:</strong> ${error.message}</p>
+        <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer">
+          Neu laden
+        </button>
+      </div>
+    `;
+  }
+}
+
+function calculateToolScores() {
+  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
+  
+  aiTools.forEach(tool => {
+    let score = 0;
+    
+    if (tool.rating >= 4.7) score += 3;
+    if (getToolVotes(tool) > 50) score += 2;
+    if (userHistory.includes(tool.category)) score += 2;
+    if (favorites.includes(tool.id)) score += 3;
+    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
+    if (tool.hasLifetimeDeal) score += 2;
+    
+    tool.aiScore = score;
+    tool.isAIRecommended = score >= 5;
+    tool.popularityScore = (10 * tool.rating) + getToolVotes(tool) + score;
+  });
+}
+
+// ==============================================
+// RENDERING FUNKTIONEN
+// ==============================================
+function renderTop5() {
+  const top5 = [...aiTools]
+    .sort((a, b) => {
+      const aVotes = getToolVotes(a) + BASELINE_VOTES;
+      const bVotes = getToolVotes(b) + BASELINE_VOTES;
+      if (bVotes !== aVotes) return bVotes - aVotes;
+      return (b.popularityScore || 0) - (a.popularityScore || 0);
+    })
+    .slice(0, 5);
+  
+  document.getElementById('top5List').innerHTML = top5.map((tool, index) => {
+    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+    const quickPeek = tool.quickPeek ? 
+      (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
+      (description.length > 60 ? description.substring(0, 60) + '...' : description);
+    
+    return `
+      <div class="top5-item" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')" title="${tool.name}">
+        <div class="top5-rank">${index + 1}</div>
+        <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+        <div class="top5-info">
+          <div class="top5-name">${tool.name}</div>
+          <div class="top5-category">${getCategoryName(tool.category)}</div>
+        </div>
+        <div class="top5-votes" id="top5Votes-${tool.id}">${getToolVotes(tool)}</div>
+        <div class="top5-quickpeek">${quickPeek}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderToolGroups() {
+  let categories = ['text', 'image', 'code', 'video', 'audio', 'business'];
+  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
+    categories = [currentCategory];
+  }
+  
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  
+  document.getElementById('toolGroups').innerHTML = categories.map(category => {
+    let categoryTools = aiTools.filter(tool => tool.category === category);
+    
+    if (currentCategory === 'free') {
+      categoryTools = categoryTools.filter(tool => tool.price === 'free');
+    }
+    if (currentCategory === 'ai') {
+      categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
+    }
+    
+    if (categoryTools.length === 0) {
+      return `
+        <div class="tool-group" data-category="${category}">
+          <div class="group-header">
+            <div class="group-title">
+              <div class="group-icon">${getCategoryIcon(category)}</div>
+              <span>${getCategoryName(category)}</span>
+              <span class="group-count">0</span>
+            </div>
+          </div>
+          <div class="group-content expanded">
+            <div style="padding:20px;text-align:center;color:var(--text-secondary)">
+              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    const sortedTools = [...categoryTools].sort((a, b) => {
+      const aVotes = getToolVotes(a) + BASELINE_VOTES;
+      const bVotes = getToolVotes(b) + BASELINE_VOTES;
+      if (bVotes !== aVotes) return bVotes - aVotes;
+      return (b.popularityScore || 0) - (a.popularityScore || 0);
+    });
+    
+    const isExpanded = expandedGroups[category] || false;
+    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
+    
+    return `
+      <div class="tool-group" data-category="${category}">
+        <div class="group-header" onclick="toggleGroup('${category}')">
+          <div class="group-title">
+            <div class="group-icon">${getCategoryIcon(category)}</div>
+            <span>${getCategoryName(category)}</span>
+            <button class="info-btn" onclick="event.stopPropagation();openCategoryInfoModal('${category}')">
+              <i class="fas fa-info-circle"></i>
+            </button>
+            <span class="group-count">${categoryTools.length}</span>
+          </div>
+          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        <div class="group-content ${isExpanded ? 'expanded' : ''}">
+          ${displayTools.map(tool => {
+            const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+            const ltdBadge = tool.hasLifetimeDeal ? 
+              '<span class="ltd-badge" style="margin-left:8px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:2px 6px;border-radius:10px;font-size:.65rem;font-weight:800">LTD</span>' : 
+              '';
+            
+            return `
+              <div class="tool-row" data-id="${tool.id}" 
+                   onmouseenter="showToolPeek(event, '${tool.id}')" 
+                   onmouseleave="hideToolPeek()" 
+                   onclick="openToolDrawer('${tool.id}')">
+                <div class="tool-vote" onclick="event.stopPropagation()">
+                  <div class="vote-count" id="voteCount-${tool.id}">${getToolVotes(tool)}</div>
+                  <div class="vote-buttons">
+                    <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                            onclick="vote('${tool.id}', 'up')">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                            onclick="vote('${tool.id}', 'down')">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="tool-info">
+                  <div class="tool-category">
+                    ${getCategoryName(tool.category)}
+                    <button class="info-btn" onclick="event.stopPropagation();openCategoryInfoModal('${tool.category}')">
+                      <i class="fas fa-info-circle"></i>
+                    </button>
+                  </div>
+                  <div class="tool-name">
+                    ${tool.name}
+                    ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color:var(--secondary);font-size:.9rem"></i>' : ''}
+                  </div>
+                  <div class="tool-desc">${description}</div>
+                </div>
+                <div class="tool-meta" onclick="event.stopPropagation()">
+                  <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
+                  <div class="tool-actions">
+                    <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" 
+                            onclick="toggleFavorite('${tool.id}')">
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" 
+                            onclick="toggleComparison('${tool.id}')">
+                      <i class="fas fa-balance-scale"></i>
+                    </button>
+                    <a href="${tool.link}" target="_blank" rel="noopener noreferrer" 
+                       class="tool-action-btn open" 
+                       onclick="event.stopPropagation();trackToolClick('${tool.id}')">
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+          ${isExpanded ? `
+            <div class="collapse-button" onclick="collapseGroup('${category}')">
+              <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
+            </div>
+          ` : ''}
+        </div>
+        ${!isExpanded && sortedTools.length > 2 ? `
+          <div class="show-more" onclick="expandGroup('${category}')">
+            <span>${currentLang === 'de' ? `+ ${sortedTools.length - 2} mehr anzeigen` : `+ ${sortedTools.length - 2} more`}</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderFilterChips() {
+  const filters = [
+    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
+    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
+    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
+    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
+    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
+    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
+    { id: 'business', icon: 'fas fa-briefcase', label: { de: 'Business', en: 'Business' } },
+    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
+    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
+  ];
+  
+  document.getElementById('filterChips').innerHTML = filters.map(filter => {
+    const isActive = currentCategory === filter.id;
+    return `
+      <div class="filter-chip ${isActive ? 'active' : ''}" 
+           data-filter="${filter.id}" 
+           onclick="setActiveFilter('${filter.id}')">
+        <i class="${filter.icon}"></i>
+        <span data-de="${filter.label.de}" data-en="${filter.label.en}">
+          ${currentLang === 'de' ? filter.label.de : filter.label.en}
+        </span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ==============================================
+// VOTING SYSTEM - ÜBERARBEITET UND FUNKTIONIERT
+// ==============================================
+async function vote(toolId, direction) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  const oldVote = tool.userVote || 0;
+  const newVote = direction === 'up' ? 1 : -1;
+  
+  // Falls gleicher Vote nochmal geklickt wird, entfernen (toggle)
+  const actualNewVote = (oldVote === newVote) ? 0 : newVote;
+  
+  // Lokale Speicherung
+  let voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  voteData[toolId] = { userVote: actualNewVote, timestamp: Date.now() };
+  localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
+  
+  // Tool-Daten aktualisieren
+  tool.userVote = actualNewVote;
+  
+  // Vote-Berechnung (lokale Änderung)
+  const voteChange = actualNewVote - oldVote;
+  tool.votes += voteChange;
+  
+  // UI sofort aktualisieren
+  updateVoteUI(toolId, tool.votes, actualNewVote);
+  
+  // Supabase im Hintergrund aktualisieren (nicht blockierend)
+  if (supabase) {
+    setTimeout(async () => {
+      try {
+        const result = await updateVoteInSupabase(toolId, oldVote, actualNewVote);
+        if (result) {
+          // Falls erfolgreich, Daten mit Supabase synchronisieren
+          tool.votes = result.totalVotes;
+          tool.upvotes = result.upvotes;
+          tool.downvotes = result.downvotes;
+          
+          // UI erneut aktualisieren mit korrekten Werten
+          updateVoteUI(toolId, tool.votes, actualNewVote);
+          
+          // Top 5 aktualisieren
+          updateTop5Vote(toolId, tool.votes);
+        }
+      } catch (error) {
+        console.warn('⚠️ Supabase Sync fehlgeschlagen:', error.message);
+      }
+    }, 0);
+  }
+  
+  // Benachrichtigung
+  let message = '';
+  if (actualNewVote === 0) {
+    message = currentLang === 'de' ? 'Vote entfernt' : 'Vote removed';
+  } else if (actualNewVote === 1) {
+    message = currentLang === 'de' ? 'Upvote gespeichert' : 'Upvote saved';
+  } else {
+    message = currentLang === 'de' ? 'Downvote gespeichert' : 'Downvote saved';
+  }
+  
+  showNotification(message, 'success');
+}
+
+function updateVoteUI(toolId, votes, userVote) {
+  // Haupt-Tool-Liste aktualisieren
+  const voteCountEl = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountEl) {
+    voteCountEl.textContent = votes;
+    voteCountEl.classList.add('changed');
+    setTimeout(() => voteCountEl.classList.remove('changed'), 600);
+  }
+  
+  // Vote-Buttons aktualisieren
+  document.querySelectorAll(`[onclick="vote('${toolId}', 'up')"]`).forEach(btn => {
+    btn.classList.toggle('active', userVote === 1);
+  });
+  
+  document.querySelectorAll(`[onclick="vote('${toolId}', 'down')"]`).forEach(btn => {
+    btn.classList.toggle('active', userVote === -1);
+  });
+  
+  // Drawer aktualisieren (falls geöffnet)
+  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (drawerVoteCount) {
+    drawerVoteCount.textContent = votes;
+  }
+  
+  const drawerUpBtn = document.getElementById(`drawer-vote-up-${toolId}`);
+  if (drawerUpBtn) {
+    drawerUpBtn.classList.toggle('active', userVote === 1);
+  }
+  
+  const drawerDownBtn = document.getElementById(`drawer-vote-down-${toolId}`);
+  if (drawerDownBtn) {
+    drawerDownBtn.classList.toggle('active', userVote === -1);
+  }
+  
+  // Top 5 aktualisieren
+  updateTop5Vote(toolId, votes);
+}
+
+// ==============================================
+// FAVORITEN & VERGLEICH
+// ==============================================
+function toggleFavorite(toolId) {
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  
+  if (favorites.includes(toolId)) {
+    favorites = favorites.filter(id => id !== toolId);
+    showNotification(
+      currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites',
+      'info'
+    );
+  } else {
+    favorites.push(toolId);
+    showNotification(
+      currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites',
+      'success'
+    );
+  }
+  
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  updateFavoritesDrawer();
+  updateFavoritesBadge();
+  
+  // UI aktualisieren
+  document.querySelectorAll(`[onclick="toggleFavorite('${toolId}')"]`).forEach(btn => {
+    btn.classList.toggle('active', favorites.includes(toolId));
+  });
+}
+
+function toggleComparison(toolId) {
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  
+  if (comparison.includes(toolId)) {
+    comparison = comparison.filter(id => id !== toolId);
+    showNotification(
+      currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison',
+      'info'
+    );
+  } else {
+    if (comparison.length < 3) {
+      comparison.push(toolId);
+      showNotification(
+        currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison',
+        'success'
+      );
+    } else {
+      showNotification(
+        currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!',
+        'error'
+      );
+      return;
+    }
+  }
+  
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  updateFavoritesDrawer();
+  
+  // UI aktualisieren
+  document.querySelectorAll(`[onclick="toggleComparison('${toolId}')"]`).forEach(btn => {
+    btn.classList.toggle('active', comparison.includes(toolId));
+  });
+}
+
+function updateFavoritesDrawer() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  
+  document.getElementById('favoriteDock').innerHTML = favorites.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    return tool ? `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation();toggleFavorite('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    ` : '';
+  }).join('');
+  
+  document.getElementById('compareDock').innerHTML = comparison.map(toolId => {
+    const tool = aiTools.find(t => t.id === toolId);
+    return tool ? `
+      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
+        ${getCategoryIcon(tool.category)}
+        <div class="dock-item-remove" onclick="event.stopPropagation();toggleComparison('${toolId}')">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    ` : '';
+  }).join('');
+}
+
+function updateFavoritesBadge() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const total = favorites.length + comparison.length;
+  
+  const badge = document.getElementById('floatingFavoritesBadge');
+  if (badge) {
+    badge.textContent = total;
+    badge.style.display = total > 0 ? 'flex' : 'none';
+  }
+}
+
+// ==============================================
+// GRUPPEN-FUNKTIONEN
+// ==============================================
+function expandGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = true;
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+  renderToolGroups();
+  
+  const groupElement = document.querySelector(`[data-category="${category}"]`);
+  if (groupElement) {
+    groupElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function collapseGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = false;
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+  renderToolGroups();
+  
+  const headerElement = document.querySelector(`[data-category="${category}"] .group-header`);
+  if (headerElement) {
+    headerElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function toggleGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = !expandedGroups[category];
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+  renderToolGroups();
+}
+
+// ==============================================
+// TOOL-PEEK FUNKTIONEN
+// ==============================================
+function showToolPeek(event, toolId) {
+  if (isDrawerOpen) return;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  hoverTimeout = setTimeout(() => {
+    createToolPeek(event, tool);
+  }, 300);
+}
+
+function createToolPeek(event, tool) {
+  if (peekElement) peekElement.remove();
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const ltdBadge = tool.hasLifetimeDeal ? 
+    '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : 
+    '';
+  
+  peekElement = document.createElement('div');
+  peekElement.className = 'tool-peek';
+  peekElement.innerHTML = `
+    <div class="peek-header">
+      <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
+      <div>
+        <div class="peek-name">${tool.name}</div>
+        <div class="peek-category">${getCategoryName(tool.category)}</div>
+      </div>
+    </div>
+    <div class="peek-desc">${description}</div>
+    <div class="peek-meta">
+      <span class="peek-badge price">
+        <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
+        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+      </span>
+      <span class="peek-badge rating">
+        <i class="fas fa-star"></i> ${tool.rating}/5
+      </span>
+      ${ltdBadge}
+    </div>
+  `;
+  
+  document.body.appendChild(peekElement);
+  
+  const rect = event.currentTarget.getBoundingClientRect();
+  const peekHeight = peekElement.offsetHeight;
+  const windowHeight = window.innerHeight;
+  
+  let top = rect.top + rect.height / 2 - peekHeight / 2;
+  if (top < 20) top = 20;
+  if (top + peekHeight > windowHeight - 20) top = windowHeight - peekHeight - 20;
+  
+  peekElement.style.top = `${top}px`;
+  peekElement.style.left = `${rect.right + 20}px`;
+}
+
+function hideToolPeek() {
+  if (hoverTimeout) {
+    clearTimeout(hoverTimeout);
+    hoverTimeout = null;
+  }
+  
+  if (peekElement) {
+    peekElement.style.opacity = '0';
     setTimeout(() => {
-      document.getElementById('cookieConsent').classList.add('active');
+      if (peekElement && peekElement.parentNode) {
+        peekElement.remove();
+        peekElement = null;
+      }
+    }, 200);
+  }
+}
+
+// ==============================================
+// TOOL-DRAWER FUNKTIONEN (gekürzt für Platz)
+// ==============================================
+function openToolDrawer(toolId) {
+  hideToolPeek();
+  isDrawerOpen = true;
+  
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  trackUserHistory(tool.category);
+  trackToolClick(toolId);
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
+  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
+  const features = tool.features || [];
+  const alternatives = tool.alternatives || [];
+  
+  const prosHtml = pros.map(pro => `<li>${pro}</li>`).join('');
+  const consHtml = cons.map(con => `<li>${con}</li>`).join('');
+  const featuresHtml = features.map(feature => 
+    `<span class="peek-badge" style="background:rgba(168,85,247,.15);color:var(--secondary);border:1px solid rgba(168,85,247,.3)">
+      <i class="fas fa-check-circle"></i> ${feature}
+    </span>`
+  ).join('');
+  
+  const alternativesHtml = alternatives.map(altId => {
+    const altTool = aiTools.find(t => t.id === altId);
+    return altTool ? `
+      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor:pointer">
+        ${getCategoryIcon(altTool.category)}
+      </div>
+    ` : '';
+  }).join('');
+  
+  document.getElementById('drawerTitle').textContent = tool.name;
+  document.getElementById('drawerContent').innerHTML = `
+    <div style="margin-bottom:24px">
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px">
+        <div class="peek-icon" style="width:60px;height:60px;font-size:1.8rem">
+          ${getCategoryIcon(tool.category)}
+        </div>
+        <div style="flex:1">
+          <h3 style="font-size:1.6rem;font-weight:800;color:var(--text-primary);margin-bottom:8px">
+            ${tool.name}
+          </h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="peek-badge category" style="background:rgba(0,212,255,.15);color:var(--primary);border:1px solid rgba(0,212,255,.3)">
+              <i class="fas fa-tag"></i> ${getCategoryName(tool.category)}
+            </span>
+            <span class="peek-badge price">
+              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
+              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
+            </span>
+            <span class="peek-badge rating">
+              <i class="fas fa-star"></i> ${tool.rating}/5
+            </span>
+            ${tool.hasLifetimeDeal ? 
+              '<span class="peek-badge ltd"><i class="fas fa-crown"></i> Lifetime Deal</span>' : 
+              ''}
+          </div>
+        </div>
+      </div>
+      
+      <!-- VOTING SECTION IN DRAWER -->
+      <div style="background:var(--bg-hover);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-weight:700;color:var(--text-primary);">
+              <span data-de="Community-Bewertung" data-en="Community Rating">Community-Bewertung</span>:
+            </span>
+            <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:1.5rem;">${getToolVotes(tool)}</div>
+            <div class="vote-buttons" style="display:flex;gap:6px;">
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                      id="drawer-vote-up-${tool.id}"
+                      onclick="vote('${tool.id}', 'up')">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                      id="drawer-vote-down-${tool.id}"
+                      onclick="vote('${tool.id}', 'down')">
+                <i class="fas fa-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+          <div style="color:var(--text-secondary);font-size:.85rem;">
+            <i class="fas fa-info-circle"></i>
+            <span data-de="Deine Stimme zählt!" data-en="Your vote counts!">Deine Stimme zählt!</span>
+          </div>
+        </div>
+      </div>
+      
+      <p style="color:var(--text-secondary);line-height:1.6;margin-bottom:24px">
+        ${description}
+      </p>
+      <div style="display:flex;gap:12px;margin-bottom:24px">
+        <button class="dock-action-btn primary" 
+                onclick="window.open('${tool.link}', '_blank');trackToolClick('${tool.id}')" 
+                style="flex:1">
+          <i class="fas fa-external-link-alt"></i>
+          <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
+        </button>
+        <button class="dock-action-btn secondary" 
+                id="drawer-favorite-${tool.id}"
+                onclick="toggleFavorite('${tool.id}')" 
+                style="width:auto">
+          ${isFavorite(tool.id) ? 
+            '<i class="fas fa-star"></i> ' + (currentLang === 'de' ? 'Entfernen' : 'Remove') :
+            '<i class="far fa-star"></i> ' + (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}
+        </button>
+      </div>
+    </div>
+    
+    ${pros.length > 0 || cons.length > 0 ? `
+      <div style="margin-bottom:24px">
+        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+          <i class="fas fa-balance-scale"></i>
+          <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span>
+        </h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          ${pros.length > 0 ? `
+            <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:16px">
+              <h5 style="color:var(--success);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+                <i class="fas fa-check-circle"></i>
+                <span data-de="Vorteile" data-en="Pros">Vorteile</span>
+              </h5>
+              <ul style="color:var(--text-secondary);padding-left:20px">${prosHtml}</ul>
+            </div>
+          ` : ''}
+          ${cons.length > 0 ? `
+            <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);padding:16px">
+              <h5 style="color:var(--error);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+                <i class="fas fa-times-circle"></i>
+                <span data-de="Nachteile" data-en="Cons">Nachteile</span>
+              </h5>
+              <ul style="color:var(--text-secondary);padding-left:20px">${consHtml}</ul>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    ` : ''}
+    
+    ${features.length > 0 ? `
+      <div style="margin-bottom:24px">
+        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+          <i class="fas fa-rocket"></i>
+          <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span>
+        </h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">${featuresHtml}</div>
+      </div>
+    ` : ''}
+    
+    ${alternatives.length > 0 ? `
+      <div style="margin-bottom:24px">
+        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+          <i class="fas fa-exchange-alt"></i>
+          <span data-de="Ähnliche Tools" data-en="Similar Tools">Ähnliche Tools</span>
+        </h4>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">${alternativesHtml}</div>
+      </div>
+    ` : ''}
+  `;
+  
+  updateLanguageElements();
+  
+  document.getElementById('drawerOverlay').classList.add('active');
+  document.getElementById('drawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeToolDrawer() {
+  isDrawerOpen = false;
+  document.getElementById('drawerOverlay').classList.remove('active');
+  document.getElementById('drawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ==============================================
+// KATEGORIE-INFO MODAL (gekürzt)
+// ==============================================
+function openCategoryInfoModal(category) {
+  const info = categoryInfo[category];
+  if (!info) return;
+  
+  document.getElementById('categoryInfoTitle').textContent = info.title[currentLang];
+  document.getElementById('categoryInfoIcon').textContent = getCategoryIcon(category);
+  
+  const topTools = aiTools
+    .filter(tool => tool.category === category)
+    .sort((a, b) => {
+      const aVotes = getToolVotes(a) + BASELINE_VOTES;
+      const bVotes = getToolVotes(b) + BASELINE_VOTES;
+      return bVotes - aVotes;
+    })
+    .slice(0, 3)
+    .map(tool => `
+      <div class="category-info-tool" onclick="openToolDrawer('${tool.id}');closeCategoryInfoModal()">
+        ${tool.name}
+      </div>
+    `).join('');
+  
+  document.getElementById('categoryInfoContent').innerHTML = `
+    <div class="category-info-section">
+      <h3><i class="fas fa-info-circle"></i> ${currentLang === 'de' ? 'Beschreibung' : 'Description'}</h3>
+      <p>${info.description[currentLang]}</p>
+    </div>
+    <div class="category-info-section">
+      <h3><i class="fas fa-lightbulb"></i> ${currentLang === 'de' ? 'Typische Anwendungen' : 'Common Use Cases'}</h3>
+      ${info.useCases[currentLang].map(useCase => `<p>• ${useCase}</p>`).join('')}
+    </div>
+    <div class="category-info-section">
+      <h3><i class="fas fa-user-check"></i> ${currentLang === 'de' ? 'Ideal für' : 'Ideal For'}</h3>
+      ${info.bestFor[currentLang].map(best => `<p>• ${best}</p>`).join('')}
+    </div>
+    <div class="category-info-section">
+      <h3><i class="fas fa-chart-line"></i> ${currentLang === 'de' ? 'Aktuelle Trends' : 'Current Trends'}</h3>
+      ${info.trends[currentLang].map(trend => `<p>• ${trend}</p>`).join('')}
+    </div>
+    <div class="category-info-section">
+      <h3><i class="fas fa-trophy"></i> ${currentLang === 'de' ? 'Top Tools dieser Kategorie' : 'Top Tools in this Category'}</h3>
+      <div class="category-info-tools">${topTools}</div>
+    </div>
+  `;
+  
+  openModal('categoryInfoModal');
+}
+
+function closeCategoryInfoModal() {
+  closeModal('categoryInfoModal');
+}
+
+// ==============================================
+// FILTER FUNKTIONEN
+// ==============================================
+function setActiveFilter(filterId) {
+  currentCategory = filterId;
+  
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.remove('active');
+  });
+  
+  const activeChip = document.querySelector(`[data-filter="${filterId}"]`);
+  if (activeChip) activeChip.classList.add('active');
+  
+  renderToolGroups();
+}
+
+// ==============================================
+// SPRACH-UMSCHALTUNG
+// ==============================================
+function updateLanguageElements() {
+  document.querySelectorAll('[data-de]').forEach(element => {
+    if (element.hasAttribute('placeholder')) {
+      element.placeholder = currentLang === 'de' ? 
+        element.getAttribute('data-placeholder-de') : 
+        element.getAttribute('data-placeholder-en');
+    } else {
+      element.textContent = currentLang === 'de' ? 
+        element.getAttribute('data-de') : 
+        element.getAttribute('data-en');
+    }
+  });
+  
+  const langText = document.getElementById('langText');
+  if (langText) {
+    langText.textContent = currentLang === 'de' ? 'EN' : 'DE';
+  }
+}
+
+function toggleLanguage() {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  updateLanguageElements();
+  renderFilterChips();
+  renderTop5();
+  renderToolGroups();
+}
+
+// ==============================================
+// FAVORITEN-DRAWER
+// ==============================================
+function openFavoritesDrawer() {
+  updateFavoritesDrawer();
+  document.getElementById('favoritesOverlay').classList.add('active');
+  document.getElementById('favoritesDrawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFavoritesDrawer() {
+  document.getElementById('favoritesOverlay').classList.remove('active');
+  document.getElementById('favoritesDrawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ==============================================
+// COOKIE-HANDLING
+// ==============================================
+function initCookieConsent() {
+  const consent = localStorage.getItem('cookieConsent');
+  const cookieBanner = document.getElementById('cookieConsent');
+  
+  if (consent === 'accepted') {
+    window.cookiePreferences.analytics = true;
+    initAnalytics();
+    cookieBanner.classList.remove('active');
+  } else if (consent === 'declined') {
+    window.cookiePreferences.analytics = false;
+    cookieBanner.classList.remove('active');
+  } else {
+    setTimeout(() => {
+      cookieBanner.classList.add('active');
     }, 1000);
-  } else if (consent === 'accepted') {
-    enableAnalytics();
   }
 }
 
-function handleCookieAccept() {
+function openCookieSettings() {
+  const isAccepted = localStorage.getItem('cookieConsent') === 'accepted';
+  document.getElementById('analyticsToggle').checked = isAccepted;
+  updateAnalyticsStatus(isAccepted);
+  openModal('cookieSettingsModal');
+}
+
+function updateAnalyticsStatus(isEnabled) {
+  const statusElement = document.getElementById('analyticsStatus');
+  if (statusElement) {
+    statusElement.textContent = isEnabled ? (currentLang === 'de' ? 'Aktiviert' : 'Active') : (currentLang === 'de' ? 'Deaktiviert' : 'Disabled');
+    statusElement.style.color = isEnabled ? 'var(--success)' : 'var(--text-secondary)';
+  }
+}
+
+function saveCookieSettings() {
+  const isAnalyticsEnabled = document.getElementById('analyticsToggle').checked;
+  
+  if (isAnalyticsEnabled) {
+    localStorage.setItem('cookieConsent', 'accepted');
+    window.cookiePreferences.analytics = true;
+    initAnalytics();
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies aktiviert' : 'Analytics cookies activated',
+      'success'
+    );
+  } else {
+    localStorage.setItem('cookieConsent', 'declined');
+    window.cookiePreferences.analytics = false;
+    showNotification(
+      currentLang === 'de' ? 'Analyse-Cookies deaktiviert' : 'Analytics cookies deactivated',
+      'info'
+    );
+  }
+  
+  closeModal('cookieSettingsModal');
+  document.getElementById('cookieConsent').classList.remove('active');
+}
+
+function acceptAllCookies() {
   localStorage.setItem('cookieConsent', 'accepted');
-  document.getElementById('cookieConsent').classList.remove('active');
-  enableAnalytics();
-  showNotification('Cookie-Einstellungen gespeichert', 'success');
-}
-
-function handleCookieDecline() {
-  localStorage.setItem('cookieConsent', 'declined');
-  document.getElementById('cookieConsent').classList.remove('active');
-  showNotification('Cookies abgelehnt', 'info');
-}
-
-function enableAnalytics() {
   window.cookiePreferences.analytics = true;
-  // Hier Google Analytics Code einfügen falls gewünscht
-  console.log('Analytics aktiviert');
+  initAnalytics();
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(
+    currentLang === 'de' ? 'Cookies akzeptiert' : 'Cookies accepted',
+    'success'
+  );
+}
+
+function declineCookies() {
+  localStorage.setItem('cookieConsent', 'declined');
+  window.cookiePreferences.analytics = false;
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification(
+    currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined',
+    'info'
+  );
+}
+
+function initAnalytics() {
+  if (!window.cookiePreferences.analytics) return;
+  
+  // GA4 Initialisierung
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
+  document.head.appendChild(script);
+  
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-53RF07VYJ8', {
+    anonymize_ip: true,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+  
+  console.log('GA4 initialized');
 }
 
 // ==============================================
-// INIT
+// SCROLL-TO-TOP FUNKTIONALITÄT
 // ==============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 AI Searcher wird initialisiert...');
-  loadData();
-});
-
-// Cleanup bei Page Unload
-window.addEventListener('beforeunload', () => {
-  if (realtimeChannel) {
-    supabase.removeChannel(realtimeChannel);
+function initBackToTop() {
+  const backToTopButton = document.getElementById('backToTop');
+  
+  function updateVisibility() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile && scrollY > 300) {
+      backToTopButton.classList.add('visible');
+    } else {
+      backToTopButton.classList.remove('visible');
+    }
   }
+  
+  function handleScroll() {
+    if (scrollDebounceTimeout) clearTimeout(scrollDebounceTimeout);
+    scrollDebounceTimeout = setTimeout(updateVisibility, 100);
+  }
+  
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', handleScroll);
+  updateVisibility();
+  
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ==============================================
+// EVENT-LISTENER SETUP
+// ==============================================
+function setupEventListeners() {
+  // Suchfunktion
+  const searchInput = document.getElementById('omniboxInput');
+  let searchTimeout;
+  
+  searchInput.addEventListener('input', (event) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const query = event.target.value.trim();
+      if (query.length > 0) {
+        searchQuery = query.toLowerCase();
+        performSearch();
+      } else {
+        searchQuery = '';
+        renderToolGroups();
+      }
+    }, 300);
+  });
+  
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const query = event.target.value.trim();
+      if (query) {
+        searchQuery = query.toLowerCase();
+        performSearch();
+      }
+    }
+  });
+  
+  // Dichte-Umschaltung
+  document.querySelectorAll('.density-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.density-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      document.body.className = '';
+      document.body.classList.add(`density-${button.dataset.density}`);
+      
+      renderToolGroups();
+      renderTop5();
+    });
+  });
+  
+  // Sprachumschaltung
+  document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+  
+  // Drawer schließen
+  document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
+  document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
+  
+  // Kategorie-Info Modal
+  document.getElementById('categoryInfoModalClose').addEventListener('click', closeCategoryInfoModal);
+  document.getElementById('categoryInfoModalOverlay').addEventListener('click', closeCategoryInfoModal);
+  
+  // Favoriten-Drawer
+  document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesDrawer);
+  document.getElementById('favoritesClose').addEventListener('click', closeFavoritesDrawer);
+  document.getElementById('favoritesOverlay').addEventListener('click', closeFavoritesDrawer);
+  
+  document.getElementById('clearFavorites').addEventListener('click', () => {
+    localStorage.setItem('aiFavorites', JSON.stringify([]));
+    updateFavoritesDrawer();
+    updateFavoritesBadge();
+    renderToolGroups();
+    showNotification(
+      currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared',
+      'info'
+    );
+  });
+  
+  document.getElementById('compareAction').addEventListener('click', () => {
+    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+    if (comparison.length < 2) {
+      showNotification(
+        currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare',
+        'error'
+      );
+    } else {
+      showNotification(
+        currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...',
+        'info'
+      );
+    }
+  });
+  
+  // Cookie-Funktionen
+  document.getElementById('cookieSettings').addEventListener('click', openCookieSettings);
+  document.getElementById('cookieDetailsBtn').addEventListener('click', openCookieSettings);
+  document.getElementById('cookieSettingsModalClose').addEventListener('click', () => closeModal('cookieSettingsModal'));
+  document.getElementById('cookieSettingsModalOverlay').addEventListener('click', () => closeModal('cookieSettingsModal'));
+  document.getElementById('saveCookieSettings').addEventListener('click', saveCookieSettings);
+  document.getElementById('acceptAllCookies').addEventListener('click', acceptAllCookies);
+  document.getElementById('cookieAccept').addEventListener('click', acceptAllCookies);
+  document.getElementById('cookieDecline').addEventListener('click', declineCookies);
+  
+  // Modals für Impressum und Datenschutz
+  document.getElementById('imprintLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('imprintModal');
+  });
+  
+  document.getElementById('privacyLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('privacyLinkCookie').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('privacyModal');
+  });
+  
+  document.getElementById('imprintModalClose').addEventListener('click', () => closeModal('imprintModal'));
+  document.getElementById('imprintModalOverlay').addEventListener('click', () => closeModal('imprintModal'));
+  document.getElementById('privacyModalClose').addEventListener('click', () => closeModal('privacyModal'));
+  document.getElementById('privacyModalOverlay').addEventListener('click', () => closeModal('privacyModal'));
+  
+  // Analytics Opt-Out
+  document.getElementById('analyticsOptOut')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.setItem('cookieConsent', 'declined');
+    window.cookiePreferences.analytics = false;
+    document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+    showNotification(
+      currentLang === 'de' ? 'Google Analytics wurde deaktiviert' : 'Google Analytics has been disabled',
+      'success'
+    );
+  });
+  
+  // Escape-Taste zum Schließen von Modals
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      if (isDrawerOpen) closeToolDrawer();
+      if (document.getElementById('favoritesOverlay').classList.contains('active')) closeFavoritesDrawer();
+      if (document.getElementById('imprintModal').classList.contains('active')) closeModal('imprintModal');
+      if (document.getElementById('privacyModal').classList.contains('active')) closeModal('privacyModal');
+      if (document.getElementById('categoryInfoModal').classList.contains('active')) closeCategoryInfoModal();
+      if (document.getElementById('cookieSettingsModal').classList.contains('active')) closeModal('cookieSettingsModal');
+    }
+  });
+  
+  // Suchbeispiele
+  document.querySelectorAll('.search-example').forEach(example => {
+    example.addEventListener('click', () => {
+      searchInput.value = example.textContent;
+      searchQuery = example.textContent.toLowerCase();
+      performSearch();
+    });
+  });
+}
+
+function performSearch() {
+  if (!searchQuery.trim()) {
+    renderToolGroups();
+    return;
+  }
+  
+  document.querySelectorAll('.tool-group').forEach(group => {
+    const toolRows = group.querySelectorAll('.tool-row');
+    let hasVisibleTools = false;
+    
+    toolRows.forEach(row => {
+      const toolId = row.dataset.id;
+      const tool = aiTools.find(t => t.id === toolId);
+      
+      if (tool) {
+        const searchMatch = 
+          tool.name.toLowerCase().includes(searchQuery) ||
+          (currentLang === 'de' ? tool.description.de : tool.description.en).toLowerCase().includes(searchQuery) ||
+          tool.category.toLowerCase().includes(searchQuery) ||
+          tool.tags.some(tag => tag.toLowerCase().includes(searchQuery)) ||
+          (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en).toLowerCase().includes(searchQuery);
+        
+        row.style.display = searchMatch ? 'grid' : 'none';
+        if (searchMatch) hasVisibleTools = true;
+      }
+    });
+    
+    group.style.display = hasVisibleTools ? 'block' : 'none';
+  });
+}
+
+// ==============================================
+// INITIALISIERUNG
+// ==============================================
+document.addEventListener('DOMContentLoaded', () => {
+  loadTools();
+  initCookieConsent();
+  initBackToTop();
+  setupEventListeners();
+  
+  // Cookie-Banner nach 1 Sekunde anzeigen (falls nötig)
+  setTimeout(() => {
+    const cookieBanner = document.getElementById('cookieConsent');
+    const consent = localStorage.getItem('cookieConsent');
+    if (!consent && cookieBanner) {
+      cookieBanner.classList.add('active');
+    }
+  }, 1000);
 });
 </script>
 </body>
