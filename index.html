@@ -2609,36 +2609,39 @@ function closeModal(modalId) {
 // ==============================================
 async function loadTools() {
   try {
+    console.log('Starting to load tools...');
     document.getElementById('loading').style.display = 'block';
     
+    // 1. Versuche data.json zu laden
+    console.log('Fetching data.json...');
     const response = await fetch('data.json');
+    
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`HTTP ${response.status}: ${await response.text()}`);
     }
     
+    console.log('data.json loaded successfully');
     const rawData = await response.json();
+    console.log(`Loaded ${rawData.length} tools from data.json`);
     
-    // Parallele API Calls für alle Tools
-    const toolPromises = rawData.map(async (tool, index) => {
-      // Votes von Supabase holen
-      let votes = { total_votes: 0, upvotes: 0, downvotes: 0, score: 0 };
-      let userVoteData = { user_vote: 0 };
-      
-      try {
-        votes = await supabaseGetToolVotes(tool.id);
-        userVoteData = await supabaseGetUserVote(tool.id);
-      } catch (error) {
-        // Fallback zu localStorage
-        const localVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-        const toolVotes = localVotes[tool.id] || {};
-        votes = {
-          score: toolVotes.totalVotes || 0,
-          upvotes: toolVotes.upvotes || 0,
-          downvotes: toolVotes.downvotes || 0
-        };
-        userVoteData = { user_vote: toolVotes.userVote || 0 };
-      }
-      
+    // 2. Teste Supabase-Verbindung
+    console.log('Testing Supabase connection...');
+    let supabaseTest = { success: false, error: null };
+    
+    try {
+      const testResult = await supabaseGetToolVotes('test-tool');
+      console.log('Supabase connection test:', testResult);
+      supabaseTest.success = true;
+    } catch (supabaseError) {
+      console.warn('Supabase connection failed:', supabaseError.message);
+      supabaseTest.error = supabaseError.message;
+    }
+    
+    // 3. Tools verarbeiten
+    const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    
+    aiTools = rawData.map((tool, index) => {
+      const votes = voteData[tool.id] || {};
       return {
         id: tool.id,
         name: tool.name,
@@ -2669,30 +2672,133 @@ async function loadTools() {
         aiScore: 90,
         popularityScore: 90,
         rankingHistory: [],
-        votes: votes.score || 0,
-        userVote: userVoteData.user_vote || 0,
+        votes: votes.totalVotes || 0,
+        userVote: votes.userVote || 0,
         upvotes: votes.upvotes || 0,
         downvotes: votes.downvotes || 0,
         pricing: { de: `Modell: ${tool.price}`, en: `Model: ${tool.price}` }
       };
     });
     
-    aiTools = await Promise.all(toolPromises);
+    console.log(`Processed ${aiTools.length} tools`);
+    
+    // 4. Falls Supabase verfügbar, aktualisiere Votes
+    if (supabaseTest.success && aiTools.length > 0) {
+      console.log('Updating votes from Supabase...');
+      
+      // Nimm nur die ersten 3 Tools, um Supabase nicht zu überlasten
+      const sampleTools = aiTools.slice(0, 3);
+      
+      for (const tool of sampleTools) {
+        try {
+          const supabaseVotes = await supabaseGetToolVotes(tool.id);
+          const userVoteData = await supabaseGetUserVote(tool.id);
+          
+          if (supabaseVotes.score !== undefined) {
+            tool.votes = supabaseVotes.score;
+            tool.upvotes = supabaseVotes.upvotes || 0;
+            tool.downvotes = supabaseVotes.downvotes || 0;
+            tool.userVote = userVoteData.user_vote || 0;
+            
+            console.log(`Updated ${tool.name}: ${tool.votes} votes`);
+          }
+        } catch (err) {
+          console.warn(`Could not update ${tool.name} from Supabase:`, err.message);
+        }
+      }
+    } else {
+      console.log('Using local votes only');
+    }
     
     calculateToolScores();
-    await renderTop5();
+    renderTop5();
     renderFilterChips();
     renderToolGroups();
     updateFavoritesBadge();
+    
     document.getElementById('loading').style.display = 'none';
+    console.log('Tools loaded successfully!');
     
   } catch (error) {
     console.error('Error loading tools:', error);
+    
+    // Zeige detaillierte Fehlermeldung
     document.getElementById('loading').innerHTML = `
-      <p style="color:var(--error)">Fehler beim Laden der Tools.</p>
-      <button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">Erneut versuchen</button>
+      <div style="color:var(--error); text-align:center; padding:20px;">
+        <h3>Fehler beim Laden der Tools</h3>
+        <p><strong>Fehler:</strong> ${error.message}</p>
+        <p><strong>Typ:</strong> ${error.name}</p>
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-top:20px;">
+          Bitte überprüfe:<br>
+          1. Existiert die Datei "data.json"?<br>
+          2. Ist sie korrekt formatiert (JSON)?<br>
+          3. Liegt sie im gleichen Ordner wie index.html?
+        </p>
+        <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:var(--primary); color:#fff; border:none; border-radius:var(--radius); cursor:pointer; font-weight:600;">
+          Seite neu laden
+        </button>
+        <button onclick="createSampleData()" style="margin-top:10px; padding:10px 20px; background:var(--secondary); color:#fff; border:none; border-radius:var(--radius); cursor:pointer; font-weight:600;">
+          Testdaten erstellen
+        </button>
+      </div>
     `;
   }
+}
+
+// Füge diese Funktion hinzu, um Testdaten zu erstellen
+function createSampleData() {
+  const sampleData = [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "link": "https://chat.openai.com",
+      "rate": 4.8,
+      "price": "freemium",
+      "badge": "",
+      "ltd": false,
+      "cat": "text",
+      "f": ["Textgenerierung", "Codehilfe", "Übersetzung"],
+      "tags": ["text", "chat", "assistant"],
+      "alt": [],
+      "d": ["ChatGPT ist ein KI-Chatbot von OpenAI.", "ChatGPT is an AI chatbot by OpenAI."],
+      "cost": ["Kostenlos & Bezahloption", "Free & Paid"],
+      "pros": [["Einfach zu bedienen", "Vielseitig"], ["Easy to use", "Versatile"]],
+      "cons": [["Manchmal ungenau", "Keine Internetrecherche"], ["Sometimes inaccurate", "No internet search"]],
+      "q": ["Der beliebteste KI-Chatbot", "The most popular AI chatbot"]
+    },
+    {
+      "id": "midjourney",
+      "name": "Midjourney",
+      "link": "https://midjourney.com",
+      "rate": 4.7,
+      "price": "paid",
+      "badge": "",
+      "ltd": false,
+      "cat": "image",
+      "f": ["Bildgenerierung", "Kunst", "Design"],
+      "tags": ["image", "art", "design"],
+      "alt": [],
+      "d": ["KI-Bildgenerator für Kunst und Design.", "AI image generator for art and design."],
+      "cost": ["Ab $10/Monat", "From $10/month"],
+      "pros": [["Hohe Qualität", "Kreative Ergebnisse"], ["High quality", "Creative results"]],
+      "cons": [["Nur über Discord", "Teuer"], ["Discord only", "Expensive"]],
+      "q": ["Führender KI-Bildgenerator", "Leading AI image generator"]
+    }
+  ];
+  
+  // Erstelle einen Download-Link
+  const dataStr = JSON.stringify(sampleData, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(dataBlob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'data.json';
+  link.click();
+  
+  URL.revokeObjectURL(url);
+  alert('Testdaten wurden als data.json gespeichert. Bitte lade die Seite neu.');
+ }
 }
 
 function calculateToolScores() {
