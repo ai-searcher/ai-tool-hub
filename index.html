@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co wss://*.supabase.co;base-uri 'self';frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co;base-uri 'self';frame-ancestors 'none'">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -604,9 +604,22 @@ body::before {
 }
 
 @keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(0,212,255,.4); }
-  70% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+  0%, 100% { transform: scale(1); box-shadow: none; }
+  50% { transform: scale(1.1); box-shadow: 0 0 15px rgba(0,212,255,.5); }
+}
+
+.top5-quickpeek {
+  font-size: .7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .top5-quickpeek { display: block; }
 }
 
 .filter-chips {
@@ -756,6 +769,28 @@ body::before {
   max-height: 5000px;
 }
 
+.info-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  transition: var(--transition);
+  margin-left: 6px;
+}
+
+.info-btn:hover {
+  color: var(--primary);
+  background: rgba(0,212,255,.1);
+  transform: scale(1.1);
+}
+
 .tool-row {
   height: var(--tool-row-height);
   display: grid;
@@ -776,6 +811,11 @@ body::before {
   background: var(--bg-hover);
 }
 
+.tool-row:hover .tool-peek {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
 .tool-vote {
   display: flex;
   flex-direction: column;
@@ -792,14 +832,24 @@ body::before {
   transition: all .3s ease;
 }
 
-.vote-count.changed {
+.vote-count.moving-up {
+  color: var(--success);
   animation: countUp .5s ease;
 }
 
+.vote-count.moving-down {
+  color: var(--error);
+  animation: countDown .5s ease;
+}
+
 @keyframes countUp {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes countDown {
+  0% { transform: translateY(-10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
 .vote-buttons {
@@ -922,7 +972,6 @@ body::before {
   align-items: center;
   justify-content: center;
   font-size: .9rem;
-  text-decoration: none;
 }
 
 .tool-action-btn:hover {
@@ -937,10 +986,38 @@ body::before {
   background: rgba(251,191,36,.1);
 }
 
+.tool-action-btn.compare:hover,
+.tool-action-btn.compare.active {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: rgba(0,212,255,.1);
+}
+
 .tool-action-btn.open:hover {
   color: var(--success);
   border-color: var(--success);
   background: rgba(16,185,129,.1);
+}
+
+.collapse-button {
+  padding: 12px 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: calc(.85rem*var(--current-density));
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-card);
+  margin: 0;
+}
+
+.collapse-button:hover {
+  background: rgba(0,212,255,.05);
 }
 
 .show-more {
@@ -960,6 +1037,128 @@ body::before {
 
 .show-more:hover {
   background: rgba(0,212,255,.05);
+}
+
+.tool-peek {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(.95);
+  width: 300px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-hover);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  margin-left: 20px;
+  animation: popIn .3s ease;
+}
+
+@keyframes popIn {
+  0% { transform: translateY(-50%) scale(.8); opacity: 0; }
+  100% { transform: translateY(-50%) scale(1); opacity: 1; }
+}
+
+.tool-peek::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: var(--border);
+}
+
+.tool-peek::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-right-color: var(--bg-card);
+  margin-right: -1px;
+}
+
+.peek-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.peek-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.peek-name {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.peek-category {
+  font-size: .7rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.peek-desc {
+  font-size: .85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.peek-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.peek-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: .75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.peek-badge.price {
+  background: rgba(16,185,129,.15);
+  color: var(--success);
+  border: 1px solid rgba(16,185,129,.3);
+}
+
+.peek-badge.rating {
+  background: rgba(251,191,36,.15);
+  color: var(--gold);
+  border: 1px solid rgba(251,191,36,.3);
+}
+
+.peek-badge.ltd {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff;
+  border: none;
 }
 
 .drawer-overlay {
@@ -994,6 +1193,7 @@ body::before {
   transition: transform .3s cubic-bezier(.4,0,.2,1);
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .drawer.active {
@@ -1019,701 +1219,134 @@ body::before {
   background: var(--bg-hover);
   border: 1px solid var(--border);
   color: var(--text-secondary);
+  cursor: pointer;
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  transition: var(--transition);
 }
 
 .drawer-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
+  color: var(--error);
+  border-color: var(--error);
+  background: rgba(239,68,68,.1);
 }
 
-.drawer-content {
+.drawer-body {
+  padding: 20px;
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
-}
-
-.floating-favorites-btn {
-  position: fixed;
-  left: 16px;
-  bottom: 20px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 900;
-  box-shadow: 0 4px 20px rgba(0,0,0,.4);
-  transition: var(--transition);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 4px 20px rgba(0,212,255,.4); }
-  50% { box-shadow: 0 4px 30px rgba(0,212,255,.8); }
-  100% { box-shadow: 0 4px 20px rgba(0,212,255,.4); }
-}
-
-.floating-favorites-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 30px rgba(0,212,255,.3);
-}
-
-.floating-favorites-badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: var(--error);
-  color: #fff;
-  font-size: .7rem;
-  font-weight: 800;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-to-top {
-  position: fixed;
-  right: 16px;
-  bottom: 80px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--primary);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 900;
-  box-shadow: var(--shadow);
-  transition: all .3s ease;
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.back-to-top.visible {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.back-to-top:hover {
-  background: var(--bg-hover);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-.favorites-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,.7);
-  backdrop-filter: blur(5px);
-  z-index: 1900;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.favorites-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.favorites-drawer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-top: 1px solid var(--border);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  z-index: 1901;
-  transform: translateY(100%);
-  transition: transform .3s cubic-bezier(.4,0,.2,1);
-  display: flex;
-  flex-direction: column;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.favorites-drawer.active {
-  transform: translateY(0);
-}
-
-.favorites-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.favorites-title {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.favorites-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.favorites-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.favorites-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.dock-section {
-  margin-bottom: 24px;
-}
-
-.dock-label {
-  color: var(--text-secondary);
-  font-size: .85rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  display: block;
-}
-
-.dock-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.dock-item {
-  width: 60px;
-  height: 60px;
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-}
-
-.dock-item:hover {
-  transform: translateY(-2px);
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(0,212,255,.2);
-}
-
-.dock-item-remove {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  background: var(--error);
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .6rem;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .2s ease;
-  border: 2px solid var(--bg-card);
-}
-
-.dock-item:hover .dock-item-remove {
-  opacity: 1;
-}
-
-.dock-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.dock-action-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: .85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid transparent;
-  flex: 1;
-}
-
-.dock-action-btn.primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-}
-
-.dock-action-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0,212,255,.3);
-}
-
-.dock-action-btn.secondary {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-  border-color: var(--border);
-}
-
-.dock-action-btn.secondary:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-.site-footer {
-  background: rgba(10,14,23,.8);
-  border-top: 1px solid var(--border);
-  padding: 20px;
-  margin-top: 40px;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: .85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.footer-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.density-toggle {
-  display: flex;
-  background: rgba(20,24,36,.8);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px;
-  gap: 4px;
-}
-
-.density-btn {
-  padding: 6px 12px;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: .75rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 600;
-}
-
-.density-btn:hover {
-  color: var(--primary);
-  background: rgba(0,212,255,.1);
-}
-
-.density-btn.active {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 10px;
-}
-
-.footer-links a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.footer-links a:hover {
-  color: var(--text-primary);
-  text-decoration: underline;
-}
-
-.footer-copyright {
-  font-size: .8rem;
-  opacity: .7;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-  margin: 10px 0;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--bg-hover);
-  transition: .4s;
-  border-radius: 24px;
-  border: 1px solid var(--border);
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 3px;
-  background-color: var(--text-secondary);
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--primary);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-  background-color: #fff;
-}
-
-.footer-legal-links {
-  margin: 15px 0;
-  font-size: .8rem;
-  color: var(--text-muted);
-}
-
-.footer-legal-links a {
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.footer-legal-links span {
-  margin: 0 8px;
-  opacity: .5;
-}
-
-.footer-age-warning {
-  background: rgba(245,158,11,.1);
-  border: 1px solid rgba(245,158,11,.3);
-  border-radius: var(--radius);
-  padding: 12px;
-  margin-top: 20px;
-  font-size: .85rem;
-  color: var(--warning);
-  text-align: center;
-}
-
-.footer-age-warning i {
-  margin-right: 8px;
-}
-
-.cookie-details-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--primary);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: .8rem;
-  margin: 0 8px;
-  cursor: pointer;
-}
-
-.cookie-setting {
-  background: rgba(20,24,36,.5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.cookie-setting h3 {
-  color: var(--text-primary);
-  font-size: 1rem;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cookie-setting p {
-  color: var(--text-secondary);
-  font-size: .9rem;
-  margin-bottom: 12px;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,.7);
-  backdrop-filter: blur(5px);
-  z-index: 3000;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%) scale(.9);
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  z-index: 3001;
-  opacity: 0;
-  visibility: hidden;
-  transition: all .3s cubic-bezier(.4,0,.2,1);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%,-50%) scale(1);
-}
-
-.modal-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.modal-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.modal-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.modal-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.modal-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.modal-content h3 {
-  color: var(--text-primary);
-  margin: 20px 0 10px 0;
-  font-size: 1.1rem;
-}
-
-.modal-content p {
-  margin-bottom: 15px;
 }
 
 .notification {
   position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 20px;
+  right: 20px;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  padding: 12px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius);
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: .9rem;
-  z-index: 9999;
-  box-shadow: 0 5px 20px rgba(0,0,0,.3);
-  animation: slideUp .3s ease;
+  gap: 12px;
+  box-shadow: var(--shadow-hover);
+  z-index: 3000;
+  animation: slideInRight .3s ease;
+  max-width: 400px;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
 .notification.success {
   border-color: var(--success);
-  color: var(--success);
 }
 
 .notification.error {
   border-color: var(--error);
-  color: var(--error);
 }
 
 .notification.info {
   border-color: var(--primary);
-  color: var(--primary);
 }
 
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: var(--primary);
-  display: none;
+.notification i {
+  font-size: 1.2rem;
 }
 
-.loading i {
-  font-size: 2.5rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
-.peek-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: .75rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.peek-badge.price {
-  background: rgba(16,185,129,.15);
+.notification.success i {
   color: var(--success);
-  border: 1px solid rgba(16,185,129,.3);
+}
+
+.notification.error i {
+  color: var(--error);
+}
+
+.notification.info i {
+  color: var(--primary);
+}
+
+.notification span {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: .9rem;
+}
+
+.notification-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.notification-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
-  :root { --drawer-width: 100%; --header-height: 60px; --hero-height: 240px; }
-  .main-content { padding: 15px; }
-  .tool-row { grid-template-columns: 1fr; height: auto; padding: 15px; gap: 12px; }
-  .tool-vote { flex-direction: row; justify-content: space-between; width: 100%; padding-right: 0; }
-  .tool-meta { flex-direction: row; justify-content: space-between; width: 100%; align-items: center; }
-  .cookie-content { flex-direction: column; text-align: center; }
-  .cookie-buttons { width: 100%; justify-content: center; }
-  .cookie-btn { flex: 1; min-width: 0; }
-  .floating-favorites-btn { bottom: 80px; }
-  .hero-area { height: 220px; }
-  .hero-title { font-size: 2rem; margin-bottom: 16px; }
-  .hero-title::after { font-size: 1.5rem; right: -35px; }
-  .hero-subtitle { font-size: .95rem; }
-  .site-title { font-size: 1.3rem; }
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-title::after {
+    right: -35px;
+    font-size: 1.5rem;
+  }
+  .drawer {
+    width: 100%;
+  }
+  .tool-peek {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
-  .hero-area { height: 200px; }
-  .hero-title { font-size: 1.8rem; }
-  .hero-title::after { font-size: 1.3rem; right: -30px; }
-  .hero-subtitle { font-size: .9rem; padding: 0 10px; }
-  .hero-omnibox-input { padding: 12px 16px; font-size: .95rem; }
-  .site-title { font-size: 1.1rem; }
-  .cookie-btn { padding: 8px 12px; font-size: .8rem; }
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--bg-card);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-hover);
-}
-
-@supports (-webkit-touch-callout: none) {
-  body {
-    min-height: -webkit-fill-available;
+  .site-title {
+    font-size: 1.3rem;
+  }
+  .hero-title {
+    font-size: 1.5rem;
+  }
+  .hero-subtitle {
+    font-size: .9rem;
+  }
+  .cookie-content {
+    flex-direction: column;
+  }
+  .cookie-text {
+    min-width: 100%;
   }
 }
 </style>
@@ -1723,184 +1356,97 @@ input:checked + .slider:before {
 <div class="glow glow-2"></div>
 <div class="glow glow-3"></div>
 
-<!-- Cookie Consent -->
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
-      <strong data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</strong><br>
-      <span data-de="Technisch notwendige Cookies (Favoriten, Votes) sind aktiv." data-en="Technically required cookies (favorites, votes) are active.">Technisch notwendige Cookies (Favoriten, Votes) sind aktiv.</span> 
-      <button class="cookie-details-btn" id="cookieDetailsBtn" data-de="Details" data-en="Details">Details</button> 
-      <a href="#" id="privacyLinkCookie" data-de="Datenschutz" data-en="Privacy">Datenschutz</a>
+      <strong>🍪 Cookies & Analytics</strong><br>
+      Wir nutzen Cookies für Analytics (Google Analytics) um unsere Website zu verbessern.
     </div>
     <div class="cookie-buttons">
-      <button class="cookie-btn decline" id="cookieDecline" data-de="Ablehnen" data-en="Decline">Ablehnen</button>
-      <button class="cookie-btn settings" id="cookieSettings" data-de="Einstellungen" data-en="Settings">Einstellungen</button>
-      <button class="cookie-btn accept" id="cookieAccept" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
-    </div>
-  </div>
-</div>
-
-<!-- Cookie Settings Modal -->
-<div class="modal-overlay" id="cookieSettingsModalOverlay"></div>
-<div class="modal" id="cookieSettingsModal">
-  <div class="modal-header">
-    <h2 class="modal-title" data-de="Cookie-Einstellungen" data-en="Cookie Settings">Cookie-Einstellungen</h2>
-    <button class="modal-close" id="cookieSettingsModalClose"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-content">
-    <div class="cookie-setting">
-      <h3><i class="fas fa-chart-line"></i> <span data-de="Analyse-Cookies (Google Analytics)" data-en="Analytics Cookies (Google Analytics)">Analyse-Cookies (Google Analytics)</span></h3>
-      <p data-de="Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert." data-en="Help us understand how the website is used. Anonymized.">Helfen uns zu verstehen, wie die Website genutzt wird. Anonymisiert.</p>
-      <label class="switch">
-        <input type="checkbox" id="analyticsToggle" checked>
-        <span class="slider"></span>
-      </label>
-      <p id="analyticsStatus" style="color:var(--success);font-size:.9rem"><span data-de="Aktiviert" data-en="Active">Aktiviert</span></p>
-    </div>
-    <div class="cookie-buttons" style="margin-top:30px">
-      <button class="cookie-btn secondary" id="saveCookieSettings" data-de="Auswahl speichern" data-en="Save Selection">Auswahl speichern</button>
-      <button class="cookie-btn accept" id="acceptAllCookies" data-de="Alle akzeptieren" data-en="Accept All">Alle akzeptieren</button>
+      <button class="cookie-btn decline" onclick="handleCookieDecline()">Ablehnen</button>
+      <button class="cookie-btn accept" onclick="handleCookieAccept()">Akzeptieren</button>
     </div>
   </div>
 </div>
 
 <header class="sticky-header">
-  <div class="site-title">AI Searcher</div>
+  <div class="site-title">AI SEARCHER</div>
   <div class="header-right">
-    <button class="lang-btn" id="langToggle">
-      <i class="fas fa-globe"></i> <span id="langText">EN</span>
+    <button class="lang-btn" onclick="toggleLanguage()">
+      <i class="fas fa-globe"></i>
+      <span id="currentLang">DE</span>
     </button>
   </div>
 </header>
 
-<div class="hero-area">
-  <h1 class="hero-title">AI Searcher</h1>
-  <div class="hero-subtitle" id="heroSubtitle">Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.</div>
+<section class="hero-area">
+  <h1 class="hero-title" data-de="Finde dein KI-Tool" data-en="Find your AI Tool">Finde dein KI-Tool</h1>
+  <p class="hero-subtitle" data-de="50+ handverlesene KI-Tools mit Echtzeitbewertungen, intelligenten Empfehlungen und Vergleichsfunktion" data-en="50+ handpicked AI tools with real-time ratings, smart recommendations and comparison feature">50+ handverlesene KI-Tools mit Echtzeitbewertungen, intelligenten Empfehlungen und Vergleichsfunktion</p>
+  
   <div class="hero-search-container">
     <div class="hero-omnibox">
-      <input type="text" class="hero-omnibox-input" id="omniboxInput" placeholder="Ich suche nach..." data-placeholder-de="Ich suche nach..." data-placeholder-en="I'm looking for...">
+      <input type="text" 
+             class="hero-omnibox-input" 
+             id="heroSearch" 
+             placeholder="Suche nach KI-Tools... (z.B. 'Bildgenerierung', 'ChatGPT')"
+             data-placeholder-de="Suche nach KI-Tools... (z.B. 'Bildgenerierung', 'ChatGPT')"
+             data-placeholder-en="Search for AI tools... (e.g. 'Image generation', 'ChatGPT')">
     </div>
   </div>
+  
   <div class="search-hint-grid">
-    <div class="search-hint-text" id="searchHintText">Suche nach Toolnamen, Use-Cases oder Features</div>
+    <span class="search-hint-text" data-de="Beliebte Suchen:" data-en="Popular searches:">Beliebte Suchen:</span>
     <div class="search-examples">
-      <div class="search-example">Text</div>
-      <div class="search-example">Bilder</div>
-      <div class="search-example">Stimme</div>
-      <div class="search-example">Code</div>
+      <span class="search-example" onclick="searchByExample(this)" data-de="Bildgenerierung" data-en="Image generation">Bildgenerierung</span>
+      <span class="search-example" onclick="searchByExample(this)" data-de="Textgenerierung" data-en="Text generation">Textgenerierung</span>
+      <span class="search-example" onclick="searchByExample(this)" data-de="Kostenlos" data-en="Free">Kostenlos</span>
     </div>
   </div>
-</div>
+</section>
 
-<main class="main-content">
+<div class="main-content" style="padding-top: 0;">
   <div class="top5-bar" id="top5Bar">
     <div class="top5-header">
-      <i class="fas fa-trophy"></i> <span data-de="Top 5 Tools" data-en="Top 5 Tools">Top 5 Tools</span>
+      <i class="fas fa-fire"></i>
+      <span data-de="🏆 Top 5 - Community Favoriten (Live)" data-en="🏆 Top 5 - Community Favorites (Live)">🏆 Top 5 - Community Favoriten (Live)</span>
     </div>
-    <div class="top5-list" id="top5List"></div>
-  </div>
-  
-  <div class="filter-chips" id="filterChips"></div>
-  
-  <section class="tool-groups" id="toolGroups"></section>
-  
-  <div class="loading" id="loading">
-    <i class="fas fa-circle-notch"></i>
-    <p data-de="Lade KI-Tools..." data-en="Loading AI tools...">Lade KI-Tools...</p>
-  </div>
-</main>
-
-<footer class="site-footer">
-  <div class="footer-controls">
-    <div class="density-toggle">
-      <button class="density-btn active" data-density="cozy">Cozy</button>
-      <button class="density-btn" data-density="compact">Compact</button>
-      <button class="density-btn" data-density="future">Future</button>
+    <div class="top5-list" id="top5List">
+      <!-- Wird dynamisch gefüllt -->
     </div>
   </div>
-  <div class="footer-links">
-    <a href="#" id="imprintLink" data-de="Impressum" data-en="Imprint">Impressum</a>
-    <a href="#" id="privacyLink" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a>
-  </div>
-  <div class="footer-legal-links">
-    <a href="#" id="legalDetailsBtn" data-de="Rechtliche Details" data-en="Legal Details">Rechtliche Details</a> <span>•</span> 
-    <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy</a> <span>•</span> 
-    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
-  </div>
-  <div class="footer-age-warning" data-de="Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll." data-en="This website is intended for users aged 16 and over. AI tools can generate unexpected content - use them responsibly.">
-    <i class="fas fa-exclamation-triangle"></i> Diese Website richtet sich an Nutzer ab 16 Jahren. KI-Tools können unerwartete Inhalte generieren – nutzen Sie sie verantwortungsvoll.
-  </div>
-  <div class="footer-copyright" data-de="© 2026 AI Searcher. Alle Rechte vorbehalten." data-en="© 2026 AI Searcher. All rights reserved.">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
-</footer>
 
-<!-- Tool Drawer -->
-<div class="drawer-overlay" id="drawerOverlay"></div>
-<div class="drawer" id="drawer">
+  <div class="filter-chips" id="filterChips">
+    <!-- Wird dynamisch gefüllt -->
+  </div>
+
+  <div class="tool-groups" id="toolGroups">
+    <!-- Wird dynamisch gefüllt -->
+  </div>
+</div>
+
+<div class="drawer-overlay" id="favoritesOverlay" onclick="closeModal('favorites')"></div>
+<div class="drawer" id="favorites">
   <div class="drawer-header">
-    <h2 class="drawer-title" id="drawerTitle">Tool Details</h2>
-    <button class="drawer-close" id="drawerClose"><i class="fas fa-times"></i></button>
+    <div class="drawer-title" data-de="⭐ Meine Favoriten" data-en="⭐ My Favorites">⭐ Meine Favoriten</div>
+    <button class="drawer-close" onclick="closeModal('favorites')">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
-  <div class="drawer-content" id="drawerContent"></div>
-</div>
-
-<!-- Favorites Drawer -->
-<div class="favorites-overlay" id="favoritesOverlay"></div>
-<div class="favorites-drawer" id="favoritesDrawer">
-  <div class="favorites-header">
-    <h2 class="favorites-title" data-de="Favoriten & Vergleich" data-en="Favorites & Compare">Favoriten & Vergleich</h2>
-    <button class="favorites-close" id="favoritesClose"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="favorites-content">
-    <div class="dock-section">
-      <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
-      <div class="dock-items" id="favoriteDock"></div>
-    </div>
-    <div class="dock-actions">
-      <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
-    </div>
+  <div class="drawer-body" id="favoritesBody">
+    <!-- Wird dynamisch gefüllt -->
   </div>
 </div>
 
-<!-- Floating Buttons -->
-<button class="floating-favorites-btn" id="floatingFavoritesBtn" aria-label="Favoriten anzeigen">
-  <i class="fas fa-star"></i> 
-  <span class="floating-favorites-badge" id="floatingFavoritesBadge">0</span>
-</button>
-<button class="back-to-top" id="backToTop" aria-label="Nach oben"><i class="fas fa-chevron-up"></i></button>
-
-<!-- Imprint Modal -->
-<div class="modal-overlay" id="imprintModalOverlay"></div>
-<div class="modal" id="imprintModal">
-  <div class="modal-header">
-    <h2 class="modal-title" data-de="Impressum" data-en="Imprint">Impressum</h2>
-    <button class="modal-close" id="imprintModalClose"><i class="fas fa-times"></i></button>
+<div class="drawer-overlay" id="compareOverlay" onclick="closeModal('compare')"></div>
+<div class="drawer" id="compare">
+  <div class="drawer-header">
+    <div class="drawer-title" data-de="🔍 Vergleich" data-en="🔍 Compare">🔍 Vergleich</div>
+    <button class="drawer-close" onclick="closeModal('compare')">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
-  <div class="modal-content">
-    <h2 data-de="Impressum" data-en="Imprint">Impressum</h2>
-    <h3 data-de="Angaben gemäß § 5 DDG" data-en="Information according to § 5 DDG">Angaben gemäß § 5 DDG</h3>
-    <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
-    <p>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a></p>
-    <h3 data-de="Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV" data-en="Responsible for content according to § 18 para. 2 MStV">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
-    <p>Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin</p>
-  </div>
-</div>
-
-<!-- Privacy Modal -->
-<div class="modal-overlay" id="privacyModalOverlay"></div>
-<div class="modal" id="privacyModal">
-  <div class="modal-header">
-    <h2 class="modal-title" data-de="Datenschutz" data-en="Privacy">Datenschutz</h2>
-    <button class="modal-close" id="privacyModalClose"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="modal-content">
-    <h2 data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
-    <h3 data-de="1. Verantwortliche Stelle" data-en="1. Responsible Party">1. Verantwortliche Stelle</h3>
-    <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
-    <h3 data-de="2. Datenerhebung bei Website-Nutzung" data-en="2. Data Collection">2. Datenerhebung bei Website-Nutzung</h3>
-    <p data-de="Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten." data-en="For informational use, we do not collect personal data.">Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten.</p>
-    <h3 data-de="3. Cookies & Local Storage" data-en="3. Cookies & Local Storage">3. Cookies & Local Storage</h3>
-    <p data-de="Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting." data-en="We use technically necessary cookies for functions such as favorites and voting.">Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting.</p>
+  <div class="drawer-body" id="compareBody">
+    <!-- Wird dynamisch gefüllt -->
   </div>
 </div>
 
@@ -1908,52 +1454,137 @@ input:checked + .slider:before {
 // ==============================================
 // KONFIGURATION & GLOBALE VARIABLEN
 // ==============================================
-const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
 
+// ⚠️ WICHTIG: SUPABASE CREDENTIALS HIER EINFÜGEN
+const SUPABASE_URL = 'DEINE_SUPABASE_URL_HIER';  // z.B. 'https://abcdefghijk.supabase.co'
+const SUPABASE_ANON_KEY = 'DEIN_SUPABASE_ANON_KEY_HIER';  // Dein Supabase anon/public Key
+
+// Supabase Client initialisieren
 let supabase = null;
 let realtimeChannel = null;
-let aiTools = [];
-let currentLang = 'de';
-let currentCategory = 'all';
-let searchQuery = '';
-let isDrawerOpen = false;
 
-// ==============================================
-// SUPABASE INITIALISIERUNG
-// ==============================================
-async function initSupabase() {
+// Prüfe ob Supabase verfügbar ist
+if (typeof supabase === 'undefined' && window.supabase) {
+  console.log('✅ Supabase SDK geladen');
+} else {
+  console.warn('⚠️ Supabase SDK nicht gefunden');
+}
+
+// Initialisiere Supabase Client nur wenn Credentials vorhanden
+function initializeSupabase() {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || 
+      SUPABASE_URL === 'DEINE_SUPABASE_URL_HIER' || 
+      SUPABASE_ANON_KEY === 'DEIN_SUPABASE_ANON_KEY_HIER') {
+    console.warn('⚠️ Supabase Credentials nicht konfiguriert. Bitte SUPABASE_URL und SUPABASE_ANON_KEY eintragen!');
+    return false;
+  }
+  
   try {
-    if (!window.supabase) {
-      console.warn('⚠️ Supabase library not loaded');
-      return false;
-    }
-
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase client initialized');
-
-    const { data, error } = await supabase.from('tools_votes').select('count').limit(1);
-    if (error) {
-      console.error('❌ Supabase connection test failed:', error);
-      return false;
-    }
-
-    console.log('✅ Supabase connection successful');
-    setupRealtime();
+    console.log('✅ Supabase Client initialisiert');
     return true;
   } catch (error) {
-    console.error('❌ Supabase initialization error:', error);
+    console.error('❌ Fehler beim Initialisieren von Supabase:', error);
     return false;
   }
 }
 
-// ==============================================
-// REALTIME UPDATES
-// ==============================================
-function setupRealtime() {
-  if (!supabase) return;
+// Globale Variablen
+let aiTools = [];
+let currentLang = 'de';
+let activeFilter = 'all';
+let userVotes = JSON.parse(localStorage.getItem('userVotes') || '{}');
+let votesData = {};
 
+// ==============================================
+// DATEN LADEN
+// ==============================================
+
+async function loadData() {
   try {
+    console.log('📥 Lade data.json...');
+    const response = await fetch('data.json');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    aiTools = await response.json();
+    console.log(`✅ ${aiTools.length} Tools erfolgreich geladen`);
+    
+    // Initialisiere Supabase
+    const supabaseReady = initializeSupabase();
+    
+    if (supabaseReady) {
+      // Lade Votes von Supabase
+      await loadVotesFromSupabase();
+      
+      // Starte Realtime-Subscription
+      subscribeToVoteUpdates();
+    } else {
+      console.log('ℹ️ Arbeite mit lokalem Vote-System (kein Supabase)');
+      // Fallback: Lade lokale Votes
+      votesData = JSON.parse(localStorage.getItem('votesData') || '{}');
+    }
+    
+    // Rendere UI
+    initializeUI();
+    
+  } catch (error) {
+    console.error('❌ Fehler beim Laden der Daten:', error);
+    showNotification('Fehler beim Laden der Daten. Bitte Seite neu laden.', 'error');
+  }
+}
+
+// ==============================================
+// SUPABASE FUNKTIONEN
+// ==============================================
+
+async function loadVotesFromSupabase() {
+  if (!supabase || typeof supabase.from !== 'function') {
+    console.warn('⚠️ Supabase nicht verfügbar für loadVotesFromSupabase');
+    return;
+  }
+  
+  try {
+    console.log('📡 Lade Votes von Supabase...');
+    
+    const { data, error } = await supabase
+      .from('tools_votes')
+      .select('*');
+    
+    if (error) {
+      console.error('❌ Supabase Fehler:', error);
+      return;
+    }
+    
+    // Konvertiere Array zu Object für schnellen Zugriff
+    votesData = {};
+    if (data && Array.isArray(data)) {
+      data.forEach(item => {
+        votesData[item.tool_id] = {
+          upvotes: parseInt(item.upvotes) || 0,
+          downvotes: parseInt(item.downvotes) || 0,
+          totalVotes: (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
+        };
+      });
+      console.log(`✅ ${Object.keys(votesData).length} Vote-Datensätze von Supabase geladen`);
+    }
+    
+  } catch (error) {
+    console.error('❌ Fehler beim Laden von Votes:', error);
+  }
+}
+
+function subscribeToVoteUpdates() {
+  if (!supabase || typeof supabase.channel !== 'function') {
+    console.warn('⚠️ Supabase Realtime nicht verfügbar');
+    return;
+  }
+  
+  try {
+    console.log('🔔 Starte Realtime-Subscription...');
+    
     realtimeChannel = supabase
       .channel('tools_votes_changes')
       .on(
@@ -1964,502 +1595,579 @@ function setupRealtime() {
           table: 'tools_votes'
         },
         (payload) => {
-          console.log('📡 Realtime update:', payload);
+          console.log('🔔 Realtime Update erhalten:', payload);
           handleRealtimeUpdate(payload);
         }
       )
       .subscribe((status) => {
-        console.log('📡 Realtime status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Realtime-Subscription aktiv');
+        } else {
+          console.log('ℹ️ Subscription Status:', status);
+        }
       });
-
-    console.log('✅ Realtime subscription active');
+      
   } catch (error) {
-    console.error('❌ Realtime setup failed:', error);
+    console.error('❌ Fehler bei Realtime-Subscription:', error);
   }
 }
 
 function handleRealtimeUpdate(payload) {
-  const { new: newRecord } = payload;
+  const { new: newRecord, old: oldRecord, eventType } = payload;
   
-  if (!newRecord || !newRecord.tool_id) return;
-
-  const tool = aiTools.find(t => t.id === newRecord.tool_id);
-  if (!tool) return;
-
-  tool.upvotes = newRecord.upvotes || 0;
-  tool.downvotes = newRecord.downvotes || 0;
-  tool.votes = tool.upvotes - tool.downvotes;
-
-  updateVoteUI(newRecord.tool_id, tool.votes);
-  renderTop5();
-}
-
-function updateVoteUI(toolId, totalVotes) {
-  const voteCountEl = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountEl) {
-    voteCountEl.textContent = totalVotes;
-    voteCountEl.classList.add('changed');
-    setTimeout(() => voteCountEl.classList.remove('changed'), 600);
-  }
-
-  const drawerVoteEl = document.getElementById(`drawer-vote-count-${toolId}`);
-  if (drawerVoteEl) {
-    drawerVoteEl.textContent = totalVotes;
-  }
-
-  const top5VoteEl = document.getElementById(`top5Votes-${toolId}`);
-  if (top5VoteEl) {
-    top5VoteEl.textContent = totalVotes;
-    top5VoteEl.classList.add('changed');
-    setTimeout(() => top5VoteEl.classList.remove('changed'), 600);
+  if (eventType === 'UPDATE' || eventType === 'INSERT') {
+    const toolId = newRecord.tool_id;
+    const oldVotes = votesData[toolId] || { totalVotes: 0 };
+    
+    // Update lokale Daten
+    votesData[toolId] = {
+      upvotes: parseInt(newRecord.upvotes) || 0,
+      downvotes: parseInt(newRecord.downvotes) || 0,
+      totalVotes: (parseInt(newRecord.upvotes) || 0) - (parseInt(newRecord.downvotes) || 0)
+    };
+    
+    console.log(`🔄 Vote Update für ${toolId}:`, votesData[toolId]);
+    
+    // Update UI
+    updateVoteUI(toolId, oldVotes.totalVotes);
+    updateTop5();
   }
 }
 
-// ==============================================
-// VOTING FUNKTIONALITÄT
-// ==============================================
-async function vote(toolId, direction) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-
-  const userVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  const oldVote = userVotes[toolId] || 0;
-  const newVote = direction === 'up' ? 1 : -1;
-  const finalVote = oldVote === newVote ? 0 : newVote;
-
-  if (finalVote === 0) {
-    delete userVotes[toolId];
-  } else {
-    userVotes[toolId] = finalVote;
-  }
-  localStorage.setItem('aiToolVotes', JSON.stringify(userVotes));
-
-  tool.userVote = finalVote;
-  updateVoteButtons(toolId, finalVote);
-
-  if (!supabase) {
-    showNotification(
-      currentLang === 'de' ? 'Vote lokal gespeichert' : 'Vote saved locally',
-      'info'
-    );
+async function submitVote(toolId, voteType) {
+  // Prüfe ob User bereits gevotet hat
+  const existingVote = userVotes[toolId];
+  
+  if (existingVote === voteType) {
+    showNotification('Du hast bereits für dieses Tool gevotet!', 'info');
     return;
   }
-
-  try {
-    let result;
-
-    if (oldVote === 0 && finalVote !== 0) {
-      result = await supabase.rpc('increment_vote', {
-        p_tool_id: toolId,
-        p_is_upvote: finalVote === 1
-      });
-    } else if (oldVote !== 0 && finalVote === 0) {
-      result = await supabase.rpc('decrement_vote', {
-        p_tool_id: toolId,
-        p_is_upvote: oldVote === 1
-      });
-    } else if (oldVote !== 0 && finalVote !== 0 && oldVote !== finalVote) {
-      await supabase.rpc('decrement_vote', {
-        p_tool_id: toolId,
-        p_is_upvote: oldVote === 1
-      });
-      result = await supabase.rpc('increment_vote', {
-        p_tool_id: toolId,
-        p_is_upvote: finalVote === 1
-      });
-    }
-
-    if (result && result.error) throw result.error;
-
-    if (result && result.data && result.data.length > 0) {
-      const voteData = result.data[0];
-      tool.upvotes = voteData.upvotes;
-      tool.downvotes = voteData.downvotes;
-      tool.votes = voteData.total_votes;
-      
-      updateVoteUI(toolId, tool.votes);
-    }
-
-    showNotification(
-      finalVote === 0 
-        ? (currentLang === 'de' ? 'Vote entfernt' : 'Vote removed')
-        : (currentLang === 'de' ? 'Vote gespeichert' : 'Vote saved'),
-      'success'
-    );
-
-  } catch (error) {
-    console.error('Vote sync error:', error);
-    showNotification(
-      currentLang === 'de' ? 'Fehler beim Synchronisieren' : 'Sync error',
-      'error'
-    );
-  }
-}
-
-function updateVoteButtons(toolId, userVote) {
-  document.querySelectorAll(`[data-tool-id="${toolId}"]`).forEach(container => {
-    const upBtn = container.querySelector('.vote-btn-row.up');
-    const downBtn = container.querySelector('.vote-btn-row.down');
-    
-    if (upBtn) upBtn.classList.toggle('active', userVote === 1);
-    if (downBtn) downBtn.classList.toggle('active', userVote === -1);
-  });
-}
-
-// ==============================================
-// TOOL LADEN
-// ==============================================
-async function loadTools() {
-  try {
-    console.log('🚀 Loading tools...');
-    document.getElementById('loading').style.display = 'block';
-
-    const supabaseReady = await initSupabase();
-
-    const response = await fetch('data.json');
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const rawData = await response.json();
-    console.log(`✅ Loaded ${rawData.length} tools from data.json`);
-
-    let liveVotes = {};
-    if (supabaseReady) {
-      const { data, error } = await supabase
-        .from('tools_votes')
-        .select('tool_id, upvotes, downvotes');
-      
-      if (!error && data) {
-        data.forEach(item => {
-          liveVotes[item.tool_id] = {
-            upvotes: item.upvotes || 0,
-            downvotes: item.downvotes || 0,
-            totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
-          };
-        });
-        console.log(`📊 Loaded ${Object.keys(liveVotes).length} vote records`);
-      }
-    }
-
-    const userVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-
-    aiTools = rawData.map((tool, index) => {
-      const toolVotes = liveVotes[tool.id] || { totalVotes: 0, upvotes: 0, downvotes: 0 };
-      const userVote = userVotes[tool.id] || 0;
-      
-      return {
-        id: tool.id || `tool-${index}`,
-        name: tool.name || 'Unnamed Tool',
-        category: tool.cat || 'text',
-        rating: parseFloat(tool.rate) || 0,
-        price: tool.price || "freemium",
-        link: tool.link || '#',
-        description: {
-          de: tool.d?.[0] || 'Keine Beschreibung',
-          en: tool.d?.[1] || 'No description'
-        },
-        votes: toolVotes.totalVotes,
-        upvotes: toolVotes.upvotes,
-        downvotes: toolVotes.downvotes,
-        userVote: userVote,
-        hasLifetimeDeal: Boolean(tool.ltd),
-        features: Array.isArray(tool.f) ? tool.f : [],
-        tags: Array.isArray(tool.tags) ? tool.tags : [],
-        priceDisplay: {
-          de: tool.cost?.[0] || (tool.price === 'free' ? 'Kostenlos' : tool.price === 'paid' ? 'Kostenpflichtig' : 'Freemium'),
-          en: tool.cost?.[1] || (tool.price === 'free' ? 'Free' : tool.price === 'paid' ? 'Paid' : 'Freemium')
-        },
-        pros: { 
-          de: tool.pros?.[0] || [], 
-          en: tool.pros?.[1] || [] 
-        },
-        cons: { 
-          de: tool.cons?.[0] || [], 
-          en: tool.cons?.[1] || [] 
-        },
-        alternatives: Array.isArray(tool.alt) ? tool.alt : []
-      };
-    });
-
-    console.log(`✅ Processed ${aiTools.length} tools`);
-
-    renderTop5();
-    renderFilterChips();
-    renderToolGroups();
-    updateFavoritesBadge();
-
-    document.getElementById('loading').style.display = 'none';
-
-  } catch (error) {
-    console.error('❌ Error loading tools:', error);
-    document.getElementById('loading').innerHTML = `
-      <div style="text-align:center;padding:30px;color:var(--error)">
-        <i class="fas fa-exclamation-triangle" style="font-size:3rem;margin-bottom:20px;"></i>
-        <p><strong>Fehler beim Laden:</strong> ${error.message}</p>
-        <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer">
-          Neu laden
-        </button>
-      </div>
-    `;
-  }
-}
-
-// ==============================================
-// RENDER FUNKTIONEN
-// ==============================================
-function renderTop5() {
-  const top5 = [...aiTools]
-    .sort((a, b) => {
-      if (b.votes !== a.votes) return b.votes - a.votes;
-      return b.rating - a.rating;
-    })
-    .slice(0, 5);
   
-  document.getElementById('top5List').innerHTML = top5.map((tool, index) => `
-    <div class="top5-item" onclick="openToolDrawer('${tool.id}')" title="${tool.name}">
-      <div class="top5-rank">${index + 1}</div>
-      <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
-      <div class="top5-info">
-        <div class="top5-name">${tool.name}</div>
-        <div class="top5-category">${getCategoryName(tool.category)}</div>
-      </div>
-      <div class="top5-votes" id="top5Votes-${tool.id}">${tool.votes}</div>
+  // Update lokale User-Votes
+  const oldVote = userVotes[toolId];
+  userVotes[toolId] = voteType;
+  localStorage.setItem('userVotes', JSON.stringify(userVotes));
+  
+  // Update UI sofort (optimistisch)
+  updateVoteButtonStates(toolId);
+  
+  // Wenn Supabase verfügbar, sende Vote
+  if (supabase && typeof supabase.from === 'function') {
+    try {
+      // Berechne Änderungen
+      let upvoteChange = 0;
+      let downvoteChange = 0;
+      
+      if (oldVote === 'up') {
+        upvoteChange = -1;
+      } else if (oldVote === 'down') {
+        downvoteChange = -1;
+      }
+      
+      if (voteType === 'up') {
+        upvoteChange += 1;
+      } else if (voteType === 'down') {
+        downvoteChange += 1;
+      }
+      
+      // Hole aktuelle Werte
+      const { data: currentData, error: fetchError } = await supabase
+        .from('tools_votes')
+        .select('upvotes, downvotes')
+        .eq('tool_id', toolId)
+        .single();
+      
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+      
+      const currentUpvotes = currentData ? parseInt(currentData.upvotes) || 0 : 0;
+      const currentDownvotes = currentData ? parseInt(currentData.downvotes) || 0 : 0;
+      
+      // Berechne neue Werte
+      const newUpvotes = Math.max(0, currentUpvotes + upvoteChange);
+      const newDownvotes = Math.max(0, currentDownvotes + downvoteChange);
+      
+      // Upsert in Datenbank
+      const { error: upsertError } = await supabase
+        .from('tools_votes')
+        .upsert(
+          {
+            tool_id: toolId,
+            upvotes: newUpvotes,
+            downvotes: newDownvotes
+          },
+          {
+            onConflict: 'tool_id'
+          }
+        );
+      
+      if (upsertError) {
+        throw upsertError;
+      }
+      
+      console.log(`✅ Vote für ${toolId} erfolgreich gespeichert`);
+      
+    } catch (error) {
+      console.error('❌ Fehler beim Speichern des Votes:', error);
+      showNotification('Fehler beim Speichern des Votes', 'error');
+      
+      // Rollback bei Fehler
+      if (oldVote) {
+        userVotes[toolId] = oldVote;
+      } else {
+        delete userVotes[toolId];
+      }
+      localStorage.setItem('userVotes', JSON.stringify(userVotes));
+      updateVoteButtonStates(toolId);
+    }
+  } else {
+    // Fallback: Lokales Vote-System
+    if (!votesData[toolId]) {
+      votesData[toolId] = { upvotes: 0, downvotes: 0, totalVotes: 0 };
+    }
+    
+    // Entferne altes Vote
+    if (oldVote === 'up') {
+      votesData[toolId].upvotes = Math.max(0, votesData[toolId].upvotes - 1);
+    } else if (oldVote === 'down') {
+      votesData[toolId].downvotes = Math.max(0, votesData[toolId].downvotes - 1);
+    }
+    
+    // Füge neues Vote hinzu
+    if (voteType === 'up') {
+      votesData[toolId].upvotes++;
+    } else if (voteType === 'down') {
+      votesData[toolId].downvotes++;
+    }
+    
+    // Berechne Total
+    votesData[toolId].totalVotes = votesData[toolId].upvotes - votesData[toolId].downvotes;
+    
+    // Speichere lokal
+    localStorage.setItem('votesData', JSON.stringify(votesData));
+    
+    // Update UI
+    const oldTotal = votesData[toolId].totalVotes - (voteType === 'up' ? 1 : -1) + (oldVote === 'up' ? 1 : oldVote === 'down' ? -1 : 0);
+    updateVoteUI(toolId, oldTotal);
+    updateTop5();
+  }
+}
+
+function updateVoteUI(toolId, oldTotal) {
+  const voteCountEl = document.querySelector(`[data-tool-id="${toolId}"] .vote-count`);
+  
+  if (voteCountEl) {
+    const newTotal = votesData[toolId]?.totalVotes || 0;
+    voteCountEl.textContent = newTotal;
+    
+    // Animation
+    voteCountEl.classList.remove('moving-up', 'moving-down');
+    if (newTotal > oldTotal) {
+      voteCountEl.classList.add('moving-up');
+    } else if (newTotal < oldTotal) {
+      voteCountEl.classList.add('moving-down');
+    }
+    
+    setTimeout(() => {
+      voteCountEl.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+}
+
+function updateVoteButtonStates(toolId) {
+  const toolRow = document.querySelector(`[data-tool-id="${toolId}"]`);
+  if (!toolRow) return;
+  
+  const upBtn = toolRow.querySelector('.vote-btn-row.up');
+  const downBtn = toolRow.querySelector('.vote-btn-row.down');
+  const userVote = userVotes[toolId];
+  
+  upBtn.classList.toggle('active', userVote === 'up');
+  downBtn.classList.toggle('active', userVote === 'down');
+}
+
+function getVoteCount(toolId) {
+  return votesData[toolId]?.totalVotes || 0;
+}
+
+// ==============================================
+// UI INITIALISIERUNG
+// ==============================================
+
+function initializeUI() {
+  renderFilterChips();
+  renderToolGroups();
+  updateTop5();
+  setupEventListeners();
+  checkCookieConsent();
+}
+
+function setupEventListeners() {
+  // Suche
+  const searchInput = document.getElementById('heroSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      filterTools(query);
+    });
+  }
+}
+
+function renderFilterChips() {
+  const container = document.getElementById('filterChips');
+  if (!container) return;
+  
+  const filters = [
+    { id: 'all', icon: 'fa-th', label: { de: 'Alle', en: 'All' } },
+    { id: 'text', icon: 'fa-keyboard', label: { de: 'Text', en: 'Text' } },
+    { id: 'image', icon: 'fa-image', label: { de: 'Bild', en: 'Image' } },
+    { id: 'code', icon: 'fa-code', label: { de: 'Code', en: 'Code' } },
+    { id: 'video', icon: 'fa-video', label: { de: 'Video', en: 'Video' } },
+    { id: 'audio', icon: 'fa-microphone', label: { de: 'Audio', en: 'Audio' } },
+    { id: 'business', icon: 'fa-briefcase', label: { de: 'Business', en: 'Business' } },
+    { id: 'free', icon: 'fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
+    { id: 'popular', icon: 'fa-fire', label: { de: 'Beliebt', en: 'Popular' } }
+  ];
+  
+  container.innerHTML = filters.map(f => `
+    <div class="filter-chip ${f.id === 'all' ? 'active' : ''}" 
+         onclick="setFilter('${f.id}')"
+         data-filter="${f.id}">
+      <i class="fas ${f.icon}"></i>
+      <span data-de="${f.label.de}" data-en="${f.label.en}">${f.label[currentLang]}</span>
     </div>
   `).join('');
 }
 
 function renderToolGroups() {
-  let categories = ['text', 'image', 'code', 'video', 'audio'];
-  if (currentCategory !== 'all' && currentCategory !== 'free') {
-    categories = [currentCategory];
+  const container = document.getElementById('toolGroups');
+  if (!container) return;
+  
+  const categories = {
+    text: { icon: '✍️', name: { de: 'Text & Schreiben', en: 'Text & Writing' } },
+    image: { icon: '🎨', name: { de: 'Bild & Design', en: 'Image & Design' } },
+    code: { icon: '💻', name: { de: 'Code & Entwicklung', en: 'Code & Development' } },
+    video: { icon: '🎬', name: { de: 'Video & Animation', en: 'Video & Animation' } },
+    audio: { icon: '🎵', name: { de: 'Audio & Musik', en: 'Audio & Music' } },
+    business: { icon: '💼', name: { de: 'Business & Produktivität', en: 'Business & Productivity' } }
+  };
+  
+  let html = '';
+  
+  for (const [cat, info] of Object.entries(categories)) {
+    const tools = aiTools.filter(t => t.cat === cat);
+    if (tools.length === 0) continue;
+    
+    // Sortiere nach Votes
+    tools.sort((a, b) => getVoteCount(b.id) - getVoteCount(a.id));
+    
+    html += `
+      <div class="tool-group" data-category="${cat}">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <div class="group-title">
+            <div class="group-icon">${info.icon}</div>
+            <span data-de="${info.name.de}" data-en="${info.name.en}">${info.name[currentLang]}</span>
+            <span class="group-count">(${tools.length})</span>
+          </div>
+          <div class="group-toggle">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        <div class="group-content">
+          ${tools.map(tool => renderToolRow(tool)).join('')}
+        </div>
+      </div>
+    `;
   }
   
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  container.innerHTML = html;
+}
+
+function renderToolRow(tool) {
+  const voteCount = getVoteCount(tool.id);
+  const userVote = userVotes[tool.id];
+  const isFavorite = isFav(tool.id);
+  const isInCompare = isInComp(tool.id);
   
-  document.getElementById('toolGroups').innerHTML = categories.map(category => {
-    let categoryTools = aiTools.filter(tool => tool.category === category);
-    
-    if (currentCategory === 'free') {
-      categoryTools = categoryTools.filter(tool => tool.price === 'free');
-    }
-    
-    if (categoryTools.length === 0) return '';
-    
-    const sortedTools = [...categoryTools].sort((a, b) => {
-      if (b.votes !== a.votes) return b.votes - a.votes;
-      return b.rating - a.rating;
-    });
-    
-    const isExpanded = expandedGroups[category] !== false;
-    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
-    
+  return `
+    <div class="tool-row" data-tool-id="${tool.id}" data-category="${tool.cat}">
+      <div class="tool-vote">
+        <div class="vote-count">${voteCount}</div>
+        <div class="vote-buttons">
+          <button class="vote-btn-row up ${userVote === 'up' ? 'active' : ''}" 
+                  onclick="handleVote('${tool.id}', 'up', event)"
+                  title="Upvote">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn-row down ${userVote === 'down' ? 'active' : ''}" 
+                  onclick="handleVote('${tool.id}', 'down', event)"
+                  title="Downvote">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="tool-info" onclick="openToolDetail('${tool.id}')">
+        <div class="tool-name">
+          ${tool.name}
+          ${tool.badge ? `<span class="peek-badge ${tool.badge}">${getBadgeText(tool.badge)}</span>` : ''}
+        </div>
+        <div class="tool-category">
+          ${getCategoryIcon(tool.cat)} ${getCategoryName(tool.cat)}
+        </div>
+        <div class="tool-desc">${tool.d[currentLang === 'de' ? 0 : 1]}</div>
+      </div>
+      
+      <div class="tool-meta">
+        <div class="tool-price">${tool.cost[currentLang === 'de' ? 0 : 1]}</div>
+        <div class="tool-actions">
+          <button class="tool-action-btn favorite ${isFavorite ? 'active' : ''}" 
+                  onclick="toggleFavorite('${tool.id}', event)"
+                  title="Favorit">
+            <i class="fas fa-star"></i>
+          </button>
+          <button class="tool-action-btn compare ${isInCompare ? 'active' : ''}" 
+                  onclick="toggleCompare('${tool.id}', event)"
+                  title="Vergleichen">
+            <i class="fas fa-scale-balanced"></i>
+          </button>
+          <button class="tool-action-btn open" 
+                  onclick="openTool('${tool.link}', event)"
+                  title="Öffnen">
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateTop5() {
+  const container = document.getElementById('top5List');
+  if (!container) return;
+  
+  // Sortiere alle Tools nach Votes
+  const sortedTools = [...aiTools].sort((a, b) => {
+    return getVoteCount(b.id) - getVoteCount(a.id);
+  });
+  
+  // Nimm Top 5
+  const top5 = sortedTools.slice(0, 5);
+  
+  container.innerHTML = top5.map((tool, index) => {
+    const voteCount = getVoteCount(tool.id);
     return `
-      <div class="tool-group" data-category="${category}">
-        <div class="group-header" onclick="toggleGroup('${category}')">
-          <div class="group-title">
-            <div class="group-icon">${getCategoryIcon(category)}</div>
-            <span>${getCategoryName(category)}</span>
-            <span class="group-count">${categoryTools.length}</span>
-          </div>
-          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
-            <i class="fas fa-chevron-down"></i>
-          </div>
+      <div class="top5-item" onclick="scrollToTool('${tool.id}')">
+        <div class="top5-rank">${index + 1}</div>
+        <div class="top5-icon">${getCategoryIcon(tool.cat)}</div>
+        <div class="top5-info">
+          <div class="top5-name">${tool.name}</div>
+          <div class="top5-category">${getCategoryName(tool.cat)}</div>
         </div>
-        <div class="group-content ${isExpanded ? 'expanded' : ''}">
-          ${displayTools.map(tool => renderToolRow(tool)).join('')}
-        </div>
-        ${!isExpanded && sortedTools.length > 2 ? `
-          <div class="show-more" onclick="expandGroup('${category}')">
-            <span>+ ${sortedTools.length - 2} ${currentLang === 'de' ? 'mehr anzeigen' : 'more'}</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-        ` : ''}
+        <div class="top5-votes">${voteCount}</div>
       </div>
     `;
   }).join('');
 }
 
-function renderToolRow(tool) {
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  
-  return `
-    <div class="tool-row" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')">
-      <div class="tool-vote" onclick="event.stopPropagation()" data-tool-id="${tool.id}">
-        <div class="vote-count" id="voteCount-${tool.id}">${tool.votes}</div>
-        <div class="vote-buttons">
-          <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
-                  onclick="vote('${tool.id}', 'up')">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-          <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
-                  onclick="vote('${tool.id}', 'down')">
-            <i class="fas fa-arrow-down"></i>
-          </button>
-        </div>
-      </div>
-      <div class="tool-info">
-        <div class="tool-category">${getCategoryName(tool.category)}</div>
-        <div class="tool-name">${tool.name}</div>
-        <div class="tool-desc">${description}</div>
-      </div>
-      <div class="tool-meta" onclick="event.stopPropagation()">
-        <div class="tool-price">${tool.priceDisplay[currentLang]}</div>
-        <div class="tool-actions">
-          <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" 
-                  onclick="toggleFavorite('${tool.id}')">
-            <i class="fas fa-star"></i>
-          </button>
-          <a href="${tool.link}" target="_blank" rel="noopener noreferrer" 
-             class="tool-action-btn open">
-            <i class="fas fa-external-link-alt"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
+// ==============================================
+// HELPER FUNKTIONEN
+// ==============================================
+
+function handleVote(toolId, voteType, event) {
+  event.stopPropagation();
+  submitVote(toolId, voteType);
 }
 
-function renderFilterChips() {
-  const filters = [
-    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
-    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
-    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
-    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
-    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
-    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
-    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } }
-  ];
+function toggleGroup(header) {
+  const content = header.nextElementSibling;
+  const toggle = header.querySelector('.group-toggle');
+  const isExpanded = content.classList.contains('expanded');
   
-  document.getElementById('filterChips').innerHTML = filters.map(filter => `
-    <div class="filter-chip ${currentCategory === filter.id ? 'active' : ''}" 
-         onclick="setActiveFilter('${filter.id}')">
-      <i class="${filter.icon}"></i>
-      <span>${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
-    </div>
-  `).join('');
+  content.classList.toggle('expanded');
+  toggle.classList.toggle('expanded');
 }
 
-// ==============================================
-// TOOL DRAWER
-// ==============================================
-function openToolDrawer(toolId) {
+function setFilter(filterId) {
+  activeFilter = filterId;
+  
+  // Update Chips
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.filter === filterId);
+  });
+  
+  // Filter Tools
+  const groups = document.querySelectorAll('.tool-group');
+  groups.forEach(group => {
+    const category = group.dataset.category;
+    const tools = group.querySelectorAll('.tool-row');
+    
+    if (filterId === 'all') {
+      group.style.display = '';
+      tools.forEach(t => t.style.display = '');
+    } else if (filterId === 'free') {
+      const hasFreeTool = Array.from(tools).some(t => {
+        const toolId = t.dataset.toolId;
+        const tool = aiTools.find(at => at.id === toolId);
+        return tool && (tool.price === 'free' || tool.price === 'freemium');
+      });
+      group.style.display = hasFreeTool ? '' : 'none';
+      tools.forEach(t => {
+        const toolId = t.dataset.toolId;
+        const tool = aiTools.find(at => at.id === toolId);
+        t.style.display = (tool && (tool.price === 'free' || tool.price === 'freemium')) ? '' : 'none';
+      });
+    } else if (filterId === 'popular') {
+      const hasPopularTool = Array.from(tools).some(t => {
+        const toolId = t.dataset.toolId;
+        const tool = aiTools.find(at => at.id === toolId);
+        return tool && tool.badge === 'popular';
+      });
+      group.style.display = hasPopularTool ? '' : 'none';
+      tools.forEach(t => {
+        const toolId = t.dataset.toolId;
+        const tool = aiTools.find(at => at.id === toolId);
+        t.style.display = (tool && tool.badge === 'popular') ? '' : 'none';
+      });
+    } else {
+      group.style.display = category === filterId ? '' : 'none';
+    }
+  });
+}
+
+function filterTools(query) {
+  if (!query) {
+    document.querySelectorAll('.tool-row').forEach(row => {
+      row.style.display = '';
+    });
+    return;
+  }
+  
+  document.querySelectorAll('.tool-row').forEach(row => {
+    const toolId = row.dataset.toolId;
+    const tool = aiTools.find(t => t.id === toolId);
+    
+    if (!tool) {
+      row.style.display = 'none';
+      return;
+    }
+    
+    const searchText = [
+      tool.name,
+      tool.d[0],
+      tool.d[1],
+      getCategoryName(tool.cat),
+      ...(tool.tags || [])
+    ].join(' ').toLowerCase();
+    
+    row.style.display = searchText.includes(query) ? '' : 'none';
+  });
+}
+
+function searchByExample(element) {
+  const text = element.textContent;
+  const searchInput = document.getElementById('heroSearch');
+  if (searchInput) {
+    searchInput.value = text;
+    filterTools(text.toLowerCase());
+  }
+}
+
+function scrollToTool(toolId) {
+  const toolRow = document.querySelector(`[data-tool-id="${toolId}"]`);
+  if (toolRow) {
+    // Öffne Gruppe falls geschlossen
+    const group = toolRow.closest('.tool-group');
+    if (group) {
+      const content = group.querySelector('.group-content');
+      const toggle = group.querySelector('.group-toggle');
+      if (!content.classList.contains('expanded')) {
+        content.classList.add('expanded');
+        toggle.classList.add('expanded');
+      }
+    }
+    
+    // Scroll zu Tool
+    toolRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Highlight
+    toolRow.style.background = 'rgba(0, 212, 255, 0.1)';
+    setTimeout(() => {
+      toolRow.style.background = '';
+    }, 2000);
+  }
+}
+
+function openTool(link, event) {
+  if (event) event.stopPropagation();
+  window.open(link, '_blank', 'noopener,noreferrer');
+}
+
+function openToolDetail(toolId) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
-
-  isDrawerOpen = true;
   
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  const pros = tool.pros[currentLang] || [];
-  const cons = tool.cons[currentLang] || [];
-  
-  document.getElementById('drawerTitle').textContent = tool.name;
-  document.getElementById('drawerContent').innerHTML = `
-    <div style="margin-bottom:24px">
-      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px">
-        <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem">
-          ${getCategoryIcon(tool.category)}
-        </div>
-        <div style="flex:1">
-          <h3 style="font-size:1.6rem;font-weight:800;color:var(--text-primary);margin-bottom:8px">
-            ${tool.name}
-          </h3>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-            <span class="peek-badge" style="background:rgba(0,212,255,.15);color:var(--primary);border:1px solid rgba(0,212,255,.3)">
-              <i class="fas fa-tag"></i> ${getCategoryName(tool.category)}
-            </span>
-            <span class="peek-badge price">
-              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
-              ${tool.priceDisplay[currentLang]}
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      <div style="background:var(--bg-hover);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);" data-tool-id="${tool.id}">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-weight:700;color:var(--text-primary);">
-              ${currentLang === 'de' ? 'Community-Bewertung' : 'Community Rating'}:
-            </span>
-            <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:1.5rem;">${tool.votes}</div>
-            <div class="vote-buttons" style="display:flex;gap:6px;">
-              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
-                      onclick="vote('${tool.id}', 'up')">
-                <i class="fas fa-arrow-up"></i>
-              </button>
-              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
-                      onclick="vote('${tool.id}', 'down')">
-                <i class="fas fa-arrow-down"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <p style="color:var(--text-secondary);line-height:1.6;margin-bottom:24px">${description}</p>
-      
-      <div style="display:flex;gap:12px;margin-bottom:24px">
-        <button class="dock-action-btn primary" 
-                onclick="window.open('${tool.link}', '_blank')" 
-                style="flex:1">
-          <i class="fas fa-external-link-alt"></i>
-          ${currentLang === 'de' ? 'Tool öffnen' : 'Open Tool'}
-        </button>
-        <button class="dock-action-btn secondary ${isFavorite(tool.id) ? 'active' : ''}" 
-                onclick="toggleFavorite('${tool.id}')" 
-                style="width:auto">
-          ${isFavorite(tool.id) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>'}
-        </button>
-      </div>
-    </div>
-    
-    ${pros.length > 0 || cons.length > 0 ? `
-      <div style="margin-bottom:24px">
-        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
-          <i class="fas fa-balance-scale"></i>
-          ${currentLang === 'de' ? 'Vor- & Nachteile' : 'Pros & Cons'}
-        </h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          ${pros.length > 0 ? `
-            <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:16px">
-              <h5 style="color:var(--success);font-weight:700;margin-bottom:8px">
-                <i class="fas fa-check-circle"></i>
-                ${currentLang === 'de' ? 'Vorteile' : 'Pros'}
-              </h5>
-              <ul style="color:var(--text-secondary);padding-left:20px">
-                ${pros.map(pro => `<li>${pro}</li>`).join('')}
-              </ul>
-            </div>
-          ` : ''}
-          ${cons.length > 0 ? `
-            <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);padding:16px">
-              <h5 style="color:var(--error);font-weight:700;margin-bottom:8px">
-                <i class="fas fa-times-circle"></i>
-                ${currentLang === 'de' ? 'Nachteile' : 'Cons'}
-              </h5>
-              <ul style="color:var(--text-secondary);padding-left:20px">
-                ${cons.map(con => `<li>${con}</li>`).join('')}
-              </ul>
-            </div>
-          ` : ''}
-        </div>
-      </div>
-    ` : ''}
-  `;
-  
-  document.getElementById('drawerOverlay').classList.add('active');
-  document.getElementById('drawer').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  // Öffne Link
+  window.open(tool.link, '_blank', 'noopener,noreferrer');
 }
 
-function closeToolDrawer() {
-  isDrawerOpen = false;
-  document.getElementById('drawerOverlay').classList.remove('active');
-  document.getElementById('drawer').classList.remove('active');
-  document.body.style.overflow = '';
+function toggleFavorite(toolId, event) {
+  if (event) event.stopPropagation();
+  
+  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const index = favorites.indexOf(toolId);
+  
+  if (index > -1) {
+    favorites.splice(index, 1);
+    showNotification('Aus Favoriten entfernt', 'info');
+  } else {
+    favorites.push(toolId);
+    showNotification('Zu Favoriten hinzugefügt', 'success');
+  }
+  
+  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
+  
+  // Update Button
+  const btn = event.target.closest('.tool-action-btn');
+  btn.classList.toggle('active');
 }
 
-// ==============================================
-// HILFSFUNKTIONEN
-// ==============================================
+function toggleCompare(toolId, event) {
+  if (event) event.stopPropagation();
+  
+  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  const index = comparison.indexOf(toolId);
+  
+  if (index > -1) {
+    comparison.splice(index, 1);
+    showNotification('Aus Vergleich entfernt', 'info');
+  } else {
+    if (comparison.length >= 5) {
+      showNotification('Maximal 5 Tools im Vergleich', 'error');
+      return;
+    }
+    comparison.push(toolId);
+    showNotification('Zu Vergleich hinzugefügt', 'success');
+  }
+  
+  localStorage.setItem('aiComparison', JSON.stringify(comparison));
+  
+  // Update Button
+  const btn = event.target.closest('.tool-action-btn');
+  btn.classList.toggle('active');
+}
+
+function isFav(toolId) {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  return favorites.includes(toolId);
+}
+
+function isInComp(toolId) {
+  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
+  return comparison.includes(toolId);
+}
+
 function getCategoryIcon(category) {
   const icons = {
     text: '✍️',
@@ -2474,62 +2182,61 @@ function getCategoryIcon(category) {
 
 function getCategoryName(category) {
   const names = {
-    de: { text: 'Text', image: 'Bild', code: 'Code', video: 'Video', audio: 'Audio', business: 'Business' },
-    en: { text: 'Text', image: 'Image', code: 'Code', video: 'Video', audio: 'Audio', business: 'Business' }
+    de: {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio',
+      business: 'Business'
+    },
+    en: {
+      text: 'Text',
+      image: 'Image',
+      code: 'Code',
+      video: 'Video',
+      audio: 'Audio',
+      business: 'Business'
+    }
   };
   return names[currentLang][category] || category;
 }
 
-function isFavorite(toolId) {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  return favorites.includes(toolId);
+function getBadgeText(badge) {
+  const badges = {
+    de: {
+      popular: 'Beliebt',
+      new: 'Neu',
+      free: 'Kostenlos',
+      ltd: 'LTD'
+    },
+    en: {
+      popular: 'Popular',
+      new: 'New',
+      free: 'Free',
+      ltd: 'LTD'
+    }
+  };
+  return badges[currentLang][badge] || badge;
 }
 
-function toggleFavorite(toolId) {
-  let favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+function toggleLanguage() {
+  currentLang = currentLang === 'de' ? 'en' : 'de';
+  document.getElementById('currentLang').textContent = currentLang.toUpperCase();
   
-  if (favorites.includes(toolId)) {
-    favorites = favorites.filter(id => id !== toolId);
-    showNotification(
-      currentLang === 'de' ? 'Aus Favoriten entfernt' : 'Removed from favorites',
-      'info'
-    );
-  } else {
-    favorites.push(toolId);
-    showNotification(
-      currentLang === 'de' ? 'Zu Favoriten hinzugefügt' : 'Added to favorites',
-      'success'
-    );
-  }
+  // Update alle Texte
+  document.querySelectorAll('[data-de]').forEach(el => {
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = el.dataset[`placeholder${currentLang === 'de' ? 'De' : 'En'}`] || el.dataset[currentLang];
+    } else {
+      el.textContent = el.dataset[currentLang];
+    }
+  });
   
-  localStorage.setItem('aiFavorites', JSON.stringify(favorites));
-  updateFavoritesBadge();
-  updateFavoritesDrawer();
-}
-
-function updateFavoritesBadge() {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const badge = document.getElementById('floatingFavoritesBadge');
-  if (badge) {
-    badge.textContent = favorites.length;
-    badge.style.display = favorites.length > 0 ? 'flex' : 'none';
-  }
-}
-
-function updateFavoritesDrawer() {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  
-  document.getElementById('favoriteDock').innerHTML = favorites.map(toolId => {
-    const tool = aiTools.find(t => t.id === toolId);
-    return tool ? `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
-        ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation();toggleFavorite('${toolId}')">
-          <i class="fas fa-times"></i>
-        </div>
-      </div>
-    ` : '';
-  }).join('');
+  // Re-render für kategorie-abhängige Texte
+  renderFilterChips();
+  renderToolGroups();
+  updateTop5();
 }
 
 function showNotification(message, type = 'info') {
@@ -2538,50 +2245,13 @@ function showNotification(message, type = 'info') {
   notification.innerHTML = `
     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
     <span>${message}</span>
+    <button class="notification-close" onclick="this.parentElement.remove()">
+      <i class="fas fa-times"></i>
+    </button>
   `;
   document.body.appendChild(notification);
+  
   setTimeout(() => notification.remove(), 3000);
-}
-
-function setActiveFilter(filterId) {
-  currentCategory = filterId;
-  renderFilterChips();
-  renderToolGroups();
-}
-
-function toggleGroup(category) {
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
-  expandedGroups[category] = !expandedGroups[category];
-  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
-  renderToolGroups();
-}
-
-function expandGroup(category) {
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
-  expandedGroups[category] = true;
-  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
-  renderToolGroups();
-}
-
-function toggleLanguage() {
-  currentLang = currentLang === 'de' ? 'en' : 'de';
-  document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
-  renderFilterChips();
-  renderTop5();
-  renderToolGroups();
-}
-
-function openFavoritesDrawer() {
-  updateFavoritesDrawer();
-  document.getElementById('favoritesOverlay').classList.add('active');
-  document.getElementById('favoritesDrawer').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeFavoritesDrawer() {
-  document.getElementById('favoritesOverlay').classList.remove('active');
-  document.getElementById('favoritesDrawer').classList.remove('active');
-  document.body.style.overflow = '';
 }
 
 function openModal(modalId) {
@@ -2597,110 +2267,54 @@ function closeModal(modalId) {
 }
 
 // ==============================================
-// EVENT-LISTENER SETUP
+// COOKIE CONSENT
 // ==============================================
-function setupEventListeners() {
-  document.getElementById('langToggle')?.addEventListener('click', toggleLanguage);
-  document.getElementById('drawerClose')?.addEventListener('click', closeToolDrawer);
-  document.getElementById('drawerOverlay')?.addEventListener('click', closeToolDrawer);
-  document.getElementById('floatingFavoritesBtn')?.addEventListener('click', openFavoritesDrawer);
-  document.getElementById('favoritesClose')?.addEventListener('click', closeFavoritesDrawer);
-  document.getElementById('favoritesOverlay')?.addEventListener('click', closeFavoritesDrawer);
-  
-  document.getElementById('clearFavorites')?.addEventListener('click', () => {
-    localStorage.setItem('aiFavorites', JSON.stringify([]));
-    updateFavoritesDrawer();
-    updateFavoritesBadge();
-    showNotification(
-      currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared',
-      'info'
-    );
-  });
-  
-  document.querySelectorAll('.density-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('.density-btn').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      document.body.className = `density-${button.dataset.density}`;
-    });
-  });
-  
-  document.getElementById('imprintLink')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('imprintModal');
-  });
-  
-  document.getElementById('privacyLink')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('privacyModal');
-  });
-  
-  document.getElementById('privacyLinkCookie')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal('privacyModal');
-  });
-  
-  document.getElementById('imprintModalClose')?.addEventListener('click', () => closeModal('imprintModal'));
-  document.getElementById('imprintModalOverlay')?.addEventListener('click', () => closeModal('imprintModal'));
-  document.getElementById('privacyModalClose')?.addEventListener('click', () => closeModal('privacyModal'));
-  document.getElementById('privacyModalOverlay')?.addEventListener('click', () => closeModal('privacyModal'));
-  
-  document.getElementById('cookieSettings')?.addEventListener('click', () => openModal('cookieSettingsModal'));
-  document.getElementById('cookieDetailsBtn')?.addEventListener('click', () => openModal('cookieSettingsModal'));
-  document.getElementById('cookieSettingsModalClose')?.addEventListener('click', () => closeModal('cookieSettingsModal'));
-  document.getElementById('cookieSettingsModalOverlay')?.addEventListener('click', () => closeModal('cookieSettingsModal'));
-  
-  document.getElementById('cookieAccept')?.addEventListener('click', () => {
-    localStorage.setItem('cookieConsent', 'accepted');
-    document.getElementById('cookieConsent').classList.remove('active');
-    showNotification('Cookies akzeptiert', 'success');
-  });
-  
-  document.getElementById('cookieDecline')?.addEventListener('click', () => {
-    localStorage.setItem('cookieConsent', 'declined');
-    document.getElementById('cookieConsent').classList.remove('active');
-    showNotification('Cookies abgelehnt', 'info');
-  });
-  
-  document.getElementById('backToTop')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-  
-  window.addEventListener('scroll', () => {
-    const backToTop = document.getElementById('backToTop');
-    if (window.scrollY > 300 && window.innerWidth <= 768) {
-      backToTop?.classList.add('visible');
-    } else {
-      backToTop?.classList.remove('visible');
-    }
-  });
-}
 
-// ==============================================
-// INITIALISIERUNG
-// ==============================================
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('🚀 App starting...');
-  
-  await loadTools();
-  setupEventListeners();
-  
+function checkCookieConsent() {
   const consent = localStorage.getItem('cookieConsent');
   if (!consent) {
     setTimeout(() => {
-      document.getElementById('cookieConsent')?.classList.add('active');
+      document.getElementById('cookieConsent').classList.add('active');
     }, 1000);
+  } else if (consent === 'accepted') {
+    enableAnalytics();
   }
-  
-  console.log('✅ App ready');
+}
+
+function handleCookieAccept() {
+  localStorage.setItem('cookieConsent', 'accepted');
+  document.getElementById('cookieConsent').classList.remove('active');
+  enableAnalytics();
+  showNotification('Cookie-Einstellungen gespeichert', 'success');
+}
+
+function handleCookieDecline() {
+  localStorage.setItem('cookieConsent', 'declined');
+  document.getElementById('cookieConsent').classList.remove('active');
+  showNotification('Cookies abgelehnt', 'info');
+}
+
+function enableAnalytics() {
+  window.cookiePreferences.analytics = true;
+  // Hier Google Analytics Code einfügen falls gewünscht
+  console.log('Analytics aktiviert');
+}
+
+// ==============================================
+// INIT
+// ==============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 AI Searcher wird initialisiert...');
+  loadData();
 });
 
+// Cleanup bei Page Unload
 window.addEventListener('beforeunload', () => {
-  if (realtimeChannel && supabase) {
+  if (realtimeChannel) {
     supabase.removeChannel(realtimeChannel);
   }
 });
 </script>
-
 </body>
 </html>
