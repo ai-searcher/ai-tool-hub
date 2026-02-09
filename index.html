@@ -2604,7 +2604,7 @@ async function loadTools() {
             liveVotes[item.tool_id] = {
               upvotes: parseInt(item.upvotes) || 0,
               downvotes: parseInt(item.downvotes) || 0,
-              totalVotes: (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
+              totalVotes: item.total_votes || (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
             };
           });
         } else if (error) {
