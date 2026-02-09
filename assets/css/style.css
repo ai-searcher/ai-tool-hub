@@ -243,7 +243,7 @@ body.light-mode .toggle-thumb .fa-sun {
     text-align: center;
     font-size: var(--text-xl);
     margin-bottom: var(--spacing-12);
-    height: 40px;
+    height: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -263,7 +263,7 @@ body.light-mode .toggle-thumb .fa-sun {
 .slogan-words {
     position: relative;
     width: 100%;
-    height: 40px;
+    height: 50px;
     display: flex;
     justify-content: center;
     overflow: hidden;
@@ -1198,14 +1198,14 @@ body.light-mode .toggle-thumb .fa-sun {
     
     .hero-slogan {
     font-size: var(--text-lg);
-    height: 35px;
+    height: 50px;
     flex-direction: column;
     gap: 0;
     }
 
     .slogan-words {
      width: 100%;
-     height: 30px;
+     height: 40px;
     }
 
     .word {
