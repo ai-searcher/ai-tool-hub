@@ -107,7 +107,7 @@ async function initApp() {
         hideLoadingSpinner();
         
         console.log('✅ Application initialized successfully');
-        showNotification('AI Tool Hub geladen!', 'success');
+        showNotification();
         
     } catch (error) {
         console.error('❌ Error initializing app:', error);
