@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com;base-uri 'self';frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://doicozkpdbkyvdkpujoh.supabase.co;base-uri 'self';frame-ancestors 'none'">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -22,6 +22,8 @@
 <meta name="twitter:title" content="AI Searcher">
 <meta name="twitter:description" content="Finde in 2 Klicks dein perfektes KI-Tool">
 <script>window.cookiePreferences=window.cookiePreferences||{};window.cookiePreferences.analytics=!1</script>
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -2304,6 +2306,145 @@ input:checked + .slider:before {
 
 <script>
 // ==============================================
+// SUPABASE INITIALISIERUNG
+// ==============================================
+const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
+
+// Supabase Client initialisieren
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// User ID generieren (anonym)
+function getOrCreateUserId() {
+  let userId = localStorage.getItem('aiVoterUserId');
+  if (!userId) {
+    userId = 'voter_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('aiVoterUserId', userId);
+  }
+  return userId;
+}
+
+const userId = getOrCreateUserId();
+
+// ==============================================
+// SUPABASE VOTE FUNKTIONEN
+// ==============================================
+async function supabaseVote(toolId, direction) {
+  try {
+    const voteValue = direction === 'up' ? 1 : -1;
+    
+    // RPC-Funktion aufrufen
+    const { data, error } = await supabaseClient.rpc('set_tool_vote', {
+      p_tool_id: toolId,
+      p_user_hash: userId,
+      p_vote_value: voteValue
+    });
+    
+    if (error) throw error;
+    
+    return data;
+  } catch (error) {
+    console.error('Supabase vote error:', error);
+    throw error;
+  }
+}
+
+async function supabaseGetToolVotes(toolId) {
+  try {
+    const { data, error } = await supabaseClient.rpc('get_tool_votes', {
+      p_tool_id: toolId
+    });
+    
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Supabase get votes error:', error);
+    return { total_votes: 0, upvotes: 0, downvotes: 0, score: 0 };
+  }
+}
+
+async function supabaseGetUserVote(toolId) {
+  try {
+    const { data, error } = await supabaseClient.rpc('get_user_vote', {
+      p_tool_id: toolId,
+      p_user_hash: userId
+    });
+    
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Supabase get user vote error:', error);
+    return { user_vote: 0, has_voted: false };
+  }
+}
+
+async function supabaseGetTopTools(limit = 5) {
+  try {
+    const { data, error } = await supabaseClient.rpc('get_top_tools', {
+      limit_count: limit
+    });
+    
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Supabase get top tools error:', error);
+    return [];
+  }
+}
+
+function updateVoteDisplay(toolId, votes, userVote, direction) {
+  // Update list vote count
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountElement) {
+    voteCountElement.textContent = Math.max(votes, 0);
+    voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      voteCountElement.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update drawer vote count
+  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (drawerVoteCount) {
+    drawerVoteCount.textContent = Math.max(votes, 0);
+    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      drawerVoteCount.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update vote buttons in list view
+  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
+  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
+  
+  if (listUpButton) {
+    listUpButton.classList.remove('active');
+    if (userVote === 1) listUpButton.classList.add('active');
+  }
+  
+  if (listDownButton) {
+    listDownButton.classList.remove('active');
+    if (userVote === -1) listDownButton.classList.add('active');
+  }
+  
+  // Update vote buttons in drawer (if open)
+  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
+  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
+  
+  if (drawerUpButton) {
+    drawerUpButton.classList.remove('active');
+    if (userVote === 1) drawerUpButton.classList.add('active');
+  }
+  
+  if (drawerDownButton) {
+    drawerDownButton.classList.remove('active');
+    if (userVote === -1) drawerDownButton.classList.add('active');
+  }
+  
+  updateTop5Vote(toolId, votes);
+}
+
+// ==============================================
 // GLOBALE VARIABLEN
 // ==============================================
 let aiTools = [];
@@ -2476,10 +2617,28 @@ async function loadTools() {
     }
     
     const rawData = await response.json();
-    const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     
-    aiTools = rawData.map((tool, index) => {
-      const votes = voteData[tool.id] || {};
+    // Parallele API Calls für alle Tools
+    const toolPromises = rawData.map(async (tool, index) => {
+      // Votes von Supabase holen
+      let votes = { total_votes: 0, upvotes: 0, downvotes: 0, score: 0 };
+      let userVoteData = { user_vote: 0 };
+      
+      try {
+        votes = await supabaseGetToolVotes(tool.id);
+        userVoteData = await supabaseGetUserVote(tool.id);
+      } catch (error) {
+        // Fallback zu localStorage
+        const localVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+        const toolVotes = localVotes[tool.id] || {};
+        votes = {
+          score: toolVotes.totalVotes || 0,
+          upvotes: toolVotes.upvotes || 0,
+          downvotes: toolVotes.downvotes || 0
+        };
+        userVoteData = { user_vote: toolVotes.userVote || 0 };
+      }
+      
       return {
         id: tool.id,
         name: tool.name,
@@ -2510,16 +2669,18 @@ async function loadTools() {
         aiScore: 90,
         popularityScore: 90,
         rankingHistory: [],
-        votes: votes.totalVotes || 0,
-        userVote: votes.userVote || 0,
+        votes: votes.score || 0,
+        userVote: userVoteData.user_vote || 0,
         upvotes: votes.upvotes || 0,
         downvotes: votes.downvotes || 0,
         pricing: { de: `Modell: ${tool.price}`, en: `Model: ${tool.price}` }
       };
     });
     
+    aiTools = await Promise.all(toolPromises);
+    
     calculateToolScores();
-    renderTop5();
+    await renderTop5();
     renderFilterChips();
     renderToolGroups();
     updateFavoritesBadge();
@@ -2555,15 +2716,38 @@ function calculateToolScores() {
   });
 }
 
-function renderTop5() {
-  const top5 = [...aiTools]
-    .sort((a, b) => {
-      const aVotes = getToolVotes(a) + BASELINE_VOTES;
-      const bVotes = getToolVotes(b) + BASELINE_VOTES;
-      if (bVotes !== aVotes) return bVotes - aVotes;
-      return (b.popularityScore || 0) - (a.popularityScore || 0);
-    })
-    .slice(0, 5);
+async function renderTop5() {
+  let top5 = [];
+  
+  try {
+    // Versuche Top 5 von Supabase zu holen
+    const supabaseTop5 = await supabaseGetTopTools(5);
+    
+    if (supabaseTop5 && supabaseTop5.length > 0) {
+      top5 = supabaseTop5.map(item => {
+        const tool = aiTools.find(t => t.id === item.tool_id);
+        if (tool) {
+          return {
+            ...tool,
+            votes: item.score || 0,
+            supabaseData: item
+          };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+  } catch (error) {
+    console.log('Using local top 5 calculation:', error);
+    // Fallback zu lokaler Berechnung
+    top5 = [...aiTools]
+      .sort((a, b) => {
+        const aVotes = getToolVotes(a) + BASELINE_VOTES;
+        const bVotes = getToolVotes(b) + BASELINE_VOTES;
+        if (bVotes !== aVotes) return bVotes - aVotes;
+        return (b.popularityScore || 0) - (a.popularityScore || 0);
+      })
+      .slice(0, 5);
+  }
   
   document.getElementById('top5List').innerHTML = top5.map((tool, index) => {
     const description = currentLang === 'de' ? tool.description.de : tool.description.en;
@@ -2579,7 +2763,7 @@ function renderTop5() {
           <div class="top5-name">${tool.name}</div>
           <div class="top5-category">${getCategoryName(tool.category)}</div>
         </div>
-        <div class="top5-votes" id="top5Votes-${tool.id}">${getToolVotes(tool)}</div>
+        <div class="top5-votes" id="top5Votes-${tool.id}">${tool.votes}</div>
         <div class="top5-quickpeek">${quickPeek}</div>
       </div>
     `;
@@ -2762,24 +2946,54 @@ async function vote(toolId, direction) {
   const voteValue = direction === 'up' ? 1 : -1;
   
   if (currentVote === voteValue) {
-    // Vote entfernen
-    tool.userVote = 0;
-    tool.votes -= voteValue;
-    if (direction === 'up') tool.upvotes -= 1;
-    else tool.downvotes -= 1;
+    // Vote entfernen (0 senden)
+    try {
+      const result = await supabaseVote(toolId, 'neutral');
+      
+      tool.userVote = 0;
+      tool.votes = result.stats.score;
+      tool.upvotes = result.stats.upvotes;
+      tool.downvotes = result.stats.downvotes;
+      
+      updateVoteDisplay(toolId, tool.votes, tool.userVote, direction);
+      updateTop5Vote(toolId, tool.votes);
+      
+      showNotification(
+        currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓',
+        'success'
+      );
+    } catch (error) {
+      showNotification(
+        currentLang === 'de' ? 'Fehler beim Entfernen des Votes' : 'Error removing vote',
+        'error'
+      );
+    }
   } else {
-    // Vote ändern oder hinzufügen
-    const oldVote = tool.userVote || 0;
-    tool.userVote = voteValue;
-    tool.votes = tool.votes - oldVote + voteValue;
-    
-    if (oldVote === 1) tool.upvotes -= 1;
-    else if (oldVote === -1) tool.downvotes -= 1;
-    
-    if (direction === 'up') tool.upvotes += 1;
-    else tool.downvotes += 1;
+    // Vote setzen/ändern
+    try {
+      const result = await supabaseVote(toolId, direction);
+      
+      tool.userVote = voteValue;
+      tool.votes = result.stats.score;
+      tool.upvotes = result.stats.upvotes;
+      tool.downvotes = result.stats.downvotes;
+      
+      updateVoteDisplay(toolId, tool.votes, tool.userVote, direction);
+      updateTop5Vote(toolId, tool.votes);
+      
+      showNotification(
+        currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
+        'success'
+      );
+    } catch (error) {
+      showNotification(
+        currentLang === 'de' ? 'Fehler beim Speichern des Votes' : 'Error saving vote',
+        'error'
+      );
+    }
   }
   
+  // Lokal speichern für Fallback
   const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
   voteData[toolId] = {
     userVote: tool.userVote,
@@ -2788,63 +3002,6 @@ async function vote(toolId, direction) {
     downvotes: tool.downvotes
   };
   localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
-  
-  // Update list vote count
-  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountElement) {
-    voteCountElement.textContent = Math.max(tool.votes, 0);
-    voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      voteCountElement.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update drawer vote count
-  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
-  if (drawerVoteCount) {
-    drawerVoteCount.textContent = Math.max(tool.votes, 0);
-    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      drawerVoteCount.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update vote buttons in list view
-  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
-  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
-  
-  if (listUpButton) {
-    listUpButton.classList.remove('active');
-    if (tool.userVote === 1) listUpButton.classList.add('active');
-  }
-  
-  if (listDownButton) {
-    listDownButton.classList.remove('active');
-    if (tool.userVote === -1) listDownButton.classList.add('active');
-  }
-  
-  // Update vote buttons in drawer (if open)
-  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
-  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
-  
-  if (drawerUpButton) {
-    drawerUpButton.classList.remove('active');
-    if (tool.userVote === 1) drawerUpButton.classList.add('active');
-  }
-  
-  if (drawerDownButton) {
-    drawerDownButton.classList.remove('active');
-    if (tool.userVote === -1) drawerDownButton.classList.add('active');
-  }
-  
-  updateTop5Vote(toolId, tool.votes);
-  
-  showNotification(
-    currentVote === voteValue 
-      ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
-      : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
-    'success'
-  );
 }
 
 function toggleFavorite(toolId) {
