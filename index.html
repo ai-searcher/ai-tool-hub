@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co;base-uri 'self';frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co wss://*.supabase.co;base-uri 'self';frame-ancestors 'none'">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -164,7 +162,6 @@ body::before {
   66% { transform: translate(-20px,20px) scale(.8); }
 }
 
-/* Cookie Consent - FIXED */
 .cookie-consent {
   position: fixed;
   bottom: 0;
@@ -606,18 +603,10 @@ body::before {
   animation: pulseGlow .6s ease;
 }
 
-.top5-quickpeek {
-  font-size: .7rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .top5-quickpeek { display: block; }
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0,212,255,.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
 }
 
 .filter-chips {
@@ -767,28 +756,6 @@ body::before {
   max-height: 5000px;
 }
 
-.info-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .75rem;
-  transition: var(--transition);
-  margin-left: 6px;
-}
-
-.info-btn:hover {
-  color: var(--primary);
-  background: rgba(0,212,255,.1);
-  transform: scale(1.1);
-}
-
 .tool-row {
   height: var(--tool-row-height);
   display: grid;
@@ -809,11 +776,6 @@ body::before {
   background: var(--bg-hover);
 }
 
-.tool-row:hover .tool-peek {
-  opacity: 1;
-  transform: translateY(-50%) scale(1);
-}
-
 .tool-vote {
   display: flex;
   flex-direction: column;
@@ -830,14 +792,14 @@ body::before {
   transition: all .3s ease;
 }
 
-.vote-count.moving-up {
-  color: var(--success);
+.vote-count.changed {
   animation: countUp .5s ease;
 }
 
-.vote-count.moving-down {
-  color: var(--error);
-  animation: countDown .5s ease;
+@keyframes countUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .vote-buttons {
@@ -960,6 +922,7 @@ body::before {
   align-items: center;
   justify-content: center;
   font-size: .9rem;
+  text-decoration: none;
 }
 
 .tool-action-btn:hover {
@@ -974,38 +937,10 @@ body::before {
   background: rgba(251,191,36,.1);
 }
 
-.tool-action-btn.compare:hover,
-.tool-action-btn.compare.active {
-  color: var(--primary);
-  border-color: var(--primary);
-  background: rgba(0,212,255,.1);
-}
-
 .tool-action-btn.open:hover {
   color: var(--success);
   border-color: var(--success);
   background: rgba(16,185,129,.1);
-}
-
-.collapse-button {
-  padding: 12px 20px;
-  text-align: center;
-  border-top: 1px solid var(--border);
-  cursor: pointer;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: calc(.85rem*var(--current-density));
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: var(--bg-card);
-  margin: 0;
-}
-
-.collapse-button:hover {
-  background: rgba(0,212,255,.05);
 }
 
 .show-more {
@@ -1025,128 +960,6 @@ body::before {
 
 .show-more:hover {
   background: rgba(0,212,255,.05);
-}
-
-.tool-peek {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%) scale(.95);
-  width: 300px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow-hover);
-  z-index: 100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
-  margin-left: 20px;
-  animation: popIn .3s ease;
-}
-
-@keyframes popIn {
-  0% { transform: translateY(-50%) scale(.8); opacity: 0; }
-  100% { transform: translateY(-50%) scale(1); opacity: 1; }
-}
-
-.tool-peek::before {
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: var(--border);
-}
-
-.tool-peek::after {
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 7px solid transparent;
-  border-right-color: var(--bg-card);
-  margin-right: -1px;
-}
-
-.peek-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.peek-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.peek-name {
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-}
-
-.peek-category {
-  font-size: .7rem;
-  color: var(--primary);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-
-.peek-desc {
-  font-size: .85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.peek-meta {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.peek-badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: .75rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.peek-badge.price {
-  background: rgba(16,185,129,.15);
-  color: var(--success);
-  border: 1px solid rgba(16,185,129,.3);
-}
-
-.peek-badge.rating {
-  background: rgba(251,191,36,.15);
-  color: var(--gold);
-  border: 1px solid rgba(251,191,36,.3);
-}
-
-.peek-badge.ltd {
-  background: linear-gradient(135deg, #f59e0b, #ef4444);
-  color: #fff;
-  border: none;
 }
 
 .drawer-overlay {
@@ -1310,10 +1123,6 @@ body::before {
   border-color: var(--primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
-}
-
-@media (min-width: 769px) {
-  .back-to-top { display: none !important; }
 }
 
 .favorites-overlay {
@@ -1688,132 +1497,6 @@ input:checked + .slider:before {
   margin-bottom: 12px;
 }
 
-.category-info-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%) scale(.95);
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  z-index: 3002;
-  opacity: 0;
-  visibility: hidden;
-  transition: all .3s cubic-bezier(.4,0,.2,1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.category-info-modal.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%,-50%) scale(1);
-}
-
-.category-info-header {
-  padding: 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(0,212,255,.1), rgba(168,85,247,.1));
-}
-
-.category-info-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.category-info-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.category-info-close {
-  background: var(--bg-hover);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.category-info-close:hover {
-  background: var(--bg-dark);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.category-info-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.category-info-section {
-  margin-bottom: 24px;
-}
-
-.category-info-section h3 {
-  color: var(--primary);
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.category-info-section p {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-
-.category-info-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.category-info-tool {
-  padding: 8px 12px;
-  background: rgba(0,212,255,.1);
-  border: 1px solid rgba(0,212,255,.2);
-  border-radius: 8px;
-  color: var(--primary);
-  font-size: .85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.category-info-tool:hover {
-  background: rgba(0,212,255,.2);
-  transform: translateY(-2px);
-}
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1912,115 +1595,6 @@ input:checked + .slider:before {
   margin-bottom: 15px;
 }
 
-@keyframes countUp {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-@keyframes countDown {
-  0% { transform: scale(1); }
-  50% { transform: scale(.8); }
-  100% { transform: scale(1); }
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(0,212,255,.4); }
-  70% { box-shadow: 0 0 0 6px rgba(0,212,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
-}
-
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: var(--primary);
-  display: none;
-}
-
-.loading i {
-  font-size: 2.5rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
-@media (max-width: 1200px) {
-  :root { --drawer-width: 450px; }
-}
-
-@media (max-width: 992px) {
-  :root { --drawer-width: 400px; }
-  .sticky-header { height: var(--header-height); padding: 0 15px; }
-  .hero-area { height: 260px; padding: 0 15px; }
-  .hero-title { font-size: 2.4rem; margin-bottom: 20px; }
-  .hero-subtitle { font-size: 1rem; }
-  .hero-search-container { max-width: 500px; }
-  .site-title { font-size: 1.5rem; }
-}
-
-@media (max-width: 768px) {
-  :root { --drawer-width: 100%; --header-height: 60px; --hero-height: 240px; }
-  .main-content { padding: 15px; }
-  .tool-row { grid-template-columns: 1fr; height: auto; padding: 15px; gap: 12px; }
-  .tool-vote { flex-direction: row; justify-content: space-between; width: 100%; padding-right: 0; }
-  .tool-meta { flex-direction: row; justify-content: space-between; width: 100%; align-items: center; }
-  .cookie-content { flex-direction: column; text-align: center; }
-  .cookie-buttons { width: 100%; justify-content: center; }
-  .cookie-btn { flex: 1; min-width: 0; }
-  .tool-peek { display: none; }
-  .floating-favorites-btn { bottom: 80px; }
-  .hero-area { height: 220px; }
-  .hero-title { font-size: 2rem; margin-bottom: 16px; }
-  .hero-title::after { font-size: 1.5rem; right: -35px; }
-  .hero-subtitle { font-size: .95rem; }
-  .search-examples { gap: 12px; }
-  .search-example { font-size: .75rem; padding: 3px 10px; }
-  .footer-controls { gap: 12px; }
-  .site-title { font-size: 1.3rem; }
-  .cookie-consent { padding: 12px 15px; }
-  .cookie-content { flex-direction: column; gap: 10px; }
-  .cookie-text { min-width: 100%; text-align: center; }
-  .cookie-buttons { width: 100%; }
-}
-
-@media (max-width: 480px) {
-  .filter-chips { max-width: 100%; overflow-x: auto; }
-  .header-right { gap: 8px; }
-  .top5-list { gap: 6px; }
-  .top5-item { min-width: 140px; padding: 6px 8px; }
-  .top5-quickpeek { display: none; }
-  .hero-area { height: 200px; }
-  .hero-title { font-size: 1.8rem; }
-  .hero-title::after { font-size: 1.3rem; right: -30px; }
-  .hero-subtitle { font-size: .9rem; padding: 0 10px; }
-  .hero-omnibox-input { padding: 12px 16px; font-size: .95rem; }
-  .search-examples { gap: 8px; }
-  .search-example { font-size: .7rem; padding: 2px 8px; }
-  .footer-links { flex-direction: column; gap: 10px; }
-  .site-title { font-size: 1.1rem; }
-  .cookie-btn { padding: 8px 12px; font-size: .8rem; }
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--bg-card);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-hover);
-}
-
 .notification {
   position: fixed;
   bottom: 100px;
@@ -2060,16 +1634,83 @@ input:checked + .slider:before {
   color: var(--primary);
 }
 
-.notification-close {
-  background: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-  margin-left: 10px;
-  font-size: 1rem;
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--primary);
+  display: none;
 }
 
-/* Fix for iOS Safari viewport */
+.loading i {
+  font-size: 2.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.peek-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: .75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.peek-badge.price {
+  background: rgba(16,185,129,.15);
+  color: var(--success);
+  border: 1px solid rgba(16,185,129,.3);
+}
+
+@media (max-width: 768px) {
+  :root { --drawer-width: 100%; --header-height: 60px; --hero-height: 240px; }
+  .main-content { padding: 15px; }
+  .tool-row { grid-template-columns: 1fr; height: auto; padding: 15px; gap: 12px; }
+  .tool-vote { flex-direction: row; justify-content: space-between; width: 100%; padding-right: 0; }
+  .tool-meta { flex-direction: row; justify-content: space-between; width: 100%; align-items: center; }
+  .cookie-content { flex-direction: column; text-align: center; }
+  .cookie-buttons { width: 100%; justify-content: center; }
+  .cookie-btn { flex: 1; min-width: 0; }
+  .floating-favorites-btn { bottom: 80px; }
+  .hero-area { height: 220px; }
+  .hero-title { font-size: 2rem; margin-bottom: 16px; }
+  .hero-title::after { font-size: 1.5rem; right: -35px; }
+  .hero-subtitle { font-size: .95rem; }
+  .site-title { font-size: 1.3rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-area { height: 200px; }
+  .hero-title { font-size: 1.8rem; }
+  .hero-title::after { font-size: 1.3rem; right: -30px; }
+  .hero-subtitle { font-size: .9rem; padding: 0 10px; }
+  .hero-omnibox-input { padding: 12px 16px; font-size: .95rem; }
+  .site-title { font-size: 1.1rem; }
+  .cookie-btn { padding: 8px 12px; font-size: .8rem; }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-hover);
+}
+
 @supports (-webkit-touch-callout: none) {
   body {
     min-height: -webkit-fill-available;
@@ -2082,7 +1723,7 @@ input:checked + .slider:before {
 <div class="glow glow-2"></div>
 <div class="glow glow-3"></div>
 
-<!-- Cookie Consent - FIXED -->
+<!-- Cookie Consent -->
 <div class="cookie-consent" id="cookieConsent">
   <div class="cookie-content">
     <div class="cookie-text">
@@ -2192,19 +1833,6 @@ input:checked + .slider:before {
   <div class="footer-copyright" data-de="© 2026 AI Searcher. Alle Rechte vorbehalten." data-en="© 2026 AI Searcher. All rights reserved.">© 2026 AI Searcher. Alle Rechte vorbehalten.</div>
 </footer>
 
-<!-- Category Info Modal -->
-<div class="modal-overlay" id="categoryInfoModalOverlay"></div>
-<div class="category-info-modal" id="categoryInfoModal">
-  <div class="category-info-header">
-    <div class="category-info-title">
-      <div class="category-info-icon" id="categoryInfoIcon">🤖</div> 
-      <span id="categoryInfoTitle">Kategorie-Info</span>
-    </div>
-    <button class="category-info-close" id="categoryInfoModalClose"><i class="fas fa-times"></i></button>
-  </div>
-  <div class="category-info-content" id="categoryInfoContent"></div>
-</div>
-
 <!-- Tool Drawer -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="drawer" id="drawer">
@@ -2227,13 +1855,8 @@ input:checked + .slider:before {
       <div class="dock-label" data-de="Favoriten" data-en="Favorites">Favoriten</div>
       <div class="dock-items" id="favoriteDock"></div>
     </div>
-    <div class="dock-section">
-      <div class="dock-label" data-de="Vergleich" data-en="Compare">Vergleich</div>
-      <div class="dock-items" id="compareDock"></div>
-    </div>
     <div class="dock-actions">
       <button class="dock-action-btn secondary" id="clearFavorites" data-de="Leeren" data-en="Clear">Leeren</button>
-      <button class="dock-action-btn primary" id="compareAction" data-de="Vergleichen" data-en="Compare">Vergleichen</button>
     </div>
   </div>
 </div>
@@ -2257,24 +1880,13 @@ input:checked + .slider:before {
     <h3 data-de="Angaben gemäß § 5 DDG" data-en="Information according to § 5 DDG">Angaben gemäß § 5 DDG</h3>
     <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin</p>
     <h3 data-de="Kontakt" data-en="Contact">Kontakt</h3>
-    <p data-de="Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small>" data-en="Phone: +49 173 5489128 (No phone support)<br>Email: <a href='mailto:ai.tool.hub.contact@gmail.com'>ai.tool.hub.contact@gmail.com</a><br><small><i>Note: Support requests are handled exclusively by email.</i></small>">Telefon: +49 173 5489128 (Kein Telefonsupport)<br>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a><br><small><i>Hinweis: Supportanfragen werden ausschließlich per E-Mail bearbeitet.</i></small></p>
-    <h3 data-de="Aufsichtsbehörde" data-en="Supervisory Authority">Aufsichtsbehörde</h3>
-    <p data-de="Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland" data-en="State Media Authority North Rhine-Westphalia<br>Location: Germany">Landesanstalt für Medien Nordrhein-Westfalen<br>Sitz: Deutschland</p>
+    <p>E-Mail: <a href="mailto:ai.tool.hub.contact@gmail.com">ai.tool.hub.contact@gmail.com</a></p>
     <h3 data-de="Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV" data-en="Responsible for content according to § 18 para. 2 MStV">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
     <p>Qerim Banulla<br>Europaring 90<br>53757 Sankt Augustin</p>
-    <h3 data-de="Haftungsausschluss & Streitbeilegung" data-en="Disclaimer & Dispute Resolution">Haftungsausschluss & Streitbeilegung</h3>
-    <p data-de="Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen." data-en="The contents of this page have been created with the greatest care. However, no guarantee can be given for the correctness, completeness and topicality of the contents. We are not willing or obliged to participate in dispute resolution proceedings before a consumer arbitration board.">Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
-    <h3 data-de="Affiliate-Hinweis" data-en="Affiliate Notice">Affiliate-Hinweis</h3>
-    <p data-de="Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="This website contains affiliate links. If you purchase a product through these links, I receive a small commission. There are no additional costs for you.">Diese Website enthält Affiliate-Links. Wenn Sie über diese Links ein Produkt kaufen, erhalte ich eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <h3 data-de="Affiliate-Links & Haftungsausschluss" data-en="Affiliate Links & Disclaimer">Affiliate-Links & Haftungsausschluss</h3>
-    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten." data-en="Links to AI tools are marked as affiliate links (*). For purchases through these links we receive a small commission. There are no additional costs for you.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Bei Käufen über diese Links erhalten wir eine kleine Provision. Für Sie entstehen keine Mehrkosten.</p>
-    <p data-de="<strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter." data-en="<strong>Important:</strong> We accept no liability for:<ul><li>Accuracy of tool descriptions (may change daily)</li><li>Availability or functionality of linked tools</li><li>Contract agreements with third-party providers</li><li>Privacy practices of external providers</li></ul>The contractual relationship is solely between you and the tool provider."><strong>Wichtig:</strong> Wir übernehmen keine Haftung für:<ul><li>Richtigkeit der Tool-Beschreibungen (können sich täglich ändern)</li><li>Verfügbarkeit oder Funktionalität der verlinkten Tools</li><li>Vertragsabschlüsse mit Drittanbietern</li><li>Datenschutzpraktiken externer Anbieter</li></ul>Die Vertragsbeziehung entsteht ausschließlich zwischen Ihnen und dem Tool-Anbieter.</p>
-    <h3 data-de="Urheberrecht & Marken" data-en="Copyright & Trademarks">Urheberrecht & Marken</h3>
-    <p data-de="Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken." data-en="All mentioned product names, logos and trademarks are property of their respective owners. Mention is for identification purposes only.">Alle genannten Produktnamen, Logos und Marken sind Eigentum ihrer jeweiligen Inhaber. Die Nennung erfolgt zu identifikatorischen Zwecken.</p>
   </div>
 </div>
 
-<!-- Privacy Modal - FIXED -->
+<!-- Privacy Modal -->
 <div class="modal-overlay" id="privacyModalOverlay"></div>
 <div class="modal" id="privacyModal">
   <div class="modal-header">
@@ -2284,106 +1896,570 @@ input:checked + .slider:before {
   <div class="modal-content">
     <h2 data-de="Datenschutzerklärung" data-en="Privacy Policy">Datenschutzerklärung</h2>
     <h3 data-de="1. Verantwortliche Stelle" data-en="1. Responsible Party">1. Verantwortliche Stelle</h3>
-    <p data-de="Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com" data-en="Responsible in terms of data protection laws:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>Email: ai.tool.hub.contact@gmail.com">Verantwortlich im Sinne der Datenschutzgesetze:<br>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
-    <h3 data-de="2. Datenerhebung bei Website-Nutzung" data-en="2. Data Collection when Using the Website">2. Datenerhebung bei Website-Nutzung</h3>
-    <p data-de="Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht." data-en="For informational use, we do not collect personal data. Server log files (IP, browser type, access time) are automatically collected by the hosting provider and deleted after 7 days.">Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten. Server-Logfiles (IP, Browsertyp, Zugriffszeit) werden automatisch vom Hosting-Provider erfasst und nach 7 Tagen gelöscht.</p>
+    <p>Qerim Banulla<br>c/o Online-Impressum.de #6292<br>Europaring 90<br>53757 Sankt Augustin<br>E-Mail: ai.tool.hub.contact@gmail.com</p>
+    <h3 data-de="2. Datenerhebung bei Website-Nutzung" data-en="2. Data Collection">2. Datenerhebung bei Website-Nutzung</h3>
+    <p data-de="Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten." data-en="For informational use, we do not collect personal data.">Bei informatorischer Nutzung erheben wir keine personenbezogenen Daten.</p>
     <h3 data-de="3. Cookies & Local Storage" data-en="3. Cookies & Local Storage">3. Cookies & Local Storage</h3>
-    <p data-de="Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren." data-en="We use technically necessary cookies for functions such as favorites and voting. These are stored locally in your browser and contain no personal data. Optionally you can activate analytics cookies.">Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting. Diese werden lokal in Ihrem Browser gespeichert und enthalten keine persönlichen Daten. Optional können Sie Analytics-Cookies aktivieren.</p>
-    <h3 data-de="4. Google Analytics (nur nach Einwilligung)" data-en="4. Google Analytics (only with consent)">4. Google Analytics (nur nach Einwilligung)</h3>
-    <p data-de="Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert." data-en="This website uses Google Analytics 4, a web analytics service from Google LLC. IP anonymization is enabled. Your IP address is shortened before reaching the USA. Data is stored for a maximum of 14 months.">Diese Website verwendet Google Analytics 4, einen Webanalysedienst der Google LLC. Die IP-Anonymisierung ist aktiviert. Ihre IP-Adresse wird gekürzt, bevor sie die USA erreicht. Daten werden maximal 14 Monate gespeichert.</p>
-    <p data-de="Sie können Analytics deaktivieren über: <a href='#' id='analyticsOptOut'>Analytics deaktivieren</a>" data-en="You can disable analytics via: <a href='#' id='analyticsOptOut'>Disable Analytics</a>">Sie können Analytics deaktivieren über: <a href="#" id="analyticsOptOut">Analytics deaktivieren</a></p>
-    <h3 data-de="5. Externe Links & Affiliate-Links" data-en="5. External Links & Affiliate Links">5. Externe Links & Affiliate-Links</h3>
-    <p data-de="Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen." data-en="Links to AI tools are marked as affiliate links (*). When clicking, no personal data is transferred to us. External pages are subject to their own privacy policies.">Links zu KI-Tools sind als Affiliate-Links gekennzeichnet (*). Beim Klick werden keine persönlichen Daten an uns übertragen. Für externe Seiten gelten deren Datenschutzerklärungen.</p>
-    <h3 data-de="6. Ihre Rechte (DSGVO)" data-en="6. Your Rights (GDPR)">6. Ihre Rechte (DSGVO)</h3>
-    <p data-de="Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com" data-en="You have the right to:<ul><li>Information about stored data</li><li>Correction of incorrect data</li><li>Deletion of your data</li><li>Restriction of processing</li><li>Data portability</li><li>Revocation of your consent</li></ul>Contact: ai.tool.hub.contact@gmail.com">Sie haben Recht auf:<ul><li>Auskunft über gespeicherte Daten</li><li>Berichtigung falscher Daten</li><li>Löschung Ihrer Daten</li><li>Einschränkung der Verarbeitung</li><li>Datenübertragbarkeit</li><li>Widerruf Ihrer Einwilligung</li></ul>Kontakt: ai.tool.hub.contact@gmail.com</p>
-    <h3 data-de="7. Hosting auf GitHub Pages" data-en="7. Hosting on GitHub Pages">7. Hosting auf GitHub Pages</h3>
-    <p data-de="Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>." data-en="This page is hosted on GitHub Pages. GitHub may process technical access data (IP, access time). Further information: <a href='https://docs.github.com/en/github/site-policy/github-privacy-statement' target='_blank' rel='noopener noreferrer'>GitHub Privacy Statement</a>.">Diese Seite wird auf GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP, Zugriffszeit) verarbeiten. Weitere Informationen: <a href="https://docs.github.com/en/github/site-policy/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>.</p>
-    <h3 data-de="8. Sicherheit" data-en="8. Security">8. Sicherheit</h3>
-    <p data-de="Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy)." data-en="We implement technical measures to protect your data (HTTPS, Content Security Policy).">Wir setzen technische Maßnahmen ein, um Ihre Daten zu schützen (HTTPS, Content Security Policy).</p>
-    <p><em data-de="Stand: Februar 2026" data-en="Status: February 2026">Stand: Februar 2026</em></p>
+    <p data-de="Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting." data-en="We use technically necessary cookies for functions such as favorites and voting.">Wir verwenden technisch notwendige Cookies für Funktionen wie Favoriten und Voting.</p>
   </div>
 </div>
 
 <script>
 // ==============================================
-// GLOBALE VARIABLEN
+// KONFIGURATION & GLOBALE VARIABLEN
 // ==============================================
+const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
+
+let supabase = null;
+let realtimeChannel = null;
 let aiTools = [];
 let currentLang = 'de';
 let currentCategory = 'all';
 let searchQuery = '';
-let hoverTimeout = null;
-let peekElement = null;
 let isDrawerOpen = false;
-let scrollDebounceTimeout = null;
-const BASELINE_VOTES = 2;
 
-// Supabase Configuration
-const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
-let supabase = null;
+// ==============================================
+// SUPABASE INITIALISIERUNG
+// ==============================================
+async function initSupabase() {
+  try {
+    if (!window.supabase) {
+      console.warn('⚠️ Supabase library not loaded');
+      return false;
+    }
 
-// Kategorie-Informationen
-const categoryInfo = {
-  text: {
-    title: { de: "Text-KI-Tools", en: "Text AI Tools" },
-    description: { de: "Text-KI-Tools revolutionieren das Schreiben, Editieren und Übersetzen von Texten. Sie helfen dir bei kreativem Schreiben, Zusammenfassungen, Grammatikprüfungen und mehr.", en: "Text AI tools revolutionize writing, editing and translating. They help with creative writing, summaries, grammar checks and more." },
-    useCases: { de: ["Kreatives Schreiben & Content-Erstellung", "Übersetzungen zwischen Sprachen", "Text-Zusammenfassungen & -Analyse", "Grammatik- und Rechtschreibprüfung", "Chatbots & Kundenservice-Automatisierung"], en: ["Creative writing & content creation", "Translation between languages", "Text summaries & analysis", "Grammar and spell checking", "Chatbots & customer service automation"] },
-    bestFor: { de: ["Content Creator & Marketing-Experten", "Autoren & Journalisten", "Übersetzer & Sprachforscher", "Studenten & Akademiker", "Unternehmen für Kundenservice"], en: ["Content creators & marketing experts", "Authors & journalists", "Translators & language researchers", "Students & academics", "Companies for customer service"] },
-    trends: { de: ["Multilinguale Modelle mit 100+ Sprachen", "Echtzeit-Zusammenarbeit & Co-Writing", "Personalisierte Schreibstile", "Emotionale Intelligenz in Texten", "Integration in bestehende Workflows"], en: ["Multilingual models with 100+ languages", "Real-time collaboration & co-writing", "Personalized writing styles", "Emotional intelligence in texts", "Integration into existing workflows"] }
-  },
-  image: {
-    title: { de: "Bild-KI-Tools", en: "Image AI Tools" },
-    description: { de: "Bild-KI-Tools generieren, bearbeiten und optimieren Bilder aus Textbeschreibungen. Perfekt für Designer, Künstler und Marketing-Teams.", en: "Image AI tools generate, edit and optimize images from text descriptions. Perfect for designers, artists and marketing teams." },
-    useCases: { de: ["Bildgenerierung aus Text-Prompts", "Bildbearbeitung & -Optimierung", "Logo-Design & Branding", "Artwork & digitale Kunst", "Produktfotos & Marketing-Material"], en: ["Image generation from text prompts", "Image editing & optimization", "Logo design & branding", "Artwork & digital art", "Product photos & marketing material"] },
-    bestFor: { de: ["Grafikdesigner & Illustratoren", "Marketing- & Werbeagenturen", "E-Commerce & Online-Shops", "Künstler & Kreative", "Social Media Manager"], en: ["Graphic designers & illustrators", "Marketing & advertising agencies", "E-commerce & online shops", "Artists & creatives", "Social media managers"] },
-    trends: { de: ["4K+ Auflösung & Photorealismus", "Konsistente Charakter-Generierung", "3D-Modellierung aus 2D-Bildern", "Video-zu-Bild-Konvertierung", "Echtzeit-Generierung & Editing"], en: ["4K+ resolution & photorealism", "Consistent character generation", "3D modeling from 2D images", "Video-to-image conversion", "Real-time generation & editing"] }
-  },
-  code: {
-    title: { de: "Code-KI-Tools", en: "Code AI Tools" },
-    description: { de: "Code-KI-Tools unterstützen Entwickler beim Schreiben, Debuggen und Optimieren von Code. Sie beschleunigen die Entwicklung und reduzieren Fehler.", en: "Code AI tools support developers in writing, debugging and optimizing code. They accelerate development and reduce errors." },
-    useCases: { de: ["Code-Vervollständigung & -Generierung", "Bug-Finding & Debugging", "Code-Optimierung & Refactoring", "Dokumentation & Kommentare", "Code-Übersetzung zwischen Sprachen"], en: ["Code completion & generation", "Bug finding & debugging", "Code optimization & refactoring", "Documentation & comments", "Code translation between languages"] },
-    bestFor: { de: ["Software-Entwickler & -Ingenieure", "Web- & App-Entwickler", "Data Scientists & ML-Engineers", "DevOps & Systemadministratoren", "IT-Studenten & Bootcamp-Teilnehmer"], en: ["Software developers & engineers", "Web & app developers", "Data scientists & ML engineers", "DevOps & system administrators", "IT students & bootcamp participants"] },
-    trends: { de: ["Kontextbewusste Code-Vorschläge", "Automatische Test-Generierung", "Sicherheitsanalyse & Vulnerability Scanning", "Multi-Language Support", "IDE-Integration & Pair Programming"], en: ["Context-aware code suggestions", "Automatic test generation", "Security analysis & vulnerability scanning", "Multi-language support", "IDE integration & pair programming"] }
-  },
-  video: {
-    title: { de: "Video-KI-Tools", en: "Video AI Tools" },
-    description: { de: "Video-KI-Tools ermöglichen die Generierung und Bearbeitung von Videos aus Text oder Bildern. Ideal für Content Creator, Filmemacher und Unternehmen.", en: "Video AI tools enable generation and editing of videos from text or images. Ideal for content creators, filmmakers and businesses." },
-    useCases: { de: ["Video-Generierung aus Text/Images", "Automatische Untertitel & Übersetzung", "Video-Bearbeitung & -Optimierung", "Animations- & Motion Graphics", "Sprach-zu-Video Konvertierung"], en: ["Video generation from text/images", "Automatic subtitles & translation", "Video editing & optimization", "Animation & motion graphics", "Speech-to-video conversion"] },
-    bestFor: { de: ["Video-Editoren & Filmemacher", "Content Creator & YouTuber", "Marketing- & Werbe-Teams", "Unternehmen für Schulungsvideos", "Event- & Wedding-Videografen"], en: ["Video editors & filmmakers", "Content creators & YouTubers", "Marketing & advertising teams", "Companies for training videos", "Event & wedding videographers"] },
-    trends: { de: ["Text-zu-Video mit hoher Konsistenz", "Emotionale Avatare & Deepfakes", "Echtzeit-Video-Bearbeitung", "3D-Animation aus 2D-Material", "Personalisiertes Video-Marketing"], en: ["Text-to-video with high consistency", "Emotional avatars & deepfakes", "Real-time video editing", "3D animation from 2D material", "Personalized video marketing"] }
-  },
-  audio: {
-    title: { de: "Audio-KI-Tools", en: "Audio AI Tools" },
-    description: { de: "Audio-KI-Tools generieren und bearbeiten Sprache, Musik und Soundeffekte. Perfekt für Podcaster, Musiker und Audio-Profis.", en: "Audio AI tools generate and edit speech, music and sound effects. Perfect for podcasters, musicians and audio professionals." },
-    useCases: { de: ["Text-zu-Sprache & Sprachsynthese", "Musik-Generierung & -Komposition", "Audio-Bearbeitung & -Bereinigung", "Podcast-Produktion & -Optimierung", "Voice Cloning & -Anpassung"], en: ["Text-to-speech & speech synthesis", "Music generation & composition", "Audio editing & cleanup", "Podcast production & optimization", "Voice cloning & customization"] },
-    bestFor: { de: ["Podcaster & Radio-Moderatoren", "Musiker & Komponisten", "Audio-Editoren & Sound-Designer", "Unternehmen für Voiceovers", "Film- & Game-Audio-Profis"], en: ["Podcasters & radio hosts", "Musicians & composers", "Audio editors & sound designers", "Companies for voiceovers", "Film & game audio professionals"] },
-    trends: { de: ["Emotionale Sprachsynthese", "KI-generierte Musik in jedem Stil", "Echtzeit-Audio-Bearbeitung", "Mehrsprachige Voice Cloning", "Binaurale Audio & 3D-Sound"], en: ["Emotional speech synthesis", "AI-generated music in any style", "Real-time audio editing", "Multilingual voice cloning", "Binaural audio & 3D sound"] }
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase client initialized');
+
+    const { data, error } = await supabase.from('tools_votes').select('count').limit(1);
+    if (error) {
+      console.error('❌ Supabase connection test failed:', error);
+      return false;
+    }
+
+    console.log('✅ Supabase connection successful');
+    setupRealtime();
+    return true;
+  } catch (error) {
+    console.error('❌ Supabase initialization error:', error);
+    return false;
   }
-};
+}
+
+// ==============================================
+// REALTIME UPDATES
+// ==============================================
+function setupRealtime() {
+  if (!supabase) return;
+
+  try {
+    realtimeChannel = supabase
+      .channel('tools_votes_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tools_votes'
+        },
+        (payload) => {
+          console.log('📡 Realtime update:', payload);
+          handleRealtimeUpdate(payload);
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Realtime status:', status);
+      });
+
+    console.log('✅ Realtime subscription active');
+  } catch (error) {
+    console.error('❌ Realtime setup failed:', error);
+  }
+}
+
+function handleRealtimeUpdate(payload) {
+  const { new: newRecord } = payload;
+  
+  if (!newRecord || !newRecord.tool_id) return;
+
+  const tool = aiTools.find(t => t.id === newRecord.tool_id);
+  if (!tool) return;
+
+  tool.upvotes = newRecord.upvotes || 0;
+  tool.downvotes = newRecord.downvotes || 0;
+  tool.votes = tool.upvotes - tool.downvotes;
+
+  updateVoteUI(newRecord.tool_id, tool.votes);
+  renderTop5();
+}
+
+function updateVoteUI(toolId, totalVotes) {
+  const voteCountEl = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountEl) {
+    voteCountEl.textContent = totalVotes;
+    voteCountEl.classList.add('changed');
+    setTimeout(() => voteCountEl.classList.remove('changed'), 600);
+  }
+
+  const drawerVoteEl = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (drawerVoteEl) {
+    drawerVoteEl.textContent = totalVotes;
+  }
+
+  const top5VoteEl = document.getElementById(`top5Votes-${toolId}`);
+  if (top5VoteEl) {
+    top5VoteEl.textContent = totalVotes;
+    top5VoteEl.classList.add('changed');
+    setTimeout(() => top5VoteEl.classList.remove('changed'), 600);
+  }
+}
+
+// ==============================================
+// VOTING FUNKTIONALITÄT
+// ==============================================
+async function vote(toolId, direction) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  const userVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  const oldVote = userVotes[toolId] || 0;
+  const newVote = direction === 'up' ? 1 : -1;
+  const finalVote = oldVote === newVote ? 0 : newVote;
+
+  if (finalVote === 0) {
+    delete userVotes[toolId];
+  } else {
+    userVotes[toolId] = finalVote;
+  }
+  localStorage.setItem('aiToolVotes', JSON.stringify(userVotes));
+
+  tool.userVote = finalVote;
+  updateVoteButtons(toolId, finalVote);
+
+  if (!supabase) {
+    showNotification(
+      currentLang === 'de' ? 'Vote lokal gespeichert' : 'Vote saved locally',
+      'info'
+    );
+    return;
+  }
+
+  try {
+    let result;
+
+    if (oldVote === 0 && finalVote !== 0) {
+      result = await supabase.rpc('increment_vote', {
+        p_tool_id: toolId,
+        p_is_upvote: finalVote === 1
+      });
+    } else if (oldVote !== 0 && finalVote === 0) {
+      result = await supabase.rpc('decrement_vote', {
+        p_tool_id: toolId,
+        p_is_upvote: oldVote === 1
+      });
+    } else if (oldVote !== 0 && finalVote !== 0 && oldVote !== finalVote) {
+      await supabase.rpc('decrement_vote', {
+        p_tool_id: toolId,
+        p_is_upvote: oldVote === 1
+      });
+      result = await supabase.rpc('increment_vote', {
+        p_tool_id: toolId,
+        p_is_upvote: finalVote === 1
+      });
+    }
+
+    if (result && result.error) throw result.error;
+
+    if (result && result.data && result.data.length > 0) {
+      const voteData = result.data[0];
+      tool.upvotes = voteData.upvotes;
+      tool.downvotes = voteData.downvotes;
+      tool.votes = voteData.total_votes;
+      
+      updateVoteUI(toolId, tool.votes);
+    }
+
+    showNotification(
+      finalVote === 0 
+        ? (currentLang === 'de' ? 'Vote entfernt' : 'Vote removed')
+        : (currentLang === 'de' ? 'Vote gespeichert' : 'Vote saved'),
+      'success'
+    );
+
+  } catch (error) {
+    console.error('Vote sync error:', error);
+    showNotification(
+      currentLang === 'de' ? 'Fehler beim Synchronisieren' : 'Sync error',
+      'error'
+    );
+  }
+}
+
+function updateVoteButtons(toolId, userVote) {
+  document.querySelectorAll(`[data-tool-id="${toolId}"]`).forEach(container => {
+    const upBtn = container.querySelector('.vote-btn-row.up');
+    const downBtn = container.querySelector('.vote-btn-row.down');
+    
+    if (upBtn) upBtn.classList.toggle('active', userVote === 1);
+    if (downBtn) downBtn.classList.toggle('active', userVote === -1);
+  });
+}
+
+// ==============================================
+// TOOL LADEN
+// ==============================================
+async function loadTools() {
+  try {
+    console.log('🚀 Loading tools...');
+    document.getElementById('loading').style.display = 'block';
+
+    const supabaseReady = await initSupabase();
+
+    const response = await fetch('data.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const rawData = await response.json();
+    console.log(`✅ Loaded ${rawData.length} tools from data.json`);
+
+    let liveVotes = {};
+    if (supabaseReady) {
+      const { data, error } = await supabase
+        .from('tools_votes')
+        .select('tool_id, upvotes, downvotes');
+      
+      if (!error && data) {
+        data.forEach(item => {
+          liveVotes[item.tool_id] = {
+            upvotes: item.upvotes || 0,
+            downvotes: item.downvotes || 0,
+            totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
+          };
+        });
+        console.log(`📊 Loaded ${Object.keys(liveVotes).length} vote records`);
+      }
+    }
+
+    const userVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+
+    aiTools = rawData.map((tool, index) => {
+      const toolVotes = liveVotes[tool.id] || { totalVotes: 0, upvotes: 0, downvotes: 0 };
+      const userVote = userVotes[tool.id] || 0;
+      
+      return {
+        id: tool.id || `tool-${index}`,
+        name: tool.name || 'Unnamed Tool',
+        category: tool.cat || 'text',
+        rating: parseFloat(tool.rate) || 0,
+        price: tool.price || "freemium",
+        link: tool.link || '#',
+        description: {
+          de: tool.d?.[0] || 'Keine Beschreibung',
+          en: tool.d?.[1] || 'No description'
+        },
+        votes: toolVotes.totalVotes,
+        upvotes: toolVotes.upvotes,
+        downvotes: toolVotes.downvotes,
+        userVote: userVote,
+        hasLifetimeDeal: Boolean(tool.ltd),
+        features: Array.isArray(tool.f) ? tool.f : [],
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
+        priceDisplay: {
+          de: tool.cost?.[0] || (tool.price === 'free' ? 'Kostenlos' : tool.price === 'paid' ? 'Kostenpflichtig' : 'Freemium'),
+          en: tool.cost?.[1] || (tool.price === 'free' ? 'Free' : tool.price === 'paid' ? 'Paid' : 'Freemium')
+        },
+        pros: { 
+          de: tool.pros?.[0] || [], 
+          en: tool.pros?.[1] || [] 
+        },
+        cons: { 
+          de: tool.cons?.[0] || [], 
+          en: tool.cons?.[1] || [] 
+        },
+        alternatives: Array.isArray(tool.alt) ? tool.alt : []
+      };
+    });
+
+    console.log(`✅ Processed ${aiTools.length} tools`);
+
+    renderTop5();
+    renderFilterChips();
+    renderToolGroups();
+    updateFavoritesBadge();
+
+    document.getElementById('loading').style.display = 'none';
+
+  } catch (error) {
+    console.error('❌ Error loading tools:', error);
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center;padding:30px;color:var(--error)">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;margin-bottom:20px;"></i>
+        <p><strong>Fehler beim Laden:</strong> ${error.message}</p>
+        <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer">
+          Neu laden
+        </button>
+      </div>
+    `;
+  }
+}
+
+// ==============================================
+// RENDER FUNKTIONEN
+// ==============================================
+function renderTop5() {
+  const top5 = [...aiTools]
+    .sort((a, b) => {
+      if (b.votes !== a.votes) return b.votes - a.votes;
+      return b.rating - a.rating;
+    })
+    .slice(0, 5);
+  
+  document.getElementById('top5List').innerHTML = top5.map((tool, index) => `
+    <div class="top5-item" onclick="openToolDrawer('${tool.id}')" title="${tool.name}">
+      <div class="top5-rank">${index + 1}</div>
+      <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
+      <div class="top5-info">
+        <div class="top5-name">${tool.name}</div>
+        <div class="top5-category">${getCategoryName(tool.category)}</div>
+      </div>
+      <div class="top5-votes" id="top5Votes-${tool.id}">${tool.votes}</div>
+    </div>
+  `).join('');
+}
+
+function renderToolGroups() {
+  let categories = ['text', 'image', 'code', 'video', 'audio'];
+  if (currentCategory !== 'all' && currentCategory !== 'free') {
+    categories = [currentCategory];
+  }
+  
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  
+  document.getElementById('toolGroups').innerHTML = categories.map(category => {
+    let categoryTools = aiTools.filter(tool => tool.category === category);
+    
+    if (currentCategory === 'free') {
+      categoryTools = categoryTools.filter(tool => tool.price === 'free');
+    }
+    
+    if (categoryTools.length === 0) return '';
+    
+    const sortedTools = [...categoryTools].sort((a, b) => {
+      if (b.votes !== a.votes) return b.votes - a.votes;
+      return b.rating - a.rating;
+    });
+    
+    const isExpanded = expandedGroups[category] !== false;
+    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
+    
+    return `
+      <div class="tool-group" data-category="${category}">
+        <div class="group-header" onclick="toggleGroup('${category}')">
+          <div class="group-title">
+            <div class="group-icon">${getCategoryIcon(category)}</div>
+            <span>${getCategoryName(category)}</span>
+            <span class="group-count">${categoryTools.length}</span>
+          </div>
+          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        <div class="group-content ${isExpanded ? 'expanded' : ''}">
+          ${displayTools.map(tool => renderToolRow(tool)).join('')}
+        </div>
+        ${!isExpanded && sortedTools.length > 2 ? `
+          <div class="show-more" onclick="expandGroup('${category}')">
+            <span>+ ${sortedTools.length - 2} ${currentLang === 'de' ? 'mehr anzeigen' : 'more'}</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderToolRow(tool) {
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  
+  return `
+    <div class="tool-row" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')">
+      <div class="tool-vote" onclick="event.stopPropagation()" data-tool-id="${tool.id}">
+        <div class="vote-count" id="voteCount-${tool.id}">${tool.votes}</div>
+        <div class="vote-buttons">
+          <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                  onclick="vote('${tool.id}', 'up')">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                  onclick="vote('${tool.id}', 'down')">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+      </div>
+      <div class="tool-info">
+        <div class="tool-category">${getCategoryName(tool.category)}</div>
+        <div class="tool-name">${tool.name}</div>
+        <div class="tool-desc">${description}</div>
+      </div>
+      <div class="tool-meta" onclick="event.stopPropagation()">
+        <div class="tool-price">${tool.priceDisplay[currentLang]}</div>
+        <div class="tool-actions">
+          <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" 
+                  onclick="toggleFavorite('${tool.id}')">
+            <i class="fas fa-star"></i>
+          </button>
+          <a href="${tool.link}" target="_blank" rel="noopener noreferrer" 
+             class="tool-action-btn open">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderFilterChips() {
+  const filters = [
+    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
+    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
+    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
+    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
+    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
+    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
+    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } }
+  ];
+  
+  document.getElementById('filterChips').innerHTML = filters.map(filter => `
+    <div class="filter-chip ${currentCategory === filter.id ? 'active' : ''}" 
+         onclick="setActiveFilter('${filter.id}')">
+      <i class="${filter.icon}"></i>
+      <span>${currentLang === 'de' ? filter.label.de : filter.label.en}</span>
+    </div>
+  `).join('');
+}
+
+// ==============================================
+// TOOL DRAWER
+// ==============================================
+function openToolDrawer(toolId) {
+  const tool = aiTools.find(t => t.id === toolId);
+  if (!tool) return;
+
+  isDrawerOpen = true;
+  
+  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
+  const pros = tool.pros[currentLang] || [];
+  const cons = tool.cons[currentLang] || [];
+  
+  document.getElementById('drawerTitle').textContent = tool.name;
+  document.getElementById('drawerContent').innerHTML = `
+    <div style="margin-bottom:24px">
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px">
+        <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem">
+          ${getCategoryIcon(tool.category)}
+        </div>
+        <div style="flex:1">
+          <h3 style="font-size:1.6rem;font-weight:800;color:var(--text-primary);margin-bottom:8px">
+            ${tool.name}
+          </h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="peek-badge" style="background:rgba(0,212,255,.15);color:var(--primary);border:1px solid rgba(0,212,255,.3)">
+              <i class="fas fa-tag"></i> ${getCategoryName(tool.category)}
+            </span>
+            <span class="peek-badge price">
+              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
+              ${tool.priceDisplay[currentLang]}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="background:var(--bg-hover);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);" data-tool-id="${tool.id}">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-weight:700;color:var(--text-primary);">
+              ${currentLang === 'de' ? 'Community-Bewertung' : 'Community Rating'}:
+            </span>
+            <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:1.5rem;">${tool.votes}</div>
+            <div class="vote-buttons" style="display:flex;gap:6px;">
+              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
+                      onclick="vote('${tool.id}', 'up')">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
+                      onclick="vote('${tool.id}', 'down')">
+                <i class="fas fa-arrow-down"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <p style="color:var(--text-secondary);line-height:1.6;margin-bottom:24px">${description}</p>
+      
+      <div style="display:flex;gap:12px;margin-bottom:24px">
+        <button class="dock-action-btn primary" 
+                onclick="window.open('${tool.link}', '_blank')" 
+                style="flex:1">
+          <i class="fas fa-external-link-alt"></i>
+          ${currentLang === 'de' ? 'Tool öffnen' : 'Open Tool'}
+        </button>
+        <button class="dock-action-btn secondary ${isFavorite(tool.id) ? 'active' : ''}" 
+                onclick="toggleFavorite('${tool.id}')" 
+                style="width:auto">
+          ${isFavorite(tool.id) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>'}
+        </button>
+      </div>
+    </div>
+    
+    ${pros.length > 0 || cons.length > 0 ? `
+      <div style="margin-bottom:24px">
+        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
+          <i class="fas fa-balance-scale"></i>
+          ${currentLang === 'de' ? 'Vor- & Nachteile' : 'Pros & Cons'}
+        </h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          ${pros.length > 0 ? `
+            <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:16px">
+              <h5 style="color:var(--success);font-weight:700;margin-bottom:8px">
+                <i class="fas fa-check-circle"></i>
+                ${currentLang === 'de' ? 'Vorteile' : 'Pros'}
+              </h5>
+              <ul style="color:var(--text-secondary);padding-left:20px">
+                ${pros.map(pro => `<li>${pro}</li>`).join('')}
+              </ul>
+            </div>
+          ` : ''}
+          ${cons.length > 0 ? `
+            <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);padding:16px">
+              <h5 style="color:var(--error);font-weight:700;margin-bottom:8px">
+                <i class="fas fa-times-circle"></i>
+                ${currentLang === 'de' ? 'Nachteile' : 'Cons'}
+              </h5>
+              <ul style="color:var(--text-secondary);padding-left:20px">
+                ${cons.map(con => `<li>${con}</li>`).join('')}
+              </ul>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    ` : ''}
+  `;
+  
+  document.getElementById('drawerOverlay').classList.add('active');
+  document.getElementById('drawer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeToolDrawer() {
+  isDrawerOpen = false;
+  document.getElementById('drawerOverlay').classList.remove('active');
+  document.getElementById('drawer').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
 // ==============================================
 // HILFSFUNKTIONEN
 // ==============================================
-function parseNumber(value) {
-  const num = Number(value);
-  return Number.isFinite(num) ? num : 0;
-}
-
-function getToolVotes(tool) {
-  const votes = parseNumber(tool?.votes ?? 0);
-  return Math.max(votes, 0);
-}
-
-function updateTop5Vote(toolId, votes) {
-  const element = document.getElementById(`top5Votes-${toolId}`);
-  if (element) {
-    element.textContent = Math.max(votes, 0);
-    element.classList.add('changed');
-    setTimeout(() => element.classList.remove('changed'), 600);
-  }
-}
-
 function getCategoryIcon(category) {
   const icons = {
     text: '✍️',
@@ -2398,22 +2474,8 @@ function getCategoryIcon(category) {
 
 function getCategoryName(category) {
   const names = {
-    de: {
-      text: 'Text',
-      image: 'Bild',
-      code: 'Code',
-      video: 'Video',
-      audio: 'Audio',
-      business: 'Business'
-    },
-    en: {
-      text: 'Text',
-      image: 'Image',
-      code: 'Code',
-      video: 'Video',
-      audio: 'Audio',
-      business: 'Business'
-    }
+    de: { text: 'Text', image: 'Bild', code: 'Code', video: 'Video', audio: 'Audio', business: 'Business' },
+    en: { text: 'Text', image: 'Image', code: 'Code', video: 'Video', audio: 'Audio', business: 'Business' }
   };
   return names[currentLang][category] || category;
 }
@@ -2421,755 +2483,6 @@ function getCategoryName(category) {
 function isFavorite(toolId) {
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
   return favorites.includes(toolId);
-}
-
-function isInComparison(toolId) {
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  return comparison.includes(toolId);
-}
-
-function trackUserHistory(category) {
-  let history = JSON.parse(localStorage.getItem('userHistory') || '[]');
-  history.push(category);
-  if (history.length > 20) history = history.slice(-20);
-  localStorage.setItem('userHistory', JSON.stringify(history));
-}
-
-function trackToolClick(toolId) {
-  let clicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
-  clicks[toolId] = (clicks[toolId] || 0) + 1;
-  localStorage.setItem('toolClicks', JSON.stringify(clicks));
-}
-
-function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.innerHTML = `
-    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-    <span>${message}</span>
-    <button class="notification-close"><i class="fas fa-times"></i></button>
-  `;
-  document.body.appendChild(notification);
-  
-  notification.querySelector('.notification-close').addEventListener('click', () => {
-    notification.remove();
-  });
-  
-  setTimeout(() => notification.remove(), 3000);
-}
-
-function openModal(modalId) {
-  document.getElementById(`${modalId}Overlay`).classList.add('active');
-  document.getElementById(modalId).classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal(modalId) {
-  document.getElementById(`${modalId}Overlay`).classList.remove('active');
-  document.getElementById(modalId).classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ==============================================
-// SUPABASE FUNKTIONEN
-// ==============================================
-async function fetchVotesFromSupabase() {
-  // VERBESSERT: Robustere Prüfung ob supabase verfügbar ist
-  if (!supabase || typeof supabase.from !== 'function') {
-    console.warn('⚠️ Supabase nicht verfügbar für fetchVotesFromSupabase', {
-      supabaseExists: !!supabase,
-      supabaseType: typeof supabase,
-      hasFromMethod: supabase ? typeof supabase.from : 'no supabase'
-    });
-    return {}; // Leeres Objekt zurückgeben, nicht false oder null
-  }
-  
-  try {
-    console.log('📡 Versuche Votes von Supabase zu laden...');
-    
-    // Timeout für die Anfrage setzen (max. 5 Sekunden)
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Supabase timeout nach 5 Sekunden')), 5000);
-    });
-    
-    // Supabase-Abfrage mit Timeout
-    const supabasePromise = supabase
-      .from('tools_votes')
-      .select('*');
-    
-    const { data, error } = await Promise.race([supabasePromise, timeoutPromise]);
-    
-    if (error) {
-      console.error('❌ Supabase Fehler beim Abrufen von Votes:', error);
-      return {};
-    }
-    
-    const votesMap = {};
-    
-    if (data && Array.isArray(data)) {
-      data.forEach(item => {
-        votesMap[item.tool_id] = {
-          upvotes: parseInt(item.upvotes) || 0,
-          downvotes: parseInt(item.downvotes) || 0,
-          totalVotes: (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
-        };
-      });
-      console.log(`✅ ${Object.keys(votesMap).length} Vote-Datensätze von Supabase geladen`);
-    } else {
-      console.log('ℹ️ Keine Vote-Daten von Supabase erhalten');
-    }
-    
-    return votesMap;
-  } catch (error) {
-    console.error('❌ Exception in fetchVotesFromSupabase:', error.message || error);
-    return {};
-  }
-}
-
-
-async function updateVoteInSupabase(toolId, oldVote, newVote) {
-  // VERBESSERT: Prüfe ob supabase wirklich verfügbar ist
-  if (!supabase || typeof supabase.from !== 'function') {
-    console.warn('⚠️ Supabase nicht verfügbar für Vote-Update', { 
-      toolId, 
-      oldVote, 
-      newVote,
-      supabaseAvailable: !!supabase,
-      supabaseType: typeof supabase
-    });
-    return null; // Wichtig: null zurückgeben statt false
-  }
-  
-  try {
-    console.log(`📤 Sende Vote an Supabase: ${toolId}, old: ${oldVote}, new: ${newVote}`);
-    
-    // First, get current vote counts
-    const { data: existingData, error: fetchError } = await supabase
-      .from('tools_votes')
-      .select('*')
-      .eq('tool_id', toolId)
-      .single();
-    
-    let currentUpvotes = 0;
-    let currentDownvotes = 0;
-    
-    if (fetchError && fetchError.code === 'PGRST116') {
-      // No existing record, create new one
-      console.log(`🆕 Erstelle neuen Vote-Eintrag für ${toolId}`);
-      currentUpvotes = 0;
-      currentDownvotes = 0;
-    } else if (fetchError) {
-      console.error('❌ Fehler beim Abrufen existierender Votes:', fetchError);
-      return null; // Wichtig: null statt false
-    } else {
-      currentUpvotes = existingData.upvotes || 0;
-      currentDownvotes = existingData.downvotes || 0;
-      console.log(`📊 Existierende Votes für ${toolId}: up=${currentUpvotes}, down=${currentDownvotes}`);
-    }
-    
-    // Calculate new vote counts
-    let newUpvotes = currentUpvotes;
-    let newDownvotes = currentDownvotes;
-    
-    // Remove old vote
-    if (oldVote === 1) {
-      newUpvotes -= 1;
-      console.log(`➖ Entferne Upvote von ${toolId}`);
-    } else if (oldVote === -1) {
-      newDownvotes -= 1;
-      console.log(`➖ Entferne Downvote von ${toolId}`);
-    }
-    
-    // Add new vote
-    if (newVote === 1) {
-      newUpvotes += 1;
-      console.log(`➕ Füge Upvote zu ${toolId} hinzu`);
-    } else if (newVote === -1) {
-      newDownvotes += 1;
-      console.log(`➕ Füge Downvote zu ${toolId} hinzu`);
-    }
-    
-    // Ensure non-negative values
-    newUpvotes = Math.max(newUpvotes, 0);
-    newDownvotes = Math.max(newDownvotes, 0);
-    
-    console.log(`🔄 Neue Vote-Zahlen für ${toolId}: up=${newUpvotes}, down=${newDownvotes}`);
-    
-    // Upsert the record
-    const { error: upsertError } = await supabase
-      .from('tools_votes')
-      .upsert({
-        tool_id: toolId,
-        upvotes: newUpvotes,
-        downvotes: newDownvotes,
-        updated_at: new Date().toISOString()
-      }, {
-        onConflict: 'tool_id'
-      });
-    
-    if (upsertError) {
-      console.error('❌ Fehler beim Speichern in Supabase:', upsertError);
-      return null; // Wichtig: null statt false
-    }
-    
-    const result = {
-      upvotes: newUpvotes,
-      downvotes: newDownvotes,
-      totalVotes: newUpvotes - newDownvotes
-    };
-    
-    console.log(`✅ Supabase Vote erfolgreich gespeichert für ${toolId}:`, result);
-    return result;
-    
-  } catch (error) {
-    console.error('❌ Exception in updateVoteInSupabase:', error);
-    return null; // Wichtig: null statt false
-  }
-}
-
-// ==============================================
-// HAUPT-FUNKTIONALITÄT
-// ==============================================
-async function loadTools() {
-  try {
-    console.log('🚀 Starte Tool-Loading...');
-    document.getElementById('loading').style.display = 'block';
-    
-    // 1. data.json LADEN (das Einzige was WIRKLICH nötig ist)
-    const response = await fetch('data.json');
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const rawData = await response.json();
-    console.log(`✅ ${rawData.length} Tools geladen`);
-    
-    // 2. Supabase OPTIONAL (nicht blockierend)
-    let liveVotes = {};
-    if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
-      try {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data, error } = await supabase
-          .from('tools_votes')
-          .select('tool_id, upvotes, downvotes');
-        
-        if (!error && data) {
-          data.forEach(item => {
-            liveVotes[item.tool_id] = {
-              upvotes: item.upvotes || 0,
-              downvotes: item.downvotes || 0,
-              totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
-            };
-          });
-          console.log(`📊 ${Object.keys(liveVotes).length} Live-Votes geladen`);
-        }
-      } catch (e) {
-        console.warn('⚠️ Supabase optional fehlgeschlagen:', e.message);
-      }
-    }
-    
-    // 3. Tools verarbeiten (SIMPLIFIED)
-    aiTools = rawData.map((tool, index) => {
-      const toolVotes = liveVotes[tool.id] || { totalVotes: 0, upvotes: 0, downvotes: 0 };
-      const userVote = JSON.parse(localStorage.getItem('aiToolVotes') || '{}')[tool.id]?.userVote || 0;
-      
-      return {
-        id: tool.id || `tool-${index}`,
-        name: tool.name || 'Unnamed Tool',
-        category: tool.cat || 'text',
-        rating: parseFloat(tool.rate) || 0,
-        price: tool.price || "freemium",
-        link: tool.link || '#',
-        description: {
-          de: tool.d?.[0] || 'Keine Beschreibung',
-          en: tool.d?.[1] || 'No description'
-        },
-        votes: toolVotes.totalVotes || 0,
-        upvotes: toolVotes.upvotes || 0,
-        downvotes: toolVotes.downvotes || 0,
-        userVote: userVote,
-        hasLifetimeDeal: Boolean(tool.ltd),
-        features: Array.isArray(tool.f) ? tool.f : [],
-        tags: Array.isArray(tool.tags) ? tool.tags : []
-      };
-    });
-    
-    console.log(`🎉 ${aiTools.length} Tools verarbeitet`);
-    
-    // 4. UI RENDERN
-    renderToolGroups();
-    renderTop5();
-    renderFilterChips();
-    updateFavoritesBadge();
-    
-    document.getElementById('loading').style.display = 'none';
-    
-  } catch (error) {
-    console.error('❌ FEHLER in loadTools:', error);
-    document.getElementById('loading').innerHTML = `
-      <div style="text-align:center;padding:30px;color:var(--error)">
-        <i class="fas fa-exclamation-triangle" style="font-size:3rem;margin-bottom:20px;"></i>
-        <p><strong>Fehler:</strong> ${error.message}</p>
-        <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer">
-          Neu laden
-        </button>
-      </div>
-    `;
-  }
-}
-
-// Hilfsfunktion: fetchVotesFromSupabase mit Parameter
-async function fetchVotesFromSupabase(supabaseClient) {
-  // VERBESSERT: Prüfe ob ein gültiges Supabase-Client übergeben wurde
-  if (!supabaseClient || typeof supabaseClient.from !== 'function') {
-    console.warn('⚠️ Ungültiges Supabase-Client für fetchVotesFromSupabase', {
-      clientExists: !!supabaseClient,
-      clientType: typeof supabaseClient,
-      hasFromMethod: supabaseClient ? typeof supabaseClient.from : 'no client'
-    });
-    return {};
-  }
-  
-  try {
-    console.log('📡 Lade Votes von Supabase...');
-    
-    // Timeout für die Anfrage (5 Sekunden)
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Supabase timeout nach 5 Sekunden')), 5000);
-    });
-    
-    // Supabase-Abfrage
-    const supabasePromise = supabaseClient
-      .from('tools_votes')
-      .select('*');
-    
-    // Race zwischen Anfrage und Timeout
-    const { data, error } = await Promise.race([supabasePromise, timeoutPromise]);
-    
-    if (error) {
-      console.error('❌ Supabase Fehler beim Abrufen von Votes:', error);
-      return {};
-    }
-    
-    const votesMap = {};
-    
-    if (data && Array.isArray(data)) {
-      data.forEach(item => {
-        // Sicherstellen, dass wir Zahlen haben
-        const upvotes = parseInt(item.upvotes) || 0;
-        const downvotes = parseInt(item.downvotes) || 0;
-        
-        votesMap[item.tool_id] = {
-          upvotes: upvotes,
-          downvotes: downvotes,
-          totalVotes: upvotes - downvotes
-        };
-      });
-      console.log(`✅ ${Object.keys(votesMap).length} Vote-Datensätze von Supabase geladen`);
-    } else {
-      console.log('ℹ️ Keine Vote-Daten von Supabase erhalten (leeres Array oder null)');
-    }
-    
-    return votesMap;
-  } catch (error) {
-    console.error('❌ Exception in fetchVotesFromSupabase:', error.message || error);
-    return {};
-  }
-}
-
-// Notfall-Tools wenn data.json nicht geladen werden kann
-function getEmergencyToolsData() {
-  return [
-    {
-      "id": "chatgpt",
-      "name": "ChatGPT",
-      "cat": "text",
-      "rate": 4.9,
-      "price": "freemium",
-      "cost": ["Kostenlos/€20", "Free/$20"],
-      "link": "https://chat.openai.com/",
-      "badge": "popular",
-      "d": ["Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.", "Best all-rounder for text, ideas, code that started the AI revolution."],
-      "f": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
-      "tags": ["text", "chat", "coding", "research", "multimodal", "popular", "freemium", "openai"],
-      "pros": [["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support", "Multimodal (Bild, Text, Code)"], ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support", "Multimodal (image, text, code)"]],
-      "cons": [["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier", "Warteschlangen im Free-Tier"], ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier", "Queue times in free tier"]],
-      "pricing": ["Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext", "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"],
-      "alt": ["claude", "gemini", "perplexity"],
-      "ltd": false
-    },
-    {
-      "id": "midjourney",
-      "name": "Midjourney",
-      "cat": "image",
-      "rate": 4.9,
-      "price": "paid",
-      "cost": ["ab €10/Monat", "from $10/month"],
-      "link": "https://www.midjourney.com/",
-      "badge": "popular",
-      "d": ["Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.", "Best artistic image generation with unparalleled stylistic control."],
-      "f": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
-      "tags": ["image", "art", "generation", "artistic", "discord", "popular", "paid", "lifetime-deal"],
-      "pros": [["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen", "Hohe Auflösungen verfügbar"], ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements", "High resolutions available"]],
-      "cons": [["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse", "Kein direkter Web-Zugang"], ["Only usable via Discord", "No free version", "Steep learning curve for optimal results", "No direct web access"]],
-      "pricing": ["Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung", "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"],
-      "alt": ["dalle-3", "stable-diffusion", "firefly"],
-      "ltd": true
-    }
-  ];
-}
-    
-    // Get localStorage votes (for user's personal vote history)
-    const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-    
-    // Map tools
-    aiTools = rawData.map((tool, index) => {
-      if (!tool.id || !tool.name || !tool.d || !Array.isArray(tool.d) || tool.d.length < 2) {
-        console.warn('Invalid tool data:', tool);
-      }
-      
-      const toolLiveVotes = liveVotes[tool.id] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
-      const userVoteData = localStorageVotes[tool.id] || {};
-      
-      // Ensure we have valid category
-      let category = tool.cat || 'text';
-      if (!['text', 'image', 'code', 'video', 'audio', 'business'].includes(category)) {
-        category = 'text';
-      }
-      
-      // Ensure we have valid description
-      const descriptionDe = tool.d && tool.d[0] ? String(tool.d[0]) : 'Keine Beschreibung verfügbar.';
-      const descriptionEn = tool.d && tool.d[1] ? String(tool.d[1]) : 'No description available.';
-      
-      // Ensure we have valid quick peek
-      const quickPeekDe = tool.q && tool.q[0] ? String(tool.q[0]) : (descriptionDe.length > 75 ? descriptionDe.substring(0, 75) + '...' : descriptionDe);
-      const quickPeekEn = tool.q && tool.q[1] ? String(tool.q[1]) : (descriptionEn.length > 75 ? descriptionEn.substring(0, 75) + '...' : descriptionEn);
-      
-      return {
-        id: tool.id || `tool-${index}`,
-        name: tool.name || 'Unnamed Tool',
-        link: tool.link || '#',
-        rating: parseFloat(tool.rate) || 0,
-        price: tool.price || "freemium",
-        badge: tool.badge || "",
-        hasLifetimeDeal: Boolean(tool.ltd),
-        category: category,
-        features: Array.isArray(tool.f) ? tool.f : [],
-        tags: Array.isArray(tool.tags) ? tool.tags : [],
-        alternatives: Array.isArray(tool.alt) ? tool.alt : [],
-        useCases: Array.isArray(tool.tags) ? tool.tags : [],
-        description: { de: descriptionDe, en: descriptionEn },
-        priceDisplay: { 
-          de: tool.cost ? tool.cost[0] : (tool.price === 'free' ? "Kostenlos" : tool.price === 'paid' ? "Kostenpflichtig" : "Freemium"),
-          en: tool.cost ? tool.cost[1] : (tool.price === 'free' ? "Free" : tool.price === 'paid' ? "Paid" : "Freemium")
-        },
-        pros: { de: tool.pros ? (Array.isArray(tool.pros[0]) ? tool.pros[0] : []) : [], en: tool.pros ? (Array.isArray(tool.pros[1]) ? tool.pros[1] : []) : [] },
-        cons: { de: tool.cons ? (Array.isArray(tool.cons[0]) ? tool.cons[0] : []) : [], en: tool.cons ? (Array.isArray(tool.cons[1]) ? tool.cons[1] : []) : [] },
-        quickPeek: { de: quickPeekDe, en: quickPeekEn },
-        seoTitle: { de: `${tool.name || 'Tool'} Review 2026`, en: `${tool.name || 'Tool'} Review 2026` },
-        seoDesc: { de: descriptionDe, en: descriptionEn },
-        numericId: index + 1,
-        aiScore: 90,
-        popularityScore: 90,
-        rankingHistory: [],
-        votes: toolLiveVotes.totalVotes || 0,
-        upvotes: toolLiveVotes.upvotes || 0,
-        downvotes: toolLiveVotes.downvotes || 0,
-        userVote: userVoteData.userVote || 0, // From localStorage
-        pricing: { de: `Modell: ${tool.price || 'freemium'}`, en: `Model: ${tool.price || 'freemium'}` }
-      };
-    });
-    
-    console.log(`Loaded ${aiTools.length} tools`);
-    
-    calculateToolScores();
-    renderTop5();
-    renderFilterChips();
-    renderToolGroups();
-    updateFavoritesBadge();
-    document.getElementById('loading').style.display = 'none';
-    
-  } catch (error) {
-    console.error('Error loading tools:', error);
-    document.getElementById('loading').innerHTML = `
-      <p style="color:var(--error)">Fehler beim Laden der Tools: ${error.message}</p>
-      <button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">Erneut versuchen</button>
-    `;
-  }
-}
-
-function calculateToolScores() {
-  const userHistory = JSON.parse(localStorage.getItem('userHistory') || '[]');
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const toolClicks = JSON.parse(localStorage.getItem('toolClicks') || '{}');
-  
-  aiTools.forEach(tool => {
-    let score = 0;
-    
-    if (tool.rating >= 4.7) score += 3;
-    if (getToolVotes(tool) > 50) score += 2;
-    if (userHistory.includes(tool.category)) score += 2;
-    if (favorites.includes(tool.id)) score += 3;
-    if (toolClicks[tool.id]) score += Math.min(toolClicks[tool.id], 5);
-    if (tool.hasLifetimeDeal) score += 2;
-    
-    tool.aiScore = score;
-    tool.isAIRecommended = score >= 5;
-    tool.popularityScore = (10 * tool.rating) + getToolVotes(tool) + score;
-  });
-}
-
-function renderTop5() {
-  const top5 = [...aiTools]
-    .sort((a, b) => {
-      const aVotes = getToolVotes(a) + BASELINE_VOTES;
-      const bVotes = getToolVotes(b) + BASELINE_VOTES;
-      if (bVotes !== aVotes) return bVotes - aVotes;
-      return (b.popularityScore || 0) - (a.popularityScore || 0);
-    })
-    .slice(0, 5);
-  
-  document.getElementById('top5List').innerHTML = top5.map((tool, index) => {
-    const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-    const quickPeek = tool.quickPeek ? 
-      (currentLang === 'de' ? tool.quickPeek.de : tool.quickPeek.en) :
-      (description.length > 60 ? description.substring(0, 60) + '...' : description);
-    
-    return `
-      <div class="top5-item" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')" title="${tool.name}">
-        <div class="top5-rank">${index + 1}</div>
-        <div class="top5-icon">${getCategoryIcon(tool.category)}</div>
-        <div class="top5-info">
-          <div class="top5-name">${tool.name}</div>
-          <div class="top5-category">${getCategoryName(tool.category)}</div>
-        </div>
-        <div class="top5-votes" id="top5Votes-${tool.id}">${getToolVotes(tool)}</div>
-        <div class="top5-quickpeek">${quickPeek}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function renderToolGroups() {
-  let categories = ['text', 'image', 'code', 'video', 'audio'];
-  if (currentCategory !== 'all' && currentCategory !== 'free' && currentCategory !== 'ai') {
-    categories = [currentCategory];
-  }
-  
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
-  
-  document.getElementById('toolGroups').innerHTML = categories.map(category => {
-    let categoryTools = aiTools.filter(tool => tool.category === category);
-    
-    if (currentCategory === 'free') {
-      categoryTools = categoryTools.filter(tool => tool.price === 'free');
-    }
-    if (currentCategory === 'ai') {
-      categoryTools = categoryTools.filter(tool => tool.isAIRecommended);
-    }
-    
-    if (categoryTools.length === 0) {
-      return `
-        <div class="tool-group" data-category="${category}">
-          <div class="group-header">
-            <div class="group-title">
-              <div class="group-icon">${getCategoryIcon(category)}</div>
-              <span>${getCategoryName(category)}</span>
-              <span class="group-count">0</span>
-            </div>
-          </div>
-          <div class="group-content expanded">
-            <div style="padding:20px;text-align:center;color:var(--text-secondary)">
-              ${currentLang === 'de' ? 'Keine Tools in dieser Kategorie.' : 'No tools in this category.'}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-    
-    const sortedTools = [...categoryTools].sort((a, b) => {
-      const aVotes = getToolVotes(a) + BASELINE_VOTES;
-      const bVotes = getToolVotes(b) + BASELINE_VOTES;
-      if (bVotes !== aVotes) return bVotes - aVotes;
-      return (b.popularityScore || 0) - (a.popularityScore || 0);
-    });
-    
-    const isExpanded = expandedGroups[category] || false;
-    const displayTools = isExpanded ? sortedTools : sortedTools.slice(0, 2);
-    
-    return `
-      <div class="tool-group" data-category="${category}">
-        <div class="group-header" onclick="toggleGroup('${category}')">
-          <div class="group-title">
-            <div class="group-icon">${getCategoryIcon(category)}</div>
-            <span>${getCategoryName(category)}</span>
-            <button class="info-btn" onclick="event.stopPropagation();openCategoryInfoModal('${category}')">
-              <i class="fas fa-info-circle"></i>
-            </button>
-            <span class="group-count">${categoryTools.length}</span>
-          </div>
-          <div class="group-toggle ${isExpanded ? 'expanded' : ''}">
-            <i class="fas fa-chevron-down"></i>
-          </div>
-        </div>
-        <div class="group-content ${isExpanded ? 'expanded' : ''}">
-          ${displayTools.map(tool => {
-            const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-            const ltdBadge = tool.hasLifetimeDeal ? 
-              '<span class="ltd-badge" style="margin-left:8px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:2px 6px;border-radius:10px;font-size:.65rem;font-weight:800">LTD</span>' : 
-              '';
-            
-            return `
-              <div class="tool-row" data-id="${tool.id}" 
-                   onmouseenter="showToolPeek(event, '${tool.id}')" 
-                   onmouseleave="hideToolPeek()" 
-                   onclick="openToolDrawer('${tool.id}')">
-                <div class="tool-vote" onclick="event.stopPropagation()">
-                  <div class="vote-count" id="voteCount-${tool.id}">${getToolVotes(tool)}</div>
-                  <div class="vote-buttons">
-                    <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
-                            onclick="vote('${tool.id}', 'up')">
-                      <i class="fas fa-arrow-up"></i>
-                    </button>
-                    <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
-                            onclick="vote('${tool.id}', 'down')">
-                      <i class="fas fa-arrow-down"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="tool-info">
-                  <div class="tool-category">
-                    ${getCategoryName(tool.category)}
-                    <button class="info-btn" onclick="event.stopPropagation();openCategoryInfoModal('${tool.category}')">
-                      <i class="fas fa-info-circle"></i>
-                    </button>
-                  </div>
-                  <div class="tool-name">
-                    ${tool.name}
-                    ${tool.isAIRecommended ? '<i class="fas fa-robot" style="color:var(--secondary);font-size:.9rem"></i>' : ''}
-                  </div>
-                  <div class="tool-desc">${description}</div>
-                </div>
-                <div class="tool-meta" onclick="event.stopPropagation()">
-                  <div class="tool-price">${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}${ltdBadge}</div>
-                  <div class="tool-actions">
-                    <button class="tool-action-btn favorite ${isFavorite(tool.id) ? 'active' : ''}" 
-                            onclick="toggleFavorite('${tool.id}')">
-                      <i class="fas fa-star"></i>
-                    </button>
-                    <button class="tool-action-btn compare ${isInComparison(tool.id) ? 'active' : ''}" 
-                            onclick="toggleComparison('${tool.id}')">
-                      <i class="fas fa-balance-scale"></i>
-                    </button>
-                    <a href="${tool.link}" target="_blank" rel="noopener noreferrer" 
-                       class="tool-action-btn open" 
-                       onclick="event.stopPropagation();trackToolClick('${tool.id}')">
-                      <i class="fas fa-external-link-alt"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join('')}
-          ${isExpanded ? `
-            <div class="collapse-button" onclick="collapseGroup('${category}')">
-              <span>${currentLang === 'de' ? 'Weniger anzeigen ↑' : 'Show less ↑'}</span>
-            </div>
-          ` : ''}
-        </div>
-        ${!isExpanded && sortedTools.length > 2 ? `
-          <div class="show-more" onclick="expandGroup('${category}')">
-            <span>${currentLang === 'de' ? `+ ${sortedTools.length - 2} mehr anzeigen` : `+ ${sortedTools.length - 2} more`}</span>
-            <i class="fas fa-chevron-down"></i>
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }).join('');
-}
-
-function renderFilterChips() {
-  const filters = [
-    { id: 'all', icon: 'fas fa-border-all', label: { de: 'Alle', en: 'All' } },
-    { id: 'text', icon: 'fas fa-pen', label: { de: 'Text', en: 'Text' } },
-    { id: 'image', icon: 'fas fa-image', label: { de: 'Bild', en: 'Image' } },
-    { id: 'code', icon: 'fas fa-code', label: { de: 'Code', en: 'Code' } },
-    { id: 'video', icon: 'fas fa-video', label: { de: 'Video', en: 'Video' } },
-    { id: 'audio', icon: 'fas fa-music', label: { de: 'Audio', en: 'Audio' } },
-    { id: 'free', icon: 'fas fa-gift', label: { de: 'Kostenlos', en: 'Free' } },
-    { id: 'ai', icon: 'fas fa-robot', label: { de: 'AI Pick', en: 'AI Pick' } }
-  ];
-  
-  document.getElementById('filterChips').innerHTML = filters.map(filter => {
-    const isActive = currentCategory === filter.id;
-    return `
-      <div class="filter-chip ${isActive ? 'active' : ''}" 
-           data-filter="${filter.id}" 
-           onclick="setActiveFilter('${filter.id}')">
-        <i class="${filter.icon}"></i>
-        <span data-de="${filter.label.de}" data-en="${filter.label.en}">
-          ${currentLang === 'de' ? filter.label.de : filter.label.en}
-        </span>
-      </div>
-    `;
-  }).join('');
-}
-
-// ==============================================
-// TOOL INTERAKTIONEN
-// ==============================================
-// ==============================================
-// TOOL INTERAKTIONEN
-// ==============================================
-async function vote(toolId, direction) {
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  const oldVote = tool.userVote || 0;
-  const newVote = direction === 'up' ? 1 : -1;
-  
-  // Lokal speichern (immer)
-  let voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  voteData[toolId] = { userVote: newVote, timestamp: Date.now() };
-  localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
-  
-  // UI sofort updaten
-  tool.userVote = newVote;
-  tool.votes += (newVote - oldVote); // Vereinfachte Berechnung
-  
-  // Vote-Buttons aktualisieren
-  document.querySelectorAll(`.vote-btn-row.up[data-tool="${toolId}"]`).forEach(btn => 
-    btn.classList.toggle('active', newVote === 1));
-  document.querySelectorAll(`.vote-btn-row.down[data-tool="${toolId}"]`).forEach(btn => 
-    btn.classList.toggle('active', newVote === -1));
-  
-  // Vote-Count aktualisieren
-  const voteCountEl = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountEl) voteCountEl.textContent = tool.votes;
-  
-  // Zu Supabase senden (im Hintergrund, nicht blockierend)
-  if (supabase) {
-    setTimeout(async () => {
-      try {
-        await supabase.rpc('update_vote', {
-          tool_id: toolId,
-          vote_change: newVote - oldVote
-        });
-        console.log(`✅ Vote für ${toolId} an Supabase gesendet`);
-      } catch (e) {
-        console.warn('⚠️ Supabase Sync fehlgeschlagen:', e.message);
-      }
-    }, 0);
-  }
-  
-  showNotification(
-    newVote === 0 ? 'Vote entfernt' : 'Vote gespeichert',
-    'success'
-  );
-}
-     else {
-    showNotification(
-      currentLang === 'de' ? 'Fehler beim Speichern des Votes' : 'Error saving vote',
-      'error'
-    );
-  }
 }
 
 function toggleFavorite(toolId) {
@@ -3190,55 +2503,21 @@ function toggleFavorite(toolId) {
   }
   
   localStorage.setItem('aiFavorites', JSON.stringify(favorites));
-  updateFavoritesDrawer();
   updateFavoritesBadge();
-  renderToolGroups();
-  
-  // Update drawer favorite button
-  const drawerFavoriteButton = document.getElementById(`drawer-favorite-${toolId}`);
-  if (drawerFavoriteButton) {
-    drawerFavoriteButton.innerHTML = isFavorite(toolId) ? 
-      '<i class="fas fa-star"></i> ' + (currentLang === 'de' ? 'Entfernen' : 'Remove') :
-      '<i class="far fa-star"></i> ' + (currentLang === 'de' ? 'Favorisieren' : 'Favorite');
-    drawerFavoriteButton.className = isFavorite(toolId) ? 
-      'dock-action-btn secondary active' : 
-      'dock-action-btn secondary';
-  }
+  updateFavoritesDrawer();
 }
 
-function toggleComparison(toolId) {
-  let comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  
-  if (comparison.includes(toolId)) {
-    comparison = comparison.filter(id => id !== toolId);
-    showNotification(
-      currentLang === 'de' ? 'Aus Vergleich entfernt' : 'Removed from comparison',
-      'info'
-    );
-  } else {
-    if (comparison.length < 3) {
-      comparison.push(toolId);
-      showNotification(
-        currentLang === 'de' ? 'Zum Vergleich hinzugefügt' : 'Added to comparison',
-        'success'
-      );
-    } else {
-      showNotification(
-        currentLang === 'de' ? 'Maximal 3 Tools zum Vergleich!' : 'Maximum 3 tools for comparison!',
-        'error'
-      );
-      return;
-    }
+function updateFavoritesBadge() {
+  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
+  const badge = document.getElementById('floatingFavoritesBadge');
+  if (badge) {
+    badge.textContent = favorites.length;
+    badge.style.display = favorites.length > 0 ? 'flex' : 'none';
   }
-  
-  localStorage.setItem('aiComparison', JSON.stringify(comparison));
-  updateFavoritesDrawer();
-  updateFavoritesBadge();
 }
 
 function updateFavoritesDrawer() {
   const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
   
   document.getElementById('favoriteDock').innerHTML = favorites.map(toolId => {
     const tool = aiTools.find(t => t.id === toolId);
@@ -3251,57 +2530,23 @@ function updateFavoritesDrawer() {
       </div>
     ` : '';
   }).join('');
-  
-  document.getElementById('compareDock').innerHTML = comparison.map(toolId => {
-    const tool = aiTools.find(t => t.id === toolId);
-    return tool ? `
-      <div class="dock-item" data-id="${toolId}" onclick="openToolDrawer('${toolId}')">
-        ${getCategoryIcon(tool.category)}
-        <div class="dock-item-remove" onclick="event.stopPropagation();toggleComparison('${toolId}')">
-          <i class="fas fa-times"></i>
-        </div>
-      </div>
-    ` : '';
-  }).join('');
 }
 
-function updateFavoritesBadge() {
-  const favorites = JSON.parse(localStorage.getItem('aiFavorites') || '[]');
-  const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-  const total = favorites.length + comparison.length;
-  
-  const badge = document.getElementById('floatingFavoritesBadge');
-  if (badge) {
-    badge.textContent = total;
-    badge.style.display = total > 0 ? 'flex' : 'none';
-  }
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+    <span>${message}</span>
+  `;
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 3000);
 }
 
-// ==============================================
-// GRUPPEN-FUNKTIONEN
-// ==============================================
-function expandGroup(category) {
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
-  expandedGroups[category] = true;
-  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
+function setActiveFilter(filterId) {
+  currentCategory = filterId;
+  renderFilterChips();
   renderToolGroups();
-  
-  const groupElement = document.querySelector(`[data-category="${category}"]`);
-  if (groupElement) {
-    groupElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-}
-
-function collapseGroup(category) {
-  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
-  expandedGroups[category] = false;
-  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
-  renderToolGroups();
-  
-  const headerElement = document.querySelector(`[data-category="${category}"] .group-header`);
-  if (headerElement) {
-    headerElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
 }
 
 function toggleGroup(category) {
@@ -3311,420 +2556,21 @@ function toggleGroup(category) {
   renderToolGroups();
 }
 
-// ==============================================
-// TOOL-PEEK FUNKTIONEN
-// ==============================================
-function showToolPeek(event, toolId) {
-  if (isDrawerOpen) return;
-  
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  hoverTimeout = setTimeout(() => {
-    createToolPeek(event, tool);
-  }, 300);
-}
-
-function createToolPeek(event, tool) {
-  if (peekElement) peekElement.remove();
-  
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  const ltdBadge = tool.hasLifetimeDeal ? 
-    '<span class="peek-badge ltd"><i class="fas fa-crown"></i> LTD</span>' : 
-    '';
-  
-  peekElement = document.createElement('div');
-  peekElement.className = 'tool-peek';
-  peekElement.innerHTML = `
-    <div class="peek-header">
-      <div class="peek-icon">${getCategoryIcon(tool.category)}</div>
-      <div>
-        <div class="peek-name">${tool.name}</div>
-        <div class="peek-category">${getCategoryName(tool.category)}</div>
-      </div>
-    </div>
-    <div class="peek-desc">${description}</div>
-    <div class="peek-meta">
-      <span class="peek-badge price">
-        <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
-        ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
-      </span>
-      <span class="peek-badge rating">
-        <i class="fas fa-star"></i> ${tool.rating}/5
-      </span>
-      ${ltdBadge}
-    </div>
-  `;
-  
-  document.body.appendChild(peekElement);
-  
-  const rect = event.currentTarget.getBoundingClientRect();
-  const peekHeight = peekElement.offsetHeight;
-  const windowHeight = window.innerHeight;
-  
-  let top = rect.top + rect.height / 2 - peekHeight / 2;
-  if (top < 20) top = 20;
-  if (top + peekHeight > windowHeight - 20) top = windowHeight - peekHeight - 20;
-  
-  peekElement.style.top = `${top}px`;
-  peekElement.style.left = `${rect.right + 20}px`;
-}
-
-function hideToolPeek() {
-  if (hoverTimeout) {
-    clearTimeout(hoverTimeout);
-    hoverTimeout = null;
-  }
-  
-  if (peekElement) {
-    peekElement.style.opacity = '0';
-    setTimeout(() => {
-      if (peekElement && peekElement.parentNode) {
-        peekElement.remove();
-        peekElement = null;
-      }
-    }, 200);
-  }
-}
-
-// ==============================================
-// TOOL-DRAWER FUNKTIONEN
-// ==============================================
-function openToolDrawer(toolId) {
-  hideToolPeek();
-  isDrawerOpen = true;
-  
-  const tool = aiTools.find(t => t.id === toolId);
-  if (!tool) return;
-  
-  trackUserHistory(tool.category);
-  
-  const description = currentLang === 'de' ? tool.description.de : tool.description.en;
-  const seoDesc = currentLang === 'de' ? tool.seoDesc?.de || description : tool.seoDesc?.en || description;
-  const pros = tool.pros ? (currentLang === 'de' ? tool.pros.de : tool.pros.en) || [] : [];
-  const cons = tool.cons ? (currentLang === 'de' ? tool.cons.de : tool.cons.en) || [] : [];
-  const features = tool.features || [];
-  const alternatives = tool.alternatives || [];
-  
-  const prosHtml = pros.map(pro => `<li>${pro}</li>`).join('');
-  const consHtml = cons.map(con => `<li>${con}</li>`).join('');
-  const featuresHtml = features.map(feature => 
-    `<span class="peek-badge" style="background:rgba(168,85,247,.15);color:var(--secondary);border:1px solid rgba(168,85,247,.3)">
-      <i class="fas fa-check-circle"></i> ${feature}
-    </span>`
-  ).join('');
-  
-  const alternativesHtml = alternatives.map(altId => {
-    const altTool = aiTools.find(t => t.id === altId);
-    return altTool ? `
-      <div class="dock-item" onclick="openToolDrawer('${altTool.id}')" style="cursor:pointer">
-        ${getCategoryIcon(altTool.category)}
-      </div>
-    ` : '';
-  }).join('');
-  
-  document.getElementById('drawerTitle').textContent = tool.name;
-  document.getElementById('drawerContent').innerHTML = `
-    <div style="margin-bottom:24px">
-      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:20px">
-        <div class="peek-icon" style="width:60px;height:60px;font-size:1.8rem">
-          ${getCategoryIcon(tool.category)}
-        </div>
-        <div style="flex:1">
-          <h3 style="font-size:1.6rem;font-weight:800;color:var(--text-primary);margin-bottom:8px">
-            ${tool.name}
-          </h3>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-            <span class="peek-badge category" style="background:rgba(0,212,255,.15);color:var(--primary);border:1px solid rgba(0,212,255,.3)">
-              <i class="fas fa-tag"></i> ${getCategoryName(tool.category)}
-            </span>
-            <span class="peek-badge price">
-              <i class="fas ${currentLang === 'de' ? 'fa-euro-sign' : 'fa-dollar-sign'}"></i> 
-              ${tool.priceDisplay[currentLang === 'de' ? 'de' : 'en']}
-            </span>
-            <span class="peek-badge rating">
-              <i class="fas fa-star"></i> ${tool.rating}/5
-            </span>
-            ${tool.hasLifetimeDeal ? 
-              '<span class="peek-badge ltd"><i class="fas fa-crown"></i> Lifetime Deal</span>' : 
-              ''}
-          </div>
-        </div>
-      </div>
-      
-      <!-- VOTING SECTION IN DRAWER -->
-      <div style="background:var(--bg-hover);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-weight:700;color:var(--text-primary);">
-              <span data-de="Community-Bewertung" data-en="Community Rating">Community-Bewertung</span>:
-            </span>
-            <div class="vote-count" id="drawer-vote-count-${tool.id}" style="font-size:1.5rem;">${getToolVotes(tool)}</div>
-            <div class="vote-buttons" style="display:flex;gap:6px;">
-              <button class="vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}" 
-                      id="drawer-vote-up-${tool.id}"
-                      onclick="vote('${tool.id}', 'up')">
-                <i class="fas fa-arrow-up"></i>
-              </button>
-              <button class="vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}" 
-                      id="drawer-vote-down-${tool.id}"
-                      onclick="vote('${tool.id}', 'down')">
-                <i class="fas fa-arrow-down"></i>
-              </button>
-            </div>
-          </div>
-          <div style="color:var(--text-secondary);font-size:.85rem;">
-            <i class="fas fa-info-circle"></i>
-            <span data-de="Deine Stimme zählt!" data-en="Your vote counts!">Deine Stimme zählt!</span>
-          </div>
-        </div>
-      </div>
-      
-      <p style="color:var(--text-secondary);line-height:1.6;margin-bottom:24px">
-        ${seoDesc}
-      </p>
-      <div style="display:flex;gap:12px;margin-bottom:24px">
-        <button class="dock-action-btn primary" 
-                onclick="window.open('${tool.link}', '_blank');trackToolClick('${tool.id}')" 
-                style="flex:1">
-          <i class="fas fa-external-link-alt"></i>
-          <span data-de="Tool öffnen" data-en="Open Tool">Tool öffnen</span>
-        </button>
-        <button class="dock-action-btn secondary" 
-                id="drawer-favorite-${tool.id}"
-                onclick="toggleFavorite('${tool.id}')" 
-                style="width:auto">
-          ${isFavorite(tool.id) ? 
-            '<i class="fas fa-star"></i> ' + (currentLang === 'de' ? 'Entfernen' : 'Remove') :
-            '<i class="far fa-star"></i> ' + (currentLang === 'de' ? 'Favorisieren' : 'Favorite')}
-        </button>
-      </div>
-    </div>
-    
-    ${pros.length > 0 || cons.length > 0 ? `
-      <div style="margin-bottom:24px">
-        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
-          <i class="fas fa-balance-scale"></i>
-          <span data-de="Vor- & Nachteile" data-en="Pros & Cons">Vor- & Nachteile</span>
-        </h4>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          ${pros.length > 0 ? `
-            <div style="background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);padding:16px">
-              <h5 style="color:var(--success);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-                <i class="fas fa-check-circle"></i>
-                <span data-de="Vorteile" data-en="Pros">Vorteile</span>
-              </h5>
-              <ul style="color:var(--text-secondary);padding-left:20px">${prosHtml}</ul>
-            </div>
-          ` : ''}
-          ${cons.length > 0 ? `
-            <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);padding:16px">
-              <h5 style="color:var(--error);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px">
-                <i class="fas fa-times-circle"></i>
-                <span data-de="Nachteile" data-en="Cons">Nachteile</span>
-              </h5>
-              <ul style="color:var(--text-secondary);padding-left:20px">${consHtml}</ul>
-            </div>
-          ` : ''}
-        </div>
-      </div>
-    ` : ''}
-    
-    ${features.length > 0 ? `
-      <div style="margin-bottom:24px">
-        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
-          <i class="fas fa-rocket"></i>
-          <span data-de="Hauptfunktionen" data-en="Key Features">Hauptfunktionen</span>
-        </h4>
-        <div style="display:flex;flex-wrap:wrap;gap:8px">${featuresHtml}</div>
-      </div>
-    ` : ''}
-    
-    ${alternatives.length > 0 ? `
-      <div style="margin-bottom:24px">
-        <h4 style="font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:12px">
-          <i class="fas fa-exchange-alt"></i>
-          <span data-de="Ähnliche Tools" data-en="Similar Tools">Ähnliche Tools</span>
-        </h4>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">${alternativesHtml}</div>
-      </div>
-    ` : ''}
-  `;
-  
-  updateLanguageElements();
-  
-  document.getElementById('drawerOverlay').classList.add('active');
-  document.getElementById('drawer').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeToolDrawer() {
-  isDrawerOpen = false;
-  document.getElementById('drawerOverlay').classList.remove('active');
-  document.getElementById('drawer').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-// ==============================================
-// KATEGORIE-INFO MODAL
-// ==============================================
-function openCategoryInfoModal(category) {
-  const info = categoryInfo[category];
-  if (!info) return;
-  
-  document.getElementById('categoryInfoTitle').textContent = info.title[currentLang];
-  document.getElementById('categoryInfoIcon').textContent = getCategoryIcon(category);
-  
-  const topTools = aiTools
-    .filter(tool => tool.category === category)
-    .sort((a, b) => {
-      const aVotes = getToolVotes(a) + BASELINE_VOTES;
-      const bVotes = getToolVotes(b) + BASELINE_VOTES;
-      return bVotes - aVotes;
-    })
-    .slice(0, 3)
-    .map(tool => `
-      <div class="category-info-tool" onclick="openToolDrawer('${tool.id}');closeCategoryInfoModal()">
-        ${tool.name}
-      </div>
-    `).join('');
-  
-  document.getElementById('categoryInfoContent').innerHTML = `
-    <div class="category-info-section">
-      <h3><i class="fas fa-info-circle"></i> ${currentLang === 'de' ? 'Beschreibung' : 'Description'}</h3>
-      <p>${info.description[currentLang]}</p>
-    </div>
-    <div class="category-info-section">
-      <h3><i class="fas fa-lightbulb"></i> ${currentLang === 'de' ? 'Typische Anwendungen' : 'Common Use Cases'}</h3>
-      ${info.useCases[currentLang].map(useCase => `<p>• ${useCase}</p>`).join('')}
-    </div>
-    <div class="category-info-section">
-      <h3><i class="fas fa-user-check"></i> ${currentLang === 'de' ? 'Ideal für' : 'Ideal For'}</h3>
-      ${info.bestFor[currentLang].map(best => `<p>• ${best}</p>`).join('')}
-    </div>
-    <div class="category-info-section">
-      <h3><i class="fas fa-chart-line"></i> ${currentLang === 'de' ? 'Aktuelle Trends' : 'Current Trends'}</h3>
-      ${info.trends[currentLang].map(trend => `<p>• ${trend}</p>`).join('')}
-    </div>
-    <div class="category-info-section">
-      <h3><i class="fas fa-trophy"></i> ${currentLang === 'de' ? 'Top Tools dieser Kategorie' : 'Top Tools in this Category'}</h3>
-      <div class="category-info-tools">${topTools}</div>
-    </div>
-    <div class="category-info-section">
-      <h3><i class="fas fa-question-circle"></i> ${currentLang === 'de' ? 'Wie wähle ich aus?' : 'How to Choose?'}</h3>
-      <p>${currentLang === 'de' ? 
-        'Vergleiche Tools anhand von Bewertungen, Preismodellen und spezifischen Features. Nutze unsere Favoriten- und Vergleichsfunktion für die besten Ergebnisse.' : 
-        'Compare tools based on ratings, pricing models and specific features. Use our favorites and comparison function for best results.'}
-      </p>
-    </div>
-  `;
-  
-  openModal('categoryInfoModal');
-}
-
-function closeCategoryInfoModal() {
-  closeModal('categoryInfoModal');
-}
-
-// ==============================================
-// FILTER FUNKTIONEN
-// ==============================================
-function setActiveFilter(filterId) {
-  currentCategory = filterId;
-  
-  document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.classList.remove('active');
-  });
-  
-  const activeChip = document.querySelector(`[data-filter="${filterId}"]`);
-  if (activeChip) activeChip.classList.add('active');
-  
+function expandGroup(category) {
+  const expandedGroups = JSON.parse(localStorage.getItem('expandedGroups') || '{}');
+  expandedGroups[category] = true;
+  localStorage.setItem('expandedGroups', JSON.stringify(expandedGroups));
   renderToolGroups();
-}
-
-function performSearch(query) {
-  searchQuery = query.toLowerCase();
-  
-  if (!searchQuery.trim()) {
-    renderToolGroups();
-    return;
-  }
-  
-  document.querySelectorAll('.tool-group').forEach(group => {
-    const category = group.dataset.category;
-    const toolRows = group.querySelectorAll('.tool-row');
-    let hasVisibleTools = false;
-    
-    toolRows.forEach(row => {
-      const toolId = row.dataset.id;
-      const tool = aiTools.find(t => t.id === toolId);
-      
-      if (tool) {
-        const searchMatch = 
-          tool.name.toLowerCase().includes(searchQuery) ||
-          (currentLang === 'de' ? tool.description.de : tool.description.en).toLowerCase().includes(searchQuery) ||
-          tool.category.toLowerCase().includes(searchQuery) ||
-          tool.tags.some(tag => tag.toLowerCase().includes(searchQuery));
-        
-        row.style.display = searchMatch ? 'grid' : 'none';
-        if (searchMatch) hasVisibleTools = true;
-      }
-    });
-    
-    group.style.display = hasVisibleTools ? 'block' : 'none';
-    
-    const showMoreButton = group.querySelector('.show-more');
-    if (showMoreButton) showMoreButton.style.display = 'none';
-  });
-}
-
-// ==============================================
-// SPRACH-UMSCHALTUNG
-// ==============================================
-function updateLanguageElements() {
-  document.querySelectorAll('[data-de]').forEach(element => {
-    if (element.hasAttribute('placeholder')) {
-      element.placeholder = currentLang === 'de' ? 
-        element.getAttribute('data-placeholder-de') : 
-        element.getAttribute('data-placeholder-en');
-    } else {
-      element.textContent = currentLang === 'de' ? 
-        element.getAttribute('data-de') : 
-        element.getAttribute('data-en');
-    }
-  });
-  
-  const searchHint = document.getElementById('searchHintText');
-  if (searchHint) {
-    searchHint.textContent = currentLang === 'de' ? 
-      'Suche nach Toolnamen, Use-Cases oder Features' : 
-      'Search for tool names, use cases or features';
-  }
-  
-  const heroSubtitle = document.getElementById('heroSubtitle');
-  if (heroSubtitle) {
-    heroSubtitle.textContent = currentLang === 'de' ?
-      'Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.' :
-      'Find your perfect AI tool in 2 clicks. Real user reviews, intelligent recommendations.';
-  }
-  
-  const langText = document.getElementById('langText');
-  if (langText) {
-    langText.textContent = currentLang === 'de' ? 'EN' : 'DE';
-  }
 }
 
 function toggleLanguage() {
   currentLang = currentLang === 'de' ? 'en' : 'de';
-  updateLanguageElements();
+  document.getElementById('langText').textContent = currentLang === 'de' ? 'EN' : 'DE';
   renderFilterChips();
   renderTop5();
   renderToolGroups();
 }
 
-// ==============================================
-// FAVORITEN-DRAWER
-// ==============================================
 function openFavoritesDrawer() {
   updateFavoritesDrawer();
   document.getElementById('favoritesOverlay').classList.add('active');
@@ -3738,329 +2584,123 @@ function closeFavoritesDrawer() {
   document.body.style.overflow = '';
 }
 
-// ==============================================
-// COOKIE-HANDLING
-// ==============================================
-function initCookieConsent() {
-  const consent = localStorage.getItem('cookieConsent');
-  const cookieBanner = document.getElementById('cookieConsent');
-  
-  if (consent === 'accepted') {
-    window.cookiePreferences.analytics = true;
-    initAnalytics();
-    cookieBanner.classList.remove('active');
-  } else if (consent === 'declined') {
-    window.cookiePreferences.analytics = false;
-    cookieBanner.classList.remove('active');
-  } else {
-    setTimeout(() => {
-      cookieBanner.classList.add('active');
-    }, 1000);
-  }
+function openModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.add('active');
+  document.getElementById(modalId).classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-function openCookieSettings() {
-  const isAccepted = localStorage.getItem('cookieConsent') === 'accepted';
-  document.getElementById('analyticsToggle').checked = isAccepted;
-  updateAnalyticsStatus(isAccepted);
-  openModal('cookieSettingsModal');
-}
-
-function updateAnalyticsStatus(isEnabled) {
-  const statusElement = document.getElementById('analyticsStatus');
-  if (statusElement) {
-    statusElement.textContent = isEnabled ? (currentLang === 'de' ? 'Aktiviert' : 'Active') : (currentLang === 'de' ? 'Deaktiviert' : 'Disabled');
-    statusElement.style.color = isEnabled ? 'var(--success)' : 'var(--text-secondary)';
-  }
-}
-
-function saveCookieSettings() {
-  const isAnalyticsEnabled = document.getElementById('analyticsToggle').checked;
-  
-  if (isAnalyticsEnabled) {
-    localStorage.setItem('cookieConsent', 'accepted');
-    window.cookiePreferences.analytics = true;
-    initAnalytics();
-    showNotification(
-      currentLang === 'de' ? 'Analyse-Cookies aktiviert' : 'Analytics cookies activated',
-      'success'
-    );
-  } else {
-    localStorage.setItem('cookieConsent', 'declined');
-    window.cookiePreferences.analytics = false;
-    showNotification(
-      currentLang === 'de' ? 'Analyse-Cookies deaktiviert' : 'Analytics cookies deactivated',
-      'info'
-    );
-  }
-  
-  closeModal('cookieSettingsModal');
-  document.getElementById('cookieConsent').classList.remove('active');
-}
-
-function acceptAllCookies() {
-  localStorage.setItem('cookieConsent', 'accepted');
-  window.cookiePreferences.analytics = true;
-  initAnalytics();
-  document.getElementById('cookieConsent').classList.remove('active');
-  showNotification(
-    currentLang === 'de' ? 'Cookies akzeptiert' : 'Cookies accepted',
-    'success'
-  );
-}
-
-function declineCookies() {
-  localStorage.setItem('cookieConsent', 'declined');
-  window.cookiePreferences.analytics = false;
-  document.getElementById('cookieConsent').classList.remove('active');
-  showNotification(
-    currentLang === 'de' ? 'Cookies abgelehnt' : 'Cookies declined',
-    'info'
-  );
-}
-
-function initAnalytics() {
-  if (!window.cookiePreferences.analytics) return;
-  if (document.cookie.includes('_ga_optout=1')) return;
-  
-  // Load GA4 script
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
-  document.head.appendChild(script);
-  
-  // Initialize GA4
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-53RF07VYJ8', {
-    anonymize_ip: true,
-    allow_google_signals: false,
-    allow_ad_personalization_signals: false,
-    restrict_domain_processing: true,
-    client_storage: 'none',
-    retention: '14 months'
-  });
-  
-  console.log('GA4 initialized');
-}
-
-// ==============================================
-// SCROLL-TO-TOP FUNKTIONALITÄT
-// ==============================================
-function initBackToTop() {
-  const backToTopButton = document.getElementById('backToTop');
-  
-  function updateVisibility() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile && scrollY > 300) {
-      backToTopButton.classList.add('visible');
-    } else {
-      backToTopButton.classList.remove('visible');
-    }
-  }
-  
-  function handleScroll() {
-    if (scrollDebounceTimeout) clearTimeout(scrollDebounceTimeout);
-    scrollDebounceTimeout = setTimeout(updateVisibility, 100);
-  }
-  
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('resize', handleScroll);
-  updateVisibility();
-  
-  backToTopButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+function closeModal(modalId) {
+  document.getElementById(`${modalId}Overlay`).classList.remove('active');
+  document.getElementById(modalId).classList.remove('active');
+  document.body.style.overflow = '';
 }
 
 // ==============================================
 // EVENT-LISTENER SETUP
 // ==============================================
 function setupEventListeners() {
-  // Suchfunktion
-  const searchInput = document.getElementById('omniboxInput');
-  let searchTimeout;
+  document.getElementById('langToggle')?.addEventListener('click', toggleLanguage);
+  document.getElementById('drawerClose')?.addEventListener('click', closeToolDrawer);
+  document.getElementById('drawerOverlay')?.addEventListener('click', closeToolDrawer);
+  document.getElementById('floatingFavoritesBtn')?.addEventListener('click', openFavoritesDrawer);
+  document.getElementById('favoritesClose')?.addEventListener('click', closeFavoritesDrawer);
+  document.getElementById('favoritesOverlay')?.addEventListener('click', closeFavoritesDrawer);
   
-  searchInput.addEventListener('input', (event) => {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      const query = event.target.value.trim();
-      if (query.length > 0) {
-        performSearch(query);
-      } else {
-        renderToolGroups();
-      }
-    }, 300);
-  });
-  
-  searchInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      const query = event.target.value.trim();
-      if (query) performSearch(query);
-    }
-  });
-  
-  // Dichte-Umschaltung
-  document.querySelectorAll('.density-btn').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('.density-btn').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      
-      document.body.className = '';
-      document.body.classList.add(`density-${button.dataset.density}`);
-      
-      renderToolGroups();
-      renderTop5();
-    });
-  });
-  
-  // Sprachumschaltung
-  document.getElementById('langToggle').addEventListener('click', toggleLanguage);
-  
-  // Drawer schließen
-  document.getElementById('drawerClose').addEventListener('click', closeToolDrawer);
-  document.getElementById('drawerOverlay').addEventListener('click', closeToolDrawer);
-  
-  // Kategorie-Info Modal
-  document.getElementById('categoryInfoModalClose').addEventListener('click', closeCategoryInfoModal);
-  document.getElementById('categoryInfoModalOverlay').addEventListener('click', closeCategoryInfoModal);
-  
-  // Favoriten-Drawer
-  document.getElementById('floatingFavoritesBtn').addEventListener('click', openFavoritesDrawer);
-  document.getElementById('favoritesClose').addEventListener('click', closeFavoritesDrawer);
-  document.getElementById('favoritesOverlay').addEventListener('click', closeFavoritesDrawer);
-  
-  document.getElementById('clearFavorites').addEventListener('click', () => {
+  document.getElementById('clearFavorites')?.addEventListener('click', () => {
     localStorage.setItem('aiFavorites', JSON.stringify([]));
     updateFavoritesDrawer();
     updateFavoritesBadge();
-    renderToolGroups();
     showNotification(
       currentLang === 'de' ? 'Favoriten geleert' : 'Favorites cleared',
       'info'
     );
   });
   
-  document.getElementById('compareAction').addEventListener('click', () => {
-    const comparison = JSON.parse(localStorage.getItem('aiComparison') || '[]');
-    if (comparison.length < 2) {
-      showNotification(
-        currentLang === 'de' ? 'Mindestens 2 Tools zum Vergleich auswählen' : 'Select at least 2 tools to compare',
-        'error'
-      );
-    } else {
-      showNotification(
-        currentLang === 'de' ? 'Vergleichsfunktion wird geladen...' : 'Loading comparison...',
-        'info'
-      );
-    }
+  document.querySelectorAll('.density-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.density-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      document.body.className = `density-${button.dataset.density}`;
+    });
   });
   
-  // Cookie-Funktionen
-  document.getElementById('cookieSettings').addEventListener('click', openCookieSettings);
-  document.getElementById('cookieDetailsBtn').addEventListener('click', openCookieSettings);
-  document.getElementById('cookieSettingsModalClose').addEventListener('click', () => closeModal('cookieSettingsModal'));
-  document.getElementById('cookieSettingsModalOverlay').addEventListener('click', () => closeModal('cookieSettingsModal'));
-  document.getElementById('saveCookieSettings').addEventListener('click', saveCookieSettings);
-  document.getElementById('acceptAllCookies').addEventListener('click', acceptAllCookies);
-  document.getElementById('cookieAccept').addEventListener('click', acceptAllCookies);
-  document.getElementById('cookieDecline').addEventListener('click', declineCookies);
-  
-  // Modals für Impressum und Datenschutz
-  document.getElementById('imprintLink').addEventListener('click', (e) => {
+  document.getElementById('imprintLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     openModal('imprintModal');
   });
   
-  document.getElementById('privacyLink').addEventListener('click', (e) => {
+  document.getElementById('privacyLink')?.addEventListener('click', (e) => {
     e.preventDefault();
     openModal('privacyModal');
   });
   
-  document.getElementById('privacyLinkCookie').addEventListener('click', (e) => {
+  document.getElementById('privacyLinkCookie')?.addEventListener('click', (e) => {
     e.preventDefault();
     openModal('privacyModal');
   });
   
-  document.getElementById('imprintModalClose').addEventListener('click', () => closeModal('imprintModal'));
-  document.getElementById('imprintModalOverlay').addEventListener('click', () => closeModal('imprintModal'));
-  document.getElementById('privacyModalClose').addEventListener('click', () => closeModal('privacyModal'));
-  document.getElementById('privacyModalOverlay').addEventListener('click', () => closeModal('privacyModal'));
+  document.getElementById('imprintModalClose')?.addEventListener('click', () => closeModal('imprintModal'));
+  document.getElementById('imprintModalOverlay')?.addEventListener('click', () => closeModal('imprintModal'));
+  document.getElementById('privacyModalClose')?.addEventListener('click', () => closeModal('privacyModal'));
+  document.getElementById('privacyModalOverlay')?.addEventListener('click', () => closeModal('privacyModal'));
   
-  // Analytics Opt-Out
-  document.getElementById('analyticsOptOut')?.addEventListener('click', (e) => {
-    e.preventDefault();
+  document.getElementById('cookieSettings')?.addEventListener('click', () => openModal('cookieSettingsModal'));
+  document.getElementById('cookieDetailsBtn')?.addEventListener('click', () => openModal('cookieSettingsModal'));
+  document.getElementById('cookieSettingsModalClose')?.addEventListener('click', () => closeModal('cookieSettingsModal'));
+  document.getElementById('cookieSettingsModalOverlay')?.addEventListener('click', () => closeModal('cookieSettingsModal'));
+  
+  document.getElementById('cookieAccept')?.addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted');
+    document.getElementById('cookieConsent').classList.remove('active');
+    showNotification('Cookies akzeptiert', 'success');
+  });
+  
+  document.getElementById('cookieDecline')?.addEventListener('click', () => {
     localStorage.setItem('cookieConsent', 'declined');
-    window.cookiePreferences.analytics = false;
-    document.cookie = '_ga_optout=1; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
-    showNotification(
-      currentLang === 'de' ? 'Google Analytics wurde deaktiviert' : 'Google Analytics has been disabled',
-      'success'
-    );
+    document.getElementById('cookieConsent').classList.remove('active');
+    showNotification('Cookies abgelehnt', 'info');
   });
   
-  // Rechtliche Details
-  document.getElementById('legalDetailsBtn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showNotification(
-      currentLang === 'de' ? 'Rechtliche Dokumente werden in neuen Tabs geöffnet' : 'Legal documents are opening in new tabs',
-      'info'
-    );
-    window.open('#', '_blank');
-    window.open('#', '_blank');
-    window.open('https://docs.github.com/en/github/site-policy/github-privacy-statement', '_blank');
-    window.open('https://policies.google.com/privacy', '_blank');
+  document.getElementById('backToTop')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   
-  // Externe Links
-  function setupExternalLinks() {
-    document.querySelectorAll('a[href^="http"]').forEach(link => {
-      if (!link.href.includes(window.location.hostname)) {
-        link.setAttribute('rel', 'noopener noreferrer nofollow');
-        link.setAttribute('target', '_blank');
-        if (!link.querySelector('.external-link-icon')) {
-          link.innerHTML += '<i class="fas fa-external-link-alt external-link-icon" style="margin-left:4px;font-size:.8em"></i>';
-        }
-      }
-    });
-  }
-  
-  // Escape-Taste zum Schließen von Modals
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      if (isDrawerOpen) closeToolDrawer();
-      if (document.getElementById('favoritesOverlay').classList.contains('active')) closeFavoritesDrawer();
-      if (document.getElementById('imprintModal').classList.contains('active')) closeModal('imprintModal');
-      if (document.getElementById('privacyModal').classList.contains('active')) closeModal('privacyModal');
-      if (document.getElementById('categoryInfoModal').classList.contains('active')) closeCategoryInfoModal();
-      if (document.getElementById('cookieSettingsModal').classList.contains('active')) closeModal('cookieSettingsModal');
+  window.addEventListener('scroll', () => {
+    const backToTop = document.getElementById('backToTop');
+    if (window.scrollY > 300 && window.innerWidth <= 768) {
+      backToTop?.classList.add('visible');
+    } else {
+      backToTop?.classList.remove('visible');
     }
   });
-  
-  setupExternalLinks();
 }
 
 // ==============================================
 // INITIALISIERUNG
 // ==============================================
-document.addEventListener('DOMContentLoaded', () => {
-  loadTools();
-  initCookieConsent();
-  initBackToTop();
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('🚀 App starting...');
+  
+  await loadTools();
   setupEventListeners();
   
-  // Cookie-Banner nach 1 Sekunde anzeigen (falls nötig)
-  setTimeout(() => {
-    const cookieBanner = document.getElementById('cookieConsent');
-    const consent = localStorage.getItem('cookieConsent');
-    if (!consent && cookieBanner) {
-      cookieBanner.classList.add('active');
-    }
-  }, 1000);
+  const consent = localStorage.getItem('cookieConsent');
+  if (!consent) {
+    setTimeout(() => {
+      document.getElementById('cookieConsent')?.classList.add('active');
+    }, 1000);
+  }
+  
+  console.log('✅ App ready');
+});
+
+window.addEventListener('beforeunload', () => {
+  if (realtimeChannel && supabase) {
+    supabase.removeChannel(realtimeChannel);
+  }
 });
 </script>
+
 </body>
 </html>
