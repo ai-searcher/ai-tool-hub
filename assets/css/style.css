@@ -1360,17 +1360,64 @@ body.light-mode .toggle-thumb .fa-sun {
 } 
 
 /* ===== BENACHRICHTIGUNGEN ===== */
+/* NEUE VERSION - ERSETZE DEN OBIGEN BLOCK MIT DIESEM: */
 .notification {
     position: fixed;
-    top: 20px;
+    top: 90px;  /* WICHTIG: Unter dem Dark-Mode Button */
     right: 20px;
-    padding: 12px 24px;
-    border-radius: 8px;
-    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 10000;
-    animation: slideIn 0.3s ease;
-    font-family: var(--font-primary);
     box-shadow: var(--shadow-lg);
+    font-size: 20px;
+    font-weight: bold;
+    animation: notificationSlideIn 0.3s ease;
+}
+
+.notification:before {
+    content: "✓";
+}
+
+.notification-success {
+    background: var(--color-success);
+    color: white;
+}
+
+.notification-error {
+    background: var(--color-error);
+    color: white;
+}
+
+.notification-info {
+    background: var(--color-info);
+    color: white;
+}
+
+@keyframes notificationSlideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes notificationSlideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
 }
 
 .notification-success {
