@@ -2524,7 +2524,6 @@ async function fetchVotesFromSupabase() {
   }
 }
 
-liveVotes = await fetchVotesFromSupabase();
 
 async function updateVoteInSupabase(toolId, oldVote, newVote) {
   // VERBESSERT: Prüfe ob supabase wirklich verfügbar ist
