@@ -2630,148 +2630,83 @@ async function updateVoteInSupabase(toolId, oldVote, newVote) {
 // ==============================================
 async function loadTools() {
   try {
-    document.getElementById('loading').style.display = 'block';
     console.log('🚀 Starte Tool-Loading...');
+    document.getElementById('loading').style.display = 'block';
     
-    // 1. Supabase mit Fehlerbehandlung initialisieren
-    // WICHTIG: Kein "let supabase = null;" hier - wir verwenden die globale Variable!
-    let supabaseAvailable = false;
+    // 1. data.json LADEN (das Einzige was WIRKLICH nötig ist)
+    const response = await fetch('data.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const rawData = await response.json();
+    console.log(`✅ ${rawData.length} Tools geladen`);
     
-    try {
-      if (typeof window.supabase !== 'undefined') {
-        console.log('🔧 Versuche Supabase zu initialisieren...');
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // Teste die Verbindung
-        const { data, error } = await supabase.from('tools_votes').select('count').limit(1);
-        if (error) {
-          console.warn('⚠️ Supabase Verbindungstest fehlgeschlagen:', error.message);
-          supabase = null;
-        } else {
-          supabaseAvailable = true;
-          console.log('✅ Supabase erfolgreich initialisiert');
-        }
-      } else {
-        console.warn('⚠️ Supabase CDN nicht geladen');
-        supabase = null; // Setze globale Variable auf null
-      }
-    } catch (error) {
-      console.warn('⚠️ Supabase Initialisierung fehlgeschlagen:', error.message);
-      supabase = null; // Setze globale Variable auf null
-    }
-    
-    // 2. data.json laden (UNBEDINGT ZUERST!)
-    console.log('📦 Lade data.json...');
-    let rawData = [];
-    try {
-      const response = await fetch('data.json');
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      rawData = await response.json();
-      console.log(`✅ ${rawData.length} Tools aus data.json geladen`);
-    } catch (error) {
-      console.error('❌ Fehler beim Laden von data.json:', error);
-      // Notfall-Daten als Fallback
-      rawData = getEmergencyToolsData();
-      console.log(`⚠️ Verwende Notfall-Daten: ${rawData.length} Tools`);
-    }
-    
-    // 3. Votes von Supabase laden (NUR wenn verfügbar)
+    // 2. Supabase OPTIONAL (nicht blockierend)
     let liveVotes = {};
-    if (supabaseAvailable && supabase) {
+    if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
       try {
-        console.log('📊 Lade Live-Votes von Supabase...');
-        liveVotes = await fetchVotesFromSupabase(supabase);
-        console.log(`✅ ${Object.keys(liveVotes).length} Vote-Datensätze geladen`);
-      } catch (error) {
-        console.warn('⚠️ Konnte keine Live-Votes laden:', error.message);
-        // Weiter mit leeren Votes
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await supabase
+          .from('tools_votes')
+          .select('tool_id, upvotes, downvotes');
+        
+        if (!error && data) {
+          data.forEach(item => {
+            liveVotes[item.tool_id] = {
+              upvotes: item.upvotes || 0,
+              downvotes: item.downvotes || 0,
+              totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
+            };
+          });
+          console.log(`📊 ${Object.keys(liveVotes).length} Live-Votes geladen`);
+        }
+      } catch (e) {
+        console.warn('⚠️ Supabase optional fehlgeschlagen:', e.message);
       }
-    } else {
-      console.warn('⚠️ Supabase nicht verfügbar - verwende lokale Votes');
     }
     
-    // 4. Lokale Votes (User-Votes) laden
-    const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-    console.log(`📝 ${Object.keys(localStorageVotes).length} lokale User-Votes geladen`);
-    
-    // 5. Tools verarbeiten
-    console.log('🔄 Verarbeite Tool-Daten...');
+    // 3. Tools verarbeiten (SIMPLIFIED)
     aiTools = rawData.map((tool, index) => {
-      const toolLiveVotes = liveVotes[tool.id] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
-      const userVoteData = localStorageVotes[tool.id] || {};
-      
-      // Stelle sicher, dass wir gültige Kategorie haben
-      let category = tool.cat || 'text';
-      if (!['text', 'image', 'code', 'video', 'audio', 'business'].includes(category)) {
-        category = 'text';
-      }
-      
-      // Beschreibung sicherstellen
-      const descriptionDe = tool.d && tool.d[0] ? String(tool.d[0]) : 'Keine Beschreibung verfügbar.';
-      const descriptionEn = tool.d && tool.d[1] ? String(tool.d[1]) : 'No description available.';
+      const toolVotes = liveVotes[tool.id] || { totalVotes: 0, upvotes: 0, downvotes: 0 };
+      const userVote = JSON.parse(localStorage.getItem('aiToolVotes') || '{}')[tool.id]?.userVote || 0;
       
       return {
         id: tool.id || `tool-${index}`,
         name: tool.name || 'Unnamed Tool',
-        link: tool.link || '#',
+        category: tool.cat || 'text',
         rating: parseFloat(tool.rate) || 0,
         price: tool.price || "freemium",
-        badge: tool.badge || "",
+        link: tool.link || '#',
+        description: {
+          de: tool.d?.[0] || 'Keine Beschreibung',
+          en: tool.d?.[1] || 'No description'
+        },
+        votes: toolVotes.totalVotes || 0,
+        upvotes: toolVotes.upvotes || 0,
+        downvotes: toolVotes.downvotes || 0,
+        userVote: userVote,
         hasLifetimeDeal: Boolean(tool.ltd),
-        category: category,
         features: Array.isArray(tool.f) ? tool.f : [],
-        tags: Array.isArray(tool.tags) ? tool.tags : [],
-        alternatives: Array.isArray(tool.alt) ? tool.alt : [],
-        description: { de: descriptionDe, en: descriptionEn },
-        priceDisplay: { 
-          de: tool.cost ? tool.cost[0] : (tool.price === 'free' ? "Kostenlos" : tool.price === 'paid' ? "Kostenpflichtig" : "Freemium"),
-          en: tool.cost ? tool.cost[1] : (tool.price === 'free' ? "Free" : tool.price === 'paid' ? "Paid" : "Freemium")
-        },
-        pros: { 
-          de: tool.pros ? (Array.isArray(tool.pros[0]) ? tool.pros[0] : []) : [], 
-          en: tool.pros ? (Array.isArray(tool.pros[1]) ? tool.pros[1] : []) : [] 
-        },
-        cons: { 
-          de: tool.cons ? (Array.isArray(tool.cons[0]) ? tool.cons[0] : []) : [], 
-          en: tool.cons ? (Array.isArray(tool.cons[1]) ? tool.cons[1] : []) : [] 
-        },
-        quickPeek: { 
-          de: descriptionDe.length > 75 ? descriptionDe.substring(0, 75) + '...' : descriptionDe,
-          en: descriptionEn.length > 75 ? descriptionEn.substring(0, 75) + '...' : descriptionEn
-        },
-        numericId: index + 1,
-        aiScore: 90,
-        popularityScore: 90,
-        votes: toolLiveVotes.totalVotes || 0,
-        upvotes: toolLiveVotes.upvotes || 0,
-        downvotes: toolLiveVotes.downvotes || 0,
-        userVote: userVoteData.userVote || 0
+        tags: Array.isArray(tool.tags) ? tool.tags : []
       };
     });
     
-    console.log(`✅ ${aiTools.length} Tools erfolgreich verarbeitet`);
+    console.log(`🎉 ${aiTools.length} Tools verarbeitet`);
     
-    // 6. UI rendern
-    calculateToolScores();
+    // 4. UI RENDERN
+    renderToolGroups();
     renderTop5();
     renderFilterChips();
-    renderToolGroups();
     updateFavoritesBadge();
     
     document.getElementById('loading').style.display = 'none';
-    console.log('🎉 Tool-Loading abgeschlossen!');
     
   } catch (error) {
-    console.error('❌ KRITISCHER FEHLER in loadTools():', error);
+    console.error('❌ FEHLER in loadTools:', error);
     document.getElementById('loading').innerHTML = `
-      <div style="text-align:center; padding:20px;">
-        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:var(--error);margin-bottom:20px;"></i>
-        <p style="color:var(--error);font-weight:bold;margin-bottom:10px;">Fehler beim Laden der Tools</p>
-        <p style="color:var(--text-secondary);margin-bottom:20px;">${error.message}</p>
-        <button onclick="location.reload()" style="padding:10px 20px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">
-          Seite neu laden
+      <div style="text-align:center;padding:30px;color:var(--error)">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;margin-bottom:20px;"></i>
+        <p><strong>Fehler:</strong> ${error.message}</p>
+        <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer">
+          Neu laden
         </button>
       </div>
     `;
@@ -3186,122 +3121,47 @@ async function vote(toolId, direction) {
   if (!tool) return;
   
   const oldVote = tool.userVote || 0;
-  const voteValue = direction === 'up' ? 1 : -1;
-  let newVote = voteValue;
+  const newVote = direction === 'up' ? 1 : -1;
   
-  // If clicking the same vote, remove it
-  if (oldVote === voteValue) {
-    newVote = 0;
-  }
-  
-  // UPDATE: Lokale Votes zuerst aktualisieren (immer funktioniert)
-  const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  voteData[toolId] = {
-    userVote: newVote,
-    timestamp: new Date().toISOString(),
-    // Speichere auch die Richtung für lokale Berechnung
-    direction: direction
-  };
+  // Lokal speichern (immer)
+  let voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  voteData[toolId] = { userVote: newVote, timestamp: Date.now() };
   localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
   
-  // Update tool data
+  // UI sofort updaten
   tool.userVote = newVote;
+  tool.votes += (newVote - oldVote); // Vereinfachte Berechnung
   
-  // Calculate local vote adjustment for immediate UI feedback
-  let voteAdjustment = 0;
-  if (oldVote === 1 && newVote === 0) voteAdjustment = -1;      // Upvote removed
-  else if (oldVote === -1 && newVote === 0) voteAdjustment = 1; // Downvote removed
-  else if (oldVote === 0 && newVote === 1) voteAdjustment = 1;  // Upvote added
-  else if (oldVote === 0 && newVote === -1) voteAdjustment = -1; // Downvote added
-  else if (oldVote === 1 && newVote === -1) voteAdjustment = -2; // Up to down
-  else if (oldVote === -1 && newVote === 1) voteAdjustment = 2;  // Down to up
+  // Vote-Buttons aktualisieren
+  document.querySelectorAll(`.vote-btn-row.up[data-tool="${toolId}"]`).forEach(btn => 
+    btn.classList.toggle('active', newVote === 1));
+  document.querySelectorAll(`.vote-btn-row.down[data-tool="${toolId}"]`).forEach(btn => 
+    btn.classList.toggle('active', newVote === -1));
   
-  // Temporär die Vote-Anzahl anpassen für sofortiges UI-Feedback
-  tool.votes = Math.max((tool.votes || 0) + voteAdjustment, 0);
+  // Vote-Count aktualisieren
+  const voteCountEl = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountEl) voteCountEl.textContent = tool.votes;
   
-  // UPDATE: Supabase als OPTIONALE Synchronisation (nicht blockierend)
+  // Zu Supabase senden (im Hintergrund, nicht blockierend)
   if (supabase) {
-    try {
-      console.log(`🔄 Versuche Vote an Supabase zu senden: ${toolId}, ${direction}`);
-      const supabaseResult = await updateVoteInSupabase(toolId, oldVote, newVote);
-      
-      if (supabaseResult) {
-        // Update tool data with Supabase response (genaue Zahlen)
-        tool.upvotes = supabaseResult.upvotes || 0;
-        tool.downvotes = supabaseResult.downvotes || 0;
-        tool.votes = supabaseResult.totalVotes || 0;
-        
-        console.log(`✅ Supabase Vote erfolgreich: ${tool.votes} Votes`);
-        
-        // Update localStorage with Supabase data
-        voteData[toolId].totalVotes = supabaseResult.totalVotes;
-        voteData[toolId].upvotes = supabaseResult.upvotes;
-        voteData[toolId].downvotes = supabaseResult.downvotes;
-        localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
+    setTimeout(async () => {
+      try {
+        await supabase.rpc('update_vote', {
+          tool_id: toolId,
+          vote_change: newVote - oldVote
+        });
+        console.log(`✅ Vote für ${toolId} an Supabase gesendet`);
+      } catch (e) {
+        console.warn('⚠️ Supabase Sync fehlgeschlagen:', e.message);
       }
-    } catch (error) {
-      console.warn('⚠️ Supabase Vote fehlgeschlagen, aber lokaler Vote gespeichert:', error.message);
-      // Lokaler Vote bleibt trotzdem erhalten
-    }
-  } else {
-    console.log('ℹ️ Supabase nicht verfügbar, nur lokaler Vote gespeichert');
+    }, 0);
   }
   
-  // Update UI elements (funktioniert immer, egal ob Supabase oder nicht)
-  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountElement) {
-    voteCountElement.textContent = Math.max(tool.votes, 0);
-    voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      voteCountElement.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update drawer vote count if open
-  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
-  if (drawerVoteCount) {
-    drawerVoteCount.textContent = Math.max(tool.votes, 0);
-    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      drawerVoteCount.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update vote buttons in list view
-  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
-  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
-  
-  if (listUpButton) {
-    listUpButton.classList.toggle('active', tool.userVote === 1);
-  }
-  
-  if (listDownButton) {
-    listDownButton.classList.toggle('active', tool.userVote === -1);
-  }
-  
-  // Update vote buttons in drawer if open
-  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
-  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
-  
-  if (drawerUpButton) {
-    drawerUpButton.classList.toggle('active', tool.userVote === 1);
-  }
-  
-  if (drawerDownButton) {
-    drawerDownButton.classList.toggle('active', tool.userVote === -1);
-  }
-  
-  // Update Top 5
-  updateTop5Vote(toolId, tool.votes);
-  
-  // Show notification (immer lokaler Erfolg)
   showNotification(
-    oldVote === newVote 
-      ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
-      : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
+    newVote === 0 ? 'Vote entfernt' : 'Vote gespeichert',
     'success'
   );
-} 
+}
      else {
     showNotification(
       currentLang === 'de' ? 'Fehler beim Speichern des Votes' : 'Error saving vote',
