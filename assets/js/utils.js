@@ -1,3 +1,5 @@
+(utils.js)
+
 // assets/js/utils.js - HILFSFUNKTIONEN
 
 // Funktion 1: Datum formatieren
@@ -32,14 +34,12 @@ export function showNotification(message, type = 'info') {
         }
     });
     
-    // NEUE Notification erstellen - NUR HÄKCHEN, KEIN TEXT
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    
-    // WICHTIG: KEIN textContent mehr! Das Häkchen kommt aus CSS
-    
     // Nur bei Erfolg-Meldungen anzeigen (für "AI Tool Hub geladen!")
     if (type === 'success') {
+        // NEUE Notification erstellen - NUR HÄKCHEN, KEIN TEXT
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
         document.body.appendChild(notification);
         
         // Nach 3 Sekunden mit Animation ausblenden
