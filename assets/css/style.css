@@ -1360,7 +1360,6 @@ body.light-mode .toggle-thumb .fa-sun {
 } 
 
 /* ===== BENACHRICHTIGUNGEN ===== */
-/* NEUE VERSION - ERSETZE DEN OBIGEN BLOCK MIT DIESEM: */
 .notification {
     position: fixed;
     top: 90px;  /* WICHTIG: Unter dem Dark-Mode Button */
@@ -1372,11 +1371,12 @@ body.light-mode .toggle-thumb .fa-sun {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
-    box-shadow: var(--shadow-lg);
-    font-size: 20px;
+    z-index: var(--z-modal);  /* Benutze existierende Variable */
+    box-shadow: var(--glass-shadow-elevated);
+    font-size: 24px;
     font-weight: bold;
     animation: notificationSlideIn 0.3s ease;
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.2);
 }
 
 .notification:before {
@@ -1416,43 +1416,6 @@ body.light-mode .toggle-thumb .fa-sun {
     }
     to {
         transform: translateY(-10px);
-        opacity: 0;
-    }
-}
-
-.notification-success {
-    background: var(--color-success);
-    border-left: 4px solid var(--color-neon-green);
-}
-
-.notification-error {
-    background: var(--color-error);
-    border-left: 4px solid #ff0033;
-}
-
-.notification-info {
-    background: var(--color-info);
-    border-left: 4px solid var(--color-neon-blue);
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
         opacity: 0;
     }
 }
