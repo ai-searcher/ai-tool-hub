@@ -2643,7 +2643,7 @@ async function loadTools() {
         id: tool.id,
         name: tool.name,
         link: tool.link,
-        rating: tool.rate || 0,
+        rating: tool.rate || tool. rating || 0,
         price: tool.price || "freemium",
         badge: tool.badge || "",
         hasLifetimeDeal: tool.ltd || false,
@@ -2660,8 +2660,8 @@ async function loadTools() {
         pros: { de: tool.pros ? tool.pros[0] : [], en: tool.pros ? tool.pros[1] : [] },
         cons: { de: tool.cons ? tool.cons[0] : [], en: tool.cons ? tool.cons[1] : [] },
         quickPeek: { 
-          de: tool.q ? tool.q[0] : (tool.d[0] ? tool.d[0].substring(0, 75) + "..." : ""),
-          en: tool.q ? tool.q[1] : (tool.d[1] ? tool.d[1].substring(0, 75) + "..." : "")
+        de: tool.d[0] ? tool.d[0].substring(0, 75) + "..." : "",
+        en: tool.d[1] ? tool.d[1].substring(0, 75) + "..." : ""
         },
         seoTitle: { de: `${tool.name} Review 2026`, en: `${tool.name} Review 2026` },
         seoDesc: { de: tool.d[0], en: tool.d[1] },
