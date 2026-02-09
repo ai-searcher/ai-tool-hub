@@ -1,5 +1,3 @@
-(utils.js)
-
 // assets/js/utils.js - HILFSFUNKTIONEN
 
 // Funktion 1: Datum formatieren
