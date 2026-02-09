@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com;base-uri 'self';frame-ancestors 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';img-src 'self' https: data:;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2;connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.supabase.co;base-uri 'self';frame-ancestors 'none'">
 <title>AI Searcher - Finde sofort dein perfektes KI-Tool</title>
 <meta name="description" content="Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen, Favoriten & Vergleichsfunktion.">
 <meta name="keywords" content="KI Tools, AI Software, ChatGPT Alternativen, KI Bildgeneratoren, kostenlose KI Tools">
@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"AI Searcher","url":"https://ai-searcher.github.io/ai-tool-hub/","description":"Finde in 2 Klicks dein perfektes KI-Tool. Echte User-Bewertungen, intelligente Empfehlungen.","potentialAction":{"@type":"SearchAction","target":"https://ai-searcher.github.io/ai-tool-hub/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 <style>
 :root {
@@ -1085,7 +1086,6 @@ body::before {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  flex-shrink: 0;
 }
 
 .peek-name {
@@ -2316,6 +2316,11 @@ let isDrawerOpen = false;
 let scrollDebounceTimeout = null;
 const BASELINE_VOTES = 2;
 
+// Supabase Configuration
+const SUPABASE_URL = 'https://doicozkpdbkyvdkpujoh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI';
+let supabase = null;
+
 // Kategorie-Informationen
 const categoryInfo = {
   text: {
@@ -2464,59 +2469,214 @@ function closeModal(modalId) {
 }
 
 // ==============================================
+// SUPABASE FUNKTIONEN
+// ==============================================
+function initSupabase() {
+  try {
+    if (typeof supabase === 'undefined') {
+      console.error('Supabase client not loaded. Check CDN script.');
+      return null;
+    }
+    
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase initialized successfully');
+    return supabase;
+  } catch (error) {
+    console.error('Error initializing Supabase:', error);
+    return null;
+  }
+}
+
+async function fetchVotesFromSupabase() {
+  if (!supabase) return {};
+  
+  try {
+    const { data, error } = await supabase
+      .from('tools_votes')
+      .select('*');
+    
+    if (error) {
+      console.error('Error fetching votes from Supabase:', error);
+      return {};
+    }
+    
+    const votesMap = {};
+    data.forEach(item => {
+      votesMap[item.tool_id] = {
+        upvotes: item.upvotes || 0,
+        downvotes: item.downvotes || 0,
+        totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
+      };
+    });
+    
+    return votesMap;
+  } catch (error) {
+    console.error('Exception fetching votes:', error);
+    return {};
+  }
+}
+
+async function updateVoteInSupabase(toolId, oldVote, newVote) {
+  if (!supabase) {
+    console.warn('Supabase not initialized, cannot update vote');
+    return false;
+  }
+  
+  try {
+    // First, get current vote counts
+    const { data: existingData, error: fetchError } = await supabase
+      .from('tools_votes')
+      .select('*')
+      .eq('tool_id', toolId)
+      .single();
+    
+    let currentUpvotes = 0;
+    let currentDownvotes = 0;
+    
+    if (fetchError && fetchError.code === 'PGRST116') {
+      // No existing record, create new one
+      currentUpvotes = 0;
+      currentDownvotes = 0;
+    } else if (fetchError) {
+      console.error('Error fetching existing vote:', fetchError);
+      return false;
+    } else {
+      currentUpvotes = existingData.upvotes || 0;
+      currentDownvotes = existingData.downvotes || 0;
+    }
+    
+    // Calculate new vote counts
+    let newUpvotes = currentUpvotes;
+    let newDownvotes = currentDownvotes;
+    
+    // Remove old vote
+    if (oldVote === 1) newUpvotes -= 1;
+    else if (oldVote === -1) newDownvotes -= 1;
+    
+    // Add new vote
+    if (newVote === 1) newUpvotes += 1;
+    else if (newVote === -1) newDownvotes += 1;
+    
+    // Ensure non-negative values
+    newUpvotes = Math.max(newUpvotes, 0);
+    newDownvotes = Math.max(newDownvotes, 0);
+    
+    // Upsert the record
+    const { error: upsertError } = await supabase
+      .from('tools_votes')
+      .upsert({
+        tool_id: toolId,
+        upvotes: newUpvotes,
+        downvotes: newDownvotes,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'tool_id'
+      });
+    
+    if (upsertError) {
+      console.error('Error upserting vote:', upsertError);
+      return false;
+    }
+    
+    return {
+      upvotes: newUpvotes,
+      downvotes: newDownvotes,
+      totalVotes: newUpvotes - newDownvotes
+    };
+  } catch (error) {
+    console.error('Exception updating vote in Supabase:', error);
+    return false;
+  }
+}
+
+// ==============================================
 // HAUPT-FUNKTIONALITÄT
 // ==============================================
 async function loadTools() {
   try {
     document.getElementById('loading').style.display = 'block';
     
+    // Initialize Supabase
+    supabase = initSupabase();
+    
+    // Fetch data.json
     const response = await fetch('data.json');
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
     const rawData = await response.json();
-    const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
     
+    // Fetch live votes from Supabase
+    let liveVotes = {};
+    if (supabase) {
+      liveVotes = await fetchVotesFromSupabase();
+    } else {
+      console.warn('Supabase not available, using localStorage for votes');
+    }
+    
+    // Get localStorage votes (for user's personal vote history)
+    const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    
+    // Map tools
     aiTools = rawData.map((tool, index) => {
-      const votes = voteData[tool.id] || {};
+      if (!tool.id || !tool.name || !tool.d || !Array.isArray(tool.d) || tool.d.length < 2) {
+        console.warn('Invalid tool data:', tool);
+      }
+      
+      const toolLiveVotes = liveVotes[tool.id] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
+      const userVoteData = localStorageVotes[tool.id] || {};
+      
+      // Ensure we have valid category
+      let category = tool.cat || 'text';
+      if (!['text', 'image', 'code', 'video', 'audio', 'business'].includes(category)) {
+        category = 'text';
+      }
+      
+      // Ensure we have valid description
+      const descriptionDe = tool.d && tool.d[0] ? String(tool.d[0]) : 'Keine Beschreibung verfügbar.';
+      const descriptionEn = tool.d && tool.d[1] ? String(tool.d[1]) : 'No description available.';
+      
+      // Ensure we have valid quick peek
+      const quickPeekDe = tool.q && tool.q[0] ? String(tool.q[0]) : (descriptionDe.length > 75 ? descriptionDe.substring(0, 75) + '...' : descriptionDe);
+      const quickPeekEn = tool.q && tool.q[1] ? String(tool.q[1]) : (descriptionEn.length > 75 ? descriptionEn.substring(0, 75) + '...' : descriptionEn);
+      
       return {
-        id: tool.id,
-        name: tool.name,
-        link: tool.link,
-        rating: tool.rate || 0,
+        id: tool.id || `tool-${index}`,
+        name: tool.name || 'Unnamed Tool',
+        link: tool.link || '#',
+        rating: parseFloat(tool.rate) || 0,
         price: tool.price || "freemium",
         badge: tool.badge || "",
-        hasLifetimeDeal: tool.ltd || false,
-        category: tool.cat,
-        features: tool.f || [],
-        tags: tool.tags || [],
-        alternatives: tool.alt || [],
-        useCases: tool.tags || [],
-        description: { de: tool.d[0], en: tool.d[1] },
+        hasLifetimeDeal: Boolean(tool.ltd),
+        category: category,
+        features: Array.isArray(tool.f) ? tool.f : [],
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
+        alternatives: Array.isArray(tool.alt) ? tool.alt : [],
+        useCases: Array.isArray(tool.tags) ? tool.tags : [],
+        description: { de: descriptionDe, en: descriptionEn },
         priceDisplay: { 
-          de: tool.cost ? tool.cost[0] : tool.price === 'paid' ? "Kostenpflichtig" : "Kostenlos",
-          en: tool.cost ? tool.cost[1] : tool.price === 'paid' ? "Paid" : "Free"
+          de: tool.cost ? tool.cost[0] : (tool.price === 'free' ? "Kostenlos" : tool.price === 'paid' ? "Kostenpflichtig" : "Freemium"),
+          en: tool.cost ? tool.cost[1] : (tool.price === 'free' ? "Free" : tool.price === 'paid' ? "Paid" : "Freemium")
         },
-        pros: { de: tool.pros ? tool.pros[0] : [], en: tool.pros ? tool.pros[1] : [] },
-        cons: { de: tool.cons ? tool.cons[0] : [], en: tool.cons ? tool.cons[1] : [] },
-        quickPeek: { 
-          de: tool.q ? tool.q[0] : (tool.d[0] ? tool.d[0].substring(0, 75) + "..." : ""),
-          en: tool.q ? tool.q[1] : (tool.d[1] ? tool.d[1].substring(0, 75) + "..." : "")
-        },
-        seoTitle: { de: `${tool.name} Review 2026`, en: `${tool.name} Review 2026` },
-        seoDesc: { de: tool.d[0], en: tool.d[1] },
+        pros: { de: tool.pros ? (Array.isArray(tool.pros[0]) ? tool.pros[0] : []) : [], en: tool.pros ? (Array.isArray(tool.pros[1]) ? tool.pros[1] : []) : [] },
+        cons: { de: tool.cons ? (Array.isArray(tool.cons[0]) ? tool.cons[0] : []) : [], en: tool.cons ? (Array.isArray(tool.cons[1]) ? tool.cons[1] : []) : [] },
+        quickPeek: { de: quickPeekDe, en: quickPeekEn },
+        seoTitle: { de: `${tool.name || 'Tool'} Review 2026`, en: `${tool.name || 'Tool'} Review 2026` },
+        seoDesc: { de: descriptionDe, en: descriptionEn },
         numericId: index + 1,
         aiScore: 90,
         popularityScore: 90,
         rankingHistory: [],
-        votes: votes.totalVotes || 0,
-        userVote: votes.userVote || 0,
-        upvotes: votes.upvotes || 0,
-        downvotes: votes.downvotes || 0,
-        pricing: { de: `Modell: ${tool.price}`, en: `Model: ${tool.price}` }
+        votes: toolLiveVotes.totalVotes || 0,
+        upvotes: toolLiveVotes.upvotes || 0,
+        downvotes: toolLiveVotes.downvotes || 0,
+        userVote: userVoteData.userVote || 0, // From localStorage
+        pricing: { de: `Modell: ${tool.price || 'freemium'}`, en: `Model: ${tool.price || 'freemium'}` }
       };
     });
+    
+    console.log(`Loaded ${aiTools.length} tools`);
     
     calculateToolScores();
     renderTop5();
@@ -2528,7 +2688,7 @@ async function loadTools() {
   } catch (error) {
     console.error('Error loading tools:', error);
     document.getElementById('loading').innerHTML = `
-      <p style="color:var(--error)">Fehler beim Laden der Tools.</p>
+      <p style="color:var(--error)">Fehler beim Laden der Tools: ${error.message}</p>
       <button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer">Erneut versuchen</button>
     `;
   }
@@ -2758,93 +2918,93 @@ async function vote(toolId, direction) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
   
-  const currentVote = tool.userVote || 0;
+  const oldVote = tool.userVote || 0;
   const voteValue = direction === 'up' ? 1 : -1;
+  let newVote = voteValue;
   
-  if (currentVote === voteValue) {
-    // Vote entfernen
-    tool.userVote = 0;
-    tool.votes -= voteValue;
-    if (direction === 'up') tool.upvotes -= 1;
-    else tool.downvotes -= 1;
+  // If clicking the same vote, remove it
+  if (oldVote === voteValue) {
+    newVote = 0;
+  }
+  
+  // Update Supabase
+  const supabaseResult = await updateVoteInSupabase(toolId, oldVote, newVote);
+  
+  if (supabaseResult) {
+    // Update tool data with Supabase response
+    tool.upvotes = supabaseResult.upvotes;
+    tool.downvotes = supabaseResult.downvotes;
+    tool.votes = supabaseResult.totalVotes;
+    tool.userVote = newVote;
+    
+    // Update localStorage for user's vote history
+    const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    voteData[toolId] = {
+      userVote: newVote,
+      totalVotes: supabaseResult.totalVotes,
+      upvotes: supabaseResult.upvotes,
+      downvotes: supabaseResult.downvotes
+    };
+    localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
+    
+    // Update UI elements
+    const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+    if (voteCountElement) {
+      voteCountElement.textContent = Math.max(tool.votes, 0);
+      voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+      setTimeout(() => {
+        voteCountElement.classList.remove('moving-up', 'moving-down');
+      }, 500);
+    }
+    
+    // Update drawer vote count if open
+    const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
+    if (drawerVoteCount) {
+      drawerVoteCount.textContent = Math.max(tool.votes, 0);
+      drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+      setTimeout(() => {
+        drawerVoteCount.classList.remove('moving-up', 'moving-down');
+      }, 500);
+    }
+    
+    // Update vote buttons in list view
+    const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
+    const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
+    
+    if (listUpButton) {
+      listUpButton.classList.toggle('active', tool.userVote === 1);
+    }
+    
+    if (listDownButton) {
+      listDownButton.classList.toggle('active', tool.userVote === -1);
+    }
+    
+    // Update vote buttons in drawer if open
+    const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
+    const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
+    
+    if (drawerUpButton) {
+      drawerUpButton.classList.toggle('active', tool.userVote === 1);
+    }
+    
+    if (drawerDownButton) {
+      drawerDownButton.classList.toggle('active', tool.userVote === -1);
+    }
+    
+    updateTop5Vote(toolId, tool.votes);
+    
+    showNotification(
+      oldVote === newVote 
+        ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
+        : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
+      'success'
+    );
   } else {
-    // Vote ändern oder hinzufügen
-    const oldVote = tool.userVote || 0;
-    tool.userVote = voteValue;
-    tool.votes = tool.votes - oldVote + voteValue;
-    
-    if (oldVote === 1) tool.upvotes -= 1;
-    else if (oldVote === -1) tool.downvotes -= 1;
-    
-    if (direction === 'up') tool.upvotes += 1;
-    else tool.downvotes += 1;
+    showNotification(
+      currentLang === 'de' ? 'Fehler beim Speichern des Votes' : 'Error saving vote',
+      'error'
+    );
   }
-  
-  const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-  voteData[toolId] = {
-    userVote: tool.userVote,
-    totalVotes: tool.votes,
-    upvotes: tool.upvotes,
-    downvotes: tool.downvotes
-  };
-  localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
-  
-  // Update list vote count
-  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
-  if (voteCountElement) {
-    voteCountElement.textContent = Math.max(tool.votes, 0);
-    voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      voteCountElement.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update drawer vote count
-  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
-  if (drawerVoteCount) {
-    drawerVoteCount.textContent = Math.max(tool.votes, 0);
-    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-    setTimeout(() => {
-      drawerVoteCount.classList.remove('moving-up', 'moving-down');
-    }, 500);
-  }
-  
-  // Update vote buttons in list view
-  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
-  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
-  
-  if (listUpButton) {
-    listUpButton.classList.remove('active');
-    if (tool.userVote === 1) listUpButton.classList.add('active');
-  }
-  
-  if (listDownButton) {
-    listDownButton.classList.remove('active');
-    if (tool.userVote === -1) listDownButton.classList.add('active');
-  }
-  
-  // Update vote buttons in drawer (if open)
-  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
-  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
-  
-  if (drawerUpButton) {
-    drawerUpButton.classList.remove('active');
-    if (tool.userVote === 1) drawerUpButton.classList.add('active');
-  }
-  
-  if (drawerDownButton) {
-    drawerDownButton.classList.remove('active');
-    if (tool.userVote === -1) drawerDownButton.classList.add('active');
-  }
-  
-  updateTop5Vote(toolId, tool.votes);
-  
-  showNotification(
-    currentVote === voteValue 
-      ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
-      : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
-    'success'
-  );
 }
 
 function toggleFavorite(toolId) {
@@ -3498,13 +3658,15 @@ function initAnalytics() {
   if (!window.cookiePreferences.analytics) return;
   if (document.cookie.includes('_ga_optout=1')) return;
   
+  // Load GA4 script
   const script = document.createElement('script');
   script.async = true;
   script.src = 'https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8';
   document.head.appendChild(script);
   
+  // Initialize GA4
   window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
+  function gtag() { window.dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', 'G-53RF07VYJ8', {
     anonymize_ip: true,
@@ -3514,6 +3676,8 @@ function initAnalytics() {
     client_storage: 'none',
     retention: '14 months'
   });
+  
+  console.log('GA4 initialized');
 }
 
 // ==============================================
