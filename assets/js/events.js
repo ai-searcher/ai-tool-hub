@@ -4,8 +4,13 @@
 // ===========================================
 
 import { supabase, saveVote, loadMultipleToolVotes } from './supabase.js';
-import { updateUIAfterVote, showNotification } from './utils.js';
+import { showNotification } from './utils.js';
 import { UI_CONFIG } from './config.js';
+
+// Einfache Platzhalter-Funktion
+const updateUIAfterVote = () => {
+    console.log("Vote würde UI aktualisieren");
+};
 
 // State management
 let currentState = {
