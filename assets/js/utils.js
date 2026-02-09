@@ -21,31 +21,37 @@ export function formatNumber(num) {
 
 // Funktion 3: Benachrichtigung anzeigen (wichtig!)
 export function showNotification(message, type = 'info') {
-    console.log(`[${type}] ${message}`);
+    // Console-Log behalten für Debugging
+    console.log(`[${type.toUpperCase()}] ${message}`);
     
-    // Einfache Browser-Benachrichtigung
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? 'green' : type === 'error' ? 'red' : 'blue'};
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        z-index: 10000;
-        font-family: sans-serif;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
+    // ENTFERNE alle bestehenden Notifications zuerst
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => {
         if (notification.parentNode) {
             notification.parentNode.removeChild(notification);
         }
-    }, 3000);
+    });
+    
+    // NEUE Notification erstellen - NUR HÄKCHEN, KEIN TEXT
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    
+    // WICHTIG: KEIN textContent mehr! Das Häkchen kommt aus CSS
+    
+    // Nur bei Erfolg-Meldungen anzeigen (für "AI Tool Hub geladen!")
+    if (type === 'success') {
+        document.body.appendChild(notification);
+        
+        // Nach 3 Sekunden mit Animation ausblenden
+        setTimeout(() => {
+            notification.style.animation = 'notificationSlideOut 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
 }
 
 // Funktion 4: Text kürzen
