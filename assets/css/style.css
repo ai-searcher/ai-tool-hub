@@ -1335,3 +1335,54 @@ body.light-mode .toggle-thumb .fa-sun {
 .h-full {
     height: 100%;
 } 
+
+/* ===== BENACHRICHTIGUNGEN ===== */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    font-family: var(--font-primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.notification-success {
+    background: var(--color-success);
+    border-left: 4px solid var(--color-neon-green);
+}
+
+.notification-error {
+    background: var(--color-error);
+    border-left: 4px solid #ff0033;
+}
+
+.notification-info {
+    background: var(--color-info);
+    border-left: 4px solid var(--color-neon-blue);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
