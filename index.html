@@ -2673,7 +2673,13 @@ async function loadTools() {
         userVote: userVoteData.user_vote || 0,
         upvotes: votes.upvotes || 0,
         downvotes: votes.downvotes || 0,
-        pricing: { de: `Modell: ${tool.price}`, en: `Model: ${tool.price}` }
+        pricing: { 
+        de: tool.pricing && tool.pricing[0] ? tool.pricing[0] : `Modell: ${tool.price}`, 
+        en: tool.pricing && tool.pricing[1] ? tool.pricing[1] : `Model: ${tool.price}` 
+        },
+        // Mapping für detaillierte Features sicherstellen
+      features: tool.f || [], 
+
       };
     });
     
