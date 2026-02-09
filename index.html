@@ -2471,58 +2471,77 @@ function closeModal(modalId) {
 // ==============================================
 // SUPABASE FUNKTIONEN
 // ==============================================
-function initSupabase() {
-  try {
-    if (typeof supabase === 'undefined') {
-      console.error('Supabase client not loaded. Check CDN script.');
-      return null;
-    }
-    
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('Supabase initialized successfully');
-    return supabase;
-  } catch (error) {
-    console.error('Error initializing Supabase:', error);
-    return null;
-  }
-}
-
 async function fetchVotesFromSupabase() {
-  if (!supabase) return {};
+  // VERBESSERT: Robustere Prüfung ob supabase verfügbar ist
+  if (!supabase || typeof supabase.from !== 'function') {
+    console.warn('⚠️ Supabase nicht verfügbar für fetchVotesFromSupabase', {
+      supabaseExists: !!supabase,
+      supabaseType: typeof supabase,
+      hasFromMethod: supabase ? typeof supabase.from : 'no supabase'
+    });
+    return {}; // Leeres Objekt zurückgeben, nicht false oder null
+  }
   
   try {
-    const { data, error } = await supabase
+    console.log('📡 Versuche Votes von Supabase zu laden...');
+    
+    // Timeout für die Anfrage setzen (max. 5 Sekunden)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Supabase timeout nach 5 Sekunden')), 5000);
+    });
+    
+    // Supabase-Abfrage mit Timeout
+    const supabasePromise = supabase
       .from('tools_votes')
       .select('*');
     
+    const { data, error } = await Promise.race([supabasePromise, timeoutPromise]);
+    
     if (error) {
-      console.error('Error fetching votes from Supabase:', error);
+      console.error('❌ Supabase Fehler beim Abrufen von Votes:', error);
       return {};
     }
     
     const votesMap = {};
-    data.forEach(item => {
-      votesMap[item.tool_id] = {
-        upvotes: item.upvotes || 0,
-        downvotes: item.downvotes || 0,
-        totalVotes: (item.upvotes || 0) - (item.downvotes || 0)
-      };
-    });
+    
+    if (data && Array.isArray(data)) {
+      data.forEach(item => {
+        votesMap[item.tool_id] = {
+          upvotes: parseInt(item.upvotes) || 0,
+          downvotes: parseInt(item.downvotes) || 0,
+          totalVotes: (parseInt(item.upvotes) || 0) - (parseInt(item.downvotes) || 0)
+        };
+      });
+      console.log(`✅ ${Object.keys(votesMap).length} Vote-Datensätze von Supabase geladen`);
+    } else {
+      console.log('ℹ️ Keine Vote-Daten von Supabase erhalten');
+    }
     
     return votesMap;
   } catch (error) {
-    console.error('Exception fetching votes:', error);
+    console.error('❌ Exception in fetchVotesFromSupabase:', error.message || error);
     return {};
   }
 }
 
+liveVotes = await fetchVotesFromSupabase();
+
 async function updateVoteInSupabase(toolId, oldVote, newVote) {
-  if (!supabase) {
-    console.warn('Supabase not initialized, cannot update vote');
-    return false;
+  // VERBESSERT: Prüfe ob supabase wirklich verfügbar ist
+  if (!supabase || typeof supabase.from !== 'function') {
+    console.warn('⚠️ Supabase nicht verfügbar für Vote-Update', { 
+      toolId, 
+      oldVote, 
+      newVote,
+      supabaseAvailable: !!supabase,
+      supabaseType: typeof supabase
+    });
+    return null; // Wichtig: null zurückgeben statt false
   }
   
   try {
+    console.log(`📤 Sende Vote an Supabase: ${toolId}, old: ${oldVote}, new: ${newVote}`);
+    
     // First, get current vote counts
     const { data: existingData, error: fetchError } = await supabase
       .from('tools_votes')
@@ -2535,14 +2554,16 @@ async function updateVoteInSupabase(toolId, oldVote, newVote) {
     
     if (fetchError && fetchError.code === 'PGRST116') {
       // No existing record, create new one
+      console.log(`🆕 Erstelle neuen Vote-Eintrag für ${toolId}`);
       currentUpvotes = 0;
       currentDownvotes = 0;
     } else if (fetchError) {
-      console.error('Error fetching existing vote:', fetchError);
-      return false;
+      console.error('❌ Fehler beim Abrufen existierender Votes:', fetchError);
+      return null; // Wichtig: null statt false
     } else {
       currentUpvotes = existingData.upvotes || 0;
       currentDownvotes = existingData.downvotes || 0;
+      console.log(`📊 Existierende Votes für ${toolId}: up=${currentUpvotes}, down=${currentDownvotes}`);
     }
     
     // Calculate new vote counts
@@ -2550,16 +2571,28 @@ async function updateVoteInSupabase(toolId, oldVote, newVote) {
     let newDownvotes = currentDownvotes;
     
     // Remove old vote
-    if (oldVote === 1) newUpvotes -= 1;
-    else if (oldVote === -1) newDownvotes -= 1;
+    if (oldVote === 1) {
+      newUpvotes -= 1;
+      console.log(`➖ Entferne Upvote von ${toolId}`);
+    } else if (oldVote === -1) {
+      newDownvotes -= 1;
+      console.log(`➖ Entferne Downvote von ${toolId}`);
+    }
     
     // Add new vote
-    if (newVote === 1) newUpvotes += 1;
-    else if (newVote === -1) newDownvotes += 1;
+    if (newVote === 1) {
+      newUpvotes += 1;
+      console.log(`➕ Füge Upvote zu ${toolId} hinzu`);
+    } else if (newVote === -1) {
+      newDownvotes += 1;
+      console.log(`➕ Füge Downvote zu ${toolId} hinzu`);
+    }
     
     // Ensure non-negative values
     newUpvotes = Math.max(newUpvotes, 0);
     newDownvotes = Math.max(newDownvotes, 0);
+    
+    console.log(`🔄 Neue Vote-Zahlen für ${toolId}: up=${newUpvotes}, down=${newDownvotes}`);
     
     // Upsert the record
     const { error: upsertError } = await supabase
@@ -2574,18 +2607,22 @@ async function updateVoteInSupabase(toolId, oldVote, newVote) {
       });
     
     if (upsertError) {
-      console.error('Error upserting vote:', upsertError);
-      return false;
+      console.error('❌ Fehler beim Speichern in Supabase:', upsertError);
+      return null; // Wichtig: null statt false
     }
     
-    return {
+    const result = {
       upvotes: newUpvotes,
       downvotes: newDownvotes,
       totalVotes: newUpvotes - newDownvotes
     };
+    
+    console.log(`✅ Supabase Vote erfolgreich gespeichert für ${toolId}:`, result);
+    return result;
+    
   } catch (error) {
-    console.error('Exception updating vote in Supabase:', error);
-    return false;
+    console.error('❌ Exception in updateVoteInSupabase:', error);
+    return null; // Wichtig: null statt false
   }
 }
 
@@ -2595,25 +2632,253 @@ async function updateVoteInSupabase(toolId, oldVote, newVote) {
 async function loadTools() {
   try {
     document.getElementById('loading').style.display = 'block';
+    console.log('🚀 Starte Tool-Loading...');
     
-    // Initialize Supabase
-    supabase = initSupabase();
+    // 1. Supabase mit Fehlerbehandlung initialisieren
+    // WICHTIG: Kein "let supabase = null;" hier - wir verwenden die globale Variable!
+    let supabaseAvailable = false;
     
-    // Fetch data.json
-    const response = await fetch('data.json');
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    try {
+      if (typeof window.supabase !== 'undefined') {
+        console.log('🔧 Versuche Supabase zu initialisieren...');
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Teste die Verbindung
+        const { data, error } = await supabase.from('tools_votes').select('count').limit(1);
+        if (error) {
+          console.warn('⚠️ Supabase Verbindungstest fehlgeschlagen:', error.message);
+          supabase = null;
+        } else {
+          supabaseAvailable = true;
+          console.log('✅ Supabase erfolgreich initialisiert');
+        }
+      } else {
+        console.warn('⚠️ Supabase CDN nicht geladen');
+        supabase = null; // Setze globale Variable auf null
+      }
+    } catch (error) {
+      console.warn('⚠️ Supabase Initialisierung fehlgeschlagen:', error.message);
+      supabase = null; // Setze globale Variable auf null
     }
     
-    const rawData = await response.json();
+    // 2. data.json laden (UNBEDINGT ZUERST!)
+    console.log('📦 Lade data.json...');
+    let rawData = [];
+    try {
+      const response = await fetch('data.json');
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      rawData = await response.json();
+      console.log(`✅ ${rawData.length} Tools aus data.json geladen`);
+    } catch (error) {
+      console.error('❌ Fehler beim Laden von data.json:', error);
+      // Notfall-Daten als Fallback
+      rawData = getEmergencyToolsData();
+      console.log(`⚠️ Verwende Notfall-Daten: ${rawData.length} Tools`);
+    }
     
-    // Fetch live votes from Supabase
+    // 3. Votes von Supabase laden (NUR wenn verfügbar)
     let liveVotes = {};
-    if (supabase) {
-      liveVotes = await fetchVotesFromSupabase();
+    if (supabaseAvailable && supabase) {
+      try {
+        console.log('📊 Lade Live-Votes von Supabase...');
+        liveVotes = await fetchVotesFromSupabase(supabase);
+        console.log(`✅ ${Object.keys(liveVotes).length} Vote-Datensätze geladen`);
+      } catch (error) {
+        console.warn('⚠️ Konnte keine Live-Votes laden:', error.message);
+        // Weiter mit leeren Votes
+      }
     } else {
-      console.warn('Supabase not available, using localStorage for votes');
+      console.warn('⚠️ Supabase nicht verfügbar - verwende lokale Votes');
     }
+    
+    // 4. Lokale Votes (User-Votes) laden
+    const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+    console.log(`📝 ${Object.keys(localStorageVotes).length} lokale User-Votes geladen`);
+    
+    // 5. Tools verarbeiten
+    console.log('🔄 Verarbeite Tool-Daten...');
+    aiTools = rawData.map((tool, index) => {
+      const toolLiveVotes = liveVotes[tool.id] || { upvotes: 0, downvotes: 0, totalVotes: 0 };
+      const userVoteData = localStorageVotes[tool.id] || {};
+      
+      // Stelle sicher, dass wir gültige Kategorie haben
+      let category = tool.cat || 'text';
+      if (!['text', 'image', 'code', 'video', 'audio', 'business'].includes(category)) {
+        category = 'text';
+      }
+      
+      // Beschreibung sicherstellen
+      const descriptionDe = tool.d && tool.d[0] ? String(tool.d[0]) : 'Keine Beschreibung verfügbar.';
+      const descriptionEn = tool.d && tool.d[1] ? String(tool.d[1]) : 'No description available.';
+      
+      return {
+        id: tool.id || `tool-${index}`,
+        name: tool.name || 'Unnamed Tool',
+        link: tool.link || '#',
+        rating: parseFloat(tool.rate) || 0,
+        price: tool.price || "freemium",
+        badge: tool.badge || "",
+        hasLifetimeDeal: Boolean(tool.ltd),
+        category: category,
+        features: Array.isArray(tool.f) ? tool.f : [],
+        tags: Array.isArray(tool.tags) ? tool.tags : [],
+        alternatives: Array.isArray(tool.alt) ? tool.alt : [],
+        description: { de: descriptionDe, en: descriptionEn },
+        priceDisplay: { 
+          de: tool.cost ? tool.cost[0] : (tool.price === 'free' ? "Kostenlos" : tool.price === 'paid' ? "Kostenpflichtig" : "Freemium"),
+          en: tool.cost ? tool.cost[1] : (tool.price === 'free' ? "Free" : tool.price === 'paid' ? "Paid" : "Freemium")
+        },
+        pros: { 
+          de: tool.pros ? (Array.isArray(tool.pros[0]) ? tool.pros[0] : []) : [], 
+          en: tool.pros ? (Array.isArray(tool.pros[1]) ? tool.pros[1] : []) : [] 
+        },
+        cons: { 
+          de: tool.cons ? (Array.isArray(tool.cons[0]) ? tool.cons[0] : []) : [], 
+          en: tool.cons ? (Array.isArray(tool.cons[1]) ? tool.cons[1] : []) : [] 
+        },
+        quickPeek: { 
+          de: descriptionDe.length > 75 ? descriptionDe.substring(0, 75) + '...' : descriptionDe,
+          en: descriptionEn.length > 75 ? descriptionEn.substring(0, 75) + '...' : descriptionEn
+        },
+        numericId: index + 1,
+        aiScore: 90,
+        popularityScore: 90,
+        votes: toolLiveVotes.totalVotes || 0,
+        upvotes: toolLiveVotes.upvotes || 0,
+        downvotes: toolLiveVotes.downvotes || 0,
+        userVote: userVoteData.userVote || 0
+      };
+    });
+    
+    console.log(`✅ ${aiTools.length} Tools erfolgreich verarbeitet`);
+    
+    // 6. UI rendern
+    calculateToolScores();
+    renderTop5();
+    renderFilterChips();
+    renderToolGroups();
+    updateFavoritesBadge();
+    
+    document.getElementById('loading').style.display = 'none';
+    console.log('🎉 Tool-Loading abgeschlossen!');
+    
+  } catch (error) {
+    console.error('❌ KRITISCHER FEHLER in loadTools():', error);
+    document.getElementById('loading').innerHTML = `
+      <div style="text-align:center; padding:20px;">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:var(--error);margin-bottom:20px;"></i>
+        <p style="color:var(--error);font-weight:bold;margin-bottom:10px;">Fehler beim Laden der Tools</p>
+        <p style="color:var(--text-secondary);margin-bottom:20px;">${error.message}</p>
+        <button onclick="location.reload()" style="padding:10px 20px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">
+          Seite neu laden
+        </button>
+      </div>
+    `;
+  }
+}
+
+// Hilfsfunktion: fetchVotesFromSupabase mit Parameter
+async function fetchVotesFromSupabase(supabaseClient) {
+  // VERBESSERT: Prüfe ob ein gültiges Supabase-Client übergeben wurde
+  if (!supabaseClient || typeof supabaseClient.from !== 'function') {
+    console.warn('⚠️ Ungültiges Supabase-Client für fetchVotesFromSupabase', {
+      clientExists: !!supabaseClient,
+      clientType: typeof supabaseClient,
+      hasFromMethod: supabaseClient ? typeof supabaseClient.from : 'no client'
+    });
+    return {};
+  }
+  
+  try {
+    console.log('📡 Lade Votes von Supabase...');
+    
+    // Timeout für die Anfrage (5 Sekunden)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Supabase timeout nach 5 Sekunden')), 5000);
+    });
+    
+    // Supabase-Abfrage
+    const supabasePromise = supabaseClient
+      .from('tools_votes')
+      .select('*');
+    
+    // Race zwischen Anfrage und Timeout
+    const { data, error } = await Promise.race([supabasePromise, timeoutPromise]);
+    
+    if (error) {
+      console.error('❌ Supabase Fehler beim Abrufen von Votes:', error);
+      return {};
+    }
+    
+    const votesMap = {};
+    
+    if (data && Array.isArray(data)) {
+      data.forEach(item => {
+        // Sicherstellen, dass wir Zahlen haben
+        const upvotes = parseInt(item.upvotes) || 0;
+        const downvotes = parseInt(item.downvotes) || 0;
+        
+        votesMap[item.tool_id] = {
+          upvotes: upvotes,
+          downvotes: downvotes,
+          totalVotes: upvotes - downvotes
+        };
+      });
+      console.log(`✅ ${Object.keys(votesMap).length} Vote-Datensätze von Supabase geladen`);
+    } else {
+      console.log('ℹ️ Keine Vote-Daten von Supabase erhalten (leeres Array oder null)');
+    }
+    
+    return votesMap;
+  } catch (error) {
+    console.error('❌ Exception in fetchVotesFromSupabase:', error.message || error);
+    return {};
+  }
+}
+
+// Notfall-Tools wenn data.json nicht geladen werden kann
+function getEmergencyToolsData() {
+  return [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "cat": "text",
+      "rate": 4.9,
+      "price": "freemium",
+      "cost": ["Kostenlos/€20", "Free/$20"],
+      "link": "https://chat.openai.com/",
+      "badge": "popular",
+      "d": ["Bester Allrounder für Texte, Ideen, Code, der die KI-Revolution gestartet hat.", "Best all-rounder for text, ideas, code that started the AI revolution."],
+      "f": ["GPT-4o", "Web Search", "File Upload", "Plugins", "Code Interpreter"],
+      "tags": ["text", "chat", "coding", "research", "multimodal", "popular", "freemium", "openai"],
+      "pros": [["Beste Sprachqualität und Kreativität", "Viele Integrationen und Plugins", "Regelmäßige Updates und Verbesserungen", "Große Community und Support", "Multimodal (Bild, Text, Code)"], ["Best language quality and creativity", "Many integrations and plugins", "Regular updates and improvements", "Large community and support", "Multimodal (image, text, code)"]],
+      "cons": [["Kostenpflichtig für volle Funktionalität", "Manchmal zu kreativ (Halluzinationen)", "Keine echte Privatsphäre im Free-Tier", "Warteschlangen im Free-Tier"], ["Paid for full functionality", "Sometimes too creative (hallucinations)", "No real privacy in free tier", "Queue times in free tier"]],
+      "pricing": ["Grundlegende Funktionen mit GPT-3.5 kostenlos, ChatGPT Plus für €20/Monat mit GPT-4o, Web-Zugang, Datei-Upload, erweitertem Kontext", "Basic features with GPT-3.5 free, ChatGPT Plus for $20/month with GPT-4o, web access, file upload, extended context"],
+      "alt": ["claude", "gemini", "perplexity"],
+      "ltd": false
+    },
+    {
+      "id": "midjourney",
+      "name": "Midjourney",
+      "cat": "image",
+      "rate": 4.9,
+      "price": "paid",
+      "cost": ["ab €10/Monat", "from $10/month"],
+      "link": "https://www.midjourney.com/",
+      "badge": "popular",
+      "d": ["Beste künstlerische Bildgenerierung mit unübertroffener stilistischer Kontrolle.", "Best artistic image generation with unparalleled stylistic control."],
+      "f": ["Style Control", "High Resolution", "Upscaling", "Parameter Control", "Community"],
+      "tags": ["image", "art", "generation", "artistic", "discord", "popular", "paid", "lifetime-deal"],
+      "pros": [["Unübertroffene künstlerische Qualität", "Viele Stile und Anpassungsoptionen", "Aktive Community auf Discord", "Regelmäßige Verbesserungen", "Hohe Auflösungen verfügbar"], ["Unmatched artistic quality", "Many styles and customization options", "Active Discord community", "Regular improvements", "High resolutions available"]],
+      "cons": [["Nur über Discord nutzbar", "Keine kostenlose Version", "Steile Lernkurve für optimale Ergebnisse", "Kein direkter Web-Zugang"], ["Only usable via Discord", "No free version", "Steep learning curve for optimal results", "No direct web access"]],
+      "pricing": ["Basic: €10/Monat für 200 Bilder, Standard: €30/Monat für unbegrenzte Bilder, Pro: €60/Monat für kommerzielle Nutzung", "Basic: $10/month for 200 images, Standard: $30/month for unlimited images, Pro: $60/month for commercial use"],
+      "alt": ["dalle-3", "stable-diffusion", "firefly"],
+      "ltd": true
+    }
+  ];
+}
     
     // Get localStorage votes (for user's personal vote history)
     const localStorageVotes = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
@@ -2914,6 +3179,9 @@ function renderFilterChips() {
 // ==============================================
 // TOOL INTERAKTIONEN
 // ==============================================
+// ==============================================
+// TOOL INTERAKTIONEN
+// ==============================================
 async function vote(toolId, direction) {
   const tool = aiTools.find(t => t.id === toolId);
   if (!tool) return;
@@ -2927,79 +3195,115 @@ async function vote(toolId, direction) {
     newVote = 0;
   }
   
-  // Update Supabase
-  const supabaseResult = await updateVoteInSupabase(toolId, oldVote, newVote);
+  // UPDATE: Lokale Votes zuerst aktualisieren (immer funktioniert)
+  const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
+  voteData[toolId] = {
+    userVote: newVote,
+    timestamp: new Date().toISOString(),
+    // Speichere auch die Richtung für lokale Berechnung
+    direction: direction
+  };
+  localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
   
-  if (supabaseResult) {
-    // Update tool data with Supabase response
-    tool.upvotes = supabaseResult.upvotes;
-    tool.downvotes = supabaseResult.downvotes;
-    tool.votes = supabaseResult.totalVotes;
-    tool.userVote = newVote;
-    
-    // Update localStorage for user's vote history
-    const voteData = JSON.parse(localStorage.getItem('aiToolVotes') || '{}');
-    voteData[toolId] = {
-      userVote: newVote,
-      totalVotes: supabaseResult.totalVotes,
-      upvotes: supabaseResult.upvotes,
-      downvotes: supabaseResult.downvotes
-    };
-    localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
-    
-    // Update UI elements
-    const voteCountElement = document.getElementById(`voteCount-${toolId}`);
-    if (voteCountElement) {
-      voteCountElement.textContent = Math.max(tool.votes, 0);
-      voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-      setTimeout(() => {
-        voteCountElement.classList.remove('moving-up', 'moving-down');
-      }, 500);
+  // Update tool data
+  tool.userVote = newVote;
+  
+  // Calculate local vote adjustment for immediate UI feedback
+  let voteAdjustment = 0;
+  if (oldVote === 1 && newVote === 0) voteAdjustment = -1;      // Upvote removed
+  else if (oldVote === -1 && newVote === 0) voteAdjustment = 1; // Downvote removed
+  else if (oldVote === 0 && newVote === 1) voteAdjustment = 1;  // Upvote added
+  else if (oldVote === 0 && newVote === -1) voteAdjustment = -1; // Downvote added
+  else if (oldVote === 1 && newVote === -1) voteAdjustment = -2; // Up to down
+  else if (oldVote === -1 && newVote === 1) voteAdjustment = 2;  // Down to up
+  
+  // Temporär die Vote-Anzahl anpassen für sofortiges UI-Feedback
+  tool.votes = Math.max((tool.votes || 0) + voteAdjustment, 0);
+  
+  // UPDATE: Supabase als OPTIONALE Synchronisation (nicht blockierend)
+  if (supabase) {
+    try {
+      console.log(`🔄 Versuche Vote an Supabase zu senden: ${toolId}, ${direction}`);
+      const supabaseResult = await updateVoteInSupabase(toolId, oldVote, newVote);
+      
+      if (supabaseResult) {
+        // Update tool data with Supabase response (genaue Zahlen)
+        tool.upvotes = supabaseResult.upvotes || 0;
+        tool.downvotes = supabaseResult.downvotes || 0;
+        tool.votes = supabaseResult.totalVotes || 0;
+        
+        console.log(`✅ Supabase Vote erfolgreich: ${tool.votes} Votes`);
+        
+        // Update localStorage with Supabase data
+        voteData[toolId].totalVotes = supabaseResult.totalVotes;
+        voteData[toolId].upvotes = supabaseResult.upvotes;
+        voteData[toolId].downvotes = supabaseResult.downvotes;
+        localStorage.setItem('aiToolVotes', JSON.stringify(voteData));
+      }
+    } catch (error) {
+      console.warn('⚠️ Supabase Vote fehlgeschlagen, aber lokaler Vote gespeichert:', error.message);
+      // Lokaler Vote bleibt trotzdem erhalten
     }
-    
-    // Update drawer vote count if open
-    const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
-    if (drawerVoteCount) {
-      drawerVoteCount.textContent = Math.max(tool.votes, 0);
-      drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
-      setTimeout(() => {
-        drawerVoteCount.classList.remove('moving-up', 'moving-down');
-      }, 500);
-    }
-    
-    // Update vote buttons in list view
-    const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
-    const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
-    
-    if (listUpButton) {
-      listUpButton.classList.toggle('active', tool.userVote === 1);
-    }
-    
-    if (listDownButton) {
-      listDownButton.classList.toggle('active', tool.userVote === -1);
-    }
-    
-    // Update vote buttons in drawer if open
-    const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
-    const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
-    
-    if (drawerUpButton) {
-      drawerUpButton.classList.toggle('active', tool.userVote === 1);
-    }
-    
-    if (drawerDownButton) {
-      drawerDownButton.classList.toggle('active', tool.userVote === -1);
-    }
-    
-    updateTop5Vote(toolId, tool.votes);
-    
-    showNotification(
-      oldVote === newVote 
-        ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
-        : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
-      'success'
-    );
   } else {
+    console.log('ℹ️ Supabase nicht verfügbar, nur lokaler Vote gespeichert');
+  }
+  
+  // Update UI elements (funktioniert immer, egal ob Supabase oder nicht)
+  const voteCountElement = document.getElementById(`voteCount-${toolId}`);
+  if (voteCountElement) {
+    voteCountElement.textContent = Math.max(tool.votes, 0);
+    voteCountElement.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      voteCountElement.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update drawer vote count if open
+  const drawerVoteCount = document.getElementById(`drawer-vote-count-${toolId}`);
+  if (drawerVoteCount) {
+    drawerVoteCount.textContent = Math.max(tool.votes, 0);
+    drawerVoteCount.classList.add(direction === 'up' ? 'moving-up' : 'moving-down');
+    setTimeout(() => {
+      drawerVoteCount.classList.remove('moving-up', 'moving-down');
+    }, 500);
+  }
+  
+  // Update vote buttons in list view
+  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
+  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
+  
+  if (listUpButton) {
+    listUpButton.classList.toggle('active', tool.userVote === 1);
+  }
+  
+  if (listDownButton) {
+    listDownButton.classList.toggle('active', tool.userVote === -1);
+  }
+  
+  // Update vote buttons in drawer if open
+  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
+  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
+  
+  if (drawerUpButton) {
+    drawerUpButton.classList.toggle('active', tool.userVote === 1);
+  }
+  
+  if (drawerDownButton) {
+    drawerDownButton.classList.toggle('active', tool.userVote === -1);
+  }
+  
+  // Update Top 5
+  updateTop5Vote(toolId, tool.votes);
+  
+  // Show notification (immer lokaler Erfolg)
+  showNotification(
+    oldVote === newVote 
+      ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
+      : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
+    'success'
+  );
+} 
+     else {
     showNotification(
       currentLang === 'de' ? 'Fehler beim Speichern des Votes' : 'Error saving vote',
       'error'
