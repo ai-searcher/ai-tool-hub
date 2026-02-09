@@ -32,7 +32,7 @@
             </div>
             
             <div class="header-controls">
-                <button class="theme-toggle" id="theme-toggle" aria-label="Dark Mode umschalten">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Dark Mode umschalten" title="Theme wechseln (Strg+T)" tabindex="0">
                     <div class="toggle-track">
                         <div class="toggle-thumb">
                             <i class="fas fa-moon"></i>
@@ -75,11 +75,11 @@
                             autocomplete="off"
                             aria-label="KI-Tools durchsuchen"
                         >
-                        <button class="search-clear" id="search-clear" aria-label="Suche löschen">
+                        <button class="search-clear" id="search-clear" aria-label="Suche löschen" title="Suche löschen" tabindex="0">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <button class="search-button" id="search-button">
+                    <button class="search-button" id="search-button" aria-label="Suche starten" title="Suche starten (Enter)" tabindex="0">
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -106,18 +106,18 @@
     <nav id="filter-bar" class="filter-nav" aria-label="Tool-Kategorien">
         <div class="filter-container" id="filter-container">
             <!-- Kategorien werden dynamisch geladen -->
-            <button class="filter-btn active" data-filter="all">
+            <button class="filter-btn active" data-filter="all" title="Alle Tools anzeigen" tabindex="0">
                 <i class="fas fa-th-large"></i>
                 <span>Alle Tools</span>
             </button>
         </div>
         
         <div class="filter-controls">
-            <button class="filter-sort" id="sort-toggle" aria-label="Sortieroptionen">
+            <button class="filter-sort" id="sort-toggle" aria-label="Sortieroptionen" title="Sortieroptionen öffnen (Strg+S)" tabindex="0">
                 <i class="fas fa-sort-amount-down"></i>
                 <span>Sortieren</span>
             </button>
-            <button class="filter-view" id="view-toggle" aria-label="Ansicht umschalten">
+            <button class="filter-view" id="view-toggle" aria-label="Ansicht umschalten" title="Ansicht umschalten (Strg+V)" tabindex="0">
                 <i class="fas fa-th"></i>
                 <i class="fas fa-list"></i>
             </button>
@@ -141,7 +141,7 @@
                 </p>
             </div>
             
-            <div class="loading-spinner" id="loading-spinner">
+            <div class="loading-spinner" id="loading-spinner" aria-busy="false">
                 <div class="spinner-container">
                     <div class="cyber-spinner"></div>
                     <p class="spinner-text">Lade KI-Tools...</p>
@@ -158,12 +158,12 @@
                     <i class="fas fa-trophy"></i>
                     <span>Top 3 Ranking</span>
                 </h3>
-                <button class="sidebar-refresh" id="refresh-ranking" aria-label="Ranking aktualisieren">
+                <button class="sidebar-refresh" id="refresh-ranking" aria-label="Ranking aktualisieren" title="Ranking aktualisieren (Strg+R)" aria-busy="false" tabindex="0">
                     <i class="fas fa-sync-alt"></i>
                 </button>
             </div>
             
-            <div class="ranking-container" id="ranking-container">
+            <div class="ranking-container" id="ranking-container" aria-busy="false">
                 <!-- Ranking-Einträge werden dynamisch geladen -->
                 <div class="ranking-placeholder">
                     <p>Ranking wird geladen...</p>
@@ -190,13 +190,13 @@
             </div>
             
             <div class="footer-links">
-                <button class="footer-link" id="imprint-btn">Impressum</button>
+                <button class="footer-link" id="imprint-btn" title="Impressum öffnen (Strg+I)" tabindex="0">Impressum</button>
                 <span class="footer-separator">|</span>
-                <button class="footer-link" id="privacy-btn">Datenschutz</button>
+                <button class="footer-link" id="privacy-btn" title="Datenschutz öffnen (Strg+P)" tabindex="0">Datenschutz</button>
             </div>
             
             <div class="footer-actions">
-                <button class="scroll-top" id="scroll-top" aria-label="Nach oben scrollen">
+                <button class="scroll-top" id="scroll-top" aria-label="Nach oben scrollen" title="Nach oben scrollen (Strg+U)" tabindex="0">
                     <i class="fas fa-chevron-up"></i>
                 </button>
             </div>
@@ -212,7 +212,7 @@
                     <i class="fas fa-file-contract"></i>
                     Impressum
                 </h3>
-                <button class="modal-close" id="imprint-close" aria-label="Modal schließen">
+                <button class="modal-close" id="imprint-close" aria-label="Modal schließen" title="Modal schließen (Escape)" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -290,7 +290,7 @@
                     <i class="fas fa-shield-alt"></i>
                     Datenschutzerklärung
                 </h3>
-                <button class="modal-close" id="privacy-close" aria-label="Modal schließen">
+                <button class="modal-close" id="privacy-close" aria-label="Modal schließen" title="Modal schließen (Escape)" tabindex="0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
