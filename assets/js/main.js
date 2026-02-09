@@ -1,4 +1,123 @@
 // ===========================================
+// THEME INITIALIZATION
+// ===========================================
+
+/**
+ * Initializes the theme system
+ */
+function initTheme() {
+    console.log('🎨 Initializing theme system...');
+    
+    try {
+        // Get DOM elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const body = document.body;
+        
+        if (!themeToggle || !themeIcon) {
+            console.warn('⚠️ Theme toggle elements not found');
+            return;
+        }
+        
+        // Get saved theme from localStorage with fallback
+        let savedTheme = 'light'; // Default fallback
+        
+        try {
+            const stored = localStorage.getItem('theme');
+            
+            // Validate stored theme value
+            if (stored === 'light' || stored === 'dark') {
+                savedTheme = stored;
+                console.log(`📁 Loaded theme from localStorage: ${savedTheme}`);
+            } else if (stored) {
+                console.warn(`⚠️ Invalid theme value in localStorage: "${stored}", using default`);
+                localStorage.removeItem('theme'); // Clean invalid value
+            } else {
+                console.log('📁 No valid theme found in localStorage');
+            }
+        } catch (storageError) {
+            console.error('❌ Error accessing localStorage:', storageError);
+            // Continue with default theme
+        }
+        
+        // Check system preference if no valid saved theme
+        let systemPreference = 'light';
+        try {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                systemPreference = 'dark';
+            }
+            console.log(`🖥️ System preference detected: ${systemPreference}`);
+        } catch (mediaError) {
+            console.error('❌ Error detecting system preference:', mediaError);
+        }
+        
+        // Determine final theme
+        let finalTheme = savedTheme;
+        if (savedTheme === 'light' && systemPreference === 'dark') {
+            // Use system preference as fallback if no valid saved theme
+            finalTheme = systemPreference;
+            console.log(`🎯 Using system preference: ${finalTheme}`);
+        }
+        
+        // Apply theme to body
+        body.classList.remove('light-theme', 'dark-theme');
+        body.classList.add(`${finalTheme}-theme`);
+        console.log(`✅ Applied theme class: ${finalTheme}-theme`);
+        
+        // Update toggle icon
+        updateThemeIcon(themeIcon, finalTheme);
+        
+        // Set up theme toggle event listener
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Update body class
+            body.classList.remove(`${currentTheme}-theme`);
+            body.classList.add(`${newTheme}-theme`);
+            
+            // Update icon
+            updateThemeIcon(themeIcon, newTheme);
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('theme', newTheme);
+                console.log(`💾 Saved theme to localStorage: ${newTheme}`);
+            } catch (storageError) {
+                console.error('❌ Error saving theme to localStorage:', storageError);
+            }
+            
+            // Log theme change
+            console.log(`🔄 Theme changed from ${currentTheme} to ${newTheme}`);
+        });
+        
+        console.log(`✅ Theme initialization complete. Active theme: ${finalTheme}`);
+        
+    } catch (error) {
+        console.error('❌ Error in theme initialization:', error);
+        // Ensure at least default theme is applied
+        document.body.classList.add('light-theme');
+    }
+}
+
+/**
+ * Updates the theme icon based on current theme
+ */
+function updateThemeIcon(iconElement, theme) {
+    if (!iconElement) return;
+    
+    // Remove all possible icon classes
+    iconElement.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
+    
+    // Add appropriate icon class
+    if (theme === 'dark') {
+        iconElement.classList.add('fa-sun'); // Sun icon for dark mode (click to switch to light)
+    } else {
+        iconElement.classList.add('fa-moon'); // Moon icon for light mode (click to switch to dark)
+    }
+}
+
+// ===========================================
 // MAIN APPLICATION CONTROLLER
 // AI Tool Hub - Main Orchestrator
 // ===========================================
@@ -78,6 +197,9 @@ async function initApp() {
     console.log('🚀 AI Tool Hub initializing...');
     
     try {
+        // Initialize theme first
+        initTheme();
+        
         showLoadingSpinner();
         
         // Test database connection
@@ -655,7 +777,6 @@ function initRealtimeUpdates() {
 // APPLICATION START
 // ===========================================
 
-// Initialize application when DOM is loaded
 // Initialize application when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
