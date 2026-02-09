@@ -232,7 +232,7 @@ body.light-mode .toggle-thumb .fa-sun {
 
 .hero-title {
     text-align: center;
-    margin-bottom: var(--spacing-8);
+    margin-bottom: var(--spacing-4);
 }
 
 .title-line {
@@ -243,36 +243,49 @@ body.light-mode .toggle-thumb .fa-sun {
     text-align: center;
     font-size: var(--text-xl);
     margin-bottom: var(--spacing-12);
-    height: 60px;
+    height: 40px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: var(--spacing-2);
+    justify-content: flex-start;
+    gap: 0;
+    position: relative;
+    width: 100%;
 }
 
 .slogan-text {
     color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-1);
+    width: 100%;
+    text-align: center;
 }
 
 .slogan-words {
     position: relative;
-    width: 300px;
+    width: 100%;
     height: 40px;
+    display: flex;
+    justify-content: center;
     overflow: hidden;
+    margin: 0 auto;
 }
 
 .word {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 300px;
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: var(--color-neon-purple);
     font-weight: 600;
     opacity: 0;
     animation: wordCycle 12s infinite;
+    text-align: center;
 }
 
 .word:nth-child(1) { animation-delay: 0s; }
@@ -281,9 +294,9 @@ body.light-mode .toggle-thumb .fa-sun {
 .word:nth-child(4) { animation-delay: 9s; }
 
 @keyframes wordCycle {
-    0%, 20% { opacity: 0; transform: translateY(20px); }
-    5%, 15% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-20px); }
+    0%, 20% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    5%, 15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
 }
 
 .search-container {
@@ -1184,15 +1197,20 @@ body.light-mode .toggle-thumb .fa-sun {
     }
     
     .hero-slogan {
-        font-size: var(--text-lg);
-        height: 50px;
-        flex-direction: column;
-        gap: 0;
+    font-size: var(--text-lg);
+    height: 35px;
+    flex-direction: column;
+    gap: 0;
     }
-    
+
     .slogan-words {
-        width: 100%;
-        height: 30px;
+     width: 100%;
+     height: 30px;
+    }
+
+    .word {
+     min-width: 250px;
+     font-size: var(--text-lg);
     }
     
     .search-container {
