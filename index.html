@@ -2762,11 +2762,13 @@ async function vote(toolId, direction) {
   const voteValue = direction === 'up' ? 1 : -1;
   
   if (currentVote === voteValue) {
+    // Vote entfernen
     tool.userVote = 0;
     tool.votes -= voteValue;
     if (direction === 'up') tool.upvotes -= 1;
     else tool.downvotes -= 1;
   } else {
+    // Vote ändern oder hinzufügen
     const oldVote = tool.userVote || 0;
     tool.userVote = voteValue;
     tool.votes = tool.votes - oldVote + voteValue;
@@ -2805,26 +2807,42 @@ async function vote(toolId, direction) {
     setTimeout(() => {
       drawerVoteCount.classList.remove('moving-up', 'moving-down');
     }, 500);
-    
-    // Update vote buttons in drawer
-    const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
-    const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
-    if (drawerUpButton && drawerDownButton) {
-      drawerUpButton.className = `vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}`;
-      drawerDownButton.className = `vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}`;
-    }
+  }
+  
+  // Update vote buttons in list view
+  const listUpButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
+  const listDownButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
+  
+  if (listUpButton) {
+    listUpButton.classList.remove('active');
+    if (tool.userVote === 1) listUpButton.classList.add('active');
+  }
+  
+  if (listDownButton) {
+    listDownButton.classList.remove('active');
+    if (tool.userVote === -1) listDownButton.classList.add('active');
+  }
+  
+  // Update vote buttons in drawer (if open)
+  const drawerUpButton = document.getElementById(`drawer-vote-up-${toolId}`);
+  const drawerDownButton = document.getElementById(`drawer-vote-down-${toolId}`);
+  
+  if (drawerUpButton) {
+    drawerUpButton.classList.remove('active');
+    if (tool.userVote === 1) drawerUpButton.classList.add('active');
+  }
+  
+  if (drawerDownButton) {
+    drawerDownButton.classList.remove('active');
+    if (tool.userVote === -1) drawerDownButton.classList.add('active');
   }
   
   updateTop5Vote(toolId, tool.votes);
   
-  // Update list vote buttons
-  const upButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.up');
-  const downButton = document.querySelector(`#voteCount-${toolId}`)?.closest('.tool-vote')?.querySelector('.vote-btn-row.down');
-  if (upButton) upButton.className = `vote-btn-row up ${tool.userVote === 1 ? 'active' : ''}`;
-  if (downButton) downButton.className = `vote-btn-row down ${tool.userVote === -1 ? 'active' : ''}`;
-  
   showNotification(
-    currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓',
+    currentVote === voteValue 
+      ? (currentLang === 'de' ? 'Vote entfernt ✓' : 'Vote removed ✓')
+      : (currentLang === 'de' ? 'Deine Stimme wurde gezählt! ✓' : 'Your vote has been counted! ✓'),
     'success'
   );
 }
