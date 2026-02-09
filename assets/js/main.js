@@ -656,12 +656,11 @@ function initRealtimeUpdates() {
 // ===========================================
 
 // Initialize application when DOM is loaded
-document.addEventListener('DOMLoaded', initApp);
-
-// Fallback: initialize when DOM is ready
+// Initialize application when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
+    // DOM ist bereits geladen
     initApp();
 }
 
