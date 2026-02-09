@@ -299,7 +299,7 @@
     "d": ["Text-zu-Sprache für Videos und kommerzielle Nutzung mit Studio-Qualität.", "Text-to-speech for videos and commercial use with studio quality."],
     "f": ["Voice Cloning", "Voice Changer", "Video Integration", "Commercial Rights", "Collaboration"],
     "tags": ["audio", "tts", "voice", "commercial", "video", "popular", "freemium"],
-    "pros": [["Hohe Stimmenqualität", "Kommerzielle Nutzung", "Video-Integration", "Team-Kollaboration", "Voice Changer"], ["High voice quality", "Commercial use", "Video integration", "Team collaboration", "Voice changer"]],
+    "pros": [["Hohe Stimmenqualität", "Kommerzielle Nutzung", "Video-Integration", "Team Kollaboration", "Voice Changer"], ["High voice quality", "Commercial use", "Video integration", "Team collaboration", "Voice changer"]],
     "cons": [["Teuer für umfangreiche Nutzung", "Begrenzte kostenlose Version", "Keine Emotionen wie ElevenLabs", "Lernkurve für optimale Ergebnisse"], ["Expensive for extensive use", "Limited free version", "No emotions like ElevenLabs", "Learning curve for optimal results"]],
     "pricing": ["Kostenlose Testversion, Basic: €19/Monat, Pro: €26/Monat, Enterprise: €75/Monat", "Free trial, Basic: $19/month, Pro: $26/month, Enterprise: $75/month"],
     "alt": ["elevenlabs", "descript", "suno"],
