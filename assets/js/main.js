@@ -134,7 +134,7 @@ async function loadAllTools() {
         
         // Fallback to local JSON if database is empty
         console.log('📂 Database empty, loading from local JSON...');
-        const response = await fetch('./data/tools.json');
+        const response = await fetch('./data.json');
         
         if (!response.ok) {
             throw new Error('Failed to load local JSON');
