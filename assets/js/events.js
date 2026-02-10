@@ -533,7 +533,7 @@ function closeModal(modalElement) {
 // ===========================================
 
 /**
- * Initializes theme toggle event listener with smooth transitions
+ * Initializes theme toggle event listener
  */
 export function initThemeEvents() {
     const themeToggle = document.getElementById('theme-toggle');
@@ -614,16 +614,6 @@ export function initThemeEvents() {
             themeToggle.click();
         }
     });
-
-    // Load saved theme
-    try {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.body.classList.add(savedTheme + '-mode');
-        console.log(`📁 Loaded saved theme: ${savedTheme}`);
-    } catch (error) {
-        console.warn('Could not load saved theme, using default:', error);
-        document.body.classList.add('dark-mode');
-    }
 }
 
 /**
