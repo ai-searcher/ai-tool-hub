@@ -384,6 +384,38 @@
         </div>
     </div>
 
+    <!-- Modal für Tool-Verzeichnis -->
+    <div class="modal" id="directory-modal" aria-hidden="true" aria-labelledby="directory-modal-title" role="dialog" aria-modal="false">
+        <div class="modal-overlay" id="directory-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="directory-modal-title">
+                    <i class="fas fa-folder-open"></i>
+                    Tool-Verzeichnis
+                </h3>
+                <button class="modal-close" id="directory-close" aria-label="Modal schließen" title="Modal schließen (Escape)" tabindex="0">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="directory-content">
+                <p class="modal-subtitle">Durchsuche alle KI-Tools nach Kategorien</p>
+                
+                <div class="directory-tabs" id="directory-tabs">
+                    <!-- Kategorien werden hier als Chips/Buttons dynamisch geladen -->
+                </div>
+                
+                <div class="directory-list" id="directory-list">
+                    <!-- Tool-Liste wird hier dynamisch geladen -->
+                    <div class="directory-item">
+                        <h4 class="tool-title">Tool Name</h4>
+                        <p class="tool-description">Kurze Beschreibung des Tools in einer Zeile</p>
+                        <button class="tool-action-btn" aria-label="Zum Tool scrollen">Zum Tool</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Externe Scripts -->
     <!-- Supabase Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
