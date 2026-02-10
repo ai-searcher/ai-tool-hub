@@ -565,67 +565,53 @@ body.light-mode .search-button:hover {
     letter-spacing: 0.1em;
 }
 
-/* ===== FILTER NAVIGATION - TEXT-ONLY DESIGN ===== */
+/* ===== FILTER NAVIGATION - TRANSPARENT BACKGROUND, CONTROLS LINKS ===== */
 .filter-nav {
     position: sticky;
     top: var(--header-height);
     z-index: var(--z-sticky);
-    background: var(--glass-bg-medium);
+    background: transparent; /* GEÄNDERT: war vorher solid background */
     backdrop-filter: var(--glass-blur-medium);
+    -webkit-backdrop-filter: var(--glass-blur-medium);
     border-bottom: var(--border-width-thin) solid var(--glass-border-light);
     padding: var(--spacing-3) 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    scroll-snap-type: x proximity;
-    position: relative;
-}
-
-.filter-nav::before,
-.filter-nav::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 60px;
-    height: 100%;
-    pointer-events: none;
-    z-index: 10;
-}
-
-.filter-nav::before {
-    left: 0;
-    background: linear-gradient(to right, 
-        var(--color-bg-primary), 
-        transparent);
-}
-
-.filter-nav::after {
-    right: 0;
-    background: linear-gradient(to left, 
-        var(--color-bg-primary), 
-        transparent);
 }
 
 .filter-nav .header-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* GEÄNDERT: war space-between */
     align-items: center;
-    min-width: max-content;
+    gap: var(--spacing-4);
+    flex-direction: row;
+    position: relative;
+}
+
+.filter-nav .header-container::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(to left, 
+        var(--color-bg-primary), 
+        transparent);
+    pointer-events: none;
+    z-index: 10;
 }
 
 .filter-container {
     display: flex;
     gap: var(--spacing-2);
     overflow-x: auto;
-    padding: var(--spacing-3) var(--spacing-6);
-    margin: 0;
-    white-space: nowrap;
+    overflow-y: hidden;
     scroll-behavior: smooth;
     scroll-snap-type: x proximity;
-    flex: 1;
-    min-width: 0;
+    padding: var(--spacing-2) var(--spacing-4);
     scrollbar-width: thin;
     scrollbar-color: var(--color-neon-blue) transparent;
+    flex: 1;
+    order: 2; /* RECHTS */
 }
 
 .filter-container::-webkit-scrollbar {
@@ -729,11 +715,10 @@ body.light-mode .filter-btn.active {
 .filter-controls {
     display: flex;
     gap: var(--spacing-2);
-    margin-left: auto;
+    margin-left: 0; /* GEÄNDERT: war auto (rechts) */
+    margin-right: var(--spacing-4);
     flex-shrink: 0;
-    padding: 0 var(--spacing-6);
-    height: 100%;
-    align-items: center;
+    order: 1; /* LINKS */
 }
 
 .filter-sort,
@@ -817,6 +802,8 @@ body.light-mode .filter-view:hover {
 
 .filter-dropdown {
     display: none;
+    order: 2;
+    flex: 1;
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -1754,28 +1741,34 @@ body.light-mode .share-btn:hover {
     
     .filter-container {
         width: 100%;
-        padding: var(--spacing-2) 0;
-        order: 2;
-    }
-    
-    .filter-controls {
-        width: 100%;
-        justify-content: flex-end;
-        padding: 0;
-        order: 1;
-    }
-    
-    .filter-container {
-        display: flex;
+        display: none;
     }
     
     .filter-dropdown {
-        display: none;
+        display: block;
+        width: 100%;
+        padding: var(--spacing-3) var(--spacing-4);
+        background: var(--glass-bg-medium);
+        border: var(--border-width-thin) solid var(--glass-border-light);
+        border-radius: var(--radius-lg);
+        color: var(--color-text-primary);
+        font-family: var(--font-primary);
+        font-size: var(--text-base);
+        cursor: pointer;
+        backdrop-filter: var(--glass-blur-small);
+        margin-bottom: var(--spacing-4);
     }
     
-    .filter-nav::before,
-    .filter-nav::after {
-        display: none;
+    .filter-dropdown option {
+        background: var(--color-bg-secondary);
+        color: var(--color-text-primary);
+    }
+    
+    .filter-controls {
+        order: 1;
+        margin-right: var(--spacing-3);
+        width: 100%;
+        justify-content: flex-end;
     }
     
     .tool-grid {
@@ -1795,7 +1788,6 @@ body.light-mode .share-btn:hover {
     .theme-toggle,
     .search-clear,
     .search-button,
-    .filter-btn,
     .filter-sort,
     .filter-view,
     .tool-link,
@@ -1816,6 +1808,10 @@ body.light-mode .share-btn:hover {
     
     .footer-link {
         padding: var(--spacing-3) var(--spacing-4);
+    }
+    
+    .filter-nav .header-container::after {
+        display: none;
     }
 }
 
