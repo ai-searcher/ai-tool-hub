@@ -33,6 +33,88 @@ const buttonDebounceTimers = new Map(); // NEU: Für Button-Debouncing
 const buttonLoadingStates = new Map(); // NEU: Für Loading-States
 
 // ===========================================
+// RE-FLOW & REDRAW FUNCTIONS
+// ===========================================
+
+/**
+ * Forces a complete redraw of critical containers to ensure smooth theme transitions
+ */
+function forceRedraw() {
+    if (typeof window === 'undefined') return;
+    
+    console.log('🔄 Forcing redraw of UI elements...');
+    
+    // List of critical containers that need reflow
+    const criticalContainers = [
+        '#tool-grid',
+        '.hero-section',
+        '.filter-nav',
+        '#ranking-container',
+        'footer'
+    ];
+    
+    // Use requestAnimationFrame for optimal performance
+    requestAnimationFrame(() => {
+        try {
+            // Store original styles to restore later
+            const originalStyles = new Map();
+            const elements = [];
+            
+            // First pass: hide elements and store original styles
+            criticalContainers.forEach(selector => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    elements.push(element);
+                    // Store original display value
+                    originalStyles.set(element, {
+                        display: element.style.display || '',
+                        visibility: element.style.visibility || ''
+                    });
+                    
+                    // Temporarily hide element to force reflow
+                    element.style.display = 'none';
+                    element.style.visibility = 'hidden';
+                    
+                    // Force browser reflow by reading offsetHeight
+                    void element.offsetHeight;
+                }
+            });
+            
+            // Second animation frame: restore elements
+            requestAnimationFrame(() => {
+                elements.forEach(element => {
+                    const originalStyle = originalStyles.get(element);
+                    if (originalStyle) {
+                        // Restore original styles
+                        element.style.display = originalStyle.display;
+                        element.style.visibility = originalStyle.visibility;
+                        
+                        // Force reflow again after restoring
+                        void element.offsetHeight;
+                    }
+                });
+                
+                // Trigger window resize event to update any responsive layouts
+                window.dispatchEvent(new Event('resize'));
+                
+                // Optional: Additional reflow triggers
+                void document.body.offsetHeight;
+                void document.documentElement.offsetHeight;
+                
+                console.log('✅ Redraw completed for', elements.length, 'elements');
+            });
+            
+        } catch (error) {
+            console.error('❌ Error during forceRedraw:', error);
+            
+            // Fallback: simple reflow trigger
+            void document.body.offsetHeight;
+            window.dispatchEvent(new Event('resize'));
+        }
+    });
+}
+
+// ===========================================
 // SEARCH & FILTER EVENTS
 // ===========================================
 
@@ -451,7 +533,7 @@ function closeModal(modalElement) {
 // ===========================================
 
 /**
- * Initializes theme toggle event listener
+ * Initializes theme toggle event listener with smooth transitions
  */
 export function initThemeEvents() {
     const themeToggle = document.getElementById('theme-toggle');
@@ -480,23 +562,46 @@ export function initThemeEvents() {
         themeToggle.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         const timer = setTimeout(() => {
-            const isDarkMode = document.body.classList.contains('light-mode');
-            if (isDarkMode) {
-                document.body.classList.remove('light-mode');
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-                showNotification('Dark Mode aktiviert', 'info');
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.body.classList.add('light-mode');
-                localStorage.setItem('theme', 'light');
-                showNotification('Light Mode aktiviert', 'info');
+            try {
+                // 1. Temporarily disable transitions to prevent flickering
+                document.body.classList.add('no-transition');
+                
+                // 2. Toggle theme
+                const isDarkMode = document.body.classList.contains('light-mode');
+                if (isDarkMode) {
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                    showNotification('Dark Mode aktiviert', 'info');
+                    console.log('🌙 Switched to dark mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                    showNotification('Light Mode aktiviert', 'info');
+                    console.log('☀️ Switched to light mode');
+                }
+                
+                // 3. Force mini-reflow before re-enabling transitions
+                void document.body.offsetHeight;
+                
+                // 4. Re-enable transitions
+                document.body.classList.remove('no-transition');
+                
+                // 5. Force complete redraw of critical containers
+                forceRedraw();
+                
+                console.log('✅ Theme transition completed');
+                
+            } catch (error) {
+                console.error('❌ Error during theme transition:', error);
+                showNotification('Fehler beim Theme-Wechsel', 'error');
+            } finally {
+                // Entferne Loading-State
+                themeToggle.classList.remove('loading');
+                themeToggle.innerHTML = originalHTML;
+                buttonDebounceTimers.delete(buttonId);
             }
-            
-            // Entferne Loading-State
-            themeToggle.classList.remove('loading');
-            themeToggle.innerHTML = originalHTML;
-            buttonDebounceTimers.delete(buttonId);
         }, 300);
 
         buttonDebounceTimers.set(buttonId, timer);
@@ -511,8 +616,14 @@ export function initThemeEvents() {
     });
 
     // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.body.classList.add(savedTheme + '-mode');
+    try {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.add(savedTheme + '-mode');
+        console.log(`📁 Loaded saved theme: ${savedTheme}`);
+    } catch (error) {
+        console.warn('Could not load saved theme, using default:', error);
+        document.body.classList.add('dark-mode');
+    }
 }
 
 /**
