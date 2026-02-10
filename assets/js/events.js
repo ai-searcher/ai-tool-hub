@@ -7,10 +7,9 @@ import { supabase, saveVote, loadMultipleToolVotes } from './supabase.js';
 import { showNotification } from './utils.js';
 import { UI_CONFIG } from './config.js';
 
-// Einfache Platzhalter-Funktion
-const updateUIAfterVote = () => {
-    console.log("Vote würde UI aktualisieren");
-};
+// ===========================================
+// ZENTRALE EVENT-MANAGEMENT
+// ===========================================
 
 // State management
 let currentState = {
@@ -25,93 +24,285 @@ let currentState = {
     activeModal: null
 };
 
-// Debounce timer for search
-let searchDebounceTimer;
-// Debounce timers for buttons
-const buttonDebounceTimers = new Map(); // NEU: Für Button-Debouncing
-// Loading states for buttons
-const buttonLoadingStates = new Map(); // NEU: Für Loading-States
+// Event-Handler Registry mit WeakMap für automatische Cleanup
+const eventHandlerRegistry = new Map();
+const elementListeners = new WeakMap();
+
+// Debounce-Management mit sicherer Cleanup-Logik
+const debounceTimers = new Map();
+const throttleFlags = new Map();
+const asyncOperations = new Map();
+const pendingRequests = new Set();
 
 // ===========================================
-// RE-FLOW & REDRAW FUNCTIONS
+// DEBOUNCE / THROTTLE UTILITIES MIT SAFE CLEANUP
 // ===========================================
 
 /**
- * Forces a complete redraw of critical containers to ensure smooth theme transitions
+ * Debounce function mit sicherer Cleanup-Logik
  */
-function forceRedraw() {
-    if (typeof window === 'undefined') return;
+function safeDebounce(id, fn, delay = UI_CONFIG.DEBOUNCE_DELAY) {
+    const existingTimer = debounceTimers.get(id);
+    if (existingTimer) {
+        clearTimeout(existingTimer);
+    }
     
-    console.log('🔄 Forcing redraw of UI elements...');
-    
-    // List of critical containers that need reflow
-    const criticalContainers = [
-        '#tool-grid',
-        '.hero-section',
-        '.filter-nav',
-        '#ranking-container',
-        'footer'
-    ];
-    
-    // Use requestAnimationFrame for optimal performance
-    requestAnimationFrame(() => {
+    const timer = setTimeout(() => {
         try {
-            // Store original styles to restore later
-            const originalStyles = new Map();
-            const elements = [];
-            
-            // First pass: hide elements and store original styles
-            criticalContainers.forEach(selector => {
-                const element = document.querySelector(selector);
-                if (element) {
-                    elements.push(element);
-                    // Store original display value
-                    originalStyles.set(element, {
-                        display: element.style.display || '',
-                        visibility: element.style.visibility || ''
-                    });
-                    
-                    // Temporarily hide element to force reflow
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    
-                    // Force browser reflow by reading offsetHeight
-                    void element.offsetHeight;
-                }
-            });
-            
-            // Second animation frame: restore elements
-            requestAnimationFrame(() => {
-                elements.forEach(element => {
-                    const originalStyle = originalStyles.get(element);
-                    if (originalStyle) {
-                        // Restore original styles
-                        element.style.display = originalStyle.display;
-                        element.style.visibility = originalStyle.visibility;
-                        
-                        // Force reflow again after restoring
-                        void element.offsetHeight;
-                    }
-                });
-                
-                // Trigger window resize event to update any responsive layouts
-                window.dispatchEvent(new Event('resize'));
-                
-                // Optional: Additional reflow triggers
-                void document.body.offsetHeight;
-                void document.documentElement.offsetHeight;
-                
-                console.log('✅ Redraw completed for', elements.length, 'elements');
-            });
-            
+            fn();
         } catch (error) {
-            console.error('❌ Error during forceRedraw:', error);
+            console.error(`Debounce function error for ${id}:`, error);
+        } finally {
+            debounceTimers.delete(id);
+        }
+    }, delay);
+    
+    debounceTimers.set(id, timer);
+    return timer;
+}
+
+/**
+ * Throttle function mit async-sicherer Logik
+ */
+function safeThrottle(id, fn, limit = 300) {
+    if (throttleFlags.has(id)) {
+        return false;
+    }
+    
+    throttleFlags.set(id, true);
+    
+    // Für async-Funktionen: verhindere parallele Ausführung
+    let isAsync = false;
+    let operationPromise = null;
+    
+    try {
+        const result = fn();
+        
+        // Prüfe ob Funktion async ist
+        if (result && typeof result.then === 'function') {
+            isAsync = true;
+            operationPromise = result;
+            asyncOperations.set(id, operationPromise);
             
-            // Fallback: simple reflow trigger
-            void document.body.offsetHeight;
-            window.dispatchEvent(new Event('resize'));
+            // Entferne Flag erst nach Abschluss ODER nach Timeout
+            const timeoutId = setTimeout(() => {
+                throttleFlags.delete(id);
+                asyncOperations.delete(id);
+            }, limit);
+            
+            result.finally(() => {
+                clearTimeout(timeoutId);
+                throttleFlags.delete(id);
+                asyncOperations.delete(id);
+            }).catch(() => {
+                // Silent catch für async errors
+            });
+            
+            return true;
+        }
+    } catch (error) {
+        console.error(`Throttle function error for ${id}:`, error);
+        // Sync error: Flag nach Timeout entfernen
+        setTimeout(() => {
+            throttleFlags.delete(id);
+        }, limit);
+        throw error;
+    }
+    
+    // Sync function: Flag nach Timeout entfernen
+    if (!isAsync) {
+        setTimeout(() => {
+            throttleFlags.delete(id);
+        }, limit);
+    }
+    
+    return true;
+}
+
+/**
+ * Cleanup aller Timer und Flags
+ */
+function cleanupTimersAndFlags() {
+    debounceTimers.forEach((timer, id) => {
+        clearTimeout(timer);
+    });
+    debounceTimers.clear();
+    
+    throttleFlags.clear();
+    
+    asyncOperations.forEach((promise, id) => {
+        throttleFlags.delete(id);
+    });
+    asyncOperations.clear();
+    
+    pendingRequests.forEach(controller => {
+        try {
+            controller.abort();
+        } catch (e) {
+            // Ignore abort errors
         }
     });
+    pendingRequests.clear();
+}
+
+// ===========================================
+// EVENT REGISTRATION & CLEANUP UTILITIES
+// ===========================================
+
+/**
+ * Sichere Event-Registrierung mit korrekten Listener-Optionen
+ */
+function registerEventListener(element, eventType, handler, handlerId) {
+    if (!element || typeof handler !== 'function') {
+        console.warn(`Invalid event registration: ${handlerId}`);
+        return;
+    }
+    
+    // Korrekte Listener-Optionen basierend auf Event-Typ
+    let options;
+    if (['scroll', 'touchmove', 'touchstart'].includes(eventType)) {
+        options = { passive: true };
+    } else {
+        // Für click, keydown, keypress, input: passive: false oder keine Option
+        options = false;
+    }
+    
+    // Store handler for cleanup
+    const listenerEntry = { element, eventType, handler, handlerId, options };
+    
+    if (!elementListeners.has(element)) {
+        elementListeners.set(element, []);
+    }
+    elementListeners.get(element).push(listenerEntry);
+    
+    eventHandlerRegistry.set(handlerId, listenerEntry);
+    
+    // Add event listener mit korrekten Optionen
+    if (options) {
+        element.addEventListener(eventType, handler, options);
+    } else {
+        element.addEventListener(eventType, handler);
+    }
+}
+
+/**
+ * Entfernt spezifischen Event-Listener
+ */
+function removeEventListenerById(handlerId) {
+    const listenerEntry = eventHandlerRegistry.get(handlerId);
+    if (!listenerEntry) return;
+    
+    const { element, eventType, handler, options } = listenerEntry;
+    
+    if (element && element.removeEventListener) {
+        if (options) {
+            element.removeEventListener(eventType, handler, options);
+        } else {
+            element.removeEventListener(eventType, handler);
+        }
+    }
+    
+    if (elementListeners.has(element)) {
+        const listeners = elementListeners.get(element);
+        const index = listeners.findIndex(l => l.handlerId === handlerId);
+        if (index > -1) {
+            listeners.splice(index, 1);
+        }
+        if (listeners.length === 0) {
+            elementListeners.delete(element);
+        }
+    }
+    
+    eventHandlerRegistry.delete(handlerId);
+}
+
+/**
+ * Entfernt alle Event-Listener eines bestimmten Elements
+ */
+function removeAllElementListeners(element) {
+    if (!elementListeners.has(element)) return;
+    
+    const listeners = elementListeners.get(element);
+    listeners.forEach(({ eventType, handler, options }) => {
+        if (options) {
+            element.removeEventListener(eventType, handler, options);
+        } else {
+            element.removeEventListener(eventType, handler);
+        }
+    });
+    
+    listeners.forEach(({ handlerId }) => {
+        eventHandlerRegistry.delete(handlerId);
+    });
+    
+    elementListeners.delete(element);
+}
+
+// ===========================================
+// KEYBOARD SHORTCUTS MIT KORREKTEM ESC-HANDLING
+// ===========================================
+
+/**
+ * Initialisiert globale Keyboard Shortcuts
+ */
+function initKeyboardShortcuts() {
+    const handleGlobalKeyDown = (e) => {
+        // ESC: Globale Behandlung nur wenn kein Modal aktiv
+        if (e.key === 'Escape') {
+            if (!currentState.activeModal) {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput && searchInput.value) {
+                    e.preventDefault();
+                    searchInput.value = '';
+                    const inputEvent = new Event('input', { bubbles: true });
+                    searchInput.dispatchEvent(inputEvent);
+                    searchInput.focus();
+                }
+            }
+            // Modal-ESC wird in initModalEvents separat behandelt
+            return;
+        }
+        
+        // Ctrl/Cmd + K: Focus search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
+            return;
+        }
+        
+        // Ctrl/Cmd + T: Toggle theme
+        if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+            e.preventDefault();
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) themeToggle.click();
+            return;
+        }
+        
+        // Ctrl/Cmd + F: Focus search (alternative)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+            e.preventDefault();
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
+            return;
+        }
+        
+        // Ctrl/Cmd + R: Reset filters
+        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+            e.preventDefault();
+            const resetBtn = document.querySelector('[data-reset-filters]');
+            if (resetBtn) resetBtn.click();
+            return;
+        }
+    };
+    
+    registerEventListener(document, 'keydown', handleGlobalKeyDown, 'global-keyboard-shortcuts');
 }
 
 // ===========================================
@@ -126,62 +317,64 @@ export function initSearchEvents(handleSearch) {
     const searchButton = document.getElementById('search-button');
     const searchClear = document.getElementById('search-clear');
 
-    // NEU: Error-Handling für fehlende Elemente
     if (!searchInput || !searchButton) {
         console.warn('Search elements not found');
         return;
     }
 
     // Real-time search with debouncing
-    searchInput.addEventListener('input', (e) => {
+    const handleSearchInput = (e) => {
         const query = e.target.value.trim();
         currentState.searchQuery = query;
         
-        // Toggle clear button visibility
         if (searchClear) {
             searchClear.style.display = query ? 'block' : 'none';
         }
 
-        // Clear previous timer
-        clearTimeout(searchDebounceTimer);
-        
-        // Set new timer for debouncing
-        searchDebounceTimer = setTimeout(() => {
-            handleSearch(query, currentState.activeFilter);
+        safeDebounce('search', () => {
+            if (typeof handleSearch === 'function') {
+                handleSearch(query, currentState.activeFilter);
+            }
         }, UI_CONFIG.DEBOUNCE_DELAY);
-    });
+    };
 
     // Search button click
-    searchButton.addEventListener('click', (e) => {
-        // NEU: Prevent default für Form-Buttons
-        if (e.target.tagName === 'BUTTON' && e.target.type === 'submit') {
-            e.preventDefault();
-        }
-        handleSearch(currentState.searchQuery, currentState.activeFilter);
-    });
-
-    // Enter key in search input
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            // NEU: Prevent default
-            e.preventDefault();
+    const handleSearchClick = (e) => {
+        e.preventDefault();
+        if (typeof handleSearch === 'function') {
             handleSearch(currentState.searchQuery, currentState.activeFilter);
         }
-    });
+    };
+
+    // Enter key in search input
+    const handleSearchKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (typeof handleSearch === 'function') {
+                handleSearch(currentState.searchQuery, currentState.activeFilter);
+            }
+        }
+    };
 
     // Clear search
-    if (searchClear) {
-        searchClear.addEventListener('click', (e) => {
-            // NEU: Prevent default
-            if (e.target.tagName === 'BUTTON') {
-                e.preventDefault();
-            }
-            searchInput.value = '';
-            currentState.searchQuery = '';
-            searchClear.style.display = 'none';
+    const handleClearClick = (e) => {
+        e.preventDefault();
+        searchInput.value = '';
+        currentState.searchQuery = '';
+        if (searchClear) searchClear.style.display = 'none';
+        if (typeof handleSearch === 'function') {
             handleSearch('', currentState.activeFilter);
-            searchInput.focus();
-        });
+        }
+        searchInput.focus();
+    };
+
+    // Attach events with safe registration
+    registerEventListener(searchInput, 'input', handleSearchInput, 'search-input');
+    registerEventListener(searchButton, 'click', handleSearchClick, 'search-button');
+    registerEventListener(searchInput, 'keypress', handleSearchKeyPress, 'search-keypress');
+    
+    if (searchClear) {
+        registerEventListener(searchClear, 'click', handleClearClick, 'search-clear');
     }
 }
 
@@ -191,93 +384,66 @@ export function initSearchEvents(handleSearch) {
 export function initFilterEvents(handleFilter) {
     const filterContainer = document.getElementById('filter-container');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!filterContainer) {
         console.warn('Filter container not found');
         return;
     }
 
-    // NEU: Erweiterte Event-Delegation mit besseren Selectors
-    filterContainer.addEventListener('click', (e) => {
-        // NEU: Bessere Selectors für Filter-Buttons
-        const filterBtn = e.target.closest('button.filter-btn, .filter-btn[data-filter], [data-filter].btn');
+    const handleFilterClick = (e) => {
+        const filterBtn = e.target.closest('[data-filter]');
         if (!filterBtn) return;
 
         const filter = filterBtn.dataset.filter;
-        if (!filter) return;
+        if (!filter || typeof handleFilter !== 'function') return;
 
-        // NEU: Prevent default für Button-Clicks
-        if (filterBtn.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+        e.preventDefault();
 
-        // NEU: Debouncing für schnelle Klicks
-        const buttonId = `filter-${filter}`;
-        if (buttonDebounceTimers.has(buttonId)) {
-            clearTimeout(buttonDebounceTimers.get(buttonId));
-        }
-        
-        // NEU: Visuelles Feedback (Loading-States)
-        filterBtn.classList.add('loading');
-        buttonLoadingStates.set(buttonId, true);
-
-        // Setze Timer für Debouncing
-        const timer = setTimeout(() => {
-            // Update active filter
+        safeThrottle(`filter-${filter}`, () => {
             currentState.activeFilter = filter;
             
-            // Update UI
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.remove('loading');
+            document.querySelectorAll('[data-filter]').forEach(btn => {
+                btn.classList.remove('active', 'loading');
             });
             filterBtn.classList.add('active');
-            filterBtn.classList.remove('loading');
-            buttonLoadingStates.delete(buttonId);
-
-            // Apply filter
-            handleFilter(filter, currentState.searchQuery);
-        }, 300); // 300ms Debounce
-
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für Filter-Buttons
-    filterContainer.addEventListener('keydown', (e) => {
-        // Handle Enter and Space keys
-        if (e.key === 'Enter' || e.key === ' ') {
-            const filterBtn = e.target.closest('button.filter-btn, .filter-btn[data-filter], [data-filter].btn');
-            if (!filterBtn) return;
             
-            e.preventDefault();
-            filterBtn.click();
+            handleFilter(filter, currentState.searchQuery);
+        }, 300);
+    };
+
+    const handleFilterKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            const filterBtn = e.target.closest('[data-filter]');
+            if (filterBtn) {
+                e.preventDefault();
+                filterBtn.click();
+            }
         }
-    });
+    };
+
+    registerEventListener(filterContainer, 'click', handleFilterClick, 'filter-click');
+    registerEventListener(filterContainer, 'keydown', handleFilterKeyDown, 'filter-keydown');
 }
 
 // ===========================================
-// VOTING EVENTS
+// VOTING EVENTS MIT SICHERER STATE-SYNCHRONISATION
 // ===========================================
 
 /**
- * Initializes voting event listeners using event delegation
+ * Initializes voting event listeners
  */
 export function initVoteEvents(handleVoteUpdate) {
     const toolGrid = document.getElementById('tool-grid');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!toolGrid) {
         console.warn('Tool grid not found');
         return;
     }
 
-    // NEU: Erweiterte Event-Delegation mit besseren Selectors
-    toolGrid.addEventListener('click', async (e) => {
-        // NEU: Bessere Selectors für Vote-Buttons
-        const voteBtn = e.target.closest('button.vote-btn, .vote-btn[data-action], [data-action].btn, .vote-button');
+    const handleVoteClick = async (e) => {
+        const voteBtn = e.target.closest('[data-action]');
         if (!voteBtn) return;
 
-        const toolCard = voteBtn.closest('.tool-card, [data-id]');
+        const toolCard = voteBtn.closest('[data-id]');
         if (!toolCard) return;
 
         const toolId = toolCard.dataset.id;
@@ -285,209 +451,161 @@ export function initVoteEvents(handleVoteUpdate) {
         
         if (!toolId || !action) return;
 
-        // NEU: Prevent default für Button-Clicks
-        if (voteBtn.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+        e.preventDefault();
 
-        // Prevent multiple votes while processing
         if (voteBtn.classList.contains('voting')) return;
         
-        // NEU: Debouncing für schnelle Klicks
         const buttonId = `vote-${toolId}-${action}`;
-        if (buttonDebounceTimers.has(buttonId)) {
-            return; // Ignoriere schnelle aufeinanderfolgende Klicks
-        }
+        if (debounceTimers.has(buttonId)) return;
 
         voteBtn.classList.add('voting');
-        
-        // NEU: Visuelles Feedback (Loading-States)
         const originalHTML = voteBtn.innerHTML;
+        const voteCountElement = voteBtn.querySelector('.vote-count');
+        const originalVoteCount = voteCountElement ? parseInt(voteCountElement.textContent) || 0 : 0;
+        
+        if (voteCountElement) {
+            const optimisticCount = action === 'upvote' ? originalVoteCount + 1 : Math.max(0, originalVoteCount - 1);
+            voteCountElement.textContent = optimisticCount;
+        }
+        
         voteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        if (voteBtn.querySelector('.vote-count')) {
-            voteBtn.querySelector('.vote-count').style.visibility = 'hidden';
+        
+        if (voteCountElement) {
+            voteCountElement.style.visibility = 'hidden';
         }
 
-        // Setze Debounce-Timer
-        const timer = setTimeout(async () => {
+        safeDebounce(buttonId, async () => {
             try {
-                // Determine vote value (upvote = 1, downvote = -1)
-                // For now, we'll implement only upvotes
                 const voteValue = action === 'upvote' ? 1 : -1;
-                
-                // Generate a unique user identifier (in a real app, this would be based on user session)
                 const userId = getUserId();
                 
-                // Save vote to database
                 const result = await saveVote(toolId, voteValue, userId);
                 
-                if (result.success) {
-                    // Update UI immediately
-                    updateVoteUI(voteBtn, toolId, action);
+                if (result && result.success) {
+                    updateVoteUI(voteBtn, toolId, action, result.data);
                     
-                    // Call external handler if provided
-                    if (handleVoteUpdate) {
+                    if (typeof handleVoteUpdate === 'function') {
                         handleVoteUpdate(toolId, result.data);
                     }
                     
-                    // Show success notification
                     showNotification('Bewertung gespeichert!', 'success');
                 } else {
-                    showNotification(result.message || 'Fehler beim Speichern der Bewertung', 'error');
+                    if (voteCountElement) {
+                        voteCountElement.textContent = originalVoteCount;
+                    }
+                    showNotification(result?.message || 'Fehler beim Speichern der Bewertung', 'error');
                 }
             } catch (error) {
                 console.error('Error processing vote:', error);
+                if (voteCountElement) {
+                    voteCountElement.textContent = originalVoteCount;
+                }
                 showNotification('Ein Fehler ist aufgetreten', 'error');
             } finally {
-                // Entferne Loading-State
                 voteBtn.classList.remove('voting');
                 voteBtn.innerHTML = originalHTML;
-                if (voteBtn.querySelector('.vote-count')) {
-                    voteBtn.querySelector('.vote-count').style.visibility = 'visible';
+                if (voteCountElement) {
+                    voteCountElement.style.visibility = 'visible';
                 }
-                
-                // Entferne Debounce-Timer nach Verarbeitung
-                buttonDebounceTimers.delete(buttonId);
             }
-        }, 300); // 300ms Debounce
+        }, 300);
+    };
 
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für Vote-Buttons
-    toolGrid.addEventListener('keydown', (e) => {
-        // Handle Enter and Space keys
+    const handleVoteKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-            const voteBtn = e.target.closest('button.vote-btn, .vote-btn[data-action], [data-action].btn, .vote-button');
-            if (!voteBtn) return;
-            
-            e.preventDefault();
-            voteBtn.click();
+            const voteBtn = e.target.closest('[data-action]');
+            if (voteBtn) {
+                e.preventDefault();
+                voteBtn.click();
+            }
         }
-    });
+    };
+
+    registerEventListener(toolGrid, 'click', handleVoteClick, 'vote-click');
+    registerEventListener(toolGrid, 'keydown', handleVoteKeyDown, 'vote-keydown');
 }
 
 /**
- * Updates the vote UI after a successful vote
+ * Updates the vote UI
  */
-function updateVoteUI(voteBtn, toolId, action) {
+function updateVoteUI(voteBtn, toolId, action, serverData) {
     const voteCountElement = voteBtn.querySelector('.vote-count');
-    if (voteCountElement) {
-        const currentCount = parseInt(voteCountElement.textContent) || 0;
-        const newCount = action === 'upvote' ? currentCount + 1 : Math.max(0, currentCount - 1);
-        voteCountElement.textContent = newCount;
+    if (voteCountElement && serverData) {
+        const serverCount = serverData.count || serverData.votes || 0;
+        voteCountElement.textContent = serverCount;
     }
 
-    // Add visual feedback
     voteBtn.classList.add('voted');
-    setTimeout(() => {
+    const voteFeedbackTimer = setTimeout(() => {
         voteBtn.classList.remove('voted');
     }, 1000);
+    
+    debounceTimers.set(`vote-feedback-${toolId}`, voteFeedbackTimer);
 
-    // Update tool's vote count in state
-    if (currentState.votes[toolId]) {
-        const currentVotes = currentState.votes[toolId];
-        if (action === 'upvote') {
-            currentState.votes[toolId] = {
-                ...currentVotes,
-                count: (currentVotes.count || 0) + 1
-            };
-        }
+    if (serverData) {
+        currentState.votes[toolId] = {
+            ...currentState.votes[toolId],
+            count: serverData.count || serverData.votes || 0,
+            lastUpdated: Date.now()
+        };
     }
 }
 
 // ===========================================
-// MODAL EVENTS
+// MODAL EVENTS MIT ZENTRALEM ESC-HANDLING
 // ===========================================
 
 /**
  * Initializes modal event listeners
  */
 export function initModalEvents() {
-    // Imprint modal
-    const imprintBtn = document.getElementById('imprint-btn');
-    const imprintModal = document.getElementById('imprint-modal');
-    const imprintClose = document.getElementById('imprint-close');
-    const imprintOverlay = document.getElementById('imprint-overlay');
+    const modals = [
+        { btn: 'imprint-btn', modal: 'imprint-modal', close: 'imprint-close', overlay: 'imprint-overlay' },
+        { btn: 'privacy-btn', modal: 'privacy-modal', close: 'privacy-close', overlay: 'privacy-overlay' }
+    ];
 
-    // Privacy modal
-    const privacyBtn = document.getElementById('privacy-btn');
-    const privacyModal = document.getElementById('privacy-modal');
-    const privacyClose = document.getElementById('privacy-close');
-    const privacyOverlay = document.getElementById('privacy-overlay');
-
-    // NEU: Error-Handling für fehlende Elemente
-    if (!imprintBtn || !imprintModal) {
-        console.warn('Imprint modal elements not found');
-    } else {
-        // Open imprint modal
-        imprintBtn.addEventListener('click', (e) => {
-            // NEU: Prevent default für Button-Clicks
-            if (imprintBtn.tagName === 'BUTTON') {
-                e.preventDefault();
-            }
-            openModal(imprintModal);
-        });
-    }
-
-    // NEU: Error-Handling für fehlende Elemente
-    if (!privacyBtn || !privacyModal) {
-        console.warn('Privacy modal elements not found');
-    } else {
-        // Open privacy modal
-        privacyBtn.addEventListener('click', (e) => {
-            // NEU: Prevent default für Button-Clicks
-            if (privacyBtn.tagName === 'BUTTON') {
-                e.preventDefault();
-            }
-            openModal(privacyModal);
-        });
-    }
-
-    // Close buttons
-    if (imprintClose) {
-        imprintClose.addEventListener('click', (e) => {
-            // NEU: Prevent default für Button-Clicks
-            if (imprintClose.tagName === 'BUTTON') {
-                e.preventDefault();
-            }
-            closeModal(imprintModal);
-        });
-    }
-    if (privacyClose) {
-        privacyClose.addEventListener('click', (e) => {
-            // NEU: Prevent default für Button-Clicks
-            if (privacyClose.tagName === 'BUTTON') {
-                e.preventDefault();
-            }
-            closeModal(privacyModal);
-        });
-    }
-
-    // Overlay clicks
-    if (imprintOverlay) {
-        imprintOverlay.addEventListener('click', () => closeModal(imprintModal));
-    }
-    if (privacyOverlay) {
-        privacyOverlay.addEventListener('click', () => closeModal(privacyModal));
-    }
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', (e) => {
+    // Zentrale ESC-Handling für Modals
+    const handleModalEscape = (e) => {
         if (e.key === 'Escape' && currentState.activeModal) {
+            e.stopPropagation();
+            e.preventDefault();
             closeModal(currentState.activeModal);
         }
-    });
+    };
 
-    // Close modal when clicking outside content
-    document.addEventListener('click', (e) => {
-        const modals = document.querySelectorAll('.modal.show');
-        modals.forEach(modal => {
-            const modalContent = modal.querySelector('.modal-container');
-            if (modalContent && !modalContent.contains(e.target)) {
-                closeModal(modal);
-            }
-        });
+    // ESC-Listener auf document für Modals
+    registerEventListener(document, 'keydown', handleModalEscape, 'modal-escape');
+
+    modals.forEach(({ btn, modal, close, overlay }) => {
+        const btnElement = document.getElementById(btn);
+        const modalElement = document.getElementById(modal);
+        const closeElement = document.getElementById(close);
+        const overlayElement = document.getElementById(overlay);
+
+        if (!btnElement || !modalElement) {
+            console.warn(`Modal elements not found: ${btn}, ${modal}`);
+            return;
+        }
+
+        const handleOpenClick = (e) => {
+            e.preventDefault();
+            openModal(modalElement);
+        };
+
+        const handleCloseClick = (e) => {
+            e.preventDefault();
+            closeModal(modalElement);
+        };
+
+        registerEventListener(btnElement, 'click', handleOpenClick, `${btn}-click`);
+
+        if (closeElement) {
+            registerEventListener(closeElement, 'click', handleCloseClick, `${close}-click`);
+        }
+
+        if (overlayElement) {
+            registerEventListener(overlayElement, 'click', handleCloseClick, `${overlay}-click`);
+        }
     });
 }
 
@@ -497,7 +615,6 @@ export function initModalEvents() {
 function openModal(modalElement) {
     if (!modalElement) return;
     
-    // Close any open modal first
     if (currentState.activeModal) {
         closeModal(currentState.activeModal);
     }
@@ -507,7 +624,6 @@ function openModal(modalElement) {
     document.body.style.overflow = 'hidden';
     currentState.activeModal = modalElement;
     
-    // Focus first focusable element in modal
     const focusableElements = modalElement.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
@@ -538,82 +654,53 @@ function closeModal(modalElement) {
 export function initThemeEvents() {
     const themeToggle = document.getElementById('theme-toggle');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!themeToggle) {
         console.warn('Theme toggle not found');
         return;
     }
 
-    themeToggle.addEventListener('click', (e) => {
-        // NEU: Prevent default für Button-Clicks
-        if (themeToggle.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+    const handleThemeClick = (e) => {
+        e.preventDefault();
 
-        // NEU: Debouncing für schnelle Klicks
         const buttonId = 'theme-toggle';
-        if (buttonDebounceTimers.has(buttonId)) {
-            return;
-        }
-
-        // NEU: Visuelles Feedback (Loading-States)
-        themeToggle.classList.add('loading');
-        const originalHTML = themeToggle.innerHTML;
-        themeToggle.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-        const timer = setTimeout(() => {
+        if (!safeThrottle(buttonId, () => {
             try {
-                // 1. Temporarily disable transitions to prevent flickering
                 document.body.classList.add('no-transition');
                 
-                // 2. Toggle theme
                 const isDarkMode = document.body.classList.contains('light-mode');
                 if (isDarkMode) {
                     document.body.classList.remove('light-mode');
                     document.body.classList.add('dark-mode');
                     localStorage.setItem('theme', 'dark');
                     showNotification('Dark Mode aktiviert', 'info');
-                    console.log('🌙 Switched to dark mode');
                 } else {
                     document.body.classList.remove('dark-mode');
                     document.body.classList.add('light-mode');
                     localStorage.setItem('theme', 'light');
                     showNotification('Light Mode aktiviert', 'info');
-                    console.log('☀️ Switched to light mode');
                 }
                 
-                // 3. Force mini-reflow before re-enabling transitions
                 void document.body.offsetHeight;
-                
-                // 4. Re-enable transitions
                 document.body.classList.remove('no-transition');
                 
-                // 5. Force complete redraw of critical containers
-                forceRedraw();
-                
-                console.log('✅ Theme transition completed');
-                
             } catch (error) {
-                console.error('❌ Error during theme transition:', error);
+                console.error('Error during theme transition:', error);
                 showNotification('Fehler beim Theme-Wechsel', 'error');
-            } finally {
-                // Entferne Loading-State
-                themeToggle.classList.remove('loading');
-                themeToggle.innerHTML = originalHTML;
-                buttonDebounceTimers.delete(buttonId);
             }
-        }, 300);
+        }, 300)) {
+            return;
+        }
+    };
 
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für Theme-Toggle
-    themeToggle.addEventListener('keydown', (e) => {
+    const handleThemeKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             themeToggle.click();
         }
-    });
+    };
+
+    registerEventListener(themeToggle, 'click', handleThemeClick, 'theme-click');
+    registerEventListener(themeToggle, 'keydown', handleThemeKeyDown, 'theme-keydown');
 }
 
 /**
@@ -622,63 +709,41 @@ export function initThemeEvents() {
 export function initViewEvents(handleViewChange) {
     const viewToggle = document.getElementById('view-toggle');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!viewToggle) {
         console.warn('View toggle not found');
         return;
     }
 
-    viewToggle.addEventListener('click', (e) => {
-        // NEU: Prevent default für Button-Clicks
-        if (viewToggle.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+    const handleViewClick = (e) => {
+        e.preventDefault();
 
-        // NEU: Debouncing für schnelle Klicks
         const buttonId = 'view-toggle';
-        if (buttonDebounceTimers.has(buttonId)) {
-            return;
-        }
-
-        // NEU: Visuelles Feedback (Loading-States)
-        viewToggle.classList.add('loading');
-        const originalHTML = viewToggle.innerHTML;
-        viewToggle.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-        const timer = setTimeout(() => {
+        if (!safeThrottle(buttonId, () => {
             const isListView = viewToggle.classList.contains('list-view');
             const newViewMode = isListView ? 'grid' : 'list';
             
-            // Toggle class on button
             viewToggle.classList.toggle('list-view');
-            
-            // Update state
             currentState.viewMode = newViewMode;
             
-            // Call handler
-            if (handleViewChange) {
+            if (typeof handleViewChange === 'function') {
                 handleViewChange(newViewMode);
             }
             
-            // Show notification
             showNotification(`${newViewMode === 'grid' ? 'Grid' : 'List'} Ansicht aktiviert`, 'info');
-            
-            // Entferne Loading-State
-            viewToggle.classList.remove('loading');
-            viewToggle.innerHTML = originalHTML;
-            buttonDebounceTimers.delete(buttonId);
-        }, 300);
+        }, 300)) {
+            return;
+        }
+    };
 
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für View-Toggle
-    viewToggle.addEventListener('keydown', (e) => {
+    const handleViewKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             viewToggle.click();
         }
-    });
+    };
+
+    registerEventListener(viewToggle, 'click', handleViewClick, 'view-click');
+    registerEventListener(viewToggle, 'keydown', handleViewKeyDown, 'view-keydown');
 }
 
 /**
@@ -687,40 +752,23 @@ export function initViewEvents(handleViewChange) {
 export function initSortEvents(handleSort) {
     const sortToggle = document.getElementById('sort-toggle');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!sortToggle) {
         console.warn('Sort toggle not found');
         return;
     }
 
-    sortToggle.addEventListener('click', (e) => {
-        // NEU: Prevent default für Button-Clicks
-        if (sortToggle.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+    const handleSortClick = (e) => {
+        e.preventDefault();
 
-        // NEU: Debouncing für schnelle Klicks
         const buttonId = 'sort-toggle';
-        if (buttonDebounceTimers.has(buttonId)) {
-            return;
-        }
-
-        // NEU: Visuelles Feedback (Loading-States)
-        sortToggle.classList.add('loading');
-        const originalHTML = sortToggle.innerHTML;
-        sortToggle.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-        const timer = setTimeout(() => {
-            // Cycle through sort options
+        if (!safeThrottle(buttonId, () => {
             const sortOptions = ['newest', 'rating', 'name', 'popular'];
             const currentIndex = sortOptions.indexOf(currentState.sortBy);
             const nextIndex = (currentIndex + 1) % sortOptions.length;
             const newSort = sortOptions[nextIndex];
             
-            // Update state
             currentState.sortBy = newSort;
             
-            // Update button text
             const sortLabels = {
                 'newest': 'Neueste',
                 'rating': 'Beste Bewertung',
@@ -728,36 +776,34 @@ export function initSortEvents(handleSort) {
                 'popular': 'Beliebteste'
             };
             
-            sortToggle.querySelector('span').textContent = sortLabels[newSort];
+            const spanElement = sortToggle.querySelector('span');
+            if (spanElement) {
+                spanElement.textContent = sortLabels[newSort];
+            }
             
-            // Call handler
-            if (handleSort) {
+            if (typeof handleSort === 'function') {
                 handleSort(newSort);
             }
             
-            // Show notification
             showNotification(`Sortiert nach: ${sortLabels[newSort]}`, 'info');
-            
-            // Entferne Loading-State
-            sortToggle.classList.remove('loading');
-            sortToggle.innerHTML = originalHTML;
-            buttonDebounceTimers.delete(buttonId);
-        }, 300);
+        }, 300)) {
+            return;
+        }
+    };
 
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für Sort-Toggle
-    sortToggle.addEventListener('keydown', (e) => {
+    const handleSortKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             sortToggle.click();
         }
-    });
+    };
+
+    registerEventListener(sortToggle, 'click', handleSortClick, 'sort-click');
+    registerEventListener(sortToggle, 'keydown', handleSortKeyDown, 'sort-keydown');
 }
 
 // ===========================================
-// SCROLL & NAVIGATION EVENTS
+// SCROLL & RESIZE EVENTS
 // ===========================================
 
 /**
@@ -766,49 +812,55 @@ export function initSortEvents(handleSort) {
 export function initScrollEvents() {
     const scrollTopBtn = document.getElementById('scroll-top');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!scrollTopBtn) {
         console.warn('Scroll top button not found');
         return;
     }
 
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            scrollTopBtn.classList.add('visible');
-        } else {
-            scrollTopBtn.classList.remove('visible');
-        }
-    });
+    const handleScroll = () => {
+        safeThrottle('scroll-throttle', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        }, 100);
+    };
 
-    // Scroll to top when clicked
-    scrollTopBtn.addEventListener('click', (e) => {
-        // NEU: Prevent default für Button-Clicks
-        if (scrollTopBtn.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
-        
-        // NEU: Visuelles Feedback (Loading-States)
-        scrollTopBtn.classList.add('loading');
+    const handleScrollClick = (e) => {
+        e.preventDefault();
         
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
-        
-        // Entferne Loading-State nach Abschluss
-        setTimeout(() => {
-            scrollTopBtn.classList.remove('loading');
-        }, 1000);
-    });
+    };
 
-    // NEU: Tastatur-Navigation für Scroll-Top-Button
-    scrollTopBtn.addEventListener('keydown', (e) => {
+    const handleScrollKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             scrollTopBtn.click();
         }
-    });
+    };
+
+    registerEventListener(window, 'scroll', handleScroll, 'window-scroll');
+    registerEventListener(scrollTopBtn, 'click', handleScrollClick, 'scroll-top-click');
+    registerEventListener(scrollTopBtn, 'keydown', handleScrollKeyDown, 'scroll-top-keydown');
+}
+
+/**
+ * Initializes resize event listener
+ */
+export function initResizeEvents(handleResize) {
+    const handleWindowResize = () => {
+        safeDebounce('resize', () => {
+            if (typeof handleResize === 'function') {
+                handleResize();
+            }
+        }, 250);
+    };
+
+    registerEventListener(window, 'resize', handleWindowResize, 'window-resize');
 }
 
 /**
@@ -817,30 +869,20 @@ export function initScrollEvents() {
 export function initRankingEvents(handleRankingRefresh) {
     const refreshBtn = document.getElementById('refresh-ranking');
     
-    // NEU: Error-Handling für fehlende Elemente
-    if (!refreshBtn || !handleRankingRefresh) {
+    if (!refreshBtn || typeof handleRankingRefresh !== 'function') {
         console.warn('Refresh ranking button not found or handler missing');
         return;
     }
 
-    refreshBtn.addEventListener('click', async (e) => {
-        // NEU: Prevent default für Button-Clicks
-        if (refreshBtn.tagName === 'BUTTON') {
-            e.preventDefault();
-        }
+    const handleRefreshClick = async (e) => {
+        e.preventDefault();
 
-        // NEU: Debouncing für schnelle Klicks
         const buttonId = 'refresh-ranking';
-        if (buttonDebounceTimers.has(buttonId)) {
-            return;
-        }
+        if (!safeThrottle(buttonId, async () => {
+            refreshBtn.classList.add('loading', 'refreshing');
+            const originalHTML = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-        // NEU: Visuelles Feedback (Loading-States)
-        refreshBtn.classList.add('loading', 'refreshing');
-        const originalHTML = refreshBtn.innerHTML;
-        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-        const timer = setTimeout(async () => {
             try {
                 await handleRankingRefresh();
                 showNotification('Ranking aktualisiert', 'success');
@@ -851,21 +893,22 @@ export function initRankingEvents(handleRankingRefresh) {
                 setTimeout(() => {
                     refreshBtn.classList.remove('loading', 'refreshing');
                     refreshBtn.innerHTML = originalHTML;
-                    buttonDebounceTimers.delete(buttonId);
                 }, 500);
             }
-        }, 300);
+        }, 300)) {
+            return;
+        }
+    };
 
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // NEU: Tastatur-Navigation für Refresh-Button
-    refreshBtn.addEventListener('keydown', (e) => {
+    const handleRefreshKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             refreshBtn.click();
         }
-    });
+    };
+
+    registerEventListener(refreshBtn, 'click', handleRefreshClick, 'refresh-click');
+    registerEventListener(refreshBtn, 'keydown', handleRefreshKeyDown, 'refresh-keydown');
 }
 
 // ===========================================
@@ -878,55 +921,77 @@ export function initRankingEvents(handleRankingRefresh) {
 export function initToolInteractionEvents() {
     const toolGrid = document.getElementById('tool-grid');
     
-    // NEU: Error-Handling für fehlende Elemente
     if (!toolGrid) {
         console.warn('Tool grid not found');
         return;
     }
 
-    // Save tool to favorites
-    toolGrid.addEventListener('click', async (e) => {
-        // NEU: Bessere Selectors für Save-Buttons
-        const saveBtn = e.target.closest('button.save-btn, .save-btn, .bookmark-btn, [data-save]');
-        if (!saveBtn) return;
-
-        const toolCard = saveBtn.closest('.tool-card, [data-id]');
-        if (!toolCard) return;
-
-        const toolId = toolCard.dataset.id;
-        if (!toolId) return;
-
-        // NEU: Prevent default für Button-Clicks
-        if (saveBtn.tagName === 'BUTTON') {
+    const handleToolGridClick = async (e) => {
+        const saveBtn = e.target.closest('[data-save]');
+        if (saveBtn) {
             e.preventDefault();
-        }
-
-        // NEU: Debouncing für schnelle Klicks
-        const buttonId = `save-${toolId}`;
-        if (buttonDebounceTimers.has(buttonId)) {
+            await handleSaveClick(saveBtn);
             return;
         }
 
-        // NEU: Visuelles Feedback (Loading-States)
+        const shareBtn = e.target.closest('[data-share]');
+        if (shareBtn) {
+            e.preventDefault();
+            await handleShareClick(shareBtn);
+            return;
+        }
+
+        const toolLink = e.target.closest('a.tool-link');
+        if (toolLink && !e.defaultPrevented) {
+            handleToolLinkClick(toolLink).catch(() => {});
+        }
+    };
+
+    const handleToolGridKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            const interactiveElement = e.target.closest('[data-save], [data-share], a.tool-link');
+            if (interactiveElement) {
+                e.preventDefault();
+                interactiveElement.click();
+            }
+        }
+    };
+
+    registerEventListener(toolGrid, 'click', handleToolGridClick, 'toolgrid-click');
+    registerEventListener(toolGrid, 'keydown', handleToolGridKeyDown, 'toolgrid-keydown');
+}
+
+/**
+ * Handles save tool click
+ */
+async function handleSaveClick(saveBtn) {
+    const toolCard = saveBtn.closest('[data-id]');
+    if (!toolCard) return;
+
+    const toolId = toolCard.dataset.id;
+    if (!toolId) return;
+
+    const buttonId = `save-${toolId}`;
+    if (!safeThrottle(buttonId, () => {
         saveBtn.classList.add('loading');
         const originalHTML = saveBtn.innerHTML;
         saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-        const timer = setTimeout(() => {
-            // Toggle save state
-            const isSaved = saveBtn.classList.contains('saved');
-            
-            if (isSaved) {
-                saveBtn.classList.remove('saved');
-                saveBtn.querySelector('i').className = 'far fa-bookmark';
-                showNotification('Aus Favoriten entfernt', 'info');
-            } else {
-                saveBtn.classList.add('saved');
-                saveBtn.querySelector('i').className = 'fas fa-bookmark';
-                showNotification('Zu Favoriten hinzugefügt', 'success');
-            }
+        const isSaved = saveBtn.classList.contains('saved');
+        
+        if (isSaved) {
+            saveBtn.classList.remove('saved');
+            const icon = saveBtn.querySelector('i');
+            if (icon) icon.className = 'far fa-bookmark';
+            showNotification('Aus Favoriten entfernt', 'info');
+        } else {
+            saveBtn.classList.add('saved');
+            const icon = saveBtn.querySelector('i');
+            if (icon) icon.className = 'fas fa-bookmark';
+            showNotification('Zu Favoriten hinzugefügt', 'success');
+        }
 
-            // Save to localStorage
+        try {
             const savedTools = JSON.parse(localStorage.getItem('savedTools') || '[]');
             if (isSaved) {
                 const index = savedTools.indexOf(toolId);
@@ -935,96 +1000,113 @@ export function initToolInteractionEvents() {
                 savedTools.push(toolId);
             }
             localStorage.setItem('savedTools', JSON.stringify(savedTools));
-            
-            // Entferne Loading-State
-            saveBtn.classList.remove('loading');
-            saveBtn.innerHTML = originalHTML;
-            buttonDebounceTimers.delete(buttonId);
-        }, 300);
-
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // Share tool
-    toolGrid.addEventListener('click', async (e) => {
-        // NEU: Bessere Selectors für Share-Buttons
-        const shareBtn = e.target.closest('button.share-btn, .share-btn, [data-share]');
-        if (!shareBtn) return;
-
-        const toolCard = shareBtn.closest('.tool-card, [data-id]');
-        if (!toolCard) return;
-
-        const toolTitle = toolCard.querySelector('.tool-title').textContent;
-        const toolLink = toolCard.querySelector('.tool-link')?.href || window.location.href;
-
-        // NEU: Prevent default für Button-Clicks
-        if (shareBtn.tagName === 'BUTTON') {
-            e.preventDefault();
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
         }
+        
+        saveBtn.classList.remove('loading');
+        saveBtn.innerHTML = originalHTML;
+    }, 300)) {
+        return;
+    }
+}
 
-        // NEU: Debouncing für schnelle Klicks
-        const buttonId = `share-${toolCard.dataset.id || 'unknown'}`;
-        if (buttonDebounceTimers.has(buttonId)) {
-            return;
-        }
+/**
+ * Handles share tool click
+ */
+async function handleShareClick(shareBtn) {
+    const toolCard = shareBtn.closest('[data-id]');
+    if (!toolCard) return;
 
-        // NEU: Visuelles Feedback (Loading-States)
+    const toolTitleElement = toolCard.querySelector('.tool-title');
+    const toolLinkElement = toolCard.querySelector('.tool-link');
+    
+    if (!toolTitleElement || !toolLinkElement) return;
+
+    const toolTitle = toolTitleElement.textContent;
+    const toolLink = toolLinkElement.href || window.location.href;
+
+    const buttonId = `share-${toolCard.dataset.id || 'unknown'}`;
+    if (!safeThrottle(buttonId, async () => {
         shareBtn.classList.add('loading');
         const originalHTML = shareBtn.innerHTML;
         shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-        const timer = setTimeout(async () => {
-            try {
-                await navigator.clipboard.writeText(`${toolTitle}: ${toolLink}`);
-                showNotification('Link kopiert!', 'success');
-            } catch (error) {
-                console.error('Error copying link:', error);
-                showNotification('Link konnte nicht kopiert werden', 'error');
-            } finally {
-                // Entferne Loading-State
-                shareBtn.classList.remove('loading');
-                shareBtn.innerHTML = originalHTML;
-                buttonDebounceTimers.delete(buttonId);
-            }
-        }, 300);
-
-        buttonDebounceTimers.set(buttonId, timer);
-    });
-
-    // Tool link tracking
-    toolGrid.addEventListener('click', async (e) => {
-        // NEU: Bessere Selectors für Tool-Links
-        const toolLink = e.target.closest('a.tool-link, .tool-link[href], .tool-card a[href]');
-        if (!toolLink) return;
-
-        const toolCard = toolLink.closest('.tool-card, [data-id]');
-        if (!toolCard) return;
-
-        const toolId = toolCard.dataset.id;
-        if (!toolId) return;
-
-        // Increment usage count
         try {
-            const response = await supabase.rpc('increment_tool_usage', { tool_id: toolId });
-            if (response.error) {
-                console.error('Error tracking tool usage:', response.error);
-            }
+            await navigator.clipboard.writeText(`${toolTitle}: ${toolLink}`);
+            showNotification('Link kopiert!', 'success');
         } catch (error) {
-            console.error('Error tracking tool usage:', error);
+            console.error('Error copying link:', error);
+            showNotification('Link konnte nicht kopiert werden', 'error');
+        } finally {
+            shareBtn.classList.remove('loading');
+            shareBtn.innerHTML = originalHTML;
         }
-    });
+    }, 300)) {
+        return;
+    }
+}
 
-    // NEU: Tastatur-Navigation für Tool-Interaktionen
-    toolGrid.addEventListener('keydown', (e) => {
-        // Handle Enter and Space keys für interaktive Elemente
-        if (e.key === 'Enter' || e.key === ' ') {
-            const interactiveElement = e.target.closest('button.save-btn, .save-btn, button.share-btn, .share-btn, .tool-link');
-            if (!interactiveElement) return;
-            
-            e.preventDefault();
-            interactiveElement.click();
+/**
+ * Handles tool link click
+ */
+async function handleToolLinkClick(toolLink) {
+    const toolCard = toolLink.closest('[data-id]');
+    if (!toolCard) return;
+
+    const toolId = toolCard.dataset.id;
+    if (!toolId) return;
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        
+        pendingRequests.add(controller);
+        
+        await supabase.rpc('increment_tool_usage', 
+            { tool_id: toolId },
+            { signal: controller.signal }
+        );
+        
+        clearTimeout(timeoutId);
+        pendingRequests.delete(controller);
+        
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.debug('Tool usage tracking failed:', error);
         }
-    });
+    }
+}
+
+// ===========================================
+// TOOLTIP EVENTS
+// ===========================================
+
+/**
+ * Initialisiert Tooltip-Events
+ */
+function initTooltipEvents() {
+    const handleDocumentClick = (e) => {
+        const tooltipElement = e.target.closest('[data-tooltip]');
+        
+        document.querySelectorAll('[data-tooltip].active').forEach(activeTooltip => {
+            if (activeTooltip !== tooltipElement) {
+                activeTooltip.classList.remove('active');
+            }
+        });
+        
+        if (tooltipElement) {
+            tooltipElement.classList.toggle('active');
+            
+            const autoCloseTimer = setTimeout(() => {
+                tooltipElement.classList.remove('active');
+            }, 3000);
+            
+            debounceTimers.set(`tooltip-${Date.now()}`, autoCloseTimer);
+        }
+    };
+
+    registerEventListener(document, 'click', handleDocumentClick, 'tooltip-click');
 }
 
 // ===========================================
@@ -1035,15 +1117,21 @@ export function initToolInteractionEvents() {
  * Generates a unique user ID for anonymous voting
  */
 function getUserId() {
-    let userId = localStorage.getItem('aiToolHubUserId');
-    
-    if (!userId) {
-        // Generate a random user ID
-        userId = 'user_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('aiToolHubUserId', userId);
+    try {
+        let userId = localStorage.getItem('aiToolHubUserId');
+        
+        if (!userId) {
+            const array = new Uint8Array(16);
+            crypto.getRandomValues(array);
+            userId = 'user_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+            localStorage.setItem('aiToolHubUserId', userId);
+        }
+        
+        return userId;
+    } catch (error) {
+        console.error('Error generating user ID:', error);
+        return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
-    
-    return userId;
 }
 
 /**
@@ -1068,14 +1156,13 @@ export function resetFilters(handleReset) {
     currentState.searchQuery = '';
     currentState.sortBy = 'newest';
     
-    // Reset UI
     const searchInput = document.getElementById('search-input');
     if (searchInput) searchInput.value = '';
     
     const searchClear = document.getElementById('search-clear');
     if (searchClear) searchClear.style.display = 'none';
     
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    document.querySelectorAll('[data-filter]').forEach(btn => {
         btn.classList.remove('active');
         if (btn.dataset.filter === 'all') {
             btn.classList.add('active');
@@ -1084,11 +1171,11 @@ export function resetFilters(handleReset) {
     
     const sortToggle = document.getElementById('sort-toggle');
     if (sortToggle) {
-        sortToggle.querySelector('span').textContent = 'Neueste';
+        const spanElement = sortToggle.querySelector('span');
+        if (spanElement) spanElement.textContent = 'Neueste';
     }
     
-    // Call reset handler
-    if (handleReset) {
+    if (typeof handleReset === 'function') {
         handleReset();
     }
     
@@ -1096,101 +1183,84 @@ export function resetFilters(handleReset) {
 }
 
 // ===========================================
-// INITIALIZATION
+// INITIALIZATION & CLEANUP
 // ===========================================
 
 /**
  * Initializes all event listeners
  */
 export function initAllEvents(handlers = {}) {
-    // Search and filter events
-    if (handlers.handleSearch) {
+    removeAllEvents();
+    
+    if (typeof handlers.handleSearch === 'function') {
         initSearchEvents(handlers.handleSearch);
     }
     
-    if (handlers.handleFilter) {
+    if (typeof handlers.handleFilter === 'function') {
         initFilterEvents(handlers.handleFilter);
     }
     
-    // Voting events
-    if (handlers.handleVoteUpdate) {
+    if (typeof handlers.handleVoteUpdate === 'function') {
         initVoteEvents(handlers.handleVoteUpdate);
     }
     
-    // Modal events
     initModalEvents();
     
-    // Theme and view events
     initThemeEvents();
     
-    if (handlers.handleViewChange) {
+    if (typeof handlers.handleViewChange === 'function') {
         initViewEvents(handlers.handleViewChange);
     }
     
-    if (handlers.handleSort) {
+    if (typeof handlers.handleSort === 'function') {
         initSortEvents(handlers.handleSort);
     }
     
-    // Scroll and navigation events
     initScrollEvents();
     
-    if (handlers.handleRankingRefresh) {
+    if (typeof handlers.handleResize === 'function') {
+        initResizeEvents(handlers.handleResize);
+    }
+    
+    if (typeof handlers.handleRankingRefresh === 'function') {
         initRankingEvents(handlers.handleRankingRefresh);
     }
     
-    // Tool interaction events
     initToolInteractionEvents();
+    
+    initKeyboardShortcuts();
+    
+    initTooltipEvents();
     
     console.log('✅ All event listeners initialized');
 }
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + F to focus search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-        e.preventDefault();
-        const searchInput = document.getElementById('search-input');
-        if (searchInput) {
-            searchInput.focus();
-            searchInput.select();
-        }
-    }
-    
-    // Escape to close modal
-    if (e.key === 'Escape' && currentState.activeModal) {
-        closeModal(currentState.activeModal);
-    }
-    
-    // Ctrl/Cmd + R to reset filters
-    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
-        e.preventDefault();
-        if (handlers && handlers.handleReset) {
-            resetFilters(handlers.handleReset);
-        }
-    }
-});
-
-// Global click handler for tooltips
-document.addEventListener('click', (e) => {
-    // Close all open tooltips
-    const openTooltips = document.querySelectorAll('[data-tooltip].active');
-    openTooltips.forEach(tooltip => {
-        tooltip.classList.remove('active');
+/**
+ * Entfernt ALLE Event-Listener
+ */
+export function removeAllEvents() {
+    eventHandlerRegistry.forEach((listenerEntry, handlerId) => {
+        removeEventListenerById(handlerId);
     });
     
-    // Show tooltip on elements with data-tooltip attribute
-    const tooltipElement = e.target.closest('[data-tooltip]');
-    if (tooltipElement) {
-        tooltipElement.classList.add('active');
-    }
-});
+    const elements = Array.from(elementListeners.keys());
+    elements.forEach(element => {
+        removeAllElementListeners(element);
+    });
+    
+    cleanupTimersAndFlags();
+    
+    currentState.activeModal = null;
+    
+    console.log('🧹 All event listeners and timers removed');
+}
 
-// Global handlers reference
-let handlers = {};
+// Globale Handler-Referenz
+let globalHandlers = {};
 
 /**
  * Sets handlers for event callbacks
  */
 export function setEventHandlers(newHandlers) {
-    handlers = { ...handlers, ...newHandlers };
+    globalHandlers = { ...globalHandlers, ...newHandlers };
 }
