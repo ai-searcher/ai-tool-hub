@@ -1,4 +1,72 @@
 /* ===========================================
+   UNIVERSAL TRANSITIONS FÜR THEME-WECHSEL
+=========================================== */
+
+/* 
+   Flüssige Übergänge für alle farbrelevanten Properties bei Theme-Wechsel
+   Verwendet !important um Konsistenz über alle Elemente zu gewährleisten
+   Dauer: 0.5s (500ms) für natürliche, nicht zu langsame Übergänge
+   Timing-Funktion: cubic-bezier(0.4, 0, 0.2, 1) - natürliche Beschleunigung
+*/
+
+* {
+  transition: 
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    text-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 
+   Klasse zum temporären Deaktivieren aller Transitions
+   Nützlich für JavaScript-Operationen, bei denen flüssige Übergänge stören würden
+*/
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* 
+   Performance-Optimierung: Tool-Grid Items
+   Verhindert unnötige Transitions für transform/opacity während Animationen
+   Behält Theme-Transitions bei, aber mit optimierter Performance
+*/
+.tool-card {
+  transition: 
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 
+   Schützt bestehende Animationen vor Beeinträchtigung durch Theme-Transitions
+   Besonders wichtig für .word-Animationen in der Hero-Sektion
+*/
+.word,
+.word *,
+.cyber-spinner,
+.toggle-thumb,
+.tool-card::before {
+  transition: none !important;
+}
+
+/* 
+   Spezifische Transition-Überschreibungen für Elemente mit eigenen Animationen
+   Stellt sicher, dass Theme-Transitions diese nicht beeinträchtigen
+*/
+.word {
+  /* Behält die opacity-Animation aus wordCycle bei */
+  transition: opacity 0s !important;
+}
+
+/* ===========================================
    FUTURISTIC CYBERPUNK STYLESHEET
    Design: Glassmorphism mit Cyberpunk-Elementen
    Autor: AI Tool Hub
