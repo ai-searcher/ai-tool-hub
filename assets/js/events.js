@@ -3,7 +3,7 @@
 // AI Tool Hub - Event Management
 // ===========================================
 
-import { supabase, saveVote, loadMultipleToolVotes } from './supabase.js';
+import { getSupabaseClient, saveVote, loadMultipleToolVotes } from './supabase.js';
 import { showNotification } from './utils.js';
 import { UI_CONFIG } from './config.js';
 
