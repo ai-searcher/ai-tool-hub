@@ -1648,6 +1648,271 @@ body.light-mode .modal-close:hover {
     text-decoration: underline;
 }
 
+/* ===== NEU: DIRECTORY MODAL (Tool Directory Panel) ===== */
+#directory-modal.modal {
+    display: none;
+    z-index: calc(var(--z-modal) + 10); /* Über anderen Modals */
+}
+
+#directory-modal.modal.show {
+    display: flex;
+}
+
+#directory-modal .modal-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+#directory-modal .modal-container {
+    max-width: 720px;
+    max-height: 70vh;
+    background: var(--glass-bg-heavy);
+    backdrop-filter: var(--glass-blur-large);
+    -webkit-backdrop-filter: var(--glass-blur-large);
+    border: var(--border-width-thin) solid var(--glass-border-medium);
+    box-shadow: var(--glow-blue), var(--glass-shadow-elevated);
+}
+
+#directory-modal .modal-header {
+    padding: var(--spacing-6);
+    border-bottom: var(--border-width-thin) solid var(--glass-border-light);
+    position: sticky;
+    top: 0;
+    background: var(--glass-bg-heavy);
+    backdrop-filter: var(--glass-blur-large);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    z-index: 1;
+}
+
+#directory-modal .modal-title {
+    font-size: var(--text-2xl);
+    color: var(--color-text-primary);
+}
+
+#directory-modal .modal-title i {
+    color: var(--color-neon-blue);
+    filter: var(--glow-blue);
+}
+
+#directory-modal .modal-content {
+    padding: var(--spacing-6);
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+/* Tabs/Chips Navigation */
+#directory-tabs {
+    display: flex;
+    gap: var(--spacing-3);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: var(--spacing-1) 0;
+    position: sticky;
+    top: 60px;
+    background: var(--glass-bg-heavy);
+    backdrop-filter: var(--glass-blur-medium);
+    z-index: 1;
+    margin-top: var(--spacing-2);
+}
+
+#directory-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.directory-tab {
+    padding: var(--spacing-2) var(--spacing-6);
+    background: transparent;
+    border: var(--border-width-thin) solid var(--glass-border-light);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-normal);
+    flex-shrink: 0;
+    backdrop-filter: var(--glass-blur-small);
+}
+
+.directory-tab:hover {
+    background: var(--glass-bg-medium);
+    color: var(--color-text-primary);
+    border-color: var(--color-neon-blue);
+    transform: translateY(-1px);
+}
+
+.directory-tab:active {
+    transform: translateY(0) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+.directory-tab.active {
+    color: var(--color-neon-blue);
+    border-color: var(--color-neon-blue);
+    background: rgba(0, 243, 255, 0.1);
+    position: relative;
+}
+
+.directory-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: var(--color-neon-blue);
+    border-radius: var(--radius-full);
+    box-shadow: var(--glow-blue);
+}
+
+/* Directory List */
+#directory-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    flex: 1;
+    overflow-y: auto;
+    padding-right: var(--spacing-2);
+}
+
+#directory-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#directory-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#directory-list::-webkit-scrollbar-thumb {
+    background: var(--color-neon-blue);
+    border-radius: var(--radius-full);
+}
+
+.directory-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4);
+    background: var(--glass-bg-medium);
+    border: var(--border-width-thin) solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    transition: var(--transition-normal);
+    gap: var(--spacing-4);
+}
+
+.directory-item:hover {
+    border-color: var(--color-neon-blue);
+    transform: translateX(4px);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+}
+
+.directory-item-content {
+    flex: 1;
+    min-width: 0; /* Für ellipsis */
+}
+
+.directory-item-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-1);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.directory-item-title i {
+    color: var(--color-neon-purple);
+    font-size: var(--text-sm);
+}
+
+.directory-item-description {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.directory-item-button {
+    padding: var(--spacing-2) var(--spacing-6);
+    background: transparent;
+    border: var(--border-width-thin) solid var(--color-neon-blue);
+    border-radius: var(--radius-full);
+    color: var(--color-neon-blue);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    white-space: nowrap;
+    flex-shrink: 0;
+    backdrop-filter: var(--glass-blur-small);
+}
+
+.directory-item-button:hover {
+    background: var(--color-neon-blue);
+    color: var(--color-bg-primary);
+    box-shadow: var(--glow-blue);
+    transform: translateX(2px);
+}
+
+.directory-item-button:active {
+    transform: translateX(2px) scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+.directory-item-button:focus {
+    outline: 2px solid var(--color-neon-blue);
+    outline-offset: 2px;
+}
+
+/* Empty State für Directory */
+.directory-empty {
+    text-align: center;
+    padding: var(--spacing-12) var(--spacing-4);
+    color: var(--color-text-tertiary);
+}
+
+.directory-empty i {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--spacing-4);
+    opacity: 0.5;
+}
+
+/* ===== NEU: TOOL CARD HIGHLIGHT EFFECT ===== */
+.tool-card.tool-highlight {
+    animation: toolHighlightPulse 1.5s ease;
+    border-color: var(--color-neon-blue);
+    box-shadow: var(--glow-blue);
+}
+
+@keyframes toolHighlightPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: var(--card-shadow);
+        border-color: var(--card-border);
+    }
+    40% {
+        transform: scale(1.01);
+        box-shadow: var(--glow-blue), 0 12px 40px rgba(0, 243, 255, 0.3);
+        border-color: var(--color-neon-blue);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: var(--card-shadow);
+        border-color: var(--card-border);
+    }
+}
+
 /* ===== BUTTON INTERACTION STATES ===== */
 .btn {
     position: relative;
@@ -1894,6 +2159,55 @@ body.light-mode .share-btn:hover {
     .filter-view {
         display: flex !important;
     }
+
+    /* NEU: Directory Modal Mobile Anpassungen */
+    #directory-modal.modal {
+        padding: var(--spacing-2);
+    }
+
+    #directory-modal .modal-container {
+        max-width: 100%;
+        max-height: 75vh;
+        border-radius: var(--radius-lg);
+    }
+
+    #directory-modal .modal-header {
+        padding: var(--spacing-4);
+        top: 0;
+    }
+
+    #directory-modal .modal-title {
+        font-size: var(--text-xl);
+    }
+
+    #directory-modal .modal-content {
+        padding: var(--spacing-4);
+        gap: var(--spacing-4);
+    }
+
+    #directory-tabs {
+        gap: var(--spacing-2);
+        padding: var(--spacing-1) 0;
+        top: 50px;
+    }
+
+    .directory-tab {
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--text-xs);
+    }
+
+    .directory-item {
+        padding: var(--spacing-3);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-3);
+    }
+
+    .directory-item-button {
+        align-self: flex-end;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--text-xs);
+    }
 }
 
 /* Restliche Responsive Styles bleiben unverändert */
@@ -2106,6 +2420,47 @@ body.light-mode .share-btn:hover {
     .word {
         min-width: 200px;
         font-size: var(--text-base);
+    }
+    
+    /* NEU: Directory Modal Extra Mobile Anpassungen */
+    #directory-modal .modal-container {
+        border-radius: var(--radius-md);
+        max-height: 80vh;
+    }
+    
+    #directory-modal .modal-header {
+        padding: var(--spacing-3);
+    }
+    
+    #directory-modal .modal-title {
+        font-size: var(--text-lg);
+    }
+    
+    #directory-tabs {
+        gap: var(--spacing-1);
+        padding: 0;
+    }
+    
+    .directory-tab {
+        padding: var(--spacing-1) var(--spacing-3);
+        font-size: 0.7rem;
+    }
+    
+    .directory-item {
+        padding: var(--spacing-2);
+    }
+    
+    .directory-item-title {
+        font-size: var(--text-sm);
+    }
+    
+    .directory-item-description {
+        font-size: var(--text-xs);
+    }
+    
+    .directory-item-button {
+        padding: var(--spacing-1) var(--spacing-3);
+        font-size: 0.7rem;
     }
 }
 
