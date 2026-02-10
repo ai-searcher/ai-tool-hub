@@ -96,7 +96,7 @@ export function createToolCard(toolData, viewMode = 'grid') {
     const badgeClass = is_free ? 'free-badge' : (is_featured ? 'featured-badge' : '');
 
     // Check if has demo
-    const hasDemo = !!demo_url;
+    const hasDemo = !!safeDemoUrl;
 
     // sanitize icon
     const safeIconClass = sanitizeIconClass(icon);
@@ -171,8 +171,8 @@ export function createToolCard(toolData, viewMode = 'grid') {
                 ` : ''}
             </div>
             
-            ${link ? `
-            <a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer" class="tool-link">
+            ${safeLink ? `
+            <a href="${escapeAttr(safeLink)}" target="_blank" rel="noopener noreferrer" class="tool-link">
                 <span>Zum Tool</span>
                 <i class="fas fa-external-link-alt" aria-hidden="true"></i>
             </a>
@@ -189,7 +189,7 @@ export function createToolCard(toolData, viewMode = 'grid') {
                 </button>
                 
                 ${hasDemo ? `
-                <button class="demo-btn" data-demo-url="${escapeAttr(demo_url)}" data-tool-id="${safeId}" aria-label="Demo öffnen">
+                <button class="demo-btn" data-demo-url="${escapeAttr(safeDemoUrl)}" data-tool-id="${safeId}" aria-label="Demo öffnen">
                     <i class="fas fa-play-circle" aria-hidden="true"></i>
                 </button>
                 ` : ''}
@@ -204,14 +204,14 @@ export function createToolCard(toolData, viewMode = 'grid') {
             </div>
             
             <div class="quick-actions">
-                ${link ? `
-                <button class="quick-action copy-link" data-url="${escapeAttr(link)}" title="Link kopieren">
+                ${safeLink ? `
+                <button class="quick-action copy-link" data-url="${escapeAttr(safeLink)}" title="Link kopieren">
                     <i class="fas fa-link" aria-hidden="true"></i>
                 </button>
                 ` : ''}
                 
                 ${hasDemo ? `
-                <button class="quick-action open-demo" data-url="${escapeAttr(demo_url)}" title="Demo öffnen">
+                <button class="quick-action open-demo" data-url="${escapeAttr(safeDemoUrl)}" title="Demo öffnen">
                     <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                 </button>
                 ` : ''}
@@ -409,7 +409,7 @@ export function createRankingHTML(rankingArray) {
                 </div>
                 
                 ${toolData.link ? `
-                <a href="${escapeAttr(toolData.link)}" target="_blank" rel="noopener noreferrer" class="rank-link">
+                 <a href="${escapeAttr(toolData.link)}" target="_blank" rel="noopener noreferrer" class="rank-link">
                     <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                     <span>Besuchen</span>
                 </a>
@@ -793,22 +793,22 @@ export function createToolDetailHTML(toolData) {
             </div>
             
             <div class="detail-footer">
-                ${link ? `
-                <a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                ${safeLink ? `
+                <a href="${escapeAttr(safeLink)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                     <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                     Zum Tool
                 </a>
                 ` : ''}
                 
-                ${demo_url ? `
-                <a href="${escapeAttr(demo_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                ${safeDemoUrl ? `
+                <a href="${escapeAttr(safeDemoUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
                     <i class="fas fa-play-circle" aria-hidden="true"></i>
                     Demo öffnen
                 </a>
                 ` : ''}
                 
-                ${link ? `
-                <button class="btn btn-outline copy-link" data-url="${escapeAttr(link)}">
+                ${safeLink ? `
+                <button class="btn btn-outline copy-link" data-url="${escapeAttr(safeLink)}">
                     <i class="fas fa-copy" aria-hidden="true"></i>
                     Link kopieren
                 </button>
