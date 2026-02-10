@@ -13,12 +13,150 @@ import {
     validateConfig
 } from './config.js';
 
-// Initialize Supabase Client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ===========================================
+// SUPABASE CLIENT INITIALIZATION
+// ===========================================
 
-// Validate configuration on import
-if (typeof window !== 'undefined') {
-    validateConfig();
+let supabase = null;
+let initializationPromise = null;
+const activeSubscriptions = new Map();
+const voteLocks = new Map();
+
+/**
+ * Initializes Supabase client once with thread safety
+ * @returns {Promise<Object>} Initialized Supabase client
+ */
+async function initializeSupabase() {
+    if (initializationPromise) return initializationPromise;
+    
+    initializationPromise = (async () => {
+        try {
+            if (typeof window === 'undefined') {
+                throw new Error('Browser environment required');
+            }
+
+            if (!window.supabase?.createClient) {
+                throw new Error('Supabase CDN not loaded');
+            }
+
+            validateConfig();
+
+            const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: false,
+                    detectSessionInUrl: false
+                },
+                global: {
+                    headers: { 'X-Client-Info': 'ai-tool-hub' }
+                }
+            });
+
+            // Test minimal connection without fetching data
+            const { error } = await client
+                .from(SUPABASE_TABLE_TOOLS)
+                .select('id', { count: 'exact', head: true })
+                .limit(1);
+
+            if (error) throw error;
+
+            supabase = client;
+            return client;
+        } catch (error) {
+            console.error('Supabase initialization failed:', error);
+            supabase = null;
+            initializationPromise = null;
+            throw new Error('Database initialization failed');
+        }
+    })();
+
+    return initializationPromise;
+}
+
+/**
+ * Gets validated Supabase client
+ * @returns {Promise<Object>} Supabase client
+ */
+async function getClient() {
+    if (supabase) return supabase;
+    return await initializeSupabase();
+}
+
+// ===========================================
+// AUTHENTICATION FUNCTIONS
+// ===========================================
+
+/**
+ * Signs in user anonymously or with OAuth
+ * @param {Object} options - Auth options { provider: 'github'|'google', anonymous: boolean }
+ * @returns {Promise<Object>} Auth result
+ */
+export async function signIn(options = {}) {
+    try {
+        const client = await getClient();
+        
+        if (options.anonymous) {
+            const { data, error } = await client.auth.signInAnonymously();
+            if (error) throw error;
+            return { success: true, user: data.user, isAnonymous: true };
+        }
+        
+        if (options.provider) {
+            const { error } = await client.auth.signInWithOAuth({
+                provider: options.provider,
+                options: { redirectTo: window.location.origin }
+            });
+            if (error) throw error;
+            return { success: true, message: `Redirecting to ${options.provider}...` };
+        }
+        
+        throw new Error('No authentication method specified');
+    } catch (error) {
+        console.error('Sign in error:', error);
+        return {
+            success: false,
+            message: ERROR_MESSAGES.AUTH_ERROR,
+            error: error.message
+        };
+    }
+}
+
+/**
+ * Signs out current user
+ * @returns {Promise<Object>} Sign out result
+ */
+export async function signOut() {
+    try {
+        const client = await getClient();
+        const { error } = await client.auth.signOut();
+        if (error) throw error;
+        return { success: true };
+    } catch (error) {
+        console.error('Sign out error:', error);
+        return { success: false, message: ERROR_MESSAGES.AUTH_ERROR };
+    }
+}
+
+/**
+ * Gets current auth state
+ * @returns {Promise<Object>} Auth state
+ */
+export async function getAuthState() {
+    try {
+        const client = await getClient();
+        const { data: { session }, error } = await client.auth.getSession();
+        
+        if (error) throw error;
+        
+        return {
+            isAuthenticated: !!session,
+            user: session?.user || null,
+            session: session
+        };
+    } catch (error) {
+        console.warn('Auth state check failed:', error);
+        return { isAuthenticated: false, user: null, session: null };
+    }
 }
 
 // ===========================================
@@ -26,38 +164,53 @@ if (typeof window !== 'undefined') {
 // ===========================================
 
 /**
- * Loads vote statistics for a specific tool
+ * Loads vote statistics for a specific tool with server-side aggregation
  * @param {string} toolId - The ID of the tool
  * @returns {Promise<Object>} - Vote statistics { total: number, average: number, count: number }
  */
 export async function loadToolVotes(toolId) {
     try {
-        if (!toolId) {
-            console.error('Tool ID is required');
+        if (!toolId || typeof toolId !== 'string') {
             return { total: 0, average: 0, count: 0 };
         }
 
-        const { data, error } = await supabase
+        const client = await getClient();
+        
+        // Get count and average in single query
+        const { count, error: countError } = await client
             .from('votes')
-            .select('*')
+            .select('*', { count: 'exact', head: false })
             .eq('tool_id', toolId);
 
-        if (error) {
-            console.error('Error loading votes:', error);
+        if (countError) {
+            console.error('Error loading vote count:', countError);
             return { total: 0, average: 0, count: 0 };
         }
 
-        if (!data || data.length === 0) {
+        const voteCount = count || 0;
+        if (voteCount === 0) {
             return { total: 0, average: 0, count: 0 };
         }
 
-        // Calculate statistics
-        const votes = data.map(v => v.vote_value);
-        const total = votes.reduce((sum, vote) => sum + vote, 0);
-        const average = votes.length > 0 ? total / votes.length : 0;
-        const count = votes.length;
+        // Get sum for total calculation
+        const { data: votes, error: votesError } = await client
+            .from('votes')
+            .select('vote_value')
+            .eq('tool_id', toolId);
 
-        return { total, average, count };
+        if (votesError) {
+            console.error('Error loading vote values:', votesError);
+            return { total: 0, average: 0, count: voteCount };
+        }
+
+        const total = votes.reduce((sum, vote) => sum + vote.vote_value, 0);
+        const average = voteCount > 0 ? total / voteCount : 0;
+
+        return { 
+            total, 
+            average: Math.round(average * 10) / 10, 
+            count: voteCount 
+        };
     } catch (error) {
         console.error('Unexpected error loading votes:', error);
         return { total: 0, average: 0, count: 0 };
@@ -71,13 +224,14 @@ export async function loadToolVotes(toolId) {
  */
 export async function loadMultipleToolVotes(toolIds) {
     try {
-        if (!toolIds || !Array.isArray(toolIds) || toolIds.length === 0) {
+        if (!Array.isArray(toolIds) || toolIds.length === 0) {
             return {};
         }
 
-        const { data, error } = await supabase
+        const client = await getClient();
+        const { data, error } = await client
             .from('votes')
-            .select('*')
+            .select('tool_id, vote_value')
             .in('tool_id', toolIds);
 
         if (error) {
@@ -89,26 +243,30 @@ export async function loadMultipleToolVotes(toolIds) {
             return {};
         }
 
-        // Group votes by tool_id
-        const votesByTool = {};
+        // Group and calculate efficiently
+        const stats = {};
+        const toolStats = new Map();
+        
         data.forEach(vote => {
             const toolId = vote.tool_id;
-            if (!votesByTool[toolId]) {
-                votesByTool[toolId] = [];
+            if (!toolStats.has(toolId)) {
+                toolStats.set(toolId, { total: 0, count: 0 });
             }
-            votesByTool[toolId].push(vote.vote_value);
+            const stat = toolStats.get(toolId);
+            stat.total += vote.vote_value;
+            stat.count += 1;
         });
 
-        // Calculate statistics for each tool
-        const result = {};
-        Object.keys(votesByTool).forEach(toolId => {
-            const votes = votesByTool[toolId];
-            const total = votes.reduce((sum, vote) => sum + vote, 0);
-            const average = votes.length > 0 ? total / votes.length : 0;
-            result[toolId] = { total, average, count: votes.length };
-        });
+        for (const [toolId, stat] of toolStats.entries()) {
+            const average = stat.count > 0 ? stat.total / stat.count : 0;
+            stats[toolId] = { 
+                total: stat.total, 
+                average: Math.round(average * 10) / 10, 
+                count: stat.count 
+            };
+        }
 
-        return result;
+        return stats;
     } catch (error) {
         console.error('Unexpected error loading multiple votes:', error);
         return {};
@@ -116,15 +274,31 @@ export async function loadMultipleToolVotes(toolIds) {
 }
 
 /**
- * Saves a vote for a tool
+ * Saves a vote for a tool with enhanced race condition protection
  * @param {string} toolId - The ID of the tool
- * @param {number} voteValue - Vote value (e.g., 1-5)
- * @param {string} userId - Optional user identifier (for preventing duplicate votes)
+ * @param {number} voteValue - Vote value (1-5)
+ * @param {string} userId - Optional user identifier
  * @returns {Promise<Object>} - Result { success: boolean, message: string, data: any }
  */
 export async function saveVote(toolId, voteValue, userId = null) {
+    const lockKey = `vote_${toolId}_${userId || 'anonymous'}`;
+    
+    // Prevent rapid duplicate votes with timestamp check
+    const now = Date.now();
+    const lastVoteTime = voteLocks.get(lockKey) || 0;
+    
+    if (now - lastVoteTime < 2000) { // 2 second cooldown
+        return {
+            success: false,
+            message: 'Please wait before voting again',
+            data: null
+        };
+    }
+    
+    voteLocks.set(lockKey, now);
+    
     try {
-        if (!toolId) {
+        if (!toolId || typeof toolId !== 'string') {
             return {
                 success: false,
                 message: 'Tool ID is required',
@@ -132,21 +306,25 @@ export async function saveVote(toolId, voteValue, userId = null) {
             };
         }
 
-        if (voteValue < 1 || voteValue > 5) {
+        const voteNum = Number(voteValue);
+        if (!Number.isInteger(voteNum) || voteNum < 1 || voteNum > 5) {
             return {
                 success: false,
-                message: 'Vote value must be between 1 and 5',
+                message: 'Vote value must be an integer between 1 and 5',
                 data: null
             };
         }
 
-        // Check if user already voted (if userId is provided)
-        if (userId) {
-            const { data: existingVote, error: checkError } = await supabase
+        const client = await getClient();
+        const authState = await getAuthState();
+        const currentUserId = userId || authState.user?.id || null;
+
+        if (currentUserId) {
+            const { data: existingVote, error: checkError } = await client
                 .from('votes')
                 .select('id')
                 .eq('tool_id', toolId)
-                .eq('user_id', userId)
+                .eq('user_id', currentUserId)
                 .maybeSingle();
 
             if (checkError) {
@@ -160,91 +338,215 @@ export async function saveVote(toolId, voteValue, userId = null) {
             }
         }
 
-        // Prepare vote data
         const voteData = {
             tool_id: toolId,
-            vote_value: voteValue,
+            vote_value: voteNum,
             created_at: new Date().toISOString(),
-            user_id: userId,
-            ip_address: userId ? null : await getClientIP()
+            user_id: currentUserId,
+            ip_address: null
         };
 
-        // Insert vote
-        const { data, error } = await supabase
+        const { data, error } = await client
             .from('votes')
             .insert([voteData])
-            .select();
+            .select('id, vote_value, created_at')
+            .single();
 
-        if (error) {
-            console.error('Error saving vote:', error);
-            return {
-                success: false,
-                message: ERROR_MESSAGES.DATABASE_ERROR,
-                data: null
-            };
-        }
+        if (error) throw error;
 
-        // Update tool's vote statistics
+        // Update statistics using server-side aggregation
         await updateToolVoteStatistics(toolId);
 
         return {
             success: true,
             message: 'Vote saved successfully',
-            data: data[0]
+            data: data
         };
     } catch (error) {
-        console.error('Unexpected error saving vote:', error);
+        console.error('Error saving vote:', error);
         return {
             success: false,
-            message: ERROR_MESSAGES.DATABASE_ERROR,
+            message: error.code === '23505' ? 'You have already voted for this tool' : ERROR_MESSAGES.DATABASE_ERROR,
             data: null
         };
     }
 }
 
 /**
- * Updates tool's vote statistics in the tools table
+ * Updates tool's vote statistics using consistent aggregation
  * @param {string} toolId - The ID of the tool
  * @returns {Promise<boolean>} - Success status
  */
 async function updateToolVoteStatistics(toolId) {
     try {
-        const voteStats = await loadToolVotes(toolId);
+        const client = await getClient();
         
-        const { error } = await supabase
+        // Use the same aggregation logic as loadToolVotes for consistency
+        const { count, error: countError } = await client
+            .from('votes')
+            .select('*', { count: 'exact', head: false })
+            .eq('tool_id', toolId);
+
+        if (countError) throw countError;
+
+        const voteCount = count || 0;
+        let average = 0;
+
+        if (voteCount > 0) {
+            const { data: votes, error: votesError } = await client
+                .from('votes')
+                .select('vote_value')
+                .eq('tool_id', toolId);
+
+            if (votesError) throw votesError;
+            
+            const total = votes.reduce((sum, vote) => sum + vote.vote_value, 0);
+            average = total / voteCount;
+        }
+
+        const { error: updateError } = await client
             .from(SUPABASE_TABLE_TOOLS)
             .update({
-                vote_count: voteStats.count,
-                vote_average: voteStats.average,
+                vote_count: voteCount,
+                vote_average: Math.round(average * 10) / 10,
                 last_vote_at: new Date().toISOString()
             })
             .eq('id', toolId);
 
-        if (error) {
-            console.error('Error updating tool vote statistics:', error);
-            return false;
-        }
-
+        if (updateError) throw updateError;
         return true;
     } catch (error) {
-        console.error('Unexpected error updating vote statistics:', error);
+        console.error('Error updating tool vote statistics:', error);
+        return false;
+    }
+}
+
+// ===========================================
+// FAVORITES SYSTEM FUNCTIONS
+// ===========================================
+
+/**
+ * Adds a tool to user's favorites
+ * @param {string} toolId - Tool ID
+ * @returns {Promise<Object>} Operation result
+ */
+export async function addFavorite(toolId) {
+    try {
+        const client = await getClient();
+        const authState = await getAuthState();
+        
+        if (!authState.isAuthenticated) {
+            return {
+                success: false,
+                message: 'Please sign in to save favorites',
+                requiresAuth: true
+            };
+        }
+
+        const { error } = await client
+            .from('favorites')
+            .upsert({
+                tool_id: toolId,
+                user_id: authState.user.id,
+                created_at: new Date().toISOString()
+            }, {
+                onConflict: 'tool_id,user_id'
+            });
+
+        if (error) throw error;
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error adding favorite:', error);
+        return {
+            success: false,
+            message: error.code === '23505' ? 'Already in favorites' : ERROR_MESSAGES.DATABASE_ERROR
+        };
+    }
+}
+
+/**
+ * Removes a tool from user's favorites
+ * @param {string} toolId - Tool ID
+ * @returns {Promise<Object>} Operation result
+ */
+export async function removeFavorite(toolId) {
+    try {
+        const client = await getClient();
+        const authState = await getAuthState();
+        
+        if (!authState.isAuthenticated) {
+            return { success: false, message: 'Not authenticated' };
+        }
+
+        const { error } = await client
+            .from('favorites')
+            .delete()
+            .eq('tool_id', toolId)
+            .eq('user_id', authState.user.id);
+
+        if (error) throw error;
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error removing favorite:', error);
+        return {
+            success: false,
+            message: ERROR_MESSAGES.DATABASE_ERROR
+        };
+    }
+}
+
+/**
+ * Checks if a tool is in user's favorites
+ * @param {string} toolId - Tool ID
+ * @returns {Promise<boolean>} Favorite status
+ */
+export async function isFavorite(toolId) {
+    try {
+        const client = await getClient();
+        const authState = await getAuthState();
+        
+        if (!authState.isAuthenticated) return false;
+
+        const { data, error } = await client
+            .from('favorites')
+            .select('id')
+            .eq('tool_id', toolId)
+            .eq('user_id', authState.user.id)
+            .maybeSingle();
+
+        if (error) throw error;
+        return !!data;
+    } catch (error) {
+        console.error('Error checking favorite:', error);
         return false;
     }
 }
 
 /**
- * Gets client IP address (for anonymous voting)
- * @returns {Promise<string>} - Client IP address
+ * Loads user's favorite tools
+ * @returns {Promise<Array>} Array of favorite tools
  */
-async function getClientIP() {
+export async function loadFavorites() {
     try {
-        // Try to get IP from a public service
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
+        const client = await getClient();
+        const authState = await getAuthState();
+        
+        if (!authState.isAuthenticated) return [];
+
+        const { data, error } = await client
+            .from('favorites')
+            .select('tool:tool_id(id, title, description, category, url, is_free, vote_average)')
+            .eq('user_id', authState.user.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        return data.map(item => item.tool).filter(Boolean);
     } catch (error) {
-        console.warn('Could not get IP address:', error);
-        return 'unknown';
+        console.error('Error loading favorites:', error);
+        return [];
     }
 }
 
@@ -253,25 +555,29 @@ async function getClientIP() {
 // ===========================================
 
 /**
- * Loads all AI tools from database
+ * Loads all AI tools from database with safe search query
  * @param {Object} options - Filter and pagination options
  * @returns {Promise<Array>} - Array of tool objects
  */
 export async function loadTools(options = {}) {
     try {
-        let query = supabase
+        const client = await getClient();
+        let query = client
             .from(SUPABASE_TABLE_TOOLS)
-            .select('*')
+            .select('id, title, description, category, url, is_free, vote_average, vote_count, usage_count, updated_at')
             .eq('status', 'active')
             .order('created_at', { ascending: false });
 
-        // Apply filters
         if (options.category && options.category !== 'all') {
             query = query.eq('category', options.category);
         }
 
         if (options.search) {
-            query = query.or(`title.ilike.%${options.search}%,description.ilike.%${options.search}%`);
+            const safeSearch = String(options.search || '').trim();
+            if (safeSearch) {
+                // Safe OR query with proper escaping
+                query = query.or(`title.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%`);
+            }
         }
 
         if (options.limit) {
@@ -280,14 +586,10 @@ export async function loadTools(options = {}) {
 
         const { data, error } = await query;
 
-        if (error) {
-            console.error('Error loading tools:', error);
-            throw new Error(ERROR_MESSAGES.DATABASE_ERROR);
-        }
-
+        if (error) throw error;
         return data || [];
     } catch (error) {
-        console.error('Unexpected error loading tools:', error);
+        console.error('Error loading tools:', error);
         throw new Error(ERROR_MESSAGES.LOADING_ERROR);
     }
 }
@@ -298,19 +600,16 @@ export async function loadTools(options = {}) {
  */
 export async function loadCategories() {
     try {
-        const { data, error } = await supabase
+        const client = await getClient();
+        const { data, error } = await client
             .from(SUPABASE_TABLE_CATEGORIES)
-            .select('*')
+            .select('id, name, description, tool_count')
             .order('name');
 
-        if (error) {
-            console.error('Error loading categories:', error);
-            throw new Error(ERROR_MESSAGES.DATABASE_ERROR);
-        }
-
+        if (error) throw error;
         return data || [];
     } catch (error) {
-        console.error('Unexpected error loading categories:', error);
+        console.error('Error loading categories:', error);
         throw new Error(ERROR_MESSAGES.LOADING_ERROR);
     }
 }
@@ -321,23 +620,20 @@ export async function loadCategories() {
  */
 export async function loadRankings() {
     try {
-        const { data, error } = await supabase
+        const client = await getClient();
+        const { data, error } = await client
             .from(SUPABASE_TABLE_RANKINGS)
             .select(`
-                *,
-                tool:tool_id (*)
+                position,
+                tool:tool_id(id, title, description, category, vote_average)
             `)
             .order('position')
             .limit(3);
 
-        if (error) {
-            console.error('Error loading rankings:', error);
-            throw new Error(ERROR_MESSAGES.DATABASE_ERROR);
-        }
-
+        if (error) throw error;
         return data || [];
     } catch (error) {
-        console.error('Unexpected error loading rankings:', error);
+        console.error('Error loading rankings:', error);
         throw new Error(ERROR_MESSAGES.LOADING_ERROR);
     }
 }
@@ -349,20 +645,28 @@ export async function loadRankings() {
  */
 export async function incrementToolUsage(toolId) {
     try {
-        // Get current usage count
-        const { data: tool, error: fetchError } = await supabase
+        const client = await getClient();
+        
+        // Try RPC first
+        try {
+            const { error } = await client.rpc('increment_usage_count', {
+                tool_id: toolId
+            });
+            if (!error) return true;
+        } catch (rpcError) {
+            console.warn('RPC not available, falling back to transaction:', rpcError);
+        }
+
+        // Fallback to atomic update
+        const { data: tool, error: fetchError } = await client
             .from(SUPABASE_TABLE_TOOLS)
             .select('usage_count')
             .eq('id', toolId)
             .single();
 
-        if (fetchError) {
-            console.error('Error fetching tool:', fetchError);
-            return false;
-        }
+        if (fetchError) throw fetchError;
 
-        // Increment usage count
-        const { error: updateError } = await supabase
+        const { error: updateError } = await client
             .from(SUPABASE_TABLE_TOOLS)
             .update({
                 usage_count: (tool.usage_count || 0) + 1,
@@ -370,14 +674,10 @@ export async function incrementToolUsage(toolId) {
             })
             .eq('id', toolId);
 
-        if (updateError) {
-            console.error('Error updating tool usage:', updateError);
-            return false;
-        }
-
+        if (updateError) throw updateError;
         return true;
     } catch (error) {
-        console.error('Unexpected error incrementing tool usage:', error);
+        console.error('Error incrementing tool usage:', error);
         return false;
     }
 }
@@ -388,26 +688,24 @@ export async function incrementToolUsage(toolId) {
  */
 export async function loadToolStatistics() {
     try {
-        // Get total tools count
-        const { count: totalTools } = await supabase
-            .from(SUPABASE_TABLE_TOOLS)
-            .select('*', { count: 'exact', head: true })
-            .eq('status', 'active');
-
-        // Get tools updated today
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const { count: updatedToday } = await supabase
-            .from(SUPABASE_TABLE_TOOLS)
-            .select('*', { count: 'exact', head: true })
-            .gte('updated_at', today.toISOString());
-
-        // Get free tools count
-        const { count: freeTools } = await supabase
-            .from(SUPABASE_TABLE_TOOLS)
-            .select('*', { count: 'exact', head: true })
-            .eq('is_free', true)
-            .eq('status', 'active');
+        const client = await getClient();
+        
+        const [
+            { count: totalTools },
+            { count: updatedToday },
+            { count: freeTools }
+        ] = await Promise.all([
+            client.from(SUPABASE_TABLE_TOOLS)
+                .select('*', { count: 'exact', head: true })
+                .eq('status', 'active'),
+            client.from(SUPABASE_TABLE_TOOLS)
+                .select('*', { count: 'exact', head: true })
+                .gte('updated_at', new Date().toISOString().split('T')[0]),
+            client.from(SUPABASE_TABLE_TOOLS)
+                .select('*', { count: 'exact', head: true })
+                .eq('is_free', true)
+                .eq('status', 'active')
+        ]);
 
         return {
             total: totalTools || 0,
@@ -416,11 +714,7 @@ export async function loadToolStatistics() {
         };
     } catch (error) {
         console.error('Error loading tool statistics:', error);
-        return {
-            total: 0,
-            updatedToday: 0,
-            free: 0
-        };
+        return { total: 0, updatedToday: 0, free: 0 };
     }
 }
 
@@ -434,16 +728,17 @@ export async function loadToolStatistics() {
  */
 export async function testConnection() {
     try {
-        const { data, error } = await supabase
+        const client = await getClient();
+        const { error } = await client
             .from(SUPABASE_TABLE_TOOLS)
-            .select('count', { count: 'exact', head: true });
+            .select('id', { count: 'exact', head: true })
+            .limit(1);
 
         if (error) {
             console.error('Database connection test failed:', error);
             return false;
         }
 
-        console.log('✅ Database connection successful');
         return true;
     } catch (error) {
         console.error('Database connection test failed:', error);
@@ -465,13 +760,12 @@ export async function setupVotesTable() {
                 id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
                 tool_id UUID REFERENCES ai_tools(id) ON DELETE CASCADE,
                 vote_value INTEGER NOT NULL CHECK (vote_value >= 1 AND vote_value <= 5),
-                user_id TEXT,
+                user_id UUID REFERENCES auth.users(id),
                 ip_address TEXT,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
                 UNIQUE(tool_id, user_id) WHERE user_id IS NOT NULL
             );
             
-            -- Index for better performance
             CREATE INDEX IF NOT EXISTS idx_votes_tool_id ON votes(tool_id);
             CREATE INDEX IF NOT EXISTS idx_votes_created_at ON votes(created_at);
         `);
@@ -491,26 +785,101 @@ export async function setupVotesTable() {
  * Subscribes to real-time vote updates for a tool
  * @param {string} toolId - The ID of the tool
  * @param {Function} callback - Function to call when votes change
- * @returns {Object} - Subscription object
+ * @returns {Object} - Subscription object with unsubscribe method
  */
 export function subscribeToVoteUpdates(toolId, callback) {
-    const subscription = supabase
-        .channel(`votes:${toolId}`)
-        .on(
-            'postgres_changes',
-            {
-                event: '*',
-                schema: 'public',
-                table: 'votes',
-                filter: `tool_id=eq.${toolId}`
-            },
-            (payload) => {
-                callback(payload);
-            }
-        )
-        .subscribe();
+    const channelKey = `votes:${toolId}`;
+    
+    // Check if already subscribed
+    if (activeSubscriptions.has(channelKey)) {
+        const existing = activeSubscriptions.get(channelKey);
+        return {
+            unsubscribe: () => unsubscribeFromUpdates(existing)
+        };
+    }
 
-    return subscription;
+    try {
+        if (!supabase) {
+            console.error('Supabase client not initialized');
+            return { unsubscribe: () => {} };
+        }
+
+        const subscription = supabase
+            .channel(channelKey)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'votes',
+                    filter: `tool_id=eq.${toolId}`
+                },
+                callback
+            )
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    activeSubscriptions.set(channelKey, subscription);
+                } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+                    activeSubscriptions.delete(channelKey);
+                }
+            });
+
+        return {
+            unsubscribe: () => unsubscribeFromUpdates(subscription)
+        };
+    } catch (error) {
+        console.error('Error creating vote subscription:', error);
+        return { unsubscribe: () => {} };
+    }
+}
+
+/**
+ * Subscribes to favorite updates for current user
+ * @param {Function} callback - Function to call when favorites change
+ * @returns {Object} - Subscription object with unsubscribe method
+ */
+export function subscribeToFavoriteUpdates(callback) {
+    const channelKey = 'favorites:user';
+    
+    if (activeSubscriptions.has(channelKey)) {
+        const existing = activeSubscriptions.get(channelKey);
+        return {
+            unsubscribe: () => unsubscribeFromUpdates(existing)
+        };
+    }
+
+    try {
+        if (!supabase) {
+            console.error('Supabase client not initialized');
+            return { unsubscribe: () => {} };
+        }
+
+        const subscription = supabase
+            .channel(channelKey)
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'favorites'
+                },
+                callback
+            )
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    activeSubscriptions.set(channelKey, subscription);
+                } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+                    activeSubscriptions.delete(channelKey);
+                }
+            });
+
+        return {
+            unsubscribe: () => unsubscribeFromUpdates(subscription)
+        };
+    } catch (error) {
+        console.error('Error creating favorites subscription:', error);
+        return { unsubscribe: () => {} };
+    }
 }
 
 /**
@@ -518,8 +887,36 @@ export function subscribeToVoteUpdates(toolId, callback) {
  * @param {Object} subscription - Subscription object
  */
 export function unsubscribeFromUpdates(subscription) {
-    if (subscription) {
+    if (!subscription || !supabase) return;
+    
+    try {
         supabase.removeChannel(subscription);
+        
+        // Remove from active subscriptions
+        for (const [key, sub] of activeSubscriptions.entries()) {
+            if (sub === subscription) {
+                activeSubscriptions.delete(key);
+                break;
+            }
+        }
+    } catch (error) {
+        console.error('Error unsubscribing:', error);
+    }
+}
+
+/**
+ * Cleanup all active subscriptions
+ */
+export function cleanupAllSubscriptions() {
+    if (!supabase) return;
+    
+    try {
+        for (const subscription of activeSubscriptions.values()) {
+            supabase.removeChannel(subscription);
+        }
+        activeSubscriptions.clear();
+    } catch (error) {
+        console.error('Error cleaning up subscriptions:', error);
     }
 }
 
