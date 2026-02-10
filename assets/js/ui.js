@@ -507,6 +507,74 @@ export function showEmptyState(message = 'Keine Tools gefunden.') {
 }
 
 // ===========================================
+// NEU: DIRECTORY MODAL HELPERS
+// ===========================================
+
+/**
+ * Generates HTML for directory modal tabs (text-only)
+ * @param {Array} categories - Array of category objects
+ * @param {string} activeCategoryId - ID of the active category
+ * @returns {string} - HTML string for tabs
+ */
+export function createDirectoryModalTabsHTML(categories, activeCategoryId = 'all') {
+    if (!Array.isArray(categories) || categories.length === 0) {
+        return '';
+    }
+    
+    // Add "All" tab at the beginning
+    const allCategories = [
+        { id: 'all', name: 'Alle' },
+        ...categories
+    ];
+    
+    return allCategories.map(category => {
+        const isActive = category.id === activeCategoryId;
+        const activeClass = isActive ? 'active' : '';
+        
+        return `
+            <button class="dir-tab ${activeClass}" data-category="${category.id}">
+                ${category.name}
+            </button>
+        `;
+    }).join('');
+}
+
+/**
+ * Generates HTML for directory modal list items (text-only)
+ * @param {Array} toolsArray - Array of tool objects
+ * @returns {string} - HTML string for list items
+ */
+export function createDirectoryModalListHTML(toolsArray) {
+    if (!Array.isArray(toolsArray) || toolsArray.length === 0) {
+        return `
+            <div class="dir-empty">
+                <p>Keine Tools in dieser Kategorie gefunden.</p>
+            </div>
+        `;
+    }
+    
+    return toolsArray.map(tool => {
+        const { id, title, category, description, is_free } = tool;
+        
+        return `
+            <div class="dir-item" data-tool-id="${id}">
+                <div class="dir-item-content">
+                    <h4 class="dir-item-title">${title}</h4>
+                    <div class="dir-item-meta">
+                        <span class="dir-item-category">${category || 'Unkategorisiert'}</span>
+                        ${is_free ? '<span class="dir-item-free">Kostenlos</span>' : ''}
+                    </div>
+                    <p class="dir-item-description">${truncateText(description, 80)}</p>
+                </div>
+                <button class="dir-jump" data-tool-id="${id}">
+                    Zum Tool
+                </button>
+            </div>
+        `;
+    }).join('');
+}
+
+// ===========================================
 // HELPER FUNCTIONS
 // ===========================================
 
@@ -656,5 +724,8 @@ export default {
     populateModal,
     showLoadingSpinner,
     hideLoadingSpinner,
-    showEmptyState
+    showEmptyState,
+    // NEU: Directory Modal Helper-Funktionen
+    createDirectoryModalTabsHTML,
+    createDirectoryModalListHTML
 };
