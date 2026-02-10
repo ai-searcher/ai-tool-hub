@@ -219,6 +219,9 @@ async function initApp() {
         // Initialize event listeners
         initializeEventHandlers();
         
+        // NEU: Filter-Bar Auto-Compact nach UI Initialisierung
+        initFilterBarAutoCompact();
+        
         // Hide loading spinner
         hideLoadingSpinner();
         
@@ -231,6 +234,73 @@ async function initApp() {
         showEmptyState('Fehler beim Laden der Daten. Bitte versuche es später erneut.');
         showNotification(ERROR_MESSAGES.LOADING_ERROR, 'error');
     }
+}
+
+// ===========================================
+// NEU: AUTO-COMPACT-ON-SCROLL FUNKTIONALITÄT
+// ===========================================
+
+/**
+ * Initialisiert automatisches Kompakt-Modus für Filterbar beim Scrollen
+ * Fügt 'compact' Klasse ab 80px Scroll hinzu für futuristischeres Design
+ */
+function initFilterBarAutoCompact() {
+    console.log('🔄 Initialisiere Filter-Bar Auto-Compact...');
+    
+    const filterBar = document.getElementById('filter-bar');
+    
+    if (!filterBar) {
+        console.log('⚠️ Filter-Bar (#filter-bar) nicht gefunden, überspringe Auto-Compact');
+        return;
+    }
+    
+    let ticking = false;
+    let lastScrollY = window.scrollY;
+    const SCROLL_THRESHOLD = 80; // Pixel ab denen kompakt wird
+    
+    /**
+     * Aktualisiert die Compact-Klasse basierend auf Scroll-Position
+     */
+    function updateCompactState() {
+        const currentScrollY = window.scrollY;
+        const shouldCompact = currentScrollY > SCROLL_THRESHOLD;
+        
+        // Toggle 'compact' Klasse basierend auf Scroll-Position
+        filterBar.classList.toggle('compact', shouldCompact);
+        
+        // Optional: Debug-Logging bei Zustandsänderung
+        if (currentScrollY !== lastScrollY) {
+            lastScrollY = currentScrollY;
+            if (shouldCompact !== filterBar.classList.contains('compact')) {
+                console.log(`📐 Filter-Bar: ${shouldCompact ? 'Kompakt' : 'Normal'} (scrollY: ${currentScrollY}px)`);
+            }
+        }
+        
+        ticking = false;
+    }
+    
+    /**
+     * RequestAnimationFrame optimierte Scroll-Handler
+     */
+    function handleScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                updateCompactState();
+            });
+            ticking = true;
+        }
+    }
+    
+    // Initialen Zustand setzen
+    updateCompactState();
+    
+    // Scroll-Event-Listener hinzufügen
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Resize-Event für Responsiveness
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
+    console.log('✅ Filter-Bar Auto-Compact initialisiert');
 }
 
 /**
