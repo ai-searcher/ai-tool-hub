@@ -141,7 +141,7 @@ export const COLORS = {
 export const validateConfig = () => {
     const errors = [];
     
-    if (!SUPABASE_URL || SUPABASE_URL.includes('https://doicozkpdbkyvdkpujoh.supabase.co')) {
+    if (!SUPABASE_URL || SUPABASE_URL.includes('https://doicozkpdbkyvdkpujoh.supabase.co') {
         errors.push('SUPABASE_URL ist nicht konfiguriert. Bitte trage deine Supabase-URL ein.');
     }
     
