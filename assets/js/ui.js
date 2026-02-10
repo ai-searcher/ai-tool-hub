@@ -1,13 +1,46 @@
 // ===========================================
 // UI COMPONENT GENERATOR
 // AI Tool Hub - HTML Component Generation
+// Überarbeitet: Sanitizing, defensive Checks, classList statt className
 // ===========================================
 
 import { TOOL_DEFAULTS } from './config.js';
 
 // ===========================================
+// CACHE & STATE
+// ===========================================
+
+const DOM_CACHE = new Map();
+let activeModals = new Set();
+
+// ===========================================
 // TOOL CARD GENERATORS
 // ===========================================
+
+/**
+ * Sanitizes a value for safe insertion into attributes.
+ * Uses escapeHTML for content safety, ensures string output.
+ * @param {any} val
+ * @returns {string}
+ */
+function escapeAttr(val) {
+    if (val === null || val === undefined) return '';
+    return escapeHTML(String(val));
+}
+
+/**
+ * Sanitizes icon class string to allow only safe characters (letters, numbers, spaces, -, _, :)
+ * Falls back to default icon.
+ * @param {string} icon
+ * @returns {string}
+ */
+function sanitizeIconClass(icon) {
+    const defaultIcon = 'fas fa-robot';
+    if (typeof icon !== 'string' || !icon.trim()) return defaultIcon;
+    // allow letters, numbers, space, -, _, :, dot (rarely used), remove any other
+    const cleaned = icon.replace(/[^\w\s\-\:\.]/g, '').trim();
+    return cleaned || defaultIcon;
+}
 
 /**
  * Generates HTML for a tool card with futuristic design
@@ -16,74 +49,99 @@ import { TOOL_DEFAULTS } from './config.js';
  * @returns {string} - HTML string for the tool card
  */
 export function createToolCard(toolData, viewMode = 'grid') {
-    if (!toolData) return '';
-    
+    if (!toolData || typeof toolData !== 'object') return '';
+
     const {
         id,
-        title,
-        description,
+        title = 'Unbekanntes Tool',
+        description = '',
         category,
         tags = [],
-        rating = TOOL_DEFAULTS.RATING,
+        rating = TOOL_DEFAULTS?.RATING ?? 0,
         usage_count = 0,
         is_free = false,
         is_featured = false,
         icon = 'fas fa-robot',
         link,
+        demo_url,
+        features = [],
+        support_contact,
         vote_count = 0,
-        vote_average = rating,
-        created_at
+        vote_average = null,
+        created_at,
+        is_favorite = false,
+        is_compared = false
     } = toolData;
-    
+
+    if (!id) return '';
+
     const isGridView = viewMode === 'grid';
-    
-    // Format rating to one decimal place
-    const formattedRating = vote_average ? vote_average.toFixed(1) : rating.toFixed(1);
-    
-    // Generate stars HTML based on rating
-    const starsHTML = generateStarsHTML(vote_average || rating);
-    
+
+    // Determine numeric rating robustly (allow 0)
+    const numericVote = (vote_average !== null && vote_average !== undefined) ? Number(vote_average) : Number(rating || 0);
+    const formattedRating = Number.isFinite(numericVote) ? numericVote.toFixed(1) : (Number(rating || 0).toFixed(1));
+
+    // Generate stars
+    const starsHTML = generateStarsHTML(numericVote);
+
     // Format tags (max 3 in grid view)
-    const displayTags = isGridView ? tags.slice(0, 3) : tags;
-    
+    const displayTags = Array.isArray(tags) ? (isGridView ? tags.slice(0, 3) : tags) : [];
+
     // Format date
     const formattedDate = formatDate(created_at);
-    
-    // Determine badge content
+
+    // Determine badge
     const badgeText = is_free ? 'KOSTENLOS' : (is_featured ? 'FEATURED' : '');
     const badgeClass = is_free ? 'free-badge' : (is_featured ? 'featured-badge' : '');
-    
+
+    // Check if has demo
+    const hasDemo = !!demo_url;
+
+    // sanitize icon
+    const safeIconClass = sanitizeIconClass(icon);
+
+    // sanitize attributes
+    const safeId = escapeAttr(id);
+    const safeCategory = escapeAttr(category || 'uncategorized');
+    const safeIsFavorite = escapeAttr(!!is_favorite);
+    const safeIsCompared = escapeAttr(!!is_compared);
+
     return `
-        <article class="tool-card ${isGridView ? '' : 'list-view'}" data-id="${id}" data-category="${category || 'uncategorized'}">
+        <article class="tool-card ${isGridView ? '' : 'list-view'}" 
+                 data-id="${safeId}" 
+                 data-category="${safeCategory}"
+                 data-favorite="${safeIsFavorite}"
+                 data-compared="${safeIsCompared}">
+            
             ${is_featured ? '<div class="featured-glow"></div>' : ''}
             
             <div class="tool-header">
                 <div class="tool-icon">
-                    <i class="${icon}"></i>
+                    <i class="${escapeAttr(safeIconClass)}" aria-hidden="true"></i>
                 </div>
                 
                 ${badgeText ? `
                 <div class="tool-badge ${badgeClass}">
-                    ${badgeText}
+                    ${escapeHTML(badgeText)}
                 </div>
                 ` : ''}
             </div>
             
             <div class="tool-content">
-                <h3 class="tool-title" title="${title}">
-                    ${title}
+                <h3 class="tool-title" title="${escapeAttr(title)}">
+                    ${escapeHTML(title)}
                 </h3>
                 
-                <p class="tool-description" title="${description}">
+                <p class="tool-description" title="${escapeAttr(description)}">
                     ${truncateText(description, isGridView ? 100 : 200)}
                 </p>
                 
                 ${displayTags.length > 0 ? `
                 <div class="tool-tags">
                     ${displayTags.map(tag => `
-                        <span class="tool-tag">${tag}</span>
+                        <span class="tool-tag">${escapeHTML(tag)}</span>
                     `).join('')}
-                    ${tags.length > 3 && isGridView ? `<span class="tool-tag">+${tags.length - 3}</span>` : ''}
+                    ${Array.isArray(tags) && tags.length > 3 && isGridView ? `<span class="tool-tag">+${tags.length - 3}</span>` : ''}
                 </div>
                 ` : ''}
             </div>
@@ -93,12 +151,12 @@ export function createToolCard(toolData, viewMode = 'grid') {
                     <div class="tool-rating" title="Bewertung: ${formattedRating}/5">
                         ${starsHTML}
                         <span class="rating-value">${formattedRating}</span>
-                        <span class="rating-count">(${vote_count})</span>
+                        <span class="rating-count">(${escapeHTML(String(vote_count || 0))})</span>
                     </div>
                     
                     ${usage_count > 0 ? `
                     <div class="tool-usage" title="Verwendungen: ${usage_count}">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-users" aria-hidden="true"></i>
                         <span>${abbreviateNumber(usage_count)}</span>
                     </div>
                     ` : ''}
@@ -106,32 +164,56 @@ export function createToolCard(toolData, viewMode = 'grid') {
                 
                 ${formattedDate ? `
                 <div class="tool-date">
-                    <i class="far fa-calendar"></i>
-                    <span>${formattedDate}</span>
+                    <i class="far fa-calendar" aria-hidden="true"></i>
+                    <span>${escapeHTML(formattedDate)}</span>
                 </div>
                 ` : ''}
             </div>
             
             ${link ? `
-            <a href="${link}" target="_blank" rel="noopener noreferrer" class="tool-link">
+            <a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer" class="tool-link">
                 <span>Zum Tool</span>
-                <i class="fas fa-external-link-alt"></i>
+                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
             </a>
             ` : ''}
             
             <div class="tool-actions">
-                <button class="vote-btn" data-action="upvote" aria-label="Für dieses Tool stimmen">
-                    <i class="fas fa-chevron-up"></i>
-                    <span class="vote-count">0</span>
+                <button class="vote-btn" data-action="upvote" data-tool-id="${safeId}" aria-label="Für dieses Tool stimmen">
+                    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+                    <span class="vote-count">${escapeHTML(String(vote_count || 0))}</span>
                 </button>
                 
-                <button class="save-btn" aria-label="Tool speichern">
-                    <i class="far fa-bookmark"></i>
+                <button class="save-btn ${is_favorite ? 'active' : ''}" data-tool-id="${safeId}" aria-label="Tool speichern">
+                    <i class="${is_favorite ? 'fas' : 'far'} fa-bookmark" aria-hidden="true"></i>
                 </button>
                 
-                <button class="share-btn" aria-label="Tool teilen">
-                    <i class="fas fa-share"></i>
+                ${hasDemo ? `
+                <button class="demo-btn" data-demo-url="${escapeAttr(demo_url)}" data-tool-id="${safeId}" aria-label="Demo öffnen">
+                    <i class="fas fa-play-circle" aria-hidden="true"></i>
                 </button>
+                ` : ''}
+                
+                <button class="share-btn" data-tool-id="${safeId}" aria-label="Tool teilen">
+                    <i class="fas fa-share" aria-hidden="true"></i>
+                </button>
+                
+                <button class="compare-btn ${is_compared ? 'active' : ''}" data-tool-id="${safeId}" aria-label="Zum Vergleich hinzufügen">
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <div class="quick-actions">
+                ${link ? `
+                <button class="quick-action copy-link" data-url="${escapeAttr(link)}" title="Link kopieren">
+                    <i class="fas fa-link" aria-hidden="true"></i>
+                </button>
+                ` : ''}
+                
+                ${hasDemo ? `
+                <button class="quick-action open-demo" data-url="${escapeAttr(demo_url)}" title="Demo öffnen">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                </button>
+                ` : ''}
             </div>
         </article>
     `;
@@ -147,7 +229,7 @@ export function generateToolCardsHTML(toolsArray, viewMode = 'grid') {
     if (!Array.isArray(toolsArray) || toolsArray.length === 0) {
         return '<p class="no-tools-message">Keine Tools gefunden.</p>';
     }
-    
+
     return toolsArray.map(tool => createToolCard(tool, viewMode)).join('');
 }
 
@@ -157,17 +239,18 @@ export function generateToolCardsHTML(toolsArray, viewMode = 'grid') {
  * @param {string} viewMode - 'grid' or 'list' view
  */
 export function renderToolGrid(toolsArray, viewMode = 'grid') {
-    const toolGrid = document.getElementById('tool-grid');
+    const toolGrid = getCachedElement('#tool-grid');
     if (!toolGrid) return;
-    
-    // Update grid class for view mode
-    toolGrid.className = `tool-grid ${viewMode === 'list' ? 'list-view' : ''}`;
-    
+
+    // Ensure base class exists and toggle list-view only
+    toolGrid.classList.add('tool-grid');
+    toolGrid.classList.toggle('list-view', viewMode === 'list');
+
     if (!Array.isArray(toolsArray) || toolsArray.length === 0) {
         toolGrid.innerHTML = `
             <div class="empty-state show">
                 <div class="empty-icon">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" aria-hidden="true"></i>
                 </div>
                 <h3 class="empty-title">Keine Tools gefunden</h3>
                 <p class="empty-description">
@@ -177,8 +260,79 @@ export function renderToolGrid(toolsArray, viewMode = 'grid') {
         `;
         return;
     }
-    
+
     toolGrid.innerHTML = generateToolCardsHTML(toolsArray, viewMode);
+}
+
+// ===========================================
+// SKELETON LOADERS
+// ===========================================
+
+/**
+ * Shows skeleton loader for tool cards
+ * @param {number} count - Number of skeleton cards to show
+ * @param {string} viewMode - 'grid' or 'list' view
+ */
+export function showSkeletonLoader(count = 8, viewMode = 'grid') {
+    const toolGrid = getCachedElement('#tool-grid');
+    if (!toolGrid) return;
+
+    toolGrid.classList.add('tool-grid');
+    toolGrid.classList.toggle('list-view', viewMode === 'list');
+
+    const skeletonCards = Array.from({ length: count }, (_, i) => `
+        <article class="tool-card skeleton ${viewMode === 'list' ? 'list-view' : ''}" data-skeleton-index="${i}">
+            <div class="tool-header">
+                <div class="tool-icon skeleton-shimmer" aria-hidden="true"></div>
+                <div class="tool-badge skeleton-shimmer" aria-hidden="true"></div>
+            </div>
+            
+            <div class="tool-content">
+                <div class="tool-title skeleton-shimmer" style="width: 70%"></div>
+                <div class="tool-description skeleton-shimmer" style="width: 90%"></div>
+                <div class="tool-description skeleton-shimmer" style="width: 80%"></div>
+                
+                <div class="tool-tags" aria-hidden="true">
+                    <span class="tool-tag skeleton-shimmer" style="width: 60px"></span>
+                    <span class="tool-tag skeleton-shimmer" style="width: 80px"></span>
+                    <span class="tool-tag skeleton-shimmer" style="width: 70px"></span>
+                </div>
+            </div>
+            
+            <div class="tool-footer">
+                <div class="tool-stats">
+                    <div class="tool-rating skeleton-shimmer" style="width: 100px" aria-hidden="true"></div>
+                    <div class="tool-usage skeleton-shimmer" style="width: 80px" aria-hidden="true"></div>
+                </div>
+                
+                <div class="tool-date skeleton-shimmer" style="width: 120px" aria-hidden="true"></div>
+            </div>
+            
+            <div class="tool-actions">
+                <button class="vote-btn skeleton-shimmer" aria-hidden="true"></button>
+                <button class="save-btn skeleton-shimmer" aria-hidden="true"></button>
+                <button class="share-btn skeleton-shimmer" aria-hidden="true"></button>
+                <button class="compare-btn skeleton-shimmer" aria-hidden="true"></button>
+            </div>
+        </article>
+    `).join('');
+
+    toolGrid.innerHTML = skeletonCards;
+}
+
+/**
+ * Hides skeleton loader and shows actual content
+ */
+export function hideSkeletonLoader() {
+    const skeletons = document.querySelectorAll('.tool-card.skeleton');
+    skeletons.forEach(skeleton => {
+        skeleton.classList.add('fade-out');
+        setTimeout(() => {
+            if (skeleton && skeleton.parentNode) {
+                skeleton.parentNode.removeChild(skeleton);
+            }
+        }, 300);
+    });
 }
 
 // ===========================================
@@ -194,52 +348,53 @@ export function createRankingHTML(rankingArray) {
     if (!Array.isArray(rankingArray) || rankingArray.length === 0) {
         return `
             <div class="ranking-placeholder">
-                <i class="fas fa-trophy"></i>
+                <i class="fas fa-trophy" aria-hidden="true"></i>
                 <p>Noch kein Ranking verfügbar</p>
             </div>
         `;
     }
-    
-    // Limit to top 5
+
     const topFive = rankingArray.slice(0, 5);
-    
+
     return topFive.map((item, index) => {
         const { tool, position = index + 1, score } = item;
         const toolData = tool || item;
-        
+
+        if (!toolData || !toolData.id) return '';
+
         const medalClass = getMedalClass(position);
-        const scoreFormatted = score ? score.toFixed(1) : '0.0';
-        
+        const scoreFormatted = (score !== undefined && score !== null) ? Number(score).toFixed(1) : '0.0';
+
         return `
-            <div class="ranking-item" data-position="${position}" data-id="${toolData.id}">
+            <div class="ranking-item" data-position="${escapeAttr(position)}" data-id="${escapeAttr(toolData.id)}">
                 <div class="rank-header">
                     <div class="rank-badge ${medalClass}">
                         ${getMedalIcon(position)}
                     </div>
                     <div class="rank-info">
-                        <h4 class="rank-title" title="${toolData.title}">
-                            ${truncateText(toolData.title, 30)}
+                        <h4 class="rank-title" title="${escapeAttr(toolData.title || '')}">
+                            ${truncateText(toolData.title || '', 30)}
                         </h4>
                         <div class="rank-category">
-                            <i class="fas fa-tag"></i>
-                            <span>${toolData.category || 'Unkategorisiert'}</span>
+                            <i class="fas fa-tag" aria-hidden="true"></i>
+                            <span>${escapeHTML(toolData.category || 'Unkategorisiert')}</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rank-stats">
                     <div class="rank-score">
-                        <i class="fas fa-star"></i>
-                        <span class="score-value">${scoreFormatted}</span>
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        <span class="score-value">${escapeHTML(String(scoreFormatted))}</span>
                     </div>
                     
                     <div class="rank-metrics">
                         <span class="metric" title="Bewertungen">
-                            <i class="fas fa-vote-yea"></i>
-                            ${toolData.vote_count || 0}
+                            <i class="fas fa-vote-yea" aria-hidden="true"></i>
+                            ${escapeHTML(String(toolData.vote_count || 0))}
                         </span>
                         <span class="metric" title="Verwendungen">
-                            <i class="fas fa-users"></i>
+                            <i class="fas fa-users" aria-hidden="true"></i>
                             ${abbreviateNumber(toolData.usage_count || 0)}
                         </span>
                     </div>
@@ -249,12 +404,12 @@ export function createRankingHTML(rankingArray) {
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${Math.min(100, (score || 0) * 20)}%"></div>
                     </div>
-                    <span class="progress-label">Score: ${scoreFormatted}/5</span>
+                    <span class="progress-label">Score: ${escapeHTML(String(scoreFormatted))}/5</span>
                 </div>
                 
                 ${toolData.link ? `
-                <a href="${toolData.link}" target="_blank" rel="noopener noreferrer" class="rank-link">
-                    <i class="fas fa-external-link-alt"></i>
+                <a href="${escapeAttr(toolData.link)}" target="_blank" rel="noopener noreferrer" class="rank-link">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                     <span>Besuchen</span>
                 </a>
                 ` : ''}
@@ -268,14 +423,13 @@ export function createRankingHTML(rankingArray) {
  * @param {Array} rankingArray - Array of ranked tool objects
  */
 export function renderRanking(rankingArray) {
-    const rankingContainer = document.getElementById('ranking-container');
-    const lastUpdateElement = document.getElementById('last-update');
-    
+    const rankingContainer = getCachedElement('#ranking-container');
+    const lastUpdateElement = getCachedElement('#last-update');
+
     if (!rankingContainer) return;
-    
+
     rankingContainer.innerHTML = createRankingHTML(rankingArray);
-    
-    // Update timestamp
+
     if (lastUpdateElement) {
         const now = new Date();
         lastUpdateElement.textContent = formatTime(now);
@@ -295,18 +449,17 @@ export function createCategoryFiltersHTML(categoriesArray) {
     if (!Array.isArray(categoriesArray) || categoriesArray.length === 0) {
         return '';
     }
-    
-    // Add "All" category at the beginning
+
     const allCategories = [
         { id: 'all', name: 'Alle Tools' },
         ...categoriesArray
     ];
-    
+
     return allCategories.map(category => {
-        // KEIN Count-Badge mehr, NUR TEXT!
+        if (!category || !category.id) return '';
         return `
-            <button class="filter-btn" data-filter="${category.id}">
-                <span>${category.name}</span>
+            <button class="filter-btn" data-filter="${escapeAttr(category.id)}">
+                <span>${escapeHTML(category.name || category.id)}</span>
             </button>
         `;
     }).join('');
@@ -317,71 +470,62 @@ export function createCategoryFiltersHTML(categoriesArray) {
  * @param {Array} categoriesArray - Array of category objects
  */
 export function renderMobileFilterDropdown(categoriesArray) {
-    const header = document.querySelector('.filter-nav .header-container');
+    const header = getCachedElement('.filter-nav .header-container') || document.querySelector('.filter-nav .header-container');
     if (!header) return;
-    
-    // Check if dropdown already exists
+
     let dropdown = document.getElementById('filter-dropdown');
-    
+
     if (!dropdown) {
-        // Create dropdown
         dropdown = document.createElement('select');
         dropdown.id = 'filter-dropdown';
         dropdown.className = 'filter-dropdown';
         dropdown.setAttribute('aria-label', 'Kategorie-Filter');
-        
-        // GEÄNDERT: Dropdown zwischen filter-controls und filter-container einfügen
+
         const controls = header.querySelector('.filter-controls');
         const container = header.querySelector('#filter-container');
-        
+
         if (controls && container) {
-            // Dropdown zwischen controls und container einfügen
             header.insertBefore(dropdown, container);
         } else if (controls) {
-            // Nach controls einfügen
             controls.insertAdjacentElement('afterend', dropdown);
         } else {
-            // Fallback: am Anfang von header
             header.insertBefore(dropdown, header.firstChild);
         }
     }
-    
-    // Generate TEXT-ONLY options
+
     const allCategories = [
         { id: 'all', name: 'Alle Tools' },
         ...categoriesArray
     ];
-    
-    dropdown.innerHTML = allCategories.map(cat => 
-        `<option value="${cat.id}">${cat.name}</option>`
+
+    dropdown.innerHTML = allCategories.map(cat =>
+        `<option value="${escapeAttr(cat.id)}">${escapeHTML(cat.name || cat.id)}</option>`
     ).join('');
-    
-    // Add event listener only once
+
     if (!dropdown.dataset.bound) {
         dropdown.dataset.bound = 'true';
-        
-        dropdown.addEventListener('change', (e) => {
+
+        const handleChange = (e) => {
             const filterId = e.target.value;
-            
-            // Try to find corresponding button and click it
-            const button = document.querySelector(`.filter-btn[data-filter="${filterId}"]`);
+
+            const button = document.querySelector(`.filter-btn[data-filter="${CSS.escape ? CSS.escape(filterId) : filterId}"]`);
             if (button) {
                 button.click();
             } else {
-                // Fallback: dispatch custom event
-                const event = new CustomEvent('filterChange', { 
+                const event = new CustomEvent('filterChange', {
                     detail: { filter: filterId },
-                    bubbles: true 
+                    bubbles: true
                 });
                 document.dispatchEvent(event);
             }
-        });
+        };
+
+        dropdown.addEventListener('change', handleChange);
     }
-    
-    // Set initial value based on active filter
+
     const activeButton = document.querySelector('.filter-btn.active');
     if (activeButton) {
-        dropdown.value = activeButton.dataset.filter;
+        dropdown.value = activeButton.dataset.filter || 'all';
     } else {
         dropdown.value = 'all';
     }
@@ -393,7 +537,7 @@ export function renderMobileFilterDropdown(categoriesArray) {
  */
 export function syncFilterDropdown(activeFilterId) {
     const dropdown = document.getElementById('filter-dropdown');
-    if (dropdown && dropdown.value !== activeFilterId) {
+    if (dropdown && dropdown.value !== String(activeFilterId)) {
         dropdown.value = activeFilterId;
     }
 }
@@ -403,21 +547,17 @@ export function syncFilterDropdown(activeFilterId) {
  * @param {Array} categoriesArray - Array of category objects
  */
 export function renderCategoryFilters(categoriesArray) {
-    const filterContainer = document.getElementById('filter-container');
+    const filterContainer = getCachedElement('#filter-container');
     if (!filterContainer) return;
-    
-    // Render text-only buttons
+
     filterContainer.innerHTML = createCategoryFiltersHTML(categoriesArray);
-    
-    // Render mobile dropdown
+
     renderMobileFilterDropdown(categoriesArray);
-    
-    // Find active filter and sync dropdown
+
     const activeButton = document.querySelector('.filter-btn.active');
     if (activeButton) {
         syncFilterDropdown(activeButton.dataset.filter);
     } else {
-        // Default to "all"
         syncFilterDropdown('all');
     }
 }
@@ -431,18 +571,72 @@ export function renderCategoryFilters(categoriesArray) {
  * @param {Object} stats - Statistics object
  */
 export function updateHeroStats(stats) {
-    const totalTools = document.getElementById('total-tools');
-    const updatedToday = document.getElementById('updated-today');
-    const freeTools = document.getElementById('free-tools');
-    
-    if (totalTools) totalTools.textContent = stats.total || 0;
-    if (updatedToday) updatedToday.textContent = stats.updatedToday || 0;
-    if (freeTools) freeTools.textContent = stats.free || 0;
+    if (!stats || typeof stats !== 'object') return;
+
+    const totalTools = getCachedElement('#total-tools');
+    const updatedToday = getCachedElement('#updated-today');
+    const freeTools = getCachedElement('#free-tools');
+
+    if (totalTools) totalTools.textContent = escapeHTML(String(stats.total || 0));
+    if (updatedToday) updatedToday.textContent = escapeHTML(String(stats.updatedToday || 0));
+    if (freeTools) freeTools.textContent = escapeHTML(String(stats.free || 0));
 }
 
 // ===========================================
-// MODAL CONTENT
+// MODAL MANAGEMENT
 // ===========================================
+
+/**
+ * Safely opens a modal by ID
+ * @param {string} modalId - ID of the modal to open
+ */
+export function openModal(modalId) {
+    const modal = getCachedElement(`#${modalId}`);
+    if (!modal) return;
+
+    closeAllModals();
+
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+    activeModals.add(modalId);
+
+    const event = new CustomEvent('modalOpened', { detail: { modalId } });
+    document.dispatchEvent(event);
+}
+
+/**
+ * Safely closes a modal by ID
+ * @param {string} modalId - ID of the modal to close
+ */
+export function closeModal(modalId) {
+    const modal = getCachedElement(`#${modalId}`);
+    if (!modal) return;
+
+    modal.classList.remove('active');
+    activeModals.delete(modalId);
+
+    if (activeModals.size === 0) {
+        document.body.classList.remove('modal-open');
+    }
+
+    const event = new CustomEvent('modalClosed', { detail: { modalId } });
+    document.dispatchEvent(event);
+}
+
+/**
+ * Closes all open modals
+ */
+export function closeAllModals() {
+    activeModals.forEach(modalId => {
+        const modal = getCachedElement(`#${modalId}`);
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    });
+
+    activeModals.clear();
+    document.body.classList.remove('modal-open');
+}
 
 /**
  * Populates modal content
@@ -450,10 +644,208 @@ export function updateHeroStats(stats) {
  * @param {string} content - HTML content
  */
 export function populateModal(modalId, content) {
-    const modalContent = document.getElementById(`${modalId}-content`);
+    const modalContent = getCachedElement(`#${modalId}-content`);
     if (modalContent) {
-        modalContent.innerHTML = content;
+        modalContent.innerHTML = content || '';
     }
+}
+
+// ===========================================
+// DETAIL VIEW (MODAL)
+// ===========================================
+
+/**
+ * Generates HTML for tool detail modal
+ * @param {Object} toolData - Complete tool data
+ * @returns {string} - HTML string for detail view
+ */
+export function createToolDetailHTML(toolData) {
+    if (!toolData || typeof toolData !== 'object') return '';
+
+    const {
+        id,
+        title = 'Unbekanntes Tool',
+        description = '',
+        category,
+        tags = [],
+        rating = 0,
+        usage_count = 0,
+        is_free = false,
+        icon = 'fas fa-robot',
+        link,
+        demo_url,
+        features = [],
+        support_contact,
+        vote_count = 0,
+        vote_average = null,
+        created_at,
+        is_favorite = false
+    } = toolData;
+
+    const numericVote = (vote_average !== null && vote_average !== undefined) ? Number(vote_average) : Number(rating || 0);
+    const formattedRating = Number.isFinite(numericVote) ? numericVote.toFixed(1) : Number(rating || 0).toFixed(1);
+    const starsHTML = generateStarsHTML(numericVote);
+    const formattedDate = formatDate(created_at);
+
+    const safeIcon = sanitizeIconClass(icon);
+    const safeId = escapeAttr(id);
+
+    return `
+        <div class="tool-detail" data-tool-id="${safeId}">
+            <div class="detail-header">
+                <div class="detail-icon">
+                    <i class="${escapeAttr(safeIcon)}" aria-hidden="true"></i>
+                </div>
+                <div class="detail-title-section">
+                    <h2 class="detail-title">${escapeHTML(title)}</h2>
+                    <div class="detail-category">
+                        <i class="fas fa-tag" aria-hidden="true"></i>
+                        <span>${escapeHTML(category || 'Unkategorisiert')}</span>
+                    </div>
+                </div>
+                <div class="detail-actions">
+                    <button class="detail-favorite ${is_favorite ? 'active' : ''}" data-tool-id="${safeId}">
+                        <i class="${is_favorite ? 'fas' : 'far'} fa-heart" aria-hidden="true"></i>
+                    </button>
+                    <button class="detail-close" aria-label="Schließen">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="detail-content">
+                <div class="detail-description">
+                    <h3>Beschreibung</h3>
+                    <p>${escapeHTML(description)}</p>
+                </div>
+                
+                ${Array.isArray(features) && features.length > 0 ? `
+                <div class="detail-features">
+                    <h3>Funktionen</h3>
+                    <ul>
+                        ${features.map(feature => `
+                            <li><i class="fas fa-check" aria-hidden="true"></i> ${escapeHTML(feature)}</li>
+                        `).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+                
+                <div class="detail-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Bewertung:</span>
+                        <div class="meta-value rating">
+                            ${starsHTML}
+                            <strong>${formattedRating}</strong>
+                            <span>(${escapeHTML(String(vote_count || 0))} Stimmen)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Verwendungen:</span>
+                        <span class="meta-value">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            ${abbreviateNumber(usage_count)}
+                        </span>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <span class="meta-label">Preis:</span>
+                        <span class="meta-value ${is_free ? 'free' : 'paid'}">
+                            ${is_free ? 'Kostenlos' : 'Bezahlung erforderlich'}
+                        </span>
+                    </div>
+                    
+                    ${formattedDate ? `
+                    <div class="meta-item">
+                        <span class="meta-label">Hinzugefügt:</span>
+                        <span class="meta-value">
+                            <i class="far fa-calendar" aria-hidden="true"></i>
+                            ${escapeHTML(formattedDate)}
+                        </span>
+                    </div>
+                    ` : ''}
+                    
+                    ${support_contact ? `
+                    <div class="meta-item">
+                        <span class="meta-label">Support:</span>
+                        <span class="meta-value">
+                            <i class="fas fa-headset" aria-hidden="true"></i>
+                            ${escapeHTML(support_contact)}
+                        </span>
+                    </div>
+                    ` : ''}
+                </div>
+                
+                ${Array.isArray(tags) && tags.length > 0 ? `
+                <div class="detail-tags">
+                    <h3>Tags</h3>
+                    <div class="tags-list">
+                        ${tags.map(tag => `
+                            <span class="detail-tag">${escapeHTML(tag)}</span>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            
+            <div class="detail-footer">
+                ${link ? `
+                <a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                    Zum Tool
+                </a>
+                ` : ''}
+                
+                ${demo_url ? `
+                <a href="${escapeAttr(demo_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <i class="fas fa-play-circle" aria-hidden="true"></i>
+                    Demo öffnen
+                </a>
+                ` : ''}
+                
+                ${link ? `
+                <button class="btn btn-outline copy-link" data-url="${escapeAttr(link)}">
+                    <i class="fas fa-copy" aria-hidden="true"></i>
+                    Link kopieren
+                </button>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+// ===========================================
+// COMPARE VIEW FUNCTIONS
+// ===========================================
+
+/**
+ * Updates compare button state
+ * @param {string} toolId - Tool ID
+ * @param {boolean} isCompared - Whether tool is in compare list
+ */
+export function updateCompareButton(toolId, isCompared) {
+    if (!toolId) return;
+    const buttons = document.querySelectorAll(`.compare-btn[data-tool-id="${escapeAttr(toolId)}"]`);
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', !!isCompared);
+        btn.setAttribute('aria-label', isCompared ? 'Aus Vergleich entfernen' : 'Zum Vergleich hinzufügen');
+    });
+}
+
+/**
+ * Updates favorite button state
+ * @param {string} toolId - Tool ID
+ * @param {boolean} isFavorite - Whether tool is favorited
+ */
+export function updateFavoriteButton(toolId, isFavorite) {
+    if (!toolId) return;
+    const buttons = document.querySelectorAll(`.save-btn[data-tool-id="${escapeAttr(toolId)}"]`);
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', !!isFavorite);
+        // Replace inner icon only, avoid removing other attributes accidentally
+        btn.innerHTML = `<i class="${isFavorite ? 'fas' : 'far'} fa-bookmark" aria-hidden="true"></i>`;
+        btn.setAttribute('aria-label', isFavorite ? 'Von Favoriten entfernen' : 'Tool speichern');
+    });
 }
 
 // ===========================================
@@ -464,13 +856,14 @@ export function populateModal(modalId, content) {
  * Shows loading spinner in tool grid
  */
 export function showLoadingSpinner() {
-    const toolGrid = document.getElementById('tool-grid');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    
+    const toolGrid = getCachedElement('#tool-grid');
+    const loadingSpinner = getCachedElement('#loading-spinner');
+
     if (toolGrid) {
+        // keep structure but clear content
         toolGrid.innerHTML = '';
     }
-    
+
     if (loadingSpinner) {
         loadingSpinner.style.display = 'flex';
     }
@@ -480,9 +873,9 @@ export function showLoadingSpinner() {
  * Hides loading spinner
  */
 export function hideLoadingSpinner() {
-    const loadingSpinner = document.getElementById('loading-spinner');
+    const loadingSpinner = getCachedElement('#loading-spinner');
     if (loadingSpinner) {
-        loadingSpinner.style.display = 'none';
+        loadingSpinner.style.display = '';
     }
 }
 
@@ -490,14 +883,14 @@ export function hideLoadingSpinner() {
  * Shows empty state message
  */
 export function showEmptyState(message = 'Keine Tools gefunden.') {
-    const toolGrid = document.getElementById('tool-grid');
+    const toolGrid = getCachedElement('#tool-grid');
     if (toolGrid) {
         toolGrid.innerHTML = `
             <div class="empty-state show">
                 <div class="empty-icon">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" aria-hidden="true"></i>
                 </div>
-                <h3 class="empty-title">${message}</h3>
+                <h3 class="empty-title">${escapeHTML(message)}</h3>
                 <p class="empty-description">
                     Versuche, andere Suchbegriffe zu verwenden oder filtere nach einer anderen Kategorie.
                 </p>
@@ -507,7 +900,7 @@ export function showEmptyState(message = 'Keine Tools gefunden.') {
 }
 
 // ===========================================
-// NEU: DIRECTORY MODAL HELPERS
+// DIRECTORY MODAL HELPERS
 // ===========================================
 
 /**
@@ -520,20 +913,21 @@ export function createDirectoryModalTabsHTML(categories, activeCategoryId = 'all
     if (!Array.isArray(categories) || categories.length === 0) {
         return '';
     }
-    
-    // Add "All" tab at the beginning
+
     const allCategories = [
         { id: 'all', name: 'Alle' },
         ...categories
     ];
-    
+
     return allCategories.map(category => {
+        if (!category || !category.id) return '';
+
         const isActive = category.id === activeCategoryId;
         const activeClass = isActive ? 'active' : '';
-        
+
         return `
-            <button class="dir-tab ${activeClass}" data-category="${category.id}">
-                ${category.name}
+            <button class="dir-tab ${activeClass}" data-category="${escapeAttr(category.id)}">
+                ${escapeHTML(category.name || category.id)}
             </button>
         `;
     }).join('');
@@ -552,21 +946,23 @@ export function createDirectoryModalListHTML(toolsArray) {
             </div>
         `;
     }
-    
+
     return toolsArray.map(tool => {
+        if (!tool || !tool.id) return '';
+
         const { id, title, category, description, is_free } = tool;
-        
+
         return `
-            <div class="dir-item" data-tool-id="${id}">
+            <div class="dir-item" data-tool-id="${escapeAttr(id)}">
                 <div class="dir-item-content">
-                    <h4 class="dir-item-title">${title}</h4>
+                    <h4 class="dir-item-title">${escapeHTML(title || '')}</h4>
                     <div class="dir-item-meta">
-                        <span class="dir-item-category">${category || 'Unkategorisiert'}</span>
+                        <span class="dir-item-category">${escapeHTML(category || 'Unkategorisiert')}</span>
                         ${is_free ? '<span class="dir-item-free">Kostenlos</span>' : ''}
                     </div>
-                    <p class="dir-item-description">${truncateText(description, 80)}</p>
+                    <p class="dir-item-description">${truncateText(description || '', 80)}</p>
                 </div>
-                <button class="dir-jump" data-tool-id="${id}">
+                <button class="dir-jump" data-tool-id="${escapeAttr(id)}">
                     Zum Tool
                 </button>
             </div>
@@ -579,32 +975,70 @@ export function createDirectoryModalListHTML(toolsArray) {
 // ===========================================
 
 /**
+ * Gets cached DOM element or queries and caches it
+ * @param {string} selector - CSS selector
+ * @returns {HTMLElement|null} - DOM element or null
+ */
+function getCachedElement(selector) {
+    if (!selector || typeof selector !== 'string') return null;
+    if (DOM_CACHE.has(selector)) {
+        const element = DOM_CACHE.get(selector);
+        if (element && document.contains(element)) {
+            return element;
+        }
+        DOM_CACHE.delete(selector);
+    }
+
+    try {
+        const element = document.querySelector(selector);
+        if (element) {
+            DOM_CACHE.set(selector, element);
+        }
+        return element;
+    } catch (e) {
+        // invalid selector
+        return null;
+    }
+}
+
+/**
+ * Escapes HTML special characters
+ * @param {string} text - Text to escape
+ * @returns {string} - Escaped text
+ */
+function escapeHTML(text) {
+    if (text === null || text === undefined) return '';
+    if (typeof text !== 'string') text = String(text);
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
  * Generates stars HTML based on rating
  * @param {number} rating - Rating from 0-5
  * @returns {string} - HTML stars
  */
 function generateStarsHTML(rating) {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5;
+    const safeRating = Math.min(5, Math.max(0, Number(rating) || 0));
+    const fullStars = Math.floor(safeRating);
+    const halfStar = (safeRating - fullStars) >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    
+
     let starsHTML = '';
-    
-    // Full stars
+
     for (let i = 0; i < fullStars; i++) {
-        starsHTML += '<i class="fas fa-star"></i>';
+        starsHTML += '<i class="fas fa-star" aria-hidden="true"></i>';
     }
-    
-    // Half star
+
     if (halfStar) {
-        starsHTML += '<i class="fas fa-star-half-alt"></i>';
+        starsHTML += '<i class="fas fa-star-half-alt" aria-hidden="true"></i>';
     }
-    
-    // Empty stars
+
     for (let i = 0; i < emptyStars; i++) {
-        starsHTML += '<i class="far fa-star"></i>';
+        starsHTML += '<i class="far fa-star" aria-hidden="true"></i>';
     }
-    
+
     return starsHTML;
 }
 
@@ -614,7 +1048,7 @@ function generateStarsHTML(rating) {
  * @returns {string} - CSS class
  */
 function getMedalClass(position) {
-    switch(position) {
+    switch (position) {
         case 1: return 'gold';
         case 2: return 'silver';
         case 3: return 'bronze';
@@ -628,11 +1062,11 @@ function getMedalClass(position) {
  * @returns {string} - Icon or number
  */
 function getMedalIcon(position) {
-    switch(position) {
-        case 1: return '<i class="fas fa-medal"></i>';
-        case 2: return '<i class="fas fa-medal"></i>';
-        case 3: return '<i class="fas fa-medal"></i>';
-        default: return position;
+    switch (position) {
+        case 1: return '<i class="fas fa-medal" aria-hidden="true"></i>';
+        case 2: return '<i class="fas fa-medal" aria-hidden="true"></i>';
+        case 3: return '<i class="fas fa-medal" aria-hidden="true"></i>';
+        default: return escapeHTML(String(position));
     }
 }
 
@@ -643,10 +1077,11 @@ function getMedalIcon(position) {
  * @returns {string} - Truncated text
  */
 function truncateText(text, maxLength = 100) {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    
-    return text.substring(0, maxLength) + '...';
+    if (text === null || text === undefined) return '';
+    if (typeof text !== 'string') text = String(text);
+    if (text.length <= maxLength) return escapeHTML(text);
+
+    return escapeHTML(text.substring(0, maxLength)) + '...';
 }
 
 /**
@@ -655,13 +1090,15 @@ function truncateText(text, maxLength = 100) {
  * @returns {string} - Abbreviated number
  */
 function abbreviateNumber(num) {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
+    const number = Number(num) || 0;
+
+    if (number >= 1000000) {
+        return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
     }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'k';
+    if (number >= 1000) {
+        return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
     }
-    return num.toString();
+    return String(number);
 }
 
 /**
@@ -671,22 +1108,20 @@ function abbreviateNumber(num) {
  */
 function formatDate(dateString) {
     if (!dateString) return '';
-    
+
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return '';
-    
+
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    // If less than 7 days ago, show relative time
+
     if (diffDays < 7) {
         if (diffDays === 0) return 'Heute';
         if (diffDays === 1) return 'Gestern';
         return `Vor ${diffDays} Tagen`;
     }
-    
-    // Otherwise show date
+
     return date.toLocaleDateString('de-DE', {
         day: '2-digit',
         month: '2-digit',
@@ -700,10 +1135,28 @@ function formatDate(dateString) {
  * @returns {string} - Formatted time
  */
 function formatTime(date) {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+        date = new Date();
+    }
+
     return date.toLocaleTimeString('de-DE', {
         hour: '2-digit',
         minute: '2-digit'
     });
+}
+
+// ===========================================
+// CLEANUP FUNCTION
+// ===========================================
+
+/**
+ * Cleans up DOM cache and event listeners
+ */
+export function cleanup() {
+    DOM_CACHE.clear();
+    activeModals.clear();
+
+    document.body.classList.remove('modal-open');
 }
 
 // ===========================================
@@ -714,6 +1167,8 @@ export default {
     createToolCard,
     generateToolCardsHTML,
     renderToolGrid,
+    showSkeletonLoader,
+    hideSkeletonLoader,
     createRankingHTML,
     renderRanking,
     createCategoryFiltersHTML,
@@ -721,11 +1176,17 @@ export default {
     renderMobileFilterDropdown,
     syncFilterDropdown,
     updateHeroStats,
+    openModal,
+    closeModal,
+    closeAllModals,
     populateModal,
+    createToolDetailHTML,
+    updateCompareButton,
+    updateFavoriteButton,
     showLoadingSpinner,
     hideLoadingSpinner,
     showEmptyState,
-    // NEU: Directory Modal Helper-Funktionen
     createDirectoryModalTabsHTML,
-    createDirectoryModalListHTML
+    createDirectoryModalListHTML,
+    cleanup
 };
