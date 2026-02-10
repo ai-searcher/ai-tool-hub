@@ -49,8 +49,9 @@ function initializeTheme() {
         }
         
         // 3. Theme-Klasse anwenden (OHNE Übergänge)
-        document.body.classList.remove('light-theme', 'dark-theme');
-        document.body.classList.add(`${themeToApply}-theme`);
+        // Normalize theme class names to match CSS (light-mode / dark-mode)
+        document.body.classList.remove('light-mode', 'dark-mode');
+        document.body.classList.add(themeToApply === 'light' ? 'light-mode' : 'dark-mode');
         
         // 4. Toggle-Icon sofort setzen (falls vorhanden)
         const themeToggle = document.getElementById('theme-toggle');
@@ -69,14 +70,14 @@ function initializeTheme() {
             
             // Neuen Event-Listener erstellen und speichern
             themeToggleHandler = function() {
-                const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+                const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
                 console.log(`Benutzer wechselt Theme: ${currentTheme} -> ${newTheme}`);
                 
                 // Theme anwenden
-                document.body.classList.remove(`${currentTheme}-theme`);
-                document.body.classList.add(`${newTheme}-theme`);
+                document.body.classList.remove('light-mode', 'dark-mode');
+                 document.body.classList.add(newTheme === 'light' ? 'light-mode' : 'dark-mode');
                 
                 // Icon aktualisieren
                 const icon = this.querySelector('i');
@@ -121,7 +122,7 @@ function initializeTheme() {
         console.error('Kritischer Fehler bei Theme-Initialisierung:', error);
         // Fallback: Dark Theme anwenden und Transitions aktivieren
         document.body.classList.remove('no-transition');
-        document.body.classList.add('dark-theme');
+        document.body.classList.add('dark-mode');
     }
 }
 
@@ -282,10 +283,13 @@ function cleanupApp() {
     }
     
     // Directory Modal Listeners cleanup
-    for (const [element, { type, handler }] of directoryModalListeners.entries()) {
-        if (element && handler && element.removeEventListener) {
-            element.removeEventListener(type, handler);
-        }
+    for (const [element, listeners] of directoryModalListeners.entries()) {
+         if (!Array.isArray(listeners)) continue;
+         listeners.forEach(({ type, handler }) => {
+             if (element && handler) {
+                 element.removeEventListener(type, handler);
+             }
+         });
     }
     directoryModalListeners.clear();
     
@@ -345,15 +349,17 @@ async function initApp() {
             console.warn('Database connection test failed, using local data:', dbError);
         }
         
-        // Load all data with improved error handling
+        // Lade zuerst die Tools (wichtig, weil andere Schritte Tools brauchen)
+        await loadAllTools();
+
+        // Danach parallel die abhängigen Schritte
         await Promise.allSettled([
-            loadAllTools(),
             loadCategoriesData(),
             loadToolStats(),
             initializeVotes()
         ]);
         
-        // Calculate total upvotes after all data is loaded
+        //Calculate total upvotes after all data is loaded
         calculateTotalUpvotes();
         
         // Calculate rankings based on loaded data
@@ -436,7 +442,7 @@ async function loadAllTools() {
         
         // Fallback to local JSON if database is empty or failed
         console.log('Loading from local JSON...');
-        let jsonTools = [];
+        let jsonToolsArray = [];
         try {
             const response = await fetch('./data.json');
             
@@ -444,16 +450,25 @@ async function loadAllTools() {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             
-            jsonTools = await response.json();
-            console.log(`Loaded ${jsonTools.length} tools from JSON`);
+            const jsonData = await response.json();
+            // Accept both shapes: either an array or { tools: [...] }
+            if (Array.isArray(jsonData)) {
+                jsonToolsArray = jsonData;
+            } else if (jsonData && Array.isArray(jsonData.tools)) {
+                jsonToolsArray = jsonData.tools;
+            } else {
+                jsonToolsArray = [];
+            }
+
+            console.log(`Loaded ${jsonToolsArray.length} tools from JSON`);
         } catch (jsonError) {
             console.warn('JSON load failed, using embedded defaults:', jsonError);
-            jsonTools = DEFAULT_TOOLS;
+            jsonToolsArray = DEFAULT_TOOLS;
             console.log(`Using ${DEFAULT_TOOLS.length} embedded default tools`);
         }
         
         // Transform JSON data to match our structure
-        const transformedTools = jsonTools.map(tool => ({
+        const transformedTools = jsonToolsArray.map(tool => ({
             id: tool.id || generateId(),
             title: tool.title || 'Unnamed Tool',
             description: tool.description || 'No description available.',
@@ -670,38 +685,38 @@ function initDirectoryModalEvents() {
     console.log('Directory Modal Events initialisiert');
 }
 
-/**
- * Helper function to add directory modal listener with tracking
- */
+// Map initialisieren: const directoryModalListeners = new Map();
 function addDirectoryModalListener(element, type, handler) {
     if (!element || !handler) return;
-    
-    // Entferne alten Listener gleichen Typs
-    removeDirectoryModalListener(element, type);
-    
-    // Füge neuen Listener hinzu
+
+    // ensure an array exists
+    let arr = directoryModalListeners.get(element);
+    if (!arr) {
+        arr = [];
+        directoryModalListeners.set(element, arr);
+    }
+
+    // add listener
     element.addEventListener(type, handler);
-    
-    // Track in Map
-    const key = `${type}-${Math.random().toString(36).substr(2, 9)}`;
-    directoryModalListeners.set(element, { type, handler, key });
+    const key = `${type}-${Math.random().toString(36).substr(2,9)}`;
+    arr.push({ type, handler, key });
 }
 
-/**
- * Helper function to remove directory modal listener
- */
 function removeDirectoryModalListener(element, type) {
     if (!element) return;
-    
-    // Finde alle Einträge für dieses Element mit diesem Typ
-    const entries = Array.from(directoryModalListeners.entries());
-    for (const [el, data] of entries) {
-        if (el === element && data.type === type) {
-            el.removeEventListener(type, data.handler);
-            directoryModalListeners.delete(el);
-            break;
+    const arr = directoryModalListeners.get(element);
+    if (!arr || arr.length === 0) return;
+
+    // find matching entries
+    for (let i = arr.length - 1; i >= 0; i--) {
+        const entry = arr[i];
+        if (!type || entry.type === type) {
+            element.removeEventListener(entry.type, entry.handler);
+            arr.splice(i, 1);
         }
     }
+
+    if (arr.length === 0) directoryModalListeners.delete(element);
 }
 
 /**
@@ -1356,33 +1371,34 @@ async function handleVoteUpdate(toolId, voteData) {
         const toolIndex = appState.tools.findIndex(t => t.id === toolId);
         if (toolIndex !== -1) {
             const tool = appState.tools[toolIndex];
-            const currentCount = tool.vote_count || 0;
-            const currentAverage = tool.vote_average || tool.rating || 4;
-            
+            const currentCount = Number(tool.vote_count || 0);
+            const currentAverage = Number(tool.vote_average || tool.rating || 4);
+
             // Korrekte Berechnung für neue Bewertung (1-5)
             // Neuer Durchschnitt = (Alter Durchschnitt * Anzahl + neue Bewertung) / (Anzahl + 1)
             const newCount = currentCount + 1;
-            const newAverage = ((currentAverage * currentCount) + voteData.vote_value) / newCount;
-            
+            const newAverageRaw = ((currentAverage * currentCount) + Number(voteData.vote_value)) / newCount;
+            const newAverage = Math.round(newAverageRaw * 10) / 10; // 1 Dezimalstelle
+
             // Update tool data
             appState.tools[toolIndex].vote_count = newCount;
             appState.tools[toolIndex].vote_average = newAverage;
-            
-            // Update filtered tools
+
+            // Update filtered tools (sofern vorhanden)
             const filteredIndex = appState.filteredTools.findIndex(t => t.id === toolId);
             if (filteredIndex !== -1) {
                 appState.filteredTools[filteredIndex] = { ...appState.tools[toolIndex] };
             }
-            
+
             // Recalculate total votes (Anzahl aller Stimmen)
             calculateTotalUpvotes();
-            
+
             // Recalculate rankings
             calculateRankings();
-            
+
             // Update UI
             updateUI();
-            
+
             // Update hero stats animation with new vote count
             if (window.updateHeroStatsFromData) {
                 window.updateHeroStatsFromData({
@@ -1391,17 +1407,17 @@ async function handleVoteUpdate(toolId, voteData) {
                     pulse: appState.totalStats.totalUpvotes
                 });
             }
-            
+
             // GA4 Tracking Event
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'vote', {
                     'event_category': 'engagement',
                     'event_label': 'tool_vote',
-                    'value': voteData.vote_value
+                    'value': Number(voteData.vote_value)
                 });
             }
         }
-        
+
     } catch (error) {
         console.error('Error updating vote in UI:', error);
     }
