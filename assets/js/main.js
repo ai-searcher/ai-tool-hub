@@ -178,6 +178,16 @@ let appState = {
 };
 
 // ===========================================
+// NEU: DIRECTORY MODAL VARIABLEN
+// ===========================================
+
+// Directory Modal State
+let directoryModalState = {
+    activeCategory: 'all',
+    lastFocusedElement: null
+};
+
+// ===========================================
 // DATA LOADING & INITIALIZATION
 // ===========================================
 
@@ -218,6 +228,9 @@ async function initApp() {
         
         // Initialize event listeners
         initializeEventHandlers();
+        
+        // NEU: Directory Modal Event Listeners hinzufügen
+        initDirectoryModalEvents();
         
         // NEU: Filter-Bar Auto-Compact initialisieren
         initFilterBarAutoCompact();
@@ -363,6 +376,392 @@ async function initializeVotes() {
         // Initialize empty votes object
         appState.votes = {};
     }
+}
+
+// ===========================================
+// NEU: DIRECTORY MODAL FUNKTIONEN
+// ===========================================
+
+/**
+ * Initialisiert Event Listener für das Directory Modal
+ */
+function initDirectoryModalEvents() {
+    console.log('📂 Initialisiere Directory Modal Events...');
+    
+    // 1. Hero-Stat-Kachel für "aktive Tools" klickbar machen
+    const heroStatsContainer = document.querySelector('.hero-stats');
+    if (heroStatsContainer) {
+        // Versuche, die "aktive Tools" Kachel zu finden
+        const totalToolsCard = heroStatsContainer.querySelector('.stat-card');
+        if (totalToolsCard) {
+            totalToolsCard.style.cursor = 'pointer';
+            totalToolsCard.setAttribute('role', 'button');
+            totalToolsCard.setAttribute('tabindex', '0');
+            totalToolsCard.setAttribute('aria-label', 'Tool-Verzeichnis öffnen');
+            totalToolsCard.addEventListener('click', openDirectoryModal);
+            totalToolsCard.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openDirectoryModal();
+                }
+            });
+            console.log('🎯 Hero-Stat-Kachel für Directory Modal klickbar gemacht');
+        }
+    }
+    
+    // 2. Modal Close Event Listener
+    const closeButton = document.getElementById('directory-close');
+    if (closeButton) {
+        closeButton.addEventListener('click', closeDirectoryModal);
+    }
+    
+    // 3. Overlay Click Event
+    const modalOverlay = document.querySelector('#directory-modal .modal-overlay');
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeDirectoryModal();
+            }
+        });
+    }
+    
+    // 4. Escape Key Event
+    document.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('directory-modal');
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+            closeDirectoryModal();
+        }
+    });
+    
+    console.log('✅ Directory Modal Events initialisiert');
+}
+
+/**
+ * Öffnet das Directory Modal
+ */
+function openDirectoryModal() {
+    console.log('📂 Öffne Directory Modal...');
+    
+    // Speichere das zuletzt fokussierte Element
+    directoryModalState.lastFocusedElement = document.activeElement;
+    
+    const modal = document.getElementById('directory-modal');
+    if (!modal) {
+        console.error('❌ Directory Modal nicht gefunden');
+        return;
+    }
+    
+    // Modal aktivieren
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+    
+    // ARIA Attribute setzen
+    modal.setAttribute('aria-hidden', 'false');
+    modal.querySelector('.modal-container').setAttribute('aria-modal', 'true');
+    
+    // Tabs und Liste rendern
+    renderDirectoryTabs();
+    renderDirectoryList('all');
+    
+    // Fokus auf Close-Button setzen (für Accessibility)
+    const closeButton = document.getElementById('directory-close');
+    if (closeButton) {
+        setTimeout(() => {
+            closeButton.focus();
+        }, 100);
+    }
+    
+    console.log('✅ Directory Modal geöffnet');
+}
+
+/**
+ * Schließt das Directory Modal
+ */
+function closeDirectoryModal() {
+    console.log('📂 Schließe Directory Modal...');
+    
+    const modal = document.getElementById('directory-modal');
+    if (!modal) return;
+    
+    // Modal deaktivieren
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+    
+    // ARIA Attribute zurücksetzen
+    modal.setAttribute('aria-hidden', 'true');
+    modal.querySelector('.modal-container').setAttribute('aria-modal', 'false');
+    
+    // Fokus zurück zum ursprünglichen Element
+    if (directoryModalState.lastFocusedElement) {
+        setTimeout(() => {
+            directoryModalState.lastFocusedElement.focus();
+        }, 100);
+    }
+    
+    console.log('✅ Directory Modal geschlossen');
+}
+
+/**
+ * Rendert die Tabs für Kategorien im Directory Modal
+ */
+function renderDirectoryTabs() {
+    const tabsContainer = document.getElementById('directory-tabs');
+    if (!tabsContainer) return;
+    
+    // Tab für "Alle"
+    const allTab = document.createElement('button');
+    allTab.className = 'directory-tab active';
+    allTab.setAttribute('data-category', 'all');
+    allTab.setAttribute('aria-selected', 'true');
+    allTab.setAttribute('role', 'tab');
+    allTab.textContent = 'Alle';
+    allTab.addEventListener('click', () => {
+        setActiveTab('all');
+        renderDirectoryList('all');
+    });
+    
+    tabsContainer.innerHTML = '';
+    tabsContainer.appendChild(allTab);
+    
+    // Tabs für jede Kategorie
+    appState.categories.forEach(category => {
+        if (category.id === 'all') return; // "Alle" haben wir schon
+        
+        const tab = document.createElement('button');
+        tab.className = 'directory-tab';
+        tab.setAttribute('data-category', category.id);
+        tab.setAttribute('aria-selected', 'false');
+        tab.setAttribute('role', 'tab');
+        tab.textContent = `${category.name} (${category.count})`;
+        tab.addEventListener('click', () => {
+            setActiveTab(category.id);
+            renderDirectoryList(category.id);
+        });
+        
+        tabsContainer.appendChild(tab);
+    });
+    
+    console.log(`✅ ${appState.categories.length} Kategorie-Tabs gerendert`);
+}
+
+/**
+ * Setzt den aktiven Tab im Directory Modal
+ */
+function setActiveTab(categoryId) {
+    const tabs = document.querySelectorAll('.directory-tab');
+    tabs.forEach(tab => {
+        if (tab.getAttribute('data-category') === categoryId) {
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+        } else {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+        }
+    });
+    
+    directoryModalState.activeCategory = categoryId;
+}
+
+/**
+ * Gibt Tools nach Kategorie zurück
+ */
+function getToolsByCategory(categoryId) {
+    if (categoryId === 'all') {
+        return appState.tools;
+    }
+    
+    return appState.tools.filter(tool => tool.category === categoryId);
+}
+
+/**
+ * Rendert die Tool-Liste für die aktive Kategorie
+ */
+function renderDirectoryList(categoryId) {
+    const listContainer = document.getElementById('directory-list');
+    if (!listContainer) return;
+    
+    const tools = getToolsByCategory(categoryId);
+    const categoryName = categoryId === 'all' ? 'Alle Tools' : 
+        appState.categories.find(c => c.id === categoryId)?.name || categoryId;
+    
+    // Titel aktualisieren
+    const modalTitle = document.getElementById('directory-modal-title');
+    if (modalTitle) {
+        modalTitle.textContent = `Tool-Verzeichnis: ${categoryName} (${tools.length})`;
+    }
+    
+    // Liste rendern
+    listContainer.innerHTML = '';
+    
+    if (tools.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'directory-empty';
+        emptyMessage.innerHTML = `
+            <i class="fas fa-search"></i>
+            <p>Keine Tools in dieser Kategorie gefunden.</p>
+        `;
+        listContainer.appendChild(emptyMessage);
+        return;
+    }
+    
+    // Begrenze auf 12 Tools für bessere Performance
+    const displayTools = tools.slice(0, 12);
+    
+    displayTools.forEach(tool => {
+        const toolItem = document.createElement('div');
+        toolItem.className = 'directory-tool-item';
+        toolItem.setAttribute('data-tool-id', tool.id);
+        
+        // Kürze Beschreibung auf max. 90 Zeichen
+        const shortDescription = tool.description.length > 90 
+            ? tool.description.substring(0, 90) + '...' 
+            : tool.description;
+        
+        toolItem.innerHTML = `
+            <div class="directory-tool-info">
+                <h3 class="directory-tool-title">${tool.title}</h3>
+                <p class="directory-tool-description">${shortDescription}</p>
+            </div>
+            <button class="btn btn-primary directory-tool-jump" data-tool-id="${tool.id}">
+                <i class="fas fa-arrow-right"></i>
+                Zum Tool
+            </button>
+        `;
+        
+        // Event Listener für den "Zum Tool" Button
+        const jumpButton = toolItem.querySelector('.directory-tool-jump');
+        if (jumpButton) {
+            jumpButton.addEventListener('click', () => {
+                handleToolJump(tool.id);
+            });
+        }
+        
+        listContainer.appendChild(toolItem);
+    });
+    
+    // "Mehr anzeigen" Button, wenn es mehr als 12 Tools gibt
+    if (tools.length > 12) {
+        const showMoreButton = document.createElement('button');
+        showMoreButton.className = 'btn btn-secondary directory-show-more';
+        showMoreButton.innerHTML = `
+            <i class="fas fa-chevron-down"></i>
+            Mehr anzeigen (${tools.length - 12} weitere)
+        `;
+        showMoreButton.addEventListener('click', () => {
+            // Lade alle restlichen Tools
+            const remainingTools = tools.slice(12);
+            remainingTools.forEach(tool => {
+                const toolItem = document.createElement('div');
+                toolItem.className = 'directory-tool-item';
+                toolItem.setAttribute('data-tool-id', tool.id);
+                
+                const shortDescription = tool.description.length > 90 
+                    ? tool.description.substring(0, 90) + '...' 
+                    : tool.description;
+                
+                toolItem.innerHTML = `
+                    <div class="directory-tool-info">
+                        <h3 class="directory-tool-title">${tool.title}</h3>
+                        <p class="directory-tool-description">${shortDescription}</p>
+                    </div>
+                    <button class="btn btn-primary directory-tool-jump" data-tool-id="${tool.id}">
+                        <i class="fas fa-arrow-right"></i>
+                        Zum Tool
+                    </button>
+                `;
+                
+                const jumpButton = toolItem.querySelector('.directory-tool-jump');
+                if (jumpButton) {
+                    jumpButton.addEventListener('click', () => {
+                        handleToolJump(tool.id);
+                    });
+                }
+                
+                listContainer.appendChild(toolItem);
+            });
+            
+            showMoreButton.remove();
+        });
+        
+        listContainer.appendChild(showMoreButton);
+    }
+    
+    console.log(`✅ ${displayTools.length} Tools in Directory Liste gerendert (${categoryId})`);
+}
+
+/**
+ * Springt zu einer Tool-Card und highlightet sie
+ */
+function handleToolJump(toolId) {
+    console.log(`🔍 Springe zu Tool: ${toolId}`);
+    
+    // Modal schließen
+    closeDirectoryModal();
+    
+    // Prüfe, ob Tool-Card im aktuellen Filter sichtbar ist
+    const toolCard = document.querySelector(`.tool-card[data-id="${toolId}"]`);
+    const isToolInCurrentFilter = appState.filteredTools.some(tool => tool.id === toolId);
+    
+    if (!isToolInCurrentFilter) {
+        // Tool ist nicht sichtbar - Filter zurücksetzen
+        console.log('🔄 Tool nicht sichtbar, setze Filter zurück...');
+        
+        appState.currentFilter = 'all';
+        appState.currentSearch = '';
+        
+        // Such-Input zurücksetzen
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        
+        // Filter anwenden und UI aktualisieren
+        filterTools();
+        updateUI();
+        
+        // Warte auf UI Update, dann scroll und highlight
+        setTimeout(() => {
+            scrollToAndHighlightTool(toolId);
+        }, 200);
+    } else if (toolCard) {
+        // Tool ist sichtbar - direkt scrollen und highlighten
+        scrollToAndHighlightTool(toolId);
+    } else {
+        // Tool-Card existiert nicht im DOM, aber ist im Filter
+        // Warte kurz und versuche es erneut
+        setTimeout(() => {
+            scrollToAndHighlightTool(toolId);
+        }, 100);
+    }
+}
+
+/**
+ * Scrollt zu einer Tool-Card und highlightet sie
+ */
+function scrollToAndHighlightTool(toolId) {
+    const toolCard = document.querySelector(`.tool-card[data-id="${toolId}"]`);
+    
+    if (!toolCard) {
+        console.error(`❌ Tool-Card mit ID ${toolId} nicht gefunden`);
+        showNotification('Tool konnte nicht gefunden werden', 'error');
+        return;
+    }
+    
+    console.log(`📍 Scrolle zu Tool-Card: ${toolId}`);
+    
+    // Sanft zur Karte scrollen
+    toolCard.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+    
+    // Highlight-Effekt hinzufügen
+    toolCard.classList.add('tool-highlight');
+    
+    // Highlight nach 1600ms entfernen
+    setTimeout(() => {
+        toolCard.classList.remove('tool-highlight');
+    }, 1600);
 }
 
 // ===========================================
@@ -555,6 +954,35 @@ function updateViewMode() {
 }
 
 // ===========================================
+// NEU: AUTO-COMPACT-ON-SCROLL FUNKTIONALITÄT
+// ===========================================
+
+/**
+ * Initialisiert automatisches Kompakt-Modus für Filterbar beim Scrollen
+ * Fügt 'compact' Klasse ab 80px Scroll hinzu
+ */
+function initFilterBarAutoCompact() {
+    const filterBar = document.getElementById('filter-bar');
+    if (!filterBar) return;
+
+    let ticking = false;
+
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+
+        window.requestAnimationFrame(() => {
+            const shouldCompact = window.scrollY > 80;
+            filterBar.classList.toggle('compact', shouldCompact);
+            ticking = false;
+        });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll(); // initial state
+}
+
+// ===========================================
 // EVENT HANDLERS
 // ===========================================
 
@@ -696,35 +1124,6 @@ function handleReset() {
     updateUI();
     
     showNotification('Alle Filter zurückgesetzt', 'info');
-}
-
-// ===========================================
-// NEU: AUTO-COMPACT-ON-SCROLL FUNKTIONALITÄT
-// ===========================================
-
-/**
- * Initialisiert automatisches Kompakt-Modus für Filterbar beim Scrollen
- * Fügt 'compact' Klasse ab 80px Scroll hinzu
- */
-function initFilterBarAutoCompact() {
-    const filterBar = document.getElementById('filter-bar');
-    if (!filterBar) return;
-
-    let ticking = false;
-
-    const onScroll = () => {
-        if (ticking) return;
-        ticking = true;
-
-        window.requestAnimationFrame(() => {
-            const shouldCompact = window.scrollY > 80;
-            filterBar.classList.toggle('compact', shouldCompact);
-            ticking = false;
-        });
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // initial state
 }
 
 // ===========================================
