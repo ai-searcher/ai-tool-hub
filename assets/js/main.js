@@ -1,130 +1,17 @@
 // ===========================================
-// ZENTRALE THEME INITIALISIERUNG
+// SOFORTIGE THEME-INITIALISIERUNG (OHNE EVENT-LISTENER)
 // ===========================================
-
-// Globale Variable um mehrfache Initialisierung zu verhindern
-let themeInitialized = false;
-let themeToggleHandler = null;
-
-/**
- * Zentrale Theme-Initialisierung (nur einmal ausführen)
- * Verhindert das Springen zwischen Themes beim Seitenneuladen
- */
-function initializeTheme() {
-    // Atomare Prüfung und Setzung
-    if (themeInitialized) {
-        return;
-    }
+(function() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme || (prefersDark ? 'dark' : 'dark');
     
-    // Sofort als initialisiert markieren, um Race Conditions zu vermeiden
-    themeInitialized = true;
-    console.log('Starte zentrale Theme-Initialisierung...');
+    document.body.classList.add('no-transition');
+    document.body.classList.remove('light-mode', 'dark-mode');
+    document.body.classList.add(theme === 'light' ? 'light-mode' : 'dark-mode');
     
-    try {
-        // 1. Disable all transitions immediately
-        document.body.classList.add('no-transition');
-        
-        // 2. Theme-Logik mit Prioritäten
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        console.log(`Gespeichertes Theme: "${savedTheme}"`);
-        console.log(`System-Preference (dark): ${prefersDark}`);
-        
-        // Entscheidungslogik:
-        // 1. Gespeichertes Theme (höchste Priorität)
-        // 2. System-Preference
-        // 3. Default: Dark Mode
-        let themeToApply = 'dark'; // Standard: Dark Mode
-        
-        if (savedTheme === 'light' || savedTheme === 'dark') {
-            themeToApply = savedTheme;
-            console.log(`Verwende gespeichertes Theme: ${themeToApply}`);
-        } else if (!savedTheme && prefersDark) {
-            themeToApply = 'dark';
-            console.log('Verwende System-Preference: Dark Mode');
-        } else {
-            themeToApply = 'dark';
-            console.log('Verwende Default: Dark Mode');
-        }
-        
-        // 3. Theme-Klasse anwenden (OHNE Übergänge)
-        // Normalize theme class names to match CSS (light-mode / dark-mode)
-        document.body.classList.remove('light-mode', 'dark-mode');
-        document.body.classList.add(themeToApply === 'light' ? 'light-mode' : 'dark-mode');
-        
-        // 4. Toggle-Icon sofort setzen (falls vorhanden)
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            // Alten Listener entfernen falls vorhanden
-            if (themeToggleHandler) {
-                themeToggle.removeEventListener('click', themeToggleHandler);
-            }
-            
-            const themeIcon = themeToggle.querySelector('i');
-            if (themeIcon) {
-                themeIcon.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
-                themeIcon.classList.add(themeToApply === 'light' ? 'fa-moon' : 'fa-sun');
-                console.log(`Icon gesetzt: ${themeToApply === 'light' ? 'moon' : 'sun'}`);
-            }
-            
-            // Neuen Event-Listener erstellen und speichern
-            themeToggleHandler = function() {
-                const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                console.log(`Benutzer wechselt Theme: ${currentTheme} -> ${newTheme}`);
-                
-                // Theme anwenden
-                document.body.classList.remove('light-mode', 'dark-mode');
-                 document.body.classList.add(newTheme === 'light' ? 'light-mode' : 'dark-mode');
-                
-                // Icon aktualisieren
-                const icon = this.querySelector('i');
-                if (icon) {
-                    icon.classList.remove('fa-sun', 'fa-moon');
-                    icon.classList.add(newTheme === 'dark' ? 'fa-sun' : 'fa-moon');
-                }
-                
-                // In localStorage speichern
-                try {
-                    localStorage.setItem('theme', newTheme);
-                    console.log(`Theme gespeichert: ${newTheme}`);
-                } catch (error) {
-                    console.error('Fehler beim Speichern in localStorage:', error);
-                }
-                
-                // GA4 Tracking Event
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'theme_change', {
-                        'event_category': 'engagement',
-                        'event_label': newTheme,
-                        'value': newTheme === 'dark' ? 1 : 0
-                    });
-                }
-            };
-            
-            // Event-Listener hinzufügen
-            themeToggle.addEventListener('click', themeToggleHandler);
-            
-            console.log('Theme-Toggle Event-Listener hinzugefügt');
-        } else {
-            console.log('Theme-Toggle Button nicht gefunden');
-        }
-        
-        // 5. Nach 50ms Transitions wieder aktivieren
-        setTimeout(() => {
-            document.body.classList.remove('no-transition');
-            console.log('Theme-Initialisierung abgeschlossen, Transitions aktiv');
-        }, 50);
-        
-    } catch (error) {
-        console.error('Kritischer Fehler bei Theme-Initialisierung:', error);
-        // Fallback: Dark Theme anwenden und Transitions aktivieren
-        document.body.classList.remove('no-transition');
-        document.body.classList.add('dark-mode');
-    }
-}
+    setTimeout(() => document.body.classList.remove('no-transition'), 50);
+})();
 
 // ===========================================
 // MAIN APPLICATION CONTROLLER
@@ -365,11 +252,12 @@ async function initApp() {
         // Calculate rankings based on loaded data
         calculateRankings();
         
-        // Update UI with loaded data
-        updateUI();
-        
-        // Initialize event listeners
+        // Initialize event listeners FIRST (WICHTIG!)
         initializeEventHandlers();
+        
+        // Update UI with loaded data SECOND
+        updateUI();
+
         
         // Directory Modal Event Listeners hinzufügen
         initDirectoryModalEvents();
@@ -392,8 +280,17 @@ async function initApp() {
         // Mark as initialized
         appInitialized = true;
         
-        console.log('Application initialized successfully');
-        showNotification('Anwendung erfolgreich geladen!', 'success');
+                console.log('✅ Application initialized successfully');
+        console.log(`📊 Loaded ${appState.tools.length} tools`);
+        console.log(`🔍 Filtered tools: ${appState.filteredTools.length}`);
+        
+        // Notification NUR wenn Tools geladen wurden
+        if (appState.tools.length > 0) {
+            showNotification('Anwendung erfolgreich geladen!', 'success');
+        } else {
+            console.error('❌ No tools loaded!');
+        }
+ 
         
         // GA4 Tracking Event
         if (typeof gtag !== 'undefined') {
@@ -424,82 +321,87 @@ async function initApp() {
  * Loads tools from database and combines with local JSON data
  */
 async function loadAllTools() {
+    console.log('🔄 Loading tools...');
+    
+    // VERSUCH 1: Supabase Datenbank
     try {
-        // Try database first
-        let dbTools = [];
-        try {
-            dbTools = await loadTools();
-            if (dbTools && dbTools.length > 0) {
-                console.log(`Loaded ${dbTools.length} tools from database`);
-                appState.tools = dbTools;
-                appState.filteredTools = [...dbTools];
-                calculateTotalUpvotes();
-                return;
-            }
-        } catch (dbError) {
-            console.warn('Database load failed, trying JSON fallback:', dbError);
+        console.log('Trying Supabase database...');
+        const dbTools = await loadTools();
+        
+        if (dbTools && Array.isArray(dbTools) && dbTools.length > 0) {
+            console.log(`✅ Loaded ${dbTools.length} tools from database`);
+            appState.tools = dbTools;
+            appState.filteredTools = [...dbTools];
+            calculateTotalUpvotes();
+            return; // Erfolgreich geladen
         }
         
-        // Fallback to local JSON if database is empty or failed
-        console.log('Loading from local JSON...');
-        let jsonToolsArray = [];
-        try {
-            const response = await fetch('./data.json');
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            
-            const jsonData = await response.json();
-            // Accept both shapes: either an array or { tools: [...] }
-            if (Array.isArray(jsonData)) {
-                jsonToolsArray = jsonData;
-            } else if (jsonData && Array.isArray(jsonData.tools)) {
-                jsonToolsArray = jsonData.tools;
-            } else {
-                jsonToolsArray = [];
-            }
-
-            console.log(`Loaded ${jsonToolsArray.length} tools from JSON`);
-        } catch (jsonError) {
-            console.warn('JSON load failed, using embedded defaults:', jsonError);
-            jsonToolsArray = DEFAULT_TOOLS;
-            console.log(`Using ${DEFAULT_TOOLS.length} embedded default tools`);
-        }
-        
-        // Transform JSON data to match our structure
-        const transformedTools = jsonToolsArray.map(tool => ({
-            id: tool.id || generateId(),
-            title: tool.title || 'Unnamed Tool',
-            description: tool.description || 'No description available.',
-            category: tool.category || 'uncategorized',
-            tags: Array.isArray(tool.tags) ? tool.tags : [],
-            rating: typeof tool.rating === 'number' ? tool.rating : 4.0,
-            usage_count: typeof tool.usage_count === 'number' ? tool.usage_count : 0,
-            vote_count: typeof tool.vote_count === 'number' ? tool.vote_count : 0,
-            vote_average: typeof tool.vote_average === 'number' ? tool.vote_average : (tool.rating || 4.0),
-            is_free: Boolean(tool.is_free),
-            is_featured: Boolean(tool.is_featured),
-            icon: tool.icon || 'fas fa-robot',
-            link: tool.link || '#',
-            created_at: tool.created_at || new Date().toISOString(),
-            updated_at: tool.updated_at || new Date().toISOString()
-        }));
-        
-        appState.tools = transformedTools;
-        appState.filteredTools = [...transformedTools];
-        calculateTotalUpvotes();
-        
-    } catch (error) {
-        console.error('Error loading tools:', error);
-        // Ultimate fallback to embedded tools
-        console.log('Using embedded default tools as ultimate fallback');
-        appState.tools = DEFAULT_TOOLS;
-        appState.filteredTools = [...DEFAULT_TOOLS];
-        calculateTotalUpvotes();
-        throw error;
+        console.log('⚠️ Database returned no tools');
+    } catch (dbError) {
+        console.warn('⚠️ Database error:', dbError.message);
     }
+    
+    // VERSUCH 2: Lokale JSON-Datei
+    try {
+        console.log('Trying local JSON file...');
+        const response = await fetch('./data.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const jsonData = await response.json();
+        
+        // JSON kann zwei Formate haben:
+        // 1. Direkt ein Array: [{ id: "...", title: "..." }, ...]
+        // 2. Objekt mit tools Property: { tools: [...] }
+        let toolsArray = [];
+        if (Array.isArray(jsonData)) {
+            toolsArray = jsonData;
+        } else if (jsonData && Array.isArray(jsonData.tools)) {
+            toolsArray = jsonData.tools;
+        }
+        
+        if (toolsArray.length > 0) {
+            console.log(`✅ Loaded ${toolsArray.length} tools from JSON`);
+            
+            // Transformiere JSON-Daten in unser Format
+            const transformedTools = toolsArray.map(tool => ({
+                id: tool.id || generateId(),
+                title: tool.title || 'Unnamed Tool',
+                description: tool.description || 'No description available.',
+                category: tool.category || 'uncategorized',
+                tags: Array.isArray(tool.tags) ? tool.tags : [],
+                rating: Number(tool.rating) || 4.0,
+                usage_count: Number(tool.usage_count) || 0,
+                vote_count: Number(tool.vote_count) || 0,
+                vote_average: Number(tool.vote_average || tool.rating) || 4.0,
+                is_free: Boolean(tool.is_free),
+                is_featured: Boolean(tool.is_featured),
+                icon: tool.icon || 'fas fa-robot',
+                link: tool.link || '#',
+                created_at: tool.created_at || new Date().toISOString(),
+                updated_at: tool.updated_at || new Date().toISOString()
+            }));
+            
+            appState.tools = transformedTools;
+            appState.filteredTools = [...transformedTools];
+            calculateTotalUpvotes();
+            return; // Erfolgreich geladen
+        }
+        
+        console.log('⚠️ JSON file contained no tools');
+    } catch (jsonError) {
+        console.warn('⚠️ JSON error:', jsonError.message);
+    }
+    
+    // VERSUCH 3: Eingebaute Fallback-Tools
+    console.log('⚠️ Using embedded fallback tools (3 default tools)');
+    appState.tools = DEFAULT_TOOLS;
+    appState.filteredTools = [...DEFAULT_TOOLS];
+    calculateTotalUpvotes();
 }
+
 
 /**
  * Loads categories from database or uses defaults
