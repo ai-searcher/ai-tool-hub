@@ -196,9 +196,6 @@ let directoryModalState = {
 async function initApp() {
     console.log('AI Tool Hub initializing...');
     try {
-        // WICHTIG: Theme GANZ AM ANFANG initialisieren
-        initializeTheme();
-        
         // Kurze Pause für sichere Render-Initialisierung
         await new Promise(resolve => setTimeout(resolve, 100));
         
@@ -271,6 +268,7 @@ async function loadAllTools() {
             console.log(`Loaded ${dbTools.length} tools from database`);
             appState.tools = dbTools;
             appState.filteredTools = [...dbTools];
+            calculateTotalUpvotes();
             return;
         }
         
@@ -306,6 +304,7 @@ async function loadAllTools() {
         
         appState.tools = transformedTools;
         appState.filteredTools = [...transformedTools];
+        calculateTotalUpvotes();
         
     } catch (error) {
         console.error('Error loading tools:', error);
@@ -345,6 +344,7 @@ async function loadCategoriesData() {
 
 /**
  * Calculates total upvotes across all tools
+ * Single source of truth for upvote count
  */
 function calculateTotalUpvotes() {
     const totalUpvotes = appState.tools.reduce((sum, tool) => {
@@ -362,11 +362,20 @@ async function loadToolStats() {
     try {
         const stats = await loadToolStatistics();
         
-        // Set total and free from database stats
-        appState.totalStats.total = stats.total || appState.tools.length;
-        appState.totalStats.free = stats.free || appState.tools.filter(tool => tool.is_free).length;
+        // Set total and free from database stats if available
+        if (stats && stats.total !== undefined) {
+            appState.totalStats.total = stats.total;
+        } else {
+            appState.totalStats.total = appState.tools.length;
+        }
         
-        // Always calculate upvotes from local tools data
+        if (stats && stats.free !== undefined) {
+            appState.totalStats.free = stats.free;
+        } else {
+            appState.totalStats.free = appState.tools.filter(tool => tool.is_free).length;
+        }
+        
+        // Always recalculate upvotes from tools data (ignore any DB updatedToday value)
         calculateTotalUpvotes();
         
     } catch (error) {
@@ -390,8 +399,8 @@ async function initializeVotes() {
         // Update tools with vote data
         appState.tools.forEach(tool => {
             if (votesData[tool.id]) {
-                tool.vote_count = votesData[tool.id].count;
-                tool.vote_average = votesData[tool.id].average;
+                tool.vote_count = votesData[tool.id].count || 0;
+                tool.vote_average = votesData[tool.id].average || tool.rating;
             }
         });
         
@@ -639,9 +648,10 @@ function renderDirectoryList(categoryId) {
         toolItem.setAttribute('data-tool-id', tool.id);
         
         // Kürze Beschreibung auf max. 90 Zeichen
-        const shortDescription = tool.description.length > 90 
-            ? tool.description.substring(0, 90) + '...' 
-            : tool.description;
+        const desc = tool.description || '';
+        const shortDescription = desc.length > 90 
+            ? desc.substring(0, 90) + '...' 
+            : desc;
         
         toolItem.innerHTML = `
             <div class="directory-tool-info">
@@ -678,9 +688,10 @@ function renderDirectoryList(categoryId) {
                 toolItem.className = 'directory-tool-item';
                 toolItem.setAttribute('data-tool-id', tool.id);
                 
-                const shortDescription = tool.description.length > 90 
-                    ? tool.description.substring(0, 90) + '...' 
-                    : tool.description;
+                const desc = tool.description || '';
+                const shortDescription = desc.length > 90 
+                    ? desc.substring(0, 90) + '...' 
+                    : desc;
                 
                 toolItem.innerHTML = `
                     <div class="directory-tool-info">
@@ -808,11 +819,15 @@ function filterTools() {
     // Apply search filter
     if (appState.currentSearch.trim() !== '') {
         const searchTerm = appState.currentSearch.toLowerCase();
-        filtered = filtered.filter(tool => 
-            tool.title.toLowerCase().includes(searchTerm) ||
-            tool.description.toLowerCase().includes(searchTerm) ||
-            tool.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-        );
+        filtered = filtered.filter(tool => {
+            const title = tool.title || '';
+            const description = tool.description || '';
+            const tags = Array.isArray(tool.tags) ? tool.tags : [];
+            
+            return title.toLowerCase().includes(searchTerm) ||
+                   description.toLowerCase().includes(searchTerm) ||
+                   tags.some(tag => (tag || '').toLowerCase().includes(searchTerm));
+        });
     }
     
     // Apply sorting
@@ -1373,6 +1388,6 @@ window.AIToolHub = {
 };
 
 // Export für andere Module (falls benötigt)
-export { initializeTheme, themeInitialized };
+export { initializeTheme };
 
 console.log('AI Tool Hub controller loaded');
