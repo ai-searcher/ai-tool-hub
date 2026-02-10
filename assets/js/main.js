@@ -171,7 +171,7 @@ let appState = {
     currentSort: 'newest',
     totalStats: {
         total: 0,
-        updatedToday: 0,
+        totalUpvotes: 0,
         free: 0
     }
 };
@@ -238,7 +238,7 @@ async function initApp() {
             window.updateHeroStatsFromData({
                 total: appState.totalStats.total,
                 freeCount: appState.totalStats.free,
-                pulse: appState.totalStats.updatedToday
+                pulse: appState.totalStats.totalUpvotes
             });
         }
         
@@ -351,7 +351,7 @@ function calculateTotalUpvotes() {
         return sum + (tool.vote_count || 0);
     }, 0);
     
-    appState.totalStats.updatedToday = totalUpvotes;
+    appState.totalStats.totalUpvotes = totalUpvotes;
     console.log(`Total upvotes calculated: ${totalUpvotes}`);
 }
 
@@ -375,7 +375,7 @@ async function loadToolStats() {
             appState.totalStats.free = appState.tools.filter(tool => tool.is_free).length;
         }
         
-        // Always recalculate upvotes from tools data (ignore any DB updatedToday value)
+        // Always recalculate upvotes from tools data (ignore any DB totalUpvotes value)
         calculateTotalUpvotes();
         
     } catch (error) {
@@ -1106,7 +1106,7 @@ async function handleVoteUpdate(toolId, voteData) {
                 window.updateHeroStatsFromData({
                     total: appState.totalStats.total,
                     freeCount: appState.totalStats.free,
-                    pulse: appState.totalStats.updatedToday
+                    pulse: appState.totalStats.totalUpvotes
                 });
             }
         }
@@ -1225,7 +1225,7 @@ function initRealtimeUpdates() {
                         window.updateHeroStatsFromData({
                             total: appState.totalStats.total,
                             freeCount: appState.totalStats.free,
-                            pulse: appState.totalStats.updatedToday
+                            pulse: appState.totalStats.totalUpvotes
                         });
                     }
                 }
@@ -1251,7 +1251,7 @@ function initRealtimeUpdates() {
                         window.updateHeroStatsFromData({
                             total: appState.totalStats.total,
                             freeCount: appState.totalStats.free,
-                            pulse: appState.totalStats.updatedToday
+                            pulse: appState.totalStats.totalUpvotes
                         });
                     }
                 }
