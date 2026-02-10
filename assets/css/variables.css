@@ -5,6 +5,196 @@
    Author: AI Tool Hub
 =========================================== */
 
+/* ===== ANIMIERBARE CSS CUSTOM PROPERTIES ===== */
+
+/* Hintergrundfarben */
+@property --color-bg-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #0a0a0f;
+}
+
+@property --color-bg-secondary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #11111a;
+}
+
+@property --color-bg-tertiary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1a1a25;
+}
+
+@property --color-bg-quaternary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #222230;
+}
+
+/* Neon Akzentfarben */
+@property --color-neon-blue {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00f3ff;
+}
+
+@property --color-neon-blue-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(0, 243, 255, 0.6);
+}
+
+@property --color-neon-purple {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #b967ff;
+}
+
+@property --color-neon-purple-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(185, 103, 255, 0.6);
+}
+
+@property --color-neon-pink {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ff00ff;
+}
+
+@property --color-neon-pink-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 0, 255, 0.4);
+}
+
+@property --color-neon-green {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00ff9d;
+}
+
+@property --color-neon-green-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(0, 255, 157, 0.4);
+}
+
+/* Textfarben */
+@property --color-text-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --color-text-secondary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #b0b0c0;
+}
+
+@property --color-text-tertiary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #8888a0;
+}
+
+@property --color-text-disabled {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #555566;
+}
+
+/* Interface Farben */
+@property --color-border {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.08);
+}
+
+@property --color-border-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(0, 243, 255, 0.3);
+}
+
+@property --color-hover-overlay {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.05);
+}
+
+@property --color-active-overlay {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(0, 243, 255, 0.1);
+}
+
+/* Statusfarben */
+@property --color-success {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00ff9d;
+}
+
+@property --color-warning {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffcc00;
+}
+
+@property --color-error {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ff3366;
+}
+
+@property --color-info {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #00c3ff;
+}
+
+/* Glassmorphism Effekte */
+@property --glass-bg-light {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.05);
+}
+
+@property --glass-bg-medium {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.08);
+}
+
+@property --glass-bg-heavy {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.12);
+}
+
+@property --glass-border-light {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.1);
+}
+
+@property --glass-border-medium {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.15);
+}
+
+@property --glass-border-heavy {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== ROOT VARIABLEN ===== */
+
 :root {
   /* ===== FARBPALETTE - DARK MODE ===== */
   
@@ -236,6 +426,41 @@
       rgba(0, 243, 255, 0.02) 10px,
       rgba(0, 243, 255, 0.02) 20px
     );
+}
+
+/* ===== GLOBALE TRANSITION-REGELN ===== */
+:root, body.light-mode {
+  transition: 
+    --color-bg-primary var(--transition-normal),
+    --color-bg-secondary var(--transition-normal),
+    --color-bg-tertiary var(--transition-normal),
+    --color-bg-quaternary var(--transition-normal),
+    --color-neon-blue var(--transition-normal),
+    --color-neon-blue-glow var(--transition-normal),
+    --color-neon-purple var(--transition-normal),
+    --color-neon-purple-glow var(--transition-normal),
+    --color-neon-pink var(--transition-normal),
+    --color-neon-pink-glow var(--transition-normal),
+    --color-neon-green var(--transition-normal),
+    --color-neon-green-glow var(--transition-normal),
+    --color-text-primary var(--transition-normal),
+    --color-text-secondary var(--transition-normal),
+    --color-text-tertiary var(--transition-normal),
+    --color-text-disabled var(--transition-normal),
+    --color-border var(--transition-normal),
+    --color-border-glow var(--transition-normal),
+    --color-hover-overlay var(--transition-normal),
+    --color-active-overlay var(--transition-normal),
+    --color-success var(--transition-normal),
+    --color-warning var(--transition-normal),
+    --color-error var(--transition-normal),
+    --color-info var(--transition-normal),
+    --glass-bg-light var(--transition-normal),
+    --glass-bg-medium var(--transition-normal),
+    --glass-bg-heavy var(--transition-normal),
+    --glass-border-light var(--transition-normal),
+    --glass-border-medium var(--transition-normal),
+    --glass-border-heavy var(--transition-normal);
 }
 
 /* ===== LIGHT MODE OVERRIDES ===== */
