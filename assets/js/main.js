@@ -1,4 +1,3 @@
-
 // ===========================================
 // ZENTRALE THEME INITIALISIERUNG
 // ===========================================
@@ -13,10 +12,10 @@ let themeInitialized = false;
 function initializeTheme() {
     // Verhindere mehrfache Ausführung
     if (themeInitialized) {
-        console.log('⚡ Theme bereits initialisiert, überspringe...');
+        console.log('Theme bereits initialisiert, überspringe...');
         return;
     }
-    console.log('🎨 Starte zentrale Theme-Initialisierung...');
+    console.log('Starte zentrale Theme-Initialisierung...');
     
     try {
         // 1. Disable all transitions immediately
@@ -26,8 +25,8 @@ function initializeTheme() {
         const savedTheme = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        console.log(`📁 Gespeichertes Theme: "${savedTheme}"`);
-        console.log(`🖥️ System-Preference (dark): ${prefersDark}`);
+        console.log(`Gespeichertes Theme: "${savedTheme}"`);
+        console.log(`System-Preference (dark): ${prefersDark}`);
         
         // Entscheidungslogik:
         // 1. Gespeichertes Theme (höchste Priorität)
@@ -37,13 +36,13 @@ function initializeTheme() {
         
         if (savedTheme === 'light' || savedTheme === 'dark') {
             themeToApply = savedTheme;
-            console.log(`🎯 Verwende gespeichertes Theme: ${themeToApply}`);
+            console.log(`Verwende gespeichertes Theme: ${themeToApply}`);
         } else if (!savedTheme && prefersDark) {
             themeToApply = 'dark';
-            console.log('🎯 Verwende System-Preference: Dark Mode');
+            console.log('Verwende System-Preference: Dark Mode');
         } else {
             themeToApply = 'dark';
-            console.log('🎯 Verwende Default: Dark Mode');
+            console.log('Verwende Default: Dark Mode');
         }
         
         // 3. Theme-Klasse anwenden (OHNE Übergänge)
@@ -57,7 +56,7 @@ function initializeTheme() {
             if (themeIcon) {
                 themeIcon.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
                 themeIcon.classList.add(themeToApply === 'light' ? 'fa-moon' : 'fa-sun');
-                console.log(`🔧 Icon gesetzt: ${themeToApply === 'light' ? 'moon' : 'sun'}`);
+                console.log(`Icon gesetzt: ${themeToApply === 'light' ? 'moon' : 'sun'}`);
             }
             
             // Event-Listener für zukünftige Klicks
@@ -65,7 +64,7 @@ function initializeTheme() {
                 const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
-                console.log(`🔄 Benutzer wechselt Theme: ${currentTheme} → ${newTheme}`);
+                console.log(`Benutzer wechselt Theme: ${currentTheme} -> ${newTheme}`);
                 
                 // Theme anwenden
                 document.body.classList.remove(`${currentTheme}-theme`);
@@ -81,26 +80,26 @@ function initializeTheme() {
                 // In localStorage speichern
                 try {
                     localStorage.setItem('theme', newTheme);
-                    console.log(`💾 Theme gespeichert: ${newTheme}`);
+                    console.log(`Theme gespeichert: ${newTheme}`);
                 } catch (error) {
-                    console.error('❌ Fehler beim Speichern in localStorage:', error);
+                    console.error('Fehler beim Speichern in localStorage:', error);
                 }
             });
             
-            console.log('🎯 Theme-Toggle Event-Listener hinzugefügt');
+            console.log('Theme-Toggle Event-Listener hinzugefügt');
         } else {
-            console.log('⚠️ Theme-Toggle Button nicht gefunden');
+            console.log('Theme-Toggle Button nicht gefunden');
         }
         
         // 5. Nach 50ms Transitions wieder aktivieren
         setTimeout(() => {
             document.body.classList.remove('no-transition');
             themeInitialized = true;
-            console.log('✅ Theme-Initialisierung abgeschlossen, Transitions aktiv');
+            console.log('Theme-Initialisierung abgeschlossen, Transitions aktiv');
         }, 50);
         
     } catch (error) {
-        console.error('❌ Kritischer Fehler bei Theme-Initialisierung:', error);
+        console.error('Kritischer Fehler bei Theme-Initialisierung:', error);
         // Fallback: Dark Theme anwenden und Transitions aktivieren
         document.body.classList.remove('no-transition');
         document.body.classList.add('dark-theme');
@@ -195,7 +194,7 @@ let directoryModalState = {
  * Initializes the application by loading all data
  */
 async function initApp() {
-    console.log('🚀 AI Tool Hub initializing...');
+    console.log('AI Tool Hub initializing...');
     try {
         // WICHTIG: Theme GANZ AM ANFANG initialisieren
         initializeTheme();
@@ -249,11 +248,11 @@ async function initApp() {
         // Hide loading spinner
         hideLoadingSpinner();
         
-        console.log('✅ Application initialized successfully');
+        console.log('Application initialized successfully');
         showNotification();
         
     } catch (error) {
-        console.error('❌ Error initializing app:', error);
+        console.error('Error initializing app:', error);
         hideLoadingSpinner();
         showEmptyState('Fehler beim Laden der Daten. Bitte versuche es später erneut.');
         showNotification(ERROR_MESSAGES.LOADING_ERROR, 'error');
@@ -269,14 +268,14 @@ async function loadAllTools() {
         const dbTools = await loadTools();
         
         if (dbTools && dbTools.length > 0) {
-            console.log(`📊 Loaded ${dbTools.length} tools from database`);
+            console.log(`Loaded ${dbTools.length} tools from database`);
             appState.tools = dbTools;
             appState.filteredTools = [...dbTools];
             return;
         }
         
         // Fallback to local JSON if database is empty
-        console.log('📂 Database empty, loading from local JSON...');
+        console.log('Database empty, loading from local JSON...');
         const response = await fetch('./data.json');
         
         if (!response.ok) {
@@ -284,7 +283,7 @@ async function loadAllTools() {
         }
         
         const jsonTools = await response.json();
-        console.log(`📊 Loaded ${jsonTools.length} tools from JSON`);
+        console.log(`Loaded ${jsonTools.length} tools from JSON`);
         
         // Transform JSON data to match our structure
         const transformedTools = jsonTools.map(tool => ({
@@ -353,7 +352,7 @@ function calculateTotalUpvotes() {
     }, 0);
     
     appState.totalStats.updatedToday = totalUpvotes;
-    console.log(`📊 Total upvotes calculated: ${totalUpvotes}`);
+    console.log(`Total upvotes calculated: ${totalUpvotes}`);
 }
 
 /**
@@ -416,7 +415,7 @@ async function initializeVotes() {
  * Initialisiert Event Listener für das Directory Modal
  */
 function initDirectoryModalEvents() {
-    console.log('📂 Initialisiere Directory Modal Events...');
+    console.log('Initialisiere Directory Modal Events...');
     
     // 1. Hero-Stat-Kachel für "aktive Tools" klickbar machen
     const heroStatsContainer = document.querySelector('.hero-stats');
@@ -437,7 +436,7 @@ function initDirectoryModalEvents() {
                 }
             });
             
-            console.log('🎯 Hero-Stat-Kachel für Directory Modal klickbar gemacht');
+            console.log('Hero-Stat-Kachel für Directory Modal klickbar gemacht');
         }
     }
     
@@ -465,21 +464,21 @@ function initDirectoryModalEvents() {
         }
     });
     
-    console.log('✅ Directory Modal Events initialisiert');
+    console.log('Directory Modal Events initialisiert');
 }
 
 /**
  * Öffnet das Directory Modal
  */
 function openDirectoryModal() {
-    console.log('📂 Öffne Directory Modal...');
+    console.log('Öffne Directory Modal...');
     
     // Speichere das zuletzt fokussierte Element
     directoryModalState.lastFocusedElement = document.activeElement;
     
     const modal = document.getElementById('directory-modal');
     if (!modal) {
-        console.error('❌ Directory Modal nicht gefunden');
+        console.error('Directory Modal nicht gefunden');
         return;
     }
     
@@ -503,14 +502,14 @@ function openDirectoryModal() {
         }, 100);
     }
     
-    console.log('✅ Directory Modal geöffnet');
+    console.log('Directory Modal geöffnet');
 }
 
 /**
  * Schließt das Directory Modal
  */
 function closeDirectoryModal() {
-    console.log('📂 Schließe Directory Modal...');
+    console.log('Schließe Directory Modal...');
     
     const modal = document.getElementById('directory-modal');
     if (!modal) return;
@@ -530,7 +529,7 @@ function closeDirectoryModal() {
         }, 100);
     }
     
-    console.log('✅ Directory Modal geschlossen');
+    console.log('Directory Modal geschlossen');
 }
 
 /**
@@ -573,7 +572,7 @@ function renderDirectoryTabs() {
         tabsContainer.appendChild(tab);
     });
     
-    console.log(`✅ ${appState.categories.length} Kategorie-Tabs gerendert`);
+    console.log(`${appState.categories.length} Kategorie-Tabs gerendert`);
 }
 
 /**
@@ -710,14 +709,14 @@ function renderDirectoryList(categoryId) {
         listContainer.appendChild(showMoreButton);
     }
     
-    console.log(`✅ ${displayTools.length} Tools in Directory Liste gerendert (${categoryId})`);
+    console.log(`${displayTools.length} Tools in Directory Liste gerendert (${categoryId})`);
 }
 
 /**
  * Springt zu einer Tool-Card und highlightet sie
  */
 function handleToolJump(toolId) {
-    console.log(`🔍 Springe zu Tool: ${toolId}`);
+    console.log(`Springe zu Tool: ${toolId}`);
     
     // Modal schließen
     closeDirectoryModal();
@@ -728,7 +727,7 @@ function handleToolJump(toolId) {
     
     if (!isToolInCurrentFilter) {
         // Tool ist nicht sichtbar - Filter zurücksetzen
-        console.log('🔄 Tool nicht sichtbar, setze Filter zurück...');
+        console.log('Tool nicht sichtbar, setze Filter zurück...');
         
         appState.currentFilter = 'all';
         appState.currentSearch = '';
@@ -767,12 +766,12 @@ function scrollToAndHighlightTool(toolId) {
     const toolCard = document.querySelector(`.tool-card[data-id="${toolId}"]`);
     
     if (!toolCard) {
-        console.error(`❌ Tool-Card mit ID ${toolId} nicht gefunden`);
+        console.error(`Tool-Card mit ID ${toolId} nicht gefunden`);
         showNotification('Tool konnte nicht gefunden werden', 'error');
         return;
     }
     
-    console.log(`📍 Scrolle zu Tool-Card: ${toolId}`);
+    console.log(`Scrolle zu Tool-Card: ${toolId}`);
     
     // Sanft zur Karte scrollen
     toolCard.scrollIntoView({
@@ -1244,7 +1243,7 @@ function initRealtimeUpdates() {
             )
             .subscribe();
         
-        console.log('✅ Real-time updates enabled');
+        console.log('Real-time updates enabled');
         
         // Store subscriptions for cleanup
         window.supabaseSubscriptions = {
@@ -1266,17 +1265,17 @@ function initRealtimeUpdates() {
  * Wird separat aufgerufen, bevor initApp() läuft
  */
 function earlyThemeInit() {
-    console.log('🌅 Early Theme-Initialisierung...');
+    console.log('Early Theme-Initialisierung...');
     
     // Nur wenn DOM bereits bereit ist
     if (document.readyState === 'loading') {
-        console.log('⏳ Warte auf DOMContentLoaded...');
+        console.log('Warte auf DOMContentLoaded...');
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('📄 DOM geladen, initialisiere Theme...');
+            console.log('DOM geladen, initialisiere Theme...');
             initializeTheme();
         });
     } else {
-        console.log('⚡ DOM bereits geladen, initialisiere sofort...');
+        console.log('DOM bereits geladen, initialisiere sofort...');
         initializeTheme();
     }
 }
@@ -1289,12 +1288,13 @@ earlyThemeInit();
 // ===========================================
 
 (function(){
-    function animateNumber(el, to, duration = 1200) {
+    function animateNumber(el, to, duration) {
         if (!el) return;
+        duration = duration || 1200;
         const start = 0;
         const range = to - start;
         const startTime = performance.now();
-        const display = (v) => { el.textContent = Math.round(v); };
+        const display = function(v) { el.textContent = Math.round(v); };
         function frame(now) {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
@@ -1311,47 +1311,42 @@ earlyThemeInit();
             {id: 'updated-today', dur: 1400},
             {id: 'free-tools', dur: 1000}
         ];
-        nodes.forEach(n => {
+        nodes.forEach(function(n) {
             const el = document.getElementById(n.id);
             if (!el) return;
             const target = parseInt(el.getAttribute('data-target') || '0', 10);
             animateNumber(el, target, n.dur);
         });
-        // small visual pulse on ai card
         const pulseEl = document.getElementById('updated-today');
         if (pulseEl) {
             const val = parseInt(pulseEl.getAttribute('data-target') || '0', 10);
             const card = document.getElementById('card-updated');
             if (card) {
                 const intensity = Math.min(1, val / 100);
-                card.style.boxShadow = `0 14px 38px rgba(0,243,255,${0.05 + intensity*0.12}), 0 0 30px rgba(185,103,255,${0.03 + intensity*0.06})`;
+                card.style.boxShadow = '0 14px 38px rgba(0,243,255,' + (0.05 + intensity*0.12) + '), 0 0 30px rgba(185,103,255,' + (0.03 + intensity*0.06) + ')';
             }
         }
     }
     
     function updateHeroStatsFromData(data){
-        // expected keys (if absent, do nothing): total, freeCount, pulse
         if (!data || typeof data !== 'object') return;
         const map = [
             {key: 'total', selector: 'total-tools'},
             {key: 'pulse', selector: 'updated-today'},
             {key: 'freeCount', selector: 'free-tools'}
         ];
-        map.forEach(m => {
+        map.forEach(function(m) {
             if (m.key in data && document.getElementById(m.selector)){
                 document.getElementById(m.selector).setAttribute('data-target', String(data[m.key] || 0));
             }
         });
-        // restart animation
         updateStatsFromTargets();
     }
     
-    document.addEventListener('DOMContentLoaded', () => {
-        // run initial animation on load
+    document.addEventListener('DOMContentLoaded', function() {
         updateStatsFromTargets();
     });
     
-    // expose updater for other modules
     window.updateHeroStatsFromData = updateHeroStatsFromData;
 })();
 
@@ -1380,5 +1375,4 @@ window.AIToolHub = {
 // Export für andere Module (falls benötigt)
 export { initializeTheme, themeInitialized };
 
-console.log('🎛️ AI Tool Hub controller loaded');
-
+console.log('AI Tool Hub controller loaded');
