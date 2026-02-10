@@ -565,25 +565,67 @@ body.light-mode .search-button:hover {
     letter-spacing: 0.1em;
 }
 
-/* ===== FILTER NAVIGATION - TRANSPARENT BACKGROUND, CONTROLS LINKS ===== */
+/* ===== FILTER NAVIGATION - FUTURISTISCHE KOMPAKTE VERSION ===== */
 .filter-nav {
     position: sticky;
     top: var(--header-height);
     z-index: var(--z-sticky);
-    background: transparent; /* GEÄNDERT: war vorher solid background */
+    background: transparent;
     backdrop-filter: var(--glass-blur-medium);
     -webkit-backdrop-filter: var(--glass-blur-medium);
     border-bottom: var(--border-width-thin) solid var(--glass-border-light);
-    padding: var(--spacing-3) 0;
+    padding: var(--spacing-2) 0; /* GEÄNDERT: reduziert von var(--spacing-3) */
+    transition: padding 200ms ease, background 200ms ease, height 200ms ease;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+}
+
+/* NEU: Futuristische Scanline/Neon-Linie */
+.filter-nav::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--color-neon-blue) 20%, 
+        var(--color-neon-purple) 50%, 
+        var(--color-neon-blue) 80%, 
+        transparent 100%);
+    opacity: 0.6;
+    filter: blur(0.5px);
+    z-index: 1;
+}
+
+.filter-nav::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 243, 255, 0.3) 20%, 
+        rgba(185, 103, 255, 0.3) 50%, 
+        rgba(0, 243, 255, 0.3) 80%, 
+        transparent 100%);
+    opacity: 0.4;
+    filter: blur(1px);
+    z-index: 0;
 }
 
 .filter-nav .header-container {
     display: flex;
-    justify-content: flex-start; /* GEÄNDERT: war space-between */
+    justify-content: flex-start;
     align-items: center;
-    gap: var(--spacing-4);
+    gap: var(--spacing-3); /* GEÄNDERT: reduziert von var(--spacing-4) */
     flex-direction: row;
     position: relative;
+    width: 100%;
 }
 
 .filter-nav .header-container::after {
@@ -602,20 +644,22 @@ body.light-mode .search-button:hover {
 
 .filter-container {
     display: flex;
-    gap: var(--spacing-2);
+    gap: var(--spacing-1); /* GEÄNDERT: reduziert von var(--spacing-2) */
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
     scroll-snap-type: x proximity;
-    padding: var(--spacing-2) var(--spacing-4);
+    padding: var(--spacing-1) var(--spacing-3); /* GEÄNDERT: reduziert */
     scrollbar-width: thin;
     scrollbar-color: var(--color-neon-blue) transparent;
     flex: 1;
-    order: 2; /* RECHTS */
+    order: 2;
+    min-height: 44px;
+    align-items: center;
 }
 
 .filter-container::-webkit-scrollbar {
-    height: 4px;
+    height: 3px; /* GEÄNDERT: dünner */
 }
 
 .filter-container::-webkit-scrollbar-track {
@@ -631,13 +675,13 @@ body.light-mode .search-button:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-3) var(--spacing-6);
+    padding: var(--spacing-2) var(--spacing-4); /* GEÄNDERT: reduziert */
     background: transparent;
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     font-family: var(--font-primary);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs); /* GEÄNDERT: kleiner */
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
@@ -648,6 +692,8 @@ body.light-mode .search-button:hover {
     position: relative;
     min-width: auto;
     z-index: var(--z-base);
+    letter-spacing: 0.03em; /* NEU: futuristischer Letterspacing */
+    height: 36px; /* NEU: feste Höhe */
 }
 
 .filter-btn:hover {
@@ -655,6 +701,7 @@ body.light-mode .search-button:hover {
     color: var(--color-text-primary);
     border-color: var(--color-neon-blue);
     transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
 }
 
 .filter-btn:active {
@@ -677,23 +724,24 @@ body.light-mode .search-button:hover {
     background: transparent;
     color: var(--color-neon-blue);
     border-color: var(--color-neon-blue);
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
 }
 
 .filter-btn.active::after {
     content: '';
     position: absolute;
-    bottom: -3px;
+    bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
-    height: 3px;
+    width: 70%; /* GEÄNDERT: kürzer */
+    height: 2px; /* GEÄNDERT: dünner */
     background: var(--color-neon-blue);
     border-radius: var(--radius-full);
     box-shadow: var(--glow-blue);
 }
 
 .filter-btn.active:hover {
-    background: var(--glass-bg-medium);
+    background: rgba(0, 243, 255, 0.1);
 }
 
 body.light-mode .filter-btn {
@@ -712,31 +760,38 @@ body.light-mode .filter-btn.active {
     border-color: var(--color-neon-blue);
 }
 
+/* GEÄNDERT: Kompaktere Controls */
 .filter-controls {
     display: flex;
-    gap: var(--spacing-2);
-    margin-left: 0; /* GEÄNDERT: war auto (rechts) */
-    margin-right: var(--spacing-4);
+    gap: var(--spacing-1); /* GEÄNDERT: reduziert */
+    margin-left: 0;
+    margin-right: var(--spacing-3); /* GEÄNDERT: reduziert */
     flex-shrink: 0;
-    order: 1; /* LINKS */
+    order: 1;
+    height: 40px; /* NEU: feste Höhe */
+    align-items: center;
 }
 
 .filter-sort,
 .filter-view {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-3) var(--spacing-4);
+    justify-content: center;
+    gap: var(--spacing-1); /* GEÄNDERT: reduziert */
+    padding: var(--spacing-2) var(--spacing-3); /* GEÄNDERT: reduziert */
     background: var(--glass-bg-light);
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     color: var(--color-text-secondary);
     font-family: var(--font-primary);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs); /* GEÄNDERT: kleiner */
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition-normal);
     z-index: var(--z-base);
+    height: 40px; /* NEU: feste Höhe */
+    min-width: 44px; /* NEU: Mindestbreite für Touch */
+    letter-spacing: 0.03em; /* NEU: futuristischer Letterspacing */
 }
 
 .filter-sort:hover,
@@ -744,7 +799,8 @@ body.light-mode .filter-btn.active {
     background: var(--glass-bg-medium);
     color: var(--color-text-primary);
     border-color: var(--color-neon-blue);
-    transform: translateY(-2px);
+    transform: translateY(-1px); /* GEÄNDERT: weniger Bewegung */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .filter-sort:active,
@@ -780,7 +836,7 @@ body.light-mode .filter-view:hover {
 
 .filter-view {
     position: relative;
-    width: 56px;
+    width: 52px; /* GEÄNDERT: reduziert */
     justify-content: center;
 }
 
@@ -800,10 +856,88 @@ body.light-mode .filter-view:hover {
     display: block;
 }
 
+/* NEU: Futuristisches kompaktes Dropdown */
 .filter-dropdown {
     display: none;
     order: 2;
     flex: 1;
+    height: 42px; /* GEÄNDERT: kompakter */
+    max-width: 280px; /* NEU: maximale Breite */
+    padding: 0 var(--spacing-4);
+    background: var(--glass-bg-medium);
+    border: var(--border-width-thin) solid var(--glass-border-light);
+    border-radius: var(--radius-full); /* GEÄNDERT: pill-förmig */
+    color: var(--color-text-primary);
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    backdrop-filter: var(--glass-blur-small);
+    transition: var(--transition-normal);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f3ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    border-color: var(--color-neon-blue);
+    box-shadow: var(--glow-blue);
+}
+
+.filter-dropdown option {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    padding: var(--spacing-2);
+}
+
+/* NEU: Auto-Compact-on-Scroll Styles */
+.filter-nav.compact {
+    padding: 6px 0; /* Noch kompakter */
+    min-height: 44px;
+}
+
+.filter-nav.compact .filter-container {
+    padding: 2px var(--spacing-2);
+    min-height: 38px;
+}
+
+.filter-nav.compact .filter-btn {
+    padding: var(--spacing-1) var(--spacing-3);
+    height: 32px;
+    font-size: 0.7rem;
+}
+
+.filter-nav.compact .filter-dropdown {
+    height: 38px;
+    font-size: var(--text-xs);
+    max-width: 260px;
+}
+
+.filter-nav.compact .filter-controls {
+    height: 36px;
+}
+
+.filter-nav.compact .filter-sort,
+.filter-nav.compact .filter-view {
+    height: 36px;
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 0.7rem;
+}
+
+.filter-nav.compact .filter-view {
+    width: 48px;
+}
+
+.filter-nav.compact::before,
+.filter-nav.compact::after {
+    opacity: 0.3; /* Dezenter bei Compact */
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -1736,7 +1870,8 @@ body.light-mode .share-btn:hover {
     
     .filter-nav .header-container {
         flex-direction: column;
-        gap: var(--spacing-4);
+        gap: var(--spacing-2); /* GEÄNDERT: reduziert für Mobile */
+        padding: 0;
     }
     
     .filter-container {
@@ -1747,28 +1882,21 @@ body.light-mode .share-btn:hover {
     .filter-dropdown {
         display: block;
         width: 100%;
-        padding: var(--spacing-3) var(--spacing-4);
-        background: var(--glass-bg-medium);
-        border: var(--border-width-thin) solid var(--glass-border-light);
-        border-radius: var(--radius-lg);
-        color: var(--color-text-primary);
-        font-family: var(--font-primary);
-        font-size: var(--text-base);
-        cursor: pointer;
-        backdrop-filter: var(--glass-blur-small);
-        margin-bottom: var(--spacing-4);
-    }
-    
-    .filter-dropdown option {
-        background: var(--color-bg-secondary);
-        color: var(--color-text-primary);
+        max-width: 100%; /* NEU: volle Breite auf Mobile */
+        margin-bottom: var(--spacing-3);
+        order: 2;
     }
     
     .filter-controls {
         order: 1;
-        margin-right: var(--spacing-3);
+        margin-right: 0;
         width: 100%;
-        justify-content: flex-end;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-3);
+    }
+    
+    .filter-nav.compact .filter-controls {
+        margin-bottom: var(--spacing-2);
     }
     
     .tool-grid {
@@ -1813,6 +1941,15 @@ body.light-mode .share-btn:hover {
     .filter-nav .header-container::after {
         display: none;
     }
+    
+    /* NEU: Mobile Compact Anpassungen */
+    .filter-nav.compact {
+        padding: 4px 0;
+    }
+    
+    .filter-nav.compact .filter-dropdown {
+        margin-bottom: var(--spacing-2);
+    }
 }
 
 @media (max-width: 480px) {
@@ -1839,18 +1976,28 @@ body.light-mode .share-btn:hover {
     }
     
     .filter-btn {
-        padding: var(--spacing-2) var(--spacing-4);
-        font-size: var(--text-xs);
+        padding: var(--spacing-1) var(--spacing-3);
+        font-size: 0.65rem;
+        height: 32px;
     }
     
     .filter-sort,
     .filter-view {
-        padding: var(--spacing-2) var(--spacing-3);
-        font-size: var(--text-xs);
+        padding: var(--spacing-1) var(--spacing-2);
+        font-size: 0.7rem;
+        height: 36px;
     }
     
     .filter-view {
-        width: 48px;
+        width: 44px;
+    }
+    
+    .filter-dropdown {
+        height: 40px;
+        font-size: var(--text-xs);
+        padding: 0 var(--spacing-3);
+        padding-right: 36px;
+        background-position: right 8px center;
     }
     
     .modal-container {
@@ -1869,6 +2016,22 @@ body.light-mode .share-btn:hover {
     .word {
         min-width: 200px;
         font-size: var(--text-base);
+    }
+    
+    /* NEU: Extra Compact für sehr kleine Screens */
+    .filter-nav.compact .filter-dropdown {
+        height: 36px;
+        font-size: 0.7rem;
+    }
+    
+    .filter-nav.compact .filter-sort,
+    .filter-nav.compact .filter-view {
+        height: 34px;
+        font-size: 0.65rem;
+    }
+    
+    .filter-nav.compact .filter-view {
+        width: 42px;
     }
 }
 
