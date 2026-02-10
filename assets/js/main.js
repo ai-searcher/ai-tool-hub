@@ -1323,7 +1323,7 @@ earlyThemeInit();
     function updateStatsFromTargets() {
         const nodes = [
             {id: 'total-tools', dur: 1000},
-            {id: 'updated-today', dur: 1400},
+            {id: 'total-upvotes', dur: 1400},
             {id: 'free-tools', dur: 1000}
         ];
         nodes.forEach(function(n) {
@@ -1332,7 +1332,7 @@ earlyThemeInit();
             const target = parseInt(el.getAttribute('data-target') || '0', 10);
             animateNumber(el, target, n.dur);
         });
-        const pulseEl = document.getElementById('updated-today');
+        const pulseEl = document.getElementById('total-upvotes');
         if (pulseEl) {
             const val = parseInt(pulseEl.getAttribute('data-target') || '0', 10);
             const card = document.getElementById('card-updated');
@@ -1347,7 +1347,7 @@ earlyThemeInit();
         if (!data || typeof data !== 'object') return;
         const map = [
             {key: 'total', selector: 'total-tools'},
-            {key: 'pulse', selector: 'updated-today'},
+            {key: 'pulse', selector: 'total-upvotes'},
             {key: 'freeCount', selector: 'free-tools'}
         ];
         map.forEach(function(m) {
