@@ -565,7 +565,7 @@ body.light-mode .search-button:hover {
     letter-spacing: 0.1em;
 }
 
-/* ===== FILTER NAVIGATION ===== */
+/* ===== FILTER NAVIGATION - TEXT-ONLY DESIGN ===== */
 .filter-nav {
     position: sticky;
     top: var(--header-height);
@@ -574,19 +574,56 @@ body.light-mode .search-button:hover {
     backdrop-filter: var(--glass-blur-medium);
     border-bottom: var(--border-width-thin) solid var(--glass-border-light);
     padding: var(--spacing-3) 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    position: relative;
+}
+
+.filter-nav::before,
+.filter-nav::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.filter-nav::before {
+    left: 0;
+    background: linear-gradient(to right, 
+        var(--color-bg-primary), 
+        transparent);
+}
+
+.filter-nav::after {
+    right: 0;
+    background: linear-gradient(to left, 
+        var(--color-bg-primary), 
+        transparent);
 }
 
 .filter-nav .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-width: max-content;
 }
 
 .filter-container {
     display: flex;
     gap: var(--spacing-2);
     overflow-x: auto;
-    padding: var(--spacing-2) 0;
+    padding: var(--spacing-3) var(--spacing-6);
+    margin: 0;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    flex: 1;
+    min-width: 0;
     scrollbar-width: thin;
     scrollbar-color: var(--color-neon-blue) transparent;
 }
@@ -605,11 +642,11 @@ body.light-mode .search-button:hover {
 }
 
 .filter-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
+    justify-content: center;
     padding: var(--spacing-3) var(--spacing-6);
-    background: var(--glass-bg-light);
+    background: transparent;
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
@@ -620,6 +657,10 @@ body.light-mode .search-button:hover {
     white-space: nowrap;
     transition: var(--transition-normal);
     backdrop-filter: var(--glass-blur-small);
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    position: relative;
+    min-width: auto;
     z-index: var(--z-base);
 }
 
@@ -627,11 +668,11 @@ body.light-mode .search-button:hover {
     background: var(--glass-bg-medium);
     color: var(--color-text-primary);
     border-color: var(--color-neon-blue);
-    transform: translateY(-2px);
+    transform: scale(1.05);
 }
 
 .filter-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: scale(1);
     transition: transform 0.1s ease;
 }
 
@@ -644,48 +685,55 @@ body.light-mode .search-button:hover {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none !important;
-    border-color: var(--glass-border-light) !important;
 }
 
 .filter-btn.active {
-    background: linear-gradient(135deg, var(--color-neon-blue), var(--color-neon-purple));
-    color: white;
-    border-color: transparent;
+    background: transparent;
+    color: var(--color-neon-blue);
+    border-color: var(--color-neon-blue);
+}
+
+.filter-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 3px;
+    background: var(--color-neon-blue);
+    border-radius: var(--radius-full);
     box-shadow: var(--glow-blue);
 }
 
 .filter-btn.active:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--glow-blue), 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.filter-btn.active:active {
-    transform: translateY(0) scale(0.98);
-}
-
-.filter-btn.active:focus {
-    outline: 2px solid white;
-    outline-offset: 2px;
+    background: var(--glass-bg-medium);
 }
 
 body.light-mode .filter-btn {
-    background: rgba(255, 255, 255, 0.7);
     border-color: rgba(0, 0, 0, 0.1);
+    color: var(--color-text-secondary);
 }
 
 body.light-mode .filter-btn:hover {
     background: rgba(255, 255, 255, 0.9);
     border-color: var(--color-neon-blue);
+    color: var(--color-text-primary);
 }
 
 body.light-mode .filter-btn.active {
-    background: linear-gradient(135deg, var(--color-neon-blue), var(--color-neon-purple));
-    color: white;
+    color: var(--color-neon-blue);
+    border-color: var(--color-neon-blue);
 }
 
 .filter-controls {
     display: flex;
     gap: var(--spacing-2);
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 0 var(--spacing-6);
+    height: 100%;
+    align-items: center;
 }
 
 .filter-sort,
@@ -765,6 +813,10 @@ body.light-mode .filter-view:hover {
 
 .filter-view.list-view i:last-child {
     display: block;
+}
+
+.filter-dropdown {
+    display: none;
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -1519,7 +1571,6 @@ body.light-mode .modal-close:hover {
 }
 
 /* ===== BUTTON INTERACTION STATES ===== */
-/* Allgemeine Button-Klassen (falls vorhanden) */
 .btn {
     position: relative;
     z-index: var(--z-base);
@@ -1547,7 +1598,6 @@ body.light-mode .modal-close:hover {
     transform: none !important;
 }
 
-/* Spezifische Button-Typen */
 .vote-btn,
 .save-btn,
 .share-btn {
@@ -1659,20 +1709,20 @@ body.light-mode .share-btn:hover {
     }
     
     .hero-slogan {
-    font-size: var(--text-lg);
-    height: 50px;
-    flex-direction: column;
-    gap: 0;
+        font-size: var(--text-lg);
+        height: 50px;
+        flex-direction: column;
+        gap: 0;
     }
 
     .slogan-words {
-     width: 100%;
-     height: 40px;
+        width: 100%;
+        height: 40px;
     }
 
     .word {
-     min-width: 250px;
-     font-size: var(--text-lg);
+        min-width: 250px;
+        font-size: var(--text-lg);
     }
     
     .search-container {
@@ -1704,6 +1754,28 @@ body.light-mode .share-btn:hover {
     
     .filter-container {
         width: 100%;
+        padding: var(--spacing-2) 0;
+        order: 2;
+    }
+    
+    .filter-controls {
+        width: 100%;
+        justify-content: flex-end;
+        padding: 0;
+        order: 1;
+    }
+    
+    .filter-container {
+        display: flex;
+    }
+    
+    .filter-dropdown {
+        display: none;
+    }
+    
+    .filter-nav::before,
+    .filter-nav::after {
+        display: none;
     }
     
     .tool-grid {
@@ -1720,7 +1792,6 @@ body.light-mode .share-btn:hover {
         max-width: 100%;
     }
     
-    /* Touch-friendly Tap-Zonen für Mobile */
     .theme-toggle,
     .search-clear,
     .search-button,
@@ -1737,10 +1808,6 @@ body.light-mode .share-btn:hover {
     .share-btn {
         min-height: 44px;
         min-width: 44px;
-    }
-    
-    .filter-btn {
-        padding: var(--spacing-4) var(--spacing-6);
     }
     
     .tool-link {
@@ -1775,6 +1842,21 @@ body.light-mode .share-btn:hover {
         max-width: 200px;
     }
     
+    .filter-btn {
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--text-xs);
+    }
+    
+    .filter-sort,
+    .filter-view {
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--text-xs);
+    }
+    
+    .filter-view {
+        width: 48px;
+    }
+    
     .modal-container {
         padding: 0;
         border-radius: var(--radius-lg);
@@ -1787,7 +1869,7 @@ body.light-mode .share-btn:hover {
     .modal-content {
         padding: var(--spacing-4);
     }
-    @media (max-width: 480px) {
+    
     .word {
         min-width: 200px;
         font-size: var(--text-base);
@@ -1850,12 +1932,12 @@ body.light-mode .share-btn:hover {
 
 .h-full {
     height: 100%;
-} 
+}
 
 /* ===== BENACHRICHTIGUNGEN ===== */
 .notification {
     position: fixed;
-    top: 90px;  /* WICHTIG: Unter dem Dark-Mode Button */
+    top: 90px;
     right: 20px;
     width: 40px;
     height: 40px;
@@ -1864,7 +1946,7 @@ body.light-mode .share-btn:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: var(--z-modal);  /* Benutze existierende Variable */
+    z-index: var(--z-modal);
     box-shadow: var(--glass-shadow-elevated);
     font-size: 24px;
     font-weight: bold;
