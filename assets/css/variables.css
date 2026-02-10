@@ -242,57 +242,106 @@
 /* Wird aktiviert, wenn .light-mode Klasse auf body vorhanden ist */
 body.light-mode {
   /* Grundfarben - Light Cyberpunk */
-  --color-bg-primary: #f0f2ff;
-  --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #e6e9ff;
-  --color-bg-quaternary: #d9ddff;
+  --color-bg-primary: #f8f9ff;
+  --color-bg-secondary: #f0f2ff;
+  --color-bg-tertiary: #e8ebff;
+  --color-bg-quaternary: #e0e4ff;
+  
+  /* Neon Akzentfarben für Light-Mode (gedämpft) */
+  --color-neon-blue: #008cff;
+  --color-neon-blue-glow: rgba(0, 140, 255, 0.5);
+  --color-neon-purple: #8a4fff;
+  --color-neon-purple-glow: rgba(138, 79, 255, 0.4);
+  --color-neon-pink: #cc00cc;
+  --color-neon-pink-glow: rgba(204, 0, 204, 0.3);
+  --color-neon-green: #00cc88;
+  --color-neon-green-glow: rgba(0, 204, 136, 0.3);
   
   /* Textfarben invertiert */
-  --color-text-primary: #11111a;
+  --color-text-primary: #0a0a1a;
   --color-text-secondary: #333344;
-  --color-text-tertiary: #555566;
-  --color-text-disabled: #8888a0;
+  --color-text-tertiary: #555577;
+  --color-text-disabled: #8888aa;
   
   /* Interface Farben */
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-glow: rgba(0, 243, 255, 0.4);
-  --color-hover-overlay: rgba(0, 0, 0, 0.05);
-  --color-active-overlay: rgba(0, 243, 255, 0.15);
+  --color-border: rgba(0, 0, 30, 0.12);
+  --color-border-glow: rgba(0, 140, 255, 0.4);
+  --color-hover-overlay: rgba(0, 0, 40, 0.08);
+  --color-active-overlay: rgba(0, 140, 255, 0.15);
   
-  /* Glassmorphism Effekte angepasst */
-  --glass-bg-light: rgba(255, 255, 255, 0.7);
-  --glass-bg-medium: rgba(255, 255, 255, 0.8);
-  --glass-bg-heavy: rgba(255, 255, 255, 0.9);
-  --glass-border-light: rgba(255, 255, 255, 0.8);
-  --glass-border-medium: rgba(255, 255, 255, 0.9);
-  --glass-border-heavy: rgba(255, 255, 255, 1);
+  /* Statusfarben für Light-Mode */
+  --color-success: #00cc88;
+  --color-warning: #ff9900;
+  --color-error: #ff3366;
+  --color-info: #008cff;
   
-  /* Glassmorphism Schatten angepasst */
+  /* Glassmorphism Effekte angepasst - dunklere Überlagerungen für besseren Kontrast */
+  --glass-bg-light: rgba(255, 255, 255, 0.85);
+  --glass-bg-medium: rgba(255, 255, 255, 0.75);
+  --glass-bg-heavy: rgba(255, 255, 255, 0.65);
+  --glass-border-light: rgba(0, 0, 30, 0.15);
+  --glass-border-medium: rgba(0, 0, 30, 0.2);
+  --glass-border-heavy: rgba(0, 0, 30, 0.25);
+  
+  /* Glassmorphism Schatten angepasst für Light-Mode */
   --glass-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 8px 32px rgba(0, 0, 60, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    inset 0 -1px 0 rgba(0, 0, 40, 0.1);
     
   --glass-shadow-elevated: 
-    0 15px 50px rgba(0, 0, 0, 0.15),
+    0 15px 50px rgba(0, 0, 60, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
-    
-  /* Input Hintergründe */
-  --input-bg: rgba(255, 255, 255, 0.9);
+    inset 0 -1px 0 rgba(0, 0, 40, 0.15);
   
-  /* Hintergrund Muster */
+  /* Neon Glow Effekte für Light-Mode */
+  --glow-blue: 
+    0 0 8px var(--color-neon-blue-glow),
+    0 0 16px var(--color-neon-blue-glow),
+    0 0 24px var(--color-neon-blue-glow);
+    
+  --glow-purple: 
+    0 0 8px var(--color-neon-purple-glow),
+    0 0 16px var(--color-neon-purple-glow),
+    0 0 24px var(--color-neon-purple-glow);
+    
+  --glow-pink: 
+    0 0 8px var(--color-neon-pink-glow),
+    0 0 16px var(--color-neon-pink-glow),
+    0 0 24px var(--color-neon-pink-glow);
+  
+  /* Utility Schatten für Light-Mode */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 30, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 30, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 30, 0.2);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 30, 0.25);
+  
+  /* Component Specific für Light-Mode */
+  --card-bg: var(--glass-bg-medium);
+  --card-border: var(--glass-border-light);
+  --card-shadow: var(--glass-shadow);
+  --card-hover-shadow: var(--glass-shadow-elevated);
+  
+  --btn-primary-bg: linear-gradient(135deg, var(--color-neon-blue), var(--color-neon-purple));
+  --btn-secondary-bg: var(--glass-bg-medium);
+  
+  --input-bg: var(--glass-bg-light);
+  --input-border: var(--glass-border-light);
+  --input-focus-border: var(--color-neon-blue);
+  --input-focus-glow: var(--glow-blue);
+  
+  /* Hintergrund Muster für Light-Mode */
   --bg-grid-pattern: 
-    linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(0, 140, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 140, 255, 0.08) 1px, transparent 1px);
     
   --bg-diagonal-pattern: 
     repeating-linear-gradient(
       45deg,
       transparent,
       transparent 10px,
-      rgba(0, 243, 255, 0.05) 10px,
-      rgba(0, 243, 255, 0.05) 20px
+      rgba(0, 140, 255, 0.05) 10px,
+      rgba(0, 140, 255, 0.05) 20px
     );
 }
 
