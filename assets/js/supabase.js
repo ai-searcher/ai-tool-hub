@@ -532,6 +532,15 @@ export async function isFavorite(toolId) {
  * Loads user's favorite tools
  * @returns {Promise<Array>} Array of favorite tools
  */
+export async function loadFavorites() {
+    try {
+        const client = await getClient();
+        const authState = await getAuthState();
+        
+        if (!authState.isAuthenticated) return [];
+
+        const { data,
+
 
 // ===========================================
 // TOOL MANAGEMENT FUNCTIONS
@@ -542,37 +551,55 @@ export async function isFavorite(toolId) {
  * @param {Object} options - Filter and pagination options
  * @returns {Promise<Array>} - Array of tool objects
  */
-export async function loadFavorites() {
+// ===========================================
+// TOOL MANAGEMENT FUNCTIONS
+// ===========================================
+
+/**
+ * Loads all AI tools from database with safe search query
+ * @param {Object} options - Filter and pagination options
+ * @returns {Promise<Array>} - Array of tool objects
+ */
+export async function loadTools(options = {}) {
     try {
         const client = await getClient();
-        const authState = await getAuthState();
-        
-        if (!authState.isAuthenticated) return [];
-
-        const { data, error } = await client
-            .from('favorites')
-            .select('tool:tool_id(id, title, description, category, link, is_free, vote_average)')
-            .eq('user_id', authState.user.id)
+        let query = client
+            .from(SUPABASE_TABLE_TOOLS)
+            .select('id, title, description, category, link, is_free, vote_average, vote_count, usage_count, created_at, updated_at')
+            .eq('status', 'active')
             .order('created_at', { ascending: false });
+
+        if (options.category && options.category !== 'all') {
+            query = query.eq('category', options.category);
+        }
+
+        if (options.search) {
+            const safeSearch = String(options.search || '').trim();
+            if (safeSearch) {
+                query = query.or(`title.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%`);
+            }
+        }
+
+        if (options.limit) {
+            query = query.limit(options.limit);
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 
-        const tools = (data || [])
-            .map(item => {
-                const tool = item.tool || {};
-                // normalize to provide both link and url
-                tool.url = tool.url || tool.link || '';
-                tool.link = tool.link || tool.url || '';
-                return tool;
-            })
-            .filter(Boolean);
-
-        return tools;
+        // link/url angleichen (für Kompatibilität)
+        return (data || []).map(tool => ({
+            ...tool,
+            url: tool.url || tool.link || '',
+            link: tool.link || tool.url || ''
+        }));
     } catch (error) {
-        console.error('Error loading favorites:', error);
-        return [];
+        console.error('Error loading tools:', error);
+        throw new Error(ERROR_MESSAGES.LOADING_ERROR);
     }
 }
+
 
 /**
  * Loads tool categories from database
