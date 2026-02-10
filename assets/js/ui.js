@@ -72,7 +72,8 @@ export function createToolCard(toolData, viewMode = 'grid') {
         is_favorite = false,
         is_compared = false
     } = toolData;
-
+    const safeLink = link || toolData.url || '';
+    const safeDemoUrl = demo_url || toolData.demo || '';
     if (!id) return '';
 
     const isGridView = viewMode === 'grid';
