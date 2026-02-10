@@ -1,77 +1,205 @@
 /* ===========================================
-   UNIVERSAL TRANSITIONS FÜR THEME-WECHSEL
-=========================================== */
-
-/* 
-   Flüssige Übergänge für alle farbrelevanten Properties bei Theme-Wechsel
-   Verwendet !important um Konsistenz über alle Elemente zu gewährleisten
-   Dauer: 0.5s (500ms) für natürliche, nicht zu langsame Übergänge
-   Timing-Funktion: cubic-bezier(0.4, 0, 0.2, 1) - natürliche Beschleunigung
-*/
-
-* {
-  transition: 
-    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    text-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    fill 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* 
-   Klasse zum temporären Deaktivieren aller Transitions
-   Nützlich für JavaScript-Operationen, bei denen flüssige Übergänge stören würden
-*/
-.no-transition,
-.no-transition * {
-  transition: none !important;
-}
-
-/* 
-   Performance-Optimierung: Tool-Grid Items
-   Verhindert unnötige Transitions für transform/opacity während Animationen
-   Behält Theme-Transitions bei, aber mit optimierter Performance
-*/
-.tool-card {
-  transition: 
-    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* 
-   Schützt bestehende Animationen vor Beeinträchtigung durch Theme-Transitions
-   Besonders wichtig für .word-Animationen in der Hero-Sektion
-*/
-.word,
-.word *,
-.cyber-spinner,
-.toggle-thumb,
-.tool-card::before {
-  transition: none !important;
-}
-
-/* 
-   Spezifische Transition-Überschreibungen für Elemente mit eigenen Animationen
-   Stellt sicher, dass Theme-Transitions diese nicht beeinträchtigen
-*/
-.word {
-  /* Behält die opacity-Animation aus wordCycle bei */
-  transition: opacity 0s !important;
-}
-
-/* ===========================================
    FUTURISTIC CYBERPUNK STYLESHEET
    Design: Glassmorphism mit Cyberpunk-Elementen
    Autor: AI Tool Hub
-   Version: 1.0
+   Version: 1.2 - Performance Optimized & Cleaned
 =========================================== */
+
+/* ===== PERFORMANCE OPTIMIZED TRANSITIONS ===== */
+/* Gezielte Transitions statt globaler - FPS verbessert */
+
+/* Theme-Transitions für farbrelevante Elemente */
+.main-header,
+.theme-toggle,
+.search-input,
+.search-button,
+.tool-card,
+.tool-link,
+.filter-btn,
+.filter-sort,
+.filter-view,
+.filter-dropdown,
+.ranking-item,
+.sidebar-refresh,
+.scroll-top,
+.modal-close,
+.modal-container,
+.footer-link,
+.vote-btn,
+.save-btn,
+.share-btn,
+.directory-tab,
+.directory-item,
+.directory-item-button,
+.stat-item,
+.holo-card {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Spezifische Transitions für bestimmte Elemente */
+.theme-toggle,
+.search-button,
+.tool-link,
+.sidebar-refresh,
+.scroll-top,
+.modal-close,
+.filter-sort,
+.filter-view,
+.footer-link,
+.vote-btn,
+.save-btn,
+.share-btn,
+.directory-item-button {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tool-card {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.search-input,
+.filter-dropdown {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ranking-item {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-thumb {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+/* Fade-in Animation für Cards - nur wenn card-visible gesetzt ist */
+.tool-card.card-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Skeleton Loading Styles */
+.tool-card.is-loading {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--glass-bg-medium) 25%,
+    var(--glass-bg-light) 50%,
+    var(--glass-bg-medium) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  opacity: 1;
+  transform: none;
+  transition: none !important;
+}
+
+.tool-card.is-loading::before {
+  display: none !important;
+}
+
+.tool-card.is-loading .tool-icon,
+.tool-card.is-loading .tool-badge,
+.tool-card.is-loading .tool-title,
+.tool-card.is-loading .tool-description,
+.tool-card.is-loading .tool-tag,
+.tool-card.is-loading .tool-rating,
+.tool-card.is-loading .tool-link {
+  visibility: hidden;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Spezifische Skeleton für Card-Elemente */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--glass-bg-medium) 25%,
+    var(--glass-bg-light) 50%,
+    var(--glass-bg-medium) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text:last-child {
+  margin-bottom: 0;
+  width: 80%;
+}
+
+/* Optimierte Animationen für Performance */
+@keyframes wordCycle {
+  0%, 20% { 
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  5%, 15% { 
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+
+/* Klasse zum temporären Deaktivieren aller Transitions */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+  animation: none !important;
+}
 
 /* ===== RESET & BASE STYLES ===== */
 * {
@@ -216,7 +344,6 @@ p {
     font-family: var(--font-primary);
     font-size: var(--text-sm);
     cursor: pointer;
-    transition: var(--transition-normal);
     backdrop-filter: var(--glass-blur-small);
     z-index: var(--z-base);
 }
@@ -230,7 +357,6 @@ p {
 
 .theme-toggle:active {
     transform: translateY(0) scale(0.98);
-    transition: transform 0.1s ease;
 }
 
 .theme-toggle:focus {
@@ -277,7 +403,6 @@ body.light-mode .theme-toggle:hover {
     align-items: center;
     justify-content: center;
     transform: translateX(0);
-    transition: var(--transition-bounce);
 }
 
 .toggle-thumb i {
@@ -389,12 +514,6 @@ body.light-mode .toggle-thumb .fa-sun {
 .word:nth-child(3) { animation-delay: 6s; }
 .word:nth-child(4) { animation-delay: 9s; }
 
-@keyframes wordCycle {
-    0%, 20% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    5%, 15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-}
-
 .search-container {
     max-width: 600px;
     margin: 0 auto var(--spacing-12);
@@ -426,7 +545,6 @@ body.light-mode .toggle-thumb .fa-sun {
     font-family: var(--font-primary);
     font-size: var(--text-base);
     backdrop-filter: var(--glass-blur-small);
-    transition: var(--transition-normal);
 }
 
 .search-input:focus {
@@ -445,7 +563,6 @@ body.light-mode .toggle-thumb .fa-sun {
     color: var(--color-text-tertiary);
     cursor: pointer;
     padding: var(--spacing-1);
-    transition: var(--transition-fast);
     z-index: var(--z-base);
 }
 
@@ -456,7 +573,6 @@ body.light-mode .toggle-thumb .fa-sun {
 
 .search-clear:active {
     transform: translateY(-50%) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .search-clear:focus {
@@ -488,7 +604,6 @@ body.light-mode .search-clear:hover {
     color: white;
     font-size: var(--text-xl);
     cursor: pointer;
-    transition: var(--transition-normal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -503,7 +618,6 @@ body.light-mode .search-clear:hover {
 .search-button:active {
     transform: translateY(0) scale(0.98);
     box-shadow: var(--glow-blue), 0 0 20px rgba(0, 243, 255, 0.5);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .search-button:focus {
@@ -540,7 +654,6 @@ body.light-mode .search-button:hover {
     border-radius: var(--radius-lg);
     backdrop-filter: var(--glass-blur-small);
     border: var(--border-width-thin) solid var(--glass-border-light);
-    transition: var(--transition-normal);
     min-width: 120px;
 }
 
@@ -565,7 +678,7 @@ body.light-mode .search-button:hover {
     letter-spacing: 0.1em;
 }
 
-/* ===== FILTER NAVIGATION - FUTURISTISCHE KOMPAKTE VERSION ===== */
+/* ===== FILTER NAVIGATION ===== */
 .filter-nav {
     position: sticky;
     top: var(--header-height);
@@ -574,14 +687,12 @@ body.light-mode .search-button:hover {
     backdrop-filter: var(--glass-blur-medium);
     -webkit-backdrop-filter: var(--glass-blur-medium);
     border-bottom: var(--border-width-thin) solid var(--glass-border-light);
-    padding: var(--spacing-2) 0; /* GEÄNDERT: reduziert von var(--spacing-3) */
-    transition: padding 200ms ease, background 200ms ease, height 200ms ease;
+    padding: var(--spacing-2) 0;
     min-height: 52px;
     display: flex;
     align-items: center;
 }
 
-/* NEU: Futuristische Scanline/Neon-Linie */
 .filter-nav::before {
     content: '';
     position: absolute;
@@ -622,7 +733,7 @@ body.light-mode .search-button:hover {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: var(--spacing-3); /* GEÄNDERT: reduziert von var(--spacing-4) */
+    gap: var(--spacing-3);
     flex-direction: row;
     position: relative;
     width: 100%;
@@ -644,12 +755,12 @@ body.light-mode .search-button:hover {
 
 .filter-container {
     display: flex;
-    gap: var(--spacing-1); /* GEÄNDERT: reduziert von var(--spacing-2) */
+    gap: var(--spacing-1);
     overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
     scroll-snap-type: x proximity;
-    padding: var(--spacing-1) var(--spacing-3); /* GEÄNDERT: reduziert */
+    padding: var(--spacing-1) var(--spacing-3);
     scrollbar-width: thin;
     scrollbar-color: var(--color-neon-blue) transparent;
     flex: 1;
@@ -659,7 +770,7 @@ body.light-mode .search-button:hover {
 }
 
 .filter-container::-webkit-scrollbar {
-    height: 3px; /* GEÄNDERT: dünner */
+    height: 3px;
 }
 
 .filter-container::-webkit-scrollbar-track {
@@ -675,25 +786,25 @@ body.light-mode .search-button:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-2) var(--spacing-4); /* GEÄNDERT: reduziert */
+    padding: var(--spacing-2) var(--spacing-4);
     background: transparent;
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-full);
     color: var(--color-text-secondary);
     font-family: var(--font-primary);
-    font-size: var(--text-xs); /* GEÄNDERT: kleiner */
+    font-size: var(--text-xs);
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-    transition: var(--transition-normal);
     backdrop-filter: var(--glass-blur-small);
     flex-shrink: 0;
     scroll-snap-align: start;
     position: relative;
     min-width: auto;
     z-index: var(--z-base);
-    letter-spacing: 0.03em; /* NEU: futuristischer Letterspacing */
-    height: 36px; /* NEU: feste Höhe */
+    letter-spacing: 0.03em;
+    height: 36px;
+    min-height: 44px;
 }
 
 .filter-btn:hover {
@@ -706,7 +817,6 @@ body.light-mode .search-button:hover {
 
 .filter-btn:active {
     transform: scale(1);
-    transition: transform 0.1s ease;
 }
 
 .filter-btn:focus {
@@ -733,8 +843,8 @@ body.light-mode .search-button:hover {
     bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%; /* GEÄNDERT: kürzer */
-    height: 2px; /* GEÄNDERT: dünner */
+    width: 70%;
+    height: 2px;
     background: var(--color-neon-blue);
     border-radius: var(--radius-full);
     box-shadow: var(--glow-blue);
@@ -760,15 +870,14 @@ body.light-mode .filter-btn.active {
     border-color: var(--color-neon-blue);
 }
 
-/* GEÄNDERT: Kompaktere Controls */
 .filter-controls {
     display: flex;
-    gap: var(--spacing-1); /* GEÄNDERT: reduziert */
+    gap: var(--spacing-1);
     margin-left: 0;
-    margin-right: var(--spacing-3); /* GEÄNDERT: reduziert */
+    margin-right: var(--spacing-3);
     flex-shrink: 0;
     order: 1;
-    height: 40px; /* NEU: feste Höhe */
+    height: 40px;
     align-items: center;
 }
 
@@ -777,21 +886,21 @@ body.light-mode .filter-btn.active {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-1); /* GEÄNDERT: reduziert */
-    padding: var(--spacing-2) var(--spacing-3); /* GEÄNDERT: reduziert */
+    gap: var(--spacing-1);
+    padding: var(--spacing-2) var(--spacing-3);
     background: var(--glass-bg-light);
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     color: var(--color-text-secondary);
     font-family: var(--font-primary);
-    font-size: var(--text-xs); /* GEÄNDERT: kleiner */
+    font-size: var(--text-xs);
     font-weight: 500;
     cursor: pointer;
-    transition: var(--transition-normal);
     z-index: var(--z-base);
-    height: 40px; /* NEU: feste Höhe */
-    min-width: 44px; /* NEU: Mindestbreite für Touch */
-    letter-spacing: 0.03em; /* NEU: futuristischer Letterspacing */
+    height: 40px;
+    min-width: 44px;
+    min-height: 44px;
+    letter-spacing: 0.03em;
 }
 
 .filter-sort:hover,
@@ -799,14 +908,13 @@ body.light-mode .filter-btn.active {
     background: var(--glass-bg-medium);
     color: var(--color-text-primary);
     border-color: var(--color-neon-blue);
-    transform: translateY(-1px); /* GEÄNDERT: weniger Bewegung */
+    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .filter-sort:active,
 .filter-view:active {
     transform: translateY(0) scale(0.98);
-    transition: transform 0.1s ease;
 }
 
 .filter-sort:focus,
@@ -836,7 +944,7 @@ body.light-mode .filter-view:hover {
 
 .filter-view {
     position: relative;
-    width: 52px; /* GEÄNDERT: reduziert */
+    width: 52px;
     justify-content: center;
 }
 
@@ -856,23 +964,21 @@ body.light-mode .filter-view:hover {
     display: block;
 }
 
-/* NEU: Futuristisches kompaktes Dropdown */
 .filter-dropdown {
     display: none;
     order: 2;
     flex: 1;
-    height: 42px; /* GEÄNDERT: kompakter */
-    max-width: 280px; /* NEU: maximale Breite */
+    height: 42px;
+    max-width: 280px;
     padding: 0 var(--spacing-4);
     background: var(--glass-bg-medium);
     border: var(--border-width-thin) solid var(--glass-border-light);
-    border-radius: var(--radius-full); /* GEÄNDERT: pill-förmig */
+    border-radius: var(--radius-full);
     color: var(--color-text-primary);
     font-family: var(--font-primary);
     font-size: var(--text-sm);
     cursor: pointer;
     backdrop-filter: var(--glass-blur-small);
-    transition: var(--transition-normal);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -883,6 +989,7 @@ body.light-mode .filter-view:hover {
     background-position: right 12px center;
     background-size: 16px;
     padding-right: 40px;
+    min-height: 44px;
 }
 
 .filter-dropdown:focus {
@@ -1010,12 +1117,13 @@ body.light-mode .filter-view:hover {
     padding: var(--spacing-6);
     backdrop-filter: var(--glass-blur-medium);
     box-shadow: var(--card-shadow);
-    transition: var(--transition-normal);
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    opacity: 1;
+    transform: none;
 }
 
 .tool-card::before {
@@ -1027,7 +1135,6 @@ body.light-mode .filter-view:hover {
     height: 4px;
     background: linear-gradient(90deg, var(--color-neon-blue), var(--color-neon-purple));
     opacity: 0;
-    transition: var(--transition-normal);
 }
 
 .tool-card:hover {
@@ -1137,7 +1244,6 @@ body.light-mode .filter-view:hover {
     border-radius: var(--radius-lg);
     font-size: var(--text-sm);
     font-weight: 500;
-    transition: var(--transition-normal);
     z-index: var(--z-base);
 }
 
@@ -1148,7 +1254,6 @@ body.light-mode .filter-view:hover {
 
 .tool-link:active {
     transform: translateX(4px) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .tool-link:focus {
@@ -1217,7 +1322,6 @@ body.light-mode .tool-link:hover {
     color: var(--color-text-secondary);
     font-size: var(--text-lg);
     cursor: pointer;
-    transition: var(--transition-normal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1233,7 +1337,6 @@ body.light-mode .tool-link:hover {
 
 .sidebar-refresh:active {
     transform: rotate(180deg) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .sidebar-refresh:focus {
@@ -1268,7 +1371,6 @@ body.light-mode .sidebar-refresh:hover {
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-lg);
     padding: var(--spacing-4);
-    transition: var(--transition-normal);
     position: relative;
     overflow: hidden;
 }
@@ -1409,7 +1511,6 @@ body.light-mode .sidebar-refresh:hover {
     font-size: var(--text-sm);
     cursor: pointer;
     padding: var(--spacing-2) var(--spacing-4);
-    transition: var(--transition-fast);
     z-index: var(--z-base);
 }
 
@@ -1420,7 +1521,6 @@ body.light-mode .sidebar-refresh:hover {
 
 .footer-link:active {
     transform: translateY(0) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .footer-link:focus {
@@ -1457,7 +1557,6 @@ body.light-mode .footer-link:hover {
     color: var(--color-text-secondary);
     font-size: var(--text-lg);
     cursor: pointer;
-    transition: var(--transition-normal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1473,7 +1572,6 @@ body.light-mode .footer-link:hover {
 
 .scroll-top:active {
     transform: translateY(-2px) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .scroll-top:focus {
@@ -1568,7 +1666,6 @@ body.light-mode .scroll-top:hover {
     color: var(--color-text-secondary);
     font-size: var(--text-lg);
     cursor: pointer;
-    transition: var(--transition-normal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1584,7 +1681,6 @@ body.light-mode .scroll-top:hover {
 
 .modal-close:active {
     transform: rotate(90deg) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .modal-close:focus {
@@ -1640,7 +1736,6 @@ body.light-mode .modal-close:hover {
 .imprint-section a {
     color: var(--color-neon-purple);
     text-decoration: none;
-    transition: var(--transition-fast);
 }
 
 .imprint-section a:hover {
@@ -1648,10 +1743,10 @@ body.light-mode .modal-close:hover {
     text-decoration: underline;
 }
 
-/* ===== NEU: DIRECTORY MODAL (Tool Directory Panel) ===== */
+/* ===== DIRECTORY MODAL ===== */
 #directory-modal.modal {
     display: none;
-    z-index: calc(var(--z-modal) + 10); /* Über anderen Modals */
+    z-index: calc(var(--z-modal) + 10);
 }
 
 #directory-modal.modal.show {
@@ -1703,7 +1798,6 @@ body.light-mode .modal-close:hover {
     gap: var(--spacing-6);
 }
 
-/* Tabs/Chips Navigation */
 #directory-tabs {
     display: flex;
     gap: var(--spacing-3);
@@ -1735,7 +1829,6 @@ body.light-mode .modal-close:hover {
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-    transition: var(--transition-normal);
     flex-shrink: 0;
     backdrop-filter: var(--glass-blur-small);
 }
@@ -1749,7 +1842,6 @@ body.light-mode .modal-close:hover {
 
 .directory-tab:active {
     transform: translateY(0) scale(0.98);
-    transition: transform 0.1s ease;
 }
 
 .directory-tab.active {
@@ -1772,7 +1864,6 @@ body.light-mode .modal-close:hover {
     box-shadow: var(--glow-blue);
 }
 
-/* Directory List */
 #directory-list {
     display: flex;
     flex-direction: column;
@@ -1803,7 +1894,6 @@ body.light-mode .modal-close:hover {
     background: var(--glass-bg-medium);
     border: var(--border-width-thin) solid var(--glass-border-light);
     border-radius: var(--radius-lg);
-    transition: var(--transition-normal);
     gap: var(--spacing-4);
 }
 
@@ -1815,7 +1905,7 @@ body.light-mode .modal-close:hover {
 
 .directory-item-content {
     flex: 1;
-    min-width: 0; /* Für ellipsis */
+    min-width: 0;
 }
 
 .directory-item-title {
@@ -1852,7 +1942,6 @@ body.light-mode .modal-close:hover {
     font-size: var(--text-sm);
     font-weight: 500;
     cursor: pointer;
-    transition: var(--transition-normal);
     white-space: nowrap;
     flex-shrink: 0;
     backdrop-filter: var(--glass-blur-small);
@@ -1867,7 +1956,6 @@ body.light-mode .modal-close:hover {
 
 .directory-item-button:active {
     transform: translateX(2px) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .directory-item-button:focus {
@@ -1875,7 +1963,6 @@ body.light-mode .modal-close:hover {
     outline-offset: 2px;
 }
 
-/* Empty State für Directory */
 .directory-empty {
     text-align: center;
     padding: var(--spacing-12) var(--spacing-4);
@@ -1888,7 +1975,7 @@ body.light-mode .modal-close:hover {
     opacity: 0.5;
 }
 
-/* ===== NEU: TOOL CARD HIGHLIGHT EFFECT ===== */
+/* ===== TOOL CARD HIGHLIGHT EFFECT ===== */
 .tool-card.tool-highlight {
     animation: toolHighlightPulse 1.5s ease;
     border-color: var(--color-neon-blue);
@@ -1918,7 +2005,6 @@ body.light-mode .modal-close:hover {
     position: relative;
     z-index: var(--z-base);
     cursor: pointer;
-    transition: var(--transition-normal);
 }
 
 .btn:hover {
@@ -1927,7 +2013,6 @@ body.light-mode .modal-close:hover {
 
 .btn:active {
     transform: translateY(0) scale(0.98);
-    transition: transform 0.1s ease;
 }
 
 .btn:focus {
@@ -1956,7 +2041,6 @@ body.light-mode .modal-close:hover {
     font-size: var(--text-sm);
     font-weight: 500;
     cursor: pointer;
-    transition: var(--transition-normal);
     z-index: var(--z-base);
 }
 
@@ -1973,7 +2057,6 @@ body.light-mode .modal-close:hover {
 .save-btn:active,
 .share-btn:active {
     transform: translateY(0) scale(0.95);
-    transition: transform 0.1s ease;
 }
 
 .vote-btn:focus,
@@ -2007,22 +2090,18 @@ body.light-mode .share-btn:hover {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
-
-/* NEU: Mobile Filterbar als 3-Spalten Control Row - Nur auf Mobile (<768px) */
 @media (max-width: 768px) {
-    /* A) Filterbar Innenabstände */
     .filter-nav .header-container {
-        display: grid; /* GEÄNDERT: von flex zu grid */
-        grid-template-columns: auto 1fr auto; /* 3-Spalten Layout */
+        display: grid;
+        grid-template-columns: auto 1fr auto;
         align-items: center;
         gap: var(--spacing-3);
-        padding: 0 var(--spacing-4); /* C) Mehr Randabstand links/rechts */
+        padding: 0 var(--spacing-4);
         width: 100%;
     }
 
-    /* B) Controls nicht am Rand */
     .filter-controls {
-        display: contents; /* GEÄNDERT: Children werden Grid-Items */
+        display: contents;
         margin: 0;
         width: auto;
         justify-content: initial;
@@ -2034,7 +2113,7 @@ body.light-mode .share-btn:hover {
     .filter-view {
         margin: 0;
         width: auto;
-        height: 44px; /* D) Gleiche Höhe wie Dropdown */
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2048,10 +2127,9 @@ body.light-mode .share-btn:hover {
         font-size: var(--text-sm);
         font-weight: 500;
         cursor: pointer;
-        transition: var(--transition-normal);
         z-index: var(--z-base);
         letter-spacing: 0.03em;
-        min-width: 44px; /* Touch-friendly */
+        min-width: 44px;
     }
 
     .filter-sort:hover,
@@ -2073,12 +2151,11 @@ body.light-mode .share-btn:hover {
         justify-content: center;
     }
 
-    /* D) Dropdown Styling wie Button */
     .filter-dropdown {
         display: block;
         width: 100%;
-        height: 44px; /* Gleiche Höhe wie Buttons */
-        padding: 0 var(--spacing-6) 0 var(--spacing-4); /* Text mit Padding links */
+        height: 44px;
+        padding: 0 var(--spacing-6) 0 var(--spacing-4);
         background: var(--glass-bg-light);
         border: var(--border-width-thin) solid var(--glass-border-light);
         border-radius: var(--radius-lg);
@@ -2096,7 +2173,6 @@ body.light-mode .share-btn:hover {
         white-space: nowrap;
         position: relative;
         box-shadow: var(--shadow-sm);
-        /* Subtiler Neon-Pfeil (kein Icon-Text) */
         background-image:
             linear-gradient(45deg, transparent 50%, var(--color-neon-blue) 50%),
             linear-gradient(135deg, var(--color-neon-blue) 50%, transparent 50%);
@@ -2105,7 +2181,7 @@ body.light-mode .share-btn:hover {
             calc(100% - 12px) 50%;
         background-size: 6px 6px, 6px 6px;
         background-repeat: no-repeat;
-        order: initial; /* Reset order */
+        order: initial;
         flex: none;
         max-width: none;
     }
@@ -2122,12 +2198,10 @@ body.light-mode .share-btn:hover {
         padding: var(--spacing-2);
     }
 
-    /* E) Mobile: Filter-Buttons Container ausblenden */
     .filter-container {
-        display: none !important; /* Sicherstellen, dass ausgeblendet */
+        display: none !important;
     }
 
-    /* F) Compact Version Anpassungen */
     .filter-nav.compact .header-container {
         padding: 0 var(--spacing-4);
     }
@@ -2148,19 +2222,16 @@ body.light-mode .share-btn:hover {
         padding: var(--spacing-1) var(--spacing-2);
     }
 
-    /* Entferne alte Layout-Regeln */
     .filter-nav .header-container::after {
-        display: none; /* Gradient-Overlay entfernen */
+        display: none;
     }
 
-    /* Sicherstellen, dass Container nicht versteckt */
     .filter-dropdown,
     .filter-sort,
     .filter-view {
         display: flex !important;
     }
 
-    /* NEU: Directory Modal Mobile Anpassungen */
     #directory-modal.modal {
         padding: var(--spacing-2);
     }
@@ -2210,7 +2281,6 @@ body.light-mode .share-btn:hover {
     }
 }
 
-/* Restliche Responsive Styles bleiben unverändert */
 @media (max-width: 1280px) {
     .ranking-sidebar {
         position: static;
@@ -2361,7 +2431,6 @@ body.light-mode .share-btn:hover {
         height: 32px;
     }
     
-    /* NEU: Extra Compact für sehr kleine Screens - Filterbar */
     .filter-nav .header-container {
         gap: var(--spacing-2);
         padding: 0 var(--spacing-3);
@@ -2388,7 +2457,6 @@ body.light-mode .share-btn:hover {
             calc(100% - 10px) 50%;
     }
     
-    /* Compact Version Anpassungen für sehr kleine Screens */
     .filter-nav.compact .filter-dropdown {
         height: 36px;
         font-size: 0.7rem;
@@ -2422,7 +2490,6 @@ body.light-mode .share-btn:hover {
         font-size: var(--text-base);
     }
     
-    /* NEU: Directory Modal Extra Mobile Anpassungen */
     #directory-modal .modal-container {
         border-radius: var(--radius-md);
         max-height: 80vh;
@@ -2583,7 +2650,7 @@ body.light-mode .share-btn:hover {
     }
 }
 
-/* ===== NEU: HOLO PANEL - futuristisch, shine + neon ===== */
+/* ===== HOLO PANEL ===== */
 .holo-stats {
   display: flex;
   gap: 22px;
@@ -2613,7 +2680,6 @@ body.light-mode .share-btn:hover {
   backdrop-filter: blur(8px) saturate(120%);
   position: relative;
   overflow: visible;
-  transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s ease, border-color .28s ease;
 }
 
 .holo-card::before{
@@ -2625,7 +2691,6 @@ body.light-mode .share-btn:hover {
   background: linear-gradient(90deg, rgba(0,243,255,0.12), rgba(185,103,255,0.10));
   filter: blur(14px);
   opacity: 0.9;
-  transition: opacity .3s ease;
   pointer-events: none;
 }
 
@@ -2672,7 +2737,7 @@ body.light-mode .share-btn:hover {
 
 /* pulse card */
 .pulse-card .wave-svg { display:block; margin:0 auto; }
-.wave-path { stroke: var(--neon); stroke-opacity: 0.9; stroke-linecap: round; transition: stroke-dashoffset .6s linear, stroke .4s ease; }
+.wave-path { stroke: var(--neon); stroke-opacity: 0.9; stroke-linecap: round; }
 
 @keyframes waveMove {
   0% { stroke-dashoffset: 0; transform: translateX(0); }
@@ -2692,7 +2757,6 @@ body.light-mode .share-btn:hover {
   transform: skewX(-18deg) translateX(-6%);
   filter: blur(6px);
   opacity: 0.0;
-  transition: opacity .45s ease, transform .45s ease;
   pointer-events: none;
 }
 .holo-card:hover::after { opacity: 1; transform: skewX(-18deg) translateX(6%); }
@@ -2703,6 +2767,52 @@ body.light-mode .share-btn:hover {
   .holo-stat-number { font-size: 28px; }
 }
 @media (max-width: 420px) { .holo-card { width: 100%; max-width: 420px; } }
+
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .holo-card, .holo-card::after, .wave-path { animation: none !important; transition: none !important; transform: none !important; }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .tool-card.card-visible {
+    transition: none !important;
+  }
+  
+  .tool-card.is-loading {
+    animation: none !important;
+  }
+  
+  .skeleton, .skeleton-text, .skeleton-circle {
+    animation: none !important;
+  }
+  
+  .word {
+    animation: none !important;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .cyber-spinner {
+    animation: none !important;
+    border-top-color: var(--color-neon-blue);
+    border-right-color: var(--color-neon-purple);
+  }
+  
+  .toggle-thumb {
+    transition: none !important;
+  }
+  
+  .holo-card::after,
+  .pulse-card .wave-path {
+    animation: none !important;
+  }
+  
+  .notification {
+    animation: none !important;
+  }
+  
+  .tool-card.tool-highlight {
+    animation: none !important;
+  }
 }
