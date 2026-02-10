@@ -1538,32 +1538,6 @@ function initRealtimeUpdates() {
     }
 }
 
-// ===========================================
-// EARLY THEME INITIALIZATION
-// ===========================================
-
-/**
- * Sofortige Theme-Initialisierung für DOMContentLoaded
- * Wird separat aufgerufen, bevor initApp() lädt
- */
-function earlyThemeInit() {
-    console.log('Early Theme-Initialisierung...');
-    
-    // Nur wenn DOM bereits bereit ist
-    if (document.readyState === 'loading') {
-        console.log('Warte auf DOMContentLoaded...');
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM geladen, initialisiere Theme...');
-            initializeTheme();
-        });
-    } else {
-        console.log('DOM bereits geladen, initialisiere sofort...');
-        initializeTheme();
-    }
-}
-
-// Starte frühe Theme-Initialisierung SOFORT
-earlyThemeInit();
 
 // ===========================================
 // HOLOGRAPHIC STATS ANIMATION
@@ -1652,10 +1626,52 @@ window.AIToolHub = {
     getState: getAppState,
     refresh: initApp,
     filterTools: filterTools,
-    cleanup: cleanupApp
+    cleanup: cleanupApp,
+    
+    // Debug-Tools
+    debug: {
+        // Zeige alle Tools als Tabelle
+        tools: () => {
+            console.table(appState.tools.map(t => ({
+                id: t.id,
+                title: t.title,
+                category: t.category,
+                rating: t.vote_average || t.rating
+            })));
+            return `${appState.tools.length} tools`;
+        },
+        
+        // Teste ob alles funktioniert
+        test: () => {
+            console.log('🔍 Running diagnostics...');
+            console.log('✅ Tools loaded:', appState.tools.length);
+            console.log('✅ Filtered tools:', appState.filteredTools.length);
+            console.log('✅ Tool grid exists:', !!document.getElementById('tool-grid'));
+            console.log('✅ Search input exists:', !!document.getElementById('search-input'));
+            console.log('✅ Theme toggle exists:', !!document.getElementById('theme-toggle'));
+            
+            // Teste ob Tool-Grid HTML hat
+            const toolGrid = document.getElementById('tool-grid');
+            if (toolGrid) {
+                console.log('✅ Tool grid HTML length:', toolGrid.innerHTML.length);
+                console.log('✅ Tool cards in DOM:', toolGrid.querySelectorAll('.tool-card').length);
+            }
+            
+            return 'Check console for details ↑';
+        },
+        
+        // Lade Tools neu
+        reload: async () => {
+            console.log('🔄 Reloading tools...');
+            await loadAllTools();
+            filterTools();
+            updateUI();
+            console.log('✅ Done!');
+            return `${appState.tools.length} tools loaded`;
+        }
+    }
 };
 
-// Export für andere Module (falls benötigt)
-export { initializeTheme };
+export { };
 
 console.log('AI Tool Hub controller loaded');
