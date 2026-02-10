@@ -598,9 +598,12 @@ export function openModal(modalId) {
 
     modal.classList.add('active');
     document.body.classList.add('modal-open');
+
     activeModals.add(modalId);
 
-    const event = new CustomEvent('modalOpened', { detail: { modalId } });
+    const event = new CustomEvent('modalOpened', {
+        detail: { modalId }
+    });
     document.dispatchEvent(event);
 }
 
@@ -825,7 +828,8 @@ export function createToolDetailHTML(toolData) {
  */
 export function updateCompareButton(toolId, isCompared) {
     if (!toolId) return;
-    const buttons = document.querySelectorAll(`.compare-btn[data-tool-id="${escapeAttr(toolId)}"]`);
+    const safeId = CSS.escape ? CSS.escape(String(toolId)) : String(toolId);
+    const buttons = document.querySelectorAll(`.compare-btn[data-tool-id="${safeId}"]`);
     buttons.forEach(btn => {
         btn.classList.toggle('active', !!isCompared);
         btn.setAttribute('aria-label', isCompared ? 'Aus Vergleich entfernen' : 'Zum Vergleich hinzufügen');
@@ -839,7 +843,8 @@ export function updateCompareButton(toolId, isCompared) {
  */
 export function updateFavoriteButton(toolId, isFavorite) {
     if (!toolId) return;
-    const buttons = document.querySelectorAll(`.save-btn[data-tool-id="${escapeAttr(toolId)}"]`);
+    const safeId = CSS.escape ? CSS.escape(String(toolId)) : String(toolId);
+    const buttons = document.querySelectorAll(`.save-btn[data-tool-id="${safeId}"]`);
     buttons.forEach(btn => {
         btn.classList.toggle('active', !!isFavorite);
         // Replace inner icon only, avoid removing other attributes accidentally
