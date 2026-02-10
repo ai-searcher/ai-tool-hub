@@ -39,7 +39,11 @@ async function initializeSupabase() {
                 throw new Error('Supabase CDN not loaded');
             }
 
-            validateConfig();
+            const isValid = validateConfig();
+            if (!isValid) {
+                throw new Error('Supabase not configured - using local mode');
+            }
+
 
             const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
                 auth: {
@@ -528,41 +532,6 @@ export async function isFavorite(toolId) {
  * Loads user's favorite tools
  * @returns {Promise<Array>} Array of favorite tools
  */
-export async function loadFavorites() {
-    try {
-        const client = await getClient();
-        const authState = await getAuthState();
-        
-        if (!authState.isAuthenticated) return [];
-
-        const { data, error } = await client
-    .from('favorites')
-    .select('tool:tool_id(id, title, description, category, link, is_free, vote_average)')
-    .eq('user_id', authState.user.id)
-    .order('created_at', { ascending: false });
-
-if (error) throw error;
-
-const tools = (data || [])
-    .map(item => {
-        const tool = item.tool || {};
-        // normalize to provide both link and url
-        tool.url = tool.url || tool.link || '';
-        tool.link = tool.link || tool.url || '';
-        return tool;
-    })
-    .filter(Boolean);
-
-return tools;
-
-        if (error) throw error;
-
-        return data.map(item => item.tool).filter(Boolean);
-    } catch (error) {
-        console.error('Error loading favorites:', error);
-        return [];
-    }
-}
 
 // ===========================================
 // TOOL MANAGEMENT FUNCTIONS
