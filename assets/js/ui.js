@@ -317,8 +317,8 @@ export function createCategoryFiltersHTML(categoriesArray) {
  * @param {Array} categoriesArray - Array of category objects
  */
 export function renderMobileFilterDropdown(categoriesArray) {
-    const filterNav = document.querySelector('.filter-nav .header-container');
-    if (!filterNav) return;
+    const header = document.querySelector('.filter-nav .header-container');
+    if (!header) return;
     
     // Check if dropdown already exists
     let dropdown = document.getElementById('filter-dropdown');
@@ -329,10 +329,24 @@ export function renderMobileFilterDropdown(categoriesArray) {
         dropdown.id = 'filter-dropdown';
         dropdown.className = 'filter-dropdown';
         dropdown.setAttribute('aria-label', 'Kategorie-Filter');
-        filterNav.insertBefore(dropdown, filterNav.firstChild);
+        
+        // GEÄNDERT: Dropdown zwischen filter-controls und filter-container einfügen
+        const controls = header.querySelector('.filter-controls');
+        const container = header.querySelector('#filter-container');
+        
+        if (controls && container) {
+            // Dropdown zwischen controls und container einfügen
+            header.insertBefore(dropdown, container);
+        } else if (controls) {
+            // Nach controls einfügen
+            controls.insertAdjacentElement('afterend', dropdown);
+        } else {
+            // Fallback: am Anfang von header
+            header.insertBefore(dropdown, header.firstChild);
+        }
     }
     
-    // Generate options
+    // Generate TEXT-ONLY options
     const allCategories = [
         { id: 'all', name: 'Alle Tools' },
         ...categoriesArray
@@ -362,6 +376,14 @@ export function renderMobileFilterDropdown(categoriesArray) {
                 document.dispatchEvent(event);
             }
         });
+    }
+    
+    // Set initial value based on active filter
+    const activeButton = document.querySelector('.filter-btn.active');
+    if (activeButton) {
+        dropdown.value = activeButton.dataset.filter;
+    } else {
+        dropdown.value = 'all';
     }
 }
 
@@ -629,7 +651,7 @@ export default {
     createCategoryFiltersHTML,
     renderCategoryFilters,
     renderMobileFilterDropdown,
-    syncFilterDropdown, // NEU: für Synchronisierung des Dropdowns
+    syncFilterDropdown,
     updateHeroStats,
     populateModal,
     showLoadingSpinner,
