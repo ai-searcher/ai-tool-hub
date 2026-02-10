@@ -841,8 +841,22 @@ export async function subscribeToVoteUpdates(toolId, callback) {
  * @returns {Object} - Subscription object with unsubscribe method
  */
 export async function subscribeToFavoriteUpdates(callback) {
-    const channelKey = 'favorites:user';
-    
+    const client = await getClient();
+    if (!client) {
+        console.error('Supabase client not initialized');
+        return { unsubscribe: () => {} };
+    }
+
+    const authState = await getAuthState();
+    if (!authState.isAuthenticated) {
+        console.warn('Favorites subscription skipped: user not authenticated');
+        return { unsubscribe: () => {} };
+    }
+
+    const userId = authState.user.id;
+    const channelKey = `favorites:user:${userId}`;
+
+    // Doppel-Subscription verhindern
     if (activeSubscriptions.has(channelKey)) {
         const existing = activeSubscriptions.get(channelKey);
         return {
@@ -851,21 +865,15 @@ export async function subscribeToFavoriteUpdates(callback) {
     }
 
     try {
-    const client = await getClient(); // ← DAS ist der Fix
-
-    if (!client) {
-        console.error('Supabase client not initialized');
-        return { unsubscribe: () => {} };
-    }
-
-    const subscription = client
-        .channel(channelKey)
-        .on(
+        const subscription = client
+            .channel(channelKey)
+            .on(
                 'postgres_changes',
                 {
                     event: '*',
                     schema: 'public',
-                    table: 'favorites'
+                    table: 'favorites',
+                    filter: `user_id=eq.${userId}`
                 },
                 callback
             )
