@@ -1,1 +1,744 @@
+/* =========================================
+   QUANTUM AI HUB - STYLE.CSS (FINAL)
+   Alle Bugs gefixt, Production Ready
+   ========================================= */
+
+/* ==================== CSS VARIABLES ==================== */
+:root {
+  /* Colors - Main */
+  --bg-dark: #0A0E27;
+  --bg-card: #1A1E37;
+  --bg-card-hover: #1F2442;
+  --border: #2A2E47;
+  --border-hover: #3A3E57;
+  
+  /* Colors - Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0F0;
+  --text-dim: #A0A0B0;
+  --text-muted: #8080A0; /* ← FIX: Besserer Kontrast */
+  
+  /* Colors - Brand */
+  --primary: #00F3FF;
+  --primary-hover: #00D4E0;
+  --primary-glow: rgba(0, 243, 255, 0.2);
+  --primary-dim: rgba(0, 243, 255, 0.1);
+  
+  /* Colors - States */
+  --error: #FF4466;
+  --warning: #FFB800;
+  --success: #00FF9D;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 60px;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Courier New', monospace;
+  
+  /* Borders & Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px var(--primary-glow);
+  
+  /* Layout */
+  --max-width: 1400px;
+  --header-height: 280px;
+  
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 10;
+  --z-sticky: 100;
+  --z-overlay: 1000;
+}
+
+/* ==================== RESET & BASE ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ==================== CONTAINER ==================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  width: 100%;
+}
+
+/* ==================== HEADER ==================== */
+.header {
+  padding: var(--spacing-xl) 0;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
+  position: relative;
+}
+
+/* Subtle Background Pattern */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: var(--z-base);
+}
+
+.header-top {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  z-index: calc(var(--z-base) + 1);
+}
+
+.title {
+  font-size: 2.5rem; /* ← FIX: Fallback für clamp() */
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--primary) 0%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  animation: fadeInDown 0.6s ease backwards; /* ← FIX: backwards hinzugefügt */
+  /* Fallback für Browser ohne background-clip Support */
+  color: var(--primary);
+}
+
+/* Fix für Safari/iOS */
+@supports not (-webkit-background-clip: text) {
+  .title {
+    background: none;
+    color: var(--primary);
+  }
+}
+
+.subtitle {
+  color: var(--text-dim);
+  font-size: 1rem; /* ← FIX: Fallback */
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 400;
+  animation: fadeInUp 0.6s ease 0.1s backwards;
+}
+
+/* ==================== SEARCH ==================== */
+.search-wrapper {
+  max-width: 600px;
+  margin: 0 auto var(--spacing-lg);
+  position: relative;
+  z-index: calc(var(--z-base) + 1);
+  animation: fadeInUp 0.6s ease 0.2s backwards;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute; /* ← FIX: position hinzugefügt */
+  left: var(--spacing-md);
+  color: var(--text-dim);
+  pointer-events: none;
+  transition: color var(--transition-fast);
+  z-index: calc(var(--z-base) + 1);
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 48px 16px 52px;
+  font-size: 1rem;
+  font-family: var(--font-family);
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-dim), var(--shadow-md);
+}
+
+/* ← FIX: :focus-within statt + */
+.search-box:focus-within .search-icon {
+  color: var(--primary);
+}
+
+.search-clear {
+  position: absolute;
+  right: var(--spacing-md);
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  z-index: calc(var(--z-base) + 1);
+}
+
+.search-clear:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.search-clear:active {
+  transform: scale(0.95);
+}
+
+/* ==================== STATS BAR ==================== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border);
+  animation: fadeInUp 0.6s ease 0.3s backwards;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== MAIN ==================== */
+.main {
+  flex: 1;
+  padding: var(--spacing-2xl) 0;
+  position: relative;
+}
+
+/* ==================== STATES ==================== */
+.state-container {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  animation: fadeIn 0.4s ease;
+}
+
+.state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.8;
+}
+
+.state-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.state-subtext {
+  font-size: 1rem;
+  color: var(--text-dim);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--spacing-lg);
+  border: 4px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Retry Button */
+.retry-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--primary);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family);
+}
+
+.retry-button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.retry-button:active {
+  transform: translateY(0);
+}
+
+/* ==================== TOOL GRID ==================== */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  animation: fadeIn 0.5s ease;
+}
+
+/* ==================== TOOL CARD ==================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), 
+              border-color var(--transition-normal),
+              box-shadow var(--transition-normal),
+              background var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* Subtle Glow Effect */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px var(--primary-glow), var(--shadow-md);
+  background: var(--bg-card-hover);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:not(:hover) {
+  will-change: auto;
+}
+
+/* ← FIX: :active State hinzugefügt */
+.card:active {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1.3;
+  flex: 1;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .card-title {
+  color: var(--primary-hover);
+}
+
+.card-category {
+  background: var(--primary-dim);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-description {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  flex: 1;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: var(--bg-dark);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer; /* ← FIX: cursor hinzugefügt */
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ← FIX: Ripple Effect korrigiert */
+.card-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s, opacity 0.3s;
+  opacity: 1;
+}
+
+.card-link:hover {
+  background: var(--primary-hover);
+  transform: translateX(2px);
+}
+
+.card-link:hover::before {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+.card-link:active {
+  transform: scale(0.98);
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+  padding: var(--spacing-xl) 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-dark);
+  margin-top: auto;
+}
+
+.footer-content {
+  text-align: center;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-text strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.footer-links {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.footer-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  cursor: pointer; /* ← FIX: cursor hinzugefügt */
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--primary);
+}
+
+/* ← FIX: :active State hinzugefügt */
+.footer-link:active {
+  transform: scale(0.98);
+  display: inline-block;
+}
+
+.footer-separator {
+  margin: 0 var(--spacing-sm);
+  opacity: 0.5;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  :root {
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+  }
+  
+  .header {
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .stats-bar {
+    gap: var(--spacing-lg);
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .tool-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  .card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  :root {
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 40px;
+  }
+  
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .title {
+    font-size: 1.75rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .search-input {
+    font-size: 0.95rem;
+    padding: 14px 44px 14px 48px;
+  }
+  
+  .stats-bar {
+    flex-direction: row;
+    gap: var(--spacing-md);
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+  }
+  
+  .tool-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .state-icon {
+    font-size: 3rem;
+  }
+  
+  .state-text {
+    font-size: 1.25rem;
+  }
+  
+  .footer {
+    padding: var(--spacing-lg) 0;
+  }
+}
+
+/* ← FIX: Safe Area erweitert */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+
+/* Focus Styles */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #4A4E67;
+    --text-dim: #C0C0D0;
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .header,
+  .footer,
+  .search-wrapper,
+  .stats-bar {
+    display: none;
+  }
+  
+  .tool-grid {
+    display: block;
+  }
+  
+  .card {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ==================== END ==================== */
 
