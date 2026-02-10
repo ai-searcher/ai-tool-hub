@@ -787,8 +787,10 @@ export async function setupVotesTable() {
  * @param {Function} callback - Function to call when votes change
  * @returns {Object} - Subscription object with unsubscribe method
  */
-export function subscribeToVoteUpdates(toolId, callback) {
+export async function subscribeToVoteUpdates(toolId, callback) {
     const channelKey = `votes:${toolId}`;
+
+    const client = await getClient();
     
     // Check if already subscribed
     if (activeSubscriptions.has(channelKey)) {
@@ -799,12 +801,12 @@ export function subscribeToVoteUpdates(toolId, callback) {
     }
 
     try {
-        if (!supabase) {
+        if (!client) {
             console.error('Supabase client not initialized');
             return { unsubscribe: () => {} };
         }
 
-        const subscription = supabase
+        const subscription = client
             .channel(channelKey)
             .on(
                 'postgres_changes',
@@ -838,7 +840,7 @@ export function subscribeToVoteUpdates(toolId, callback) {
  * @param {Function} callback - Function to call when favorites change
  * @returns {Object} - Subscription object with unsubscribe method
  */
-export function subscribeToFavoriteUpdates(callback) {
+export async function subscribeToFavoriteUpdates(callback) {
     const channelKey = 'favorites:user';
     
     if (activeSubscriptions.has(channelKey)) {
@@ -849,14 +851,16 @@ export function subscribeToFavoriteUpdates(callback) {
     }
 
     try {
-        if (!supabase) {
-            console.error('Supabase client not initialized');
-            return { unsubscribe: () => {} };
-        }
+    const client = await getClient(); // ← DAS ist der Fix
 
-        const subscription = supabase
-            .channel(channelKey)
-            .on(
+    if (!client) {
+        console.error('Supabase client not initialized');
+        return { unsubscribe: () => {} };
+    }
+
+    const subscription = client
+        .channel(channelKey)
+        .on(
                 'postgres_changes',
                 {
                     event: '*',
@@ -924,4 +928,6 @@ export function cleanupAllSubscriptions() {
 // EXPORT SUPABASE CLIENT
 // ===========================================
 
-export { supabase };
+export async function getSupabaseClient() {
+    return await getClient();
+}
