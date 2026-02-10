@@ -4,17 +4,20 @@
 
 // Globale Variable um mehrfache Initialisierung zu verhindern
 let themeInitialized = false;
+let themeToggleHandler = null;
 
 /**
  * Zentrale Theme-Initialisierung (nur einmal ausführen)
  * Verhindert das Springen zwischen Themes beim Seitenneuladen
  */
 function initializeTheme() {
-    // Verhindere mehrfache Ausführung
+    // Atomare Prüfung und Setzung
     if (themeInitialized) {
-        console.log('Theme bereits initialisiert, überspringe...');
         return;
     }
+    
+    // Sofort als initialisiert markieren, um Race Conditions zu vermeiden
+    themeInitialized = true;
     console.log('Starte zentrale Theme-Initialisierung...');
     
     try {
@@ -52,6 +55,11 @@ function initializeTheme() {
         // 4. Toggle-Icon sofort setzen (falls vorhanden)
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
+            // Alten Listener entfernen falls vorhanden
+            if (themeToggleHandler) {
+                themeToggle.removeEventListener('click', themeToggleHandler);
+            }
+            
             const themeIcon = themeToggle.querySelector('i');
             if (themeIcon) {
                 themeIcon.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
@@ -59,8 +67,8 @@ function initializeTheme() {
                 console.log(`Icon gesetzt: ${themeToApply === 'light' ? 'moon' : 'sun'}`);
             }
             
-            // Event-Listener für zukünftige Klicks
-            themeToggle.addEventListener('click', function() {
+            // Neuen Event-Listener erstellen und speichern
+            themeToggleHandler = function() {
                 const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 
@@ -84,7 +92,19 @@ function initializeTheme() {
                 } catch (error) {
                     console.error('Fehler beim Speichern in localStorage:', error);
                 }
-            });
+                
+                // GA4 Tracking Event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'theme_change', {
+                        'event_category': 'engagement',
+                        'event_label': newTheme,
+                        'value': newTheme === 'dark' ? 1 : 0
+                    });
+                }
+            };
+            
+            // Event-Listener hinzufügen
+            themeToggle.addEventListener('click', themeToggleHandler);
             
             console.log('Theme-Toggle Event-Listener hinzugefügt');
         } else {
@@ -94,7 +114,6 @@ function initializeTheme() {
         // 5. Nach 50ms Transitions wieder aktivieren
         setTimeout(() => {
             document.body.classList.remove('no-transition');
-            themeInitialized = true;
             console.log('Theme-Initialisierung abgeschlossen, Transitions aktiv');
         }, 50);
         
@@ -103,7 +122,6 @@ function initializeTheme() {
         // Fallback: Dark Theme anwenden und Transitions aktivieren
         document.body.classList.remove('no-transition');
         document.body.classList.add('dark-theme');
-        themeInitialized = true;
     }
 }
 
@@ -157,6 +175,61 @@ import {
     SUCCESS_MESSAGES
 } from './config.js';
 
+// Embedded default tools as fallback
+const DEFAULT_TOOLS = [
+    {
+        id: 'tool_chatgpt',
+        title: 'ChatGPT',
+        description: 'Ein fortschrittlicher KI-Chatbot von OpenAI.',
+        category: 'chat',
+        tags: ['chat', 'text', 'openai'],
+        rating: 4.8,
+        usage_count: 10000,
+        vote_count: 500,
+        vote_average: 4.8,
+        is_free: true,
+        is_featured: true,
+        icon: 'fas fa-comment',
+        link: 'https://chat.openai.com',
+        created_at: '2022-11-30T00:00:00Z',
+        updated_at: '2023-10-01T00:00:00Z'
+    },
+    {
+        id: 'tool_midjourney',
+        title: 'Midjourney',
+        description: 'KI-gestützte Bildgenerierung über Discord.',
+        category: 'image',
+        tags: ['image', 'art', 'generation'],
+        rating: 4.6,
+        usage_count: 8000,
+        vote_count: 420,
+        vote_average: 4.6,
+        is_free: false,
+        is_featured: true,
+        icon: 'fas fa-image',
+        link: 'https://www.midjourney.com',
+        created_at: '2022-07-01T00:00:00Z',
+        updated_at: '2023-10-01T00:00:00Z'
+    },
+    {
+        id: 'tool_github_copilot',
+        title: 'GitHub Copilot',
+        description: 'KI-Paarprogrammierer für Entwickler.',
+        category: 'code',
+        tags: ['code', 'development', 'ai'],
+        rating: 4.7,
+        usage_count: 12000,
+        vote_count: 680,
+        vote_average: 4.7,
+        is_free: false,
+        is_featured: true,
+        icon: 'fas fa-code',
+        link: 'https://github.com/features/copilot',
+        created_at: '2021-10-01T00:00:00Z',
+        updated_at: '2023-10-01T00:00:00Z'
+    }
+];
+
 // Global application state
 let appState = {
     tools: [],
@@ -177,7 +250,63 @@ let appState = {
 };
 
 // ===========================================
-// NEU: DIRECTORY MODAL VARIABLEN
+// APPLICATION LIFECYCLE MANAGEMENT
+// ===========================================
+
+// Track initialization state
+let appInitialized = false;
+let supabaseSubscriptions = null;
+const directoryModalListeners = new Map();
+let filterBarScrollHandler = null;
+let escapeKeyHandler = null;
+
+/**
+ * Cleanup-Funktion für App-Lifecycle
+ */
+function cleanupApp() {
+    console.log('Cleanup App Resources...');
+    
+    // Supabase Subscriptions cleanup
+    if (supabaseSubscriptions) {
+        try {
+            if (supabaseSubscriptions.tools && supabaseSubscriptions.tools.unsubscribe) {
+                supabaseSubscriptions.tools.unsubscribe();
+            }
+            if (supabaseSubscriptions.votes && supabaseSubscriptions.votes.unsubscribe) {
+                supabaseSubscriptions.votes.unsubscribe();
+            }
+        } catch (error) {
+            console.warn('Error during supabase subscription cleanup:', error);
+        }
+        supabaseSubscriptions = null;
+    }
+    
+    // Directory Modal Listeners cleanup
+    for (const [element, { type, handler }] of directoryModalListeners.entries()) {
+        if (element && handler && element.removeEventListener) {
+            element.removeEventListener(type, handler);
+        }
+    }
+    directoryModalListeners.clear();
+    
+    // Filter Bar Scroll Listener cleanup
+    if (filterBarScrollHandler) {
+        window.removeEventListener('scroll', filterBarScrollHandler);
+        filterBarScrollHandler = null;
+    }
+    
+    // Escape Key Listener cleanup
+    if (escapeKeyHandler) {
+        document.removeEventListener('keydown', escapeKeyHandler);
+        escapeKeyHandler = null;
+    }
+    
+    appInitialized = false;
+    console.log('App cleanup completed');
+}
+
+// ===========================================
+// DIRECTORY MODAL VARIABLEN
 // ===========================================
 
 // Directory Modal State
@@ -195,20 +324,29 @@ let directoryModalState = {
  */
 async function initApp() {
     console.log('AI Tool Hub initializing...');
+    
+    // Cleanup bei Re-Initialization
+    if (appInitialized) {
+        cleanupApp();
+    }
+    
     try {
         // Kurze Pause für sichere Render-Initialisierung
         await new Promise(resolve => setTimeout(resolve, 100));
         
         showLoadingSpinner();
         
-        // Test database connection
-        const isConnected = await testConnection();
-        if (!isConnected) {
-            throw new Error('Database connection failed');
+        // Test database connection (non-blocking)
+        let isConnected = false;
+        try {
+            isConnected = await testConnection();
+            console.log(`Database connection: ${isConnected ? 'OK' : 'Failed'}`);
+        } catch (dbError) {
+            console.warn('Database connection test failed, using local data:', dbError);
         }
         
-        // Load all data in parallel
-        await Promise.all([
+        // Load all data with improved error handling
+        await Promise.allSettled([
             loadAllTools(),
             loadCategoriesData(),
             loadToolStats(),
@@ -227,13 +365,13 @@ async function initApp() {
         // Initialize event listeners
         initializeEventHandlers();
         
-        // NEU: Directory Modal Event Listeners hinzufügen
+        // Directory Modal Event Listeners hinzufügen
         initDirectoryModalEvents();
         
-        // NEU: Filter-Bar Auto-Compact initialisieren
+        // Filter-Bar Auto-Compact initialisieren
         initFilterBarAutoCompact();
         
-        // NEU: Holographic Stats Animation starten
+        // Holographic Stats Animation starten
         if (window.updateHeroStatsFromData) {
             window.updateHeroStatsFromData({
                 total: appState.totalStats.total,
@@ -245,14 +383,34 @@ async function initApp() {
         // Hide loading spinner
         hideLoadingSpinner();
         
+        // Mark as initialized
+        appInitialized = true;
+        
         console.log('Application initialized successfully');
-        showNotification();
+        showNotification('Anwendung erfolgreich geladen!', 'success');
+        
+        // GA4 Tracking Event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'app_load', {
+                'event_category': 'engagement',
+                'event_label': 'init_complete',
+                'value': appState.tools.length
+            });
+        }
         
     } catch (error) {
         console.error('Error initializing app:', error);
         hideLoadingSpinner();
         showEmptyState('Fehler beim Laden der Daten. Bitte versuche es später erneut.');
         showNotification(ERROR_MESSAGES.LOADING_ERROR, 'error');
+        
+        // GA4 Tracking Event for error
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'exception', {
+                'description': 'app_initialization_failed',
+                'fatal': false
+            });
+        }
     }
 }
 
@@ -261,41 +419,52 @@ async function initApp() {
  */
 async function loadAllTools() {
     try {
-        // First try to load from Supabase
-        const dbTools = await loadTools();
-        
-        if (dbTools && dbTools.length > 0) {
-            console.log(`Loaded ${dbTools.length} tools from database`);
-            appState.tools = dbTools;
-            appState.filteredTools = [...dbTools];
-            calculateTotalUpvotes();
-            return;
+        // Try database first
+        let dbTools = [];
+        try {
+            dbTools = await loadTools();
+            if (dbTools && dbTools.length > 0) {
+                console.log(`Loaded ${dbTools.length} tools from database`);
+                appState.tools = dbTools;
+                appState.filteredTools = [...dbTools];
+                calculateTotalUpvotes();
+                return;
+            }
+        } catch (dbError) {
+            console.warn('Database load failed, trying JSON fallback:', dbError);
         }
         
-        // Fallback to local JSON if database is empty
-        console.log('Database empty, loading from local JSON...');
-        const response = await fetch('./data.json');
-        
-        if (!response.ok) {
-            throw new Error('Failed to load local JSON');
+        // Fallback to local JSON if database is empty or failed
+        console.log('Loading from local JSON...');
+        let jsonTools = [];
+        try {
+            const response = await fetch('./data.json');
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            jsonTools = await response.json();
+            console.log(`Loaded ${jsonTools.length} tools from JSON`);
+        } catch (jsonError) {
+            console.warn('JSON load failed, using embedded defaults:', jsonError);
+            jsonTools = DEFAULT_TOOLS;
+            console.log(`Using ${DEFAULT_TOOLS.length} embedded default tools`);
         }
-        
-        const jsonTools = await response.json();
-        console.log(`Loaded ${jsonTools.length} tools from JSON`);
         
         // Transform JSON data to match our structure
         const transformedTools = jsonTools.map(tool => ({
             id: tool.id || generateId(),
-            title: tool.title,
-            description: tool.description,
+            title: tool.title || 'Unnamed Tool',
+            description: tool.description || 'No description available.',
             category: tool.category || 'uncategorized',
-            tags: tool.tags || [],
-            rating: tool.rating || 4.0,
-            usage_count: tool.usage_count || 0,
-            vote_count: tool.vote_count || 0,
-            vote_average: tool.vote_average || tool.rating || 4.0,
-            is_free: tool.is_free || false,
-            is_featured: tool.is_featured || false,
+            tags: Array.isArray(tool.tags) ? tool.tags : [],
+            rating: typeof tool.rating === 'number' ? tool.rating : 4.0,
+            usage_count: typeof tool.usage_count === 'number' ? tool.usage_count : 0,
+            vote_count: typeof tool.vote_count === 'number' ? tool.vote_count : 0,
+            vote_average: typeof tool.vote_average === 'number' ? tool.vote_average : (tool.rating || 4.0),
+            is_free: Boolean(tool.is_free),
+            is_featured: Boolean(tool.is_featured),
             icon: tool.icon || 'fas fa-robot',
             link: tool.link || '#',
             created_at: tool.created_at || new Date().toISOString(),
@@ -308,6 +477,11 @@ async function loadAllTools() {
         
     } catch (error) {
         console.error('Error loading tools:', error);
+        // Ultimate fallback to embedded tools
+        console.log('Using embedded default tools as ultimate fallback');
+        appState.tools = DEFAULT_TOOLS;
+        appState.filteredTools = [...DEFAULT_TOOLS];
+        calculateTotalUpvotes();
         throw error;
     }
 }
@@ -338,21 +512,28 @@ async function loadCategoriesData() {
         
     } catch (error) {
         console.error('Error loading categories:', error);
-        appState.categories = DEFAULT_CATEGORIES;
+        // Fallback to default categories
+        appState.categories = DEFAULT_CATEGORIES.map(cat => ({
+            id: cat.id,
+            name: cat.name,
+            icon: cat.icon,
+            count: cat.id === 'all' ? appState.tools.length : 
+                   appState.tools.filter(t => t.category === cat.id).length
+        }));
     }
 }
 
 /**
  * Calculates total upvotes across all tools
- * Single source of truth for upvote count
+ * Jetzt: Anzahl aller abgegebenen Stimmen (vote_count pro Tool summiert)
  */
 function calculateTotalUpvotes() {
-    const totalUpvotes = appState.tools.reduce((sum, tool) => {
+    const totalVotes = appState.tools.reduce((sum, tool) => {
         return sum + (tool.vote_count || 0);
     }, 0);
     
-    appState.totalStats.totalUpvotes = totalUpvotes;
-    console.log(`Total upvotes calculated: ${totalUpvotes}`);
+    appState.totalStats.totalUpvotes = totalVotes;
+    console.log(`Total votes calculated: ${totalVotes}`);
 }
 
 /**
@@ -375,7 +556,7 @@ async function loadToolStats() {
             appState.totalStats.free = appState.tools.filter(tool => tool.is_free).length;
         }
         
-        // Always recalculate upvotes from tools data (ignore any DB totalUpvotes value)
+        // Always recalculate upvotes from tools data
         calculateTotalUpvotes();
         
     } catch (error) {
@@ -417,7 +598,7 @@ async function initializeVotes() {
 }
 
 // ===========================================
-// NEU: DIRECTORY MODAL FUNKTIONEN
+// DIRECTORY MODAL FUNKTIONEN
 // ===========================================
 
 /**
@@ -429,21 +610,27 @@ function initDirectoryModalEvents() {
     // 1. Hero-Stat-Kachel für "aktive Tools" klickbar machen
     const heroStatsContainer = document.querySelector('.hero-stats');
     if (heroStatsContainer) {
-        // Versuche, die "aktive Tools" Kachel zu finden
         const totalToolsCard = document.getElementById('card-active');
         if (totalToolsCard) {
+            // Entferne existierende Listener zuerst
+            removeDirectoryModalListener(totalToolsCard, 'click');
+            removeDirectoryModalListener(totalToolsCard, 'keydown');
+            
             totalToolsCard.style.cursor = 'pointer';
             totalToolsCard.setAttribute('role', 'button');
             totalToolsCard.setAttribute('tabindex', '0');
             totalToolsCard.setAttribute('aria-label', 'Tool-Verzeichnis öffnen');
             
-            totalToolsCard.addEventListener('click', openDirectoryModal);
-            totalToolsCard.addEventListener('keydown', (e) => {
+            const clickHandler = openDirectoryModal;
+            const keyHandler = (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     openDirectoryModal();
                 }
-            });
+            };
+            
+            addDirectoryModalListener(totalToolsCard, 'click', clickHandler);
+            addDirectoryModalListener(totalToolsCard, 'keydown', keyHandler);
             
             console.log('Hero-Stat-Kachel für Directory Modal klickbar gemacht');
         }
@@ -452,28 +639,69 @@ function initDirectoryModalEvents() {
     // 2. Modal Close Event Listener
     const closeButton = document.getElementById('directory-close');
     if (closeButton) {
-        closeButton.addEventListener('click', closeDirectoryModal);
+        removeDirectoryModalListener(closeButton, 'click');
+        const clickHandler = closeDirectoryModal;
+        addDirectoryModalListener(closeButton, 'click', clickHandler);
     }
     
     // 3. Overlay Click Event
     const modalOverlay = document.querySelector('#directory-modal .modal-overlay');
     if (modalOverlay) {
-        modalOverlay.addEventListener('click', (e) => {
+        removeDirectoryModalListener(modalOverlay, 'click');
+        const clickHandler = (e) => {
             if (e.target === modalOverlay) {
                 closeDirectoryModal();
             }
-        });
+        };
+        addDirectoryModalListener(modalOverlay, 'click', clickHandler);
     }
     
-    // 4. Escape Key Event
-    document.addEventListener('keydown', (e) => {
-        const modal = document.getElementById('directory-modal');
-        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
-            closeDirectoryModal();
-        }
-    });
+    // 4. Escape Key Event (global, nur einmal registrieren)
+    if (!escapeKeyHandler) {
+        escapeKeyHandler = (e) => {
+            const modal = document.getElementById('directory-modal');
+            if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+                closeDirectoryModal();
+            }
+        };
+        document.addEventListener('keydown', escapeKeyHandler);
+    }
     
     console.log('Directory Modal Events initialisiert');
+}
+
+/**
+ * Helper function to add directory modal listener with tracking
+ */
+function addDirectoryModalListener(element, type, handler) {
+    if (!element || !handler) return;
+    
+    // Entferne alten Listener gleichen Typs
+    removeDirectoryModalListener(element, type);
+    
+    // Füge neuen Listener hinzu
+    element.addEventListener(type, handler);
+    
+    // Track in Map
+    const key = `${type}-${Math.random().toString(36).substr(2, 9)}`;
+    directoryModalListeners.set(element, { type, handler, key });
+}
+
+/**
+ * Helper function to remove directory modal listener
+ */
+function removeDirectoryModalListener(element, type) {
+    if (!element) return;
+    
+    // Finde alle Einträge für dieses Element mit diesem Typ
+    const entries = Array.from(directoryModalListeners.entries());
+    for (const [el, data] of entries) {
+        if (el === element && data.type === type) {
+            el.removeEventListener(type, data.handler);
+            directoryModalListeners.delete(el);
+            break;
+        }
+    }
 }
 
 /**
@@ -512,6 +740,14 @@ function openDirectoryModal() {
     }
     
     console.log('Directory Modal geöffnet');
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'directory_open', {
+            'event_category': 'engagement',
+            'event_label': 'modal_opened'
+        });
+    }
 }
 
 /**
@@ -555,17 +791,20 @@ function renderDirectoryTabs() {
     allTab.setAttribute('aria-selected', 'true');
     allTab.setAttribute('role', 'tab');
     allTab.textContent = 'Alle';
-    allTab.addEventListener('click', () => {
+    
+    removeDirectoryModalListener(allTab, 'click');
+    const clickHandler = () => {
         setActiveTab('all');
         renderDirectoryList('all');
-    });
+    };
+    addDirectoryModalListener(allTab, 'click', clickHandler);
     
     tabsContainer.innerHTML = '';
     tabsContainer.appendChild(allTab);
     
     // Tabs für jede Kategorie
     appState.categories.forEach(category => {
-        if (category.id === 'all') return; // "Alle" haben wir schon
+        if (category.id === 'all') return;
         
         const tab = document.createElement('button');
         tab.className = 'directory-tab';
@@ -573,10 +812,12 @@ function renderDirectoryTabs() {
         tab.setAttribute('aria-selected', 'false');
         tab.setAttribute('role', 'tab');
         tab.textContent = `${category.name} (${category.count})`;
-        tab.addEventListener('click', () => {
+        
+        const clickHandler = () => {
             setActiveTab(category.id);
             renderDirectoryList(category.id);
-        });
+        };
+        addDirectoryModalListener(tab, 'click', clickHandler);
         
         tabsContainer.appendChild(tab);
     });
@@ -667,9 +908,8 @@ function renderDirectoryList(categoryId) {
         // Event Listener für den "Zum Tool" Button
         const jumpButton = toolItem.querySelector('.directory-tool-jump');
         if (jumpButton) {
-            jumpButton.addEventListener('click', () => {
-                handleToolJump(tool.id);
-            });
+            const clickHandler = () => handleToolJump(tool.id);
+            addDirectoryModalListener(jumpButton, 'click', clickHandler);
         }
         
         listContainer.appendChild(toolItem);
@@ -680,8 +920,8 @@ function renderDirectoryList(categoryId) {
         const showMoreButton = document.createElement('button');
         showMoreButton.className = 'btn btn-secondary directory-show-more';
         showMoreButton.innerHTML = `<i class="fas fa-chevron-down"></i> Mehr anzeigen (${tools.length - 12} weitere)`;
-        showMoreButton.addEventListener('click', () => {
-            // Lade alle restlichen Tools
+        
+        const clickHandler = () => {
             const remainingTools = tools.slice(12);
             remainingTools.forEach(tool => {
                 const toolItem = document.createElement('div');
@@ -706,17 +946,17 @@ function renderDirectoryList(categoryId) {
                 
                 const jumpButton = toolItem.querySelector('.directory-tool-jump');
                 if (jumpButton) {
-                    jumpButton.addEventListener('click', () => {
-                        handleToolJump(tool.id);
-                    });
+                    const clickHandler = () => handleToolJump(tool.id);
+                    addDirectoryModalListener(jumpButton, 'click', clickHandler);
                 }
                 
                 listContainer.appendChild(toolItem);
             });
             
             showMoreButton.remove();
-        });
+        };
         
+        addDirectoryModalListener(showMoreButton, 'click', clickHandler);
         listContainer.appendChild(showMoreButton);
     }
     
@@ -767,6 +1007,15 @@ function handleToolJump(toolId) {
         setTimeout(() => {
             scrollToAndHighlightTool(toolId);
         }, 100);
+    }
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'directory_jump', {
+            'event_category': 'engagement',
+            'event_label': 'tool_navigation',
+            'value': 1
+        });
     }
 }
 
@@ -820,13 +1069,14 @@ function filterTools() {
     if (appState.currentSearch.trim() !== '') {
         const searchTerm = appState.currentSearch.toLowerCase();
         filtered = filtered.filter(tool => {
-            const title = tool.title || '';
-            const description = tool.description || '';
-            const tags = Array.isArray(tool.tags) ? tool.tags : [];
+            const title = (tool.title || '').toLowerCase();
+            const description = (tool.description || '').toLowerCase();
+            const tags = Array.isArray(tool.tags) ? tool.tags.map(tag => (tag || '').toLowerCase()) : [];
             
-            return title.toLowerCase().includes(searchTerm) ||
-                   description.toLowerCase().includes(searchTerm) ||
-                   tags.some(tag => (tag || '').toLowerCase().includes(searchTerm));
+            // Simple fuzzy search (partial matches)
+            return title.includes(searchTerm) ||
+                   description.includes(searchTerm) ||
+                   tags.some(tag => tag.includes(searchTerm));
         });
     }
     
@@ -845,22 +1095,22 @@ function sortTools(tools, sortBy) {
     switch (sortBy) {
         case 'newest':
             return sorted.sort((a, b) => 
-                new Date(b.created_at) - new Date(a.created_at)
+                new Date(b.created_at || 0) - new Date(a.created_at || 0)
             );
         
         case 'rating':
             return sorted.sort((a, b) => 
-                (b.vote_average || b.rating) - (a.vote_average || a.rating)
+                (b.vote_average || b.rating || 0) - (a.vote_average || a.rating || 0)
             );
         
         case 'name':
             return sorted.sort((a, b) => 
-                a.title.localeCompare(b.title)
+                (a.title || '').localeCompare(b.title || '')
             );
         
         case 'popular':
             return sorted.sort((a, b) => 
-                b.usage_count - a.usage_count
+                (b.usage_count || 0) - (a.usage_count || 0)
             );
         
         default:
@@ -897,8 +1147,8 @@ function updateCategoryCounts() {
 function calculateRankings() {
     // Calculate score for each tool (weighted average of rating and usage)
     const toolsWithScore = appState.tools.map(tool => {
-        const ratingScore = (tool.vote_average || tool.rating) * 20; // Convert to 0-100 scale
-        const usageScore = Math.min(100, tool.usage_count / 10); // Usage contributes up to 100
+        const ratingScore = (tool.vote_average || tool.rating || 4) * 20; // Convert to 0-100 scale
+        const usageScore = Math.min(100, (tool.usage_count || 0) / 10); // Usage contributes up to 100
         const totalScore = (ratingScore * 0.7) + (usageScore * 0.3); // 70% rating, 30% usage
         
         return {
@@ -908,7 +1158,7 @@ function calculateRankings() {
     });
     
     // Sort by score and take top 5
-    const sorted = toolsWithScore.sort((a, b) => b.score - a.score);
+    const sorted = toolsWithScore.sort((a, b) => (b.score || 0) - (a.score || 0));
     appState.rankings = sorted.slice(0, 5);
 }
 
@@ -993,7 +1243,7 @@ function updateViewMode() {
 }
 
 // ===========================================
-// NEU: AUTO-COMPACT-ON-SCROLL FUNKTIONALITÄT
+// AUTO-COMPACT-ON-SCROLL FUNKTIONALITÄT
 // ===========================================
 
 /**
@@ -1004,9 +1254,15 @@ function initFilterBarAutoCompact() {
     const filterBar = document.getElementById('filter-bar');
     if (!filterBar) return;
     
+    // Entferne existierenden Listener
+    if (filterBarScrollHandler) {
+        window.removeEventListener('scroll', filterBarScrollHandler);
+        filterBarScrollHandler = null;
+    }
+    
     let ticking = false;
     
-    const onScroll = () => {
+    filterBarScrollHandler = () => {
         if (ticking) return;
         ticking = true;
         
@@ -1017,8 +1273,8 @@ function initFilterBarAutoCompact() {
         });
     };
     
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // initial state
+    window.addEventListener('scroll', filterBarScrollHandler, { passive: true });
+    filterBarScrollHandler(); // Initial state
 }
 
 // ===========================================
@@ -1029,8 +1285,11 @@ function initFilterBarAutoCompact() {
  * Initializes all event handlers
  */
 function initializeEventHandlers() {
+    // Create debounced search handler
+    const debouncedSearch = debounce(handleSearch, 300);
+    
     setEventHandlers({
-        handleSearch: handleSearch,
+        handleSearch: debouncedSearch,
         handleFilter: handleFilter,
         handleVoteUpdate: handleVoteUpdate,
         handleViewChange: handleViewChange,
@@ -1054,6 +1313,15 @@ function handleSearch(searchTerm) {
     if (appState.filteredTools.length === 0 && searchTerm.trim() !== '') {
         showNotification('Keine Ergebnisse gefunden', 'info');
     }
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined' && searchTerm.trim() !== '') {
+        gtag('event', 'search', {
+            'search_term': searchTerm,
+            'event_category': 'engagement',
+            'event_label': 'tool_search'
+        });
+    }
 }
 
 /**
@@ -1068,23 +1336,37 @@ function handleFilter(filterId) {
     if (appState.filteredTools.length === 0 && filterId !== 'all') {
         showNotification('Keine Tools in dieser Kategorie', 'info');
     }
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined' && filterId !== 'all') {
+        gtag('event', 'filter', {
+            'filter_category': filterId,
+            'event_category': 'engagement',
+            'event_label': 'category_filter'
+        });
+    }
 }
 
 /**
- * Handles vote updates
+ * Handles vote updates - Korrigierte Logik für 1-5 Bewertungen
  */
 async function handleVoteUpdate(toolId, voteData) {
     try {
-        // Update local state
+        // Update local state basierend auf vote_value (1-5)
         const toolIndex = appState.tools.findIndex(t => t.id === toolId);
         if (toolIndex !== -1) {
-            appState.tools[toolIndex].vote_count = (appState.tools[toolIndex].vote_count || 0) + 1;
+            const tool = appState.tools[toolIndex];
+            const currentCount = tool.vote_count || 0;
+            const currentAverage = tool.vote_average || tool.rating || 4;
             
-            // Recalculate average
-            const currentAvg = appState.tools[toolIndex].vote_average || appState.tools[toolIndex].rating;
-            const newAvg = ((currentAvg * (appState.tools[toolIndex].vote_count - 1)) + voteData.vote_value) / 
-                          appState.tools[toolIndex].vote_count;
-            appState.tools[toolIndex].vote_average = newAvg;
+            // Korrekte Berechnung für neue Bewertung (1-5)
+            // Neuer Durchschnitt = (Alter Durchschnitt * Anzahl + neue Bewertung) / (Anzahl + 1)
+            const newCount = currentCount + 1;
+            const newAverage = ((currentAverage * currentCount) + voteData.vote_value) / newCount;
+            
+            // Update tool data
+            appState.tools[toolIndex].vote_count = newCount;
+            appState.tools[toolIndex].vote_average = newAverage;
             
             // Update filtered tools
             const filteredIndex = appState.filteredTools.findIndex(t => t.id === toolId);
@@ -1092,7 +1374,7 @@ async function handleVoteUpdate(toolId, voteData) {
                 appState.filteredTools[filteredIndex] = { ...appState.tools[toolIndex] };
             }
             
-            // Recalculate total upvotes
+            // Recalculate total votes (Anzahl aller Stimmen)
             calculateTotalUpvotes();
             
             // Recalculate rankings
@@ -1101,12 +1383,21 @@ async function handleVoteUpdate(toolId, voteData) {
             // Update UI
             updateUI();
             
-            // Update hero stats animation with new upvote count
+            // Update hero stats animation with new vote count
             if (window.updateHeroStatsFromData) {
                 window.updateHeroStatsFromData({
                     total: appState.totalStats.total,
                     freeCount: appState.totalStats.free,
                     pulse: appState.totalStats.totalUpvotes
+                });
+            }
+            
+            // GA4 Tracking Event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'vote', {
+                    'event_category': 'engagement',
+                    'event_label': 'tool_vote',
+                    'value': voteData.vote_value
                 });
             }
         }
@@ -1128,6 +1419,15 @@ function handleViewChange(viewMode) {
         renderToolGrid(appState.filteredTools, viewMode);
         updateToolVoteCounts();
     }
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'view_change', {
+            'view_mode': viewMode,
+            'event_category': 'engagement',
+            'event_label': 'view_toggle'
+        });
+    }
 }
 
 /**
@@ -1137,6 +1437,15 @@ function handleSort(sortBy) {
     appState.currentSort = sortBy;
     filterTools();
     updateUI();
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'sort', {
+            'sort_by': sortBy,
+            'event_category': 'engagement',
+            'event_label': 'tool_sort'
+        });
+    }
 }
 
 /**
@@ -1153,6 +1462,14 @@ async function handleRankingRefresh() {
         renderRanking(appState.rankings);
         
         showNotification('Ranking aktualisiert!', 'success');
+        
+        // GA4 Tracking Event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'refresh', {
+                'event_category': 'engagement',
+                'event_label': 'ranking_refresh'
+            });
+        }
         
     } catch (error) {
         console.error('Error refreshing ranking:', error);
@@ -1177,6 +1494,14 @@ function handleReset() {
     updateUI();
     
     showNotification('Alle Filter zurückgesetzt', 'info');
+    
+    // GA4 Tracking Event
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'reset', {
+            'event_category': 'engagement',
+            'event_label': 'filter_reset'
+        });
+    }
 }
 
 // ===========================================
@@ -1206,6 +1531,32 @@ function getAppState() {
  */
 function initRealtimeUpdates() {
     try {
+        // Prüfe ob Supabase Client verfügbar ist
+        if (!supabase || typeof supabase.channel !== 'function') {
+            console.error('Supabase client not properly initialized');
+            return;
+        }
+        
+        // Cleanup existing subscriptions
+        if (supabaseSubscriptions) {
+            try {
+                if (supabaseSubscriptions.tools && typeof supabaseSubscriptions.tools.unsubscribe === 'function') {
+                    supabaseSubscriptions.tools.unsubscribe();
+                }
+                if (supabaseSubscriptions.votes && typeof supabaseSubscriptions.votes.unsubscribe === 'function') {
+                    supabaseSubscriptions.votes.unsubscribe();
+                }
+            } catch (error) {
+                console.warn('Error during supabase subscription cleanup:', error);
+            }
+        }
+        
+        // Initialize subscriptions object
+        supabaseSubscriptions = {
+            tools: null,
+            votes: null
+        };
+        
         // Subscribe to tool updates
         const toolsSubscription = supabase
             .channel('tools-changes')
@@ -1261,10 +1612,8 @@ function initRealtimeUpdates() {
         console.log('Real-time updates enabled');
         
         // Store subscriptions for cleanup
-        window.supabaseSubscriptions = {
-            tools: toolsSubscription,
-            votes: votesSubscription
-        };
+        supabaseSubscriptions.tools = toolsSubscription;
+        supabaseSubscriptions.votes = votesSubscription;
         
     } catch (error) {
         console.error('Error setting up real-time updates:', error);
@@ -1277,7 +1626,7 @@ function initRealtimeUpdates() {
 
 /**
  * Sofortige Theme-Initialisierung für DOMContentLoaded
- * Wird separat aufgerufen, bevor initApp() läuft
+ * Wird separat aufgerufen, bevor initApp() lädt
  */
 function earlyThemeInit() {
     console.log('Early Theme-Initialisierung...');
@@ -1299,7 +1648,7 @@ function earlyThemeInit() {
 earlyThemeInit();
 
 // ===========================================
-// NEU: HOLOGRAPHIC STATS ANIMATION
+// HOLOGRAPHIC STATS ANIMATION
 // ===========================================
 
 (function(){
@@ -1384,7 +1733,8 @@ if (document.readyState === 'loading') {
 window.AIToolHub = {
     getState: getAppState,
     refresh: initApp,
-    filterTools: filterTools
+    filterTools: filterTools,
+    cleanup: cleanupApp
 };
 
 // Export für andere Module (falls benötigt)
