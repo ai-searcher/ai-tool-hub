@@ -1,119 +1,117 @@
 // ===========================================
-// THEME INITIALIZATION
+// THEME INITIALIZATION (NO FLASH VERSION)
 // ===========================================
 
 /**
- * Initializes the theme system
+ * Initializes the theme system without visible transitions or flashing
  */
 function initTheme() {
-    console.log('🎨 Initializing theme system...');
+    console.log('🎨 Initializing theme (no-flash version)...');
     
     try {
-        // Get DOM elements
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.querySelector('.theme-icon');
-        const body = document.body;
+        // 1. Disable transitions immediately to prevent flashing
+        document.body.classList.add('no-transition');
+        console.log('⏸️ Transitions disabled');
         
-        if (!themeToggle || !themeIcon) {
-            console.warn('⚠️ Theme toggle elements not found');
-            return;
-        }
-        
-        // Get saved theme from localStorage with fallback
-        let savedTheme = 'light'; // Default fallback
+        // 2. Get saved theme from localStorage
+        let savedTheme = null;
         
         try {
-            const stored = localStorage.getItem('theme');
-            
-            // Validate stored theme value
-            if (stored === 'light' || stored === 'dark') {
-                savedTheme = stored;
-                console.log(`📁 Loaded theme from localStorage: ${savedTheme}`);
-            } else if (stored) {
-                console.warn(`⚠️ Invalid theme value in localStorage: "${stored}", using default`);
-                localStorage.removeItem('theme'); // Clean invalid value
-            } else {
-                console.log('📁 No valid theme found in localStorage');
-            }
+            savedTheme = localStorage.getItem('theme');
+            console.log(`📁 Loaded theme from localStorage: "${savedTheme}"`);
         } catch (storageError) {
-            console.error('❌ Error accessing localStorage:', storageError);
-            // Continue with default theme
+            console.error('❌ localStorage access error:', storageError);
         }
         
-        // Check system preference if no valid saved theme
-        let systemPreference = 'light';
-        try {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                systemPreference = 'dark';
-            }
-            console.log(`🖥️ System preference detected: ${systemPreference}`);
-        } catch (mediaError) {
-            console.error('❌ Error detecting system preference:', mediaError);
-        }
+        // 3. Validate theme value
+        const validThemes = ['light', 'dark'];
+        let themeToApply = 'light'; // Default fallback
         
-        // Determine final theme
-        let finalTheme = savedTheme;
-        if (savedTheme === 'light' && systemPreference === 'dark') {
-            // Use system preference as fallback if no valid saved theme
-            finalTheme = systemPreference;
-            console.log(`🎯 Using system preference: ${finalTheme}`);
-        }
-        
-        // Apply theme to body
-        body.classList.remove('light-theme', 'dark-theme');
-        body.classList.add(`${finalTheme}-theme`);
-        console.log(`✅ Applied theme class: ${finalTheme}-theme`);
-        
-        // Update toggle icon
-        updateThemeIcon(themeIcon, finalTheme);
-        
-        // Set up theme toggle event listener
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            // Update body class
-            body.classList.remove(`${currentTheme}-theme`);
-            body.classList.add(`${newTheme}-theme`);
-            
-            // Update icon
-            updateThemeIcon(themeIcon, newTheme);
-            
-            // Save to localStorage
+        if (validThemes.includes(savedTheme)) {
+            themeToApply = savedTheme;
+        } else {
+            // Check system preference as secondary fallback
             try {
-                localStorage.setItem('theme', newTheme);
-                console.log(`💾 Saved theme to localStorage: ${newTheme}`);
-            } catch (storageError) {
-                console.error('❌ Error saving theme to localStorage:', storageError);
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    themeToApply = 'dark';
+                }
+                console.log(`🖥️ Using system preference: ${themeToApply}`);
+            } catch (mediaError) {
+                console.error('❌ System preference detection error:', mediaError);
             }
-            
-            // Log theme change
-            console.log(`🔄 Theme changed from ${currentTheme} to ${newTheme}`);
-        });
+        }
         
-        console.log(`✅ Theme initialization complete. Active theme: ${finalTheme}`);
+        console.log(`🎯 Final theme to apply: ${themeToApply}`);
+        
+        // 4. Apply theme to body
+        document.body.classList.remove('light-theme', 'dark-theme');
+        document.body.classList.add(`${themeToApply}-theme`);
+        
+        // 5. Update theme toggle icon immediately
+        const themeToggleIcon = document.querySelector('#theme-toggle i');
+        if (themeToggleIcon) {
+            // Remove all possible icon classes
+            themeToggleIcon.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
+            
+            // Set appropriate icon
+            if (themeToApply === 'dark') {
+                themeToggleIcon.classList.add('fa-sun');
+            } else {
+                themeToggleIcon.classList.add('fa-moon');
+            }
+            console.log(`🔄 Updated icon for ${themeToApply} theme`);
+        }
+        
+        // 6. Re-enable transitions after a short delay
+        setTimeout(() => {
+            document.body.classList.remove('no-transition');
+            console.log('▶️ Transitions re-enabled');
+        }, 100);
+        
+        // 7. Set up theme toggle event listener (for user interactions)
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                // Apply new theme with transitions (user expects them on click)
+                document.body.classList.remove(`${currentTheme}-theme`);
+                document.body.classList.add(`${newTheme}-theme`);
+                
+                // Update icon
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-sun', 'fa-moon');
+                    if (newTheme === 'dark') {
+                        icon.classList.add('fa-sun');
+                    } else {
+                        icon.classList.add('fa-moon');
+                    }
+                }
+                
+                // Save to localStorage
+                try {
+                    localStorage.setItem('theme', newTheme);
+                    console.log(`💾 Saved theme to localStorage: ${newTheme}`);
+                } catch (error) {
+                    console.error('❌ Error saving theme:', error);
+                }
+                
+                console.log(`🔄 User changed theme: ${currentTheme} → ${newTheme}`);
+            });
+            
+            console.log('🎯 Theme toggle event listener added');
+        }
+        
+        console.log('✅ Theme initialization complete');
         
     } catch (error) {
-        console.error('❌ Error in theme initialization:', error);
-        // Ensure at least default theme is applied
+        console.error('❌ Critical error in theme initialization:', error);
+        // Ensure transitions are re-enabled even on error
+        document.body.classList.remove('no-transition');
+        // Apply default theme as fallback
         document.body.classList.add('light-theme');
-    }
-}
-
-/**
- * Updates the theme icon based on current theme
- */
-function updateThemeIcon(iconElement, theme) {
-    if (!iconElement) return;
-    
-    // Remove all possible icon classes
-    iconElement.classList.remove('fa-sun', 'fa-moon', 'fa-adjust');
-    
-    // Add appropriate icon class
-    if (theme === 'dark') {
-        iconElement.classList.add('fa-sun'); // Sun icon for dark mode (click to switch to light)
-    } else {
-        iconElement.classList.add('fa-moon'); // Moon icon for light mode (click to switch to dark)
     }
 }
 
@@ -197,7 +195,7 @@ async function initApp() {
     console.log('🚀 AI Tool Hub initializing...');
     
     try {
-        // Initialize theme first
+        // CRITICAL: Initialize theme FIRST to prevent flashing
         initTheme();
         
         showLoadingSpinner();
