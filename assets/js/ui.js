@@ -287,7 +287,7 @@ export function renderRanking(rankingArray) {
 // ===========================================
 
 /**
- * Generates HTML for category filters
+ * Generates HTML for category filters (TEXT-ONLY)
  * @param {Array} categoriesArray - Array of category objects
  * @returns {string} - HTML string for filter buttons
  */
@@ -298,21 +298,58 @@ export function createCategoryFiltersHTML(categoriesArray) {
     
     // Add "All" category at the beginning
     const allCategories = [
-        { id: 'all', name: 'Alle Tools', icon: 'fas fa-th-large', count: 0 },
+        { id: 'all', name: 'Alle Tools' },
         ...categoriesArray
     ];
     
     return allCategories.map(category => {
-        const countBadge = category.count > 0 ? `<span class="filter-count">${category.count}</span>` : '';
-        
+        // KEIN Count-Badge mehr, NUR TEXT!
         return `
             <button class="filter-btn" data-filter="${category.id}">
-                <i class="${category.icon || 'fas fa-tag'}"></i>
                 <span>${category.name}</span>
-                ${countBadge}
             </button>
         `;
     }).join('');
+}
+
+/**
+ * Renders mobile dropdown for category filters
+ * @param {Array} categoriesArray - Array of category objects
+ */
+export function renderMobileFilterDropdown(categoriesArray) {
+    const filterNav = document.querySelector('.filter-nav .header-container');
+    if (!filterNav) return;
+    
+    // Check if dropdown already exists
+    let dropdown = document.getElementById('filter-dropdown');
+    if (!dropdown) {
+        dropdown = document.createElement('select');
+        dropdown.id = 'filter-dropdown';
+        dropdown.className = 'filter-dropdown';
+        filterNav.insertBefore(dropdown, filterNav.firstChild);
+    }
+    
+    // Generate options
+    const allCategories = [
+        { id: 'all', name: 'Alle Tools' },
+        ...categoriesArray
+    ];
+    
+    dropdown.innerHTML = allCategories.map(cat => 
+        `<option value="${cat.id}">${cat.name}</option>`
+    ).join('');
+    
+    // Add event listener
+    dropdown.addEventListener('change', (e) => {
+        const filterId = e.target.value;
+        // Update active state on buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filterId);
+        });
+        // Trigger filter (assuming handleFilter function exists in events.js)
+        const event = new CustomEvent('filterChange', { detail: { filter: filterId } });
+        document.dispatchEvent(event);
+    });
 }
 
 /**
@@ -324,6 +361,9 @@ export function renderCategoryFilters(categoriesArray) {
     if (!filterContainer) return;
     
     filterContainer.innerHTML = createCategoryFiltersHTML(categoriesArray);
+    
+    // NEU: Render Mobile-Dropdown
+    renderMobileFilterDropdown(categoriesArray);
 }
 
 // ===========================================
@@ -554,6 +594,7 @@ export default {
     renderRanking,
     createCategoryFiltersHTML,
     renderCategoryFilters,
+    renderMobileFilterDropdown, // NEU
     updateHeroStats,
     populateModal,
     showLoadingSpinner,
