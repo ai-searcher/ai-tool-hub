@@ -134,34 +134,33 @@ export const COLORS = {
     INFO: '#00c3ff'
 };
 
-// Export Validation
-// -----------------
-// Diese Funktion prüft, ob alle erforderlichen Konfigurationen gesetzt sind
-
 export const validateConfig = () => {
-    const errors = [];
-    
-    if (!SUPABASE_URL || SUPABASE_URL.includes('https://doicozkpdbkyvdkpujoh.supabase.co')) {
-        errors.push('SUPABASE_URL ist nicht konfiguriert. Bitte trage deine Supabase-URL ein.');
-    }
-    
-    if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('your-anon-key-here')) {
-        errors.push('SUPABASE_ANON_KEY ist nicht konfiguriert. Bitte trage deinen Anon Key ein.');
-    }
-    
-    if (!GA_TRACKING_ID || GA_TRACKING_ID.includes('XXXXXXXXXX')) {
-        console.warn('GA_TRACKING_ID ist nicht konfiguriert. Google Analytics wird nicht funktionieren.');
-    }
-    
-    if (errors.length > 0) {
-        console.error('Konfigurationsfehler gefunden:');
-        errors.forEach(error => console.error(`- ${error}`));
+    // Prüfe ob Werte überhaupt gesetzt sind
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        console.warn('⚠️ Supabase nicht vollständig konfiguriert – es wird auf lokale Daten-Fallbacks zurückgegriffen.');
         return false;
     }
-    
-    console.log('✓ Konfiguration erfolgreich validiert');
+
+    // Grobe Plausibilitätschecks (aber nicht mehr deine eigene URL als „Fehler“ behandeln)
+    if (!SUPABASE_URL.startsWith('https://')) {
+        console.error('❌ SUPABASE_URL scheint nicht gültig zu sein (muss mit "https://" beginnen).');
+        return false;
+    }
+
+    if (typeof SUPABASE_ANON_KEY !== 'string' || SUPABASE_ANON_KEY.length < 50) {
+        console.error('❌ SUPABASE_ANON_KEY scheint ungültig oder zu kurz zu sein.');
+        return false;
+    }
+
+    // GA4 ist optional
+    if (!GA_TRACKING_ID || GA_TRACKING_ID.includes('XXXXXXXXXX')) {
+        console.warn('ℹ️ GA_TRACKING_ID ist nicht gesetzt oder Platzhalter – Analytics ist optional.');
+    }
+
+    console.log('✅ Supabase-Konfiguration sieht gültig aus');
     return true;
 };
+
 
 // Development Mode Check
 // ----------------------
