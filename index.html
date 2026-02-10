@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -103,11 +104,13 @@
     </section>
 
     <!-- Filter Navigationsleiste -->
-    <nav id="filter-bar" class="filter-nav" aria-label="Tool-Kategorien">
+<nav id="filter-bar" class="filter-nav" aria-label="Tool-Kategorien">
+    <div class="header-container">
+        <!-- Mobile Dropdown wird hier von JavaScript eingefügt -->
+        
         <div class="filter-container" id="filter-container">
-            <!-- Kategorien werden dynamisch geladen -->
+            <!-- Kategorien werden dynamisch geladen - NUR TEXT! -->
             <button class="filter-btn active" data-filter="all" title="Alle Tools anzeigen" tabindex="0">
-                <i class="fas fa-th-large"></i>
                 <span>Alle Tools</span>
             </button>
         </div>
@@ -122,7 +125,8 @@
                 <i class="fas fa-list"></i>
             </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Hauptbereich mit Tool-Grid -->
     <main class="main-content">
@@ -387,3 +391,4 @@
     <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
+```
