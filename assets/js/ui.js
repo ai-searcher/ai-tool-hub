@@ -322,10 +322,13 @@ export function renderMobileFilterDropdown(categoriesArray) {
     
     // Check if dropdown already exists
     let dropdown = document.getElementById('filter-dropdown');
+    
     if (!dropdown) {
+        // Create dropdown
         dropdown = document.createElement('select');
         dropdown.id = 'filter-dropdown';
         dropdown.className = 'filter-dropdown';
+        dropdown.setAttribute('aria-label', 'Kategorie-Filter');
         filterNav.insertBefore(dropdown, filterNav.firstChild);
     }
     
@@ -339,17 +342,38 @@ export function renderMobileFilterDropdown(categoriesArray) {
         `<option value="${cat.id}">${cat.name}</option>`
     ).join('');
     
-    // Add event listener
-    dropdown.addEventListener('change', (e) => {
-        const filterId = e.target.value;
-        // Update active state on buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === filterId);
+    // Add event listener only once
+    if (!dropdown.dataset.bound) {
+        dropdown.dataset.bound = 'true';
+        
+        dropdown.addEventListener('change', (e) => {
+            const filterId = e.target.value;
+            
+            // Try to find corresponding button and click it
+            const button = document.querySelector(`.filter-btn[data-filter="${filterId}"]`);
+            if (button) {
+                button.click();
+            } else {
+                // Fallback: dispatch custom event
+                const event = new CustomEvent('filterChange', { 
+                    detail: { filter: filterId },
+                    bubbles: true 
+                });
+                document.dispatchEvent(event);
+            }
         });
-        // Trigger filter (assuming handleFilter function exists in events.js)
-        const event = new CustomEvent('filterChange', { detail: { filter: filterId } });
-        document.dispatchEvent(event);
-    });
+    }
+}
+
+/**
+ * Synchronizes the mobile dropdown with the active filter
+ * @param {string} activeFilterId - ID of the active filter
+ */
+export function syncFilterDropdown(activeFilterId) {
+    const dropdown = document.getElementById('filter-dropdown');
+    if (dropdown && dropdown.value !== activeFilterId) {
+        dropdown.value = activeFilterId;
+    }
 }
 
 /**
@@ -360,10 +384,20 @@ export function renderCategoryFilters(categoriesArray) {
     const filterContainer = document.getElementById('filter-container');
     if (!filterContainer) return;
     
+    // Render text-only buttons
     filterContainer.innerHTML = createCategoryFiltersHTML(categoriesArray);
     
-    // NEU: Render Mobile-Dropdown
+    // Render mobile dropdown
     renderMobileFilterDropdown(categoriesArray);
+    
+    // Find active filter and sync dropdown
+    const activeButton = document.querySelector('.filter-btn.active');
+    if (activeButton) {
+        syncFilterDropdown(activeButton.dataset.filter);
+    } else {
+        // Default to "all"
+        syncFilterDropdown('all');
+    }
 }
 
 // ===========================================
@@ -594,7 +628,8 @@ export default {
     renderRanking,
     createCategoryFiltersHTML,
     renderCategoryFilters,
-    renderMobileFilterDropdown, // NEU
+    renderMobileFilterDropdown,
+    syncFilterDropdown, // NEU: für Synchronisierung des Dropdowns
     updateHeroStats,
     populateModal,
     showLoadingSpinner,
