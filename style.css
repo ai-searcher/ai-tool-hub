@@ -999,55 +999,46 @@ body {
 }
 
 /* ==================== FLOATING SQUARES GRID (REPLACED) ==================== */
-/* Ziel: Grid-Zellen wirklich ~15% kleiner + etwas mehr Luft zwischen Karten */
+/* Ziel: Grid-Zellen 15% kleiner + großzügiger Abstand (wie Markierung) */
 
-/* Default (Desktop / responsive) */
+/* Desktop default: 320px * 0.85 ≈ 272px */
 .tool-grid-squares {
-  /* 85% von 320px ≈ 272px -> wir runden auf 260/272 (sauber) */
-  /* Verwende minmax(260px, 1fr) wenn du etwas mehr Kompaktheit willst */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 32px;
-  padding: 40px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
+  gap: 44px;                 /* großer Abstand wie auf deiner Markierung */
+  padding: 48px 28px;
   perspective: 2000px;
   transform-style: preserve-3d;
   box-sizing: border-box;
 }
 
-/* Square Card */
+/* Card */
 .card-square {
   position: relative;
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 20px;                 /* leicht reduziert vs. vorher */
-  aspect-ratio: 1 / 1;
-  width: 100%;
+  padding: 18px;
+  aspect-ratio: 1/1;
   display: flex;
   flex-direction: column;
-  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 200ms ease;
-  transform-style: preserve-3d;
+  transition: transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 200ms;
   will-change: transform;
   overflow: hidden;
   -webkit-user-select: text;
   user-select: text;
-  -webkit-touch-callout: default;
   box-sizing: border-box;
 }
 
-/* Glow / border top */
+/* subtle top stripe + glow */
 .card-square::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 3px;
   background: var(--primary);
   opacity: 0;
-  transition: opacity 200ms ease;
+  transition: opacity 160ms ease;
 }
-
 .card-square::after {
   content: '';
   position: absolute;
@@ -1056,98 +1047,80 @@ body {
   background: var(--primary);
   opacity: 0;
   filter: blur(20px);
-  transition: opacity 260ms ease;
+  transition: opacity 200ms ease;
   z-index: -1;
 }
 
-/* Hover State */
+/* Hover state */
 .card-square:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--primary);
   transform: translateY(-6px) scale(1.02);
+  border-color: var(--primary);
+  box-shadow: 0 12px 30px rgba(0,243,255,0.08);
   z-index: 100;
-  transition: transform 220ms cubic-bezier(0.22,1,0.36,1), box-shadow 200ms;
 }
-
 .card-square:hover::before { opacity: 1; }
 .card-square:hover::after  { opacity: 0.28; }
 
-/* Category-specific Glows keep existing color variables */
+/* Category-specific glows (keine Änderung nötig, nur zur Sicherheit) */
 .card-square[data-category="text"]:hover::before { background: var(--color-text); }
-.card-square[data-category="text"]:hover::after  { background: var(--color-text); }
 .card-square[data-category="image"]:hover::before { background: var(--color-image); }
-.card-square[data-category="image"]:hover::after  { background: var(--color-image); }
 .card-square[data-category="code"]:hover::before { background: var(--color-code); }
-.card-square[data-category="code"]:hover::after  { background: var(--color-code); }
 .card-square[data-category="audio"]:hover::before { background: var(--color-audio); }
-.card-square[data-category="audio"]:hover::after  { background: var(--color-audio); }
 .card-square[data-category="video"]:hover::before { background: var(--color-video); }
-.card-square[data-category="video"]:hover::after  { background: var(--color-video); }
 .card-square[data-category="data"]:hover::before { background: var(--color-data); }
-.card-square[data-category="data"]:hover::after  { background: var(--color-data); }
 
-/* Z-Index Layering (Parallax-Tiefe) */
-.card-square:nth-child(6n+1) { z-index: 10; }
-.card-square:nth-child(6n+2) { z-index: 30; }
-.card-square:nth-child(6n+3) { z-index: 50; }
-.card-square:nth-child(6n+4) { z-index: 20; }
-.card-square:nth-child(6n+5) { z-index: 40; }
-.card-square:nth-child(6n+6) { z-index: 60; }
+/* Inhalt */
+.square-content { display:flex; flex-direction:column; gap:12px; height:100%; }
+.square-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.square-title { font-size:1.12rem; font-weight:700; color:var(--primary); line-height:1.25; transition:color 160ms ease; }
+.square-description { color:var(--text-dim); font-size:0.95rem; line-height:1.45; }
 
-/* Square Content */
-.square-content {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  height: 100%;
-}
-
-.square-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.square-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 0;
-  line-height: 1.25;
-  flex: 1;
-  transition: color 160ms ease;
-}
-
-.square-category {
-  background: var(--primary-dim);
-  color: var(--primary);
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-/* Button (falls noch vorhanden, wird per CSS versteckt) */
+/* Verstecke alte "Öffnen"-Buttons sicher (falls noch im HTML) */
 .card-link,
-.square-link {
-  display: none !important;
-}
+.square-link { display: none !important; }
 
-/* Idle Float Animation — leichter, flüssiger */
+/* Leichter Float-Effekt (sanfter als vorher) */
 @keyframes squareFloat {
-  0%, 100% { transform: translateY(0px); }
+  0%,100% { transform: translateY(0); }
   50%     { transform: translateY(-6px); }
 }
+.card-square { animation: squareFloat 4.4s ease-in-out infinite; }
+.card-square:nth-child(2n) { animation-delay: 0.55s; animation-duration:4.6s; }
+.card-square:nth-child(3n) { animation-delay: 1s; animation-duration:5s; }
 
-/* Default animation timing reduced for smoother feel */
-.card-square { animation: squareFloat 4.2s ease-in-out infinite; }
-.card-square:nth-child(2n) { animation-delay: 0.5s; animation-duration: 4.6s; }
-.card-square:nth-child(3n) { animation-delay: 1s;   animation-duration: 5s; }
-
-/* Neural Network Canvas z-index lower so it doesn't overlap */
+/* Neural canvas niedriger halten */
 .neural-canvas { z-index: 0; opacity: 0.28; }
+
+/* ===== Responsive Anpassungen für größere Lücken auf kleineren Screens ===== */
+
+/* XXL / Desktop */
+@media (min-width: 1600px) {
+  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 52px; padding:72px 48px; }
+}
+
+/* Desktop / Laptop */
+@media (min-width: 1400px) and (max-width: 1599px) {
+  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(272px, 1fr)); gap: 48px; padding:60px 40px; }
+}
+
+/* Narrow laptops */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px; padding:48px 28px; }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 28px; padding:36px 20px; }
+  .card-square { padding:16px; }
+}
+
+/* Mobile: zwinge 2 Spalten, kleinere Lücken */
+@media (max-width: 767px) {
+  .tool-grid-squares { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 18px 12px; }
+  .card-square { padding:12px; animation: none !important; }
+  .square-title { font-size:1.02rem; }
+  .square-description { font-size:0.9rem; line-height:1.35; -webkit-line-clamp:3; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; }
+}
 
 /* ==================== RESPONSIVE VARIANTS (angepasst) ==================== */
 
