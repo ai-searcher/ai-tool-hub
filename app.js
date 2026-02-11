@@ -731,9 +731,9 @@ render() {
 // =========================================
 const viewManager = {
   currentView: 'grid', // 'grid' or 'stack'
+  isStackModeActive: false,
 
   init() {
-    // ensure ui elements cached
     if (!ui.elements || Object.keys(ui.elements).length === 0) ui.cacheElements();
 
     ui.elements.viewToggle = ui.elements.viewToggle || getElement('#view-toggle');
@@ -749,7 +749,6 @@ const viewManager = {
     if (ui.elements.viewGrid) {
       ui.elements.viewGrid.addEventListener('click', () => this.switchView('grid'));
     }
-
     if (ui.elements.viewStack) {
       ui.elements.viewStack.addEventListener('click', () => this.switchView('stack'));
     }
@@ -769,93 +768,204 @@ const viewManager = {
       ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
     }
 
-    // ensure references
-    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
-    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
+    // references
+    const gridEl = ui.elements.toolGrid || getElement('#tool-grid');
+    const stacksEl = ui.elements.toolStacks || getElement('#tool-stacks');
 
-    // GRID view: hide panel & restore normal page
     if (view === 'grid') {
-      // close panel if open (animated)
-      const stacks = ui.elements.toolStacks;
-      if (stacks && stacks.classList.contains('panel')) {
-        document.body.style.overflow = ''; // restore scroll
-        stacks.classList.remove('enter');
-        stacks.classList.add('exit');
-        // after transition hide and cleanup
-        const onEnd = () => {
-          stacks.style.display = 'none';
-          stacks.classList.remove('panel', 'exit');
-          stacks.removeEventListener('transitionend', onEnd);
-        };
-        stacks.addEventListener('transitionend', onEnd, { passive: true, once: true });
-      } else {
-        if (ui.elements.toolStacks) ui.elements.toolStacks.style.display = 'none';
+      // revert stack-mode if active
+      if (this.isStackModeActive) {
+        this.disableStackMode();
       }
 
-      // show grid
-      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'grid';
-      // tidy up stacks fanned state
+      // hide stacks panel (existing behaviour)
+      if (stacksEl && stacksEl.classList.contains('panel')) {
+        document.body.style.overflow = '';
+        stacksEl.classList.remove('enter');
+        stacksEl.classList.add('exit');
+        const onEnd = () => {
+          stacksEl.style.display = 'none';
+          stacksEl.classList.remove('panel', 'exit');
+          stacksEl.removeEventListener('transitionend', onEnd);
+        };
+        stacksEl.addEventListener('transitionend', onEnd, { passive: true, once: true });
+      } else {
+        if (stacksEl) stacksEl.style.display = 'none';
+      }
+
+      // make grid visible again
+      if (gridEl) {
+        gridEl.style.display = 'grid';
+        // undo inline positioning left by stack-mode cleanup
+      }
+
+      // tidy up temporary fanned classes (if any)
       $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
       console.log('📐 Switched to grid view');
       return;
     }
 
-    // STACK view: render stacks and open full-screen panel (slide-in)
+    // STACK view requested -> animate grid -> stacks
     if (view === 'stack') {
-      // render stacks content (idempotent)
-      try {
-        stackRenderer.render();
-      } catch (err) {
-        console.error('Stack render failed:', err);
+      // if we have a dedicated stacks panel, show it (existing behaviour)
+      if (stacksEl) {
+        stacksEl.style.display = 'grid';
+        // use existing renderer for fallback panel
+        if (typeof stackRenderer !== 'undefined' && stackRenderer.render) stackRenderer.render();
       }
-
-      const stacks = ui.elements.toolStacks;
-      if (!stacks) {
-        console.warn('tool-stacks element not found');
-        return;
+      // enable animated stack mode from grid squares
+      if (gridEl) {
+        this.enableStackMode();
       }
-
-      // hide grid behind panel
-      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'none';
-
-      // prepare panel mode
-      if (!stacks.classList.contains('panel')) {
-        stacks.classList.add('panel');
-        // create close button if not exist
-        let closeBtn = stacks.querySelector('.panel-close');
-        if (!closeBtn) {
-          closeBtn = document.createElement('button');
-          closeBtn.type = 'button';
-          closeBtn.className = 'panel-close';
-          closeBtn.setAttribute('aria-label', 'Zurück zur Grid Ansicht');
-          closeBtn.innerHTML = '← Zurück';
-          closeBtn.addEventListener('click', () => this.switchView('grid'));
-          stacks.prepend(closeBtn);
-        }
-      }
-
-      // show & animate in
-      stacks.style.display = 'block';
-      // prevent background scroll while panel open
-      document.body.style.overflow = 'hidden';
-
-      // trigger CSS animation
-      requestAnimationFrame(() => {
-        stacks.classList.remove('exit');
-        stacks.classList.add('enter');
-      });
-
-      // focus the close button for accessibility
-      const firstFocusable = stacks.querySelector('.panel-close, .stack-title, .category-stack .stack-title');
-      if (firstFocusable) {
-        firstFocusable.setAttribute('tabindex', '-1');
-        firstFocusable.focus({ preventScroll: true });
-      }
-
-      console.log('📐 Switched to stack view (panel open)');
+      console.log('📐 Switched to stack view');
     }
+  },
+
+  // ========== STACK MODE: animate grid squares into category stacks ==========
+  enableStackMode() {
+    const container = ui.elements.toolGrid || getElement('#tool-grid');
+    if (!container) return;
+    this.isStackModeActive = true;
+    const cards = Array.from(container.querySelectorAll('.card-square, .card'));
+    if (!cards.length) return;
+
+    // get bounding rects
+    const containerRect = container.getBoundingClientRect();
+
+    // group cards by data-category attribute (order preserved)
+    const categories = [];
+    const byCategory = {};
+    cards.forEach(card => {
+      const cat = (card.dataset.category || card.getAttribute('data-category') || 'other').toString();
+      if (!byCategory[cat]) { byCategory[cat] = []; categories.push(cat); }
+      byCategory[cat].push(card);
+    });
+
+    // Save original inline styles for restore
+    const originalStyles = new Map();
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      originalStyles.set(card, {
+        position: card.style.position || '',
+        left: card.style.left || '',
+        top: card.style.top || '',
+        width: card.style.width || '',
+        height: card.style.height || '',
+        transform: card.style.transform || '',
+        transition: card.style.transition || '',
+        zIndex: card.style.zIndex || ''
+      });
+      // make absolute in container space
+      card.style.position = 'absolute';
+      card.style.left = (r.left - containerRect.left) + 'px';
+      card.style.top = (r.top - containerRect.top) + 'px';
+      card.style.width = r.width + 'px';
+      card.style.height = r.height + 'px';
+      card.style.transition = 'transform 520ms cubic-bezier(.2,.9,.2,1), left 520ms, top 520ms';
+      card.style.willChange = 'transform';
+      // mark as in-stack default (content dim)
+      card.classList.add('in-stack');
+    });
+
+    // compute stack centers evenly across width
+    const padding = 24;
+    const catCount = categories.length;
+    const contW = containerRect.width;
+    const contH = Math.max(containerRect.height, 300);
+    const yCenter = Math.round(contH * 0.45);
+
+    // For cleanup later attach map to container
+    container._stack_meta = { originalStyles, categories, byCategory };
+
+    categories.forEach((cat, i) => {
+      const cx = Math.round(padding + ((i + 0.5) * ((contW - padding * 2) / Math.max(1, catCount))));
+      const cy = yCenter;
+      const stack = byCategory[cat];
+
+      stack.forEach((card, idx) => {
+        const curLeft = parseFloat(card.style.left || 0);
+        const curTop = parseFloat(card.style.top || 0);
+        const cardW = parseFloat(card.style.width || 0);
+        const cardH = parseFloat(card.style.height || 0);
+        const targetLeft = cx - cardW / 2;
+        const targetTop = cy - cardH / 2;
+        const dx = targetLeft - curLeft;
+        const dy = targetTop - curTop;
+        const depthOffset = idx * 8; // px vertical offset within stack
+        const zIndex = 2000 + (stack.length - idx);
+        card.style.transform = `translate(${dx}px, ${dy + depthOffset}px) scale(${1 - idx * 0.01})`;
+        card.style.zIndex = String(zIndex);
+
+        // mark only the top card as visible/label
+        if (idx === 0) {
+          card.classList.add('stack-top');
+          card.classList.remove('in-stack');
+          // ensure label exists
+          let lbl = card.querySelector('.stack-label');
+          if (!lbl) {
+            lbl = document.createElement('div');
+            lbl.className = 'stack-label';
+            lbl.textContent = cat;
+            card.appendChild(lbl);
+          } else {
+            lbl.textContent = cat;
+          }
+        } else {
+          // remove any existing label on non-top
+          const lbl = card.querySelector('.stack-label');
+          if (lbl) lbl.remove();
+          card.classList.add('in-stack');
+          card.classList.remove('stack-top');
+        }
+      });
+    });
+
+    // Slight container transform (optional subtle scale)
+    // container.style.transform = 'scale(0.995)'; // if you want a small camera effect
+  },
+
+  disableStackMode() {
+    const container = ui.elements.toolGrid || getElement('#tool-grid');
+    if (!container || !container._stack_meta) {
+      this.isStackModeActive = false;
+      return;
+    }
+    const { originalStyles } = container._stack_meta;
+    const cards = Array.from(container.querySelectorAll('.card-square, .card'));
+
+    // animate back to original by clearing transform and then restore inline styles on transitionend
+    cards.forEach(card => {
+      card.style.transform = '';
+      // remove label if any
+      const lbl = card.querySelector('.stack-label');
+      if (lbl) lbl.remove();
+      card.classList.remove('stack-top', 'in-stack');
+
+      const cleanup = () => {
+        const orig = originalStyles.get(card) || {};
+        card.style.position = orig.position || '';
+        card.style.left = orig.left || '';
+        card.style.top = orig.top || '';
+        card.style.width = orig.width || '';
+        card.style.height = orig.height || '';
+        card.style.transition = orig.transition || '';
+        card.style.zIndex = orig.zIndex || '';
+        card.style.willChange = '';
+        card.removeEventListener('transitionend', cleanup);
+      };
+      // if there's an on-going transform, wait for end; otherwise cleanup little later
+      card.addEventListener('transitionend', cleanup, { passive: true, once: true });
+      // fallback cleanup after 700ms in case transitionend didn't fire
+      setTimeout(cleanup, 700);
+    });
+
+    // tidy
+    delete container._stack_meta;
+    this.isStackModeActive = false;
+    // ensure container transform reset (if used)
+    if (container.style) container.style.transform = '';
   }
-};
+}; // end viewManager
 
 // =========================================
 // STACK RENDERER (3D Category Stacks)
