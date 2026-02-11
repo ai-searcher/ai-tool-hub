@@ -9,7 +9,7 @@
         script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.supabase.co;
         style-src 'self' 'unsafe-inline';
         img-src 'self'  https:;
-        font-src 'self' ;
+        font-src 'self';
         connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://doicozkpdbkyvdkpujoh.supabase.co;
         frame-ancestors 'none';
         base-uri 'self';
@@ -44,25 +44,31 @@
     <!-- ==================== STANDARD META TAGS ==================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Kuratierte Sammlung der besten AI Tools - Von Text über Bilder bis Code">
-    <meta name="keywords" content="AI Tools, Künstliche Intelligenz, ChatGPT, Midjourney, AI Hub">
+    <meta name="description" content="Kuratierte Sammlung der besten AI Tools - Von Text über Bilder bis Code. Mit Favoriten, Filter und Sortierung.">
+    <meta name="keywords" content="AI Tools, Künstliche Intelligenz, ChatGPT, Midjourney, Claude, Gemini, AI Hub, Machine Learning">
     <meta name="author" content="Quantum AI Hub">
+    <meta name="theme-color" content="#0A0E27">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="Quantum AI Hub">
-    <meta property="og:description" content="Deine kuratierte AI Tool-Sammlung">
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="⚡ Quantum AI Hub - Die besten AI Tools">
+    <meta property="og:description" content="Deine kuratierte AI Tool-Sammlung mit 20+ Tools">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com">
+    <meta property="og:site_name" content="Quantum AI Hub">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="⚡ Quantum AI Hub">
+    <meta name="twitter:description" content="Die besten AI Tools an einem Ort">
     
     <!-- Title -->
-    <title>⚡ Quantum AI Hub - Die besten AI Tools</title>
+    <title>⚡ Quantum AI Hub - Die besten AI Tools 2026</title>
     
     <!-- ==================== GOOGLE ANALYTICS (SECURE) ==================== -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
     <script>
-      // Strict Mode
       'use strict';
       
-      // Google Analytics mit Security
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -71,40 +77,49 @@
         'allow_google_signals': false,
         'allow_ad_personalization_signals': false,
         'cookie_flags': 'SameSite=Strict;Secure',
-        'cookie_expires': 63072000, // 2 Jahre
+        'cookie_expires': 63072000,
         'client_storage': 'cookies'
       });
       
-      // Error Handling
       window.addEventListener('error', function(e) {
         console.error('Global Error:', e.message);
-        // Verhindere dass Fehler Seite crashen
         return true;
       });
       
-      // Unhandled Promise Rejection
       window.addEventListener('unhandledrejection', function(e) {
         console.error('Unhandled Promise:', e.reason);
         e.preventDefault();
       });
     </script>
     
-    <!-- Favicon (optional - später hinzufügen) -->
+    <!-- Favicon (optional) -->
     <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+    <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="app.js" as="script">
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=1.2">
-
- </head>
- <body>
+    <link rel="stylesheet" href="style.css?v=2.0">
+    
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://doicozkpdbkyvdkpujoh.supabase.co">
+</head>
+<body>
+    
+    <!-- ==================== ANIMATED BACKGROUND ==================== -->
+    <canvas id="background-canvas" class="background-canvas" aria-hidden="true"></canvas>
     
     <!-- ==================== HEADER ==================== -->
-    <header class="header">
+    <header class="header" role="banner">
         <div class="container">
+            
             <!-- Logo & Title -->
             <div class="header-top">
                 <h1 class="title">⚡ Quantum AI Hub</h1>
-                <p class="subtitle">Deine kuratierte AI Tool-Sammlung</p>
+                <p class="subtitle">Deine kuratierte AI Tool-Sammlung mit Favoriten & Filter</p>
             </div>
             
             <!-- Search Bar -->
@@ -114,14 +129,14 @@
                         <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <input 
-                        type="text" 
+                        type="search" 
                         id="search" 
                         class="search-input"
-                        placeholder="Tool suchen... (z.B. ChatGPT, Midjourney)" 
+                        placeholder="Tool suchen... (z.B. ChatGPT, Midjourney, Claude)" 
                         autocomplete="off"
                         spellcheck="false"
                         maxlength="100"
-                        aria-label="Tool suchen"
+                        aria-label="Durchsuche AI Tools"
                     >
                     <button 
                         id="search-clear" 
@@ -174,30 +189,31 @@
                 </button>
             </div>
             
-            <!-- Stats Bar (optional - wird später befüllt) -->
+            <!-- Stats Bar -->
             <div class="stats-bar" id="stats-bar" style="display: none;" role="status" aria-live="polite">
                 <div class="stat">
-                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-value" id="stat-total" aria-label="Anzahl Tools">0</span>
                     <span class="stat-label">Tools</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value" id="stat-categories">0</span>
+                    <span class="stat-value" id="stat-categories" aria-label="Anzahl Kategorien">0</span>
                     <span class="stat-label">Kategorien</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value" id="stat-featured">0</span>
+                    <span class="stat-value" id="stat-featured" aria-label="Anzahl Featured">0</span>
                     <span class="stat-label">Featured</span>
                 </div>
             </div>
+            
         </div>
     </header>
     
     <!-- ==================== MAIN ==================== -->
-    <main class="main">
+    <main class="main" role="main">
         <div class="container">
             
             <!-- Loading State -->
-            <div id="loading" class="state-container loading-state" role="status" aria-live="polite">
+            <div id="loading" class="state-container loading-state" role="status" aria-live="polite" aria-busy="true">
                 <div class="spinner" aria-hidden="true"></div>
                 <p class="state-text">Lädt Tools...</p>
                 <p class="state-subtext">Verbinde mit Datenbank</p>
@@ -208,38 +224,73 @@
                 <div class="state-icon" aria-hidden="true">⚠️</div>
                 <p class="state-text">Fehler beim Laden</p>
                 <p class="state-subtext">Bitte Seite neu laden oder Console prüfen (F12)</p>
-                <button id="retry-button" class="retry-button" type="button">Erneut versuchen</button>
+                <button id="retry-button" class="retry-button" type="button">
+                    🔄 Erneut versuchen
+                </button>
             </div>
             
-            <!-- Empty State (keine Suchergebnisse) -->
+            <!-- Empty State -->
             <div id="empty" class="state-container empty-state" style="display: none;" role="status" aria-live="polite">
                 <div class="state-icon" aria-hidden="true">🔍</div>
                 <p class="state-text">Keine Tools gefunden</p>
-                <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff</p>
+                <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff oder Filter</p>
             </div>
             
-            <!-- Tool Grid (Floating Squares View) -->
-<div id="tool-grid" class="tool-grid tool-grid-squares" style="display: none;">
-    <!-- Tools werden hier dynamisch als Squares eingefügt -->
-</div>
-
-<!-- Canvas für Neural Network Linien -->
-<canvas id="neural-canvas" class="neural-canvas"></canvas>
-
-
+            <!-- Filter & Sort Container (dynamisch eingefügt von JS) -->
+            <div id="filter-sort-container" class="filter-sort-container" style="display: none;">
+                <!-- Filter Chips werden hier von app.js eingefügt -->
+                <!-- Sort Dropdown wird hier von app.js eingefügt -->
+            </div>
+            
+            <!-- Tool Grid (Square Cards View) -->
+            <div 
+                id="tool-grid" 
+                class="tool-grid tool-grid-squares" 
+                style="display: none;"
+                role="region"
+                aria-label="AI Tools Grid"
+            >
+                <!-- Tool Cards werden hier dynamisch von app.js eingefügt -->
+                <!-- Struktur pro Card:
+                <div class="card-square" data-category="text" data-tool-id="1">
+                    <button class="favorite-btn">❤️</button>
+                    <div class="square-content-centered">
+                        <div class="square-category-badge">Text</div>
+                        <h3 class="square-title-large">Tool Name</h3>
+                        <div class="tool-meta">
+                            <span class="tool-rating">⭐⭐⭐⭐⭐</span>
+                            <span class="tool-provider">by Provider</span>
+                            <span class="badge-free">GRATIS</span>
+                        </div>
+                        <div class="tool-tags">
+                            <span class="tool-tag">#tag1</span>
+                            <span class="tool-tag">#tag2</span>
+                        </div>
+                    </div>
+                    <a href="https://..." class="card-overlay-link"></a>
+                </div>
+                -->
+            </div>
             
             <!-- Tool Stacks (3D Stack View) -->
-            <div id="tool-stacks" class="tool-stacks" style="display: none;">
-                <!-- Stacks werden hier dynamisch eingefügt -->
+            <div 
+                id="tool-stacks" 
+                class="tool-stacks" 
+                style="display: none;"
+                role="region"
+                aria-label="AI Tools Stacks"
+            >
+                <!-- Category Stacks werden hier dynamisch von app.js eingefügt -->
                 <!-- Struktur pro Stack:
                 <div class="category-stack" data-category="text">
                     <div class="stack-header">
-                        <h2 class="stack-title">Text Tools</h2>
+                        <h2 class="stack-title">📝 Text Tools</h2>
                         <span class="stack-count">5</span>
                     </div>
                     <div class="stack-container">
                         <div class="stack-cards">
-                            ... Cards ...
+                            <div class="stack-card">...</div>
+                            <div class="stack-card">...</div>
                         </div>
                     </div>
                 </div>
@@ -250,29 +301,62 @@
     </main>
     
     <!-- ==================== FOOTER ==================== -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <p class="footer-text">
-                    <strong>Quantum AI Hub</strong> v1.0 
+                    <strong>Quantum AI Hub</strong> v2.0 
                     <span class="footer-separator" aria-hidden="true">•</span>
-                    Gebaut mit 💙
+                    Gebaut mit 💙 und modernster Technologie
                 </p>
                 <p class="footer-links">
-                    <a href="https://github.com" target="_blank" rel="noopener noreferrer nofollow" class="footer-link">
+                    <a 
+                        href="https://github.com/yourusername/quantum-ai-hub" 
+                        target="_blank" 
+                        rel="noopener noreferrer nofollow" 
+                        class="footer-link"
+                        aria-label="GitHub Repository öffnen"
+                    >
                         GitHub
                     </a>
                     <span class="footer-separator" aria-hidden="true">•</span>
-                    <span class="footer-link" id="source-indicator">
+                    <span class="footer-link" id="source-indicator" aria-label="Datenquelle">
                         Datenquelle: <span id="data-source">Lädt...</span>
+                    </span>
+                    <span class="footer-separator" aria-hidden="true">•</span>
+                    <span class="footer-link" style="cursor: default;">
+                        Features: ❤️ Favoriten | 🎨 Filter | 📊 Sortierung
                     </span>
                 </p>
             </div>
         </div>
     </footer>
     
-    <!-- ==================== SCRIPT ==================== -->
-    <script src="app.js?v=1.1"></script>
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script src="app.js?v=2.0" defer></script>
+    
+    <!-- ==================== NOSCRIPT FALLBACK ==================== -->
+    <noscript>
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1A1E37;
+            padding: 40px;
+            border-radius: 16px;
+            border: 2px solid #00F3FF;
+            text-align: center;
+            max-width: 500px;
+            z-index: 9999;
+        ">
+            <h2 style="color: #00F3FF; margin-bottom: 16px;">⚠️ JavaScript erforderlich</h2>
+            <p style="color: #E0E0F0; line-height: 1.6;">
+                Diese App benötigt JavaScript um zu funktionieren.<br>
+                Bitte aktiviere JavaScript in deinem Browser.
+            </p>
+        </div>
+    </noscript>
     
 </body>
 </html>
