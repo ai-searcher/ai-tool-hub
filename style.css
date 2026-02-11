@@ -1146,21 +1146,21 @@ body {
 /* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(2, 1fr);  /* Keine minmax! */
-    max-width: 400px;                        /* Begrenze Grid-Breite */
-    margin: 0 auto;                          /* Zentriere */
+    grid-template-columns: repeat(2, minmax(96px, 150px));  /* Max 150px pro Spalte */
+    justify-content: center;    /* Zentriere Grid wenn Platz übrig */
     gap: 36px;
     padding: 40px 24px;
   }
 
   .card-square {
-    max-width: 150px;       /* Maximal 150px breit */
     min-height: 112px;
     padding: 10px;
+    width: 100%;                /* Fülle Grid-Zelle komplett */
     animation: squareFloat 8s ease-in-out infinite;
     transform: none !important;
   }
 }
+
 
 
 
