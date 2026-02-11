@@ -624,46 +624,55 @@ const ui = {
   },
   
   // Render all tools
-  render() {
-    if (!this.elements.toolGrid) return;
-    
-    // Filter tools by search query
-    if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      const query = state.searchQuery.toLowerCase();
-      state.filtered = state.tools.filter(tool => 
-        tool.title.toLowerCase().includes(query) ||
-        (tool.description && tool.description.toLowerCase().includes(query))
-      );
-    } else {
-      state.filtered = [...state.tools];
+  // Render all tools
+render() {
+  // Filter tools by search query
+  if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
+    const query = state.searchQuery.toLowerCase();
+    state.filtered = state.tools.filter(tool => 
+      tool.title.toLowerCase().includes(query) ||
+      (tool.description && tool.description.toLowerCase().includes(query))
+    );
+  } else {
+    state.filtered = [...state.tools];
+  }
+  
+  // Show appropriate state
+  if (state.loading) {
+    this.showState('loading');
+    return;
+  }
+  
+  if (state.error) {
+    this.showState('error');
+    return;
+  }
+  
+  if (state.filtered.length === 0) {
+    this.showState('empty');
+    if (this.elements.emptyQuery && state.searchQuery) {
+      this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
     }
-    
-    // Show appropriate state
-    if (state.loading) {
-      this.showState('loading');
-      return;
-    }
-    
-    if (state.error) {
-      this.showState('error');
-      return;
-    }
-    
-    if (state.filtered.length === 0) {
-      this.showState('empty');
-      if (this.elements.emptyQuery && state.searchQuery) {
-        this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
-      }
-      return;
-    }
-    
-    // Render grid
+    return;
+  }
+  
+  // Render based on current view
+  if (viewManager.currentView === 'grid') {
     this.showState('grid');
-    this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-    
-    // Attach click handlers for analytics
-    this.attachCardHandlers();
-  },
+    if (this.elements.toolGrid) {
+      this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+      this.attachCardHandlers();
+    }
+  } else {
+    // Stack view
+    if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
+    if (this.elements.toolStacks) {
+      this.elements.toolStacks.style.display = 'grid';
+      stackRenderer.render();
+    }
+  }
+}
+
   
   // Attach event handlers to cards
   attachCardHandlers() {
@@ -676,6 +685,221 @@ const ui = {
     });
   }
 };
+
+// =========================================
+// VIEW MANAGEMENT (Grid/Stack Toggle)
+// =========================================
+const viewManager = {
+  currentView: 'grid', // 'grid' or 'stack'
+  
+  init() {
+    // Cache view elements
+    ui.elements.viewToggle = getElement('#view-toggle');
+    ui.elements.viewGrid = getElement('#view-grid');
+    ui.elements.viewStack = getElement('#view-stack');
+    ui.elements.toolStacks = getElement('#tool-stacks');
+    
+    if (!ui.elements.viewToggle) return;
+    
+    // Show toggle buttons when tools are loaded
+    if (state.tools.length > 0) {
+      ui.elements.viewToggle.style.display = 'flex';
+    }
+    
+    // Grid button handler
+    if (ui.elements.viewGrid) {
+      ui.elements.viewGrid.addEventListener('click', () => {
+        this.switchView('grid');
+      });
+    }
+    
+    // Stack button handler
+    if (ui.elements.viewStack) {
+      ui.elements.viewStack.addEventListener('click', () => {
+        this.switchView('stack');
+      });
+    }
+  },
+  
+  switchView(view) {
+    this.currentView = view;
+    
+    // Update button states
+    if (ui.elements.viewGrid && ui.elements.viewStack) {
+      ui.elements.viewGrid.classList.toggle('active', view === 'grid');
+      ui.elements.viewStack.classList.toggle('active', view === 'stack');
+      
+      // Update ARIA
+      ui.elements.viewGrid.setAttribute('aria-selected', view === 'grid');
+      ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
+    }
+    
+    // Show/hide views
+    if (ui.elements.toolGrid) {
+      ui.elements.toolGrid.style.display = view === 'grid' ? 'grid' : 'none';
+    }
+    if (ui.elements.toolStacks) {
+      ui.elements.toolStacks.style.display = view === 'stack' ? 'grid' : 'none';
+    }
+    
+    // Render stack view if switching to it
+    if (view === 'stack') {
+      stackRenderer.render();
+    }
+    
+    console.log(`📐 Switched to ${view} view`);
+  }
+};
+
+// =========================================
+// STACK RENDERER (3D Category Stacks)
+// =========================================
+const stackRenderer = {
+  // Category labels and emojis
+  categoryConfig: {
+    text: { label: 'Text Tools', emoji: '📝', color: 'text' },
+    image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
+    code: { label: 'Code Tools', emoji: '💻', color: 'code' },
+    audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
+    video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
+     { label: 'Data Tools', emoji: '📊', color: 'data' },
+    other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
+  },
+  
+  // Group tools by category
+  groupByCategory() {
+    const grouped = {};
+    
+    state.filtered.forEach(tool => {
+      const category = tool.category || 'other';
+      if (!grouped[category]) {
+        grouped[category] = [];
+      }
+      grouped[category].push(tool);
+    });
+    
+    return grouped;
+  },
+  
+  // Render single stack card
+  renderStackCard(tool) {
+    const categoryDisplay = (tool.category || 'other').charAt(0).toUpperCase() + (tool.category || 'other').slice(1);
+    
+    return `
+      <div class="stack-card" data-tool-id="${tool.id}">
+        <div class="card-header">
+          <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
+          <span class="card-category">${categoryDisplay}</span>
+        </div>
+        <p class="card-description">
+          ${ui.escapeHtml(tool.description || 'AI Tool')}
+        </p>
+        <a 
+          href="${ui.escapeHtml(tool.link)}" 
+          class="card-link" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          data-tool-name="${ui.escapeHtml(tool.title)}"
+          onclick="event.stopPropagation()"
+        >
+          Öffnen →
+        </a>
+      </div>
+    `;
+  },
+  
+  // Render category stack
+  renderCategoryStack(category, tools) {
+    const config = this.categoryConfig[category] || this.categoryConfig.other;
+    const cardsHtml = tools.map(tool => this.renderStackCard(tool)).join('');
+    
+    return `
+      <div class="category-stack" data-category="${category}">
+        <div class="stack-header">
+          <h2 class="stack-title">
+            <span aria-hidden="true">${config.emoji}</span>
+            ${config.label}
+          </h2>
+          <span class="stack-count">${tools.length}</span>
+        </div>
+        <div class="stack-container" data-stack-id="${category}">
+          <div class="stack-cards" data-category="${category}">
+            ${cardsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+  
+  // Render all stacks
+  render() {
+    if (!ui.elements.toolStacks) return;
+    
+    const grouped = this.groupByCategory();
+    const categories = Object.keys(grouped).sort();
+    
+    if (categories.length === 0) {
+      ui.elements.toolStacks.innerHTML = '<p class="state-text">Keine Tools gefunden</p>';
+      return;
+    }
+    
+    // Render each category stack
+    const stacksHtml = categories
+      .map(category => this.renderCategoryStack(category, grouped[category]))
+      .join('');
+    
+    ui.elements.toolStacks.innerHTML = stacksHtml;
+    
+    // Attach stack handlers
+    this.attachStackHandlers();
+    
+    console.log(`📚 Rendered ${categories.length} category stacks`);
+  },
+  
+  // Attach click/touch handlers to stacks
+  attachStackHandlers() {
+    const stackContainers = $$('.stack-container');
+    
+    stackContainers.forEach(container => {
+      const stackCards = container.querySelector('.stack-cards');
+      if (!stackCards) return;
+      
+      // Click/Touch to fan out
+      container.addEventListener('click', (e) => {
+        // Don't toggle if clicking on a link
+        if (e.target.closest('.card-link')) return;
+        
+        const isFanned = stackCards.classList.contains('fanned');
+        
+        // Close all other stacks
+        $$('.stack-cards').forEach(sc => {
+          if (sc !== stackCards) {
+            sc.classList.remove('fanned');
+          }
+        });
+        
+        // Toggle current stack
+        stackCards.classList.toggle('fanned', !isFanned);
+        
+        console.log(`📇 Stack ${isFanned ? 'closed' : 'opened'}:`, container.dataset.stackId);
+      });
+    });
+    
+    // Attach analytics to links
+    const links = $$('.stack-card .card-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const toolName = e.currentTarget.dataset.toolName;
+        analytics.trackToolClick(toolName);
+      });
+    });
+  }
+};
+
+// =========================================
+// SEARCH FUNCTIONALITY
+// =========================================
+
 
 // =========================================
 // SEARCH FUNCTIONALITY
@@ -833,6 +1057,10 @@ const app = {
       
       // Initialize search
       search.init();
+      
+      // Initialize view manager
+      viewManager.init();
+
       
       console.log('✅ App initialized successfully!');
       
