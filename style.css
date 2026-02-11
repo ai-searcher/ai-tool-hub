@@ -1146,26 +1146,22 @@ body {
 /* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    /* kleinere Quadrate: maximale Breite reduziert (ca. 15% kleiner) */
-    grid-template-columns: repeat(2, minmax(96px, 1fr));
-
-    /* mehr Abstand zwischen den Quadraten (luftig wie auf deiner Markierung) */
-    gap: 36px;              /* mehr Luft zwischen Karten */
-
-    /* größerer Seitenabstand */
-    padding: 40px 24px;     /* mehr Rand zum Bildschirm */
+    grid-template-columns: repeat(2, 1fr);  /* Keine minmax! */
+    max-width: 400px;                        /* Begrenze Grid-Breite */
+    margin: 0 auto;                          /* Zentriere */
+    gap: 36px;
+    padding: 40px 24px;
   }
 
   .card-square {
-    /* Höhe/Innenabstand an kleinere Kachelgröße anpassen */
+    max-width: 150px;       /* Maximal 150px breit */
     min-height: 112px;
     padding: 10px;
-
-    /* Leichte Animation - langsamer als Desktop für bessere Performance */
     animation: squareFloat 8s ease-in-out infinite;
-    transform: none !important; /* Parallax-Effekt aus, nur Float-Animation */
+    transform: none !important;
   }
 }
+
 
 
   /* Erzwinge button unten, clamped text, damit Karten weiterhin quadratisch bleiben */
