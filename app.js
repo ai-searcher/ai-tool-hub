@@ -553,7 +553,7 @@ const dataLoader = {
 const ui = {
   elements: {},
   
-  // Cache all DOM elements
+    // Cache all DOM elements
   cacheElements() {
     this.elements = {
       loading: getElement('#loading'),
@@ -561,6 +561,10 @@ const ui = {
       empty: getElement('#empty'),
       emptyQuery: getElement('#empty-query'),
       toolGrid: getElement('#tool-grid'),
+      toolStacks: getElement('#tool-stacks'),   // << neu: Tool Stacks Element
+      viewToggle: getElement('#view-toggle'),   // << neu: View Toggle Container
+      viewGrid: getElement('#view-grid'),       // << neu: Grid Button
+      viewStack: getElement('#view-stack'),     // << neu: Stack Button
       search: getElement('#search'),
       searchClear: getElement('#search-clear'),
       retryButton: getElement('#retry-button'),
@@ -731,49 +735,62 @@ render() {
 // =========================================
 const viewManager = {
   currentView: 'grid', // 'grid' or 'stack'
-  
+
   init() {
-    // Cache view elements
-    ui.elements.viewToggle = getElement('#view-toggle');
-    ui.elements.viewGrid = getElement('#view-grid');
-    ui.elements.viewStack = getElement('#view-stack');
-    ui.elements.toolStacks = getElement('#tool-stacks');
-    
-    if (!ui.elements.viewToggle) return;
-    
-    // Show toggle buttons when tools are loaded
-    if (state.tools.length > 0) {
+    // make sure ui.cacheElements() wurde schon ausgeführt
+    // falls nicht, cache jetzt (sichere Vorsichtsmaßnahme)
+    if (!ui.elements || Object.keys(ui.elements).length === 0) {
+      ui.cacheElements();
+    }
+
+    // ensure elements exist (fallbacks)
+    ui.elements.viewToggle = ui.elements.viewToggle || getElement('#view-toggle');
+    ui.elements.viewGrid   = ui.elements.viewGrid   || getElement('#view-grid');
+    ui.elements.viewStack  = ui.elements.viewStack  || getElement('#view-stack');
+    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
+    ui.elements.toolGrid   = ui.elements.toolGrid   || getElement('#tool-grid');
+
+    // If toggle exists, show it when we have tools
+    if (ui.elements.viewToggle && state.tools && state.tools.length > 0) {
       ui.elements.viewToggle.style.display = 'flex';
     }
-    
-    // Grid button handler
+
+    // Attach handlers (use optional chaining to avoid errors)
     if (ui.elements.viewGrid) {
       ui.elements.viewGrid.addEventListener('click', () => {
         this.switchView('grid');
       });
     }
-    
-    // Stack button handler
+
     if (ui.elements.viewStack) {
       ui.elements.viewStack.addEventListener('click', () => {
         this.switchView('stack');
       });
     }
+
+    // If currentView is 'stack' (persisted state or dev), ensure the correct view is visible
+    // and rendered — helpful for hot reloads/dev.
+    this.switchView(this.currentView);
   },
-  
+
   switchView(view) {
+    // Always update reference to elements (in case DOM changed)
+    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
+    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
+    ui.elements.viewGrid = ui.elements.viewGrid || getElement('#view-grid');
+    ui.elements.viewStack = ui.elements.viewStack || getElement('#view-stack');
+
+    // If requested view is already active, still ensure stacks are rendered and focused.
     this.currentView = view;
-    
-    // Update button states
+
+    // Update button states & ARIA (if buttons exist)
     if (ui.elements.viewGrid && ui.elements.viewStack) {
       ui.elements.viewGrid.classList.toggle('active', view === 'grid');
       ui.elements.viewStack.classList.toggle('active', view === 'stack');
-      
-      // Update ARIA
       ui.elements.viewGrid.setAttribute('aria-selected', view === 'grid');
       ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
     }
-    
+
     // Show/hide views
     if (ui.elements.toolGrid) {
       ui.elements.toolGrid.style.display = view === 'grid' ? 'grid' : 'none';
@@ -781,12 +798,38 @@ const viewManager = {
     if (ui.elements.toolStacks) {
       ui.elements.toolStacks.style.display = view === 'stack' ? 'grid' : 'none';
     }
-    
-    // Render stack view if switching to it
+
+    // If switching to stack, render stacks and bring them into view
     if (view === 'stack') {
-      stackRenderer.render();
+      // render stack content (idempotent)
+      try {
+        stackRenderer.render();
+      } catch (err) {
+        console.error('Stack render failed:', err);
+      }
+
+      // small timeout to allow DOM paint, then scroll/focus the first category
+      setTimeout(() => {
+        const container = ui.elements.toolStacks || getElement('#tool-stacks');
+        if (!container) return;
+
+        // Scroll the stacks container into view smoothly
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Focus the first category title for accessibility (and to make it obvious)
+        const firstTitle = container.querySelector('.category-stack .stack-title');
+        if (firstTitle) {
+          // ensure it's focusable then focus quickly
+          firstTitle.setAttribute('tabindex', '-1');
+          firstTitle.focus({ preventScroll: true });
+        }
+      }, 60);
+    } else {
+      // switching to grid: stop any stack-specific animations / states
+      // optional: close all fanned stacks for a tidy return
+      $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
     }
-    
+
     console.log(`📐 Switched to ${view} view`);
   }
 };
