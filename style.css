@@ -854,7 +854,7 @@ body {
 /* Tablets */
 @media (max-width: 768px) {
   .tool-grid {
-    gap: 12px;
+    gap: 20px;
   }
 
   .card {
@@ -1129,7 +1129,7 @@ body {
 .square-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
   height: 100%;
 }
 
