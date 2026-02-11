@@ -165,17 +165,26 @@ const supabase = {
     };
     
     try {
-      const response = await fetch(url, { 
-        ...options, 
-        headers,
-        signal: AbortSignal.timeout(10000) // 10s timeout
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      return await response.json();
+      // fallback-compatible fetch with AbortController timeout
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s
+
+try {
+  const response = await fetch(url, {
+    ...options,
+    headers,
+    signal: controller.signal
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  return await response.json();
+} finally {
+  clearTimeout(timeoutId);
+}
+
     } catch (error) {
       console.error('Supabase fetch error:', error);
       throw error;
@@ -461,19 +470,28 @@ const dataLoader = {
       console.log('📍 Current URL:', window.location.href);
       console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
       
-      const response = await fetch('./data.json', {
-        signal: AbortSignal.timeout(5000)
-      });
-      
-      console.log('📥 Response status:', response.status);
-      console.log('📥 Response OK:', response.ok);
-      console.log('📥 Response headers:', [...response.headers.entries()]);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      const data = await response.json();
+      // robust local JSON fetch with AbortController timeout
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s
+
+try {
+  const response = await fetch('./data.json', {
+    signal: controller.signal
+  });
+
+  console.log('📥 Response status:', response.status);
+  console.log('📥 Response OK:', response.ok);
+  console.log('📥 Response headers:', [...response.headers.entries()]);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  // <-- rest of function continues unchanged (use data as before)
+} finally {
+  clearTimeout(timeoutId);
+}
       console.log('📦 JSON parsed successfully');
       console.log('📦 Data structure:', Object.keys(data));
       console.log('📦 Data content:', data);
@@ -773,14 +791,14 @@ const viewManager = {
 const stackRenderer = {
   // Category labels and emojis
   categoryConfig: {
-    text: { label: 'Text Tools', emoji: '📝', color: 'text' },
-    image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
-    code: { label: 'Code Tools', emoji: '💻', color: 'code' },
-    audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
-    video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-     { label: 'Data Tools', emoji: '💿', color: 'data' },
-    other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
-  },
+  text:  { label: 'Text Tools',  emoji: '📝', color: 'text' },
+  image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
+  code:  { label: 'Code Tools',  emoji: '💻', color: 'code' },
+  audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
+  video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
+  data:  { label: 'Data Tools',  emoji: '📊', color: 'data' },
+  other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
+},
   
   // Group tools by category
   groupByCategory() {
