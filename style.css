@@ -1205,18 +1205,47 @@ body {
   .card-square { padding: 18px; }
 }
 
-/* Mobile (2 Spalten) */
+/* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    padding: 20px 16px;
+    /* kleinere Quadrate: maximale Breite reduziert (ca. 15% kleiner) */
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+
+    /* mehr Abstand zwischen den Quadraten (luftig wie auf deiner Markierung) */
+    gap: 28px;
+
+    /* größerer Seitenabstand */
+    padding: 32px 18px;
   }
 
   .card-square {
-    padding: 14px;
-    animation: none !important; /* besser für mobile performance */
+    /* Höhe/Innenabstand an kleinere Kachelgröße anpassen */
+    min-height: 140px;
+    padding: 12px;
+
+    /* Animation auf mobilen Geräten ausschalten für bessere Performance */
+    animation: none !important;
+    transform: none !important;
   }
+
+  /* Erzwinge button unten, clamped text, damit Karten weiterhin quadratisch bleiben */
+  #tool-grid.tool-grid-squares .square-link,
+  #tool-grid.tool-grid-squares .card-link {
+    margin-top: auto !important;
+    width: 100% !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+  }
+
+  #tool-grid.tool-grid-squares .square-description,
+  #tool-grid.tool-grid-squares .card-description {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
 
   .square-title { font-size: 1.05rem; }
   .square-description { font-size: 0.9rem; }
