@@ -855,7 +855,7 @@ body {
 /* Tablets */
 @media (max-width: 768px) {
   .tool-grid {
-    gap: 16px;
+    gap: 40px;              /* war: 16px */
   }
 
   .card {
@@ -883,15 +883,15 @@ body {
 @media (max-width: 767px) {
 
   .container {
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 20px;     /* war: 4px */
+    padding-right: 20px;    /* war: 4px */
   }
 
   .tool-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 26px;   /* mehr Raum zwischen den Karten */
-    padding: 0;
+    gap: 36px;              /* war: 26px */
+    padding: 20px 0;        /* war: 0 */
   }
 
   .card {
@@ -912,8 +912,8 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
 }
+
 
 /* ==================== FOOTER ==================== */
 
