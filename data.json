@@ -1,9 +1,8 @@
-{
   "meta": {
-    "version": "2.0.0",
+    "version": "1.0.0",
     "last_updated": "2026-02-11",
     "total_tools": 20,
-    "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung mit erweiterten Features"
+    "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung"
   },
   "tools": [
     {
