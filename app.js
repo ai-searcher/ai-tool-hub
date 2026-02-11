@@ -634,22 +634,27 @@ const ui = {
   },
   
   // Render tool card
-  renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    
-    return `
-  <div class="card" role="listitem" data-tool-id="${tool.id}">
-    <div class="card-header">
-      <h3 class="card-title">${this.escapeHtml(tool.title)}</h3>
-      <span class="card-category">${categoryDisplay}</span>
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  
+  return `
+    <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
+      <div class="square-content-centered">
+        <div class="square-category-badge">${categoryDisplay}</div>
+        <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
+      </div>
+      <a 
+        href="${this.escapeHtml(tool.link)}" 
+        class="card-overlay-link"
+        target="_blank" 
+        rel="noopener noreferrer"
+        aria-label="${this.escapeHtml(tool.title)} öffnen"
+      ></a>
     </div>
-    <p class="card-description">
-      ${this.escapeHtml(tool.description || 'AI Tool')}
-    </p>
-  </div>
-`;
-  },
+  `;
+}
+
   
   // Escape HTML to prevent XSS
   escapeHtml(text) {
