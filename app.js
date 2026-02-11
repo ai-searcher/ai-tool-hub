@@ -5,6 +5,13 @@
 // =========================================
 
 'use strict';
+window.addEventListener('unhandledrejection', function (event) {
+  console.error('UNHANDLED PROMISE REJECTION:', event.reason);
+});
+
+window.addEventListener('error', function (event) {
+  console.error('GLOBAL ERROR:', event.error || event.message);
+});
 
 // =========================================
 // CONFIGURATION
