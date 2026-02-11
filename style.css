@@ -78,7 +78,7 @@
   --color-code: #7C4DFF;
   --color-audio: #FF6B9D;
   --color-video: #448AFF;
-  --color- #1DE9B6;
+  --color-data: #1DE9B6;
   --color-other: #B0BEC5;
 
   --glow-text: rgba(0, 212, 255, 0.25);
@@ -86,9 +86,8 @@
   --glow-code: rgba(124, 77, 255, 0.25);
   --glow-audio: rgba(255, 107, 157, 0.25);
   --glow-video: rgba(68, 138, 255, 0.25);
-  --glow- rgba(29, 233, 182, 0.25);
+  --glow-data: rgba(29, 233, 182, 0.25);
 }
-
 /* ==================== RESET & BASE ==================== */
 * {
   margin: 0;
