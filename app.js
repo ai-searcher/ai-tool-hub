@@ -578,11 +578,12 @@ const ui = {
     if (!this.elements.dataSource) return;
     
     const sources = {
-      supabase: 'Supabase',
-      json: 'Local JSON',
-      defaults: 'Defaults',
-      loading: 'Loading...'
+      supabase: 'D: SB',
+      json: 'D: LJ',
+      defaults: 'D: DEF',
+      loading: '...'
     };
+
     
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
