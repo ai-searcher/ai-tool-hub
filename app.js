@@ -639,25 +639,16 @@ const ui = {
     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
     
     return `
-      <div class="card" role="listitem" data-tool-id="${tool.id}"><div class="card-header">
-          <h3 class="card-title">${this.escapeHtml(tool.title)}</h3>
-          <span class="card-category">${categoryDisplay}</span>
-        </div>
-        <p class="card-description">
-          ${this.escapeHtml(tool.description || 'AI Tool')}
-        </p>
-        <a 
-          href="${this.escapeHtml(tool.link)}" 
-          class="card-link" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          data-tool-id="${tool.id}"
-          data-tool-name="${this.escapeHtml(tool.title)}"
-        >
-          Öffnen →
-        </a>
-      </div>
-    `;
+  <div class="card" role="listitem" data-tool-id="${tool.id}">
+    <div class="card-header">
+      <h3 class="card-title">${this.escapeHtml(tool.title)}</h3>
+      <span class="card-category">${categoryDisplay}</span>
+    </div>
+    <p class="card-description">
+      ${this.escapeHtml(tool.description || 'AI Tool')}
+    </p>
+  </div>
+`;
   },
   
   // Escape HTML to prevent XSS
@@ -895,26 +886,16 @@ const stackRenderer = {
     const categoryDisplay = (tool.category || 'other').charAt(0).toUpperCase() + (tool.category || 'other').slice(1);
     
     return `
-      <div class="stack-card" data-tool-id="${tool.id}">
-        <div class="card-header">
-          <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
-          <span class="card-category">${categoryDisplay}</span>
-        </div>
-        <p class="card-description">
-          ${ui.escapeHtml(tool.description || 'AI Tool')}
-        </p>
-        <a 
-          href="${ui.escapeHtml(tool.link)}" 
-          class="card-link" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          data-tool-name="${ui.escapeHtml(tool.title)}"
-          onclick="event.stopPropagation()"
-        >
-          Öffnen →
-        </a>
-      </div>
-    `;
+  <div class="stack-card" data-tool-id="${tool.id}">
+    <div class="card-header">
+      <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
+      <span class="card-category">${categoryDisplay}</span>
+    </div>
+    <p class="card-description">
+      ${ui.escapeHtml(tool.description || 'AI Tool')}
+    </p>
+  </div>
+`;
   },
   
   // Render category stack
@@ -1282,39 +1263,28 @@ const floatingSquares = {
     grid.classList.add('tool-grid-squares');
     
     const html = state.filtered.map((tool, index) => {
-      const depth = (index % 6) * 10 + 10; // Z-depth: 10-60
-      
-      return `
-        <div 
-          class="card-square" 
-          data-tool-id="${tool.id}"
-          data-category="${tool.category || 'other'}"
-          data-depth="${depth}"
-        >
-          <div class="square-content">
-            <div class="square-header">
-              <h3 class="square-title">${ui.escapeHtml(tool.title)}</h3>
-              <span class="square-category">${(tool.category || 'other').toUpperCase()}</span>
-            </div>
-            <p class="square-description">
-              ${ui.escapeHtml(tool.description || 'AI Tool')}
-            </p>
-            <a 
-              href="${ui.escapeHtml(tool.link)}" 
-              class="square-link" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              data-tool-name="${ui.escapeHtml(tool.title)}"
-              onclick="event.stopPropagation()"
-            >
-              Öffnen →
-            </a>
-          </div>
+  const depth = (index % 6) * 10 + 10; // Z-depth: 10-60
+
+  return `
+    <div 
+      class="card-square" 
+      data-tool-id="${tool.id}"
+      data-category="${tool.category || 'other'}"
+      data-depth="${depth}"
+    >
+      <div class="square-content">
+        <div class="square-header">
+          <h3 class="square-title">${ui.escapeHtml(tool.title)}</h3>
+          <span class="square-category">${(tool.category || 'other').toUpperCase()}</span>
         </div>
-      `;
-    }).join('');
-    
-    grid.innerHTML = html;
+        <p class="square-description">
+          ${ui.escapeHtml(tool.description || 'AI Tool')}
+        </p>
+      </div>
+    </div>
+  `;
+}).join('');
+grid.innerHTML = html;
     
     // Cache card elements
     this.cards = Array.from(grid.querySelectorAll('.card-square'));
