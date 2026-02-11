@@ -453,7 +453,6 @@ const dataLoader = {
     }
   },
   
-  
   async loadFromJSON() {
     if (!CONFIG.fallback.useLocalJSON) return null;
     
@@ -499,7 +498,6 @@ const dataLoader = {
       return null;
     }
   },
-  
   
   loadDefaults() {
     if (!CONFIG.fallback.useDefaults) return [];
@@ -643,7 +641,6 @@ const ui = {
   },
   
   // Render all tools
-  // Render all tools
 render() {
   // Filter tools by search query
   if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -690,7 +687,7 @@ render() {
       stackRenderer.render();
     }
   }
-}
+},
 
   
   // Attach event handlers to cards
@@ -780,10 +777,9 @@ const stackRenderer = {
     image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
     code: { label: 'Code Tools', emoji: '💻', color: 'code' },
     audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
-        video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-     { label: 'Data Tools', emoji: '📊', color: 'data' }, // Key '' hinzugefügt
+    video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
+     { label: 'Data Tools', emoji: '📊', color: 'data' },
     other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
-
   },
   
   // Group tools by category
@@ -919,11 +915,6 @@ const stackRenderer = {
 // =========================================
 // SEARCH FUNCTIONALITY
 // =========================================
-
-
-// =========================================
-// SEARCH FUNCTIONALITY
-// =========================================
 const search = {
   init() {
     if (!ui.elements.search) return;
@@ -1046,11 +1037,6 @@ const app = {
       // Show loading state
       ui.showState('loading');
       
-      // Show loading state
-ui.showState('loading');
-
-// TEMPORARY: Force use defaults for testing
-
       // Load data with triple fallback
       const rawTools = await dataLoader.load();
       
@@ -1086,48 +1072,47 @@ ui.showState('loading');
       // Initialize view manager
       viewManager.init();
 
-      
       console.log('✅ App initialized successfully!');
       
     } catch (error) {
-  console.error('❌ CRITICAL ERROR in init:', error);
-  console.error('❌ Error type:', error.constructor.name);
-  console.error('❌ Error message:', error.message);
-  console.error('❌ Error stack:', error.stack);
-  
-  // Emergency fallback to defaults
-  console.log('🚨 EMERGENCY: Activating fallback to defaults...');
-  
-  try {
-    state.tools = DEFAULT_TOOLS;
-    state.filtered = [...state.tools];
-    state.loading = false;
-    state.error = null; // Clear error
-    state.dataSource = 'emergency';
-    
-    console.log('🔧 Emergency: Updating UI...');
-    ui.updateStats();
-    ui.updateDataSource();
-    ui.render();
-    
-    console.log('🔧 Emergency: Initializing search...');
-    search.init();
-    
-    console.log('🔧 Emergency: Initializing view manager...');
-    viewManager.init();
-    
-    console.log('✅ Emergency recovery successful! App running with defaults.');
-    console.log('💡 Check console errors above to debug the original issue.');
-    
-  } catch (recoveryError) {
-    console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
-    console.error('💥 This should never happen. Something is very wrong.');
-    
-    // Last resort: show error
-    errorHandler.handle(error, 'Initialization');
+      console.error('❌ CRITICAL ERROR in init:', error);
+      console.error('❌ Error type:', error.constructor.name);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      
+      // Emergency fallback to defaults
+      console.log('🚨 EMERGENCY: Activating fallback to defaults...');
+      
+      try {
+        state.tools = DEFAULT_TOOLS;
+        state.filtered = [...state.tools];
+        state.loading = false;
+        state.error = null; // Clear error
+        state.dataSource = 'emergency';
+        
+        console.log('🔧 Emergency: Updating UI...');
+        ui.updateStats();
+        ui.updateDataSource();
+        ui.render();
+        
+        console.log('🔧 Emergency: Initializing search...');
+        search.init();
+        
+        console.log('🔧 Emergency: Initializing view manager...');
+        viewManager.init();
+        
+        console.log('✅ Emergency recovery successful! App running with defaults.');
+        console.log('💡 Check console errors above to debug the original issue.');
+        
+      } catch (recoveryError) {
+        console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
+        console.error('💥 This should never happen. Something is very wrong.');
+        
+        // Last resort: show error
+        errorHandler.handle(error, 'Initialization');
+      }
+    }
   }
-}
-
 };
 
 // =========================================
@@ -1149,4 +1134,3 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 // =========================================
 // END
 // =========================================
-
