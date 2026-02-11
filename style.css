@@ -1427,6 +1427,27 @@ body {
     padding-right: env(safe-area-inset-right);
     padding-bottom: env(safe-area-inset-bottom);
   }
+} 
+ 
+ /* ==== 3mm Abstand zwischen den Boxen (mit px-Fallback) ==== */
+/* 3mm ≈ 11.34px -> runden wir auf 12px als Fallback */
+
+#tool-grid.tool-grid-squares {
+  gap: 12px;   /* fallback für Browser, die mm unzuverlässig rendern */
+  gap: 3mm;    /* primär: 3 Millimeter (wenn Browser physische Einheiten nutzt) */
+  padding-left: 4mm;   /* Abstand zum Rand links */
+  padding-right: 4mm;  /* Abstand zum Rand rechts */
+  box-sizing: border-box;
+}
+
+/* Speziell für kleine Mobil-Displays (wenn du nur mobil ändern willst) */
+@media (max-width: 480px) {
+  #tool-grid.tool-grid-squares {
+    gap: 12px;
+    gap: 3mm;
+    padding-left: 4mm;
+    padding-right: 4mm;
+  }
 }
 
 /* ==================== ACCESSIBILITY ==================== */
