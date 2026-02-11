@@ -1179,13 +1179,13 @@ const viewManager = {
 // STACK RENDERER (3D Category Stacks)
 // =========================================
 const stackRenderer = {
-  categoryConfig: {
-    text: { label: 'Text Tools', emoji: '📝', color: 'text' },
+    categoryConfig: {
+    text:  { label: 'Text Tools',  emoji: '📝', color: 'text' },
     image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
-    code: { label: 'Code Tools', emoji: '💻', color: 'code' },
+    code:  { label: 'Code Tools',  emoji: '💻', color: 'code' },
     audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
     video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-     { label: 'Data Tools', emoji: '📊', color: 'data' },
+    data:  { label: 'Data Tools',  emoji: '📊', color: 'data' },
     other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
   },
   
