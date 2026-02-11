@@ -1697,4 +1697,11 @@ a:focus-visible {
   cursor: pointer;
 }
 
+/* Entfernt die dünne Linie oben an Karten komplett */
+.card::before,
+.card-square::before,
+.stack-card::before {
+  display: none !important;
+}
+
 /* ==================== END ==================== */
