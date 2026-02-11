@@ -952,24 +952,170 @@ body {
   display: grid;
 }
 
-/* Card (Square) */
+/* Card */
 .card-square {
   position: relative;
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 18px;
-  aspect-ratio: 1 / 1;
-  width: 100%;
+  aspect-ratio: 1/1;
   display: flex;
   flex-direction: column;
-  transition: transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 200ms, border-color 200ms;
+  transition: transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 200ms;
   will-change: transform;
   overflow: hidden;
   -webkit-user-select: text;
   user-select: text;
   box-sizing: border-box;
 }
+
+/* ==================== HIER EINFÜGEN ==================== */
+/* ==================== CENTERED CARD DESIGN ==================== */
+
+/* Zentrierter Content Container */
+.square-content-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 20px;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Category Badge - klein und elegant */
+.square-category-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  background: var(--primary-dim);
+  padding: 6px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+/* Tool Name - groß und prominent */
+.square-title-large {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0;
+  transition: color var(--transition-fast);
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+/* Overlay Link (gesamte Karte klickbar) */
+.card-overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Hover Effects */
+.card-square:hover .square-title-large {
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+.card-square:hover .square-category-badge {
+  background: var(--primary);
+  color: var(--bg-dark);
+  transform: translateY(-2px);
+}
+
+/* Category-specific Badge Colors */
+.card-square[data-category="text"] .square-category-badge {
+  background: var(--glow-text);
+  color: var(--color-text);
+}
+
+.card-square[data-category="image"] .square-category-badge {
+  background: var(--glow-image);
+  color: var(--color-image);
+}
+
+.card-square[data-category="code"] .square-category-badge {
+  background: var(--glow-code);
+  color: var(--color-code);
+}
+
+.card-square[data-category="audio"] .square-category-badge {
+  background: var(--glow-audio);
+  color: var(--color-audio);
+}
+
+.card-square[data-category="video"] .square-category-badge {
+  background: var(--glow-video);
+  color: var(--color-video);
+}
+
+.card-square[data-category="data"] .square-category-badge {
+  background: var(--glow-data);
+  color: var(--color-data);
+}
+
+/* Hover: Badge in Kategorie-Farbe */
+.card-square[data-category="text"]:hover .square-category-badge {
+  background: var(--color-text);
+}
+
+.card-square[data-category="image"]:hover .square-category-badge {
+  background: var(--color-image);
+}
+
+.card-square[data-category="code"]:hover .square-category-badge {
+  background: var(--color-code);
+}
+
+.card-square[data-category="audio"]:hover .square-category-badge {
+  background: var(--color-audio);
+}
+
+.card-square[data-category="video"]:hover .square-category-badge {
+  background: var(--color-video);
+}
+
+.card-square[data-category="data"]:hover .square-category-badge {
+  background: var(--color-data);
+}
+
+/* Mobile Anpassungen */
+@media (max-width: 767px) {
+  .square-content-centered {
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .square-category-badge {
+    font-size: 0.65rem;
+    padding: 4px 12px;
+  }
+  
+  .square-title-large {
+    font-size: 1.1rem;
+  }
+}
+
+/* Tablet Anpassungen */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .square-title-large {
+    font-size: 1.3rem;
+  }
+}
+/* ==================== ENDE EINFÜGEN ==================== */
+
+  
 
 /* sanfter Hover (nicht zu stark) */
 .card-square:hover {
@@ -999,24 +1145,6 @@ body {
     padding: 12px;
     transition: none; /* weniger Animation auf Mobile */
   }
-}
-
-/* Card */
-.card-square {
-  position: relative;
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 18px;
-  aspect-ratio: 1/1;
-  display: flex;
-  flex-direction: column;
-  transition: transform 260ms cubic-bezier(0.22,1,0.36,1), box-shadow 200ms;
-  will-change: transform;
-  overflow: hidden;
-  -webkit-user-select: text;
-  user-select: text;
-  box-sizing: border-box;
 }
 
 /* subtle top stripe + glow */
