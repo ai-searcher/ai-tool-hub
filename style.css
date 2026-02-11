@@ -854,7 +854,7 @@ body {
 /* Tablets */
 @media (max-width: 768px) {
   .tool-grid {
-    gap: 20px;
+    gap: 16px;
   }
 
   .card {
@@ -1129,7 +1129,7 @@ body {
 .square-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   height: 100%;
 }
 
@@ -1253,7 +1253,7 @@ body {
 @media (min-width: 768px) and (max-width: 1023px) {
   .tool-grid-squares {
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
     padding: 40px 24px;
   }
   
@@ -1272,7 +1272,7 @@ body {
   
   .card-square {
     min-height: 240px;
-    padding: 16px;
+    padding: 20px;
     
     /* Disable animations on mobile for performance */
     animation: none !important;
