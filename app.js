@@ -639,8 +639,7 @@ const ui = {
     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
     
     return `
-      <div class="card" role="listitem">
-        <div class="card-header">
+      <div class="card" role="listitem" data-tool-id="${tool.id}"><div class="card-header">
           <h3 class="card-title">${this.escapeHtml(tool.title)}</h3>
           <span class="card-category">${categoryDisplay}</span>
         </div>
@@ -1165,6 +1164,9 @@ const app = {
       
       // Initialize view manager
       viewManager.init();
+      
+      // --- Double-click handlers for cards (first click = arm, second click = open detail) ---
+      attachDoubleClickHandlers();
 
       console.log('✅ App initialized successfully!');
       
@@ -1484,74 +1486,109 @@ app.init = async function() {
   floatingSquares.init();
 };
 
-/* ============================================= */
-/* DOUBLE CLICK CARD SYSTEM */
-/* ============================================= */
 
-(function() {
+/* -----------------------------
+   DOUBLE-CLICK / MODAL SYSTEM
+   ----------------------------- */
 
-  // Modal erstellen
-  const modal = document.createElement("div");
-  modal.id = "tool-modal";
+function createToolModal() {
+  if (document.getElementById('tool-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'tool-modal';
+  modal.style.display = 'none';
+  modal.style.position = 'fixed';
+  modal.style.inset = '0';
+  modal.style.zIndex = '9999';
+  modal.style.background = 'rgba(0,0,0,0.7)';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
   modal.innerHTML = `
-    <div class="modal-box">
-      <h3 id="modal-title"></h3>
-      <p id="modal-desc"></p>
-      <button onclick="closeToolModal()">Schließen</button>
+    <div class="modal-box" role="dialog" aria-modal="true" style="background:#0f1224;border-radius:14px;padding:24px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+      <h3 id="tool-modal-title" style="color:var(--primary);margin-bottom:8px;">Tool</h3>
+      <p id="tool-modal-desc" style="color:var(--text-dim);margin-bottom:12px;"></p>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <a id="tool-modal-open" class="card-link" style="display:inline-flex;padding:8px 12px;border-radius:8px;background:var(--primary);color:var(--bg-dark);text-decoration:none;">Öffnen</a>
+        <button id="tool-modal-close" style="background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:var(--text-secondary);">Schließen</button>
+      </div>
     </div>
   `;
   document.body.appendChild(modal);
 
-  window.closeToolModal = function() {
-    modal.classList.remove("open");
-  };
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeToolModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeToolModal();
+  });
+}
 
-  // Karten auswählen
-  function initDoubleClickCards() {
-    const cards = document.querySelectorAll(".card, .card-square");
+function openToolModal(tool) {
+  createToolModal();
+  const modal = document.getElementById('tool-modal');
+  if (!modal) return;
+  modal.querySelector('#tool-modal-title').textContent = tool.title || 'Tool';
+  modal.querySelector('#tool-modal-desc').textContent = tool.description || '';
+  const openLink = modal.querySelector('#tool-modal-open');
+  openLink.href = tool.link || '#';
+  openLink.target = '_blank';
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('open'), 10);
+}
 
-    cards.forEach(card => {
-      let armed = false;
+function closeToolModal() {
+  const modal = document.getElementById('tool-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.style.display = 'none';
+}
 
-      card.addEventListener("click", () => {
+function attachDoubleClickHandlers() {
+  createToolModal();
 
-        if (!armed) {
-          // ERSTER Klick
-          card.classList.add("card-armed");
-          armed = true;
+  const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
 
-          setTimeout(() => {
-            armed = false;
-            card.classList.remove("card-armed");
-          }, 2000);
+  grid.addEventListener('click', (e) => {
+    if (e.target.closest('a') || e.target.closest('button')) return;
+    const card = e.target.closest('.card, .card-square, .stack-card');
+    if (!card) return;
 
-        } else {
-          // ZWEITER Klick
-          const title = card.querySelector("h3")?.innerText || "Tool";
-          const desc = card.querySelector("p")?.innerText || "";
+    // id vom data-attribute
+    const idAttr = card.dataset.toolId;
+    // erste Stufe: arming
+    if (!card.classList.contains('card-armed')) {
+      document.querySelectorAll('.card-armed').forEach(c => c.classList.remove('card-armed'));
+      card.classList.add('card-armed');
+      setTimeout(() => { if (card.classList.contains('card-armed')) card.classList.remove('card-armed'); }, 3000);
+      return;
+    }
 
-          document.getElementById("modal-title").innerText = title;
-          document.getElementById("modal-desc").innerText = desc;
+    // zweite Stufe: open
+    card.classList.remove('card-armed');
 
-          modal.classList.add("open");
+    let tool = null;
+    if (idAttr && window.appState && appState.tools) {
+      tool = appState.tools.find(t => String(t.id) === String(idAttr));
+    }
+    if (!tool) {
+      const titleEl = card.querySelector('.card-title, .square-title');
+      const title = titleEl?.textContent?.trim();
+      if (title && window.appState && appState.tools) {
+        tool = appState.tools.find(t => (t.title || '').trim() === title);
+      }
+    }
 
-          armed = false;
-          card.classList.remove("card-armed");
-        }
-
-      });
-
-    });
-  }
-
-  // kurz warten bis alles geladen ist
-  window.addEventListener("load", () => {
-    setTimeout(initDoubleClickCards, 500);
+    if (tool) {
+      openToolModal(tool);
+    } else {
+      const link = card.querySelector('a.card-link, a.square-link');
+      if (link) window.open(link.href, '_blank');
+    }
   });
 
-})();
-
-
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'tool-modal-close') closeToolModal();
+  });
+}
 
 // =========================================
 // END
