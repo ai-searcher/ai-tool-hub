@@ -1158,8 +1158,8 @@ body {
 
   .card-square {
     /* Höhe/Innenabstand an kleinere Kachelgröße anpassen */
-    min-height: 140px;
-    padding: 12px;
+    min-height: 112px;
+    padding: 10px;
 
     /* Leichte Animation - langsamer als Desktop für bessere Performance */
     animation: squareFloat 8s ease-in-out infinite;
