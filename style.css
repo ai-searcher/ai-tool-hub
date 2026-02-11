@@ -604,15 +604,15 @@ body {
 
 /* ==================== CATEGORY COLORS ==================== */
 :root {
-  /* Elegant Category Colors */
+    /* Elegant Category Colors */
   --color-text: #00D4FF;      /* Ocean Blue */
   --color-image: #E040FB;     /* Soft Purple-Pink */
   --color-code: #7C4DFF;      /* Deep Purple */
   --color-audio: #FF6B9D;     /* Soft Coral */
   --color-video: #448AFF;     /* Bright Blue */
-  --color-data: #1DE9B6;      /* Elegant Teal (korrekt benannt) */
+  --color-data: #1DE9B6;      /* Elegant Teal (korrekt) */
   --color-other: #B0BEC5;     /* Neutral Gray */
-  
+
   /* Glow variants */
   --glow-text: rgba(0, 212, 255, 0.25);
   --glow-image: rgba(224, 64, 251, 0.25);
@@ -1019,15 +1019,15 @@ body {
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  min-height: 280px;
+  /* remove min-height so aspect-ratio controls size */
+  aspect-ratio: 1 / 1;          /* <- zwingt Quadrat */
+  width: 100%;
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-style: preserve-3d;
   will-change: transform;
   overflow: hidden;
-  
-  /* iOS Text Selection */
   -webkit-user-select: text;
   user-select: text;
   -webkit-touch-callout: default;
@@ -1524,6 +1524,43 @@ a:focus-visible {
 
   /* touch devices: remove hover transforms for stability */
   .card:hover { transform: none !important; box-shadow: none !important; }
+}
+   
+  /* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT (HIGH-SPECIFICITY) ===== */
+@media (orientation: portrait) and (max-width: 900px) {
+  /* grid: 2 columns, close to edges (you said 4px earlier) */
+  #tool-grid.tool-grid-squares {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 4px !important;      /* <- Abstand zum Rand (du wolltest 4px) */
+    box-sizing: border-box;
+  }
+
+  /* ensure each square stays square, allow inner content to clamp */
+  #tool-grid.tool-grid-squares .card-square {
+    aspect-ratio: 1 / 1 !important;
+    min-height: 0 !important;     /* remove fixed min-heights that break aspect-ratio */
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  /* clamp description so it doesn't expand the card */
+  #tool-grid.tool-grid-squares .square-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;        /* max 3 lines (adjust if needed) */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    font-size: 0.9rem;
+  }
+
+  /* make the action button sit at bottom */
+  #tool-grid.tool-grid-squares .square-link {
+    margin-top: auto !important;
+  }
 }
 
 /* ==================== END ==================== */
