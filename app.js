@@ -1151,8 +1151,6 @@ const app = {
       // Initialize view manager
       viewManager.init();
       
-      // --- Double-click handlers for cards (first click = arm, second click = open detail) ---
-      attachDoubleClickHandlers();
 
       console.log('✅ App initialized successfully!');
       
