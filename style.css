@@ -353,7 +353,7 @@ body {
 /* ==================== TOOL GRID ==================== */
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-lg);
   animation: fadeIn 0.5s ease;
 }
@@ -364,6 +364,8 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
+  aspect-ratio: 1 / 1;
+  justify-content: space-between;
   display: flex;
   flex-direction: column;
   transition: transform var(--transition-normal), 
@@ -869,8 +871,8 @@ body {
 
 /* Mobile */
 @media (max-width: 480px) {
-  .tool-stacks {
-    grid-template-columns: 1fr;
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
   }
   
