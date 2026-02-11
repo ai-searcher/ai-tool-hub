@@ -726,9 +726,7 @@ render() {
   }
 };
 
-// =========================================
-// VIEW MANAGEMENT (Grid/Stack Toggle)
-// =========================================
+
 // =========================================
 // VIEW MANAGEMENT (Grid/Stack Toggle)  <--- REPLACED by manual patch
 // =========================================
@@ -757,7 +755,7 @@ const viewManager = {
     }
 
     // make sure initial state is applied
-    this.switchView(this.currentView);
+    try { this.switchView(this.currentView); } catch (e) { console.error('viewManager.init switchView error', e); }
   },
 
   switchView(view) {
