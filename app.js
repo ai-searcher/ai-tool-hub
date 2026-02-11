@@ -453,7 +453,6 @@ const dataLoader = {
     }
   },
   
-    },
   
   async loadFromJSON() {
     if (!CONFIG.fallback.useLocalJSON) return null;
