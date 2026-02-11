@@ -1005,9 +1005,9 @@ body {
 /* ==================== FLOATING SQUARES GRID (angepasst: -15% + mehr Abstand) ==================== */
 /* Desktop default: 320px * 0.85 ≈ 272px */
 .tool-grid-squares {
-  grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
-  gap: 44px;                 /* größerer Abstand wie in deiner Markierung */
-  padding: 48px 28px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 60px;
+  padding: 80px 60px;
   perspective: 2000px;
   transform-style: preserve-3d;
   box-sizing: border-box;
