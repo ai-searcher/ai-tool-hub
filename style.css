@@ -1399,8 +1399,8 @@ body {
   }
   
   .tool-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+     grid-template-columns: repeat(2, minmax(140px, 1fr));
+     gap: 12px;
   }
   
   .card-header {
