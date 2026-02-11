@@ -1484,6 +1484,73 @@ app.init = async function() {
   floatingSquares.init();
 };
 
+/* ============================================= */
+/* DOUBLE CLICK CARD SYSTEM */
+/* ============================================= */
+
+(function() {
+
+  // Modal erstellen
+  const modal = document.createElement("div");
+  modal.id = "tool-modal";
+  modal.innerHTML = `
+    <div class="modal-box">
+      <h3 id="modal-title"></h3>
+      <p id="modal-desc"></p>
+      <button onclick="closeToolModal()">Schließen</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  window.closeToolModal = function() {
+    modal.classList.remove("open");
+  };
+
+  // Karten auswählen
+  function initDoubleClickCards() {
+    const cards = document.querySelectorAll(".card, .card-square");
+
+    cards.forEach(card => {
+      let armed = false;
+
+      card.addEventListener("click", () => {
+
+        if (!armed) {
+          // ERSTER Klick
+          card.classList.add("card-armed");
+          armed = true;
+
+          setTimeout(() => {
+            armed = false;
+            card.classList.remove("card-armed");
+          }, 2000);
+
+        } else {
+          // ZWEITER Klick
+          const title = card.querySelector("h3")?.innerText || "Tool";
+          const desc = card.querySelector("p")?.innerText || "";
+
+          document.getElementById("modal-title").innerText = title;
+          document.getElementById("modal-desc").innerText = desc;
+
+          modal.classList.add("open");
+
+          armed = false;
+          card.classList.remove("card-armed");
+        }
+
+      });
+
+    });
+  }
+
+  // kurz warten bis alles geladen ist
+  window.addEventListener("load", () => {
+    setTimeout(initDoubleClickCards, 500);
+  });
+
+})();
+
 
 
 // =========================================
