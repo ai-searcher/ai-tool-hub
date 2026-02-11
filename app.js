@@ -1156,10 +1156,10 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 }
 
 // =========================================
-// HEXAGONAL GRID + FLOATING PARALLAX
+// FLOATING SQUARES + PARALLAX
 // =========================================
 
-const hexagonalView = {
+const floatingSquares = {
   enabled: false,
   canvas: null,
   ctx: null,
@@ -1171,30 +1171,28 @@ const hexagonalView = {
   
   // Initialize
   init() {
-    if (this.isMobile) {
-      console.log('📱 Mobile detected - Parallax disabled');
-      return;
+    this.canvas = getElement('#neural-canvas');
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext('2d');
+      this.resizeCanvas();
     }
     
-    this.canvas = getElement('#neural-canvas');
-    if (!this.canvas) return;
-    
-    this.ctx = this.canvas.getContext('2d');
-    this.resizeCanvas();
-    
-    // Mouse tracking
-    document.addEventListener('mousemove', (e) => {
-      this.mouseX = e.clientX;
-      this.mouseY = e.clientY;
-    });
+    if (!this.isMobile) {
+      // Mouse tracking (nur Desktop)
+      document.addEventListener('mousemove', (e) => {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+      });
+    }
     
     // Resize handler
     window.addEventListener('resize', () => {
-      this.resizeCanvas();
+      this.isMobile = window.innerWidth < 768;
+      if (this.canvas) this.resizeCanvas();
       this.updateCardPositions();
     });
     
-    console.log('✨ Hexagonal Parallax initialized');
+    console.log('✨ Floating Squares initialized');
   },
   
   // Resize canvas
@@ -1204,42 +1202,41 @@ const hexagonalView = {
     this.canvas.height = window.innerHeight;
   },
   
-  // Render hexagonal cards
-  renderHexagons() {
+  // Render square cards
+  renderSquares() {
     const grid = ui.elements.toolGrid;
     if (!grid) return;
     
-    grid.classList.add('tool-grid-hexagonal');
+    grid.classList.add('tool-grid-squares');
     
     const html = state.filtered.map((tool, index) => {
-      const depth = (index % 6) * 10 + 10; // Z-depth: 10, 20, 30, 40, 50, 60
+      const depth = (index % 6) * 10 + 10; // Z-depth: 10-60
       
       return `
         <div 
-          class="card-hexagon" 
+          class="card-square" 
           data-tool-id="${tool.id}"
           data-category="${tool.category || 'other'}"
           data-depth="${depth}"
-          style="--depth: ${depth};"
         >
-          <div class="hexagon-shape">
-            <div class="hexagon-content">
-              <h3 class="hexagon-title">${ui.escapeHtml(tool.title)}</h3>
-              <span class="hexagon-category">${(tool.category || 'other').toUpperCase()}</span>
-              <p class="hexagon-description">
-                ${ui.escapeHtml(tool.description || 'AI Tool')}
-              </p>
-              <a 
-                href="${ui.escapeHtml(tool.link)}" 
-                class="hexagon-link" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                data-tool-name="${ui.escapeHtml(tool.title)}"
-                onclick="event.stopPropagation()"
-              >
-                Öffnen →
-              </a>
+          <div class="square-content">
+            <div class="square-header">
+              <h3 class="square-title">${ui.escapeHtml(tool.title)}</h3>
+              <span class="square-category">${(tool.category || 'other').toUpperCase()}</span>
             </div>
+            <p class="square-description">
+              ${ui.escapeHtml(tool.description || 'AI Tool')}
+            </p>
+            <a 
+              href="${ui.escapeHtml(tool.link)}" 
+              class="square-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              data-tool-name="${ui.escapeHtml(tool.title)}"
+              onclick="event.stopPropagation()"
+            >
+              Öffnen →
+            </a>
           </div>
         </div>
       `;
@@ -1248,10 +1245,10 @@ const hexagonalView = {
     grid.innerHTML = html;
     
     // Cache card elements
-    this.cards = Array.from(grid.querySelectorAll('.card-hexagon'));
+    this.cards = Array.from(grid.querySelectorAll('.card-square'));
     
     // Attach analytics
-    const links = grid.querySelectorAll('.hexagon-link');
+    const links = grid.querySelectorAll('.square-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
         const toolName = e.currentTarget.dataset.toolName;
@@ -1259,7 +1256,7 @@ const hexagonalView = {
       });
     });
     
-    // Start parallax animation
+    // Start parallax animation (nur Desktop)
     if (!this.isMobile) {
       this.startParallax();
     }
@@ -1273,7 +1270,7 @@ const hexagonalView = {
     
     const animate = () => {
       this.updateParallax();
-      this.drawNeuralNetwork();
+      if (this.canvas) this.drawNeuralNetwork();
       this.animationFrame = requestAnimationFrame(animate);
     };
     
@@ -1290,16 +1287,14 @@ const hexagonalView = {
   
   // Update parallax positions
   updateParallax() {
+    if (this.isMobile) return;
+    
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     
     this.cards.forEach(card => {
       const depth = parseInt(card.dataset.depth) || 10;
-      const factor = depth / 500; // Parallax intensity
-      
-      const rect = card.getBoundingClientRect();
-      const cardCenterX = rect.left + rect.width / 2;
-      const cardCenterY = rect.top + rect.height / 2;
+      const factor = depth / 800; // Parallax intensity (sanfter als Hexagons)
       
       const deltaX = (this.mouseX - centerX) * factor;
       const deltaY = (this.mouseY - centerY) * factor;
@@ -1308,25 +1303,25 @@ const hexagonalView = {
       card.style.transform = `
         translate(${deltaX}px, ${deltaY}px) 
         translateZ(${depth}px)
-        rotateX(${deltaY * 0.05}deg)
-        rotateY(${deltaX * 0.05}deg)
+        rotateX(${deltaY * 0.02}deg)
+        rotateY(${deltaX * 0.02}deg)
       `;
     });
   },
   
   // Update card positions (for resize)
   updateCardPositions() {
-    this.cards = Array.from(document.querySelectorAll('.card-hexagon'));
+    this.cards = Array.from(document.querySelectorAll('.card-square'));
   },
   
-  // Draw neural network lines
+  // Draw neural network lines (optional - kannst du auch weglassen)
   drawNeuralNetwork() {
-    if (!this.ctx || this.cards.length === 0) return;
+    if (!this.ctx || this.cards.length === 0 || this.isMobile) return;
     
     // Clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
-    // Draw connections between nearby hexagons
+    // Draw connections between nearby squares
     for (let i = 0; i < this.cards.length; i++) {
       const card1 = this.cards[i];
       const rect1 = card1.getBoundingClientRect();
@@ -1346,18 +1341,10 @@ const hexagonalView = {
         const distance = Math.hypot(center2.x - center1.x, center2.y - center1.y);
         
         // Only connect if close enough
-        if (distance < 400) {
-          const opacity = 1 - (distance / 400);
+        if (distance < 350) {
+          const opacity = 1 - (distance / 350);
           
-          // Gradient line
-          const gradient = this.ctx.createLinearGradient(
-            center1.x, center1.y, 
-            center2.x, center2.y
-          );
-          gradient.addColorStop(0, `rgba(0, 243, 255, ${opacity * 0.3})`);
-          gradient.addColorStop(1, `rgba(224, 64, 251, ${opacity * 0.3})`);
-          
-          this.ctx.strokeStyle = gradient;
+          this.ctx.strokeStyle = `rgba(0, 243, 255, ${opacity * 0.2})`;
           this.ctx.lineWidth = 1;
           this.ctx.beginPath();
           this.ctx.moveTo(center1.x, center1.y);
@@ -1386,13 +1373,13 @@ ui.render = function() {
   // Show appropriate state
   if (state.loading) {
     this.showState('loading');
-    hexagonalView.stopParallax();
+    floatingSquares.stopParallax();
     return;
   }
   
   if (state.error) {
     this.showState('error');
-    hexagonalView.stopParallax();
+    floatingSquares.stopParallax();
     return;
   }
   
@@ -1401,17 +1388,17 @@ ui.render = function() {
     if (this.elements.emptyQuery && state.searchQuery) {
       this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
     }
-    hexagonalView.stopParallax();
+    floatingSquares.stopParallax();
     return;
   }
   
   // Render based on current view
   if (viewManager.currentView === 'grid') {
     this.showState('grid');
-    hexagonalView.renderHexagons();
+    floatingSquares.renderSquares();
   } else {
     // Stack view
-    hexagonalView.stopParallax();
+    floatingSquares.stopParallax();
     if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
     if (this.elements.toolStacks) {
       this.elements.toolStacks.style.display = 'grid';
@@ -1420,12 +1407,13 @@ ui.render = function() {
   }
 };
 
-// Initialize hexagonal view on app init
+// Initialize floating squares on app init
 const originalAppInit = app.init;
 app.init = async function() {
   await originalAppInit.call(this);
-  hexagonalView.init();
+  floatingSquares.init();
 };
+
 
 
 // =========================================
