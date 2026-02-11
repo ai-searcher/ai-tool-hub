@@ -1147,7 +1147,7 @@ body {
 @media (max-width: 767px) {
   .tool-grid-squares {
     /* kleinere Quadrate: maximale Breite reduziert (ca. 15% kleiner) */
-    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    grid-template-columns: repeat(2, minmax(96px, 1fr));
 
     /* mehr Abstand zwischen den Quadraten (luftig wie auf deiner Markierung) */
     gap: 36px;              /* mehr Luft zwischen Karten */
