@@ -1272,14 +1272,22 @@ const floatingSquares = {
       data-category="${tool.category || 'other'}"
       data-depth="${depth}"
     >
-      <div class="square-content">
-        <div class="square-header">
-          <h3 class="square-title">${ui.escapeHtml(tool.title)}</h3>
-          <span class="square-category">${(tool.category || 'other').toUpperCase()}</span>
-        </div>
-        <p class="square-description">
-          ${ui.escapeHtml(tool.description || 'AI Tool')}
-        </p>
+       <!-- Kategorie zuerst -->
+       <div class="square-header">
+        <span class="square-category">
+          ${(tool.category || 'other').toUpperCase()}
+        </span>
+       </div>
+
+       <!-- Dann Titel groß -->
+       <h3 class="square-title">
+         ${ui.escapeHtml(tool.title)}
+       </h3>
+
+       <!-- Dann Beschreibung -->
+       <p class="square-description">
+         ${ui.escapeHtml(tool.description || 'AI Tool')}
+       </p>
       </div>
     </div>
   `;
