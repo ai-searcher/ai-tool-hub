@@ -1481,10 +1481,10 @@ a:focus-visible {
   /* use both orientation and max-width covering more devices */
 
   .tool-grid {
-    grid-template-columns: repeat(2, minmax(140px, 1fr)) !important;
-    gap: 12px !important;
-    padding-left: 12px;
-    padding-right: 12px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+    padding: 0 16px !important;   /* ← gleichmäßige Luft links & rechts */
+    box-sizing: border-box;
   }
 
   .card {
