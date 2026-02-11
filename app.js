@@ -466,47 +466,53 @@ const dataLoader = {
     if (!CONFIG.fallback.useLocalJSON) return null;
     
     try {
-      console.log('🔄 Trying local JSON...');
+            console.log('🔄 Trying local JSON...');
       console.log('📍 Current URL:', window.location.href);
       console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
-      
-      // robust local JSON fetch with AbortController timeout
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s
 
-try {
-  const response = await fetch('./data.json', {
-    signal: controller.signal
-  });
+      // robust local JSON fetch with AbortController, scoped correctly
+      let data = null;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s
 
-  console.log('📥 Response status:', response.status);
-  console.log('📥 Response OK:', response.ok);
-  console.log('📥 Response headers:', [...response.headers.entries()]);
+      try {
+        const response = await fetch('./data.json', {
+          signal: controller.signal,
+          // cache: 'no-store' // optional: uncomment while debugging to avoid stale cached JSON
+        });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response OK:', response.ok);
+        console.log('📥 Response headers:', [...response.headers.entries()]);
 
-  const data = await response.json();
-  // <-- rest of function continues unchanged (use data as before)
-} finally {
-  clearTimeout(timeoutId);
-}
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        data = await response.json();
+      } finally {
+        clearTimeout(timeoutId);
+      }
+
       console.log('📦 JSON parsed successfully');
-      console.log('📦 Data structure:', Object.keys(data));
-      console.log('📦 Data content:', data);
-      
-      const tools = data.tools || data;
-      
+
+      if (!data) {
+        console.warn('⚠️ JSON parsed but empty');
+        return null;
+      }
+
+      // support both { tools: [...] } and plain [...] JSON files
+      const tools = Array.isArray(data) ? data : (data.tools || data);
+
       if (tools && tools.length > 0) {
         console.log('✅ Loaded from data.json:', tools.length, 'tools');
         state.dataSource = 'json';
         return tools;
       }
-      
+
       console.warn('⚠️ JSON loaded but no tools found');
-      console.warn('⚠️ Data was:', data);
       return null;
+      
     } catch (error) {
       console.error('❌ JSON load failed:');
       console.error('❌ Error type:', error.constructor.name);
