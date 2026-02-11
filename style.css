@@ -1566,4 +1566,79 @@ a:focus-visible {
   }
 }
 
+/* ==================== STACK PANEL / "ZWEITE SEITE" (Slide-in) ==================== */
+
+/* Panel base (hidden by default - will be display:block by JS) */
+#tool-stacks.panel {
+  position: fixed;
+  inset: 0;                         /* top:0; right:0; bottom:0; left:0 */
+  background: linear-gradient(180deg, rgba(10,14,39,0.98), rgba(10,14,39,0.99));
+  z-index: var(--z-overlay);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 48px 20px;
+  box-sizing: border-box;
+  transform: translateX(100%);      /* start off-canvas (right) */
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
+  opacity: 1;
+}
+
+/* visible state (slide in) */
+#tool-stacks.panel.enter {
+  transform: translateX(0%);
+}
+
+/* exit state (slide out to right) */
+#tool-stacks.panel.exit {
+  transform: translateX(100%);
+}
+
+/* make contained stacks layout full-width and readable */
+#tool-stacks.panel .container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Close button */
+#tool-stacks .panel-close {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: calc(var(--z-overlay) + 10);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+#tool-stacks .panel-close:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.02);
+  color: var(--primary);
+}
+
+/* ensure stack columns look good inside panel */
+#tool-stacks.panel .tool-stacks {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* responsive tweaks */
+@media (max-width: 767px) {
+  #tool-stacks.panel {
+    padding: 20px 12px;
+  }
+  #tool-stacks .panel-close {
+    top: 12px;
+    right: 12px;
+    padding: 8px 12px;
+  }
+}
+
 /* ==================== END ==================== */
