@@ -1561,6 +1561,63 @@ a:focus-visible {
   #tool-grid.tool-grid-squares .square-link {
     margin-top: auto !important;
   }
+   
+   /* ===== MOBILE: STRONG OVERRIDES für 2 quadratische Karten NEBENEINANDER ===== */
+@media (orientation: portrait) and (max-width: 900px) {
+  /* Container näher an den Rand bringen (du wolltest 4px) */
+  .container {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  /* Grid selbst (nutze ID + Klasse, sehr spezifisch) */
+  #tool-grid.tool-grid-squares {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;    /* Abstand zwischen Karten */
+    padding: 4px !important; /* Abstand vom Grid-Rand innen */
+    box-sizing: border-box !important;
+    align-items: start !important;
+  }
+
+  /* Erzwinge Quadrat-Form und verhindere min-height Probleme */
+  #tool-grid.tool-grid-squares .card-square,
+  #tool-grid.tool-grid-squares .card {
+    aspect-ratio: 1 / 1 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  /* Button soll unten bleiben */
+  #tool-grid.tool-grid-squares .square-link,
+  #tool-grid.tool-grid-squares .card-link {
+    margin-top: auto !important;
+  }
+
+  /* Kurz den Text (clamp) damit er nicht die Höhe sprengt */
+  #tool-grid.tool-grid-squares .square-description,
+  #tool-grid.tool-grid-squares .card-description {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;         /* maximal 3 Zeilen — anpassen falls zu kurz */
+    -webkit-box-orient: vertical;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.35 !important;
+    font-size: 0.92rem !important;
+  }
+
+  /* Touch devices: keine Hover-Transforms (stabilität) */
+  @media (hover: none) {
+    #tool-grid.tool-grid-squares .card,
+    #tool-grid.tool-grid-squares .card-square {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
 }
 
 /* ==================== END ==================== */
