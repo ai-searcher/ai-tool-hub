@@ -373,6 +373,13 @@ body {
   position: relative;
   overflow: hidden;
   will-change: transform;
+  
+  /* iOS Text Selection Fix */
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 
 /* Subtle Glow Effect */
@@ -403,9 +410,44 @@ body {
   will-change: auto;
 }
 
-/* ← FIX: :active State hinzugefügt */
 .card:active {
   transform: translateY(-2px);
+}
+
+/* iOS Text Selection - Specific Elements */
+.card-title,
+.card-description,
+.card-header {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+  cursor: text;
+}
+
+.card-link,
+.card-category {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.card-title,
+.card-description {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .card {
+    -webkit-touch-callout: default;
+  }
+  
+  .card-title,
+  .card-description {
+    -webkit-user-select: text;
+    cursor: text;
+  }
 }
 
 .card-header {
@@ -461,13 +503,12 @@ body {
   border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 0.95rem;
-  cursor: pointer; /* ← FIX: cursor hinzugefügt */
+  cursor: pointer;
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
 }
 
-/* ← FIX: Ripple Effect korrigiert */
 .card-link::before {
   content: '';
   position: absolute;
@@ -498,6 +539,8 @@ body {
 }
 
 /* ==================== FOOTER ==================== */
+
+
 .footer {
   padding: var(--spacing-xl) 0;
   border-top: 1px solid var(--border);
