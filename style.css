@@ -1480,6 +1480,26 @@ a:focus-visible {
     page-break-inside: avoid;
     margin-bottom: 1rem;
   }
+  
+  /* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT ===== */
+@media (orientation: portrait) and (max-width: 900px) {
+
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .card {
+    aspect-ratio: 1 / 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px !important;
+  }
+
+  .card-link {
+    margin-top: auto !important;
+  }
+  
 }
 
 /* ==================== END ==================== */
