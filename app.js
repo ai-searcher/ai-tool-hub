@@ -737,53 +737,35 @@ const viewManager = {
   currentView: 'grid', // 'grid' or 'stack'
 
   init() {
-    // make sure ui.cacheElements() wurde schon ausgeführt
-    // falls nicht, cache jetzt (sichere Vorsichtsmaßnahme)
-    if (!ui.elements || Object.keys(ui.elements).length === 0) {
-      ui.cacheElements();
-    }
+    // ensure ui elements cached
+    if (!ui.elements || Object.keys(ui.elements).length === 0) ui.cacheElements();
 
-    // ensure elements exist (fallbacks)
     ui.elements.viewToggle = ui.elements.viewToggle || getElement('#view-toggle');
     ui.elements.viewGrid   = ui.elements.viewGrid   || getElement('#view-grid');
     ui.elements.viewStack  = ui.elements.viewStack  || getElement('#view-stack');
     ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
     ui.elements.toolGrid   = ui.elements.toolGrid   || getElement('#tool-grid');
 
-    // If toggle exists, show it when we have tools
     if (ui.elements.viewToggle && state.tools && state.tools.length > 0) {
       ui.elements.viewToggle.style.display = 'flex';
     }
 
-    // Attach handlers (use optional chaining to avoid errors)
     if (ui.elements.viewGrid) {
-      ui.elements.viewGrid.addEventListener('click', () => {
-        this.switchView('grid');
-      });
+      ui.elements.viewGrid.addEventListener('click', () => this.switchView('grid'));
     }
 
     if (ui.elements.viewStack) {
-      ui.elements.viewStack.addEventListener('click', () => {
-        this.switchView('stack');
-      });
+      ui.elements.viewStack.addEventListener('click', () => this.switchView('stack'));
     }
 
-    // If currentView is 'stack' (persisted state or dev), ensure the correct view is visible
-    // and rendered — helpful for hot reloads/dev.
+    // make sure initial state is applied
     this.switchView(this.currentView);
   },
 
   switchView(view) {
-    // Always update reference to elements (in case DOM changed)
-    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
-    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
-    ui.elements.viewGrid = ui.elements.viewGrid || getElement('#view-grid');
-    ui.elements.viewStack = ui.elements.viewStack || getElement('#view-stack');
-
-    // If requested view is already active, still ensure stacks are rendered and focused.
     this.currentView = view;
 
-    // Update button states & ARIA (if buttons exist)
+    // update button UI / ARIA
     if (ui.elements.viewGrid && ui.elements.viewStack) {
       ui.elements.viewGrid.classList.toggle('active', view === 'grid');
       ui.elements.viewStack.classList.toggle('active', view === 'stack');
@@ -791,46 +773,91 @@ const viewManager = {
       ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
     }
 
-    // Show/hide views
-    if (ui.elements.toolGrid) {
-      ui.elements.toolGrid.style.display = view === 'grid' ? 'grid' : 'none';
-    }
-    if (ui.elements.toolStacks) {
-      ui.elements.toolStacks.style.display = view === 'stack' ? 'grid' : 'none';
+    // ensure references
+    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
+    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
+
+    // GRID view: hide panel & restore normal page
+    if (view === 'grid') {
+      // close panel if open (animated)
+      const stacks = ui.elements.toolStacks;
+      if (stacks && stacks.classList.contains('panel')) {
+        document.body.style.overflow = ''; // restore scroll
+        stacks.classList.remove('enter');
+        stacks.classList.add('exit');
+        // after transition hide and cleanup
+        const onEnd = () => {
+          stacks.style.display = 'none';
+          stacks.classList.remove('panel', 'exit');
+          stacks.removeEventListener('transitionend', onEnd);
+        };
+        stacks.addEventListener('transitionend', onEnd, { passive: true, once: true });
+      } else {
+        if (ui.elements.toolStacks) ui.elements.toolStacks.style.display = 'none';
+      }
+
+      // show grid
+      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'grid';
+      // tidy up stacks fanned state
+      $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
+      console.log('📐 Switched to grid view');
+      return;
     }
 
-    // If switching to stack, render stacks and bring them into view
+    // STACK view: render stacks and open full-screen panel (slide-in)
     if (view === 'stack') {
-      // render stack content (idempotent)
+      // render stacks content (idempotent)
       try {
         stackRenderer.render();
       } catch (err) {
         console.error('Stack render failed:', err);
       }
 
-      // small timeout to allow DOM paint, then scroll/focus the first category
-      setTimeout(() => {
-        const container = ui.elements.toolStacks || getElement('#tool-stacks');
-        if (!container) return;
+      const stacks = ui.elements.toolStacks;
+      if (!stacks) {
+        console.warn('tool-stacks element not found');
+        return;
+      }
 
-        // Scroll the stacks container into view smoothly
-        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // hide grid behind panel
+      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'none';
 
-        // Focus the first category title for accessibility (and to make it obvious)
-        const firstTitle = container.querySelector('.category-stack .stack-title');
-        if (firstTitle) {
-          // ensure it's focusable then focus quickly
-          firstTitle.setAttribute('tabindex', '-1');
-          firstTitle.focus({ preventScroll: true });
+      // prepare panel mode
+      if (!stacks.classList.contains('panel')) {
+        stacks.classList.add('panel');
+        // create close button if not exist
+        let closeBtn = stacks.querySelector('.panel-close');
+        if (!closeBtn) {
+          closeBtn = document.createElement('button');
+          closeBtn.type = 'button';
+          closeBtn.className = 'panel-close';
+          closeBtn.setAttribute('aria-label', 'Zurück zur Grid Ansicht');
+          closeBtn.innerHTML = '← Zurück';
+          closeBtn.addEventListener('click', () => this.switchView('grid'));
+          stacks.prepend(closeBtn);
         }
-      }, 60);
-    } else {
-      // switching to grid: stop any stack-specific animations / states
-      // optional: close all fanned stacks for a tidy return
-      $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
-    }
+      }
 
-    console.log(`📐 Switched to ${view} view`);
+      // show & animate in
+      stacks.style.display = 'block';
+      // prevent background scroll while panel open
+      document.body.style.overflow = 'hidden';
+
+      // trigger CSS animation
+      requestAnimationFrame(() => {
+        stacks.classList.remove('exit');
+        stacks.classList.add('enter');
+      });
+
+      // focus the close button for accessibility
+      const firstFocusable = stacks.querySelector('.panel-close, .stack-title, .category-stack .stack-title');
+      if (firstFocusable) {
+        firstFocusable.setAttribute('tabindex', '-1');
+        firstFocusable.focus({ preventScroll: true });
+      }
+
+      console.log('📐 Switched to stack view (panel open)');
+    }
   }
 };
 
