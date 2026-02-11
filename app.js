@@ -1156,5 +1156,278 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 }
 
 // =========================================
+// HEXAGONAL GRID + FLOATING PARALLAX
+// =========================================
+
+const hexagonalView = {
+  enabled: false,
+  canvas: null,
+  ctx: null,
+  cards: [],
+  mouseX: 0,
+  mouseY: 0,
+  animationFrame: null,
+  isMobile: window.innerWidth < 768,
+  
+  // Initialize
+  init() {
+    if (this.isMobile) {
+      console.log('📱 Mobile detected - Parallax disabled');
+      return;
+    }
+    
+    this.canvas = getElement('#neural-canvas');
+    if (!this.canvas) return;
+    
+    this.ctx = this.canvas.getContext('2d');
+    this.resizeCanvas();
+    
+    // Mouse tracking
+    document.addEventListener('mousemove', (e) => {
+      this.mouseX = e.clientX;
+      this.mouseY = e.clientY;
+    });
+    
+    // Resize handler
+    window.addEventListener('resize', () => {
+      this.resizeCanvas();
+      this.updateCardPositions();
+    });
+    
+    console.log('✨ Hexagonal Parallax initialized');
+  },
+  
+  // Resize canvas
+  resizeCanvas() {
+    if (!this.canvas) return;
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
+  
+  // Render hexagonal cards
+  renderHexagons() {
+    const grid = ui.elements.toolGrid;
+    if (!grid) return;
+    
+    grid.classList.add('tool-grid-hexagonal');
+    
+    const html = state.filtered.map((tool, index) => {
+      const depth = (index % 6) * 10 + 10; // Z-depth: 10, 20, 30, 40, 50, 60
+      
+      return `
+        <div 
+          class="card-hexagon" 
+          data-tool-id="${tool.id}"
+          data-category="${tool.category || 'other'}"
+          data-depth="${depth}"
+          style="--depth: ${depth};"
+        >
+          <div class="hexagon-shape">
+            <div class="hexagon-content">
+              <h3 class="hexagon-title">${ui.escapeHtml(tool.title)}</h3>
+              <span class="hexagon-category">${(tool.category || 'other').toUpperCase()}</span>
+              <p class="hexagon-description">
+                ${ui.escapeHtml(tool.description || 'AI Tool')}
+              </p>
+              <a 
+                href="${ui.escapeHtml(tool.link)}" 
+                class="hexagon-link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                data-tool-name="${ui.escapeHtml(tool.title)}"
+                onclick="event.stopPropagation()"
+              >
+                Öffnen →
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    grid.innerHTML = html;
+    
+    // Cache card elements
+    this.cards = Array.from(grid.querySelectorAll('.card-hexagon'));
+    
+    // Attach analytics
+    const links = grid.querySelectorAll('.hexagon-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const toolName = e.currentTarget.dataset.toolName;
+        analytics.trackToolClick(toolName);
+      });
+    });
+    
+    // Start parallax animation
+    if (!this.isMobile) {
+      this.startParallax();
+    }
+  },
+  
+  // Start parallax animation
+  startParallax() {
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+    }
+    
+    const animate = () => {
+      this.updateParallax();
+      this.drawNeuralNetwork();
+      this.animationFrame = requestAnimationFrame(animate);
+    };
+    
+    animate();
+  },
+  
+  // Stop parallax animation
+  stopParallax() {
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = null;
+    }
+  },
+  
+  // Update parallax positions
+  updateParallax() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    this.cards.forEach(card => {
+      const depth = parseInt(card.dataset.depth) || 10;
+      const factor = depth / 500; // Parallax intensity
+      
+      const rect = card.getBoundingClientRect();
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      
+      const deltaX = (this.mouseX - centerX) * factor;
+      const deltaY = (this.mouseY - centerY) * factor;
+      
+      // Apply transform
+      card.style.transform = `
+        translate(${deltaX}px, ${deltaY}px) 
+        translateZ(${depth}px)
+        rotateX(${deltaY * 0.05}deg)
+        rotateY(${deltaX * 0.05}deg)
+      `;
+    });
+  },
+  
+  // Update card positions (for resize)
+  updateCardPositions() {
+    this.cards = Array.from(document.querySelectorAll('.card-hexagon'));
+  },
+  
+  // Draw neural network lines
+  drawNeuralNetwork() {
+    if (!this.ctx || this.cards.length === 0) return;
+    
+    // Clear canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    // Draw connections between nearby hexagons
+    for (let i = 0; i < this.cards.length; i++) {
+      const card1 = this.cards[i];
+      const rect1 = card1.getBoundingClientRect();
+      const center1 = {
+        x: rect1.left + rect1.width / 2,
+        y: rect1.top + rect1.height / 2
+      };
+      
+      for (let j = i + 1; j < this.cards.length; j++) {
+        const card2 = this.cards[j];
+        const rect2 = card2.getBoundingClientRect();
+        const center2 = {
+          x: rect2.left + rect2.width / 2,
+          y: rect2.top + rect2.height / 2
+        };
+        
+        const distance = Math.hypot(center2.x - center1.x, center2.y - center1.y);
+        
+        // Only connect if close enough
+        if (distance < 400) {
+          const opacity = 1 - (distance / 400);
+          
+          // Gradient line
+          const gradient = this.ctx.createLinearGradient(
+            center1.x, center1.y, 
+            center2.x, center2.y
+          );
+          gradient.addColorStop(0, `rgba(0, 243, 255, ${opacity * 0.3})`);
+          gradient.addColorStop(1, `rgba(224, 64, 251, ${opacity * 0.3})`);
+          
+          this.ctx.strokeStyle = gradient;
+          this.ctx.lineWidth = 1;
+          this.ctx.beginPath();
+          this.ctx.moveTo(center1.x, center1.y);
+          this.ctx.lineTo(center2.x, center2.y);
+          this.ctx.stroke();
+        }
+      }
+    }
+  }
+};
+
+// Update UI render function
+const originalRender = ui.render;
+ui.render = function() {
+  // Filter tools
+  if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
+    const query = state.searchQuery.toLowerCase();
+    state.filtered = state.tools.filter(tool => 
+      tool.title.toLowerCase().includes(query) ||
+      (tool.description && tool.description.toLowerCase().includes(query))
+    );
+  } else {
+    state.filtered = [...state.tools];
+  }
+  
+  // Show appropriate state
+  if (state.loading) {
+    this.showState('loading');
+    hexagonalView.stopParallax();
+    return;
+  }
+  
+  if (state.error) {
+    this.showState('error');
+    hexagonalView.stopParallax();
+    return;
+  }
+  
+  if (state.filtered.length === 0) {
+    this.showState('empty');
+    if (this.elements.emptyQuery && state.searchQuery) {
+      this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
+    }
+    hexagonalView.stopParallax();
+    return;
+  }
+  
+  // Render based on current view
+  if (viewManager.currentView === 'grid') {
+    this.showState('grid');
+    hexagonalView.renderHexagons();
+  } else {
+    // Stack view
+    hexagonalView.stopParallax();
+    if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
+    if (this.elements.toolStacks) {
+      this.elements.toolStacks.style.display = 'grid';
+      stackRenderer.render();
+    }
+  }
+};
+
+// Initialize hexagonal view on app init
+const originalAppInit = app.init;
+app.init = async function() {
+  await originalAppInit.call(this);
+  hexagonalView.init();
+};
+
+
+// =========================================
 // END
 // =========================================
