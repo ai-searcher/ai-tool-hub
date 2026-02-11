@@ -653,7 +653,7 @@ renderCard(tool) {
       ></a>
     </div>
   `;
-}
+},
 
   
   // Escape HTML to prevent XSS
