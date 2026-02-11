@@ -729,6 +729,9 @@ render() {
 // =========================================
 // VIEW MANAGEMENT (Grid/Stack Toggle)
 // =========================================
+// =========================================
+// VIEW MANAGEMENT (Grid/Stack Toggle)  <--- REPLACED by manual patch
+// =========================================
 const viewManager = {
   currentView: 'grid', // 'grid' or 'stack'
   isStackModeActive: false,
@@ -866,6 +869,106 @@ const viewManager = {
       // mark as in-stack default (content dim)
       card.classList.add('in-stack');
     });
+
+    // compute stack centers evenly across width
+    const padding = 24;
+    const catCount = categories.length;
+    const contW = containerRect.width;
+    const contH = Math.max(containerRect.height, 300);
+    const yCenter = Math.round(contH * 0.45);
+
+    // For cleanup later attach map to container
+    container._stack_meta = { originalStyles, categories, byCategory };
+
+    categories.forEach((cat, i) => {
+      const cx = Math.round(padding + ((i + 0.5) * ((contW - padding * 2) / Math.max(1, catCount))));
+      const cy = yCenter;
+      const stack = byCategory[cat];
+
+      stack.forEach((card, idx) => {
+        const curLeft = parseFloat(card.style.left || 0);
+        const curTop = parseFloat(card.style.top || 0);
+        const cardW = parseFloat(card.style.width || 0);
+        const cardH = parseFloat(card.style.height || 0);
+        const targetLeft = cx - cardW / 2;
+        const targetTop = cy - cardH / 2;
+        const dx = targetLeft - curLeft;
+        const dy = targetTop - curTop;
+        const depthOffset = idx * 8; // px vertical offset within stack
+        const zIndex = 2000 + (stack.length - idx);
+        card.style.transform = `translate(${dx}px, ${dy + depthOffset}px) scale(${1 - idx * 0.01})`;
+        card.style.zIndex = String(zIndex);
+
+        // mark only the top card as visible/label
+        if (idx === 0) {
+          card.classList.add('stack-top');
+          card.classList.remove('in-stack');
+          // ensure label exists
+          let lbl = card.querySelector('.stack-label');
+          if (!lbl) {
+            lbl = document.createElement('div');
+            lbl.className = 'stack-label';
+            lbl.textContent = cat;
+            card.appendChild(lbl);
+          } else {
+            lbl.textContent = cat;
+          }
+        } else {
+          // remove any existing label on non-top
+          const lbl = card.querySelector('.stack-label');
+          if (lbl) lbl.remove();
+          card.classList.add('in-stack');
+          card.classList.remove('stack-top');
+        }
+      });
+    });
+
+    // Slight container transform (optional subtle scale)
+    // container.style.transform = 'scale(0.995)'; // if you want a small camera effect
+  },
+
+  disableStackMode() {
+    const container = ui.elements.toolGrid || getElement('#tool-grid');
+    if (!container || !container._stack_meta) {
+      this.isStackModeActive = false;
+      return;
+    }
+    const { originalStyles } = container._stack_meta;
+    const cards = Array.from(container.querySelectorAll('.card-square, .card'));
+
+    // animate back to original by clearing transform and then restore inline styles on transitionend
+    cards.forEach(card => {
+      card.style.transform = '';
+      // remove label if any
+      const lbl = card.querySelector('.stack-label');
+      if (lbl) lbl.remove();
+      card.classList.remove('stack-top', 'in-stack');
+
+      const cleanup = () => {
+        const orig = originalStyles.get(card) || {};
+        card.style.position = orig.position || '';
+        card.style.left = orig.left || '';
+        card.style.top = orig.top || '';
+        card.style.width = orig.width || '';
+        card.style.height = orig.height || '';
+        card.style.transition = orig.transition || '';
+        card.style.zIndex = orig.zIndex || '';
+        card.style.willChange = '';
+        card.removeEventListener('transitionend', cleanup);
+      };
+      // if there's an on-going transform, wait for end; otherwise cleanup little later
+      card.addEventListener('transitionend', cleanup, { passive: true, once: true });
+      // fallback cleanup after 700ms in case transitionend didn't fire
+      setTimeout(cleanup, 700);
+    });
+
+    // tidy
+    delete container._stack_meta;
+    this.isStackModeActive = false;
+    // ensure container transform reset (if used)
+    if (container.style) container.style.transform = '';
+  }
+ }; // end viewManager
 
     // compute stack centers evenly across width
     const padding = 24;
