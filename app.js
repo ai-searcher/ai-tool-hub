@@ -856,52 +856,56 @@ const ui = {
   },
   
   renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    const isFavorite = favoritesManager.isFavorite(tool.id);
-    const rating = tool.rating || 0;
-    const stars = '⭐'.repeat(Math.round(rating));
-    const provider = tool.provider ? `by ${tool.provider}` : '';
-    const isFree = tool.is_free ? '<span class="badge-free">GRATIS</span>' : '';
-    
-    return `
-      <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-tool-id="${tool.id}" data-depth="10">
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const isFavorite = favoritesManager.isFavorite(tool.id);
+  const rating = tool.rating || 0;
+  const stars = '⭐'.repeat(Math.round(rating));
+  const provider = tool.provider ? `by ${tool.provider}` : '';
+  const isFree = tool.is_free ? '<span class="badge-free">GRATIS</span>' : '';
+
+  return `
+    <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-tool-id="${tool.id}" data-depth="10">
+      
+      <!-- CARD TOP: badge (links) + favorite inline (rechts) -->
+      <div class="card-top" aria-hidden="true">
+        <div class="square-category-badge">${categoryDisplay}</div>
         <button 
-          class="favorite-btn ${isFavorite ? 'active' : ''}" 
+          class="favorite-inline ${isFavorite ? 'active' : ''}" 
           data-tool-id="${tool.id}"
           type="button"
           aria-label="${isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'}"
-        >
-          ${isFavorite ? '❤️' : '🤍'}
-        </button>
-        
-        <div class="square-content-centered">
-          <div class="square-category-badge">${categoryDisplay}</div>
-          <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
-          
-          <div class="tool-meta">
-            ${rating > 0 ? `<span class="tool-rating" title="Rating: ${rating}/5">${stars}</span>` : ''}
-            ${provider ? `<span class="tool-provider">${this.escapeHtml(provider)}</span>` : ''}
-            ${isFree}
-          </div>
-          
-          ${tool.tags && tool.tags.length > 0 ? `
-            <div class="tool-tags">
-              ${tool.tags.slice(0, 3).map(tag => `<span class="tool-tag">#${this.escapeHtml(tag)}</span>`).join('')}
-            </div>
-          ` : ''}
-        </div>
-        
-        <a 
-          href="${this.escapeHtml(tool.link)}" 
-          class="card-overlay-link"
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="${this.escapeHtml(tool.title)} öffnen"
-        ></a>
+          title="${isFavorite ? 'Favorit' : 'Zu Favoriten hinzufügen'}"
+        >${isFavorite ? '❤️' : '🤍'}</button>
       </div>
-    `;
-  },
+
+      <!-- CENTRED CONTENT (ohne duplicate badge) -->
+      <div class="square-content-centered">
+        <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
+
+        <div class="tool-meta">
+          ${rating > 0 ? `<span class="tool-rating" title="Rating: ${rating}/5">${stars}</span>` : ''}
+          ${provider ? `<span class="tool-provider">${this.escapeHtml(provider)}</span>` : ''}
+          ${isFree}
+        </div>
+
+        ${tool.tags && tool.tags.length > 0 ? `
+          <div class="tool-tags">
+            ${tool.tags.slice(0, 3).map(tag => `<span class="tool-tag">#${this.escapeHtml(tag)}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <a 
+        href="${this.escapeHtml(tool.link)}" 
+        class="card-overlay-link"
+        target="_blank" 
+        rel="noopener noreferrer"
+        aria-label="${this.escapeHtml(tool.title)} öffnen"
+      ></a>
+    </div>
+  `;
+}
   
   escapeHtml(text) {
     const div = document.createElement('div');
