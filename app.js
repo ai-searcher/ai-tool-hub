@@ -1050,22 +1050,7 @@ const app = {
 ui.showState('loading');
 
 // TEMPORARY: Force use defaults for testing
-console.log('🔧 DEBUG: Forcing defaults...');
-state.tools = DEFAULT_TOOLS;
-state.filtered = [...state.tools];
-state.loading = false;
-state.dataSource = 'defaults';
-ui.updateStats();
-ui.updateDataSource();
-ui.render();
-search.init();
-viewManager.init();
-console.log('✅ Debug mode active with defaults');
-return; // Exit early
 
-
-
-      
       // Load data with triple fallback
       const rawTools = await dataLoader.load();
       
