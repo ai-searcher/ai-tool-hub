@@ -1515,7 +1515,7 @@ a:focus-visible {
 
   /* Erzwinge Quadrat-Form — target card-square (dein JS rendert .card-square) */
   #tool-grid.tool-grid-squares .card-square,
-  #tool-grid.tool-grid-squares .card {
+  #tool-grid.tool-grid-squares > .card-square {
     aspect-ratio: 1 / 1 !important;
     min-height: 0 !important;
     height: auto !important;
@@ -1559,7 +1559,7 @@ a:focus-visible {
   /* Keine Hover-Transform für Touch-Devices */
   @media (hover: none) {
     #tool-grid.tool-grid-squares .card-square,
-    #tool-grid.tool-grid-squares .card {
+    #tool-grid.tool-grid-squares > .card-square {
       transform: none !important;
       box-shadow: none !important;
     }
