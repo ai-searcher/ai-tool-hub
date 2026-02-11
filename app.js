@@ -453,20 +453,33 @@ const dataLoader = {
     }
   },
   
+    },
+  
   async loadFromJSON() {
     if (!CONFIG.fallback.useLocalJSON) return null;
     
     try {
       console.log('🔄 Trying local JSON...');
+      console.log('📍 Current URL:', window.location.href);
+      console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
+      
       const response = await fetch('./data.json', {
         signal: AbortSignal.timeout(5000)
       });
       
+      console.log('📥 Response status:', response.status);
+      console.log('📥 Response OK:', response.ok);
+      console.log('📥 Response headers:', [...response.headers.entries()]);
+      
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const data = await response.json();
+      console.log('📦 JSON parsed successfully');
+      console.log('📦 Data structure:', Object.keys(data));
+      console.log('📦 Data content:', data);
+      
       const tools = data.tools || data;
       
       if (tools && tools.length > 0) {
@@ -475,12 +488,19 @@ const dataLoader = {
         return tools;
       }
       
+      console.warn('⚠️ JSON loaded but no tools found');
+      console.warn('⚠️ Data was:', data);
       return null;
     } catch (error) {
-      console.warn('⚠️ JSON file not found or invalid:', error.message);
+      console.error('❌ JSON load failed:');
+      console.error('❌ Error type:', error.constructor.name);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      console.error('❌ Full error:', error);
       return null;
     }
   },
+  
   
   loadDefaults() {
     if (!CONFIG.fallback.useDefaults) return [];
@@ -1026,6 +1046,26 @@ const app = {
       // Show loading state
       ui.showState('loading');
       
+      // Show loading state
+ui.showState('loading');
+
+// TEMPORARY: Force use defaults for testing
+console.log('🔧 DEBUG: Forcing defaults...');
+state.tools = DEFAULT_TOOLS;
+state.filtered = [...state.tools];
+state.loading = false;
+state.dataSource = 'defaults';
+ui.updateStats();
+ui.updateDataSource();
+ui.render();
+search.init();
+viewManager.init();
+console.log('✅ Debug mode active with defaults');
+return; // Exit early
+
+
+
+      
       // Load data with triple fallback
       const rawTools = await dataLoader.load();
       
@@ -1065,9 +1105,44 @@ const app = {
       console.log('✅ App initialized successfully!');
       
     } catch (error) {
-      errorHandler.handle(error, 'Initialization');
-    }
+  console.error('❌ CRITICAL ERROR in init:', error);
+  console.error('❌ Error type:', error.constructor.name);
+  console.error('❌ Error message:', error.message);
+  console.error('❌ Error stack:', error.stack);
+  
+  // Emergency fallback to defaults
+  console.log('🚨 EMERGENCY: Activating fallback to defaults...');
+  
+  try {
+    state.tools = DEFAULT_TOOLS;
+    state.filtered = [...state.tools];
+    state.loading = false;
+    state.error = null; // Clear error
+    state.dataSource = 'emergency';
+    
+    console.log('🔧 Emergency: Updating UI...');
+    ui.updateStats();
+    ui.updateDataSource();
+    ui.render();
+    
+    console.log('🔧 Emergency: Initializing search...');
+    search.init();
+    
+    console.log('🔧 Emergency: Initializing view manager...');
+    viewManager.init();
+    
+    console.log('✅ Emergency recovery successful! App running with defaults.');
+    console.log('💡 Check console errors above to debug the original issue.');
+    
+  } catch (recoveryError) {
+    console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
+    console.error('💥 This should never happen. Something is very wrong.');
+    
+    // Last resort: show error
+    errorHandler.handle(error, 'Initialization');
   }
+}
+
 };
 
 // =========================================
