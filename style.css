@@ -11,24 +11,24 @@
   --bg-card-hover: #1F2442;
   --border: #2A2E47;
   --border-hover: #3A3E57;
-  
+
   /* Colors - Text */
   --text-primary: #FFFFFF;
   --text-secondary: #E0E0F0;
   --text-dim: #A0A0B0;
   --text-muted: #8080A0; /* ← FIX: Besserer Kontrast */
-  
+
   /* Colors - Brand */
   --primary: #00F3FF;
   --primary-hover: #00D4E0;
   --primary-glow: rgba(0, 243, 255, 0.2);
   --primary-dim: rgba(0, 243, 255, 0.1);
-  
+
   /* Colors - States */
   --error: #FF4466;
   --warning: #FFB800;
   --success: #00FF9D;
-  
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -36,32 +36,32 @@
   --spacing-lg: 24px;
   --spacing-xl: 40px;
   --spacing-2xl: 60px;
-  
+
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Courier New', monospace;
-  
+
   /* Borders & Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
-  
+
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 300ms ease;
   --transition-slow: 500ms ease;
-  
+
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 20px var(--primary-glow);
-  
+
   /* Layout */
   --max-width: 1400px;
   --header-height: 280px;
-  
+
   /* Z-Index Scale */
   --z-base: 1;
   --z-dropdown: 10;
@@ -123,7 +123,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
   opacity: 0.3;
@@ -367,14 +367,14 @@ body {
   justify-content: space-between;
   display: flex;
   flex-direction: column;
-  transition: transform var(--transition-normal), 
+  transition: transform var(--transition-normal),
               border-color var(--transition-normal),
               box-shadow var(--transition-normal),
               background var(--transition-normal);
   position: relative;
   overflow: hidden;
   will-change: transform;
-  
+
   /* iOS Text Selection Fix */
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -443,7 +443,7 @@ body {
   .card {
     -webkit-touch-callout: default;
   }
-  
+
   .card-title,
   .card-description {
     -webkit-user-select: text;
@@ -538,6 +538,7 @@ body {
 .card-link:active {
   transform: scale(0.98);
 }
+
 /* ==================== VIEW TOGGLE ==================== */
 .view-toggle {
   display: flex;
@@ -604,7 +605,7 @@ body {
 
 /* ==================== CATEGORY COLORS ==================== */
 :root {
-    /* Elegant Category Colors */
+  /* Elegant Category Colors */
   --color-text: #00D4FF;      /* Ocean Blue */
   --color-image: #E040FB;     /* Soft Purple-Pink */
   --color-code: #7C4DFF;      /* Deep Purple */
@@ -676,38 +677,38 @@ body {
 
 /* Category-specific colors */
 .category-stack[data-category="text"] .stack-title { color: var(--color-text); }
-.category-stack[data-category="text"] .stack-count { 
-  background: var(--glow-text); 
+.category-stack[data-category="text"] .stack-count {
+  background: var(--glow-text);
   color: var(--color-text);
 }
 
 .category-stack[data-category="image"] .stack-title { color: var(--color-image); }
-.category-stack[data-category="image"] .stack-count { 
-  background: var(--glow-image); 
+.category-stack[data-category="image"] .stack-count {
+  background: var(--glow-image);
   color: var(--color-image);
 }
 
 .category-stack[data-category="code"] .stack-title { color: var(--color-code); }
-.category-stack[data-category="code"] .stack-count { 
-  background: var(--glow-code); 
+.category-stack[data-category="code"] .stack-count {
+  background: var(--glow-code);
   color: var(--color-code);
 }
 
 .category-stack[data-category="audio"] .stack-title { color: var(--color-audio); }
-.category-stack[data-category="audio"] .stack-count { 
-  background: var(--glow-audio); 
+.category-stack[data-category="audio"] .stack-count {
+  background: var(--glow-audio);
   color: var(--color-audio);
 }
 
 .category-stack[data-category="video"] .stack-title { color: var(--color-video); }
-.category-stack[data-category="video"] .stack-count { 
-  background: var(--glow-video); 
+.category-stack[data-category="video"] .stack-count {
+  background: var(--glow-video);
   color: var(--color-video);
 }
 
 .category-stack[data-category="data"] .stack-title { color: var(--color-data); }
-.category-stack[data-category="data"] .stack-count { 
-  background: var(--glow-data); 
+.category-stack[data-category="data"] .stack-count {
+  background: var(--glow-data);
   color: var(--color-data);
 }
 
@@ -743,7 +744,7 @@ body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   cursor: pointer;
-  
+
   /* iOS Text Selection */
   -webkit-user-select: text;
   user-select: text;
@@ -867,12 +868,11 @@ body {
   .card-link {
     margin-top: auto;
   }
-}
-  
+
   .view-toggle {
     margin-top: var(--spacing-md);
   }
-  
+
   .toggle-btn {
     padding: 8px 16px;
     font-size: 0.9rem;
@@ -915,10 +915,7 @@ body {
 
 }
 
-
-
 /* ==================== FOOTER ==================== */
-
 
 .footer {
   padding: var(--spacing-xl) 0;
@@ -1256,7 +1253,7 @@ body {
     gap: 16px;
     padding: 40px 24px;
   }
-  
+
   .card-square {
     min-height: 260px;
     padding: 20px;
@@ -1269,24 +1266,24 @@ body {
     gap: 16px;
     padding: 20px 16px;
   }
-  
+
   .card-square {
     min-height: 240px;
     padding: 20px;
-    
+
     /* Disable animations on mobile for performance */
     animation: none !important;
   }
-  
+
   .square-title {
     font-size: 1.1rem;
   }
-  
+
   .square-description {
     font-size: 0.85rem;
     line-height: 1.5;
   }
-  
+
   .square-link {
     padding: 8px 16px;
     font-size: 0.85rem;
@@ -1299,23 +1296,21 @@ body {
     gap: 12px;
     padding: 16px 12px;
   }
-  
+
   .card-square {
     min-height: 220px;
     padding: 14px;
   }
-  
+
   .square-header {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .square-category {
     align-self: flex-start;
   }
 }
-
-
 
 /* ==================== RESPONSIVE ==================== */
 
@@ -1325,33 +1320,33 @@ body {
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
   }
-  
+
   .header {
     padding: var(--spacing-lg) 0;
   }
-  
+
   .title {
     font-size: 2rem;
   }
-  
+
   .subtitle {
     font-size: 0.95rem;
   }
-  
+
   .stats-bar {
     gap: var(--spacing-lg);
   }
-  
+
   .stat-value {
     font-size: 1.5rem;
   }
-  
+
   .tool-grid {
     gap: var(--spacing-md);
   }
-  
-   .card {
-     aspect-ratio: 1 / 1;
+
+  .card {
+    aspect-ratio: 1 / 1;
   }
 }
 
@@ -1362,59 +1357,59 @@ body {
     --spacing-xl: 24px;
     --spacing-2xl: 40px;
   }
-  
+
   .container {
     padding: 0 var(--spacing-md);
   }
-  
+
   .title {
     font-size: 1.75rem;
   }
-  
+
   .subtitle {
     font-size: 0.9rem;
   }
-  
+
   .search-input {
     font-size: 0.95rem;
     padding: 14px 44px 14px 48px;
   }
-  
+
   .stats-bar {
     flex-direction: row;
     gap: var(--spacing-md);
   }
-  
+
   .stat-value {
     font-size: 1.25rem;
   }
-  
+
   .stat-label {
     font-size: 0.75rem;
   }
-  
+
   .tool-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
-  
+
   .card-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .card-title {
     font-size: 1.1rem;
   }
-  
+
   .state-icon {
     font-size: 3rem;
   }
-  
+
   .state-text {
     font-size: 1.25rem;
   }
-  
+
   .footer {
     padding: var(--spacing-lg) 0;
   }
@@ -1427,11 +1422,10 @@ body {
     padding-right: env(safe-area-inset-right);
     padding-bottom: env(safe-area-inset-bottom);
   }
-} 
- 
- /* ==== 3mm Abstand zwischen den Boxen (mit px-Fallback) ==== */
-/* 3mm ≈ 11.34px -> runden wir auf 12px als Fallback */
+}
 
+/* ==== 3mm Abstand zwischen den Boxen (mit px-Fallback) ==== */
+/* 3mm ≈ 11.34px -> runden wir auf 12px als Fallback */
 #tool-grid.tool-grid-squares {
   gap: 12px;   /* fallback für Browser, die mm unzuverlässig rendern */
   gap: 3mm;    /* primär: 3 Millimeter (wenn Browser physische Einheiten nutzt) */
@@ -1487,121 +1481,39 @@ a:focus-visible {
   .stats-bar {
     display: none;
   }
-  
+
   .tool-grid {
     display: block;
   }
-  
+
   .card {
     page-break-inside: avoid;
     margin-bottom: 1rem;
   }
-} /* <-- close print media correctly */
+}
 
-/* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT ===== */
+/* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT (CONSOLIDATED) ===== */
+/* Covers orientation:portrait up to 900px and narrower devices */
 @media (orientation: portrait) and (max-width: 900px),
        (max-width: 767px) {
-  /* use both orientation and max-width covering more devices */
-
-  .tool-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 14px !important;
-    padding: 0 16px !important;   /* ← gleichmäßige Luft links & rechts */
-    box-sizing: border-box;
-  }
-
-  .card {
-    aspect-ratio: 1 / 1 !important;
-    min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    padding: 12px !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  .card .card-title {
-    font-size: 1.05rem !important;
-    line-height: 1.2 !important;
-  }
-
-  .card .card-description {
-    font-size: 0.85rem !important;
-    line-height: 1.25 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-    margin-bottom: 8px !important;
-  }
-
-  .card-link {
-    margin-top: auto !important;
-    width: 100% !important;
-    display: inline-flex !important;
-    justify-content: center !important;
-  }
-
-  /* touch devices: remove hover transforms for stability */
-  .card:hover { transform: none !important; box-shadow: none !important; }
-}
-   
-  /* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT (HIGH-SPECIFICITY) ===== */
-@media (orientation: portrait) and (max-width: 900px) {
-  /* grid: 2 columns, close to edges (you said 4px earlier) */
-  #tool-grid.tool-grid-squares {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-    padding: 4px !important;      /* <- Abstand zum Rand (du wolltest 4px) */
-    box-sizing: border-box;
-  }
-
-  /* ensure each square stays square, allow inner content to clamp */
-  #tool-grid.tool-grid-squares .card-square {
-    aspect-ratio: 1 / 1 !important;
-    min-height: 0 !important;     /* remove fixed min-heights that break aspect-ratio */
-    padding: 12px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-  }
-
-  /* clamp description so it doesn't expand the card */
-  #tool-grid.tool-grid-squares .square-description {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;        /* max 3 lines (adjust if needed) */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.4;
-    font-size: 0.9rem;
-  }
-
-  /* make the action button sit at bottom */
-  #tool-grid.tool-grid-squares .square-link {
-    margin-top: auto !important;
-  }
-   
-   /* ===== MOBILE: STRONG OVERRIDES für 2 quadratische Karten NEBENEINANDER ===== */
-@media (orientation: portrait) and (max-width: 900px) {
-  /* Container näher an den Rand bringen (du wolltest 4px) */
+  /* Container näher an den Rand bringen (4px) */
   .container {
     padding-left: 4px !important;
     padding-right: 4px !important;
   }
 
-  /* Grid selbst (nutze ID + Klasse, sehr spezifisch) */
-  #tool-grid.tool-grid-squares {
+  /* Grid: 2 Spalten, enge Lücken, flexibel */
+  #tool-grid.tool-grid-squares,
+  .tool-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;    /* Abstand zwischen Karten */
-    padding: 4px !important; /* Abstand vom Grid-Rand innen */
+    padding: 4px !important; /* Innenabstand vom Grid-Rand */
     box-sizing: border-box !important;
     align-items: start !important;
   }
 
-  /* Erzwinge Quadrat-Form und verhindere min-height Probleme */
+  /* Erzwinge Quadrat-Form — target card-square (dein JS rendert .card-square) */
   #tool-grid.tool-grid-squares .card-square,
   #tool-grid.tool-grid-squares .card {
     aspect-ratio: 1 / 1 !important;
@@ -1610,31 +1522,44 @@ a:focus-visible {
     padding: 12px !important;
     display: flex !important;
     flex-direction: column !important;
+    justify-content: flex-start !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
-  /* Button soll unten bleiben */
+  /* Button sitzt immer unten */
   #tool-grid.tool-grid-squares .square-link,
   #tool-grid.tool-grid-squares .card-link {
     margin-top: auto !important;
+    width: 100% !important;
+    display: inline-flex !important;
+    justify-content: center !important;
   }
 
-  /* Kurz den Text (clamp) damit er nicht die Höhe sprengt */
+  /* Text clamping — damit das Kartenhöhen-Problem nicht auftritt */
   #tool-grid.tool-grid-squares .square-description,
   #tool-grid.tool-grid-squares .card-description {
     display: -webkit-box !important;
-    -webkit-line-clamp: 3;         /* maximal 3 Zeilen — anpassen falls zu kurz */
+    -webkit-line-clamp: 3 !important;         /* max 3 Zeilen — anpassen falls nötig */
     -webkit-box-orient: vertical;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     line-height: 1.35 !important;
     font-size: 0.92rem !important;
+    margin: 6px 0 !important;
   }
 
-  /* Touch devices: keine Hover-Transforms (stabilität) */
+  /* Titel etwas kompakter */
+  #tool-grid.tool-grid-squares .square-title,
+  #tool-grid.tool-grid-squares .card-title {
+    font-size: 1.05rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Keine Hover-Transform für Touch-Devices */
   @media (hover: none) {
-    #tool-grid.tool-grid-squares .card,
-    #tool-grid.tool-grid-squares .card-square {
+    #tool-grid.tool-grid-squares .card-square,
+    #tool-grid.tool-grid-squares .card {
       transform: none !important;
       box-shadow: none !important;
     }
