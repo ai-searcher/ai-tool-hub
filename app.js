@@ -699,6 +699,7 @@ render() {
   if (viewManager.currentView === 'grid') {
     this.showState('grid');
     if (this.elements.toolGrid) {
+      this.elements.toolGrid.classList.add('tool-grid-squares');
       this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
       this.attachCardHandlers();
     }
