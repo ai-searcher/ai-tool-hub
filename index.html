@@ -1,271 +1,277 @@
-{
-  "meta": {
-    "version": "1.0.0",
-    "last_updated": "2026-02-11",
-    "total_tools": 20,
-    "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung"
-  },
-  "tools": [
-    {
-      "id": 1,
-      "title": "ChatGPT",
-      "link": "https://chat.openai.com",
-      "description": "Fortschrittlicher AI Chatbot von OpenAI für natürliche Konversationen und komplexe Aufgaben",
-      "category": "text",
-      "tags": ["chat", "nlp", "conversation", "gpt", "openai"],
-      "is_free": true,
-      "rating": 4.8,
-      "provider": "OpenAI",
-      "added": "2024-01-15",
-      "featured": true
-    },
-    {
-      "id": 2,
-      "title": "Claude",
-      "link": "https://claude.ai",
-      "description": "AI Assistent von Anthropic mit großem Context-Window und sicherer Architektur",
-      "category": "text",
-      "tags": ["chat", "assistant", "coding", "anthropic"],
-      "is_free": true,
-      "rating": 4.7,
-      "provider": "Anthropic",
-      "added": "2024-02-01",
-      "featured": true
-    },
-    {
-      "id": 3,
-      "title": "Perplexity AI",
-      "link": "https://www.perplexity.ai",
-      "description": "AI-gestützte Suchmaschine mit Quellenangaben und präzisen Antworten",
-      "category": "text",
-      "tags": ["search", "research", "citations", "answers"],
-      "is_free": true,
-      "rating": 4.6,
-      "provider": "Perplexity",
-      "added": "2024-01-20",
-      "featured": true
-    },
-    {
-      "id": 4,
-      "title": "Midjourney",
-      "link": "https://www.midjourney.com",
-      "description": "Erstelle atemberaubende AI-generierte Kunstwerke und Bilder mit Text-Prompts",
-      "category": "image",
-      "tags": ["image-generation", "art", "creative", "discord"],
-      "is_free": false,
-      "rating": 4.7,
-      "provider": "Midjourney",
-      "added": "2024-01-10",
-      "featured": true
-    },
-    {
-      "id": 5,
-      "title": "DALL-E 3",
-      "link": "https://openai.com/dall-e-3",
-      "description": "OpenAIs neuester Bild-Generator mit präziser Prompt-Befolgung",
-      "category": "image",
-      "tags": ["image-generation", "art", "openai"],
-      "is_free": false,
-      "rating": 4.5,
-      "provider": "OpenAI",
-      "added": "2024-02-05",
-      "featured": false
-    },
-    {
-      "id": 6,
-      "title": "Stable Diffusion",
-      "link": "https://stability.ai",
-      "description": "Open Source Bild-Generator mit voller Kontrolle und lokaler Ausführung",
-      "category": "image",
-      "tags": ["image-generation", "open-source", "local"],
-      "is_free": true,
-      "rating": 4.4,
-      "provider": "Stability AI",
-      "added": "2024-01-25",
-      "featured": false
-    },
-    {
-      "id": 7,
-      "title": "GitHub Copilot",
-      "link": "https://github.com/features/copilot",
-      "description": "AI Pair-Programmer der direkt in deinem Code-Editor funktioniert",
-      "category": "code",
-      "tags": ["coding", "autocomplete", "development", "github"],
-      "is_free": false,
-      "rating": 4.6,
-      "provider": "GitHub",
-      "added": "2024-01-12",
-      "featured": true
-    },
-    {
-      "id": 8,
-      "title": "Cursor",
-      "link": "https://cursor.sh",
-      "description": "AI-First Code Editor mit integrierten AI-Features und Pair Programming",
-      "category": "code",
-      "tags": ["editor", "coding", "ide", "ai-native"],
-      "is_free": false,
-      "rating": 4.5,
-      "provider": "Cursor",
-      "added": "2024-02-10",
-      "featured": false
-    },
-    {
-      "id": 9,
-      "title": "Codeium",
-      "link": "https://codeium.com",
-      "description": "Kostenlose AI Code-Completion für alle populären IDEs",
-      "category": "code",
-      "tags": ["coding", "autocomplete", "free", "ide"],
-      "is_free": true,
-      "rating": 4.3,
-      "provider": "Codeium",
-      "added": "2024-01-28",
-      "featured": false
-    },
-    {
-      "id": 10,
-      "title": "ElevenLabs",
-      "link": "https://elevenlabs.io",
-      "description": "Realistische AI Voice Generation und Text-to-Speech in vielen Sprachen",
-      "category": "audio",
-      "tags": ["voice", "tts", "generation", "speech"],
-      "is_free": false,
-      "rating": 4.6,
-      "provider": "ElevenLabs",
-      "added": "2024-01-18",
-      "featured": false
-    },
-    {
-      "id": 11,
-      "title": "Suno AI",
-      "link": "https://suno.ai",
-      "description": "Erstelle komplette Songs mit AI - von Lyrics bis zur Produktion",
-      "category": "audio",
-      "tags": ["music", "generation", "songs", "lyrics"],
-      "is_free": true,
-      "rating": 4.4,
-      "provider": "Suno",
-      "added": "2024-02-03",
-      "featured": false
-    },
-    {
-      "id": 12,
-      "title": "Runway ML",
-      "link": "https://runwayml.com",
-      "description": "AI-gestützte Video-Bearbeitung und Generierung mit Gen-2 Technologie",
-      "category": "video",
-      "tags": ["video", "editing", "generation", "gen-2"],
-      "is_free": false,
-      "rating": 4.5,
-      "provider": "Runway",
-      "added": "2024-01-22",
-      "featured": false
-    },
-    {
-      "id": 13,
-      "title": "Gemini",
-      "link": "https://gemini.google.com",
-      "description": "Googles multimodaler AI Assistent mit Deep Research Capabilities",
-      "category": "text",
-      "tags": ["chat", "multimodal", "google", "research"],
-      "is_free": true,
-      "rating": 4.5,
-      "provider": "Google",
-      "added": "2024-02-08",
-      "featured": false
-    },
-    {
-      "id": 14,
-      "title": "Notion AI",
-      "link": "https://www.notion.so/product/ai",
-      "description": "AI-Assistent integriert in Notion für Notizen, Dokumente und Datenbanken",
-      "category": "text",
-      "tags": ["productivity", "writing", "notes", "workspace"],
-      "is_free": false,
-      "rating": 4.3,
-      "provider": "Notion",
-      "added": "2024-01-30",
-      "featured": false
-    },
-    {
-      "id": 15,
-      "title": "Leonardo AI",
-      "link": "https://leonardo.ai",
-      "description": "AI Bild-Generator fokussiert auf Game Assets und kreative Designs",
-      "category": "image",
-      "tags": ["image-generation", "game-assets", "creative"],
-      "is_free": true,
-      "rating": 4.4,
-      "provider": "Leonardo",
-      "added": "2024-02-01",
-      "featured": false
-    },
-    {
-      "id": 16,
-      "title": "Julius AI",
-      "link": "https://julius.ai",
-      "description": "AI Data Analyst der deine Daten visualisiert und analysiert",
-      "category": "data",
-      "tags": ["data-analysis", "visualization", "analytics"],
-      "is_free": true,
-      "rating": 4.2,
-      "provider": "Julius",
-      "added": "2024-02-04",
-      "featured": false
-    },
-    {
-      "id": 17,
-      "title": "Pika Labs",
-      "link": "https://pika.art",
-      "description": "Text-to-Video AI Generator für kreative Video-Inhalte",
-      "category": "video",
-      "tags": ["video", "generation", "text-to-video"],
-      "is_free": true,
-      "rating": 4.3,
-      "provider": "Pika",
-      "added": "2024-02-07",
-      "featured": false
-    },
-    {
-      "id": 18,
-      "title": "Jasper AI",
-      "link": "https://www.jasper.ai",
-      "description": "AI Content Creator für Marketing, Blogs und Social Media",
-      "category": "text",
-      "tags": ["content", "marketing", "copywriting", "seo"],
-      "is_free": false,
-      "rating": 4.4,
-      "provider": "Jasper",
-      "added": "2024-01-16",
-      "featured": false
-    },
-    {
-      "id": 19,
-      "title": "Synthesia",
-      "link": "https://www.synthesia.io",
-      "description": "Erstelle AI-generierte Videos mit virtuellen Avataren",
-      "category": "video",
-      "tags": ["video", "avatars", "text-to-video", "corporate"],
-      "is_free": false,
-      "rating": 4.3,
-      "provider": "Synthesia",
-      "added": "2024-01-19",
-      "featured": false
-    },
-    {
-      "id": 20,
-      "title": "V0 by Vercel",
-      "link": "https://v0.dev",
-      "description": "Generiere React/Next.js UI Components mit AI aus Text-Beschreibungen",
-      "category": "code",
-      "tags": ["ui", "react", "nextjs", "components", "vercel"],
-      "is_free": true,
-      "rating": 4.5,
-      "provider": "Vercel",
-      "added": "2024-02-09",
-      "featured": false
-    }
-  ]
-}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <!-- ==================== SECURITY HEADERS ==================== -->
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.supabase.co;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self'  https:;
+        font-src 'self' ;
+        connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://doicozkpdbkyvdkpujoh.supabase.co;
+        frame-ancestors 'none';
+        base-uri 'self';
+        form-action 'self';
+        upgrade-insecure-requests;
+    ">
+    
+    <!-- XSS Protection -->
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Prevent MIME-Type Sniffing -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Clickjacking Protection -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
+    <!-- Referrer Policy -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Permissions Policy -->
+    <meta http-equiv="Permissions-Policy" content="
+        geolocation=(),
+        microphone=(),
+        camera=(),
+        payment=(),
+        usb=(),
+        magnetometer=(),
+        gyroscope=(),
+        speaker=()
+    ">
+    
+    <!-- ==================== STANDARD META TAGS ==================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kuratierte Sammlung der besten AI Tools - Von Text über Bilder bis Code">
+    <meta name="keywords" content="AI Tools, Künstliche Intelligenz, ChatGPT, Midjourney, AI Hub">
+    <meta name="author" content="Quantum AI Hub">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Quantum AI Hub">
+    <meta property="og:description" content="Deine kuratierte AI Tool-Sammlung">
+    <meta property="og:type" content="website">
+    
+    <!-- Title -->
+    <title>⚡ Quantum AI Hub - Die besten AI Tools</title>
+    
+    <!-- ==================== GOOGLE ANALYTICS (SECURE) ==================== -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
+    <script>
+      // Strict Mode
+      'use strict';
+      
+      // Google Analytics mit Security
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-53RF07VYJ8', {
+        'anonymize_ip': true,
+        'allow_google_signals': false,
+        'allow_ad_personalization_signals': false,
+        'cookie_flags': 'SameSite=Strict;Secure',
+        'cookie_expires': 63072000, // 2 Jahre
+        'client_storage': 'cookies'
+      });
+      
+      // Error Handling
+      window.addEventListener('error', function(e) {
+        console.error('Global Error:', e.message);
+        // Verhindere dass Fehler Seite crashen
+        return true;
+      });
+      
+      // Unhandled Promise Rejection
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled Promise:', e.reason);
+        e.preventDefault();
+      });
+    </script>
+    
+    <!-- Favicon (optional - später hinzufügen) -->
+    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=1.2">
 
+ </head>
+ <body>
+    
+    <!-- ==================== HEADER ==================== -->
+    <header class="header">
+        <div class="container">
+            <!-- Logo & Title -->
+            <div class="header-top">
+                <h1 class="title">⚡ Quantum AI Hub</h1>
+                <p class="subtitle">Deine kuratierte AI Tool-Sammlung</p>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="search" 
+                        class="search-input"
+                        placeholder="Tool suchen... (z.B. ChatGPT, Midjourney)" 
+                        autocomplete="off"
+                        spellcheck="false"
+                        maxlength="100"
+                        aria-label="Tool suchen"
+                    >
+                    <button 
+                        id="search-clear" 
+                        class="search-clear" 
+                        style="display: none;"
+                        aria-label="Suche löschen"
+                        type="button"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- View Toggle Buttons -->
+            <div class="view-toggle" id="view-toggle" style="display: none;" role="tablist" aria-label="Ansicht wählen">
+                <button 
+                    id="view-grid" 
+                    class="toggle-btn active" 
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="tool-grid"
+                    aria-label="Grid Ansicht"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
+                        <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
+                        <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
+                        <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
+                    </svg>
+                    <span>Grid</span>
+                </button>
+                <button 
+                    id="view-stack" 
+                    class="toggle-btn" 
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="tool-stacks"
+                    aria-label="Stack Ansicht"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <rect x="2" y="2" width="16" height="16" stroke="currentColor" stroke-width="2" rx="3" opacity="0.3"/>
+                        <rect x="3" y="4" width="14" height="14" stroke="currentColor" stroke-width="2" rx="2" opacity="0.6"/>
+                        <rect x="4" y="6" width="12" height="12" stroke="currentColor" stroke-width="2" rx="2"/>
+                    </svg>
+                    <span>Stack</span>
+                </button>
+            </div>
+            
+            <!-- Stats Bar (optional - wird später befüllt) -->
+            <div class="stats-bar" id="stats-bar" style="display: none;" role="status" aria-live="polite">
+                <div class="stat">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Tools</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="stat-categories">0</span>
+                    <span class="stat-label">Kategorien</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="stat-featured">0</span>
+                    <span class="stat-label">Featured</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- ==================== MAIN ==================== -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Loading State -->
+            <div id="loading" class="state-container loading-state" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <p class="state-text">Lädt Tools...</p>
+                <p class="state-subtext">Verbinde mit Datenbank</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="error" class="state-container error-state" style="display: none;" role="alert" aria-live="assertive">
+                <div class="state-icon" aria-hidden="true">⚠️</div>
+                <p class="state-text">Fehler beim Laden</p>
+                <p class="state-subtext">Bitte Seite neu laden oder Console prüfen (F12)</p>
+                <button id="retry-button" class="retry-button" type="button">Erneut versuchen</button>
+            </div>
+            
+            <!-- Empty State (keine Suchergebnisse) -->
+            <div id="empty" class="state-container empty-state" style="display: none;" role="status" aria-live="polite">
+                <div class="state-icon" aria-hidden="true">🔍</div>
+                <p class="state-text">Keine Tools gefunden</p>
+                <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff</p>
+            </div>
+            
+            <!-- Tool Grid (Floating Squares View) -->
+<div id="tool-grid" class="tool-grid tool-grid-squares" style="display: none;">
+    <!-- Tools werden hier dynamisch als Squares eingefügt -->
+</div>
+
+<!-- Canvas für Neural Network Linien -->
+<canvas id="neural-canvas" class="neural-canvas"></canvas>
+
+
+            
+            <!-- Tool Stacks (3D Stack View) -->
+            <div id="tool-stacks" class="tool-stacks" style="display: none;">
+                <!-- Stacks werden hier dynamisch eingefügt -->
+                <!-- Struktur pro Stack:
+                <div class="category-stack" data-category="text">
+                    <div class="stack-header">
+                        <h2 class="stack-title">Text Tools</h2>
+                        <span class="stack-count">5</span>
+                    </div>
+                    <div class="stack-container">
+                        <div class="stack-cards">
+                            ... Cards ...
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    <strong>Quantum AI Hub</strong> v1.0 
+                    <span class="footer-separator" aria-hidden="true">•</span>
+                    Gebaut mit 💙
+                </p>
+                <p class="footer-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer nofollow" class="footer-link">
+                        GitHub
+                    </a>
+                    <span class="footer-separator" aria-hidden="true">•</span>
+                    <span class="footer-link" id="source-indicator">
+                        Datenquelle: <span id="data-source">Lädt...</span>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- ==================== SCRIPT ==================== -->
+    <script src="app.js?v=1.1"></script>
+    
+</body>
