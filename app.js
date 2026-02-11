@@ -231,7 +231,7 @@ const filterManager = {
       code: { label: 'Code', emoji: '💻' },
       audio: { label: 'Audio', emoji: '🎵' },
       video: { label: 'Video', emoji: '🎬' },
-       { label: 'Daten', emoji: '📊' },
+      data:  { label: 'Daten', emoji: '📊' },
       favorites: { label: 'Favoriten', emoji: '⭐' }
     };
     
