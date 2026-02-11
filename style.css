@@ -879,38 +879,40 @@ body {
   }
 }
 
-/* Mobile */
-@media (max-width: 480px) {
+/* ================= MOBILE PERFECT GRID ================= */
+@media (max-width: 767px) {
+
+  .container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
   .tool-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-lg);
+    gap: 26px;   /* mehr Raum zwischen den Karten */
+    padding: 0;
   }
-  
-  .view-toggle {
-    width: 100%;
+
+  .card {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    overflow: hidden;
   }
-  
-  .toggle-btn {
-    flex: 1;
-    justify-content: center;
+
+  .card-link {
+    margin-top: auto;
   }
-  
-  .stack-container {
-    min-height: 250px;
+
+  .card-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  
-  /* Reduced 3D effect on mobile */
-  .stack-cards:not(.fanned) .stack-card:nth-child(2) {
-    transform: translateZ(-15px) translateY(6px) rotateX(-1deg);
-  }
-  
-  .stack-cards:not(.fanned) .stack-card:nth-child(3) {
-    transform: translateZ(-30px) translateY(12px) rotateX(-2deg);
-  }
-  
-  .stack-cards:not(.fanned) .stack-card:nth-child(n+4) {
-    transform: translateZ(-45px) translateY(18px) rotateX(-3deg);
-  }
+
 }
 
 
