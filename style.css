@@ -854,10 +854,22 @@ body {
 
 /* Tablets */
 @media (max-width: 768px) {
-  .tool-stacks {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-lg);
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
+
+  .card {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .card-link {
+    margin-top: auto;
+  }
+}
   
   .view-toggle {
     margin-top: var(--spacing-md);
@@ -1343,8 +1355,8 @@ body {
     gap: var(--spacing-md);
   }
   
-  .card {
-    padding: var(--spacing-md);
+   .card {
+     aspect-ratio: 1 / 1;
   }
 }
 
