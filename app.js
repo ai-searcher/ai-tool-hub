@@ -778,7 +778,7 @@ const stackRenderer = {
     code: { label: 'Code Tools', emoji: '💻', color: 'code' },
     audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
     video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-     { label: 'Data Tools', emoji: '📊', color: 'data' },
+     { label: 'Data Tools', emoji: '💿', color: 'data' },
     other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
   },
   
