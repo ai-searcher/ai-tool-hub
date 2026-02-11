@@ -1198,8 +1198,8 @@ body {
 @media (min-width: 768px) and (max-width: 1023px) {
   .tool-grid-squares {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-    padding: 40px 24px;
+    gap: 40px;              /* mehr Luft zwischen Karten */
+    padding: 60px 40px;     /* mehr Rand zum Bildschirm */
   }
 
   .card-square { padding: 18px; }
@@ -1212,10 +1212,10 @@ body {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
 
     /* mehr Abstand zwischen den Quadraten (luftig wie auf deiner Markierung) */
-    gap: 28px;
+    gap: 36px;              /* mehr Luft zwischen Karten */
 
     /* größerer Seitenabstand */
-    padding: 32px 18px;
+    padding: 40px 24px;     /* mehr Rand zum Bildschirm */
   }
 
   .card-square {
@@ -1223,10 +1223,12 @@ body {
     min-height: 140px;
     padding: 12px;
 
-    /* Animation auf mobilen Geräten ausschalten für bessere Performance */
-    animation: none !important;
-    transform: none !important;
+    /* Leichte Animation - langsamer als Desktop für bessere Performance */
+    animation: squareFloat 8s ease-in-out infinite;
+    transform: none !important; /* Parallax-Effekt aus, nur Float-Animation */
   }
+}
+
 
   /* Erzwinge button unten, clamped text, damit Karten weiterhin quadratisch bleiben */
   #tool-grid.tool-grid-squares .square-link,
@@ -1269,30 +1271,6 @@ body {
   }
 }
 
-/* Tablet (3 Spalten) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    padding: 40px 24px;
-  }
-
-  .card-square {
-    min-height: 260px;
-    padding: 20px;
-  }
-}
-
-/* Mobile (2 Spalten - GENAU WIE DU WOLLTEST!) */
-@media (max-width: 767px) {
-  .tool-grid-squares {
-    gap: 16px;
-    padding: 20px 16px;
-  }
-
-  .card-square {
-    min-height: 240px;
-    padding: 20px;
 
     /* Disable animations on mobile for performance */
     animation: none !important;
