@@ -610,7 +610,7 @@ body {
   --color-code: #7C4DFF;      /* Deep Purple */
   --color-audio: #FF6B9D;     /* Soft Coral */
   --color-video: #448AFF;     /* Bright Blue */
-  --color- #1DE9B6;      /* Elegant Teal */
+  --color-data: #1DE9B6;      /* Elegant Teal (korrekt benannt) */
   --color-other: #B0BEC5;     /* Neutral Gray */
   
   /* Glow variants */
@@ -619,7 +619,7 @@ body {
   --glow-code: rgba(124, 77, 255, 0.25);
   --glow-audio: rgba(255, 107, 157, 0.25);
   --glow-video: rgba(68, 138, 255, 0.25);
-  --glow- rgba(29, 233, 182, 0.25);
+  --glow-data: rgba(29, 233, 182, 0.25);
 }
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
