@@ -780,9 +780,10 @@ const stackRenderer = {
     image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
     code: { label: 'Code Tools', emoji: '💻', color: 'code' },
     audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
-    video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-     { label: 'Data Tools', emoji: '📊', color: 'data' },
+        video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
+     { label: 'Data Tools', emoji: '📊', color: 'data' }, // Key '' hinzugefügt
     other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
+
   },
   
   // Group tools by category
