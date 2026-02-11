@@ -1,7 +1,7 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 2.0.0 - Feature Complete
-// Production Ready - All Features Integrated
+// Version: 1.0.0
+// Production Ready - All Systems Checked
 // =========================================
 
 'use strict';
@@ -28,9 +28,6 @@ const CONFIG = {
     autoFix: true,
     logErrors: true,
     strictMode: false
-  },
-  favorites: {
-    storageKey: 'quantum-ai-hub-favorites'
   }
 };
 
@@ -45,10 +42,7 @@ const DEFAULT_TOOLS = [
     description: 'AI Chatbot von OpenAI',
     category: 'text',
     is_free: true,
-    rating: 4.8,
-    provider: 'OpenAI',
-    tags: ['chat', 'nlp'],
-    added: '2024-01-15'
+    rating: 4.8
   },
   {
     id: 2,
@@ -57,10 +51,7 @@ const DEFAULT_TOOLS = [
     description: 'AI Bild-Generator',
     category: 'image',
     is_free: false,
-    rating: 4.7,
-    provider: 'Midjourney',
-    tags: ['image', 'art'],
-    added: '2024-01-10'
+    rating: 4.7
   },
   {
     id: 3,
@@ -69,10 +60,7 @@ const DEFAULT_TOOLS = [
     description: 'AI Code-Assistent',
     category: 'code',
     is_free: false,
-    rating: 4.6,
-    provider: 'GitHub',
-    tags: ['coding', 'autocomplete'],
-    added: '2024-01-12'
+    rating: 4.6
   }
 ];
 
@@ -127,7 +115,7 @@ const getElement = (selector) => {
 const sanitizeInput = (input) => {
   if (typeof input !== 'string') return '';
   return input
-    .replace(/[<>'"]/g, '')
+    .replace(/[<>'"]/g, '') // Remove dangerous chars
     .trim()
     .substring(0, CONFIG.search.maxLength);
 };
@@ -154,254 +142,11 @@ const state = {
   loading: true,
   error: null,
   searchQuery: '',
-  currentFilter: 'all',
-  currentSort: 'rating-desc',
-  favorites: [],
   dataSource: 'loading',
   stats: {
     total: 0,
     categories: 0,
     featured: 0
-  }
-};
-
-// =========================================
-// FAVORITES MANAGER
-// =========================================
-const favoritesManager = {
-  load() {
-    try {
-      const stored = localStorage.getItem(CONFIG.favorites.storageKey);
-      return stored ? JSON.parse(stored) : [];
-    } catch (error) {
-      console.warn('Failed to load favorites:', error);
-      return [];
-    }
-  },
-  
-  save(favorites) {
-    try {
-      localStorage.setItem(CONFIG.favorites.storageKey, JSON.stringify(favorites));
-    } catch (error) {
-      console.warn('Failed to save favorites:', error);
-    }
-  },
-  
-  toggle(toolId) {
-    const index = state.favorites.indexOf(toolId);
-    if (index > -1) {
-      state.favorites.splice(index, 1);
-    } else {
-      state.favorites.push(toolId);
-    }
-    this.save(state.favorites);
-    ui.render();
-    console.log('⭐ Favorites updated:', state.favorites);
-  },
-  
-  isFavorite(toolId) {
-    return state.favorites.includes(toolId);
-  }
-};
-
-// =========================================
-// FILTER MANAGER
-// =========================================
-const filterManager = {
-  categories: ['all', 'text', 'image', 'code', 'audio', 'video', 'data', 'favorites'],
-  
-  setFilter(category) {
-    state.currentFilter = category;
-    ui.render();
-    this.updateUI();
-    console.log('🔍 Filter set to:', category);
-  },
-  
-  updateUI() {
-    $$('.filter-chip').forEach(chip => {
-      chip.classList.toggle('active', chip.dataset.category === state.currentFilter);
-    });
-  },
-  
-  renderChips() {
-    const chipLabels = {
-      all: { label: 'Alle', emoji: '🌐' },
-      text: { label: 'Text', emoji: '📝' },
-      image: { label: 'Bilder', emoji: '🎨' },
-      code: { label: 'Code', emoji: '💻' },
-      audio: { label: 'Audio', emoji: '🎵' },
-      video: { label: 'Video', emoji: '🎬' },
-      data:  { label: 'Daten', emoji: '📊' },
-      favorites: { label: 'Favoriten', emoji: '⭐' }
-    };
-    
-    return this.categories.map(cat => {
-      const config = chipLabels[cat];
-      const count = cat === 'all' 
-        ? state.tools.length 
-        : cat === 'favorites'
-        ? state.favorites.length
-        : state.tools.filter(t => t.category === cat).length;
-      
-      return `
-        <button 
-          class="filter-chip ${cat === state.currentFilter ? 'active' : ''}" 
-          data-category="${cat}"
-          type="button"
-        >
-          <span class="chip-emoji" aria-hidden="true">${config.emoji}</span>
-          <span class="chip-label">${config.label}</span>
-          <span class="chip-count">${count}</span>
-        </button>
-      `;
-    }).join('');
-  }
-};
-
-// =========================================
-// SORT MANAGER
-// =========================================
-const sortManager = {
-  options: {
-    'rating-desc': { label: '⭐ Rating (hoch → niedrig)', fn: (a, b) => (b.rating || 0) - (a.rating || 0) },
-    'rating-asc': { label: '⭐ Rating (niedrig → hoch)', fn: (a, b) => (a.rating || 0) - (b.rating || 0) },
-    'name-asc': { label: '🔤 Name (A → Z)', fn: (a, b) => a.title.localeCompare(b.title) },
-    'name-desc': { label: '🔤 Name (Z → A)', fn: (a, b) => b.title.localeCompare(a.title) },
-    'date-desc': { label: '📅 Neueste zuerst', fn: (a, b) => new Date(b.added || 0) - new Date(a.added || 0) },
-    'date-asc': { label: '📅 Älteste zuerst', fn: (a, b) => new Date(a.added || 0) - new Date(b.added || 0) }
-  },
-  
-  setSort(sortKey) {
-    state.currentSort = sortKey;
-    ui.render();
-    this.updateUI();
-    console.log('📊 Sort set to:', sortKey);
-  },
-  
-  updateUI() {
-    const select = $('#sort-select');
-    if (select) select.value = state.currentSort;
-  },
-  
-  renderDropdown() {
-    return `
-      <div class="sort-container">
-        <label for="sort-select" class="sort-label">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M3 6h18M7 12h10M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span>Sortieren:</span>
-        </label>
-        <select id="sort-select" class="sort-select">
-          ${Object.entries(this.options).map(([key, opt]) => 
-            `<option value="${key}" ${key === state.currentSort ? 'selected' : ''}>${opt.label}</option>`
-          ).join('')}
-        </select>
-      </div>
-    `;
-  },
-  
-  applySorting(tools) {
-    const sortFn = this.options[state.currentSort]?.fn;
-    return sortFn ? [...tools].sort(sortFn) : tools;
-  }
-};
-
-// =========================================
-// ANIMATED BACKGROUND
-// =========================================
-const animatedBackground = {
-  canvas: null,
-  ctx: null,
-  particles: [],
-  animationFrame: null,
-  
-  init() {
-    this.canvas = $('#background-canvas');
-    if (!this.canvas) {
-      this.canvas = document.createElement('canvas');
-      this.canvas.id = 'background-canvas';
-      this.canvas.className = 'background-canvas';
-      document.body.insertBefore(this.canvas, document.body.firstChild);
-    }
-    
-    this.ctx = this.canvas.getContext('2d');
-    this.resizeCanvas();
-    this.createParticles();
-    this.animate();
-    
-    window.addEventListener('resize', () => this.resizeCanvas());
-    console.log('🌌 Animated background initialized');
-  },
-  
-  resizeCanvas() {
-    if (!this.canvas) return;
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  },
-  
-  createParticles() {
-    const count = Math.min(50, Math.floor(window.innerWidth / 30));
-    this.particles = [];
-    
-    for (let i = 0; i < count; i++) {
-      this.particles.push({
-        x: Math.random() * this.canvas.width,
-        y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        radius: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2
-      });
-    }
-  },
-  
-  animate() {
-    if (!this.ctx) return;
-    
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    // Draw particles
-    this.particles.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      
-      if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
-      if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
-      
-      this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = `rgba(0, 243, 255, ${p.opacity})`;
-      this.ctx.fill();
-    });
-    
-    // Draw connections
-    this.particles.forEach((p1, i) => {
-      this.particles.slice(i + 1).forEach(p2 => {
-        const dx = p1.x - p2.x;
-        const dy = p1.y - p2.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 150) {
-          const opacity = (1 - distance / 150) * 0.2;
-          this.ctx.beginPath();
-          this.ctx.moveTo(p1.x, p1.y);
-          this.ctx.lineTo(p2.x, p2.y);
-          this.ctx.strokeStyle = `rgba(0, 243, 255, ${opacity})`;
-          this.ctx.lineWidth = 1;
-          this.ctx.stroke();
-        }
-      });
-    });
-    
-    this.animationFrame = requestAnimationFrame(() => this.animate());
-  },
-  
-  destroy() {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-      this.animationFrame = null;
-    }
   }
 };
 
@@ -420,24 +165,26 @@ const supabase = {
     };
     
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
-      try {
-        const response = await fetch(url, {
-          ...options,
-          headers,
-          signal: controller.signal
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        return await response.json();
-      } finally {
-        clearTimeout(timeoutId);
-      }
+      // fallback-compatible fetch with AbortController timeout
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s
+
+try {
+  const response = await fetch(url, {
+    ...options,
+    headers,
+    signal: controller.signal
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  return await response.json();
+} finally {
+  clearTimeout(timeoutId);
+}
+
     } catch (error) {
       console.error('Supabase fetch error:', error);
       throw error;
@@ -446,6 +193,7 @@ const supabase = {
   
   async getTools() {
     try {
+      // Use the view with category info
       const tools = await this.fetch('tools_with_category?order=created_at.desc');
       console.log('✅ Supabase: Loaded', tools.length, 'tools');
       return tools;
@@ -460,10 +208,12 @@ const supabase = {
 // DATA VALIDATION
 // =========================================
 const validator = {
+  // Validate single tool
   validateTool(tool, index) {
     const errors = [];
     const warnings = [];
     
+    // Check required fields
     VALIDATION_RULES.required.forEach(field => {
       if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
         errors.push({
@@ -475,6 +225,7 @@ const validator = {
       }
     });
     
+    // Check types
     Object.keys(tool).forEach(field => {
       const expectedType = VALIDATION_RULES.types[field];
       if (!expectedType) return;
@@ -492,6 +243,7 @@ const validator = {
       }
     });
     
+    // Check ranges
     if (tool.rating !== undefined && tool.rating !== null) {
       const { min, max } = VALIDATION_RULES.ranges.rating;
       if (tool.rating < min || tool.rating > max) {
@@ -514,6 +266,7 @@ const validator = {
       }
     }
     
+    // Check patterns
     if (tool.link && !VALIDATION_RULES.patterns.link.test(tool.link)) {
       errors.push({
         type: 'INVALID_PATTERN',
@@ -535,29 +288,35 @@ const validator = {
     return { errors, warnings };
   },
   
+  // Auto-fix tool
   autoFix(tool) {
     const fixed = { ...tool };
     
+    // Generate ID if missing
     if (!fixed.id || typeof fixed.id !== 'number') {
       fixed.id = Date.now() + Math.floor(Math.random() * 1000);
       console.log(`🔧 Auto-fix: Generated ID for "${fixed.title}"`);
     }
     
+    // Fix URL protocol
     if (fixed.link && !fixed.link.match(/^https?:\/\//i)) {
       fixed.link = 'https://' + fixed.link;
       console.log(`🔧 Auto-fix: Added https:// to "${fixed.title}"`);
     }
     
+    // Generate description if missing
     if (!fixed.description || fixed.description === '') {
       fixed.description = `${fixed.title} - AI Tool`;
       console.log(`🔧 Auto-fix: Generated description for "${fixed.title}"`);
     }
     
+    // Detect category if missing
     if (!fixed.category) {
       fixed.category = this.detectCategory(fixed);
       console.log(`🔧 Auto-fix: Detected category "${fixed.category}" for "${fixed.title}"`);
     }
     
+    // Clamp rating
     if (fixed.rating !== undefined && fixed.rating !== null) {
       if (fixed.rating < 0) fixed.rating = 0;
       if (fixed.rating > 5) fixed.rating = 5;
@@ -566,6 +325,7 @@ const validator = {
     return fixed;
   },
   
+  // Detect category from title/description
   detectCategory(tool) {
     const text = `${tool.title} ${tool.description || ''}`.toLowerCase();
     
@@ -586,6 +346,7 @@ const validator = {
     return 'other';
   },
   
+  // Validate all tools
   validateAll(tools) {
     const allErrors = [];
     const allWarnings = [];
@@ -596,10 +357,12 @@ const validator = {
     const seenTitles = new Set();
     
     tools.forEach((tool, index) => {
+      // Auto-fix if enabled
       const processedTool = CONFIG.validation.autoFix ? this.autoFix(tool) : tool;
       
       const { errors, warnings } = this.validateTool(processedTool, index);
       
+      // Check duplicate ID
       if (processedTool.id && seenIds.has(processedTool.id)) {
         errors.push({
           type: 'DUPLICATE_ID',
@@ -609,6 +372,7 @@ const validator = {
       }
       seenIds.add(processedTool.id);
       
+      // Check duplicate title (warning only)
       const titleLower = processedTool.title?.toLowerCase();
       if (titleLower && seenTitles.has(titleLower)) {
         warnings.push({
@@ -645,6 +409,7 @@ const validator = {
     };
   },
   
+  // Display validation report
   displayReport(validation) {
     if (!CONFIG.validation.logErrors) return;
     
@@ -701,46 +466,50 @@ const dataLoader = {
     if (!CONFIG.fallback.useLocalJSON) return null;
     
     try {
-      console.log('🔄 Trying local JSON...');
+            console.log('🔄 Trying local JSON...');
       console.log('📍 Current URL:', window.location.href);
       console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
-      
+
+      // robust local JSON fetch with AbortController, scoped correctly
       let data = null;
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s
+
       try {
         const response = await fetch('./data.json', {
-          signal: controller.signal
+          signal: controller.signal,
+          // cache: 'no-store' // optional: uncomment while debugging to avoid stale cached JSON
         });
-        
+
         console.log('📥 Response status:', response.status);
         console.log('📥 Response OK:', response.ok);
-        
+        console.log('📥 Response headers:', [...response.headers.entries()]);
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         data = await response.json();
       } finally {
         clearTimeout(timeoutId);
       }
-      
+
       console.log('📦 JSON parsed successfully');
-      
+
       if (!data) {
         console.warn('⚠️ JSON parsed but empty');
         return null;
       }
-      
+
+      // support both { tools: [...] } and plain [...] JSON files
       const tools = Array.isArray(data) ? data : (data.tools || data);
-      
+
       if (tools && tools.length > 0) {
         console.log('✅ Loaded from data.json:', tools.length, 'tools');
         state.dataSource = 'json';
         return tools;
       }
-      
+
       console.warn('⚠️ JSON loaded but no tools found');
       return null;
       
@@ -749,6 +518,7 @@ const dataLoader = {
       console.error('❌ Error type:', error.constructor.name);
       console.error('❌ Error message:', error.message);
       console.error('❌ Error stack:', error.stack);
+      console.error('❌ Full error:', error);
       return null;
     }
   },
@@ -764,12 +534,15 @@ const dataLoader = {
   async load() {
     console.log('🚀 Starting data load sequence...');
     
+    // Try Supabase first
     let tools = await this.loadFromSupabase();
     if (tools) return tools;
     
+    // Try local JSON
     tools = await this.loadFromJSON();
     if (tools) return tools;
     
+    // Fallback to defaults
     return this.loadDefaults();
   }
 };
@@ -780,6 +553,7 @@ const dataLoader = {
 const ui = {
   elements: {},
   
+    // Cache all DOM elements
   cacheElements() {
     this.elements = {
       loading: getElement('#loading'),
@@ -787,10 +561,10 @@ const ui = {
       empty: getElement('#empty'),
       emptyQuery: getElement('#empty-query'),
       toolGrid: getElement('#tool-grid'),
-      toolStacks: getElement('#tool-stacks'),
-      viewToggle: getElement('#view-toggle'),
-      viewGrid: getElement('#view-grid'),
-      viewStack: getElement('#view-stack'),
+      toolStacks: getElement('#tool-stacks'),   // << neu: Tool Stacks Element
+      viewToggle: getElement('#view-toggle'),   // << neu: View Toggle Container
+      viewGrid: getElement('#view-grid'),       // << neu: Grid Button
+      viewStack: getElement('#view-stack'),     // << neu: Stack Button
       search: getElement('#search'),
       searchClear: getElement('#search-clear'),
       retryButton: getElement('#retry-button'),
@@ -802,6 +576,7 @@ const ui = {
     };
   },
   
+  // Show/hide states
   showState(stateName) {
     const states = ['loading', 'error', 'empty'];
     
@@ -817,6 +592,7 @@ const ui = {
     }
   },
   
+  // Update stats bar
   updateStats() {
     if (!this.elements.statsBar) return;
     
@@ -842,6 +618,7 @@ const ui = {
     this.elements.statsBar.style.display = 'flex';
   },
   
+  // Update data source indicator
   updateDataSource() {
     if (!this.elements.dataSource) return;
     
@@ -851,51 +628,22 @@ const ui = {
       defaults: 'D: DEF',
       loading: '...'
     };
+
     
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
   
-  renderCard(tool) {
+  // Render tool card
+renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-  const isFavorite = favoritesManager.isFavorite(tool.id);
-  const rating = tool.rating || 0;
-  const stars = '⭐'.repeat(Math.round(rating));
-  const provider = tool.provider ? `by ${tool.provider}` : '';
-  const isFree = tool.is_free ? '<span class="badge-free">GRATIS</span>' : '';
-
+  
   return `
-    <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-tool-id="${tool.id}" data-depth="10">
-      
-      <!-- CARD TOP: badge (links) + favorite inline (rechts) -->
-      <div class="card-top" aria-hidden="true">
-        <div class="square-category-badge">${categoryDisplay}</div>
-        <button 
-          class="favorite-inline ${isFavorite ? 'active' : ''}" 
-          data-tool-id="${tool.id}"
-          type="button"
-          aria-label="${isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'}"
-          title="${isFavorite ? 'Favorit' : 'Zu Favoriten hinzufügen'}"
-        >${isFavorite ? '❤️' : '🤍'}</button>
-      </div>
-
-      <!-- CENTRED CONTENT (ohne duplicate badge) -->
+    <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
       <div class="square-content-centered">
+        <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
-
-        <div class="tool-meta">
-          ${rating > 0 ? `<span class="tool-rating" title="Rating: ${rating}/5">${stars}</span>` : ''}
-          ${provider ? `<span class="tool-provider">${this.escapeHtml(provider)}</span>` : ''}
-          ${isFree}
-        </div>
-
-        ${tool.tags && tool.tags.length > 0 ? `
-          <div class="tool-tags">
-            ${tool.tags.slice(0, 3).map(tag => `<span class="tool-tag">#${this.escapeHtml(tag)}</span>`).join('')}
-          </div>
-        ` : ''}
       </div>
-
       <a 
         href="${this.escapeHtml(tool.link)}" 
         class="card-overlay-link"
@@ -905,162 +653,74 @@ const ui = {
       ></a>
     </div>
   `;
-}
+},
+
   
+  // Escape HTML to prevent XSS
   escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   },
   
-  render() {
-    let tools = [...state.tools];
-    
-    // Apply category filter
-    if (state.currentFilter === 'favorites') {
-      tools = tools.filter(t => favoritesManager.isFavorite(t.id));
-    } else if (state.currentFilter !== 'all') {
-      tools = tools.filter(t => t.category === state.currentFilter);
-    }
-    
-    // Apply search filter
-    if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      const query = state.searchQuery.toLowerCase();
-      tools = tools.filter(tool => 
-        tool.title.toLowerCase().includes(query) ||
-        (tool.description && tool.description.toLowerCase().includes(query)) ||
-        (tool.tags && tool.tags.some(tag => tag.toLowerCase().includes(query)))
-      );
-    }
-    
-    // Apply sorting
-    tools = sortManager.applySorting(tools);
-    
-    state.filtered = tools;
-    
-    // Show appropriate state
-    if (state.loading) {
-      this.showState('loading');
-      return;
-    }
-    
-    if (state.error) {
-      this.showState('error');
-      return;
-    }
-    
-    if (state.filtered.length === 0) {
-      this.showState('empty');
-      if (this.elements.emptyQuery && state.searchQuery) {
-        this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
-      } else if (state.currentFilter === 'favorites' && state.favorites.length === 0) {
-        this.elements.emptyQuery.textContent = 'Noch keine Favoriten gespeichert';
-      } else {
-        this.elements.emptyQuery.textContent = 'Versuche einen anderen Filter';
-      }
-      return;
-    }
-    
-    // Render filters and sort
-    this.renderFilterSort();
-    
-    // Render based on current view
-    if (viewManager.currentView === 'grid') {
-      this.showState('grid');
-      if (this.elements.toolGrid) {
-        this.elements.toolGrid.classList.add('tool-grid-squares');
-        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-        this.attachCardHandlers();
-      }
-    } else {
-      if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
-      if (this.elements.toolStacks) {
-        this.elements.toolStacks.style.display = 'grid';
-        stackRenderer.render();
-      }
-    }
-  },
+  // Render all tools
+render() {
+  // Filter tools by search query
+  if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
+    const query = state.searchQuery.toLowerCase();
+    state.filtered = state.tools.filter(tool => 
+      tool.title.toLowerCase().includes(query) ||
+      (tool.description && tool.description.toLowerCase().includes(query))
+    );
+  } else {
+    state.filtered = [...state.tools];
+  }
   
-  renderFilterSort() {
-    let container = $('#filter-sort-container');
-    
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'filter-sort-container';
-      container.className = 'filter-sort-container';
-      
-      const mainContainer = $('.container');
-      const toolGrid = $('#tool-grid');
-      if (mainContainer && toolGrid) {
-        mainContainer.insertBefore(container, toolGrid);
-      }
-    }
-    
-    container.innerHTML = `
-      <div class="filter-chips">
-        ${filterManager.renderChips()}
-      </div>
-      ${sortManager.renderDropdown()}
-    `;
-    
-    // Attach handlers
-    $$('.filter-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        filterManager.setFilter(chip.dataset.category);
-      });
-    });
-    
-    const sortSelect = $('#sort-select');
-    if (sortSelect) {
-      sortSelect.addEventListener('change', (e) => {
-        sortManager.setSort(e.target.value);
-      });
-    }
-  },
+  // Show appropriate state
+  if (state.loading) {
+    this.showState('loading');
+    return;
+  }
   
+  if (state.error) {
+    this.showState('error');
+    return;
+  }
+  
+  if (state.filtered.length === 0) {
+    this.showState('empty');
+    if (this.elements.emptyQuery && state.searchQuery) {
+      this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
+    }
+    return;
+  }
+  
+  // Render based on current view
+  if (viewManager.currentView === 'grid') {
+    this.showState('grid');
+    if (this.elements.toolGrid) {
+      this.elements.toolGrid.classList.add('tool-grid-squares');
+      this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+      this.attachCardHandlers();
+    }
+  } else {
+    // Stack view
+    if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
+    if (this.elements.toolStacks) {
+      this.elements.toolStacks.style.display = 'grid';
+      stackRenderer.render();
+    }
+  }
+},
+
+  
+  // Attach event handlers to cards
   attachCardHandlers() {
-    // Favorite buttons
-    $$('.favorite-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const toolId = parseInt(btn.dataset.toolId);
-        favoritesManager.toggle(toolId);
-      });
-    });
-    
-    // Card armed state (click highlight)
-    $$('.card-square').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.favorite-btn') || e.target.closest('.card-overlay-link')) {
-          return;
-        }
-        
-        // Remove armed from all cards
-        $$('.card-armed').forEach(c => c.classList.remove('card-armed'));
-        
-        // Add armed to clicked card
-        card.classList.add('card-armed');
-        
-        // Auto-remove after 3s
-        setTimeout(() => {
-          card.classList.remove('card-armed');
-        }, 3000);
-      });
-    });
-    
-    // Analytics
-    const links = $$('.card-overlay-link');
+    const links = $$('.card-link');
     links.forEach(link => {
-      link.addEventListener('click', () => {
-        const card = link.closest('.card-square');
-        const toolId = card?.dataset.toolId;
-        if (toolId) {
-          const tool = state.tools.find(t => t.id === parseInt(toolId));
-          if (tool) {
-            analytics.trackToolClick(tool.title);
-          }
-        }
+      link.addEventListener('click', (e) => {
+        const toolName = e.currentTarget.dataset.toolName;
+        analytics.trackToolClick(toolName);
       });
     });
   }
@@ -1070,51 +730,58 @@ const ui = {
 // VIEW MANAGEMENT (Grid/Stack Toggle)
 // =========================================
 const viewManager = {
-  currentView: 'grid',
-  
+  currentView: 'grid', // 'grid' or 'stack'
+
   init() {
+    // ensure ui elements cached
     if (!ui.elements || Object.keys(ui.elements).length === 0) ui.cacheElements();
-    
+
     ui.elements.viewToggle = ui.elements.viewToggle || getElement('#view-toggle');
-    ui.elements.viewGrid = ui.elements.viewGrid || getElement('#view-grid');
-    ui.elements.viewStack = ui.elements.viewStack || getElement('#view-stack');
+    ui.elements.viewGrid   = ui.elements.viewGrid   || getElement('#view-grid');
+    ui.elements.viewStack  = ui.elements.viewStack  || getElement('#view-stack');
     ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
-    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
-    
+    ui.elements.toolGrid   = ui.elements.toolGrid   || getElement('#tool-grid');
+
     if (ui.elements.viewToggle && state.tools && state.tools.length > 0) {
       ui.elements.viewToggle.style.display = 'flex';
     }
-    
+
     if (ui.elements.viewGrid) {
       ui.elements.viewGrid.addEventListener('click', () => this.switchView('grid'));
     }
-    
+
     if (ui.elements.viewStack) {
       ui.elements.viewStack.addEventListener('click', () => this.switchView('stack'));
     }
-    
+
+    // make sure initial state is applied
     this.switchView(this.currentView);
   },
-  
+
   switchView(view) {
     this.currentView = view;
-    
+
+    // update button UI / ARIA
     if (ui.elements.viewGrid && ui.elements.viewStack) {
       ui.elements.viewGrid.classList.toggle('active', view === 'grid');
       ui.elements.viewStack.classList.toggle('active', view === 'stack');
       ui.elements.viewGrid.setAttribute('aria-selected', view === 'grid');
       ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
     }
-    
+
+    // ensure references
     ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
     ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
-    
+
+    // GRID view: hide panel & restore normal page
     if (view === 'grid') {
+      // close panel if open (animated)
       const stacks = ui.elements.toolStacks;
       if (stacks && stacks.classList.contains('panel')) {
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; // restore scroll
         stacks.classList.remove('enter');
         stacks.classList.add('exit');
+        // after transition hide and cleanup
         const onEnd = () => {
           stacks.style.display = 'none';
           stacks.classList.remove('panel', 'exit');
@@ -1124,30 +791,37 @@ const viewManager = {
       } else {
         if (ui.elements.toolStacks) ui.elements.toolStacks.style.display = 'none';
       }
-      
+
+      // show grid
       if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'grid';
+      // tidy up stacks fanned state
       $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
       console.log('📐 Switched to grid view');
       return;
     }
-    
+
+    // STACK view: render stacks and open full-screen panel (slide-in)
     if (view === 'stack') {
+      // render stacks content (idempotent)
       try {
         stackRenderer.render();
       } catch (err) {
         console.error('Stack render failed:', err);
       }
-      
+
       const stacks = ui.elements.toolStacks;
       if (!stacks) {
         console.warn('tool-stacks element not found');
         return;
       }
-      
+
+      // hide grid behind panel
       if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'none';
-      
+
+      // prepare panel mode
       if (!stacks.classList.contains('panel')) {
         stacks.classList.add('panel');
+        // create close button if not exist
         let closeBtn = stacks.querySelector('.panel-close');
         if (!closeBtn) {
           closeBtn = document.createElement('button');
@@ -1159,21 +833,25 @@ const viewManager = {
           stacks.prepend(closeBtn);
         }
       }
-      
+
+      // show & animate in
       stacks.style.display = 'block';
+      // prevent background scroll while panel open
       document.body.style.overflow = 'hidden';
-      
+
+      // trigger CSS animation
       requestAnimationFrame(() => {
         stacks.classList.remove('exit');
         stacks.classList.add('enter');
       });
-      
+
+      // focus the close button for accessibility
       const firstFocusable = stacks.querySelector('.panel-close, .stack-title, .category-stack .stack-title');
       if (firstFocusable) {
         firstFocusable.setAttribute('tabindex', '-1');
         firstFocusable.focus({ preventScroll: true });
       }
-      
+
       console.log('📐 Switched to stack view (panel open)');
     }
   }
@@ -1183,16 +861,18 @@ const viewManager = {
 // STACK RENDERER (3D Category Stacks)
 // =========================================
 const stackRenderer = {
-    categoryConfig: {
-    text:  { label: 'Text Tools',  emoji: '📝', color: 'text' },
-    image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
-    code:  { label: 'Code Tools',  emoji: '💻', color: 'code' },
-    audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
-    video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-    data:   { label: 'Data Tools', emoji: '📊', color: 'data' },
-    other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
-  },
+  // Category labels and emojis
+  categoryConfig: {
+  text:  { label: 'Text Tools',  emoji: '📝', color: 'text' },
+  image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
+  code:  { label: 'Code Tools',  emoji: '💻', color: 'code' },
+  audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
+  video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
+  data:  { label: 'Data Tools',  emoji: '📊', color: 'data' },
+  other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
+},
   
+  // Group tools by category
   groupByCategory() {
     const grouped = {};
     
@@ -1207,22 +887,24 @@ const stackRenderer = {
     return grouped;
   },
   
+  // Render single stack card
   renderStackCard(tool) {
     const categoryDisplay = (tool.category || 'other').charAt(0).toUpperCase() + (tool.category || 'other').slice(1);
     
     return `
-      <div class="stack-card" data-tool-id="${tool.id}">
-        <div class="card-header">
-          <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
-          <span class="card-category">${categoryDisplay}</span>
-        </div>
-        <p class="card-description">
-          ${ui.escapeHtml(tool.description || 'AI Tool')}
-        </p>
-      </div>
-    `;
+  <div class="stack-card" data-tool-id="${tool.id}">
+    <div class="card-header">
+      <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
+      <span class="card-category">${categoryDisplay}</span>
+    </div>
+    <p class="card-description">
+      ${ui.escapeHtml(tool.description || 'AI Tool')}
+    </p>
+  </div>
+`;
   },
   
+  // Render category stack
   renderCategoryStack(category, tools) {
     const config = this.categoryConfig[category] || this.categoryConfig.other;
     const cardsHtml = tools.map(tool => this.renderStackCard(tool)).join('');
@@ -1245,6 +927,7 @@ const stackRenderer = {
     `;
   },
   
+  // Render all stacks
   render() {
     if (!ui.elements.toolStacks) return;
     
@@ -1256,17 +939,20 @@ const stackRenderer = {
       return;
     }
     
+    // Render each category stack
     const stacksHtml = categories
       .map(category => this.renderCategoryStack(category, grouped[category]))
       .join('');
     
     ui.elements.toolStacks.innerHTML = stacksHtml;
     
+    // Attach stack handlers
     this.attachStackHandlers();
     
     console.log(`📚 Rendered ${categories.length} category stacks`);
   },
   
+  // Attach click/touch handlers to stacks
   attachStackHandlers() {
     const stackContainers = $$('.stack-container');
     
@@ -1274,23 +960,28 @@ const stackRenderer = {
       const stackCards = container.querySelector('.stack-cards');
       if (!stackCards) return;
       
+      // Click/Touch to fan out
       container.addEventListener('click', (e) => {
+        // Don't toggle if clicking on a link
         if (e.target.closest('.card-link')) return;
         
         const isFanned = stackCards.classList.contains('fanned');
         
+        // Close all other stacks
         $$('.stack-cards').forEach(sc => {
           if (sc !== stackCards) {
             sc.classList.remove('fanned');
           }
         });
         
+        // Toggle current stack
         stackCards.classList.toggle('fanned', !isFanned);
         
         console.log(`📇 Stack ${isFanned ? 'closed' : 'opened'}:`, container.dataset.stackId);
       });
     });
     
+    // Attach analytics to links
     const links = $$('.stack-card .card-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -1308,23 +999,28 @@ const search = {
   init() {
     if (!ui.elements.search) return;
     
+    // Input handler with debounce
     const handleInput = debounce((e) => {
       const value = sanitizeInput(e.target.value);
       state.searchQuery = value;
       
+      // Show/hide clear button
       if (ui.elements.searchClear) {
         ui.elements.searchClear.style.display = value ? 'flex' : 'none';
       }
       
+      // Track search
       if (value) {
         analytics.trackSearch(value);
       }
       
+      // Re-render
       ui.render();
     }, CONFIG.search.debounceMs);
     
     ui.elements.search.addEventListener('input', handleInput);
     
+    // Clear button
     if (ui.elements.searchClear) {
       ui.elements.searchClear.addEventListener('click', () => {
         ui.elements.search.value = '';
@@ -1409,21 +1105,19 @@ const errorHandler = {
 const app = {
   async init() {
     try {
-      console.log('🚀 Initializing Quantum AI Hub v2.0...');
+      console.log('🚀 Initializing Quantum AI Hub...');
       console.log('Config:', CONFIG);
       
+      // Cache DOM elements
       ui.cacheElements();
+      
+      // Setup error handler
       errorHandler.setupRetry();
       
-      // Load favorites from localStorage
-      state.favorites = favoritesManager.load();
-      console.log('⭐ Loaded favorites:', state.favorites);
-      
-      // Initialize animated background
-      animatedBackground.init();
-      
+      // Show loading state
       ui.showState('loading');
       
+      // Load data with triple fallback
       const rawTools = await dataLoader.load();
       
       if (!rawTools || rawTools.length === 0) {
@@ -1432,9 +1126,11 @@ const app = {
       
       console.log('📥 Raw tools loaded:', rawTools.length);
       
+      // Validate and process tools
       const validation = validator.validateAll(rawTools);
       validator.displayReport(validation);
       
+      // Use valid tools only
       state.tools = validation.validTools;
       state.filtered = [...state.tools];
       state.loading = false;
@@ -1445,21 +1141,19 @@ const app = {
       
       console.log('✅ Valid tools ready:', state.tools.length);
       
+      // Update UI
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
       
+      // Initialize search
       search.init();
+      
+      // Initialize view manager
       viewManager.init();
       
+
       console.log('✅ App initialized successfully!');
-      console.log('✨ All features active:');
-      console.log('   - Kategorie-Filter');
-      console.log('   - Sortierung');
-      console.log('   - Favoriten-System');
-      console.log('   - Erweiterte Details');
-      console.log('   - Animierter Hintergrund');
-      console.log('   - Click-Highlight');
       
     } catch (error) {
       console.error('❌ CRITICAL ERROR in init:', error);
@@ -1467,13 +1161,14 @@ const app = {
       console.error('❌ Error message:', error.message);
       console.error('❌ Error stack:', error.stack);
       
+      // Emergency fallback to defaults
       console.log('🚨 EMERGENCY: Activating fallback to defaults...');
       
       try {
         state.tools = DEFAULT_TOOLS;
         state.filtered = [...state.tools];
         state.loading = false;
-        state.error = null;
+        state.error = null; // Clear error
         state.dataSource = 'emergency';
         
         console.log('🔧 Emergency: Updating UI...');
@@ -1494,6 +1189,7 @@ const app = {
         console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
         console.error('💥 This should never happen. Something is very wrong.');
         
+        // Last resort: show error
         errorHandler.handle(error, 'Initialization');
       }
     }
@@ -1516,6 +1212,110 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   console.log('💡 Debug mode: window.appState and window.appConfig available');
 }
 
+
+/* -----------------------------
+   DOUBLE-CLICK / MODAL SYSTEM
+   ----------------------------- */
+
+function createToolModal() {
+  if (document.getElementById('tool-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'tool-modal';
+  modal.style.display = 'none';
+  modal.style.position = 'fixed';
+  modal.style.inset = '0';
+  modal.style.zIndex = '9999';
+  modal.style.background = 'rgba(0,0,0,0.7)';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.innerHTML = `
+    <div class="modal-box" role="dialog" aria-modal="true" style="background:#0f1224;border-radius:14px;padding:24px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+      <h3 id="tool-modal-title" style="color:var(--primary);margin-bottom:8px;">Tool</h3>
+      <p id="tool-modal-desc" style="color:var(--text-dim);margin-bottom:12px;"></p>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <a id="tool-modal-open" class="card-link" style="display:inline-flex;padding:8px 12px;border-radius:8px;background:var(--primary);color:var(--bg-dark);text-decoration:none;">Öffnen</a>
+        <button id="tool-modal-close" style="background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:var(--text-secondary);">Schließen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeToolModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeToolModal();
+  });
+}
+
+function openToolModal(tool) {
+  createToolModal();
+  const modal = document.getElementById('tool-modal');
+  if (!modal) return;
+  modal.querySelector('#tool-modal-title').textContent = tool.title || 'Tool';
+  modal.querySelector('#tool-modal-desc').textContent = tool.description || '';
+  const openLink = modal.querySelector('#tool-modal-open');
+  openLink.href = tool.link || '#';
+  openLink.target = '_blank';
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('open'), 10);
+}
+
+function closeToolModal() {
+  const modal = document.getElementById('tool-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.style.display = 'none';
+}
+
+function attachDoubleClickHandlers() {
+  createToolModal();
+
+  const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
+
+  grid.addEventListener('click', (e) => {
+    if (e.target.closest('a') || e.target.closest('button')) return;
+    const card = e.target.closest('.card, .card-square, .stack-card');
+    if (!card) return;
+
+    // id vom data-attribute
+    const idAttr = card.dataset.toolId;
+    // erste Stufe: arming
+    if (!card.classList.contains('card-armed')) {
+      document.querySelectorAll('.card-armed').forEach(c => c.classList.remove('card-armed'));
+      card.classList.add('card-armed');
+      setTimeout(() => { if (card.classList.contains('card-armed')) card.classList.remove('card-armed'); }, 3000);
+      return;
+    }
+
+    // zweite Stufe: open
+    card.classList.remove('card-armed');
+
+    let tool = null;
+    if (idAttr && window.appState && appState.tools) {
+      tool = appState.tools.find(t => String(t.id) === String(idAttr));
+    }
+    if (!tool) {
+      const titleEl = card.querySelector('.card-title, .square-title');
+      const title = titleEl?.textContent?.trim();
+      if (title && window.appState && appState.tools) {
+        tool = appState.tools.find(t => (t.title || '').trim() === title);
+      }
+    }
+
+    if (tool) {
+      openToolModal(tool);
+    } else {
+      const link = card.querySelector('a.card-link, a.square-link');
+      if (link) window.open(link.href, '_blank');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'tool-modal-close') closeToolModal();
+  });
+}
+
 // =========================================
 // END
-// =========================================
+// =================================
