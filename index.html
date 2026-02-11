@@ -62,36 +62,16 @@
     <!--
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
     -->
-    <script>
-      // Strict Mode
-      'use strict';
-      
-      // Google Analytics mit Security
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-53RF07VYJ8', {
-        'anonymize_ip': true,
-        'allow_google_signals': false,
-        'allow_ad_personalization_signals': false,
-        'cookie_flags': 'SameSite=Strict;Secure',
-        'cookie_expires': 63072000, // 2 Jahre
-        'client_storage': 'cookies'
-      });
-      
-      // Error Handling
-      window.addEventListener('error', function(e) {
-        console.error('Global Error:', e.message);
-        // Verhindere dass Fehler Seite crashen
-        return true;
-      });
-      
-      // Unhandled Promise Rejection
-      window.addEventListener('unhandledrejection', function(e) {
-        console.error('Unhandled Promise:', e.reason);
-        e.preventDefault();
-      });
-    </script>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-53RF07VYJ8', {
+    anonymize_ip: true
+  });
+</script>
     
     <!-- Favicon (optional - später hinzufügen) -->
     <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
