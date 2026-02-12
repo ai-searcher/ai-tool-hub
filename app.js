@@ -652,7 +652,7 @@ const ui = {
         <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
         
-        ${/* ⬅️ HIER IST DEIN FIX! */ }
+        
         <div class="context-marquee">
           <div class="marquee-track">
             <span class="marquee-seq">${contextTexts.join(' • ')}</span>
