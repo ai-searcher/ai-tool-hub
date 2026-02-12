@@ -1,3 +1,6 @@
+style.css
+
+
 /* =========================================
    QUANTUM AI HUB - STYLE.CSS (FINAL)
    Alle Bugs gefixt, Production Ready
@@ -624,72 +627,6 @@ body {
 }
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
-
-/* ==================== GRID → STACK TRANSFORM HELPERS ==================== */
-/* (fügt Regeln für quadratische grid-cards und das oberste stack-label hinzu) */
-
-.tool-grid {
-  position: relative; /* wichtig: container als referenz für absolute cards */
-  display: grid;      /* bleibt grid */
-  gap: var(--spacing-md, 18px);
-}
-
-/* Force square look (cards are square in grid) */
-.card-square, .card-square > .square-content-centered {
-  aspect-ratio: 1 / 1;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  transition: transform 520ms cubic-bezier(.2,.9,.2,1), box-shadow 520ms;
-  will-change: transform;
-}
-
-/* visual: when cards are moved to stacks we use .in-stack to dim inner content */
-.card-square.in-stack .square-content-centered {
-  opacity: 0.06;
-  transform: translateY(6px) scale(0.98);
-  pointer-events: none;
-}
-
-/* top card (in stack-mode) shows the category label */
-.card-square.stack-top {
-  opacity: 1 !important;
-  transform: none !important;
-}
-.card-square .stack-label {
-  position: absolute;
-  left: 50%;
-  top: 10%;
-  transform: translateX(-50%);
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.92rem;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: #EAF8FF;
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 8px 30px rgba(2,6,23,0.45), 0 0 40px rgba(0,243,255,0.03);
-  z-index: 999;
-}
-
-/* utility: small offset for stacked cards (non top) */
-.card-square[data-stack-index] {
-  /* JS sets transform; this rule exists to keep layout consistent when not transformed */
-}
-
-/* keep reduced-motion respectful */
-@media (prefers-reduced-motion: reduce) {
-  .card-square, .card-square .stack-label {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
 .tool-stacks {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
