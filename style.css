@@ -1276,22 +1276,46 @@ body {
   .tool-grid-squares {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: center;
-    gap: 20px;           /* ⬅️ etwas kleiner */
-    row-gap: 25px;       /* ⬅️ etwas kleiner */
+    gap: 20px;
+    row-gap: 25px;
     padding: 16px;
   }
 
   .card-square {
-    aspect-ratio: 1 / 1 !important;  /* ⬅️ NEU: QUADRATISCH */
-    max-width: 128px;                /* ⬅️ etwas kleiner */
+    aspect-ratio: 1 / 1 !important;
+    max-width: 128px;
     width: 100%;
     height: auto;
     margin: 0 auto;
-    padding: 12px;                   /* ⬅️ etwas mehr Innenabstand */
+    padding: 12px;
     animation: none;
     transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  /* Kategorie oben links */
+  .square-category-badge {
+    align-self: flex-start !important;
+    margin-bottom: auto !important;
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+  }
+
+  /* Toolname UNTEN links, einzeilig */
+  .square-title-large {
+    align-self: flex-start !important;
+    margin-top: auto !important;
+    margin-bottom: 4px !important;
+    font-size: 0.85rem !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 }
+
 
 
 
