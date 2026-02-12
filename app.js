@@ -633,27 +633,25 @@ const ui = {
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
   
+  //Get context text for badges
+  getContextText(tool) {
+    if (!tool.badges || !tool.badges.length) {
+      return ['KI-powered Tool'];
+    }
+    
+    return tool.badges.slice(0, 3).map(badge => {
+      const text = badge.split('.')[0].trim();
+      return text.length > 28 ? text.slice(0, 28) + '…' : text;
+    });
+  },
+
   //Render Tool Card
   renderCard(tool) {
-  const categoryName = tool.category_name || tool.category || 'other';
-  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-  
-  const contextTexts = (() => {
-    try {
-      getContextText(tool) {
-  // 1. Priorität: badges → kürzen auf 3× kurze Texte
-  if (tool.badges && tool.badges.length) {
-    return tool.badges.slice(0, 3).map(badge => {
-      // Erste 25 Zeichen + Stil
-      return badge.split('.')[0].trim().slice(0, 28) || 'Pro-Tool';
-    });
-  }
-  
-  // 2. Fallback
-  return ['KI-powered Tool'];
-}
+    const categoryName = tool.category_name || tool.category || 'other';
+    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+    
+    const contextTexts = getContextText(tool) || ['KI-powered Tool'];
 
-  })();
   
   return `
     <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
