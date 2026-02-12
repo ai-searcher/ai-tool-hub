@@ -634,6 +634,7 @@ const ui = {
   },
   
   // Render tool card
+
 renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
@@ -643,6 +644,11 @@ renderCard(tool) {
       <div class="square-content-centered">
         <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
+        
+        <!-- Eleganter Kontext-Badge -->
+        <div class="context-marquee">
+          <div class="marquee-text">${getContextText(tool).join(' • ')}</div>
+        </div>
       </div>
       <a 
         href="${this.escapeHtml(tool.link)}" 
@@ -654,6 +660,7 @@ renderCard(tool) {
     </div>
   `;
 },
+
 
   
   // Escape HTML to prevent XSS
