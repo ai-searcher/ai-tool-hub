@@ -1274,20 +1274,23 @@ body {
 /* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(2, minmax(96px, 150px));  /* Max 150px pro Spalte */
-    justify-content: center;    /* Zentriere Grid wenn Platz übrig */
-    gap: 36px;
-    padding: 40px 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 gleich breite Spalten */
+    justify-content: center;                          /* Grid zentrieren */
+    gap: 24px;                                       /* etwas mehr Abstand, aber nicht riesig */
+    padding: 16px;                                   /* gleichmäßiger Rand */
   }
 
   .card-square {
-    min-height: 112px;
+    max-width: 180px;                                /* Karten kleiner machen */
+    width: 100%;
+    margin: 0 auto;                                  /* in der Spalte zentrieren */
+    min-height: 0;
     padding: 10px;
-    width: 100%;                /* Fülle Grid-Zelle komplett */
-    animation: squareFloat 8s ease-in-out infinite;
+    animation: none;                                 /* optional: ruhiger auf Handy */
     transform: none !important;
   }
 }
+
 
 
 
