@@ -640,10 +640,19 @@ const ui = {
   
   const contextTexts = (() => {
     try {
-      return getContextText(tool);
-    } catch(e) {
-      return ['KI Tool'];
-    }
+      getContextText(tool) {
+  // 1. Priorität: badges → kürzen auf 3× kurze Texte
+  if (tool.badges && tool.badges.length) {
+    return tool.badges.slice(0, 3).map(badge => {
+      // Erste 25 Zeichen + Stil
+      return badge.split('.')[0].trim().slice(0, 28) || 'Pro-Tool';
+    });
+  }
+  
+  // 2. Fallback
+  return ['KI-powered Tool'];
+}
+
   })();
   
   return `
