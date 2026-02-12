@@ -561,10 +561,6 @@ const ui = {
       empty: getElement('#empty'),
       emptyQuery: getElement('#empty-query'),
       toolGrid: getElement('#tool-grid'),
-      toolStacks: getElement('#tool-stacks'),   // << neu: Tool Stacks Element
-      viewToggle: getElement('#view-toggle'),   // << neu: View Toggle Container
-      viewGrid: getElement('#view-grid'),       // << neu: Grid Button
-      viewStack: getElement('#view-stack'),     // << neu: Stack Button
       search: getElement('#search'),
       searchClear: getElement('#search-clear'),
       retryButton: getElement('#retry-button'),
@@ -715,21 +711,12 @@ render() {
     return;
   }
   
-  // Render based on current view
-  if (viewManager.currentView === 'grid') {
-    this.showState('grid');
-    if (this.elements.toolGrid) {
-      this.elements.toolGrid.classList.add('tool-grid-squares');
-      this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-      this.attachCardHandlers();
-    }
-  } else {
-    // Stack view
-    if (this.elements.toolGrid) this.elements.toolGrid.style.display = 'none';
-    if (this.elements.toolStacks) {
-      this.elements.toolStacks.style.display = 'grid';
-      stackRenderer.render();
-    }
+  // Render grid view
+  this.showState('grid');
+  if (this.elements.toolGrid) {
+    this.elements.toolGrid.classList.add('tool-grid-squares');
+    this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+    this.attachCardHandlers();
   }
 },
 
@@ -746,271 +733,6 @@ render() {
   }
 };
 
-// =========================================
-// VIEW MANAGEMENT (Grid/Stack Toggle)
-// =========================================
-const viewManager = {
-  currentView: 'grid', // 'grid' or 'stack'
-
-  init() {
-    // ensure ui elements cached
-    if (!ui.elements || Object.keys(ui.elements).length === 0) ui.cacheElements();
-
-    ui.elements.viewToggle = ui.elements.viewToggle || getElement('#view-toggle');
-    ui.elements.viewGrid   = ui.elements.viewGrid   || getElement('#view-grid');
-    ui.elements.viewStack  = ui.elements.viewStack  || getElement('#view-stack');
-    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
-    ui.elements.toolGrid   = ui.elements.toolGrid   || getElement('#tool-grid');
-
-    if (ui.elements.viewToggle && state.tools && state.tools.length > 0) {
-      ui.elements.viewToggle.style.display = 'flex';
-    }
-
-    if (ui.elements.viewGrid) {
-      ui.elements.viewGrid.addEventListener('click', () => this.switchView('grid'));
-    }
-
-    if (ui.elements.viewStack) {
-      ui.elements.viewStack.addEventListener('click', () => this.switchView('stack'));
-    }
-
-    // make sure initial state is applied
-    this.switchView(this.currentView);
-  },
-
-  switchView(view) {
-    this.currentView = view;
-
-    // update button UI / ARIA
-    if (ui.elements.viewGrid && ui.elements.viewStack) {
-      ui.elements.viewGrid.classList.toggle('active', view === 'grid');
-      ui.elements.viewStack.classList.toggle('active', view === 'stack');
-      ui.elements.viewGrid.setAttribute('aria-selected', view === 'grid');
-      ui.elements.viewStack.setAttribute('aria-selected', view === 'stack');
-    }
-
-    // ensure references
-    ui.elements.toolGrid = ui.elements.toolGrid || getElement('#tool-grid');
-    ui.elements.toolStacks = ui.elements.toolStacks || getElement('#tool-stacks');
-
-    // GRID view: hide panel & restore normal page
-    if (view === 'grid') {
-      // close panel if open (animated)
-      const stacks = ui.elements.toolStacks;
-      if (stacks && stacks.classList.contains('panel')) {
-        document.body.style.overflow = ''; // restore scroll
-        stacks.classList.remove('enter');
-        stacks.classList.add('exit');
-        // after transition hide and cleanup
-        const onEnd = () => {
-          stacks.style.display = 'none';
-          stacks.classList.remove('panel', 'exit');
-          stacks.removeEventListener('transitionend', onEnd);
-        };
-        stacks.addEventListener('transitionend', onEnd, { passive: true, once: true });
-      } else {
-        if (ui.elements.toolStacks) ui.elements.toolStacks.style.display = 'none';
-      }
-
-      // show grid
-      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'grid';
-      // tidy up stacks fanned state
-      $$('.stack-cards.fanned').forEach(sc => sc.classList.remove('fanned'));
-      console.log('📐 Switched to grid view');
-      return;
-    }
-
-    // STACK view: render stacks and open full-screen panel (slide-in)
-    if (view === 'stack') {
-      // render stacks content (idempotent)
-      try {
-        stackRenderer.render();
-      } catch (err) {
-        console.error('Stack render failed:', err);
-      }
-
-      const stacks = ui.elements.toolStacks;
-      if (!stacks) {
-        console.warn('tool-stacks element not found');
-        return;
-      }
-
-      // hide grid behind panel
-      if (ui.elements.toolGrid) ui.elements.toolGrid.style.display = 'none';
-
-      // prepare panel mode
-      if (!stacks.classList.contains('panel')) {
-        stacks.classList.add('panel');
-        // create close button if not exist
-        let closeBtn = stacks.querySelector('.panel-close');
-        if (!closeBtn) {
-          closeBtn = document.createElement('button');
-          closeBtn.type = 'button';
-          closeBtn.className = 'panel-close';
-          closeBtn.setAttribute('aria-label', 'Zurück zur Grid Ansicht');
-          closeBtn.innerHTML = '← Zurück';
-          closeBtn.addEventListener('click', () => this.switchView('grid'));
-          stacks.prepend(closeBtn);
-        }
-      }
-
-      // show & animate in
-      stacks.style.display = 'block';
-      // prevent background scroll while panel open
-      document.body.style.overflow = 'hidden';
-
-      // trigger CSS animation
-      requestAnimationFrame(() => {
-        stacks.classList.remove('exit');
-        stacks.classList.add('enter');
-      });
-
-      // focus the close button for accessibility
-      const firstFocusable = stacks.querySelector('.panel-close, .stack-title, .category-stack .stack-title');
-      if (firstFocusable) {
-        firstFocusable.setAttribute('tabindex', '-1');
-        firstFocusable.focus({ preventScroll: true });
-      }
-
-      console.log('📐 Switched to stack view (panel open)');
-    }
-  }
-};
-
-// =========================================
-// STACK RENDERER (3D Category Stacks)
-// =========================================
-const stackRenderer = {
-  // Category labels and emojis
-  categoryConfig: {
-  text:  { label: 'Text Tools',  emoji: '📝', color: 'text' },
-  image: { label: 'Image Tools', emoji: '🎨', color: 'image' },
-  code:  { label: 'Code Tools',  emoji: '💻', color: 'code' },
-  audio: { label: 'Audio Tools', emoji: '🎵', color: 'audio' },
-  video: { label: 'Video Tools', emoji: '🎬', color: 'video' },
-  data:  { label: 'Data Tools',  emoji: '📊', color: 'data' },
-  other: { label: 'Other Tools', emoji: '🔧', color: 'other' }
-},
-  
-  // Group tools by category
-  groupByCategory() {
-    const grouped = {};
-    
-    state.filtered.forEach(tool => {
-      const category = tool.category || 'other';
-      if (!grouped[category]) {
-        grouped[category] = [];
-      }
-      grouped[category].push(tool);
-    });
-    
-    return grouped;
-  },
-  
-  // Render single stack card
-  renderStackCard(tool) {
-    const categoryDisplay = (tool.category || 'other').charAt(0).toUpperCase() + (tool.category || 'other').slice(1);
-    
-    return `
-  <div class="stack-card" data-tool-id="${tool.id}">
-    <div class="card-header">
-      <h3 class="card-title">${ui.escapeHtml(tool.title)}</h3>
-      <span class="card-category">${categoryDisplay}</span>
-    </div>
-    <p class="card-description">
-      ${ui.escapeHtml(tool.description || 'AI Tool')}
-    </p>
-  </div>
-`;
-  },
-  
-  // Render category stack
-  renderCategoryStack(category, tools) {
-    const config = this.categoryConfig[category] || this.categoryConfig.other;
-    const cardsHtml = tools.map(tool => this.renderStackCard(tool)).join('');
-    
-    return `
-      <div class="category-stack" data-category="${category}">
-        <div class="stack-header">
-          <h2 class="stack-title">
-            <span aria-hidden="true">${config.emoji}</span>
-            ${config.label}
-          </h2>
-          <span class="stack-count">${tools.length}</span>
-        </div>
-        <div class="stack-container" data-stack-id="${category}">
-          <div class="stack-cards" data-category="${category}">
-            ${cardsHtml}
-          </div>
-        </div>
-      </div>
-    `;
-  },
-  
-  // Render all stacks
-  render() {
-    if (!ui.elements.toolStacks) return;
-    
-    const grouped = this.groupByCategory();
-    const categories = Object.keys(grouped).sort();
-    
-    if (categories.length === 0) {
-      ui.elements.toolStacks.innerHTML = '<p class="state-text">Keine Tools gefunden</p>';
-      return;
-    }
-    
-    // Render each category stack
-    const stacksHtml = categories
-      .map(category => this.renderCategoryStack(category, grouped[category]))
-      .join('');
-    
-    ui.elements.toolStacks.innerHTML = stacksHtml;
-    
-    // Attach stack handlers
-    this.attachStackHandlers();
-    
-    console.log(`📚 Rendered ${categories.length} category stacks`);
-  },
-  
-  // Attach click/touch handlers to stacks
-  attachStackHandlers() {
-    const stackContainers = $$('.stack-container');
-    
-    stackContainers.forEach(container => {
-      const stackCards = container.querySelector('.stack-cards');
-      if (!stackCards) return;
-      
-      // Click/Touch to fan out
-      container.addEventListener('click', (e) => {
-        // Don't toggle if clicking on a link
-        if (e.target.closest('.card-link')) return;
-        
-        const isFanned = stackCards.classList.contains('fanned');
-        
-        // Close all other stacks
-        $$('.stack-cards').forEach(sc => {
-          if (sc !== stackCards) {
-            sc.classList.remove('fanned');
-          }
-        });
-        
-        // Toggle current stack
-        stackCards.classList.toggle('fanned', !isFanned);
-        
-        console.log(`📇 Stack ${isFanned ? 'closed' : 'opened'}:`, container.dataset.stackId);
-      });
-    });
-    
-    // Attach analytics to links
-    const links = $$('.stack-card .card-link');
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const toolName = e.currentTarget.dataset.toolName;
-        analytics.trackToolClick(toolName);
-      });
-    });
-  }
-};
 
 // =========================================
 // SEARCH FUNCTIONALITY
@@ -1169,8 +891,6 @@ const app = {
       // Initialize search
       search.init();
       
-      // Initialize view manager
-      viewManager.init();
       
 
       console.log('✅ App initialized successfully!');
@@ -1198,9 +918,6 @@ const app = {
         
         console.log('🔧 Emergency: Initializing search...');
         search.init();
-        
-        console.log('🔧 Emergency: Initializing view manager...');
-        viewManager.init();
         
         console.log('✅ Emergency recovery successful! App running with defaults.');
         console.log('💡 Check console errors above to debug the original issue.');
