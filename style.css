@@ -1288,7 +1288,7 @@ body {
     width: 100%;
     height: auto;
     margin: 0 auto;
-    padding: 12px;
+    padding: 22px;
     animation: none;
     transform: none !important;
     display: flex !important;
@@ -1315,7 +1315,16 @@ body {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
+
+  /* ⬅️ NEU: Content-Container */
+  .square-content-centered {
+    padding: 0 !important;
+    gap: 6px !important;
+    height: 100%;
+    width: 100%;
+  }
 }
+
 
 
 
