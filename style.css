@@ -981,13 +981,14 @@ body {
   align-items: flex-start;
   height: 100%;
   gap: 8px;
-  padding: 14px 12px;       /* ← Mehr horizontaler Platz für Marquee */
+  padding: 18px;              /* ← ZURÜCK zu 18px */
   text-align: left;
   position: relative;
   z-index: 2;
-  overflow: visible;         /* ← Marquee darf rausgucken (durch mask versteckt) */
+  overflow: hidden;           /* ← ZURÜCK zu hidden */
   box-sizing: border-box;
 }
+
 
 
 /* Category Badge - klein und elegant */
@@ -1900,15 +1901,16 @@ a:focus-visible {
 /* ═══════════ FULLWIDTH, NAHTLOSE MARQUEE (duplizierter Track) ═══════════ */
 .context-marquee {
   position: relative;
-  width: 100%;                /* ← Volle Breite nutzen */
+  width: calc(100% - 36px);  /* ← ZURÜCK zur alten Berechnung */
   height: 24px;
   overflow: hidden;
-  margin-top: auto;           /* ← Flex pushes to bottom */
+  margin-top: 6px;            /* ← ZURÜCK zu 6px */
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-  align-self: stretch;        /* ← Streckt sich über Container-Breite */
+  align-self: stretch;
 }
+
 
 
 /* Track enthält 2x die Sequenz für nahtlosen Loop */
