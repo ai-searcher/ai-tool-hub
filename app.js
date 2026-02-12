@@ -653,7 +653,7 @@ renderCard(tool) {
   
   const contextTexts = ['KI-powered Tool'];  // HARDCODE
   
-  return `  // dein altes HTML-Template
+  
 
 
   
