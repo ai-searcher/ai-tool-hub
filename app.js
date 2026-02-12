@@ -633,8 +633,8 @@ const ui = {
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
   
-  // Render tool card
-renderCard(tool) {
+  
+  renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   
@@ -652,17 +652,22 @@ renderCard(tool) {
         <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
         
+        ${/* ⬅️ HIER IST DEIN FIX! */ }
         <div class="context-marquee">
-          <div class="marquee-text">${contextTexts.join(' • ')}</div>
+          <div class="marquee-track">
+            <span class="marquee-seq">${contextTexts.join(' • ')}</span>
+            <span class="marquee-seq">${contextTexts.join(' • ')}</span>
+          </div>
         </div>
+        
+        <a 
+          href="${this.escapeHtml(tool.link)}" 
+          class="card-overlay-link"
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="${this.escapeHtml(tool.title)} öffnen"
+        ></a>
       </div>
-      <a 
-        href="${this.escapeHtml(tool.link)}" 
-        class="card-overlay-link"
-        target="_blank" 
-        rel="noopener noreferrer"
-        aria-label="${this.escapeHtml(tool.title)} öffnen"
-      ></a>
     </div>
   `;
 },
