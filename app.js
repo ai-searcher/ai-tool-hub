@@ -646,11 +646,15 @@ const ui = {
   },
 
   //Render Tool Card
-  renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    
-    const contextTexts = getContextText(tool) || ['KI-powered Tool'];
+  // ❌ NEUES LÖSCHEN → ALTES WIEDER
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  
+  const contextTexts = ['KI-powered Tool'];  // HARDCODE
+  
+  return `  // dein altes HTML-Template
+
 
   
   return `
