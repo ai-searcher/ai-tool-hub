@@ -1,22 +1,24 @@
+index.html
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <!-- ==================== SECURITY HEADERS ==================== -->
     
-    <!-- Content Security Policy (GA4 + Supabase, sicher) -->
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data: https://www.google-analytics.com https://stats.g.doubleclick.net;
-  font-src 'self' data:;
-  connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://*.supabase.co;
-  frame-src https://www.googletagmanager.com;
-  frame-ancestors 'none';
-  base-uri 'self';
-  form-action 'self';
-  upgrade-insecure-requests;
-">
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.supabase.co;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self'  https:;
+        font-src 'self' ;
+        connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://doicozkpdbkyvdkpujoh.supabase.co;
+        frame-ancestors 'none';
+        base-uri 'self';
+        form-action 'self';
+        upgrade-insecure-requests;
+    ">
     
     <!-- XSS Protection -->
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -58,19 +60,37 @@
     <title>⚡ Quantum AI Hub - Die besten AI Tools</title>
     
     <!-- ==================== GOOGLE ANALYTICS (SECURE) ==================== -->
-    <!--
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
-    -->
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-53RF07VYJ8', {
-    anonymize_ip: true
-  });
-</script>
+    <script>
+      // Strict Mode
+      'use strict';
+      
+      // Google Analytics mit Security
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-53RF07VYJ8', {
+        'anonymize_ip': true,
+        'allow_google_signals': false,
+        'allow_ad_personalization_signals': false,
+        'cookie_flags': 'SameSite=Strict;Secure',
+        'cookie_expires': 63072000, // 2 Jahre
+        'client_storage': 'cookies'
+      });
+      
+      // Error Handling
+      window.addEventListener('error', function(e) {
+        console.error('Global Error:', e.message);
+        // Verhindere dass Fehler Seite crashen
+        return true;
+      });
+      
+      // Unhandled Promise Rejection
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled Promise:', e.reason);
+        e.preventDefault();
+      });
+    </script>
     
     <!-- Favicon (optional - später hinzufügen) -->
     <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
@@ -258,3 +278,5 @@
     <script src="app.js?v=1.1"></script>
     
 </body>
+</html>
+
