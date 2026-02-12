@@ -1569,15 +1569,17 @@ a:focus-visible {
   }
 
   /* Grid: 2 Spalten, enge Lücken, flexibel */
-  #tool-grid.tool-grid-squares,
+   #tool-grid.tool-grid-squares,
   .tool-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;    /* Abstand zwischen Karten */
-    padding: 4px !important; /* Innenabstand vom Grid-Rand */
+    /* gap und padding NICHT mehr überschreiben */
+    gap: inherit !important;
+    padding: 0 !important;
     box-sizing: border-box !important;
     align-items: start !important;
   }
+
 
   /* Erzwinge Quadrat-Form — target card-square (dein JS rendert .card-square) */
   #tool-grid.tool-grid-squares .card-square,
