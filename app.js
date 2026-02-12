@@ -722,7 +722,7 @@ render() {
 
   
   // Attach event handlers to cards
-    attachCardHandlers() {
+      attachCardHandlers() {
     const links = $$('.card-overlay-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -732,6 +732,7 @@ render() {
       });
     });
   }
+};
 
 
 // =========================================
