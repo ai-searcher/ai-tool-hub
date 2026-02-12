@@ -1888,7 +1888,7 @@ a:focus-visible {
   display: inline-block;
   width: 200%;
   white-space: nowrap;
-  animation: marqueeFlow 28s linear infinite;
+  animation: marqueeFlow 18s linear infinite;
 }
 
 .context-marquee .marquee-seq {
