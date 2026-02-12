@@ -633,7 +633,7 @@ const ui = {
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
   
-  
+  //Render Tool Card
   renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
