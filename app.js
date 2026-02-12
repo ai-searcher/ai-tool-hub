@@ -165,26 +165,24 @@ const supabase = {
     };
     
     try {
-      // fallback-compatible fetch with AbortController timeout
-const controller = new AbortController();
-const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-try {
-  const response = await fetch(url, {
-    ...options,
-    headers,
-    signal: controller.signal
-  });
+      try {
+        const response = await fetch(url, {
+          ...options,
+          headers,
+          signal: controller.signal
+        });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
 
-  return await response.json();
-} finally {
-  clearTimeout(timeoutId);
-}
-
+        return await response.json();
+      } finally {
+        clearTimeout(timeoutId);
+      }
     } catch (error) {
       console.error('Supabase fetch error:', error);
       throw error;
@@ -193,7 +191,6 @@ try {
   
   async getTools() {
     try {
-      // Use the view with category info
       const tools = await this.fetch('tools_with_category?order=created_at.desc');
       console.log('✅ Supabase: Loaded', tools.length, 'tools');
       return tools;
@@ -208,12 +205,10 @@ try {
 // DATA VALIDATION
 // =========================================
 const validator = {
-  // Validate single tool
   validateTool(tool, index) {
     const errors = [];
     const warnings = [];
     
-    // Check required fields
     VALIDATION_RULES.required.forEach(field => {
       if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
         errors.push({
@@ -225,7 +220,6 @@ const validator = {
       }
     });
     
-    // Check types
     Object.keys(tool).forEach(field => {
       const expectedType = VALIDATION_RULES.types[field];
       if (!expectedType) return;
@@ -243,7 +237,6 @@ const validator = {
       }
     });
     
-    // Check ranges
     if (tool.rating !== undefined && tool.rating !== null) {
       const { min, max } = VALIDATION_RULES.ranges.rating;
       if (tool.rating < min || tool.rating > max) {
@@ -266,7 +259,6 @@ const validator = {
       }
     }
     
-    // Check patterns
     if (tool.link && !VALIDATION_RULES.patterns.link.test(tool.link)) {
       errors.push({
         type: 'INVALID_PATTERN',
@@ -288,35 +280,29 @@ const validator = {
     return { errors, warnings };
   },
   
-  // Auto-fix tool
   autoFix(tool) {
     const fixed = { ...tool };
     
-    // Generate ID if missing
     if (!fixed.id || typeof fixed.id !== 'number') {
       fixed.id = Date.now() + Math.floor(Math.random() * 1000);
       console.log(`🔧 Auto-fix: Generated ID for "${fixed.title}"`);
     }
     
-    // Fix URL protocol
     if (fixed.link && !fixed.link.match(/^https?:\/\//i)) {
       fixed.link = 'https://' + fixed.link;
       console.log(`🔧 Auto-fix: Added https:// to "${fixed.title}"`);
     }
     
-    // Generate description if missing
     if (!fixed.description || fixed.description === '') {
       fixed.description = `${fixed.title} - AI Tool`;
       console.log(`🔧 Auto-fix: Generated description for "${fixed.title}"`);
     }
     
-    // Detect category if missing
     if (!fixed.category) {
       fixed.category = this.detectCategory(fixed);
       console.log(`🔧 Auto-fix: Detected category "${fixed.category}" for "${fixed.title}"`);
     }
     
-    // Clamp rating
     if (fixed.rating !== undefined && fixed.rating !== null) {
       if (fixed.rating < 0) fixed.rating = 0;
       if (fixed.rating > 5) fixed.rating = 5;
@@ -325,7 +311,6 @@ const validator = {
     return fixed;
   },
   
-  // Detect category from title/description
   detectCategory(tool) {
     const text = `${tool.title} ${tool.description || ''}`.toLowerCase();
     
@@ -346,7 +331,6 @@ const validator = {
     return 'other';
   },
   
-  // Validate all tools
   validateAll(tools) {
     const allErrors = [];
     const allWarnings = [];
@@ -357,12 +341,10 @@ const validator = {
     const seenTitles = new Set();
     
     tools.forEach((tool, index) => {
-      // Auto-fix if enabled
       const processedTool = CONFIG.validation.autoFix ? this.autoFix(tool) : tool;
       
       const { errors, warnings } = this.validateTool(processedTool, index);
       
-      // Check duplicate ID
       if (processedTool.id && seenIds.has(processedTool.id)) {
         errors.push({
           type: 'DUPLICATE_ID',
@@ -372,7 +354,6 @@ const validator = {
       }
       seenIds.add(processedTool.id);
       
-      // Check duplicate title (warning only)
       const titleLower = processedTool.title?.toLowerCase();
       if (titleLower && seenTitles.has(titleLower)) {
         warnings.push({
@@ -409,7 +390,6 @@ const validator = {
     };
   },
   
-  // Display validation report
   displayReport(validation) {
     if (!CONFIG.validation.logErrors) return;
     
@@ -466,19 +446,17 @@ const dataLoader = {
     if (!CONFIG.fallback.useLocalJSON) return null;
     
     try {
-            console.log('🔄 Trying local JSON...');
+      console.log('🔄 Trying local JSON...');
       console.log('📍 Current URL:', window.location.href);
       console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
 
-      // robust local JSON fetch with AbortController, scoped correctly
       let data = null;
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       try {
         const response = await fetch('./data.json', {
-          signal: controller.signal,
-          // cache: 'no-store' // optional: uncomment while debugging to avoid stale cached JSON
+          signal: controller.signal
         });
 
         console.log('📥 Response status:', response.status);
@@ -501,7 +479,6 @@ const dataLoader = {
         return null;
       }
 
-      // support both { tools: [...] } and plain [...] JSON files
       const tools = Array.isArray(data) ? data : (data.tools || data);
 
       if (tools && tools.length > 0) {
@@ -534,15 +511,12 @@ const dataLoader = {
   async load() {
     console.log('🚀 Starting data load sequence...');
     
-    // Try Supabase first
     let tools = await this.loadFromSupabase();
     if (tools) return tools;
     
-    // Try local JSON
     tools = await this.loadFromJSON();
     if (tools) return tools;
     
-    // Fallback to defaults
     return this.loadDefaults();
   }
 };
@@ -553,7 +527,6 @@ const dataLoader = {
 const ui = {
   elements: {},
   
-    // Cache all DOM elements
   cacheElements() {
     this.elements = {
       loading: getElement('#loading'),
@@ -572,7 +545,6 @@ const ui = {
     };
   },
   
-  // Show/hide states
   showState(stateName) {
     const states = ['loading', 'error', 'empty'];
     
@@ -588,7 +560,6 @@ const ui = {
     }
   },
   
-  // Update stats bar
   updateStats() {
     if (!this.elements.statsBar) return;
     
@@ -614,180 +585,165 @@ const ui = {
     this.elements.statsBar.style.display = 'flex';
   },
   
- // ---------- UI methods: data source, badges, rendering & handlers ----------
-updateDataSource() {
-  if (!this.elements.dataSource) return;
+  updateDataSource() {
+    if (!this.elements.dataSource) return;
 
-  const sources = {
-    supabase: 'D: SB',
-    json: 'D: LJ',
-    defaults: 'D: DEF',
-    loading: '...'
-  };
+    const sources = {
+      supabase: 'D: SB',
+      json: 'D: LJ',
+      defaults: 'D: DEF',
+      loading: '...'
+    };
 
-  this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
-},
+    this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
+  },
 
-// Get context text for badges (returns up to 3 short snippets)
-getContextText(tool) {
-  if (!tool.badges || !tool.badges.length) {
-    // fallback: prefer description, then tags, then generic
-    const fallback = [
-      tool.description || '',
-      ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
-    ].filter(Boolean);
-    return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
-  }
-
-  return tool.badges.slice(0, 3).map(badge => {
-    const text = String(badge).split('.')[0].trim();
-    return text.length > 28 ? text.slice(0, 28) + '…' : text;
-  });
-},
-
-// Render Tool Card (single consolidated implementation)
-renderCard(tool) {
-  const categoryName = tool.category_name || tool.category || 'other';
-  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-
-  // safe context texts
-  const contextTexts = (typeof this.getContextText === 'function')
-    ? this.getContextText(tool)
-    : ([
+  getContextText(tool) {
+    if (!tool.badges || !tool.badges.length) {
+      const fallback = [
         tool.description || '',
-        ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
-      ].filter(Boolean));
+        ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
+      ].filter(Boolean);
+      return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
+    }
 
-  if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
+    return tool.badges.slice(0, 3).map(badge => {
+      const text = String(badge).split('.')[0].trim();
+      return text.length > 28 ? text.slice(0, 28) + '…' : text;
+    });
+  },
 
-  return `
-    <div class="card-square"
-         data-category="${this.escapeHtml(categoryName)}"
-         data-tool-name="${this.escapeHtml(tool.title)}"
-         data-depth="10"
-         tabindex="0"
-         role="article"
-         aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
+  renderCard(tool) {
+    const categoryName = tool.category_name || tool.category || 'other';
+    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-      <div class="square-content-centered">
+    const contextTexts = (typeof this.getContextText === 'function')
+      ? this.getContextText(tool)
+      : ([
+          tool.description || '',
+          ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
+        ].filter(Boolean));
 
-        <div class="square-category-badge" aria-hidden="true">
-          ${this.escapeHtml(categoryDisplay)}
-        </div>
+    if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
 
-        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-          ${this.escapeHtml(tool.title)}
-        </h3>
+    return `
+      <div class="card-square"
+           data-category="${this.escapeHtml(categoryName)}"
+           data-tool-name="${this.escapeHtml(tool.title)}"
+           data-depth="10"
+           tabindex="0"
+           role="article"
+           aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
 
-        <div class="context-marquee" aria-hidden="true">
-          <div class="marquee-track" role="presentation">
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+        <div class="square-content-centered">
+
+          <div class="square-category-badge" aria-hidden="true">
+            ${this.escapeHtml(categoryDisplay)}
           </div>
+
+          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+            ${this.escapeHtml(tool.title)}
+          </h3>
+
+          <div class="context-marquee" aria-hidden="true">
+            <div class="marquee-track" role="presentation">
+              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            </div>
+          </div>
+
+          <a href="${this.escapeHtml(tool.link)}"
+             class="card-overlay-link"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
+
         </div>
-
-        <a href="${this.escapeHtml(tool.link)}"
-           class="card-overlay-link"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
-
       </div>
-    </div>
-  `;
-},
+    `;
+  },
 
-// Escape HTML to prevent XSS (single, robust implementation)
-escapeHtml(text) {
-  if (text === null || text === undefined) return '';
-  const div = document.createElement('div');
-  div.textContent = String(text);
-  return div.innerHTML;
-},
+  escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
+  },
 
-// Render all tools (robust + idempotent)
-render() {
-  // Filter tools by search query
-  if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-    const query = state.searchQuery.toLowerCase();
-    state.filtered = state.tools.filter(tool =>
-      (tool.title || '').toLowerCase().includes(query) ||
-      (tool.description && tool.description.toLowerCase().includes(query))
-    );
-  } else {
-    state.filtered = [...state.tools];
-  }
-
-  // Show states
-  if (state.loading) { this.showState('loading'); return; }
-  if (state.error) { this.showState('error'); return; }
-
-  if (state.filtered.length === 0) {
-    this.showState('empty');
-    if (this.elements.emptyQuery && state.searchQuery) {
-      this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
-    }
-    return;
-  }
-
-  // Render grid view
-  this.showState('grid');
-  if (this.elements.toolGrid) {
-    if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-      this.elements.toolGrid.classList.add('tool-grid-squares');
-    }
-    this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-    this.attachCardHandlers();
-  }
-},
-
-// Attach handlers (event delegation, keyboard-accessible)
-attachCardHandlers() {
-  const grid = this.elements.toolGrid || getElement('#tool-grid');
-  if (!grid) return;
-
-  // Remove previous handlers if any
-  if (grid._clickHandler) {
-    grid.removeEventListener('click', grid._clickHandler);
-    grid.removeEventListener('keydown', grid._keyHandler);
-  }
-
-  // Click delegation
-  grid._clickHandler = (e) => {
-    const overlay = e.target.closest('.card-overlay-link');
-    const card = e.target.closest('.card-square');
-
-    if (overlay && card) {
-      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-      analytics.trackToolClick(toolName);
-      return; // allow anchor default
+  render() {
+    if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
+      const query = state.searchQuery.toLowerCase();
+      state.filtered = state.tools.filter(tool =>
+        (tool.title || '').toLowerCase().includes(query) ||
+        (tool.description && tool.description.toLowerCase().includes(query))
+      );
+    } else {
+      state.filtered = [...state.tools];
     }
 
-    if (card && !overlay) {
-      card.classList.toggle('card-armed');
-      const toolName = card.dataset.toolName || 'Unknown';
-      analytics.trackToolClick(toolName);
-    }
-  };
+    if (state.loading) { this.showState('loading'); return; }
+    if (state.error) { this.showState('error'); return; }
 
-  // Keyboard support (Enter/Space opens overlay)
-  grid._keyHandler = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      const card = e.target.closest('.card-square');
-      if (!card) return;
-      const overlay = card.querySelector('.card-overlay-link');
-      if (overlay) {
-        overlay.click();
-        e.preventDefault();
+    if (state.filtered.length === 0) {
+      this.showState('empty');
+      if (this.elements.emptyQuery && state.searchQuery) {
+        this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
       }
+      return;
     }
-  };
 
-  grid.addEventListener('click', grid._clickHandler);
-  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-},
+    this.showState('grid');
+    if (this.elements.toolGrid) {
+      if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+        this.elements.toolGrid.classList.add('tool-grid-squares');
+      }
+      this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+      this.attachCardHandlers();
+    }
+  },
+
+  attachCardHandlers() {
+    const grid = this.elements.toolGrid || getElement('#tool-grid');
+    if (!grid) return;
+
+    if (grid._clickHandler) {
+      grid.removeEventListener('click', grid._clickHandler);
+      grid.removeEventListener('keydown', grid._keyHandler);
+    }
+
+    grid._clickHandler = (e) => {
+      const overlay = e.target.closest('.card-overlay-link');
+      const card = e.target.closest('.card-square');
+
+      if (overlay && card) {
+        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+        analytics.trackToolClick(toolName);
+        return;
+      }
+
+      if (card && !overlay) {
+        card.classList.toggle('card-armed');
+        const toolName = card.dataset.toolName || 'Unknown';
+        analytics.trackToolClick(toolName);
+      }
+    };
+
+    grid._keyHandler = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const card = e.target.closest('.card-square');
+        if (!card) return;
+        const overlay = card.querySelector('.card-overlay-link');
+        if (overlay) {
+          overlay.click();
+          e.preventDefault();
+        }
+      }
+    };
+
+    grid.addEventListener('click', grid._clickHandler);
+    grid.addEventListener('keydown', grid._keyHandler, { passive: false });
+  }
 };
-
 
 // =========================================
 // SEARCH FUNCTIONALITY
@@ -796,28 +752,23 @@ const search = {
   init() {
     if (!ui.elements.search) return;
     
-    // Input handler with debounce
     const handleInput = debounce((e) => {
       const value = sanitizeInput(e.target.value);
       state.searchQuery = value;
       
-      // Show/hide clear button
       if (ui.elements.searchClear) {
         ui.elements.searchClear.style.display = value ? 'flex' : 'none';
       }
       
-      // Track search
       if (value) {
         analytics.trackSearch(value);
       }
       
-      // Re-render
       ui.render();
     }, CONFIG.search.debounceMs);
     
     ui.elements.search.addEventListener('input', handleInput);
     
-    // Clear button
     if (ui.elements.searchClear) {
       ui.elements.searchClear.addEventListener('click', () => {
         ui.elements.search.value = '';
@@ -905,16 +856,12 @@ const app = {
       console.log('🚀 Initializing Quantum AI Hub...');
       console.log('Config:', CONFIG);
       
-      // Cache DOM elements
       ui.cacheElements();
       
-      // Setup error handler
       errorHandler.setupRetry();
       
-      // Show loading state
       ui.showState('loading');
       
-      // Load data with triple fallback
       const rawTools = await dataLoader.load();
       
       if (!rawTools || rawTools.length === 0) {
@@ -923,11 +870,9 @@ const app = {
       
       console.log('📥 Raw tools loaded:', rawTools.length);
       
-      // Validate and process tools
       const validation = validator.validateAll(rawTools);
       validator.displayReport(validation);
       
-      // Use valid tools only
       state.tools = validation.validTools;
       state.filtered = [...state.tools];
       state.loading = false;
@@ -938,15 +883,11 @@ const app = {
       
       console.log('✅ Valid tools ready:', state.tools.length);
       
-      // Update UI
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
       
-      // Initialize search
       search.init();
-      
-      
 
       console.log('✅ App initialized successfully!');
       
@@ -956,14 +897,13 @@ const app = {
       console.error('❌ Error message:', error.message);
       console.error('❌ Error stack:', error.stack);
       
-      // Emergency fallback to defaults
       console.log('🚨 EMERGENCY: Activating fallback to defaults...');
       
       try {
         state.tools = DEFAULT_TOOLS;
         state.filtered = [...state.tools];
         state.loading = false;
-        state.error = null; // Clear error
+        state.error = null;
         state.dataSource = 'emergency';
         
         console.log('🔧 Emergency: Updating UI...');
@@ -981,7 +921,6 @@ const app = {
         console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
         console.error('💥 This should never happen. Something is very wrong.');
         
-        // Last resort: show error
         errorHandler.handle(error, 'Initialization');
       }
     }
@@ -997,17 +936,11 @@ if (document.readyState === 'loading') {
   app.init();
 }
 
-// Debug: Expose state to console
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   window.appState = state;
   window.appConfig = CONFIG;
   console.log('💡 Debug mode: window.appState and window.appConfig available');
 }
-
-
-/* -----------------------------
-   DOUBLE-CLICK / MODAL SYSTEM
-   ----------------------------- */
 
 function createToolModal() {
   if (document.getElementById('tool-modal')) return;
@@ -1070,9 +1003,7 @@ function attachDoubleClickHandlers() {
     const card = e.target.closest('.card, .card-square, .stack-card');
     if (!card) return;
 
-    // id vom data-attribute
     const idAttr = card.dataset.toolId;
-    // erste Stufe: arming
     if (!card.classList.contains('card-armed')) {
       document.querySelectorAll('.card-armed').forEach(c => c.classList.remove('card-armed'));
       card.classList.add('card-armed');
@@ -1080,7 +1011,6 @@ function attachDoubleClickHandlers() {
       return;
     }
 
-    // zweite Stufe: open
     card.classList.remove('card-armed');
 
     let tool = null;
@@ -1107,7 +1037,3 @@ function attachDoubleClickHandlers() {
     if (e.target && e.target.id === 'tool-modal-close') closeToolModal();
   });
 }
-
-// =========================================
-// END
-// =================================
