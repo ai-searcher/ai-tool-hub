@@ -137,43 +137,6 @@
                 </div>
             </div>
             
-            <!-- View Toggle Buttons -->
-            <div class="view-toggle" id="view-toggle" style="display: none;" role="tablist" aria-label="Ansicht wählen">
-                <button 
-                    id="view-grid" 
-                    class="toggle-btn active" 
-                    type="button"
-                    role="tab"
-                    aria-selected="true"
-                    aria-controls="tool-grid"
-                    aria-label="Grid Ansicht"
-                >
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
-                        <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
-                        <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
-                        <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" rx="2"/>
-                    </svg>
-                    <span>Grid</span>
-                </button>
-                <button 
-                    id="view-stack" 
-                    class="toggle-btn" 
-                    type="button"
-                    role="tab"
-                    aria-selected="false"
-                    aria-controls="tool-stacks"
-                    aria-label="Stack Ansicht"
-                >
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <rect x="2" y="2" width="16" height="16" stroke="currentColor" stroke-width="2" rx="3" opacity="0.3"/>
-                        <rect x="3" y="4" width="14" height="14" stroke="currentColor" stroke-width="2" rx="2" opacity="0.6"/>
-                        <rect x="4" y="6" width="12" height="12" stroke="currentColor" stroke-width="2" rx="2"/>
-                    </svg>
-                    <span>Stack</span>
-                </button>
-            </div>
-            
             <!-- Stats Bar (optional - wird später befüllt) -->
             <div class="stats-bar" id="stats-bar" style="display: none;" role="status" aria-live="polite">
                 <div class="stat">
@@ -228,23 +191,6 @@
 
 
             
-            <!-- Tool Stacks (3D Stack View) -->
-            <div id="tool-stacks" class="tool-stacks" style="display: none;">
-                <!-- Stacks werden hier dynamisch eingefügt -->
-                <!-- Struktur pro Stack:
-                <div class="category-stack" data-category="text">
-                    <div class="stack-header">
-                        <h2 class="stack-title">Text Tools</h2>
-                        <span class="stack-count">5</span>
-                    </div>
-                    <div class="stack-container">
-                        <div class="stack-cards">
-                            ... Cards ...
-                        </div>
-                    </div>
-                </div>
-                -->
-            </div>
             
         </div>
     </main>
