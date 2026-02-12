@@ -679,30 +679,97 @@ renderCard(tool) {
     return div.innerHTML;
   },
   
-  // Render all tools
+// ---------- Render Tool Card (ersetzen) ----------
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+  // Fallback-safe: falls getContextText nicht existiert, benutze Description + tags
+  const contextTexts = (typeof this.getContextText === 'function')
+    ? this.getContextText(tool)
+    : ([
+        tool.description || '',
+        ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
+      ].filter(Boolean));
+
+  // Ensure we have at least one short item
+  if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
+
+  // data-tool-name on container helps analytics and avoids querying DOM textContent
+return `
+  <div class="card-square"
+       data-category="${this.escapeHtml(categoryName)}"
+       data-tool-name="${this.escapeHtml(tool.title)}"
+       data-depth="10"
+       tabindex="0"
+       role="article"
+       aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
+
+    <div class="square-content-centered">
+
+      <div class="square-category-badge" aria-hidden="true">
+        ${categoryDisplay}
+      </div>
+
+      <h3 class="square-title-large"
+          title="${this.escapeHtml(tool.title)}">
+        ${this.escapeHtml(tool.title)}
+      </h3>
+
+      <div class="context-marquee" aria-hidden="true">
+        <div class="marquee-track" role="presentation">
+          <span class="marquee-seq">
+            ${this.escapeHtml(contextTexts.join(' • '))}
+          </span>
+          <span class="marquee-seq">
+            ${this.escapeHtml(contextTexts.join(' • '))}
+          </span>
+        </div>
+      </div>
+
+      <a href="${this.escapeHtml(tool.link)}"
+         class="card-overlay-link"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="${this.escapeHtml(tool.title)} öffnen">
+      </a>
+
+    </div>
+  </div>
+`;
+
+// ---------- Escape HTML (kleiner Schutz-Fallback, falls bereits vorhanden) ----------
+escapeHtml(text) {
+  if (text === null || text === undefined) return '';
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+},
+
+// ---------- Render all tools (leicht robuster) ----------
 render() {
   // Filter tools by search query
   if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
     const query = state.searchQuery.toLowerCase();
-    state.filtered = state.tools.filter(tool => 
-      tool.title.toLowerCase().includes(query) ||
+    state.filtered = state.tools.filter(tool =>
+      (tool.title || '').toLowerCase().includes(query) ||
       (tool.description && tool.description.toLowerCase().includes(query))
     );
   } else {
     state.filtered = [...state.tools];
   }
-  
+
   // Show appropriate state
   if (state.loading) {
     this.showState('loading');
     return;
   }
-  
+
   if (state.error) {
     this.showState('error');
     return;
   }
-  
+
   if (state.filtered.length === 0) {
     this.showState('empty');
     if (this.elements.emptyQuery && state.searchQuery) {
@@ -710,28 +777,70 @@ render() {
     }
     return;
   }
-  
+
   // Render grid view
   this.showState('grid');
   if (this.elements.toolGrid) {
-    this.elements.toolGrid.classList.add('tool-grid-squares');
+    // ensure class present (idempotent)
+    if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+      this.elements.toolGrid.classList.add('tool-grid-squares');
+    }
     this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+    // attach handlers via delegation
     this.attachCardHandlers();
   }
 },
 
-  
-  // Attach event handlers to cards
-      attachCardHandlers() {
-    const links = $$('.card-overlay-link');
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const card = e.currentTarget.closest('.card-square');
-        const toolName = card ? card.querySelector('.square-title-large')?.textContent : 'Unknown';
-        analytics.trackToolClick(toolName);
-      });
-    });
+// ---------- Attach handlers (event delegation) ----------
+attachCardHandlers() {
+  const grid = this.elements.toolGrid || getElement('#tool-grid');
+  if (!grid) return;
+
+  // Remove old delegated handler if present
+  if (grid._clickHandler) {
+    grid.removeEventListener('click', grid._clickHandler);
+    grid.removeEventListener('keydown', grid._keyHandler);
   }
+
+  // Click delegation (handles overlay clicks anywhere in card)
+  grid._clickHandler = (e) => {
+    // prefer the clickable overlay or nearest card-square
+    const overlay = e.target.closest('.card-overlay-link');
+    const card = e.target.closest('.card-square');
+
+    if (overlay && card) {
+      // Follow link naturally; track then let default open happen
+      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+      analytics.trackToolClick(toolName);
+      // don't preventDefault: allow anchor to open
+      return;
+    }
+
+    // If user clicked the card (not overlay) — you might want to open modal / arm card
+    if (card && !overlay) {
+      // example: toggle "armed" class
+      card.classList.toggle('card-armed');
+      const toolName = card.dataset.toolName || 'Unknown';
+      analytics.trackToolClick(toolName);
+    }
+  };
+
+  // Keyboard support: Enter on focussed card activates overlay (accessibility)
+  grid._keyHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const card = e.target.closest('.card-square');
+      if (!card) return;
+      const overlay = card.querySelector('.card-overlay-link');
+      if (overlay) {
+        overlay.click();
+        e.preventDefault();
+      }
+    }
+  };
+
+  grid.addEventListener('click', grid._clickHandler);
+  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
+ }
 };
 
 
