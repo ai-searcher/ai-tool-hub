@@ -1577,7 +1577,9 @@ a:focus-visible {
     .tool-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: inherit !important;        /* ⬅️ benutzt Mobile-Regel oben */
+    gap: 20px !important;
+    row-gap: 25px !important;       /* ⬅️ deine Werte aus Mobile-Block */
+    /* ⬅️ benutzt Mobile-Regel oben */
     padding: 0 !important;
     box-sizing: border-box !important;
     align-items: start !important;
