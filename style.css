@@ -1871,6 +1871,80 @@ a:focus-visible {
   cursor: pointer;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   ELEGANT CONTEXT MARQUEE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Positionierung */
+.square-content-centered {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  gap: 6px !important;
+}
+
+/* Container */
+.context-marquee {
+  position: relative;
+  height: 20px;
+  overflow: hidden;
+  margin-top: auto;
+  padding: 0 6px;
+}
+
+/* Laufender Text */
+.marquee-text {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  color: rgba(255,255,255,0.8);
+  animation: marqueeFlow 24s linear infinite;
+}
+
+/* Fade Ränder */
+.context-marquee::before,
+.context-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 28px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.context-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-card), transparent);
+}
+
+.context-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-card), transparent);
+}
+
+/* Animation */
+@keyframes marqueeFlow {
+  0% { transform: translateY(-50%) translateX(100%); }
+  100% { transform: translateY(-50%) translateX(-100%); }
+}
+
+/* Hover */
+.card-square:hover .marquee-text {
+  animation-duration: 32s;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .context-marquee { height: 18px; padding: 0 4px; }
+  .marquee-text { font-size: 0.6rem; }
+}
+
 
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
