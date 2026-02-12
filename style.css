@@ -1565,22 +1565,22 @@ a:focus-visible {
        (max-width: 767px) {
   /* Container näher an den Rand bringen (4px) */
   .container {
-    padding-left: 4px !important;
-    padding-right: 4px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 
-  /* Grid: 2 Spalten, enge Lücken, flexibel */
-   #tool-grid.tool-grid-squares,
-  .tool-grid {
+  
+  /* Grid: 2 Spalten, kontrollierter Abstand */
+  #tool-grid.tool-grid-squares,
+    .tool-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    /* gap und padding NICHT mehr überschreiben */
-    gap: 24px !important;           /* ⬅️ explizit setzen */
-    row-gap: 32px !important;       /* ⬅️ extra vertikaler Abstand */
+    gap: inherit !important;        /* ⬅️ benutzt Mobile-Regel oben */
     padding: 0 !important;
     box-sizing: border-box !important;
     align-items: start !important;
   }
+
 
 
   /* Erzwinge Quadrat-Form — target card-square (dein JS rendert .card-square) */
