@@ -614,77 +614,43 @@ const ui = {
     this.elements.statsBar.style.display = 'flex';
   },
   
-  // Update data source indicator
-  updateDataSource() {
-    if (!this.elements.dataSource) return;
-    
-    const sources = {
-      supabase: 'D: SB',
-      json: 'D: LJ',
-      defaults: 'D: DEF',
-      loading: '...'
-    };
+ // ---------- UI methods: data source, badges, rendering & handlers ----------
+updateDataSource() {
+  if (!this.elements.dataSource) return;
 
-    
-    this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
-  },
-  
- //Get context text for badges
+  const sources = {
+    supabase: 'D: SB',
+    json: 'D: LJ',
+    defaults: 'D: DEF',
+    loading: '...'
+  };
+
+  this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
+},
+
+// Get context text for badges (returns up to 3 short snippets)
 getContextText(tool) {
   if (!tool.badges || !tool.badges.length) {
-    return ['KI-powered Tool'];
+    // fallback: prefer description, then tags, then generic
+    const fallback = [
+      tool.description || '',
+      ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
+    ].filter(Boolean);
+    return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
   }
-  
+
   return tool.badges.slice(0, 3).map(badge => {
-    const text = badge.split('.')[0].trim();
+    const text = String(badge).split('.')[0].trim();
     return text.length > 28 ? text.slice(0, 28) + '…' : text;
   });
 },
 
-//Render Tool Card
-renderCard(tool) {
-  const categoryName = tool.category_name || tool.category || 'other';
-  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-  
-  const contextTexts = this.getContextText(tool);  // ✅ FIX
-  
-  return `
-    <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
-      <div class="square-content-centered">
-        <div class="square-category-badge">${categoryDisplay}</div>
-        <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
-        
-        <div class="context-marquee">
-          <div class="marquee-track">
-            <span class="marquee-seq">${contextTexts.join(' • ')}</span>
-            <span class="marquee-seq">${contextTexts.join(' • ')}</span>
-          </div>
-        </div>
-        
-        <a href="${this.escapeHtml(tool.link)}" class="card-overlay-link" target="_blank" rel="noopener noreferrer" aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
-      </div>
-    </div>
-  `;
-},
-
-
-
-
-
-  
-  // Escape HTML to prevent XSS
-  escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  },
-  
-// ---------- Render Tool Card (ersetzen) ----------
+// Render Tool Card (single consolidated implementation)
 renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-  // Fallback-safe: falls getContextText nicht existiert, benutze Description + tags
+  // safe context texts
   const contextTexts = (typeof this.getContextText === 'function')
     ? this.getContextText(tool)
     : ([
@@ -692,53 +658,46 @@ renderCard(tool) {
         ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
       ].filter(Boolean));
 
-  // Ensure we have at least one short item
   if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
 
-  // data-tool-name on container helps analytics and avoids querying DOM textContent
-return `
-  <div class="card-square"
-       data-category="${this.escapeHtml(categoryName)}"
-       data-tool-name="${this.escapeHtml(tool.title)}"
-       data-depth="10"
-       tabindex="0"
-       role="article"
-       aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
+  return `
+    <div class="card-square"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-depth="10"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
 
-    <div class="square-content-centered">
+      <div class="square-content-centered">
 
-      <div class="square-category-badge" aria-hidden="true">
-        ${categoryDisplay}
-      </div>
-
-      <h3 class="square-title-large"
-          title="${this.escapeHtml(tool.title)}">
-        ${this.escapeHtml(tool.title)}
-      </h3>
-
-      <div class="context-marquee" aria-hidden="true">
-        <div class="marquee-track" role="presentation">
-          <span class="marquee-seq">
-            ${this.escapeHtml(contextTexts.join(' • '))}
-          </span>
-          <span class="marquee-seq">
-            ${this.escapeHtml(contextTexts.join(' • '))}
-          </span>
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
         </div>
+
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+          </div>
+        </div>
+
+        <a href="${this.escapeHtml(tool.link)}"
+           class="card-overlay-link"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
+
       </div>
-
-      <a href="${this.escapeHtml(tool.link)}"
-         class="card-overlay-link"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="${this.escapeHtml(tool.title)} öffnen">
-      </a>
-
     </div>
-  </div>
-`;
+  `;
+},
 
-// ---------- Escape HTML (kleiner Schutz-Fallback, falls bereits vorhanden) ----------
+// Escape HTML to prevent XSS (single, robust implementation)
 escapeHtml(text) {
   if (text === null || text === undefined) return '';
   const div = document.createElement('div');
@@ -746,7 +705,7 @@ escapeHtml(text) {
   return div.innerHTML;
 },
 
-// ---------- Render all tools (leicht robuster) ----------
+// Render all tools (robust + idempotent)
 render() {
   // Filter tools by search query
   if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -759,16 +718,9 @@ render() {
     state.filtered = [...state.tools];
   }
 
-  // Show appropriate state
-  if (state.loading) {
-    this.showState('loading');
-    return;
-  }
-
-  if (state.error) {
-    this.showState('error');
-    return;
-  }
+  // Show states
+  if (state.loading) { this.showState('loading'); return; }
+  if (state.error) { this.showState('error'); return; }
 
   if (state.filtered.length === 0) {
     this.showState('empty');
@@ -781,51 +733,44 @@ render() {
   // Render grid view
   this.showState('grid');
   if (this.elements.toolGrid) {
-    // ensure class present (idempotent)
     if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
       this.elements.toolGrid.classList.add('tool-grid-squares');
     }
     this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-    // attach handlers via delegation
     this.attachCardHandlers();
   }
 },
 
-// ---------- Attach handlers (event delegation) ----------
+// Attach handlers (event delegation, keyboard-accessible)
 attachCardHandlers() {
   const grid = this.elements.toolGrid || getElement('#tool-grid');
   if (!grid) return;
 
-  // Remove old delegated handler if present
+  // Remove previous handlers if any
   if (grid._clickHandler) {
     grid.removeEventListener('click', grid._clickHandler);
     grid.removeEventListener('keydown', grid._keyHandler);
   }
 
-  // Click delegation (handles overlay clicks anywhere in card)
+  // Click delegation
   grid._clickHandler = (e) => {
-    // prefer the clickable overlay or nearest card-square
     const overlay = e.target.closest('.card-overlay-link');
     const card = e.target.closest('.card-square');
 
     if (overlay && card) {
-      // Follow link naturally; track then let default open happen
       const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
       analytics.trackToolClick(toolName);
-      // don't preventDefault: allow anchor to open
-      return;
+      return; // allow anchor default
     }
 
-    // If user clicked the card (not overlay) — you might want to open modal / arm card
     if (card && !overlay) {
-      // example: toggle "armed" class
       card.classList.toggle('card-armed');
       const toolName = card.dataset.toolName || 'Unknown';
       analytics.trackToolClick(toolName);
     }
   };
 
-  // Keyboard support: Enter on focussed card activates overlay (accessibility)
+  // Keyboard support (Enter/Space opens overlay)
   grid._keyHandler = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('.card-square');
@@ -840,8 +785,8 @@ attachCardHandlers() {
 
   grid.addEventListener('click', grid._clickHandler);
   grid.addEventListener('keydown', grid._keyHandler, { passive: false });
- }
-};
+},
+
 
 
 // =========================================
