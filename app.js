@@ -634,10 +634,17 @@ const ui = {
   },
   
   // Render tool card
-
 renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  
+  const contextTexts = (() => {
+    try {
+      return getContextText(tool);
+    } catch(e) {
+      return ['KI Tool'];
+    }
+  })();
   
   return `
     <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
@@ -645,9 +652,8 @@ renderCard(tool) {
         <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
         
-        <!-- Eleganter Kontext-Badge -->
         <div class="context-marquee">
-          <div class="marquee-text">${getContextText(tool).join(' • ')}</div>
+          <div class="marquee-text">${contextTexts.join(' • ')}</div>
         </div>
       </div>
       <a 
@@ -660,6 +666,8 @@ renderCard(tool) {
     </div>
   `;
 },
+
+
 
 
   
