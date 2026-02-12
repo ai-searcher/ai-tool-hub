@@ -1030,7 +1030,7 @@ const viewManager = {
 
     // Slight container transform (optional subtle scale)
     // container.style.transform = 'scale(0.995)'; // if you want a small camera effect
-  },
+  
 
   disableStackMode() {
     const container = ui.elements.toolGrid || getElement('#tool-grid');
