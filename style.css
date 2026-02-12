@@ -1872,86 +1872,42 @@ a:focus-visible {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ELEGANT CONTEXT MARQUEE
-   ═══════════════════════════════════════════════════════════════ */
-
-/* Positionierung */
-/* ✅ SICHERER MARQUEE-CONTAINER */
-.square-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-  padding-bottom: 4px;
-}
-
-.context-marquee {
-  margin-top: auto;
-  flex-shrink: 0;
-}
-
-
-/* Container */
+   /* ====== APPLE-STYLE MARQUEE (ROBUST) ====== */
 .context-marquee {
   position: relative;
-  height: 20px;
+  width: 100%;
+  height: 26px;
   overflow: hidden;
   margin-top: auto;
-  padding: 0 6px;
-}
-
-/* Laufender Text */
-.marquee-text {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  font-size: 0.65rem;
-  font-weight: 400;
-  letter-spacing: 0.4px;
-  color: rgba(255,255,255,0.8);
-  animation: marqueeFlow 24s linear infinite;
-}
-
-/* Fade Ränder */
-.context-marquee::before,
-.context-marquee::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 28px;
-  height: 100%;
+  padding: 0 8px;
   pointer-events: none;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
-.context-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-card), transparent);
+.context-marquee .marquee-track {
+  display: inline-block;
+  width: 200%;
+  white-space: nowrap;
+  animation: marqueeFlow 28s linear infinite;
 }
 
-.context-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-card), transparent);
+.context-marquee .marquee-seq {
+  display: inline-block;
+  padding-right: 2.5rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: 0.02em;
 }
 
-/* Animation */
 @keyframes marqueeFlow {
-  0% { transform: translateY(-50%) translateX(100%); }
-  100% { transform: translateY(-50%) translateX(-100%); }
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
-/* Hover */
-.card-square:hover .marquee-text {
-  animation-duration: 32s;
-}
-
-/* Mobile */
 @media (max-width: 767px) {
-  .context-marquee { height: 18px; padding: 0 4px; }
-  .marquee-text { font-size: 0.6rem; }
+  .context-marquee { height: 22px; padding: 0 6px; }
+  .context-marquee .marquee-seq { font-size: 0.72rem; padding-right: 1.8rem; }
 }
-
 
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
