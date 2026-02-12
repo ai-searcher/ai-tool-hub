@@ -722,16 +722,16 @@ render() {
 
   
   // Attach event handlers to cards
-  attachCardHandlers() {
-    const links = $$('.card-link');
+    attachCardHandlers() {
+    const links = $$('.card-overlay-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
-        const toolName = e.currentTarget.dataset.toolName;
+        const card = e.currentTarget.closest('.card-square');
+        const toolName = card ? card.querySelector('.square-title-large')?.textContent : 'Unknown';
         analytics.trackToolClick(toolName);
       });
     });
   }
-};
 
 
 // =========================================
