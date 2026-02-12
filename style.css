@@ -1277,7 +1277,7 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: center;
     gap: 20px;           /* ⬅️ etwas kleiner */
-    row-gap: 36px;       /* ⬅️ etwas kleiner */
+    row-gap: 10px;       /* ⬅️ etwas kleiner */
     padding: 16px;
   }
 
