@@ -633,36 +633,30 @@ const ui = {
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
   
-  //Get context text for badges
-  getContextText(tool) {
-    if (!tool.badges || !tool.badges.length) {
-      return ['KI-powered Tool'];
-    }
-    
-    return tool.badges.slice(0, 3).map(badge => {
-      const text = badge.split('.')[0].trim();
-      return text.length > 28 ? text.slice(0, 28) + '…' : text;
-    });
-  },
+ //Get context text for badges
+getContextText(tool) {
+  if (!tool.badges || !tool.badges.length) {
+    return ['KI-powered Tool'];
+  }
+  
+  return tool.badges.slice(0, 3).map(badge => {
+    const text = badge.split('.')[0].trim();
+    return text.length > 28 ? text.slice(0, 28) + '…' : text;
+  });
+},
 
-  //Render Tool Card
-  // ❌ NEUES LÖSCHEN → ALTES WIEDER
+//Render Tool Card
 renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   
-  const contextTexts = ['KI-powered Tool'];  // HARDCODE
-  
-  
-
-
+  const contextTexts = this.getContextText(tool);  // ✅ FIX
   
   return `
     <div class="card-square" data-category="${this.escapeHtml(categoryName)}" data-depth="10">
       <div class="square-content-centered">
         <div class="square-category-badge">${categoryDisplay}</div>
         <h3 class="square-title-large">${this.escapeHtml(tool.title)}</h3>
-        
         
         <div class="context-marquee">
           <div class="marquee-track">
@@ -671,17 +665,12 @@ renderCard(tool) {
           </div>
         </div>
         
-        <a 
-          href="${this.escapeHtml(tool.link)}" 
-          class="card-overlay-link"
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="${this.escapeHtml(tool.title)} öffnen"
-        ></a>
+        <a href="${this.escapeHtml(tool.link)}" class="card-overlay-link" target="_blank" rel="noopener noreferrer" aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
       </div>
     </div>
   `;
 },
+
 
 
 
