@@ -16,7 +16,7 @@
   --text-primary: #FFFFFF;
   --text-secondary: #E0E0F0;
   --text-dim: #A0A0B0;
-  --text-muted: #8080A0; /* ← FIX: Besserer Kontrast */
+  --text-muted: #8080A0; /* =← FIX: Besserer Kontrast */
 
   /* Colors - Brand */
   --primary: #00F3FF;
@@ -1274,23 +1274,25 @@ body {
 /* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 gleich breite Spalten */
-    justify-content: center;                          /* Grid zentrieren */
-    gap: 24px;
-    row-gap: 32px;                                       /* etwas mehr Abstand, aber nicht riesig */
-    padding: 16px;                                   /* gleichmäßiger Rand */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: center;
+    gap: 20px;           /* ⬅️ etwas kleiner */
+    row-gap: 28px;       /* ⬅️ etwas kleiner */
+    padding: 16px;
   }
 
   .card-square {
-    max-width: 180px;                                /* Karten kleiner machen */
+    aspect-ratio: 1 / 1 !important;  /* ⬅️ NEU: QUADRATISCH */
+    max-width: 160px;                /* ⬅️ etwas kleiner */
     width: 100%;
-    margin: 0 auto;                                  /* in der Spalte zentrieren */
-    min-height: 0;
-    padding: 10px;
-    animation: none;                                 /* optional: ruhiger auf Handy */
+    height: auto;
+    margin: 0 auto;
+    padding: 12px;                   /* ⬅️ etwas mehr Innenabstand */
+    animation: none;
     transform: none !important;
   }
 }
+
 
 
 
