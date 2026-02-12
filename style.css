@@ -980,9 +980,9 @@ body {
   justify-content: flex-end;
   align-items: center;
   height: 100%;
-  gap: 12px;
-  padding: 24px;
-  padding-bottom: 28px;
+  gap: 16px;
+  padding: 20px 16px;
+  padding-bottom: 20px;
   text-align: center;
   position: relative;
   z-index: 2;
@@ -990,14 +990,14 @@ body {
 
 /* Category Badge - klein und elegant */
 .square-category-badge {
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--primary);
   background: var(--primary-dim);
-  padding: 8px 20px;
-  border-radius: 24px;
+  padding: 10px 32px;
+  border-radius: 28px;
   white-space: nowrap;
   transition: all var(--transition-fast);
 }
