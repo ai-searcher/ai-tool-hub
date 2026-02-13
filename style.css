@@ -113,6 +113,7 @@ body {
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
   position: relative;
+  z-index: 2200; /* Sicherstellen, dass Header über allen Karten/Overlays liegt */
 }
 
 /* Subtle Background Pattern */
@@ -1022,12 +1023,20 @@ body {
 }
 
 /* Overlay Link (gesamte Karte klickbar) */
+/* Default: keine Pointer-Events außerhalb von .card-square (sicherer Fallback) */
 .card-overlay-link {
   position: absolute;
   inset: 0;
   z-index: 1;
   cursor: pointer;
   text-decoration: none;
+  pointer-events: none; /* default neutralisieren: verhindert Abfangen von Klicks, wenn Overlay mal außerhalb der Karte landet */
+}
+
+/* Aktiv: nur wenn direkter Kindknoten von .card-square, dann darf es klicken */
+.card-square > .card-overlay-link {
+  pointer-events: auto;
+  z-index: 2; /* über Inhalt, aber unter globalen FABs/Legends */
 }
 
 /* Hover Effects */
