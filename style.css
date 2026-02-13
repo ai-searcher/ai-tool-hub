@@ -2017,14 +2017,12 @@ a:focus-visible {
   }
 }
 
-/* Breathing auf Desktop & Mobile */
-@media (min-width: 1px) {
-  .card-square {
-    animation: breathing 8s ease-in-out infinite !important;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.35s ease !important;
-  }
+/* Breathing DIREKT auf .card-square - OHNE Media Query */
+.card-square {
+  animation: breathing 8s ease-in-out infinite !important;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s ease !important;
 }
 
 /* Desktop: Hover-Effekt - stoppt Breathing */
@@ -2056,7 +2054,7 @@ a:focus-visible {
 /* Mobile: Touch/Tap-Effekt - Breathing läuft weiter */
 @media (max-width: 767px) {
   .card-square:active {
-    transform: scale(1.08) !important;           /* ← Etwas stärker als Breathing */
+    transform: scale(1.08) !important;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
                 0 0 30px rgba(99, 102, 241, 0.2),
                 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
