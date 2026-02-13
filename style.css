@@ -1706,14 +1706,15 @@ a:focus-visible {
 /* make content sit above pseudo border */
 .card-square > .square-content-centered { position: relative; z-index: 2; }
 
-/* Slight scale + elevated glow on hover / armed */
-.card-square:hover,
+/* === FINAL: Kein harter Rahmen beim Tap/Klick === */
+.card-square:active,
 .card-square.card-armed {
-  transform: translateY(-8px) scale(1.02);
   box-shadow:
-    0 18px 46px rgba(0,20,40,0.5),
-    0 6px 20px rgba(0,243,255,0.06);
+    0 18px 46px rgba(0,20,40,0.45),
+    0 0 26px rgba(0,243,255,0.10) !important; /* weich, kein "Rand-Quadrat" */
+  border-color: rgba(255,255,255,0.10) !important;
 }
+
 
 /* CATEGORY: small, flat, left-aligned badge */
 .square-category-badge {
@@ -2352,3 +2353,23 @@ a:focus-visible {
 }
 
 /* End of overrides */
+
+/* === FINAL: Marquee wirklich rand-bis-rand (2mm extra Overscan) === */
+:root { --marquee-overscan: 8px; } /* ~2mm in CSS-Pixeln */
+
+.card-square .context-marquee {
+  left: calc(-1 * var(--marquee-overscan)) !important;
+  right: calc(-1 * var(--marquee-overscan)) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-bottom-left-radius: inherit !important;
+  border-bottom-right-radius: inherit !important;
+}
+
+/* Kein "Innenabstand", damit Text bis zur Linie kommt */
+.card-square .context-marquee .marquee-seq {
+  padding-left: 0 !important;
+  padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
+}
+
