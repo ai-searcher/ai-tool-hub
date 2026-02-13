@@ -952,6 +952,25 @@ const app = {
         // Failsafe: mögliche CSP/readonly globales Objekt
         console.debug('app: could not expose global state or dispatch event', e);
       }
+            // ---- DEBUG BADGE (sichtbar auf Seite) ----
+      try {
+        const dbg = document.createElement('div');
+        dbg.id = 'debug-badge';
+        dbg.style.cssText = [
+          'position:fixed',
+          'top:12px',
+          'left:12px',
+          'padding:6px 10px',
+          'background:rgba(255,255,255,0.95)',
+          'color:#000',
+          'font-size:12px',
+          'border-radius:8px',
+          'z-index:99999',
+          'box-shadow:0 6px 18px rgba(0,0,0,0.4)'
+        ].join(';');
+        dbg.textContent = `App OK — tools: ${state.tools?.length ?? 'n/a'} • src: ${state.dataSource ?? 'n/a'}`;
+        document.body.appendChild(dbg);
+      } catch (_e) { /* ignore */ }
       
     } catch (error) {
       console.error('❌ CRITICAL ERROR in init:', error);
