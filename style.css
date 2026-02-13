@@ -1972,27 +1972,28 @@ a:focus-visible {
     order: 0 !important;
   }
 
-  /* Toolname - links unten über Marquee */
+    /* Toolname - 6px höher */
   .square-title-large {
     font-size: 0.94rem !important;
     line-height: 1.15 !important;
-    margin: auto 0 3px 0 !important;         /* ← GEÄNDERT: auto oben, 3px unten */
+    margin: auto 0 9px 0 !important;         /* ← GEÄNDERT: 9px (war 3px) = +6px höher */
     max-width: 100% !important;
     display: block !important;
     word-wrap: break-word !important;
-    align-self: flex-start !important;       /* ← Links positioniert */
+    align-self: flex-start !important;
     order: 1 !important;
   }
 
-  /* Marquee - 5% größer Text + 4% höher + noch näher am Rand */
+  /* Marquee - 6px höher */
   .context-marquee {
-    height: 21px !important;                 /* ← GEÄNDERT: 4% höher (war 20px) */
+    height: 21px !important;
     width: calc(100% + 20px) !important;
     margin-left: -10px !important;
     margin-right: -10px !important;
-    margin-bottom: -16px !important;         /* ← GEÄNDERT: noch näher am Rand */
+    margin-bottom: -10px !important;         /* ← GEÄNDERT: -10px (war -16px) = +6px höher */
     order: 2 !important;
   }
+
 
   .context-marquee .marquee-seq {
     font-size: 0.66rem !important;           /* ← GEÄNDERT: 5% größer (war 0.63rem) */
