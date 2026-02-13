@@ -676,7 +676,47 @@ escapeHtml(text) {
 
 // ---------- Render all (stays in ui) - ensure trailing commas/commas between methods are correct ----------
 render() {
-  // ... deine render()-Implementation (lass wie gehabt oder ersetze mit deiner robusten Variante)
+
+  if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
+    const query = state.searchQuery.toLowerCase();
+    state.filtered = state.tools.filter(tool =>
+      (tool.title || '').toLowerCase().includes(query) ||
+      (tool.description && tool.description.toLowerCase().includes(query))
+    );
+  } else {
+    state.filtered = [...state.tools];
+  }
+
+  if (state.loading) {
+    this.showState('loading');
+    return;
+  }
+
+  if (state.error) {
+    this.showState('error');
+    return;
+  }
+
+  if (state.filtered.length === 0) {
+    this.showState('empty');
+    if (this.elements.emptyQuery && state.searchQuery) {
+      this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
+    }
+    return;
+  }
+
+  this.showState('grid');
+
+  if (this.elements.toolGrid) {
+    if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+      this.elements.toolGrid.classList.add('tool-grid-squares');
+    }
+
+    this.elements.toolGrid.innerHTML =
+      state.filtered.map(tool => this.renderCard(tool)).join('');
+
+    this.attachCardHandlers();
+  }
 },
 
 // ---------- Attach handlers (event delegation, keyboard-accessible) ----------
