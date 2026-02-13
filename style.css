@@ -1956,7 +1956,7 @@ a:focus-visible {
   .square-content-centered {
     justify-content: space-between !important;
     align-items: flex-start !important;
-    padding: 10px 10px 0 10px !important;    /* ← padding-bottom = 0 */
+    padding: 10px 10px 0 10px !important;
     gap: 0 !important;
     height: 100%;
     width: 100%;
@@ -1969,34 +1969,35 @@ a:focus-visible {
     padding: 4px 10px !important;
     margin: 0 0 6px 0 !important;
     align-self: flex-start !important;
-    order: 0 !important;                     /* ← Badge zuerst */
+    order: 0 !important;
   }
 
-  /* Toolname - über Marquee */
+  /* Toolname - links unten über Marquee */
   .square-title-large {
     font-size: 0.94rem !important;
     line-height: 1.15 !important;
-    margin: 0 0 auto 0 !important;           /* ← Pusht Marquee nach unten */
+    margin: auto 0 3px 0 !important;         /* ← GEÄNDERT: auto oben, 3px unten */
     max-width: 100% !important;
     display: block !important;
     word-wrap: break-word !important;
-    order: 1 !important;                     /* ← Toolname in der Mitte */
+    align-self: flex-start !important;       /* ← Links positioniert */
+    order: 1 !important;
   }
 
-  /* Marquee - genau am Rand */
+  /* Marquee - 5% größer Text + 4% höher + noch näher am Rand */
   .context-marquee {
-    height: 20px !important;
-    width: calc(100% + 20px) !important;     /* ← Über padding hinaus */
-    margin-left: -10px !important;           /* ← Startet am linken Rand */
-    margin-right: -10px !important;          /* ← Endet am rechten Rand */
-    margin-bottom: -12px !important;         /* ← Endet am unteren Rand */
-    order: 2 !important;                     /* ← Marquee zuletzt */
+    height: 21px !important;                 /* ← GEÄNDERT: 4% höher (war 20px) */
+    width: calc(100% + 20px) !important;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    margin-bottom: -16px !important;         /* ← GEÄNDERT: noch näher am Rand */
+    order: 2 !important;
   }
 
   .context-marquee .marquee-seq {
-    font-size: 0.63rem !important;
+    font-size: 0.66rem !important;           /* ← GEÄNDERT: 5% größer (war 0.63rem) */
     padding-right: 2rem !important;
-    line-height: 20px !important;
+    line-height: 21px !important;            /* ← GEÄNDERT: passt zu height */
   }
 
   .context-marquee .marquee-track {
@@ -2005,4 +2006,5 @@ a:focus-visible {
 }
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
+
 
