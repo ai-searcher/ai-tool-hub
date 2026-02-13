@@ -968,6 +968,10 @@ body {
   -webkit-user-select: text;
   user-select: text;
   box-sizing: border-box;
+  animation: breathing 8s ease-in-out infinite !important;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+  box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+  border-color 0.35s ease !important;
 }
 
 /* ==================== HIER EINFÜGEN ==================== */
@@ -1996,8 +2000,6 @@ a:focus-visible {
 
 /* ==================== SCHWEBEEFFEKT ==================== */
 
-/* ALTE squareFloat Animation gelöscht - durch breathing ersetzt */
-
 /* Breathing-Animation - 10% stärker */
 @keyframes breathing {
   0%, 100% {
@@ -2011,8 +2013,9 @@ a:focus-visible {
   }
 }
 
-/* Breathing auf alle Quadrate - DIREKT ohne Media Query */
-.card-square {
+/* Breathing auf alle Quadrate - höhere Specificity */
+#tool-grid .card-square,
+.tool-grid-squares .card-square {
   animation: breathing 8s ease-in-out infinite !important;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -2020,30 +2023,31 @@ a:focus-visible {
 }
 
 /* Welleneffekt mit zufälligen Variationen */
-.card-square:nth-child(1)  { animation-delay: 0s !important; }
-.card-square:nth-child(2)  { animation-delay: 0.4s !important; }
-.card-square:nth-child(3)  { animation-delay: 0.9s !important; }
-.card-square:nth-child(4)  { animation-delay: 1.2s !important; }
-.card-square:nth-child(5)  { animation-delay: 1.7s !important; }
-.card-square:nth-child(6)  { animation-delay: 2.3s !important; }
-.card-square:nth-child(7)  { animation-delay: 2.6s !important; }
-.card-square:nth-child(8)  { animation-delay: 3.1s !important; }
-.card-square:nth-child(9)  { animation-delay: 3.4s !important; }
-.card-square:nth-child(10) { animation-delay: 4.0s !important; }
-.card-square:nth-child(11) { animation-delay: 4.5s !important; }
-.card-square:nth-child(12) { animation-delay: 4.8s !important; }
-.card-square:nth-child(13) { animation-delay: 5.3s !important; }
-.card-square:nth-child(14) { animation-delay: 5.9s !important; }
-.card-square:nth-child(15) { animation-delay: 6.2s !important; }
-.card-square:nth-child(16) { animation-delay: 6.7s !important; }
-.card-square:nth-child(17) { animation-delay: 7.1s !important; }
-.card-square:nth-child(18) { animation-delay: 7.6s !important; }
-.card-square:nth-child(19) { animation-delay: 1.5s !important; }
-.card-square:nth-child(20) { animation-delay: 3.8s !important; }
+#tool-grid .card-square:nth-child(1), .tool-grid-squares .card-square:nth-child(1)  { animation-delay: 0s !important; }
+#tool-grid .card-square:nth-child(2), .tool-grid-squares .card-square:nth-child(2)  { animation-delay: 0.4s !important; }
+#tool-grid .card-square:nth-child(3), .tool-grid-squares .card-square:nth-child(3)  { animation-delay: 0.9s !important; }
+#tool-grid .card-square:nth-child(4), .tool-grid-squares .card-square:nth-child(4)  { animation-delay: 1.2s !important; }
+#tool-grid .card-square:nth-child(5), .tool-grid-squares .card-square:nth-child(5)  { animation-delay: 1.7s !important; }
+#tool-grid .card-square:nth-child(6), .tool-grid-squares .card-square:nth-child(6)  { animation-delay: 2.3s !important; }
+#tool-grid .card-square:nth-child(7), .tool-grid-squares .card-square:nth-child(7)  { animation-delay: 2.6s !important; }
+#tool-grid .card-square:nth-child(8), .tool-grid-squares .card-square:nth-child(8)  { animation-delay: 3.1s !important; }
+#tool-grid .card-square:nth-child(9), .tool-grid-squares .card-square:nth-child(9)  { animation-delay: 3.4s !important; }
+#tool-grid .card-square:nth-child(10), .tool-grid-squares .card-square:nth-child(10) { animation-delay: 4.0s !important; }
+#tool-grid .card-square:nth-child(11), .tool-grid-squares .card-square:nth-child(11) { animation-delay: 4.5s !important; }
+#tool-grid .card-square:nth-child(12), .tool-grid-squares .card-square:nth-child(12) { animation-delay: 4.8s !important; }
+#tool-grid .card-square:nth-child(13), .tool-grid-squares .card-square:nth-child(13) { animation-delay: 5.3s !important; }
+#tool-grid .card-square:nth-child(14), .tool-grid-squares .card-square:nth-child(14) { animation-delay: 5.9s !important; }
+#tool-grid .card-square:nth-child(15), .tool-grid-squares .card-square:nth-child(15) { animation-delay: 6.2s !important; }
+#tool-grid .card-square:nth-child(16), .tool-grid-squares .card-square:nth-child(16) { animation-delay: 6.7s !important; }
+#tool-grid .card-square:nth-child(17), .tool-grid-squares .card-square:nth-child(17) { animation-delay: 7.1s !important; }
+#tool-grid .card-square:nth-child(18), .tool-grid-squares .card-square:nth-child(18) { animation-delay: 7.6s !important; }
+#tool-grid .card-square:nth-child(19), .tool-grid-squares .card-square:nth-child(19) { animation-delay: 1.5s !important; }
+#tool-grid .card-square:nth-child(20), .tool-grid-squares .card-square:nth-child(20) { animation-delay: 3.8s !important; }
 
 /* Desktop: Hover-Effekt */
 @media (min-width: 768px) {
-  .card-square:hover {
+  #tool-grid .card-square:hover,
+  .tool-grid-squares .card-square:hover {
     animation: none !important;
     transform: translateY(-8px) scale(1.03) !important;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
@@ -2052,24 +2056,28 @@ a:focus-visible {
     border-color: rgba(99, 102, 241, 0.4) !important;
   }
 
-  .card-square:hover .context-marquee .marquee-track {
+  #tool-grid .card-square:hover .context-marquee .marquee-track,
+  .tool-grid-squares .card-square:hover .context-marquee .marquee-track {
     animation-duration: 15s !important;
   }
 
-  .card-square:hover .square-category-badge {
+  #tool-grid .card-square:hover .square-category-badge,
+  .tool-grid-squares .card-square:hover .square-category-badge {
     background: rgba(99, 102, 241, 0.25) !important;
     border-color: rgba(99, 102, 241, 0.5) !important;
     transform: scale(1.05) !important;
   }
 
-  .card-square:hover .square-title-large {
+  #tool-grid .card-square:hover .square-title-large,
+  .tool-grid-squares .card-square:hover .square-title-large {
     color: rgba(255, 255, 255, 1) !important;
   }
 }
 
 /* Mobile: Touch/Tap-Effekt */
 @media (max-width: 767px) {
-  .card-square:active {
+  #tool-grid .card-square:active,
+  .tool-grid-squares .card-square:active {
     transform: scale(1.08) !important;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
                 0 0 30px rgba(99, 102, 241, 0.2),
@@ -2077,17 +2085,20 @@ a:focus-visible {
     border-color: rgba(99, 102, 241, 0.3) !important;
   }
 
-  .card-square:active .context-marquee .marquee-track {
+  #tool-grid .card-square:active .context-marquee .marquee-track,
+  .tool-grid-squares .card-square:active .context-marquee .marquee-track {
     animation-duration: 15s !important;
   }
 
-  .card-square:active .square-category-badge {
+  #tool-grid .card-square:active .square-category-badge,
+  .tool-grid-squares .card-square:active .square-category-badge {
     background: rgba(99, 102, 241, 0.25) !important;
     border-color: rgba(99, 102, 241, 0.5) !important;
     transform: scale(1.05) !important;
   }
 
-  .card-square:active .square-title-large {
+  #tool-grid .card-square:active .square-title-large,
+  .tool-grid-squares .card-square:active .square-title-large {
     color: rgba(255, 255, 255, 1) !important;
   }
 }
