@@ -2198,3 +2198,136 @@ a:focus-visible {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* ===========================
+   OVERRIDES: MARQUEE & NOTICES
+   (append this at end of style.css)
+   =========================== */
+
+/* 1) Debug / dev badge vollständig ausblenden (JS erstellt #debug-badge) */
+#debug-badge,
+.app-notice,
+.app-toast,
+.onboarding-toast,
+.site-notice,
+.toast,
+#app-notice,
+.notification-bubble,
+.notice {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* 2) Falls eine JS-Badge andere ID/Klasse nutzt: sehr breite Sicherung (nicht destruktiv) */
+[id^="debug"], [class*="toast"], [class*="notice"][role="status"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* 3) Entferne / neutralisiere Overlay-Links über dem Header/Titel */
+.header a.card-overlay-link,
+.header a.header-overlay,
+.header .overlay-link,
+.title > a,
+.header a[aria-hidden="true"] {
+  display: none !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* 4) Einheitliche, pixelgenaue Position der Marquee innerhalb der Card
+   - nutzt exakt das Card-Innenpadding (18px desktop / 12px mobile)
+   - absolute Position, gleiche top/bottom für alle marquees
+   - kein eigener Hintergrund, keine Ränder, kein Schatten
+*/
+.card-square { position: relative; } /* ensure container is positioned */
+
+.card-square .context-marquee {
+  position: absolute !important;
+  left: 18px !important;               /* equal to card padding desktop */
+  right: 18px !important;
+  bottom: 14px !important;             /* konstante Y-Offset (feinjustierbar) */
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;     /* nicht klickbar */
+  z-index: 2 !important;
+  -webkit-mask-image: none !important; /* remove previous mask which can cause visible bars */
+  mask-image: none !important;
+}
+
+/* Track & sequence: no background, only text visible; ensure loop still works */
+.card-square .context-marquee .marquee-track {
+  display: inline-flex !important;
+  white-space: nowrap !important;
+  will-change: transform;
+  animation: elegantMarqueeFlow 18s linear infinite !important;
+  transform: translateZ(0); /* avoid subpixel weirdness */
+}
+
+.card-square .context-marquee .marquee-seq {
+  display: inline-block !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(255,255,255,0.78) !important;
+  font-size: 0.72rem !important;
+  line-height: 22px !important;
+  padding: 0 1.5rem !important; /* spacing between segments */
+  min-width: 40% !important;     /* ensures visible continuous look */
+  pointer-events: none !important;
+}
+
+/* Remove side fade overlays that produce visible background bars */
+.card-square .context-marquee::before,
+.card-square .context-marquee::after,
+.context-marquee::before,
+.context-marquee::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* 5) Mobile tweak: use smaller internal padding so marquee aligns with mobile card padding */
+@media (max-width: 767px) {
+  .card-square .context-marquee {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    height: 20px !important;
+  }
+  .card-square .context-marquee .marquee-seq {
+    font-size: 0.66rem !important;
+    padding: 0 1.2rem !important;
+    min-width: 45% !important;
+  }
+}
+
+/* 6) Accessibility: pausieren on focus or reduce motion respected */
+.card-square:focus-within .context-marquee .marquee-track,
+.card-square.card-armed .context-marquee .marquee-track {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-square .context-marquee .marquee-track {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
+}
+
+/* 7) Final safety: ensure no visible border/shadow from any marquee ancestor */
+.card-square,
+.card-square * {
+  background-clip: padding-box !important;
+  outline: none !important;
+}
+
+/* End of overrides */
