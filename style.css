@@ -2101,6 +2101,17 @@ a:focus-visible {
   .tool-grid-squares .card-square:active .square-title-large {
     color: rgba(255, 255, 255, 1) !important;
   }
+  
+  /* Force breathing animation on cards (unless user prefers reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .tool-grid-squares .card-square,
+  #tool-grid .card-square {
+    animation-name: breathing !important;
+    animation-duration: 8s !important;
+    animation-timing-function: ease-in-out !important;
+    animation-iteration-count: infinite !important;
+    animation-play-state: running !important;
+  }
 }
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
