@@ -1929,7 +1929,7 @@ a:focus-visible {
   .context-marquee { -webkit-mask-image: none; mask-image: none; }
  }
 
-/* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
+/* Mobile (2 Spalten) - Optimiert */
 @media (max-width: 767px) {
   .tool-grid-squares {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1956,7 +1956,7 @@ a:focus-visible {
   .square-content-centered {
     justify-content: space-between !important;
     align-items: flex-start !important;
-    padding: 10px !important;
+    padding: 10px 10px 6px 10px !important;  /* ← GEÄNDERT: padding-bottom reduziert */
     gap: 0 !important;
     height: 100%;
     width: 100%;
@@ -1971,9 +1971,9 @@ a:focus-visible {
     align-self: flex-start !important;
   }
 
-  /* Toolname */
+  /* Toolname - 4% größer */
   .square-title-large {
-    font-size: 0.9rem !important;
+    font-size: 0.94rem !important;              /* ← Bereits 4% größer ✅ */
     line-height: 1.15 !important;
     margin: 0 0 auto 0 !important;
     max-width: 100% !important;
@@ -1981,25 +1981,23 @@ a:focus-visible {
     word-wrap: break-word !important;
   }
 
-  /* Marquee */
+  /* Marquee - 4% größer + volle Breite + näher am Rand */
   .context-marquee {
-    height: 18px !important;
-    width: 100% !important;
-    margin: 0 !important;
+    height: 20px !important;                    /* ← GEÄNDERT: höher */
+    width: calc(100% + 20px) !important;        /* ← GEÄNDERT: über Container hinaus */
+    margin-left: -10px !important;              /* ← NEU: von ganz links */
+    margin-bottom: -8px !important;             /* ← NEU: näher am Rand */
   }
 
   .context-marquee .marquee-seq {
-    font-size: 0.6rem !important;
+    font-size: 0.63rem !important;              /* ← GEÄNDERT: 4% größer */
     padding-right: 2rem !important;
-    line-height: 18px !important;
+    line-height: 20px !important;               /* ← GEÄNDERT: passt zu height */
   }
 
   .context-marquee .marquee-track {
     animation-duration: 18s !important;
   }
 }
-
-
-
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
