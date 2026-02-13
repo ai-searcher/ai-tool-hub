@@ -1196,14 +1196,6 @@ body {
 .card-link,
 .square-link { display: none !important; }
 
-/* Leichter Float-Effekt (sanfter als vorher) */
-@keyframes squareFloat {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-6px); }
-}
-.card-square { animation: squareFloat 4.4s ease-in-out infinite; }
-.card-square:nth-child(2n) { animation-delay: 0.55s; animation-duration:4.6s; }
-.card-square:nth-child(3n) { animation-delay: 1s; animation-duration:5s; }
 
 /* Neural canvas niedriger halten */
 .neural-canvas { z-index: 0; opacity: 0.28; }
@@ -1234,7 +1226,7 @@ body {
 /* Mobile: zwinge 2 Spalten, kleinere Lücken */
 @media (max-width: 767px) {
   .tool-grid-squares { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 18px 12px; }
-  .card-square { padding:12px; animation: none !important; }
+  .card-square { padding:12px; }
   .square-title { font-size:1.02rem; }
   .square-description { font-size:0.9rem; line-height:1.35; -webkit-line-clamp:3; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; }
 }
@@ -2004,6 +1996,8 @@ a:focus-visible {
 
 /* ==================== SCHWEBEEFFEKT ==================== */
 
+/* ALTE squareFloat Animation gelöscht - durch breathing ersetzt */
+
 /* Breathing-Animation - 10% stärker */
 @keyframes breathing {
   0%, 100% {
@@ -2011,13 +2005,13 @@ a:focus-visible {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
-    transform: scale(1.055);                     /* ← 5.5% statt 4% = +10% stärker */
+    transform: scale(1.055);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(99, 102, 241, 0.18); /* ← Stärkerer Glow */
+                0 0 20px rgba(99, 102, 241, 0.18);
   }
 }
 
-/* Breathing auf alle Quadrate */
+/* Breathing auf alle Quadrate - DIREKT ohne Media Query */
 .card-square {
   animation: breathing 8s ease-in-out infinite !important;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
@@ -2025,38 +2019,29 @@ a:focus-visible {
               border-color 0.35s ease !important;
 }
 
-/* Welleneffekt mit zufälligen Variationen - natürlicher Flow */
-/* Reihe 1 (oben) - früher Start */
+/* Welleneffekt mit zufälligen Variationen */
 .card-square:nth-child(1)  { animation-delay: 0s !important; }
 .card-square:nth-child(2)  { animation-delay: 0.4s !important; }
 .card-square:nth-child(3)  { animation-delay: 0.9s !important; }
 .card-square:nth-child(4)  { animation-delay: 1.2s !important; }
-
-/* Reihe 2 - leichte Versetzung */
 .card-square:nth-child(5)  { animation-delay: 1.7s !important; }
 .card-square:nth-child(6)  { animation-delay: 2.3s !important; }
 .card-square:nth-child(7)  { animation-delay: 2.6s !important; }
 .card-square:nth-child(8)  { animation-delay: 3.1s !important; }
-
-/* Reihe 3 - mit Variation */
 .card-square:nth-child(9)  { animation-delay: 3.4s !important; }
 .card-square:nth-child(10) { animation-delay: 4.0s !important; }
 .card-square:nth-child(11) { animation-delay: 4.5s !important; }
 .card-square:nth-child(12) { animation-delay: 4.8s !important; }
-
-/* Reihe 4 - abschließende Welle */
 .card-square:nth-child(13) { animation-delay: 5.3s !important; }
 .card-square:nth-child(14) { animation-delay: 5.9s !important; }
 .card-square:nth-child(15) { animation-delay: 6.2s !important; }
 .card-square:nth-child(16) { animation-delay: 6.7s !important; }
-
-/* Weitere Quadrate (falls mehr als 16) */
 .card-square:nth-child(17) { animation-delay: 7.1s !important; }
 .card-square:nth-child(18) { animation-delay: 7.6s !important; }
 .card-square:nth-child(19) { animation-delay: 1.5s !important; }
 .card-square:nth-child(20) { animation-delay: 3.8s !important; }
 
-/* Desktop: Hover-Effekt - stoppt Breathing */
+/* Desktop: Hover-Effekt */
 @media (min-width: 768px) {
   .card-square:hover {
     animation: none !important;
@@ -2082,7 +2067,7 @@ a:focus-visible {
   }
 }
 
-/* Mobile: Touch/Tap-Effekt - Breathing läuft weiter */
+/* Mobile: Touch/Tap-Effekt */
 @media (max-width: 767px) {
   .card-square:active {
     transform: scale(1.08) !important;
@@ -2108,5 +2093,3 @@ a:focus-visible {
 }
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
-
-
