@@ -952,7 +952,6 @@ body {
   display: grid;
 }
 
-
 /* Card */
 .card-square {
   position: relative;
@@ -989,9 +988,6 @@ body {
   box-sizing: border-box;
 }
 
-
-
-
 /* Category Badge - klein und elegant */
 .square-category-badge {
   font-size: 0.75rem;              /* ← KLEINER als vorher */
@@ -1009,8 +1005,6 @@ body {
   flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
 }
 
-
-
 /* Tool Name - groß und prominent */
 .square-title-large {
   font-size: 1.1rem;               /* ← Etwas größer */
@@ -1026,7 +1020,6 @@ body {
   flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
   display: block;                  /* ← Wichtig für Sichtbarkeit */
 }
-
 
 /* Overlay Link (gesamte Karte klickbar) */
 .card-overlay-link {
@@ -1053,7 +1046,6 @@ body {
 .card-square:hover .context-marquee .marquee-seq {
   color: rgba(255, 255, 255, 0.9);
 }
-
 
 /* Category-specific Badge Colors */
 .card-square[data-category="text"] .square-category-badge {
@@ -1111,10 +1103,7 @@ body {
   background: var(--color-data);
 }
 
-
 /* ==================== ENDE EINFÜGEN ==================== */
-
-  
 
 /* sanfter Hover (nicht zu stark) */
 .card-square:hover {
@@ -1196,7 +1185,6 @@ body {
 .card-link,
 .square-link { display: none !important; }
 
-
 /* Neural canvas niedriger halten */
 .neural-canvas { z-index: 0; opacity: 0.28; }
 
@@ -1223,651 +1211,9 @@ body {
   .card-square { padding:16px; }
 }
 
-/* Mobile: zwinge 2 Spalten, kleinere Lücken */
-@media (max-width: 767px) {
-  .tool-grid-squares { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 18px 12px; }
-  .card-square { padding:12px; }
-  .square-title { font-size:1.02rem; }
-  .square-description { font-size:0.9rem; line-height:1.35; -webkit-line-clamp:3; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; }
-}
+/* Mobile tweaks are handled in dedicated mobile blocks below */
 
-/* ==================== RESPONSIVE VARIANTS (angepasst) ==================== */
-
-/* Large Desktop */
-@media (min-width: 1400px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 36px;
-    padding: 60px 40px;
-  }
-}
-
-/* Laptop / Desktop narrow */
-@media (min-width: 1024px) and (max-width: 1399px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 28px;
-    padding: 50px 30px;
-  }
-}
-
-/* Tablet */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 40px;              /* mehr Luft zwischen Karten */
-    padding: 60px 40px;     /* mehr Rand zum Bildschirm */
-  }
-
-  .card-square { padding: 18px; }
-}
-
-/* Mobile (2 Spalten) - angepasste Größe + mehr Abstand */
-@media (max-width: 767px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: center;
-    gap: 20px;
-    row-gap: 25px;
-    padding: 16px;
-  }
-
-  .card-square {
-    aspect-ratio: 1 / 1 !important;
-    max-width: 128px;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    padding: 22px;
-    animation: none;
-    transform: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-  }
-
-  /* Kategorie oben links */
-  .square-category-badge {
-    align-self: flex-start !important;
-    margin-bottom: auto !important;
-    font-size: 0.85rem !important;
-    padding: 6px 12px !important;
-  }
-
-  /* Toolname — linksbündig, direkt unter Badge, sauber einzeilig mit Ellipsis */
-.square-title-large {
-  align-self: flex-start;        /* linksbündig (cross-axis) */
-  margin: 0;                     /* kein auto-gap nach oben — bleibt direkt unter Badge */
-  margin-top: 6px;               /* kleiner Abstand zum Badge */
-  margin-bottom: 2px;
-  font-size: 1.05rem;            /* gut lesbar */
-  line-height: 1.15;
-  color: var(--text-primary);
-  display: block;                /* nötig für text-overflow */
-  max-width: calc(100% - 36px);  /* sichert Ellipsis (passt zu container padding) */
-  white-space: nowrap;           /* eine Zeile */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-  /* ⬅️ NEU: Content-Container */
-  .square-content-centered {
-    justify-content: space-between !important;
-    align-items: flex-start !important;
-    padding: 14px 12px !important;
-    gap: 6px !important;
-    height: 100%;
-    width: 100%;
-    text-align: left !important;
-  }
-}
-
-
-
-  /* Erzwinge button unten, clamped text, damit Karten weiterhin quadratisch bleiben */
-  #tool-grid.tool-grid-squares .square-link,
-  #tool-grid.tool-grid-squares .card-link {
-    margin-top: auto !important;
-    width: 100% !important;
-    display: inline-flex !important;
-    justify-content: center !important;
-  }
-
-  #tool-grid.tool-grid-squares .square-description,
-  #tool-grid.tool-grid-squares .card-description {
-    display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;
-    -webkit-box-orient: vertical;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-}
-
-  .square-title { font-size: 1.05rem; }
-  .square-description { font-size: 0.9rem; }
-}
-
-/* ==================== RESPONSIVE SQUARES ==================== */
-
-/* Desktop (5 Spalten) */
-@media (min-width: 1400px) {
-  .tool-grid-squares {
-    gap: 28px;
-    padding: 60px 40px;
-  }
-}
-
-/* Laptop (4 Spalten) */
-@media (min-width: 1024px) and (max-width: 1399px) {
-  .tool-grid-squares {
-    gap: 24px;
-    padding: 50px 30px;
-  }
-}
-
-
-      /* Disable animations on mobile for performance
-     — handled correctly inside the mobile media queries below */
-  /* (no stray animation rule here) */
-
-  .square-title {
-    font-size: 1.1rem;
-  }
-
-  .square-description {
-    font-size: 0.9rem;
-  }
-
-  .square-description {
-    font-size: 0.85rem;
-    line-height: 1.5;
-  }
-
-  .square-link {
-    padding: 8px 16px;
-    font-size: 0.85rem;
-  }
-}
-
-/* Small Mobile (2 Spalten, kleinere Cards) */
-@media (max-width: 480px) {
-  .tool-grid-squares {
-    gap: 12px;
-    padding: 16px 12px;
-  }
-
-  .card-square {
-    min-height: 220px;
-    padding: 14px;
-  }
-
-  .square-header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .square-category {
-    align-self: flex-start;
-  }
-}
-
-/* ==================== RESPONSIVE ==================== */
-
-/* Tablets */
-@media (max-width: 768px) {
-  :root {
-    --spacing-xl: 32px;
-    --spacing-2xl: 48px;
-  }
-
-  .header {
-    padding: var(--spacing-lg) 0;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-
-  .subtitle {
-    font-size: 0.95rem;
-  }
-
-  .stats-bar {
-    gap: var(--spacing-lg);
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .tool-grid {
-    gap: var(--spacing-md);
-  }
-
-  .card {
-    aspect-ratio: 1 / 1;
-  }
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  :root {
-    --spacing-lg: 16px;
-    --spacing-xl: 24px;
-    --spacing-2xl: 40px;
-  }
-
-  .container {
-    padding: 0 var(--spacing-md);
-  }
-
-  .title {
-    font-size: 1.75rem;
-  }
-
-  .subtitle {
-    font-size: 0.9rem;
-  }
-
-  .search-input {
-    font-size: 0.95rem;
-    padding: 14px 44px 14px 48px;
-  }
-
-  .stats-bar {
-    flex-direction: row;
-    gap: var(--spacing-md);
-  }
-
-  .stat-value {
-    font-size: 1.25rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-  }
-
-  .tool-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-  }
-
-  .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .card-title {
-    font-size: 1.1rem;
-  }
-
-  .state-icon {
-    font-size: 3rem;
-  }
-
-  .state-text {
-    font-size: 1.25rem;
-  }
-
-  .footer {
-    padding: var(--spacing-lg) 0;
-  }
-}
-
-/* ← FIX: Safe Area erweitert */
-@supports (padding: env(safe-area-inset-bottom)) {
-  body {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-}
-
-/* ==== 3mm Abstand zwischen den Boxen (mit px-Fallback) ==== */
-/* 3mm ≈ 11.34px -> runden wir auf 12px als Fallback */
-#tool-grid.tool-grid-squares {
-  gap: 12px;   /* fallback für Browser, die mm unzuverlässig rendern */
-  gap: 3mm;    /* primär: 3 Millimeter (wenn Browser physische Einheiten nutzt) */
-  padding-left: 4mm;   /* Abstand zum Rand links */
-  padding-right: 4mm;  /* Abstand zum Rand rechts */
-  box-sizing: border-box;
-}
-
-/* Speziell für kleine Mobil-Displays (wenn du nur mobil ändern willst) */
-@media (max-width: 480px) {
-  #tool-grid.tool-grid-squares {
-    gap: 12px;
-    gap: 3mm;
-    padding-left: 4mm;
-    padding-right: 4mm;
-  }
-}
-
-/* ==================== ACCESSIBILITY ==================== */
-
-/* Focus Styles */
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  :root {
-    --border: #4A4E67;
-    --text-dim: #C0C0D0;
-  }
-}
-
-/* ==================== PRINT STYLES ==================== */
-@media print {
-  .header,
-  .footer,
-  .search-wrapper,
-  .stats-bar {
-    display: none;
-  }
-
-  .tool-grid {
-    display: block;
-  }
-
-  .card {
-    page-break-inside: avoid;
-    margin-bottom: 1rem;
-  }
-}
-
-/* ===== FORCE 2 SQUARE CARDS ON MOBILE PORTRAIT (CONSOLIDATED) ===== */
-/* Covers orientation:portrait up to 900px and narrower devices */
-@media (orientation: portrait) and (max-width: 900px),
-       (max-width: 767px) {
-  /* Container näher an den Rand bringen (4px) */
-  .container {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-
-  
-  /* Grid: 2 Spalten, kontrollierter Abstand */
-  #tool-grid.tool-grid-squares,
-    .tool-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 20px !important;
-    row-gap: 25px !important;       /* ⬅️ deine Werte aus Mobile-Block */
-    /* ⬅️ benutzt Mobile-Regel oben */
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    align-items: start !important;
-  }
-
-
-
-  /* Erzwinge Quadrat-Form — target card-square (dein JS rendert .card-square) */
-  #tool-grid.tool-grid-squares .card-square,
-  #tool-grid.tool-grid-squares > .card-square {
-    aspect-ratio: 1 / 1 !important;
-    min-height: 0 !important;
-    height: auto !important;
-    padding: 12px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Button sitzt immer unten */
-  #tool-grid.tool-grid-squares .square-link,
-  #tool-grid.tool-grid-squares .card-link {
-    margin-top: auto !important;
-    width: 100% !important;
-    display: inline-flex !important;
-    justify-content: center !important;
-  }
-
-  /* Text clamping — damit das Kartenhöhen-Problem nicht auftritt */
-  #tool-grid.tool-grid-squares .square-description,
-  #tool-grid.tool-grid-squares .card-description {
-    display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;         /* max 3 Zeilen — anpassen falls nötig */
-    -webkit-box-orient: vertical;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    line-height: 1.35 !important;
-    font-size: 0.92rem !important;
-    margin: 6px 0 !important;
-  }
-
-  /* Titel etwas kompakter */
-  #tool-grid.tool-grid-squares .square-title,
-  #tool-grid.tool-grid-squares .card-title {
-    font-size: 1.05rem !important;
-    line-height: 1.2 !important;
-  }
-
-  /* Keine Hover-Transform für Touch-Devices */
-  @media (hover: none) {
-    #tool-grid.tool-grid-squares .card-square,
-    #tool-grid.tool-grid-squares > .card-square {
-      transform: none !important;
-      box-shadow: none !important;
-    }
-  }
-}
-
-/* ==================== STACK PANEL / "ZWEITE SEITE" (Slide-in) ==================== */
-
-/* Panel base (hidden by default - will be display:block by JS) */
-#tool-stacks.panel {
-  position: fixed;
-  inset: 0;                         /* top:0; right:0; bottom:0; left:0 */
-  background: linear-gradient(180deg, rgba(10,14,39,0.98), rgba(10,14,39,0.99));
-  z-index: var(--z-overlay);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 48px 20px;
-  box-sizing: border-box;
-  transform: translateX(100%);      /* start off-canvas (right) */
-  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1), opacity 260ms ease;
-  opacity: 1;
-}
-
-/* visible state (slide in) */
-#tool-stacks.panel.enter {
-  transform: translateX(0%);
-}
-
-/* exit state (slide out to right) */
-#tool-stacks.panel.exit {
-  transform: translateX(100%);
-}
-
-/* make contained stacks layout full-width and readable */
-#tool-stacks.panel .container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Close button */
-#tool-stacks .panel-close {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  z-index: calc(var(--z-overlay) + 10);
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: var(--text-secondary);
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-}
-
-#tool-stacks .panel-close:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,0.02);
-  color: var(--primary);
-}
-
-/* ensure stack columns look good inside panel */
-#tool-stacks.panel .tool-stacks {
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-lg);
-}
-
-/* responsive tweaks */
-@media (max-width: 767px) {
-  #tool-stacks.panel {
-    padding: 20px 12px;
-  }
-  #tool-stacks .panel-close {
-    top: 12px;
-    right: 12px;
-    padding: 8px 12px;
-  }
-}
-/* =============================================
-   DOUBLE CLICK CARD SYSTEM (REPLACED)
-   ============================================= */
-
-/* -----------------------------
-   CARD-ARMED: KEEP BADGE VISIBLE
-   ----------------------------- */
-
-/* Ensure badge sits above pseudo-elements and glows */
-.card-square .square-category,
-.card .card-category {
-  position: relative;
-  z-index: 6; /* above ::after which may use -1 */
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
-  opacity: 1;
-}
-
-/* When card is "armed" (first click) keep badge readable and add subtle pop */
-.card-square.card-armed .square-category,
-.card.card-armed .card-category {
-  background: var(--primary);    /* solid brand color */
-  color: var(--bg-dark);         /* contrast text */
-  box-shadow: 0 6px 18px var(--primary-glow);
-  transform: translateY(0) scale(1.02);
-  opacity: 1;
-}
-
-/* Make sure title remains readable on armed state as well */
-.card-square.card-armed .square-title-large,
-.card.card-armed .card-title {
-  color: var(--text-primary);
-  text-shadow: 0 2px 10px rgba(0,0,0,0.35);
-  z-index: 5;
-}
-
-/* Lower the intensity of the background ::after pseudo when armed so it doesn't wash-out the badge */
-.card-square.card-armed::after,
-.card.card-armed::after {
-  opacity: 0.08 !important; /* reduce overlay when armed */
-  transform: scale(1.02);
-  transition: opacity 180ms ease, transform 220ms ease;
-}
-
-/* If you have a top glow line pseudo-element, ensure it doesn't cover badge */
-.card-square.card-armed::before,
-.card.card-armed::before {
-  opacity: 1;
-  z-index: 7; /* keep thin top glow visible but not hiding badge */
-}
-
-/* Accessibility: ensure focus outline still visible */
-.card-square.card-armed:focus,
-.card.card-armed:focus {
-  outline: 3px solid rgba(0,243,255,0.15);
-  outline-offset: 4px;
-}
-
-/* -----------------------------
-   HIDE "Öffnen" BUTTON (we use double-click/modal)
-   ----------------------------- */
-.card-link,
-.square-link {
-  display: none !important;
-}
-
-/* -----------------------------
-   FIRST-CLICK (ARM) VISUAL
-   ----------------------------- */
-.card.card-armed,
-.card-square.card-armed {
-  border-color: var(--primary);
-  box-shadow: 0 0 25px rgba(0,243,255,0.35);
-  transform: scale(1.03);
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, border-color 180ms ease;
-}
-
-/* small animation for smoother feel */
-.card.card-armed .card-title,
-.card-square.card-armed .square-title-large {
-  transform: translateY(-2px);
-  transition: transform 180ms ease, color 160ms ease;
-}
-
-/* -----------------------------
-   DETAIL MODAL (simple) - keep if your JS uses openToolModal()
-   ----------------------------- */
-#tool-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-#tool-modal.open {
-  display: flex;
-}
-
-#tool-modal .modal-box {
-  background: #0f1224;
-  border-radius: 14px;
-  padding: 24px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-}
-
-#tool-modal h3 {
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-#tool-modal button {
-  margin-top: 15px;
-  padding: 8px 14px;
-  background: var(--primary);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-/* ═══════════ FULLWIDTH, NAHTLOSE MARQUEE (duplizierter Track) ═══════════ */
+/* ========= MARQUEE (FULLWIDTH NAHTLOS) ========= */
 .context-marquee {
   position: relative;
   width: 100%;
@@ -1880,9 +1226,6 @@ a:focus-visible {
   align-self: stretch;
   flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
 }
-
-
-
 
 /* Track enthält 2x die Sequenz für nahtlosen Loop */
 .context-marquee .marquee-track {
@@ -1923,7 +1266,7 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .context-marquee .marquee-track { animation: none !important; }
   .context-marquee { -webkit-mask-image: none; mask-image: none; }
- }
+}
 
 /* Mobile (2 Spalten) - Optimiert */
 @media (max-width: 767px) {
@@ -1965,7 +1308,7 @@ a:focus-visible {
     order: 0 !important;
   }
 
-    /* Toolname - 6px höher */
+  /* Toolname - 6px höher */
   .square-title-large {
     font-size: 0.94rem !important;
     line-height: 1.15 !important;
@@ -1995,6 +1338,31 @@ a:focus-visible {
 
   .context-marquee .marquee-track {
     animation-duration: 18s !important;
+  }
+
+  /* Toolname — linksbündig, direkt unter Badge, sauber einzeilig mit Ellipsis on very small screens */
+  .square-title-large {
+    align-self: flex-start;
+    margin: 6px 0 2px 0;
+    font-size: 1.05rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    display: block;
+    max-width: calc(100% - 36px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ⬅️ NEU: Content-Container adjustments for very small screens */
+  .square-content-centered {
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    padding: 14px 12px !important;
+    gap: 6px !important;
+    height: 100%;
+    width: 100%;
+    text-align: left !important;
   }
 }
 
@@ -2101,8 +1469,10 @@ a:focus-visible {
   .tool-grid-squares .card-square:active .square-title-large {
     color: rgba(255, 255, 255, 1) !important;
   }
-  
-  /* Force breathing animation on cards (unless user prefers reduced motion) */
+}
+
+/* Force breathing animation on cards (unless user prefers reduced motion)
+   Moved out of nested media and properly scoped. */
 @media (prefers-reduced-motion: no-preference) {
   .tool-grid-squares .card-square,
   #tool-grid .card-square {
@@ -2114,4 +1484,62 @@ a:focus-visible {
   }
 }
 
+/* Accessibility: prefers-reduced-motion (high priority) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Disable breathing for reduced-motion users */
+  .tool-grid-squares .card-square,
+  #tool-grid .card-square {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
+
+/* ==================== ACCESSIBILITY / PRINT / OTHER RULES BELOW ==================== */
+
+/* Focus Styles */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #4A4E67;
+    --text-dim: #C0C0D0;
+  }
+}
+
+/* PRINT */
+@media print {
+  .header,
+  .footer,
+  .search-wrapper,
+  .stats-bar {
+    display: none;
+  }
+
+  .tool-grid {
+    display: block;
+  }
+
+  .card {
+    page-break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Misc safe rules kept as in original */
+/* End of corrected file */
