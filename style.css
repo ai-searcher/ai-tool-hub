@@ -1990,15 +1990,14 @@ a:focus-visible {
     width: calc(100% + 20px) !important;
     margin-left: -10px !important;
     margin-right: -10px !important;
-    margin-bottom: -10px !important;         /* ← GEÄNDERT: -10px (war -16px) = +6px höher */
+    margin-bottom: -10px !important;
     order: 2 !important;
   }
 
-
   .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;           /* ← GEÄNDERT: 5% größer (war 0.63rem) */
+    font-size: 0.66rem !important;
     padding-right: 2rem !important;
-    line-height: 21px !important;            /* ← GEÄNDERT: passt zu height */
+    line-height: 21px !important;
   }
 
   .context-marquee .marquee-track {
@@ -2006,6 +2005,84 @@ a:focus-visible {
   }
 }
 
+/* ==================== SCHWEBEEFFEKT ==================== */
+
+/* Breathing-Animation */
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.015);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Breathing auf Desktop & Mobile - erweitert bestehende card-square */
+@media (min-width: 1px) {
+  .card-square {
+    animation: breathing 6s ease-in-out infinite !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.35s ease !important;
+  }
+}
+
+/* Desktop: Hover-Effekt */
+@media (min-width: 768px) {
+  .card-square:hover {
+    animation: none !important;
+    transform: translateY(-8px) scale(1.03) !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(99, 102, 241, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(99, 102, 241, 0.4) !important;
+  }
+
+  .card-square:hover .context-marquee .marquee-track {
+    animation-duration: 15s !important;
+  }
+
+  .card-square:hover .square-category-badge {
+    background: rgba(99, 102, 241, 0.25) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    transform: scale(1.05) !important;
+  }
+
+  .card-square:hover .square-title-large {
+    color: rgba(255, 255, 255, 1) !important;
+  }
+}
+
+/* Mobile: Touch/Tap-Effekt mit :active */
+@media (max-width: 767px) {
+  .card-square:active {
+    animation: none !important;
+    transform: scale(1.04) !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(99, 102, 241, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+  }
+
+  .card-square:active .context-marquee .marquee-track {
+    animation-duration: 15s !important;
+  }
+
+  .card-square:active .square-category-badge {
+    background: rgba(99, 102, 241, 0.25) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    transform: scale(1.05) !important;
+  }
+
+  .card-square:active .square-title-large {
+    color: rgba(255, 255, 255, 1) !important;
+  }
+}
+
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
+
+
 
 
