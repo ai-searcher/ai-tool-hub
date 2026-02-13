@@ -644,7 +644,7 @@ const ui = {
   } else {
     console.warn('[ui.showState] toolGrid element NOT found in cached elements');
   }
-}
+},
 
 // ---------- Render Tool Card (NEU: prevent immediate navigation; keep data-href) ----------
 renderCard(tool) {
