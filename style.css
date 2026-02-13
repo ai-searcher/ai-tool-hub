@@ -1808,12 +1808,18 @@ a:focus-visible {
   100% { transform: translateX(-50%); }
 }
 
-/* focus styles (keyboard) */
+
+/* focus styles (keyboard) - FIX */
 .card-square:focus {
-  outline: 3px solid rgba(0,243,255,0.12);
-  outline-offset: 6px;
-  transform: translateY(-6px) scale(1.01);
+  outline: none !important;              /* klickt man → kein großes Viereck */
 }
+
+/* nur Tastatur: Fokus sichtbar, aber klein */
+.card-square:focus-visible {
+  outline: 2px solid rgba(0,243,255,0.35) !important;
+  outline-offset: 2px !important;
+}
+
 
 /* clamp description to avoid pushing the badge/title */
 .square-description {
@@ -2307,17 +2313,23 @@ a:focus-visible {
 /* 5) Mobile tweak: use smaller internal padding so marquee aligns with mobile card padding */
 @media (max-width: 767px) {
   .card-square .context-marquee {
-    left: 12px !important;
-    right: 12px !important;
-    bottom: 12px !important;
-    height: 20px !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-bottom-left-radius: inherit !important;
+    border-bottom-right-radius: inherit !important;
   }
+
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
-    padding: 0 1.2rem !important;
+    padding-left: 0 !important;
+    padding-right: 2rem !important;
     min-width: 45% !important;
   }
 }
+
 
 /* 6) Accessibility: pausieren on focus or reduce motion respected */
 .card-square:focus-within .context-marquee .marquee-track,
