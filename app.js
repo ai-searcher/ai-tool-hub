@@ -644,7 +644,7 @@ const ui = {
   } else {
     console.warn('[ui.showState] toolGrid element NOT found in cached elements');
   }
-},
+},  // <-- KOMMA HIER hinzugefügt (trennt showState von renderCard)
 
 // ---------- Render Tool Card (NEU: prevent immediate navigation; keep data-href) ----------
 renderCard(tool) {
@@ -751,8 +751,7 @@ render() {
 
     this.attachCardHandlers();
   }
-},
-
+}, 
 // ---------- Attach handlers (event delegation, keyboard-accessible) ----------
 attachCardHandlers() {
   const grid = this.elements.toolGrid || getElement('#tool-grid');
