@@ -6,6 +6,19 @@
 
 'use strict';
 
+// GLOBAL DEBUG: make unhandled promise rejections visible (helps locate "Unhandled Promise: TypeError" errors)
+window.addEventListener('unhandledrejection', (ev) => {
+  try {
+    console.group('%cUnhandled Promise Rejection (global)', 'color:#fff;background:#d9534f;padding:3px;border-radius:4px;');
+    console.error('reason:', ev.reason);
+    if (ev.reason && ev.reason.stack) console.error(ev.reason.stack);
+    console.trace();
+    console.groupEnd();
+  } catch (e) {
+    // swallow to avoid breaking page if console restricted
+    console.error('unhandledrejection logging failed', e);
+  }
+});
 // =========================================
 // CONFIGURATION
 // =========================================
@@ -628,7 +641,8 @@ renderCard(tool) {
   if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
 
   return `
-    <div class="card-square"
+        <div class="card-square"
+         data-tool-id="${this.escapeHtml(String(tool.id || ''))}"
          data-category="${this.escapeHtml(categoryName)}"
          data-tool-name="${this.escapeHtml(tool.title)}"
          data-href="${this.escapeHtml(tool.link)}"
@@ -978,10 +992,18 @@ const app = {
 // =========================================
 // START APPLICATION
 // =========================================
+const startApp = async () => {
+  try {
+    await app.init();
+  } catch (e) {
+    console.error('App init failed (caught):', e);
+  }
+};
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => app.init());
+  document.addEventListener('DOMContentLoaded', () => startApp());
 } else {
-  app.init();
+  startApp();
 }
 
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -1016,10 +1038,17 @@ function createToolModal() {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeToolModal();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeToolModal();
-  });
-}
+
+  // Attach global Escape handler once (idempotent)
+  if (!document._toolModalEscapeHandlerAttached) {
+    const _toolModalEscapeHandler = (e) => {
+      if (e.key === 'Escape') closeToolModal();
+    };
+    document.addEventListener('keydown', _toolModalEscapeHandler);
+    document._toolModalEscapeHandlerAttached = true;
+  }
+
+} // <-- WICHTIG: Funktion createToolModal wird hier sauber geschlossen
 
 function openToolModal(tool) {
   createToolModal();
@@ -1046,12 +1075,16 @@ function attachDoubleClickHandlers() {
 
   const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
 
+  // ensure we don't attach duplicate handler
+  if (grid._doubleClickHandlerAttached) return;
+  grid._doubleClickHandlerAttached = true;
+
   grid.addEventListener('click', (e) => {
     if (e.target.closest('a') || e.target.closest('button')) return;
     const card = e.target.closest('.card, .card-square, .stack-card');
     if (!card) return;
 
-    const idAttr = card.dataset.toolId;
+    const idAttr = card.getAttribute('data-tool-id') || card.dataset.toolId || '';
     if (!card.classList.contains('card-armed')) {
       document.querySelectorAll('.card-armed').forEach(c => c.classList.remove('card-armed'));
       card.classList.add('card-armed');
@@ -1062,22 +1095,39 @@ function attachDoubleClickHandlers() {
     card.classList.remove('card-armed');
 
     let tool = null;
-    if (idAttr && window.appState && appState.tools) {
-      tool = appState.tools.find(t => String(t.id) === String(idAttr));
+
+    // Prefer numeric id lookups when available
+    if (idAttr) {
+      const appTools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : state.tools;
+      if (appTools) {
+        tool = appTools.find(t => String(t.id) === String(idAttr));
+      }
     }
+
+    // Fallback: match by normalized title
     if (!tool) {
-      const titleEl = card.querySelector('.card-title, .square-title');
+      const titleEl = card.querySelector('.card-title, .square-title, .square-title-large, .card-title-large');
       const title = titleEl?.textContent?.trim();
-      if (title && window.appState && appState.tools) {
-        tool = appState.tools.find(t => (t.title || '').trim() === title);
+      if (title) {
+        const titleNorm = title.toLowerCase();
+        const appTools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : state.tools;
+        if (appTools) {
+          tool = appTools.find(t => ((t.title || '').trim().toLowerCase()) === titleNorm);
+        }
       }
     }
 
     if (tool) {
-      openToolModal(tool);
+      try {
+        openToolModal(tool);
+      } catch (err) {
+        console.error('openToolModal error', err);
+        // fallback visual feedback
+        card.classList.toggle('card-armed');
+      }
     } else {
-      const link = card.querySelector('a.card-link, a.square-link');
-      if (link) window.open(link.href, '_blank');
+      const link = card.querySelector('a.card-link, a.square-link, a.card-overlay-link, a');
+      if (link && link.href) window.open(link.href, '_blank');
     }
   });
 
