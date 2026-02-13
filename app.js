@@ -929,6 +929,15 @@ const app = {
       search.init();
 
       console.log('✅ App initialized successfully!');
+
+      // --- Expose minimal global state + plugin-ready event (safe) ---
+      try {
+        if (!window.appState) window.appState = state;
+        window.dispatchEvent(new Event('quantum:ready'));
+      } catch (e) {
+        // Failsafe: mögliche CSP/readonly globales Objekt
+        console.debug('app: could not expose global state or dispatch event', e);
+      }
       
     } catch (error) {
       console.error('❌ CRITICAL ERROR in init:', error);
