@@ -7,41 +7,68 @@ class SmartColorFlow {
     this.tools = [];
     this.focusedTool = null;
     
-    this.colors = {
-      text: { r: 0, g: 243, b: 255 },
-      image: { r: 236, g: 72, b: 153 },
-      code: { r: 139, g: 92, b: 246 },
-      video: { r: 239, g: 68, b: 68 },
+        this.colors = {
+      text:  { r: 0,   g: 243, b: 255 },
+      image: { r: 236, g: 72,  b: 153 },
+      code:  { r: 139, g: 92,  b: 246 },
+      video: { r: 239, g: 68,  b: 68  },
       audio: { r: 255, g: 107, b: 157 },
-       { r: 29, g: 233, b: 182 },
+      data:  { r: 29,  g: 233, b: 182 },  // <-- fehlender key (data)
       other: { r: 176, g: 190, b: 197 }
     };
   }
   
-  async init() {
-    console.log('🎨 Color Flow starting...');
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => this.start());
-    } else {
-      if (window.appState && window.appState.tools && window.appState.tools.length > 0) {
-        this.start();
-      } else {
-        this.waitForTools();
-      }
+  // ---- Ersetze die alte async init() Funktion durch diesen kompletten Block ----
+async init() {
+  console.log('🎨 Color Flow starting.');
+
+  const startWhenReady = () => {
+    // 1) Wenn Karten bereits im DOM sind → sofort starten
+    if (document.querySelectorAll('.card-square').length > 0) {
+      this.start();
+      return true;
     }
+    // 2) Fallback: app-exposed states (debug/prod)
+    if (window.appState && Array.isArray(window.appState.tools) && window.appState.tools.length > 0) {
+      this.start();
+      return true;
+    }
+    if (window.state && Array.isArray(window.state.tools) && window.state.tools.length > 0) {
+      this.start();
+      return true;
+    }
+    return false;
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!startWhenReady()) this.waitForTools();
+    });
+  } else {
+    if (!startWhenReady()) this.waitForTools();
   }
+
+  // Hook: app kann 'quantum:ready' dispatchen sobald UI gerendert ist
+  window.addEventListener('quantum:ready', () => {
+    if (!this.started) this.start();
+  }, { once: true });
+}
   
-  waitForTools() {
-    const check = setInterval(() => {
-      if (window.appState && window.appState.tools && window.appState.tools.length > 0) {
-        clearInterval(check);
-        this.start();
-      }
-    }, 100);
-    
-    setTimeout(() => clearInterval(check), 10000);
-  }
+  // ---- Ersetze die alte waitForTools() Funktion durch diesen Block ----
+waitForTools() {
+  const check = setInterval(() => {
+    if (document.querySelectorAll('.card-square').length > 0 ||
+        (window.appState && Array.isArray(window.appState.tools) && window.appState.tools.length > 0) ||
+        (window.state && Array.isArray(window.state.tools) && window.state.tools.length > 0)) {
+      clearInterval(check);
+      this.start();
+      return;
+    }
+  }, 150);
+
+  // timeout nach 12s, aber es bleibt das 'quantum:ready' Event als Fallback
+  setTimeout(() => clearInterval(check), 12000);
+}
   
   start() {
     this.canvas = document.getElementById('connection-canvas');
@@ -63,12 +90,16 @@ class SmartColorFlow {
     console.log('✅ Color Flow ready!', this.tools.length, 'tools');
   }
   
-  setupCanvas() {
+    setupCanvas() {
     const dpr = window.devicePixelRatio || 1;
-    this.canvas.width = window.innerWidth * dpr;
-    this.canvas.height = document.documentElement.scrollHeight * dpr;
+    // set physical pixel size
+    this.canvas.width = Math.max(1, Math.round(window.innerWidth * dpr));
+    this.canvas.height = Math.max(1, Math.round(document.documentElement.scrollHeight * dpr));
+    // set CSS size
     this.canvas.style.width = window.innerWidth + 'px';
     this.canvas.style.height = document.documentElement.scrollHeight + 'px';
+    // reset transform & scale exactly once (avoid cumulative scaling)
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
   }
   
