@@ -559,72 +559,48 @@ const ui = {
   },
   
   showState(stateName) {
-    const states = ['loading', 'error', 'empty'];
-    
-    states.forEach(s => {
-      const el = this.elements[s];
-      if (el) {
-        el.style.display = s === stateName ? 'block' : 'none';
-      }
-    });
-    
-    if (this.elements.toolGrid) {
-      this.elements.toolGrid.style.display = stateName === 'grid' ? 'grid' : 'none';
-    }
-  },
-  
-  updateStats() {
-    if (!this.elements.statsBar) return;
-    
-    const categories = new Set(state.tools.map(t => t.category)).size;
-    const featured = state.tools.filter(t => t.featured).length;
-    
-    state.stats = {
-      total: state.tools.length,
-      categories,
-      featured
-    };
-    
-    if (this.elements.statTotal) {
-      this.elements.statTotal.textContent = state.stats.total;
-    }
-    if (this.elements.statCategories) {
-      this.elements.statCategories.textContent = state.stats.categories;
-    }
-    if (this.elements.statFeatured) {
-      this.elements.statFeatured.textContent = state.stats.featured;
-    }
-    
-    this.elements.statsBar.style.display = 'flex';
-  },
-  
-  updateDataSource() {
-    if (!this.elements.dataSource) return;
+  const states = ['loading', 'error', 'empty'];
 
-    const sources = {
-      supabase: 'D: SB',
-      json: 'D: LJ',
-      defaults: 'D: DEF',
-      loading: '...'
-    };
+  // Debug log
+  try {
+    console.log(`[ui.showState] -> requested state: "${stateName}"`);
+  } catch (e) {}
 
-    this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
-  },
-
-  getContextText(tool) {
-    if (!tool.badges || !tool.badges.length) {
-      const fallback = [
-        tool.description || '',
-        ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
-      ].filter(Boolean);
-      return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
+  states.forEach(s => {
+    const el = this.elements[s];
+    if (el) {
+      el.style.display = s === stateName ? 'block' : 'none';
     }
+  });
 
-    return tool.badges.slice(0, 3).map(badge => {
-      const text = String(badge).split('.')[0].trim();
-      return text.length > 28 ? text.slice(0, 28) + '…' : text;
-    });
-  },
+  // Tool grid visibility handling with extra logging & safety
+  if (this.elements.toolGrid) {
+    const prevInline = this.elements.toolGrid.getAttribute('style') || '';
+    try {
+      console.log(`[ui.showState] toolGrid previous inline style: "${prevInline}"`);
+    } catch (e) {}
+
+    // set display explicitly for grid state
+    if (stateName === 'grid') {
+      // force visible
+      this.elements.toolGrid.style.display = 'grid';
+      // remove possible visibility properties that hide it
+      this.elements.toolGrid.style.removeProperty('visibility');
+      this.elements.toolGrid.style.removeProperty('opacity');
+      // extra log after change
+      try {
+        console.log('[ui.showState] toolGrid set to display: grid');
+      } catch (e) {}
+    } else {
+      this.elements.toolGrid.style.display = 'none';
+      try {
+        console.log(`[ui.showState] toolGrid hidden for state "${stateName}"`);
+      } catch (e) {}
+    }
+  } else {
+    console.warn('[ui.showState] toolGrid element NOT found in cached elements');
+  }
+}
 
 // ---------- Render Tool Card (NEU: prevent immediate navigation; keep data-href) ----------
 renderCard(tool) {
