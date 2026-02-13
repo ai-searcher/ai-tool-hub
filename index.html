@@ -170,61 +170,71 @@
   <!-- Onboarding Toast (wird von JS erstellt) -->
 
   <!-- ==================== HEADER ==================== -->
-  <header class="header">
-    <div class="container">
-      <!-- Logo & Title -->
-      <div class="header-top">
-        <h1 class="title">⚡ Quantum AI Hub</h1>
-        <p class="subtitle">Deine kuratierte AI Tool-Sammlung</p>
-      </div>
+<header class="header">
+  <div class="container">
 
-      <!-- Search Bar -->
-      <div class="search-wrapper">
-        <div class="search-box">
-          <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Marquee container (kein sichtbarer Hintergrund, marquees an derselben Stelle) -->
+    <div id="marquee-container" class="marquee-container" aria-hidden="true">
+      <!-- Jede "marquee" ist absolut positioniert und stapelt sich exakt übereinander -->
+      <div class="marquee marquee-1">🎯 Live: Neue Features •</div>
+      <div class="marquee marquee-2">✨ Beta: Neural Lines aktiviert •</div>
+      <div class="marquee marquee-3">🔗 Datenquelle: JSON geladen •</div>
+    </div>
+
+    <!-- Logo & Title -->
+    <div class="header-top">
+      <h1 class="title">⚡ Quantum AI Hub</h1>
+      <p class="subtitle">Deine kuratierte AI Tool-Sammlung</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <div class="search-box">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input
+          type="text"
+          id="search"
+          class="search-input"
+          placeholder="Tool suchen... (z.B. ChatGPT, Midjourney)"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="100"
+          aria-label="Tool suchen"
+        >
+        <button
+          id="search-clear"
+          class="search-clear"
+          style="display: none;"
+          aria-label="Suche löschen"
+          type="button"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
-          <input
-            type="text"
-            id="search"
-            class="search-input"
-            placeholder="Tool suchen... (z.B. ChatGPT, Midjourney)"
-            autocomplete="off"
-            spellcheck="false"
-            maxlength="100"
-            aria-label="Tool suchen"
-          >
-          <button
-            id="search-clear"
-            class="search-clear"
-            style="display: none;"
-            aria-label="Suche löschen"
-            type="button"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Stats Bar (optional - wird später befüllt) -->
-      <div class="stats-bar" id="stats-bar" style="display: none;" role="status" aria-live="polite">
-        <div class="stat">
-          <span class="stat-value" id="stat-total">0</span>
-          <span class="stat-label">Tools</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value" id="stat-categories">0</span>
-          <span class="stat-label">Kategorien</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value" id="stat-featured">0</span>
-          <span class="stat-label">Featured</span>
-        </div>
+        </button>
       </div>
     </div>
-  </header>
+
+    <!-- Stats Bar (optional - wird später befüllt) -->
+    <div class="stats-bar" id="stats-bar" style="display: none;" role="status" aria-live="polite">
+      <div class="stat">
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Tools</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-categories">0</span>
+        <span class="stat-label">Kategorien</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-featured">0</span>
+        <span class="stat-label">Featured</span>
+      </div>
+    </div>
+
+  </div>
+</header>
 
   <!-- ==================== MAIN ==================== -->
   <main class="main">
