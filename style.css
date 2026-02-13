@@ -2004,29 +2004,30 @@ a:focus-visible {
 
 /* ==================== SCHWEBEEFFEKT ==================== */
 
-/* Breathing-Animation */
+/* Breathing-Animation - Langsamer & sichtbarer */
 @keyframes breathing {
   0%, 100% {
     transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
-    transform: scale(1.015);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transform: scale(1.04);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35),
+                0 0 15px rgba(99, 102, 241, 0.12);
   }
 }
 
-/* Breathing auf Desktop & Mobile - erweitert bestehende card-square */
+/* Breathing auf Desktop & Mobile */
 @media (min-width: 1px) {
   .card-square {
-    animation: breathing 6s ease-in-out infinite !important;
+    animation: breathing 8s ease-in-out infinite !important;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                 border-color 0.35s ease !important;
   }
 }
 
-/* Desktop: Hover-Effekt */
+/* Desktop: Hover-Effekt - stoppt Breathing */
 @media (min-width: 768px) {
   .card-square:hover {
     animation: none !important;
@@ -2052,10 +2053,10 @@ a:focus-visible {
   }
 }
 
-/* Mobile: Touch/Tap-Effekt mit :active */
+/* Mobile: Touch/Tap-Effekt - Breathing läuft weiter */
 @media (max-width: 767px) {
   .card-square:active {
-    transform: scale(1.04) !important;
+    transform: scale(1.08) !important;           /* ← Etwas stärker als Breathing */
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
                 0 0 30px rgba(99, 102, 241, 0.2),
                 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
@@ -2078,6 +2079,7 @@ a:focus-visible {
 }
 
 /* ==================== END (DOUBLE CLICK CARD SYSTEM) ==================== */
+
 
 
 
