@@ -1835,12 +1835,17 @@ a:focus-visible {
   pointer-events: none;
 }
 
-/* Connection Active State */
+/* Connection Active State — etwas niedriger als FAB */
 .card-square.connection-active {
   transform: translateY(-6px) scale(1.05) !important;
   box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5) !important;
-  z-index: 1000 !important;
+  z-index: 900 !important; /* bleibt hoch, aber unter FAB */
   position: relative;
+}
+
+/* ensure toggle button can be clicked */
+.legend-toggle {
+  pointer-events: auto;
 }
 
 /* Connection Labels */
@@ -1901,12 +1906,13 @@ a:focus-visible {
   font-size: 0.7rem;
 }
 
-/* Floating Legend Button */
+/* Floating Legend Button — zwingend oben */
 .color-legend-fab {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 100;
+  z-index: 2100 !important; /* deutlich über 1000 */
+  pointer-events: auto;
 }
 
 .legend-toggle {
