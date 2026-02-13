@@ -18,17 +18,7 @@ window.addEventListener('error', (e) => {
   } catch (err) { console.error('error listener failed', err); }
 });
 
-window.addEventListener('unhandledrejection', (ev) => {
-  try {
-    const r = ev.reason;
-    console.error('Unhandled Promise Rejection (global) - enhanced:', {
-      name: r && r.name,
-      message: r && r.message,
-      stack: r && r.stack,
-      raw: r
-    });
-  } catch (err) { console.error('unhandledrejection logging failed', err); }
-});
+// duplicate unhandledrejection listener removed here — consolidated handler is declared later in the file
 
 // Wrap fetch to log failing requests
 (function() {
@@ -1167,13 +1157,13 @@ function closeToolModal() {
 function attachDoubleClickHandlers() {
   createToolModal();
 
-  const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
+    const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
 
   // ensure we don't attach duplicate handler
   if (grid._doubleClickHandlerAttached) return;
   grid._doubleClickHandlerAttached = true;
 
-  grid.addEventListener('click', (e) => {
+  grid.addEventListener('dblclick', (e) => {
     if (e.target.closest('a') || e.target.closest('button')) return;
     const card = e.target.closest('.card, .card-square, .stack-card');
     if (!card) return;
