@@ -1945,9 +1945,6 @@ a:focus-visible {
     width: 100%;
     height: auto;
     margin: 0 auto;
-    padding: 12px;
-    animation: none;
-    transform: none !important;
     display: flex !important;
     flex-direction: column !important;
   }
