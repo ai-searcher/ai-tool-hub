@@ -613,136 +613,135 @@ const ui = {
     });
   },
 
-  renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+// ---------- Render Tool Card (NEU: prevent immediate navigation; keep data-href) ----------
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-    const contextTexts = (typeof this.getContextText === 'function')
-      ? this.getContextText(tool)
-      : ([
-          tool.description || '',
-          ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
-        ].filter(Boolean));
+  const contextTexts = (typeof this.getContextText === 'function')
+    ? this.getContextText(tool)
+    : ([
+        tool.description || '',
+        ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
+      ].filter(Boolean));
 
-    if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
+  if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
 
-    return `
-      <div class="card-square"
-           data-category="${this.escapeHtml(categoryName)}"
-           data-tool-name="${this.escapeHtml(tool.title)}"
-           data-depth="10"
-           tabindex="0"
-           role="article"
-           aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
+  return `
+    <div class="card-square"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-href="${this.escapeHtml(tool.link)}"
+         data-depth="10"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
 
-        <div class="square-content-centered">
+      <div class="square-content-centered">
 
-          <div class="square-category-badge" aria-hidden="true">
-            ${this.escapeHtml(categoryDisplay)}
-          </div>
-
-          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-            ${this.escapeHtml(tool.title)}
-          </h3>
-
-          <div class="context-marquee" aria-hidden="true">
-            <div class="marquee-track" role="presentation">
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            </div>
-          </div>
-
-          <a href="${this.escapeHtml(tool.link)}"
-             class="card-overlay-link"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
-
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
         </div>
+
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+          </div>
+        </div>
+
+        <!-- overlay kept for click area, but href removed; data-href used for later navigation -->
+        <a class="card-overlay-link"
+           role="button"
+           tabindex="-1"
+           data-href="${this.escapeHtml(tool.link)}"
+           aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
+
       </div>
-    `;
-  },
+    </div>
+  `;
+},
 
-  escapeHtml(text) {
-    if (text === null || text === undefined) return '';
-    const div = document.createElement('div');
-    div.textContent = String(text);
-    return div.innerHTML;
-  },
+// EscapeHtml function must exist exactly once in ui (keine Duplikate)
+escapeHtml(text) {
+  if (text === null || text === undefined) return '';
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+},
 
-  render() {
-    if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      const query = state.searchQuery.toLowerCase();
-      state.filtered = state.tools.filter(tool =>
-        (tool.title || '').toLowerCase().includes(query) ||
-        (tool.description && tool.description.toLowerCase().includes(query))
-      );
-    } else {
-      state.filtered = [...state.tools];
-    }
+// ---------- Render all (stays in ui) - ensure trailing commas/commas between methods are correct ----------
+render() {
+  // ... deine render()-Implementation (lass wie gehabt oder ersetze mit deiner robusten Variante)
+},
 
-    if (state.loading) { this.showState('loading'); return; }
-    if (state.error) { this.showState('error'); return; }
+// ---------- Attach handlers (event delegation, keyboard-accessible) ----------
+attachCardHandlers() {
+  const grid = this.elements.toolGrid || getElement('#tool-grid');
+  if (!grid) return;
 
-    if (state.filtered.length === 0) {
-      this.showState('empty');
-      if (this.elements.emptyQuery && state.searchQuery) {
-        this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
+  if (grid._clickHandler) {
+    grid.removeEventListener('click', grid._clickHandler);
+    grid.removeEventListener('keydown', grid._keyHandler);
+  }
+
+  grid._clickHandler = (e) => {
+    const overlay = e.target.closest('.card-overlay-link');
+    const card = e.target.closest('.card-square');
+
+    if (overlay && card) {
+      // don't navigate immediately; track and open modal later
+      e.preventDefault();
+      e.stopPropagation();
+
+      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+      const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+
+      analytics.trackToolClick(toolName);
+
+      if (typeof openToolModal === 'function') {
+        try {
+          openToolModal({ title: toolName, href, cardElement: card });
+        } catch (err) {
+          console.error('openToolModal error', err);
+          card.classList.toggle('card-armed');
+        }
+      } else {
+        card.classList.toggle('card-armed');
+        console.log(`Detail requested for: ${toolName}`, href);
       }
+
       return;
     }
 
-    this.showState('grid');
-    if (this.elements.toolGrid) {
-      if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-        this.elements.toolGrid.classList.add('tool-grid-squares');
-      }
-      this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-      this.attachCardHandlers();
+    if (card && !overlay) {
+      e.preventDefault();
+      card.classList.toggle('card-armed');
+      const toolName = card.dataset.toolName || 'Unknown';
+      analytics.trackToolClick(toolName);
     }
-  },
+  };
 
-  attachCardHandlers() {
-    const grid = this.elements.toolGrid || getElement('#tool-grid');
-    if (!grid) return;
-
-    if (grid._clickHandler) {
-      grid.removeEventListener('click', grid._clickHandler);
-      grid.removeEventListener('keydown', grid._keyHandler);
-    }
-
-    grid._clickHandler = (e) => {
-      const overlay = e.target.closest('.card-overlay-link');
+  grid._keyHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
       const card = e.target.closest('.card-square');
-
-      if (overlay && card) {
-        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-        analytics.trackToolClick(toolName);
-        return;
+      if (!card) return;
+      const overlay = card.querySelector('.card-overlay-link');
+      if (overlay) {
+        // trigger delegated handler via programmatic click
+        overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        e.preventDefault();
       }
-
-      if (card && !overlay) {
-        card.classList.toggle('card-armed');
-        const toolName = card.dataset.toolName || 'Unknown';
-        analytics.trackToolClick(toolName);
-      }
-    };
-
-    grid._keyHandler = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const card = e.target.closest('.card-square');
-        if (!card) return;
-        const overlay = card.querySelector('.card-overlay-link');
-        if (overlay) {
-          overlay.click();
-          e.preventDefault();
-        }
-      }
-    };
+    }
+  };
 
     grid.addEventListener('click', grid._clickHandler);
     grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-  }
+ }
 };
 
 // =========================================
