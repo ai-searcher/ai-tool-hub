@@ -5,6 +5,50 @@
 // =========================================
 
 'use strict';
+// ======= DEBUG: globaler Error- und Fetch-Logger (temporär) =======
+window.addEventListener('error', (e) => {
+  try {
+    console.error('Global error event:', {
+      message: e.message,
+      filename: e.filename,
+      lineno: e.lineno,
+      colno: e.colno,
+      error: e.error
+    });
+  } catch (err) { console.error('error listener failed', err); }
+});
+
+window.addEventListener('unhandledrejection', (ev) => {
+  try {
+    const r = ev.reason;
+    console.error('Unhandled Promise Rejection (global) - enhanced:', {
+      name: r && r.name,
+      message: r && r.message,
+      stack: r && r.stack,
+      raw: r
+    });
+  } catch (err) { console.error('unhandledrejection logging failed', err); }
+});
+
+// Wrap fetch to log failing requests
+(function() {
+  if (!window.fetch) return;
+  const _origFetch = window.fetch;
+  window.fetch = async function(resource, init) {
+    try {
+      const res = await _origFetch(resource, init);
+      if (!res.ok) {
+        console.warn('Fetch non-ok:', { url: String(resource), status: res.status, statusText: res.statusText });
+      }
+      return res;
+    } catch (err) {
+      try {
+        console.error('Fetch failed:', { url: String(resource), error: err });
+      } catch (e) {}
+      throw err;
+    }
+  };
+})();
 
 // GLOBAL DEBUG: make unhandled promise rejections visible (helps locate "Unhandled Promise: TypeError" errors)
 window.addEventListener('unhandledrejection', (ev) => {
