@@ -1390,27 +1390,127 @@ body {
               border-color 0.35s ease !important;
 }
 
-/* Welleneffekt mit zufälligen Variationen */
-#tool-grid .card-square:nth-child(1), .tool-grid-squares .card-square:nth-child(1)  { animation-delay: 0s !important; }
-#tool-grid .card-square:nth-child(2), .tool-grid-squares .card-square:nth-child(2)  { animation-delay: 0.4s !important; }
-#tool-grid .card-square:nth-child(3), .tool-grid-squares .card-square:nth-child(3)  { animation-delay: 0.9s !important; }
-#tool-grid .card-square:nth-child(4), .tool-grid-squares .card-square:nth-child(4)  { animation-delay: 1.2s !important; }
-#tool-grid .card-square:nth-child(5), .tool-grid-squares .card-square:nth-child(5)  { animation-delay: 1.7s !important; }
-#tool-grid .card-square:nth-child(6), .tool-grid-squares .card-square:nth-child(6)  { animation-delay: 2.3s !important; }
-#tool-grid .card-square:nth-child(7), .tool-grid-squares .card-square:nth-child(7)  { animation-delay: 2.6s !important; }
-#tool-grid .card-square:nth-child(8), .tool-grid-squares .card-square:nth-child(8)  { animation-delay: 3.1s !important; }
-#tool-grid .card-square:nth-child(9), .tool-grid-squares .card-square:nth-child(9)  { animation-delay: 3.4s !important; }
-#tool-grid .card-square:nth-child(10), .tool-grid-squares .card-square:nth-child(10) { animation-delay: 4.0s !important; }
-#tool-grid .card-square:nth-child(11), .tool-grid-squares .card-square:nth-child(11) { animation-delay: 4.5s !important; }
-#tool-grid .card-square:nth-child(12), .tool-grid-squares .card-square:nth-child(12) { animation-delay: 4.8s !important; }
-#tool-grid .card-square:nth-child(13), .tool-grid-squares .card-square:nth-child(13) { animation-delay: 5.3s !important; }
-#tool-grid .card-square:nth-child(14), .tool-grid-squares .card-square:nth-child(14) { animation-delay: 5.9s !important; }
-#tool-grid .card-square:nth-child(15), .tool-grid-squares .card-square:nth-child(15) { animation-delay: 6.2s !important; }
-#tool-grid .card-square:nth-child(16), .tool-grid-squares .card-square:nth-child(16) { animation-delay: 6.7s !important; }
-#tool-grid .card-square:nth-child(17), .tool-grid-squares .card-square:nth-child(17) { animation-delay: 7.1s !important; }
-#tool-grid .card-square:nth-child(18), .tool-grid-squares .card-square:nth-child(18) { animation-delay: 7.6s !important; }
-#tool-grid .card-square:nth-child(19), .tool-grid-squares .card-square:nth-child(19) { animation-delay: 1.5s !important; }
-#tool-grid .card-square:nth-child(20), .tool-grid-squares .card-square:nth-child(20) { animation-delay: 3.8s !important; }
+/* Individuelle Breathing-Rhythmen - jedes Quadrat atmet separat */
+#tool-grid .card-square:nth-child(1), 
+.tool-grid-squares .card-square:nth-child(1)  { 
+  animation-delay: 0s !important; 
+  animation-duration: 7.5s !important; 
+}
+
+#tool-grid .card-square:nth-child(2), 
+.tool-grid-squares .card-square:nth-child(2)  { 
+  animation-delay: 0.4s !important; 
+  animation-duration: 8.2s !important; 
+}
+
+#tool-grid .card-square:nth-child(3), 
+.tool-grid-squares .card-square:nth-child(3)  { 
+  animation-delay: 0.9s !important; 
+  animation-duration: 7.8s !important; 
+}
+
+#tool-grid .card-square:nth-child(4), 
+.tool-grid-squares .card-square:nth-child(4)  { 
+  animation-delay: 1.2s !important; 
+  animation-duration: 8.5s !important; 
+}
+
+#tool-grid .card-square:nth-child(5), 
+.tool-grid-squares .card-square:nth-child(5)  { 
+  animation-delay: 1.7s !important; 
+  animation-duration: 7.3s !important; 
+}
+
+#tool-grid .card-square:nth-child(6), 
+.tool-grid-squares .card-square:nth-child(6)  { 
+  animation-delay: 2.3s !important; 
+  animation-duration: 8.7s !important; 
+}
+
+#tool-grid .card-square:nth-child(7), 
+.tool-grid-squares .card-square:nth-child(7)  { 
+  animation-delay: 2.6s !important; 
+  animation-duration: 7.9s !important; 
+}
+
+#tool-grid .card-square:nth-child(8), 
+.tool-grid-squares .card-square:nth-child(8)  { 
+  animation-delay: 3.1s !important; 
+  animation-duration: 8.1s !important; 
+}
+
+#tool-grid .card-square:nth-child(9), 
+.tool-grid-squares .card-square:nth-child(9)  { 
+  animation-delay: 3.4s !important; 
+  animation-duration: 7.6s !important; 
+}
+
+#tool-grid .card-square:nth-child(10), 
+.tool-grid-squares .card-square:nth-child(10) { 
+  animation-delay: 4.0s !important; 
+  animation-duration: 8.4s !important; 
+}
+
+#tool-grid .card-square:nth-child(11), 
+.tool-grid-squares .card-square:nth-child(11) { 
+  animation-delay: 4.5s !important; 
+  animation-duration: 7.7s !important; 
+}
+
+#tool-grid .card-square:nth-child(12), 
+.tool-grid-squares .card-square:nth-child(12) { 
+  animation-delay: 4.8s !important; 
+  animation-duration: 8.3s !important; 
+}
+
+#tool-grid .card-square:nth-child(13), 
+.tool-grid-squares .card-square:nth-child(13) { 
+  animation-delay: 5.3s !important; 
+  animation-duration: 7.4s !important; 
+}
+
+#tool-grid .card-square:nth-child(14), 
+.tool-grid-squares .card-square:nth-child(14) { 
+  animation-delay: 5.9s !important; 
+  animation-duration: 8.6s !important; 
+}
+
+#tool-grid .card-square:nth-child(15), 
+.tool-grid-squares .card-square:nth-child(15) { 
+  animation-delay: 6.2s !important; 
+  animation-duration: 7.2s !important; 
+}
+
+#tool-grid .card-square:nth-child(16), 
+.tool-grid-squares .card-square:nth-child(16) { 
+  animation-delay: 6.7s !important; 
+  animation-duration: 8.8s !important; 
+}
+
+#tool-grid .card-square:nth-child(17), 
+.tool-grid-squares .card-square:nth-child(17) { 
+  animation-delay: 7.1s !important; 
+  animation-duration: 7.5s !important; 
+}
+
+#tool-grid .card-square:nth-child(18), 
+.tool-grid-squares .card-square:nth-child(18) { 
+  animation-delay: 7.6s !important; 
+  animation-duration: 8.0s !important; 
+}
+
+#tool-grid .card-square:nth-child(19), 
+.tool-grid-squares .card-square:nth-child(19) { 
+  animation-delay: 1.5s !important; 
+  animation-duration: 7.8s !important; 
+}
+
+#tool-grid .card-square:nth-child(20), 
+.tool-grid-squares .card-square:nth-child(20) { 
+  animation-delay: 3.8s !important; 
+  animation-duration: 8.2s !important; 
+}
+
 
 /* Desktop: Hover-Effekt */
 @media (min-width: 768px) {
