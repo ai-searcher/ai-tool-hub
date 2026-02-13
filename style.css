@@ -1181,9 +1181,10 @@ body {
 .square-title { font-size:1.12rem; font-weight:700; color:var(--primary); line-height:1.25; transition:color 160ms ease; }
 .square-description { color:var(--text-dim); font-size:0.95rem; line-height:1.45; }
 
-/* Verstecke alte "Öffnen"-Buttons sicher (falls noch im HTML) */
-.card-link,
-.square-link { display: none !important; }
+/* Verstecke alte "Öffnen"-Buttons **nur** wenn sie explizit als legacy markiert sind.
+   Reason: globale Ausblendung kann funktionale Links/Buttons deaktivieren. */
+.card-link.legacy-hidden,
+.square-link.legacy-hidden { display: none !important; }
 
 /* Neural canvas niedriger halten */
 .neural-canvas { z-index: 0; opacity: 0.28; }
@@ -1652,6 +1653,8 @@ a:focus-visible {
     margin-bottom: 1rem;
   }
   
+}
+  
   /* =========================
    Card Visual Upgrade Pack
    (Paste at end of style.css)
@@ -1681,11 +1684,13 @@ a:focus-visible {
   border-radius: inherit;
   background: linear-gradient(90deg, rgba(0,243,255,0.06), rgba(124,77,255,0.04), rgba(0,243,255,0.06));
   padding: 1px;
-  -webkit-mask:
+    -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
+  /* WebKit expects xor, spec uses 'exclude' - keep both for max compatibility */
   -webkit-mask-composite: xor;
           mask-composite: exclude;
+  /* NOTE: If you see missing gradient-outline in Firefox, consider alternative approach or fallback background */
   pointer-events: none;
 }
 
