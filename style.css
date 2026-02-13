@@ -2140,3 +2140,61 @@ a:focus-visible {
 }
 
 /* ==================== END SMART COLOR FLOW ==================== */
+
+/* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
+
+/* Container: keine Höhe im Layout, Marken absolut platzieren,
+   pointer-events:none damit sie interaktionen nicht blockieren */
+.marquee-container {
+  position: relative;
+  width: 100%;
+  height: 0;              /* kein Platz im normalen Flow */
+  pointer-events: none;   /* keine Klicks abfangen */
+  z-index: 1000;
+}
+
+/* Jede marquee an exakt derselben Stelle: zentriert, transparent background */
+.marquee {
+  position: absolute;
+  left: 50%;
+  top: 10px; /* anpassen: Abstand vom oberen Rand des Header */
+  transform: translateX(-50%);
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  color: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;    /* optisch als Pill, aber transparent bg */
+  opacity: 0.98;
+  pointer-events: none;    /* nicht klickbar */
+  white-space: nowrap;
+  z-index: 1001;
+}
+
+/* Falls JS/toggling mehrere marquees sichtbar macht, erzwinge gleiche Position */
+.marquee-1, .marquee-2, .marquee-3 {
+  top: 10px; /* alle gleich */
+}
+
+/* Inhalte innerhalb marquees transparent halten (falls Markup enthält) */
+.marquee * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ===== Hide common dev/notice toasts (top-left "App OK - tools:20") =====
+   Versuch mehrere übliche Klassen/IDs abzudecken; falls dein JS eigene Klasse
+   nutzt, ergänze sie hier oder nutze den Optionalen JS-Remover unten. */
+.app-notice,
+.app-toast,
+.onboarding-toast,
+.site-notice,
+.toast,
+#app-notice,
+.notification-bubble,
+.notice {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
