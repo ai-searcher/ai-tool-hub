@@ -70,11 +70,22 @@ waitForTools() {
   setTimeout(() => clearInterval(check), 12000);
 }
   
-  start() {
+    start() {
+    // prevent double-initialization
+    if (this.started) return;
+
     this.canvas = document.getElementById('connection-canvas');
     if (!this.canvas) return;
     
     this.ctx = this.canvas.getContext('2d');
+    if (!this.ctx) {
+      console.warn('Color Flow: 2D context not available; aborting start().');
+      return;
+    }
+
+    // mark as started to avoid multiple initializations
+    this.started = true;
+
     this.setupCanvas();
     this.parseTools();
     this.calculateConnections();
@@ -88,7 +99,7 @@ waitForTools() {
     window.addEventListener('scroll', () => this.requestRedraw(), { passive: true });
     
     console.log('✅ Color Flow ready!', this.tools.length, 'tools');
-  }
+  } 
   
     setupCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -126,7 +137,10 @@ waitForTools() {
     });
   }
   
-  draw() {
+    draw() {
+    // defensive guard: ensure ctx and canvas are available
+    if (!this.ctx || !this.canvas) return;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     
     this.tools.forEach(tool => {
