@@ -1213,19 +1213,22 @@ body {
 
 /* Mobile tweaks are handled in dedicated mobile blocks below */
 
-/* ========= MARQUEE (FULLWIDTH NAHTLOS) ========= */
+/* ========= MARQUEE (FULLWIDTH OHNE FADE) ========= */
 .context-marquee {
   position: relative;
-  width: 100%;
-  height: 22px;                    /* ← Etwas kleiner */
+  width: 100%;                    /* ← Volle Breite */
+  height: 22px;
   overflow: hidden;
-  margin: 0;                       /* ← Kein margin */
+  margin: 0;                      /* ← Kein Margin */
+  padding: 0;                     /* ← Kein Padding */
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  /* ⬇️ ENTFERNT: mask-image (verursacht Fade) */
+  -webkit-mask-image: none;
+  mask-image: none;
   align-self: stretch;
-  flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
+  flex-shrink: 0;
 }
+
 
 /* Track enthält 2x die Sequenz für nahtlosen Loop */
 .context-marquee .marquee-track {
@@ -1323,12 +1326,13 @@ body {
   /* Marquee - 6px höher */
   .context-marquee {
     height: 21px !important;
-    width: calc(100% + 20px) !important;
-    margin-left: -10px !important;
-    margin-right: -10px !important;
-    margin-bottom: -10px !important;
+    width: 100% !important;              /* ← Normale Breite */
+    margin: 0 !important;                /* ← Kein Offset */
+    padding: 0 !important;               /* ← Kein Padding */
     order: 2 !important;
   }
+}
+
 
   .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
@@ -1760,25 +1764,12 @@ a:focus-visible {
   line-height: 26px;
 }
 
-/* side fading (preserve existing mask) */
+/* ⬇️ FADE DEAKTIVIERT - Text läuft bis zum Rand */
 .context-marquee::before,
 .context-marquee::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 36px;
-  pointer-events: none;
-  z-index: 3;
+  display: none;  /* ← Komplett ausblenden */
 }
-.context-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-card), transparent);
-}
-.context-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-card), transparent);
-}
+
 
 /* smoother slower on hover */
 .card-square:hover .context-marquee .marquee-track { animation-duration: 28s; }
