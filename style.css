@@ -113,7 +113,6 @@ body {
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
   position: relative;
-  z-index: 2200; /* Sicherstellen, dass Header über allen Karten/Overlays liegt */
 }
 
 /* Subtle Background Pattern */
@@ -1023,20 +1022,12 @@ body {
 }
 
 /* Overlay Link (gesamte Karte klickbar) */
-/* Default: keine Pointer-Events außerhalb von .card-square (sicherer Fallback) */
 .card-overlay-link {
   position: absolute;
   inset: 0;
   z-index: 1;
   cursor: pointer;
   text-decoration: none;
-  pointer-events: none; /* default neutralisieren: verhindert Abfangen von Klicks, wenn Overlay mal außerhalb der Karte landet */
-}
-
-/* Aktiv: nur wenn direkter Kindknoten von .card-square, dann darf es klicken */
-.card-square > .card-overlay-link {
-  pointer-events: auto;
-  z-index: 2; /* über Inhalt, aber unter globalen FABs/Legends */
 }
 
 /* Hover Effects */
@@ -1190,10 +1181,9 @@ body {
 .square-title { font-size:1.12rem; font-weight:700; color:var(--primary); line-height:1.25; transition:color 160ms ease; }
 .square-description { color:var(--text-dim); font-size:0.95rem; line-height:1.45; }
 
-/* Verstecke alte "Öffnen"-Buttons **nur** wenn sie explizit als legacy markiert sind.
-   Reason: globale Ausblendung kann funktionale Links/Buttons deaktivieren. */
-.card-link.legacy-hidden,
-.square-link.legacy-hidden { display: none !important; }
+/* Verstecke alte "Öffnen"-Buttons sicher (falls noch im HTML) */
+.card-link,
+.square-link { display: none !important; }
 
 /* Neural canvas niedriger halten */
 .neural-canvas { z-index: 0; opacity: 0.28; }
@@ -1662,8 +1652,6 @@ a:focus-visible {
     margin-bottom: 1rem;
   }
   
-}
-  
   /* =========================
    Card Visual Upgrade Pack
    (Paste at end of style.css)
@@ -1684,8 +1672,8 @@ a:focus-visible {
   backdrop-filter: blur(8px);
 }
 
-/* Gradient outline using pseudo-element for visual-upgrade only */
-.card-square.visual-upgrade::before {
+/* Gradient outline using pseudo-element (non-intrusive) */
+.card-square::before {
   content: "";
   position: absolute;
   inset: -1px;
@@ -1693,13 +1681,11 @@ a:focus-visible {
   border-radius: inherit;
   background: linear-gradient(90deg, rgba(0,243,255,0.06), rgba(124,77,255,0.04), rgba(0,243,255,0.06));
   padding: 1px;
-    -webkit-mask:
+  -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
-  /* WebKit expects xor, spec uses 'exclude' - keep both for max compatibility */
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  /* NOTE: If you see missing gradient-outline in Firefox, consider alternative approach or fallback background */
   pointer-events: none;
 }
 
@@ -1830,513 +1816,8 @@ a:focus-visible {
   .square-title-large { margin-left: 12px; font-size: 1rem; }
   .context-marquee { margin-left: 12px; margin-right: 12px; width: calc(100% - 24px); height: 22px; }
 }
+  
+}
 
 /* Misc safe rules kept as in original */
 /* End of corrected file */
-
-/* ==================== SMART COLOR FLOW SYSTEM ==================== */
-
-/* Connection Canvas */
-.connection-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Connection Active State — etwas niedriger als FAB */
-.card-square.connection-active {
-  transform: translateY(-6px) scale(1.05) !important;
-  box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5) !important;
-  z-index: 900 !important; /* bleibt hoch, aber unter FAB */
-  position: relative;
-}
-
-/* ensure toggle button can be clicked */
-.legend-toggle {
-  pointer-events: auto;
-}
-
-/* Connection Labels */
-.connection-labels {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 50;
-}
-
-.connection-label {
-  position: absolute;
-  transform: translate(-50%, -50%) scale(0.8);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
-}
-
-.connection-label.visible {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
-.label-content {
-  background: var(--bg-dark);
-  border: 2px solid var(--primary);
-  border-radius: 12px;
-  padding: 8px 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  min-width: 120px;
-}
-
-.label-content strong {
-  color: var(--primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: capitalize;
-}
-
-.label-content span {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-
-.label-type {
-  background: var(--primary);
-  color: var(--bg-dark);
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.7rem;
-}
-
-/* Floating Legend Button — zwingend oben */
-.color-legend-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 2100 !important; /* deutlich über 1000 */
-  pointer-events: auto;
-}
-
-.legend-toggle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, 
-    rgb(0,243,255) 0%, 
-    rgb(236,72,153) 50%, 
-    rgb(250,204,21) 100%);
-  border: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-}
-
-.legend-toggle:active {
-  transform: scale(0.95);
-}
-
-.legend-icon {
-  font-size: 1.8rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-/* Legend Panel */
-.color-legend-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--bg-dark);
-  border-radius: 24px 24px 0 0;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2150 !important; /* sits above cards and FAB */
-  max-height: 70vh;
-  overflow-y: auto;
-  box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
-}
-
-.color-legend-panel.active {
-  transform: translateY(0);
-}
-
-.legend-content {
-  padding: 0;
-}
-
-.legend-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  border-bottom: 2px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg-dark);
-  z-index: 1;
-}
-
-.legend-header h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, 
-    rgb(0,243,255), 
-    rgb(236,72,153));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.legend-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.legend-body {
-  padding: 20px;
-}
-
-.legend-section {
-  margin-bottom: 24px;
-}
-
-.legend-section h4 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-}
-
-.legend-line {
-  width: 40px;
-  height: 3px;
-  border-radius: 2px;
-  position: relative;
-}
-
-.legend-line.solid {
-  background: currentColor;
-}
-
-.legend-line.dashed {
-  background: linear-gradient(90deg, 
-    currentColor 0%, 
-    currentColor 50%, 
-    transparent 50%, 
-    transparent 100%);
-  background-size: 8px 3px;
-}
-
-.legend-line.dotted {
-  background: radial-gradient(circle, 
-    currentColor 40%, 
-    transparent 40%);
-  background-size: 6px 3px;
-  background-position: 0 center;
-}
-
-.legend-item span {
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-/* Onboarding Toast */
-.onboarding-toast {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 200;
-  max-width: 90%;
-}
-
-.onboarding-toast.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-.toast-content {
-  background: var(--bg-dark);
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  padding: 16px 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.toast-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-}
-
-.toast-text {
-  flex: 1;
-}
-
-.toast-text strong {
-  color: var(--primary);
-  font-size: 1rem;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.toast-text small {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-}
-
-/* Mobile Anpassungen */
-@media (max-width: 768px) {
-  .color-legend-fab {
-    bottom: 16px;
-    right: 16px;
-  }
-  
-  .legend-toggle {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .legend-icon {
-    font-size: 1.5rem;
-  }
-  
-  .connection-label {
-    max-width: 140px;
-  }
-  
-  .label-content {
-    padding: 6px 10px;
-    min-width: 100px;
-  }
-}
-
-/* ==================== END SMART COLOR FLOW ==================== */
-
-/* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
-
-/* Container: keine Höhe im Layout, Marken absolut platzieren,
-   pointer-events:none damit sie interaktionen nicht blockieren */
-.marquee-container {
-  position: relative;
-  width: 100%;
-  height: 0;              /* kein Platz im normalen Flow */
-  pointer-events: none;   /* keine Klicks abfangen */
-  z-index: 1000;
-}
-
-/* Jede marquee an exakt derselben Stelle: zentriert, transparent background */
-.marquee {
-  position: absolute;
-  left: 50%;
-  top: 10px; /* anpassen: Abstand vom oberen Rand des Header */
-  transform: translateX(-50%);
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-  color: inherit;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;    /* optisch als Pill, aber transparent bg */
-  opacity: 0.98;
-  pointer-events: none;    /* nicht klickbar */
-  white-space: nowrap;
-  z-index: 1001;
-}
-
-/* Falls JS/toggling mehrere marquees sichtbar macht, erzwinge gleiche Position */
-.marquee-1, .marquee-2, .marquee-3 {
-  top: 10px; /* alle gleich */
-}
-
-/* Inhalte innerhalb marquees transparent halten (falls Markup enthält) */
-.marquee * {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* ===== Hide common dev/notice toasts (top-left "App OK - tools:20") =====
-   Versuch mehrere übliche Klassen/IDs abzudecken; falls dein JS eigene Klasse
-   nutzt, ergänze sie hier oder nutze den Optionalen JS-Remover unten. */
-.app-notice,
-.app-toast,
-.onboarding-toast,
-.site-notice,
-.toast,
-#app-notice,
-.notification-bubble,
-.notice {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* ===========================
-   OVERRIDES: MARQUEE & NOTICES
-   (append this at end of style.css)
-   =========================== */
-
-/* 1) Debug / dev badge vollständig ausblenden (JS erstellt #debug-badge) */
-#debug-badge,
-.app-notice,
-.app-toast,
-.onboarding-toast,
-.site-notice,
-.toast,
-#app-notice,
-.notification-bubble,
-.notice {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* 2) Falls eine JS-Badge andere ID/Klasse nutzt: sehr breite Sicherung (nicht destruktiv) */
-[id^="debug"], [class*="toast"], [class*="notice"][role="status"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* 3) Entferne / neutralisiere Overlay-Links über dem Header/Titel */
-.header a.card-overlay-link,
-.header a.header-overlay,
-.header .overlay-link,
-.title > a,
-.header a[aria-hidden="true"] {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* 4) Einheitliche, pixelgenaue Position der Marquee innerhalb der Card
-   - nutzt exakt das Card-Innenpadding (18px desktop / 12px mobile)
-   - absolute Position, gleiche top/bottom für alle marquees
-   - kein eigener Hintergrund, keine Ränder, kein Schatten
-*/
-.card-square { position: relative; } /* ensure container is positioned */
-
-.card-square .context-marquee {
-  position: absolute !important;
-  left: 18px !important;               /* equal to card padding desktop */
-  right: 18px !important;
-  bottom: 14px !important;             /* konstante Y-Offset (feinjustierbar) */
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;     /* nicht klickbar */
-  z-index: 2 !important;
-  -webkit-mask-image: none !important; /* remove previous mask which can cause visible bars */
-  mask-image: none !important;
-}
-
-/* Track & sequence: no background, only text visible; ensure loop still works */
-.card-square .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  will-change: transform;
-  animation: elegantMarqueeFlow 18s linear infinite !important;
-  transform: translateZ(0); /* avoid subpixel weirdness */
-}
-
-.card-square .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-  padding: 0 1.5rem !important; /* spacing between segments */
-  min-width: 40% !important;     /* ensures visible continuous look */
-  pointer-events: none !important;
-}
-
-/* Remove side fade overlays that produce visible background bars */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after,
-.context-marquee::before,
-.context-marquee::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* 5) Mobile tweak: use smaller internal padding so marquee aligns with mobile card padding */
-@media (max-width: 767px) {
-  .card-square .context-marquee {
-    left: 12px !important;
-    right: 12px !important;
-    bottom: 12px !important;
-    height: 20px !important;
-  }
-  .card-square .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding: 0 1.2rem !important;
-    min-width: 45% !important;
-  }
-}
-
-/* 6) Accessibility: pausieren on focus or reduce motion respected */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-square .context-marquee .marquee-track {
-    animation: none !important;
-    transform: translateX(0) !important;
-  }
-}
-
-/* 7) Final safety: ensure no visible border/shadow from any marquee ancestor */
-.card-square,
-.card-square * {
-  background-clip: padding-box !important;
-  outline: none !important;
-}
-
-/* End of overrides */
