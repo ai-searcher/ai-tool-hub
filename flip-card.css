@@ -1,49 +1,50 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - Ultra-Simple Version
-   ══════════════════════════════════════════════════════════ */
+   FLIP CARD SYSTEM - GLITCH-FREE
+   Version: 2.0
+   ═══════════════════════════════════════════════════════════ */
 
-/* 3D Container */
+/* Flip Container */
 .card-square {
-  transform-style: preserve-3d !important;
-  transition: transform 0.6s ease !important;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
 /* Flipped State */
 .card-square.is-flipped {
   transform: rotateY(180deg) !important;
-  animation: none !important; /* Stop breathing */
+  animation: none !important; /* Deaktiviert breathing beim Flip */
 }
 
-/* Card Faces */
+/* Front & Back Faces */
 .card-face {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
-  top: 0;
-  left: 0;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
   border-radius: inherit;
 }
 
-/* Front */
+/* Front Face */
 .card-face-front {
   z-index: 2;
+  transform: rotateY(0deg);
 }
 
-/* Back */
+/* Back Face */
 .card-face-back {
+  z-index: 1;
   transform: rotateY(180deg);
-  background: var(--bg-card, #1A1E37);
-  border: 2px solid var(--primary, #00F3FF);
-  padding: 20px;
+  background: var(--bg-card);
+  border: 2px solid var(--primary);
+  padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   gap: 16px;
-  z-index: 1;
 }
 
 /* Close Button */
@@ -54,62 +55,93 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(0, 243, 255, 0.2);
-  border: 1px solid var(--primary, #00F3FF);
-  color: white;
-  font-size: 20px;
-  font-weight: 300;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
   transition: all 0.2s ease;
+  z-index: 10;
 }
 
 .card-back-close:hover {
-  background: var(--primary, #00F3FF);
-  color: var(--bg-dark, #0A0E27);
-  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary);
+  transform: scale(1.1);
 }
 
-/* Placeholder */
-.card-back-placeholder {
-  color: var(--text-dim, #A0A0B0);
-  text-align: center;
-  font-size: 0.95rem;
+.card-back-close:active {
+  transform: scale(0.95);
 }
 
-/* Mobile */
+/* Back Content */
+.card-back-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 100%;
+}
+
+.card-back-content h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-back-content p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Mobile Optimizations */
 @media (max-width: 767px) {
-  .card-square {
-    transition: transform 0.5s ease !important;
+  .card-square.is-flipped {
+    transform: rotateY(180deg) scale(1.05) !important;
   }
   
   .card-back-close {
     width: 40px;
     height: 40px;
-    font-size: 22px;
+    font-size: 1.8rem;
+  }
+  
+  .card-face-back {
+    padding: 20px;
   }
 }
 
-/* Reduced Motion */
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .card-square {
     transition: none !important;
   }
   
-  .card-square:not(.is-flipped) .card-face-back {
-    display: none;
+  .card-square.is-flipped {
+    transform: none !important;
   }
   
-  .card-square.is-flipped .card-face-front {
-    display: none;
-  }
-  
-  .card-square.is-flipped .card-face-back {
-    transform: none;
+  .card-face-back {
     position: relative;
+    transform: none;
   }
 }
+
+/* Verhindere Flip während Breathing */
+.card-square:not(.is-flipped) {
+  transform-origin: center center;
+}
+
+/* Z-Index Management */
+.card-square.is-flipped {
+  z-index: 1000 !important;
+  position: relative;
+}
+
+/* END FLIP CARD CSS */
