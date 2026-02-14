@@ -1233,8 +1233,6 @@ body {
   overflow: hidden;
   margin: 0;                       /* ← Kein margin */
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   align-self: stretch;
   flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
 }
@@ -2676,7 +2674,6 @@ a:focus-visible {
   overflow: hidden;
   margin: 0;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   align-self: stretch;
   flex-shrink: 0;
