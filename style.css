@@ -2655,8 +2655,88 @@ a:focus-visible {
 /* ================================================ */
 
 /* ═════════════════════════════════════════════════════════
-   FLIP CARD ADDON - Füge das ans ENDE deiner style.css ein
+   FLIP CARD ADDON - AKTUALISIERT MIT MARQUEE FIX
+   Füge das ans ENDE deiner style.css ein
    ════════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MARQUEE POSITION FIX
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 🔧 Fix: Card Face Front Struktur */
+.card-face-front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card-face-front .square-content-centered {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+/* 🔧 Fix: Marquee exakte Original-Position */
+.card-face-front .context-marquee {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-face-front .context-marquee .marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marqueeScroll 30s linear infinite;
+  will-change: transform;
+}
+
+.card-face-front .context-marquee .marquee-seq {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+/* Title & Badge */
+.card-face-front .square-title-large {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0 12px;
+  max-width: 90%;
+  word-wrap: break-word;
+  z-index: 2;
+}
+
+.card-face-front .square-category-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: var(--primary-dim);
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  z-index: 2;
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    3D FLIP CARD SYSTEM
@@ -2756,7 +2836,7 @@ a:focus-visible {
   max-height: 180px;
 }
 
-/* Scrollbar Styling für Description */
+/* Scrollbar Styling */
 .card-back-description::-webkit-scrollbar {
   width: 4px;
 }
@@ -2855,7 +2935,7 @@ a:focus-visible {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   TOUCH FEEDBACK - App.js Button Fix
+   TOUCH FEEDBACK
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 /* Touch Active State für Mobile */
@@ -2973,3 +3053,4 @@ button,
 /* ═════════════════════════════════════════════════════════
    END FLIP CARD ADDON
    ════════════════════════════════════════════════════════ */
+
