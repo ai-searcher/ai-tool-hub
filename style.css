@@ -2355,7 +2355,8 @@ a:focus-visible {
 /* End of overrides */
 
 /* === FINAL: Marquee wirklich rand-bis-rand (2mm extra Overscan) === */
-:root { --marquee-overscan: 8px; } /* ~2mm in CSS-Pixeln */
+:root { --marquee-overscan: 12px; } /* ~1mm näher zum Rand als 8px */
+
 
 .card-square .context-marquee {
   left: calc(-1 * var(--marquee-overscan)) !important;
