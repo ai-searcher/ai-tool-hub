@@ -2655,149 +2655,17 @@ a:focus-visible {
 /* ================================================ */
 
 /* ═════════════════════════════════════════════════════════
-   FLIP CARD ADDON - PERFEKTE MARQUEE POSITION
-   Füge das ans ENDE deiner style.css ein
+   FLIP CARD FIX - Keine verkehrten Texte
+   Ersetze dein flip-addon CSS damit
    ════════════════════════════════════════════════════════ */
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MARQUEE POSITION FIX - EXAKT WIE ORIGINAL
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* 🔧 Card Face Front muss relative bleiben */
-.card-face-front {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* 🔧 Content Container - WICHTIG für Marquee */
-.card-face-front .square-content-centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 100%;
-  gap: 0;
-  padding: 14px;
-  text-align: left;
-  position: relative;
-  z-index: 2;
-  overflow: visible;
-  box-sizing: border-box;
-}
-
-/* 🔧 MARQUEE - EXAKT WIE ORIGINAL (rand-bis-rand mit overscan) */
-.card-face-front .context-marquee {
-  position: absolute !important;
-  left: calc(-1 * var(--marquee-overscan, 12px)) !important;
-  right: calc(-1 * var(--marquee-overscan, 12px)) !important;
-  bottom: 0px !important;
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-  align-self: stretch;
-  flex-shrink: 0;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
-}
-
-/* 🔧 Marquee Track - Original Animation */
-.card-face-front .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  will-change: transform;
-  animation: elegantMarqueeFlow 15s linear infinite !important;
-  transform: translateZ(0);
-}
-
-/* 🔧 Marquee Sequence - Original Styling */
-.card-face-front .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255, 255, 255, 0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-  padding: 0 1.5rem !important;
-  min-width: 40% !important;
-  pointer-events: none !important;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-/* 🔧 Entferne Fade-Overlays (verursachen sichtbare Balken) */
-.card-face-front .context-marquee::before,
-.card-face-front .context-marquee::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* 🔧 Category Badge - Original Position */
-.card-face-front .square-category-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--primary);
-  background: var(--primary-dim);
-  padding: 5px 12px;
-  border-radius: 16px;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
-  align-self: flex-start;
-  margin: 0 0 8px 0;
-  flex-shrink: 0;
-}
-
-/* 🔧 Title - Original Position */
-.card-face-front .square-title-large {
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--text-primary);
-  margin: 0 0 auto 0;
-  padding: 0;
-  transition: color var(--transition-fast);
-  max-width: 100%;
-  word-wrap: break-word;
-  align-self: flex-start;
-  flex-shrink: 0;
-  display: block;
-}
-
-/* 🔧 Mobile Marquee Anpassung */
-@media (max-width: 767px) {
-  .card-face-front .context-marquee {
-    left: 0 !important;
-    right: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .card-face-front .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-left: 0 !important;
-    padding-right: 2rem !important;
-    min-width: 45% !important;
-  }
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   3D FLIP CARD SYSTEM
+   CORE FIX: Backface Visibility
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 /* 🔄 Card Container mit 3D Transform */
 .card-square {
-  transform-style: preserve-3d;
+  transform-style: preserve-3d !important;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
@@ -2817,19 +2685,21 @@ a:focus-visible {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
   border-radius: inherit;
   top: 0;
   left: 0;
 }
 
-/* 🔄 Front Face (Standard) */
+/* 🔄 Front Face - WICHTIG: Verstecke Rückseite */
 .card-face-front {
   z-index: 2;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
 }
 
-/* 🔄 Back Face (Details) */
+/* 🔄 Back Face - Leer für später */
 .card-face-back {
   transform: rotateY(180deg);
   background: var(--bg-card);
@@ -2837,121 +2707,23 @@ a:focus-visible {
   padding: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow-y: auto;
-  z-index: 1;
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   CARD BACK CONTENT STYLING
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* Header mit Titel */
-.card-back-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-/* Titel auf Rückseite */
-.card-back-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1.2;
-  margin-bottom: 6px;
-  padding-right: 32px;
-}
-
-/* Category Badge auf Rückseite */
-.card-back-category {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  letter-spacing: 0.05em;
-  background: var(--primary-dim);
-  padding: 4px 10px;
-  border-radius: 12px;
-  display: inline-block;
-}
-
-/* Beschreibung */
-.card-back-description {
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 12px 0;
-  flex: 1;
-  overflow-y: auto;
-  max-height: 180px;
-}
-
-/* Scrollbar Styling */
-.card-back-description::-webkit-scrollbar {
-  width: 4px;
-}
-
-.card-back-description::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-}
-
-.card-back-description::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-}
-
-.card-back-description::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Footer mit Buttons */
-.card-back-footer {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   BUTTONS
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-.card-back-button {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  gap: 4px;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
 }
 
-/* Primary Button (Öffnen) */
-.card-back-button-primary {
-  background: var(--primary);
-  color: var(--bg-dark);
-}
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BACK SIDE - Vorerst leer (Platzhalter)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-.card-back-button-primary:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 243, 255, 0.3);
-}
-
-.card-back-button-primary:active {
-  transform: translateY(0);
+.card-back-placeholder {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  opacity: 0.5;
 }
 
 /* Close Button (X) */
@@ -2988,38 +2760,112 @@ a:focus-visible {
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   TOUCH FEEDBACK
+   FRONT SIDE - Original Styling bleibt
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* Touch Active State für Mobile */
-.card-square.card-touch-active:not(.is-flipped),
-.card-touch-active:not(.is-flipped) {
-  transform: scale(0.98) !important;
-  transition: transform 0.15s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+.card-face-front {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-/* Focus States für Keyboard Navigation */
+.card-face-front .square-content-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  gap: 0;
+  padding: 14px;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Category Badge */
+.card-face-front .square-category-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  background: var(--primary-dim);
+  padding: 5px 12px;
+  border-radius: 16px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  align-self: flex-start;
+  margin: 0 0 8px 0;
+  flex-shrink: 0;
+}
+
+/* Title */
+.card-face-front .square-title-large {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0 0 auto 0;
+  padding: 0;
+  transition: color var(--transition-fast);
+  max-width: 100%;
+  word-wrap: break-word;
+  align-self: flex-start;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Marquee */
+.card-face-front .context-marquee {
+  position: absolute !important;
+  left: calc(-1 * var(--marquee-overscan, 12px)) !important;
+  right: calc(-1 * var(--marquee-overscan, 12px)) !important;
+  bottom: 0px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
+}
+
+.card-face-front .context-marquee .marquee-track {
+  display: inline-flex !important;
+  white-space: nowrap !important;
+  will-change: transform;
+  animation: elegantMarqueeFlow 15s linear infinite !important;
+}
+
+.card-face-front .context-marquee .marquee-seq {
+  display: inline-block !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 0.72rem !important;
+  line-height: 22px !important;
+  padding: 0 1.5rem !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOUCH & INTERACTION
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
 .card-square:focus-visible {
   outline: 2px solid rgba(0, 243, 255, 0.5);
   outline-offset: 4px;
-  z-index: 101;
 }
 
-/* Armed State */
-.card-square.card-armed:not(.is-flipped) {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
-}
-
-/* Prevent double-tap zoom on iOS */
 .card-square,
-.card-overlay-link,
 .card-back-button,
-.card-back-close,
-button,
-.search-clear,
-.retry-button {
+.card-back-close {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -3029,27 +2875,13 @@ button,
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 @media (max-width: 767px) {
+  .card-face-front .context-marquee {
+    left: 0 !important;
+    right: 0 !important;
+  }
+
   .card-face-back {
     padding: 14px;
-  }
-
-  .card-back-title {
-    font-size: 1rem;
-  }
-
-  .card-back-category {
-    font-size: 0.65rem;
-    padding: 3px 8px;
-  }
-
-  .card-back-description {
-    font-size: 0.82rem;
-    max-height: 140px;
-  }
-
-  .card-back-button {
-    padding: 8px 12px;
-    font-size: 0.85rem;
   }
 
   .card-back-close {
@@ -3063,7 +2895,6 @@ button,
    ACCESSIBILITY
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .card-square {
     transition: none !important;
@@ -3073,57 +2904,11 @@ button,
     transform: rotateY(0deg) !important;
   }
 
-  .card-face-back {
-    position: relative !important;
-    transform: none !important;
-    display: none;
-  }
-
-  .card-square.is-flipped .card-face-front {
-    display: none;
-  }
-
-  .card-square.is-flipped .card-face-back {
-    display: flex !important;
-  }
-
-  /* Marquee Stop bei Reduced Motion */
   .card-face-front .context-marquee .marquee-track {
     animation: none !important;
-    transform: translateX(0) !important;
   }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  .card-face-back {
-    border-width: 3px;
-  }
-
-  .card-back-close {
-    border-width: 2px;
-  }
-
-  .card-back-button-primary {
-    border: 2px solid var(--primary);
-  }
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MARQUEE ACCESSIBILITY
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* Pausieren bei Focus oder Armed State */
-.card-square:focus-within .card-face-front .context-marquee .marquee-track,
-.card-square.card-armed .card-face-front .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
-/* Slower on Hover */
-.card-square:hover .card-face-front .context-marquee .marquee-track {
-  animation-duration: 28s !important;
 }
 
 /* ═════════════════════════════════════════════════════════
-   END FLIP CARD ADDON
+   END FLIP CARD FIX
    ════════════════════════════════════════════════════════ */
