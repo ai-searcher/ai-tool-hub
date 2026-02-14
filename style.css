@@ -2392,4 +2392,17 @@ a:focus-visible {
   margin-left: 0 !important;
 }
 
+/* === FINAL ALIGN: Badge + Titel 3mm vom linken Kartenrand === */
+:root { --card-left-pad: 11px; } /* ~3mm */
+
+/* Der Wrapper definiert die linke Linie für alles */
+.card-square > .square-content-centered {
+  padding-left: var(--card-left-pad) !important;
+}
+
+/* Alte Offsets neutralisieren, damit beide wirklich bündig sind */
+.card-square .square-category-badge,
+.card-square .square-title-large {
+  margin-left: 0 !important;
+}
 
