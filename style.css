@@ -2405,3 +2405,68 @@ a:focus-visible {
 .card-square .square-title-large {
   margin-left: 0 !important;
 }
+
+/* === Ergänzungen für index.html ------------------------------------------------------------------------------------------------- */
+/* Baseline für state containers (loading / error / empty) */
+.state-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+  padding: var(--spacing-lg, 1.25rem);
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--text, #E6EEF3);
+}
+
+/* Spezifische Visuals für Zustände (sichtbar & konsistent) */
+.loading-state { background: transparent; }
+.error-state {
+  background: rgba(239,68,68,0.03);
+  border: 1px solid rgba(239,68,68,0.08);
+  color: var(--error, #ff6b6b);
+}
+.empty-state {
+  opacity: 0.95;
+  color: var(--text-dim, #9aa0ab);
+}
+
+/* Make sure state elements hide/show gracefully */
+.state-container[style*="display: none"], .state-container.hidden { display: none !important; }
+
+/* Canvas defaults: full-bleed, non-interactive (UI over elements) */
+.connection-canvas,
+.neural-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* keep behind interactive UI if needed; adjust if lines must overlay */
+}
+
+/* Header / hero offsets: ensure marquee container aligns inside header */
+.marquee-container {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: var(--marquee-height, 40px);
+  pointer-events: none;
+  display: block;
+}
+
+/* Small helper: ensure legend panel overlays correctly */
+.color-legend-panel#legend-panel,
+.color-legend-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1.25rem;
+  z-index: 1200;
+  max-width: 340px;
+  box-sizing: border-box;
+}
+
+/* Make sure tool-grid occupies flow-space (fallback) */
+.tool-grid { min-height: 320px; }
