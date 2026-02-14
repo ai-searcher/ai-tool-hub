@@ -293,7 +293,7 @@ const validator = {
           message: `Tool "${tool.title}": Rating ${tool.rating} is outside range ${min}-${max}`
         });
       }
-    };
+    }
     
     if (tool.title) {
       const { minLength, maxLength } = VALIDATION_RULES.ranges.title;
@@ -335,7 +335,7 @@ const validator = {
       console.log(`🔧 Auto-fix: Generated ID for "${fixed.title}"`);
     }
     
-    if (fixed.link && !fixed.link.match(/^https?:\/\/i)) {
+    if (fixed.link && !fixed.link.match(/^https?:\/\//i)) {
       fixed.link = 'https://' + fixed.link;
       console.log(`🔧 Auto-fix: Added https:// to "${fixed.title}"`);
     }
@@ -360,7 +360,7 @@ const validator = {
   
   detectCategory(tool) {
     const text = `${tool.title} ${tool.description || ''}`.toLowerCase();
-
+    
     const patterns = {
       text: ['chat', 'text', 'write', 'language', 'gpt', 'claude', 'conversation'],
       image: ['image', 'photo', 'art', 'visual', 'picture', 'midjourney', 'dall'],
