@@ -747,68 +747,44 @@ const ui = {
 
   // 🔄 FLIP CARD: Modified renderCard with Front/Back
   renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    const contextTexts = this.getContextText(tool);
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const contextTexts = this.getContextText(tool);
 
-    return `
-      <div class="card-square" 
-           data-tool-id="${this.escapeHtml(String(tool.id))}"
-           data-category="${this.escapeHtml(categoryName)}"
-           data-tool-name="${this.escapeHtml(tool.title)}"
-           data-href="${this.escapeHtml(tool.link)}"
-           tabindex="0"
-           role="article"
-           aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
+  // ⚠️ WICHTIG: Keine Back-Face hier! flip-card.js erstellt sie!
+  return `
+    <div class="card-square" 
+         data-tool-id="${this.escapeHtml(String(tool.id))}"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-href="${this.escapeHtml(tool.link)}"
+         data-description="${this.escapeHtml(tool.description || '')}"
+         data-rating="${this.escapeHtml(String(tool.rating || 0))}"
+         data-is-free="${this.escapeHtml(String(tool.is_free || false))}"
+         data-tags="${this.escapeHtml(JSON.stringify(tool.tags || []))}"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
 
-        <!-- FRONT SIDE -->
-        <div class="card-face card-face-front">
-          <div class="square-content-centered">
-            <div class="square-category-badge" aria-hidden="true">
-              ${this.escapeHtml(categoryDisplay)}
-            </div>
-            <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-              ${this.escapeHtml(tool.title)}
-            </h3>
-            <div class="context-marquee" aria-hidden="true">
-              <div class="marquee-track" role="presentation">
-                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              </div>
-            </div>
-          </div>
+      <!-- Content wird von flip-card.js in Front-Face gewrapped -->
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
         </div>
-
-        <!-- BACK SIDE (Details) -->
-        <div class="card-face card-face-back">
-          <button class="card-back-close" aria-label="Zurück" onclick="event.stopPropagation(); this.closest('.card-square').classList.remove('is-flipped');">
-            ✕
-          </button>
-
-          <div class="card-back-header">
-            <div>
-              <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
-              <div class="card-back-category">${this.escapeHtml(categoryDisplay)}</div>
-            </div>
-          </div>
-
-          <div class="card-back-description">
-            ${this.escapeHtml(tool.description || 'Keine Beschreibung verfügbar.')}
-          </div>
-
-          <div class="card-back-footer">
-            <a href="${this.escapeHtml(tool.link)}" 
-               target="_blank"
-               rel="noopener noreferrer"
-               class="card-back-button card-back-button-primary"
-               onclick="event.stopPropagation();">
-              Öffnen ↗
-            </a>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
           </div>
         </div>
       </div>
-    `;
-  },
+    </div>
+  `;
+}
+
 
   render() {
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -880,19 +856,19 @@ const ui = {
     let touchStartTime = 0;
     let touchStartTarget = null;
 
-    // 🔄 Click Handler with FLIP - FIXED
+    // Analytics Handler - KEIN FLIP! flip-card.js macht das!
 const clickHandler = (e) => {
   const card = e.target.closest('.card-square');
   if (!card) return;
 
-  // WICHTIG: Verhindere Event-Bubbling komplett
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
+  // ⚠️ WICHTIG: Kein preventDefault! flip-card.js braucht das Event!
+  // ⚠️ WICHTIG: Kein Flip-Toggle! flip-card.js macht das!
 
-  // Don't flip if clicking close button
-  if (e.target.closest('.card-back-close')) {
-    return;
+  // Ignore flipped cards & back-face elements
+  if (card.classList.contains('is-flipped') || 
+      e.target.closest('.card-back-close') ||
+      e.target.closest('.card-face-back')) {
+    return; // Let flip-card.js handle it
   }
 
   const toolName = card.dataset.toolName ||
@@ -900,7 +876,7 @@ const clickHandler = (e) => {
                    card.querySelector('.square-title-large')?.textContent ||
                    'Unknown';
 
-  // Analytics
+  // Analytics only
   try {
     if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
       analytics.trackToolClick(toolName);
@@ -909,15 +885,12 @@ const clickHandler = (e) => {
     console.warn('Analytics tracking failed', err);
   }
 
-  // 🔄 TOGGLE FLIP
-  card.classList.toggle('is-flipped');
-  console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
+  // ✅ KEIN FLIP HIER! flip-card.js übernimmt!
+  console.log(`📊 Analytics tracked: ${toolName}`);
 };
 
-// Throttle NACH der Funktion mit längerer Delay
-const throttledClickHandler = throttle(clickHandler, 300);
+// Kein Throttle nötig - flip-card.js hat eigenes
 
-    
     // Touch handlers
     const touchStartHandler = (e) => {
       const card = e.target.closest('.card-square');
@@ -964,23 +937,25 @@ const throttledClickHandler = throttle(clickHandler, 300);
       clickHandler(fakeEvent);
     };
 
-    // Store & attach
-    this.handlers.grid = {
-      click: clickHandler,
-      keydown: keyHandler,
-      touchstart: touchStartHandler,
-      touchend: touchEndHandler
-    };
+     // Store & attach
+this.handlers.grid = {
+  click: clickHandler,  // ← OHNE throttle!
+  keydown: keyHandler,
+  touchstart: touchStartHandler,
+  touchend: touchEndHandler
+};
 
-    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: false } : false;
+const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;  // ← passive: true!
 
-    grid.addEventListener('click', throttledClickHandler, true);
-    grid.addEventListener('keydown', keyHandler, passiveOption);
-    grid.addEventListener('touchstart', touchStartHandler, { passive: true });
-    grid.addEventListener('touchend', touchEndHandler, passiveOption);
+grid.addEventListener('click', clickHandler, false);  // ← capture: false, nicht true!
+grid.addEventListener('keydown', keyHandler, passiveOption);
+grid.addEventListener('touchstart', touchStartHandler, { passive: true });
+grid.addEventListener('touchend', touchEndHandler, passiveOption);
 
-    console.log('✅ Card handlers attached with flip support');
-  }
+console.log('✅ Card handlers attached (flip-card.js compatible)');
+
+  
+   }
 };
 
 // =========================================
