@@ -2654,3 +2654,322 @@ a:focus-visible {
 
 /* ================================================ */
 
+/* ═════════════════════════════════════════════════════════
+   FLIP CARD ADDON - Füge das ans ENDE deiner style.css ein
+   ════════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3D FLIP CARD SYSTEM
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 🔄 Card Container mit 3D Transform */
+.card-square {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* 🔄 Flipped State - 180° Drehung */
+.card-square.is-flipped {
+  transform: rotateY(180deg) !important;
+}
+
+/* 🔄 Disable Breathing während Flip */
+.card-square.is-flipped {
+  animation: none !important;
+}
+
+/* 🔄 Card Faces (Front & Back) */
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: inherit;
+  top: 0;
+  left: 0;
+}
+
+/* 🔄 Front Face (Standard) */
+.card-face-front {
+  z-index: 2;
+}
+
+/* 🔄 Back Face (Details) */
+.card-face-back {
+  transform: rotateY(180deg);
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CARD BACK CONTENT STYLING
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Header mit Titel */
+.card-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+/* Titel auf Rückseite */
+.card-back-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+  margin-bottom: 6px;
+  padding-right: 32px;
+}
+
+/* Category Badge auf Rückseite */
+.card-back-category {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  background: var(--primary-dim);
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* Beschreibung */
+.card-back-description {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 12px 0;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 180px;
+}
+
+/* Scrollbar Styling für Description */
+.card-back-description::-webkit-scrollbar {
+  width: 4px;
+}
+
+.card-back-description::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.card-back-description::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.card-back-description::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Footer mit Buttons */
+.card-back-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BUTTONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-back-button {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Primary Button (Öffnen) */
+.card-back-button-primary {
+  background: var(--primary);
+  color: var(--bg-dark);
+}
+
+.card-back-button-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 243, 255, 0.3);
+}
+
+.card-back-button-primary:active {
+  transform: translateY(0);
+}
+
+/* Close Button (X) */
+.card-back-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-size: 16px;
+  padding: 0;
+  font-weight: 400;
+}
+
+.card-back-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--primary);
+  transform: rotate(90deg) scale(1.1);
+  border-color: var(--primary);
+}
+
+.card-back-close:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOUCH FEEDBACK - App.js Button Fix
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Touch Active State für Mobile */
+.card-square.card-touch-active:not(.is-flipped),
+.card-touch-active:not(.is-flipped) {
+  transform: scale(0.98) !important;
+  transition: transform 0.15s ease !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Focus States für Keyboard Navigation */
+.card-square:focus-visible {
+  outline: 2px solid rgba(0, 243, 255, 0.5);
+  outline-offset: 4px;
+  z-index: 101;
+}
+
+/* Armed State */
+.card-square.card-armed:not(.is-flipped) {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* Prevent double-tap zoom on iOS */
+.card-square,
+.card-overlay-link,
+.card-back-button,
+.card-back-close,
+button,
+.search-clear,
+.retry-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE RESPONSIVE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@media (max-width: 767px) {
+  .card-face-back {
+    padding: 14px;
+  }
+
+  .card-back-title {
+    font-size: 1rem;
+  }
+
+  .card-back-category {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .card-back-description {
+    font-size: 0.82rem;
+    max-height: 140px;
+  }
+
+  .card-back-button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .card-back-close {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ACCESSIBILITY
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .card-square {
+    transition: none !important;
+  }
+
+  .card-square.is-flipped {
+    transform: rotateY(0deg) !important;
+  }
+
+  .card-face-back {
+    position: relative !important;
+    transform: none !important;
+    display: none;
+  }
+
+  .card-square.is-flipped .card-face-front {
+    display: none;
+  }
+
+  .card-square.is-flipped .card-face-back {
+    display: flex !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .card-face-back {
+    border-width: 3px;
+  }
+
+  .card-back-close {
+    border-width: 2px;
+  }
+
+  .card-back-button-primary {
+    border: 2px solid var(--primary);
+  }
+}
+
+/* ═════════════════════════════════════════════════════════
+   END FLIP CARD ADDON
+   ════════════════════════════════════════════════════════ */
