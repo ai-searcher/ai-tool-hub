@@ -968,6 +968,7 @@ body {
   -webkit-user-select: text;
   user-select: text;
   box-sizing: border-box;
+  z-index: 10 !important;
   /* Animation & Transition werden im SCHWEBEEFFEKT-Block definiert */
 }
 
