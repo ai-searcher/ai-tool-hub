@@ -1145,9 +1145,9 @@ const app = {
       console.log('🔄 Flip Card System active');
 
       try {
-        if (!window.appState) window.appState = state;
         window.dispatchEvent(new Event('quantum:ready'));
       } catch (e) {}
+
 
     } catch (error) {
       console.error('❌ CRITICAL ERROR:', error);
