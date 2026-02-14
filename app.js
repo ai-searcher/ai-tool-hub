@@ -745,70 +745,40 @@ const ui = {
     return div.innerHTML;
   },
 
-  // 🔄 FLIP CARD: Modified renderCard with Front/Back
-  renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    const contextTexts = this.getContextText(tool);
+  // Modified renderCard - NO Back-Face (flip-card.js creates it)
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const contextTexts = this.getContextText(tool);
 
-    return `
-      <div class="card-square" 
-           data-tool-id="${this.escapeHtml(String(tool.id))}"
-           data-category="${this.escapeHtml(categoryName)}"
-           data-tool-name="${this.escapeHtml(tool.title)}"
-           data-href="${this.escapeHtml(tool.link)}"
-           tabindex="0"
-           role="article"
-           aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
+  return `
+    <div class="card-square" 
+         data-tool-id="${this.escapeHtml(String(tool.id))}"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-href="${this.escapeHtml(tool.link)}"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
 
-        <!-- FRONT SIDE -->
-        <div class="card-face card-face-front">
-          <div class="square-content-centered">
-            <div class="square-category-badge" aria-hidden="true">
-              ${this.escapeHtml(categoryDisplay)}
-            </div>
-            <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-              ${this.escapeHtml(tool.title)}
-            </h3>
-            <div class="context-marquee" aria-hidden="true">
-              <div class="marquee-track" role="presentation">
-                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              </div>
-            </div>
-          </div>
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
         </div>
-
-        <!-- BACK SIDE (Details) -->
-        <div class="card-face card-face-back">
-          <button class="card-back-close" aria-label="Zurück" onclick="event.stopPropagation(); this.closest('.card-square').classList.remove('is-flipped');">
-            ✕
-          </button>
-
-          <div class="card-back-header">
-            <div>
-              <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
-              <div class="card-back-category">${this.escapeHtml(categoryDisplay)}</div>
-            </div>
-          </div>
-
-          <div class="card-back-description">
-            ${this.escapeHtml(tool.description || 'Keine Beschreibung verfügbar.')}
-          </div>
-
-          <div class="card-back-footer">
-            <a href="${this.escapeHtml(tool.link)}" 
-               target="_blank"
-               rel="noopener noreferrer"
-               class="card-back-button card-back-button-primary"
-               onclick="event.stopPropagation();">
-              Öffnen ↗
-            </a>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
           </div>
         </div>
       </div>
-    `;
-  },
+    </div>
+  `;
+}
+
 
   render() {
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
