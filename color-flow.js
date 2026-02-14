@@ -13,7 +13,7 @@ class SmartColorFlow {
       code:  { r: 139, g: 92,  b: 246 },
       video: { r: 239, g: 68,  b: 68  },
       audio: { r: 255, g: 107, b: 157 },
-      data:  { r: 29,  g: 233, b: 182 },  // <-- fehlender key (data)
+      data: { r: 29, g: 233, b: 182 },
       other: { r: 176, g: 190, b: 197 }
     };
   }
