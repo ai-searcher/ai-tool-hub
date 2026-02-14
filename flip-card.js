@@ -1,23 +1,27 @@
 /**
  * ═══════════════════════════════════════════════════════════
  * FLIP CARD SYSTEM - WITH PROGRESS BAR RATING
- * Version: 3.0 - Production Ready
+ * Version: 3.1 - Waits for quantum:ready event
  * ══════════════════════════════════════════════════════════
  */
 
 (function() {
   'use strict';
 
-  console.log('🔄 FlipCard v3.0 loading (Progress Bar Rating)...');
+  console.log('🔄 FlipCard v3.1 loading (quantum:ready sync)...');
 
   let isInitialized = false;
   let toolsData = [];
 
   function init() {
-    if (isInitialized) return;
+    if (isInitialized) {
+      console.log('⚠️ FlipCard: Already initialized, skipping');
+      return;
+    }
     
     const grid = document.querySelector('#tool-grid');
     if (!grid) {
+      console.warn('⚠️ FlipCard: Grid not found, retrying...');
       setTimeout(init, 100);
       return;
     }
@@ -25,7 +29,9 @@
     // Get tools data from app state
     if (window.appState && window.appState.tools) {
       toolsData = window.appState.tools;
-      console.log(`📦 Loaded ${toolsData.length} tools data`);
+      console.log(`📦 FlipCard: Loaded ${toolsData.length} tools data`);
+    } else {
+      console.warn('⚠️ FlipCard: No appState.tools found!');
     }
 
     // Prepare all cards
@@ -36,7 +42,7 @@
     document.addEventListener('keydown', handleKeydown);
 
     isInitialized = true;
-    console.log('✅ FlipCard v3.0 ready');
+    console.log('✅ FlipCard v3.1 ready');
   }
 
   /**
@@ -46,6 +52,8 @@
     const cards = document.querySelectorAll('.card-square');
     let prepared = 0;
 
+    console.log(`🔍 FlipCard: Found ${cards.length} cards`);
+
     cards.forEach(card => {
       if (!card.dataset.flipReady) {
         prepareCard(card);
@@ -53,7 +61,7 @@
       }
     });
 
-    console.log(`✅ ${prepared} cards prepared with progress bar rating`);
+    console.log(`✅ FlipCard: ${prepared} cards prepared with progress bar rating`);
   }
 
   /**
@@ -75,6 +83,8 @@
       link: card.dataset.href || '',
       tags: []
     };
+
+    console.log(`🔧 FlipCard: Preparing "${toolData.title}"`);
 
     // Wrap existing content
     const existingContent = card.innerHTML;
@@ -210,7 +220,7 @@
       const card = closeBtn.closest('.card-square');
       if (card) {
         card.classList.remove('is-flipped');
-        console.log('🔄 Card closed');
+        console.log('🔄 FlipCard: Card closed');
       }
       return;
     }
@@ -238,7 +248,7 @@
 
     // Flip
     card.classList.add('is-flipped');
-    console.log('🔄 Card flipped:', card.dataset.toolName || 'Unknown');
+    console.log('🔄 FlipCard: Card flipped:', card.dataset.toolName || 'Unknown');
   }
 
   /**
@@ -249,7 +259,7 @@
       const flipped = document.querySelectorAll('.card-square.is-flipped');
       if (flipped.length > 0) {
         flipped.forEach(card => card.classList.remove('is-flipped'));
-        console.log('🔄 All cards closed (ESC)');
+        console.log('🔄 FlipCard: All cards closed (ESC)');
       }
     }
   }
@@ -263,32 +273,57 @@
     return div.innerHTML;
   }
 
-  // Auto-start with delay for app.js
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(init, 500));
-  } else {
-    setTimeout(init, 500);
-  }
+  // ═══════════════════════════════════════════════════════════
+  // INITIALIZATION - Wait for quantum:ready event from app.js
+  // ═══════════════════════════════════════════════════════════
 
-  // Re-prepare after grid changes
-  const observer = new MutationObserver(() => {
+  let readyReceived = false;
+
+  // Listen for app.js ready signal
+  window.addEventListener('quantum:ready', () => {
+    console.log('🎯 FlipCard: Received quantum:ready event');
+    readyReceived = true;
+    setTimeout(init, 300);
+  });
+
+  // Fallback: If event doesn't fire within 3 seconds
+  setTimeout(() => {
+    if (!readyReceived && !isInitialized) {
+      console.warn('⚠️ FlipCard: quantum:ready not received, starting anyway...');
+      init();
+    }
+  }, 3000);
+
+  // ═══════════════════════════════════════════════════════════
+  // MUTATION OBSERVER - Re-prepare cards after grid changes
+  // ═══════════════════════════════════════════════════════════
+
+  const observer = new MutationObserver((mutations) => {
+    console.log('🔄 FlipCard: Grid mutation detected, re-preparing...');
     if (window.appState && window.appState.tools) {
       toolsData = window.appState.tools;
     }
     prepareAllCards();
   });
 
-  setTimeout(() => {
+  // Start observer
+  const startObserver = () => {
     const grid = document.querySelector('#tool-grid');
     if (grid) {
-      observer.observe(grid, { childList: true });
+      observer.observe(grid, { childList: true, subtree: true });
+      console.log('✅ FlipCard: Mutation observer started');
+    } else {
+      setTimeout(startObserver, 200);
     }
-  }, 1500);
+  };
+
+  // Start observer after short delay
+  setTimeout(startObserver, 1000);
 
 })();
 
 /**
  * ═══════════════════════════════════════════════════════════
- * END FLIP CARD SYSTEM
+ * END FLIP CARD SYSTEM v3.1
  * ══════════════════════════════════════════════════════════
  */
