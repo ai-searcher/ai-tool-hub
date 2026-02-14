@@ -1,532 +1,432 @@
 // =========================================
-// QUANTUM AI HUB — GRID-SYNCHRONIZED NETWORK
-// Version 6.0 - Exact Grid Size • Strong Glow
-// Canvas = Grid-Größe • Stärkere Linien • Perfekt synchronisiert
+// GRID SYNCHRONIZED NETWORK V7.0 ULTRA
+// Revolutionary Edition with:
+// - Extreme Neon Glow (3x stronger)
+// - Energy Particles (flowing through connections)
+// - Hover Interactions (reactive network)
+// - Gradient Lines (color transitions)
 // =========================================
 
-'use strict';
+(function() {
+  'use strict';
 
-class GridSynchronizedNetwork {
+  class GridSynchronizedNetworkUltra {
+    constructor() {
+      this.canvas = null;
+      this.ctx = null;
+      this.gridElement = null;
+      this.containerElement = null;
+      this.cards = [];
+      this.connections = [];
+      this.particles = [];
+      this.animationFrame = null;
+      this.resizeObserver = null;
+      this.hoveredCard = null;
+      this.isMobile = window.innerWidth < 768;
 
-  constructor() {
-    this.canvas = null;
-    this.ctx = null;
-    this.gridElement = null;
+      // Ultra Glow Settings (3x stronger!)
+      this.glowSettings = {
+        baseOpacity: 0.45,        // 3x stronger than v6
+        glowOpacity: 0.30,        // Extreme glow
+        lineWidth: 3.5,           // Thicker base
+        glowWidth: 15,            // Massive glow radius
+        pulseAmplitude: 0.20,     // Dramatic pulse (20%)
+        pulseSpeed: 0.0008,       // Slow, smooth pulse
+        glowAlpha: 0.7,           // Strong glow alpha
+        particleGlow: 25          // Particle glow radius
+      };
 
-    // State
-    this.tools = [];
-    this.connections = [];
-    this.animationFrame = null;
-    this.resizeObserver = null;
+      // Particle System
+      this.particleSettings = {
+        count: 40,                // Particles per connection
+        speed: 0.003,             // Movement speed
+        size: 3,                  // Particle size
+        glow: 20,                 // Particle glow
+        opacity: 0.9              // Particle opacity
+      };
 
-    // Performance
-    this.isMobile = this.detectMobile();
-    this.targetFPS = 60;
+      // Category Colors (for gradients)
+      this.categoryColors = {
+        text: { r: 0, g: 243, b: 255 },      // Cyan
+        image: { r: 236, g: 72, b: 153 },    // Pink
+        code: { r: 139, g: 92, b: 246 },     // Purple
+        video: { r: 239, g: 68, b: 68 },     // Red
+        audio: { r: 34, g: 197, b: 94 },     // Green
+        data: { r: 251, g: 191, b: 36 },     // Yellow
+        other: { r: 148, g: 163, b: 184 }    // Gray
+      };
 
-    // Configuration - STÄRKERE LINIEN!
-    this.config = {
-      maxConnectionsPerTool: this.isMobile ? 3 : 4,
-      maxDistance: this.isMobile ? 450 : 600,
-      minDistance: 120,
+      this.init();
+    }
 
-      // Stärkere visuelle Präsenz
-      lineWidth: this.isMobile ? 2 : 2.5,
-      glowWidth: this.isMobile ? 5 : 6,
-      baseOpacity: 0.28,        // Deutlich sichtbarer!
-      glowOpacity: 0.15,         // Starker Glow!
+    init() {
+      console.log('🚀 GridSynchronizedNetwork v7.0 ULTRA initialized');
 
-      pulseSpeed: 0.0015,
-      pulseAmplitude: 0.12,      // Stärkeres Pulsieren
+      window.addEventListener('quantum:ready', () => {
+        console.log('📡 Quantum ready event received');
+        setTimeout(() => this.setup(), 50);
+      });
 
-      categoryWeights: {
-        same: 4,
-        related: 2.5,
-        different: 0.3
-      },
+      if (document.readyState === 'complete') {
+        setTimeout(() => this.setup(), 100);
+      }
 
-      curveIntensity: this.isMobile ? 0.25 : 0.35
-    };
+      window.addEventListener('resize', () => this.handleResize());
 
-    // Farben - kräftiger!
-    this.colors = {
-      text: { base: '#00D4FF', glow: 'rgba(0, 212, 255, 0.5)' },
-      image: { base: '#E040FB', glow: 'rgba(224, 64, 251, 0.5)' },
-      code: { base: '#7C4DFF', glow: 'rgba(124, 77, 255, 0.5)' },
-      audio: { base: '#FF6B9D', glow: 'rgba(255, 107, 157, 0.5)' },
-      video: { base: '#448AFF', glow: 'rgba(68, 138, 255, 0.5)' },
-      data: { base: '#1DE9B6', glow: 'rgba(29, 233, 182, 0.5)' },
-      other: { base: '#B0BEC5', glow: 'rgba(176, 190, 197, 0.5)' }
-    };
+      // Hover detection
+      document.addEventListener('mouseover', (e) => this.handleHover(e));
+      document.addEventListener('mouseout', (e) => this.handleHoverOut(e));
+    }
 
-    this.relatedCategories = {
-      text: ['code', 'data'],
-      image: ['video'],
-      code: ['text', 'data'],
-      audio: ['video'],
-      video: ['image', 'audio'],
-      data: ['text', 'code']
-    };
-
-    // Init
-    this.init();
-  }
-
-  // =========================================
-  // INITIALIZATION
-  // =========================================
-
-  init() {
-    // Warte auf Grid-Element
-    const checkGrid = () => {
-      this.gridElement = document.getElementById('tool-grid') || 
-                         document.querySelector('.tool-grid-squares');
+    setup() {
+      this.gridElement = document.getElementById('tool-grid');
 
       if (!this.gridElement) {
-        setTimeout(checkGrid, 100);
+        console.warn('⚠️ Grid element not found, retrying...');
+        setTimeout(() => this.setup(), 500);
+        return;
+      }
+
+      this.containerElement = this.gridElement.parentElement;
+
+      if (!this.containerElement) {
+        console.error('❌ Container not found!');
         return;
       }
 
       this.setupCanvas();
-      this.observeGrid();
-      this.observeTools();
-      this.start();
+      this.scanTools();
+      this.generateConnections();
+      this.initParticles();
+      this.startAnimation();
 
-      console.log('✅ GridSynchronizedNetwork v6.0 initialized');
-      console.log(`📱 Mobile: ${this.isMobile}`);
-      console.log(`📐 Grid Size: ${this.gridElement.offsetWidth}x${this.gridElement.offsetHeight}`);
-    };
+      this.setupResizeObserver();
 
-    checkGrid();
-  }
-
-  detectMobile() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const isSmallScreen = window.innerWidth < 768;
-    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase());
-    return hasTouch || isSmallScreen || isMobileUA;
-  }
-
-  // =========================================
-  // CANVAS SETUP - EXAKTE GRID-GRÖSSE
-  // =========================================
-
-  setupCanvas() {
-    if (!this.gridElement) return;
-
-    // Erstelle Canvas wenn nicht vorhanden
-    if (!this.canvas) {
-      this.canvas = document.createElement('canvas');
-      this.canvas.id = 'grid-network-canvas';
-      this.canvas.className = 'connection-canvas';
-
-      // Canvas direkt VOR das Grid setzen (als Sibling)
-      this.gridElement.parentElement.insertBefore(this.canvas, this.gridElement);
-
-      this.ctx = this.canvas.getContext('2d', { 
-        alpha: true, 
-        desynchronized: true,
-        willReadFrequently: false 
-      });
+      console.log('✅ Ultra Network initialized successfully!');
+      console.log(\`📱 Mobile: \${this.isMobile}\`);
+      console.log(\`🕸️ Connections: \${this.connections.length}\`);
+      console.log(\`✨ Particles: \${this.particles.length}\`);
     }
 
-    // WICHTIG: Canvas hat EXAKT die gleiche Größe wie das Grid!
-    const gridRect = this.gridElement.getBoundingClientRect();
-    const gridStyles = window.getComputedStyle(this.gridElement);
-
-    // Grid-Position relativ zum Parent
-    const parent = this.gridElement.parentElement;
-    const parentRect = parent.getBoundingClientRect();
-
-    const dpr = this.isMobile 
-      ? Math.min(window.devicePixelRatio || 1, 2)
-      : Math.min(window.devicePixelRatio || 1, 2.5);
-
-    // Canvas EXAKT über dem Grid positionieren
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
-    this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
-    this.canvas.style.width = gridRect.width + 'px';
-    this.canvas.style.height = gridRect.height + 'px';
-    this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.zIndex = '0';
-
-    // Canvas-Größe mit DPR
-    this.canvas.width = gridRect.width * dpr;
-    this.canvas.height = gridRect.height * dpr;
-
-    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    this.ctx.imageSmoothingEnabled = true;
-    this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
-
-    // Parent braucht position: relative
-    if (window.getComputedStyle(parent).position === 'static') {
-      parent.style.position = 'relative';
-    }
-
-    console.log(`📐 Canvas: ${gridRect.width}x${gridRect.height}px`);
-  }
-
-  // =========================================
-  // GRID SIZE OBSERVER
-  // =========================================
-
-  observeGrid() {
-    if (!this.gridElement) return;
-
-    // ResizeObserver für Grid-Größenänderungen
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        if (entry.target === this.gridElement) {
-          // Grid hat sich geändert → Canvas neu positionieren
-          this.setupCanvas();
-          this.scanTools();
-        }
+    setupCanvas() {
+      if (!this.canvas) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.className = 'connection-canvas';
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.pointerEvents = 'none';
+        this.canvas.style.zIndex = '0';
+        this.containerElement.insertBefore(this.canvas, this.gridElement);
       }
-    });
 
-    this.resizeObserver.observe(this.gridElement);
+      const gridRect = this.gridElement.getBoundingClientRect();
+      const parentRect = this.containerElement.getBoundingClientRect();
 
-    // Window Resize
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        this.setupCanvas();
-        this.scanTools();
-      }, 150);
-    }, { passive: true });
+      this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
+      this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
+      this.canvas.style.width = gridRect.width + 'px';
+      this.canvas.style.height = gridRect.height + 'px';
 
-    // Scroll Handler
-    let scrollTimer = null;
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        this.setupCanvas(); // Position aktualisieren
-      }, 50);
-    }, { passive: true });
-  }
+      this.canvas.width = gridRect.width * window.devicePixelRatio;
+      this.canvas.height = gridRect.height * window.devicePixelRatio;
 
-  // =========================================
-  // TOOL OBSERVATION
-  // =========================================
+      this.ctx = this.canvas.getContext('2d', { alpha: true });
+      this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-  observeTools() {
-    let debounceTimer = null;
-
-    const scan = () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => this.scanTools(), 150);
-    };
-
-    // Initial scan
-    setTimeout(() => this.scanTools(), 200);
-
-    // Mutation Observer
-    const observer = new MutationObserver(() => scan());
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  scanTools() {
-    if (!this.canvas || !this.gridElement) return;
-
-    const elements = document.querySelectorAll('.card-square');
-
-    if (elements.length === 0) {
-      this.tools = [];
-      this.connections = [];
-      return;
+      console.log(\`📐 Canvas: \${gridRect.width}x\${gridRect.height}px\`);
     }
 
-    // Canvas-Position relativ zum Viewport
-    const canvasRect = this.canvas.getBoundingClientRect();
+    scanTools() {
+      const cardElements = this.gridElement.querySelectorAll('.card-square');
+      this.cards = [];
 
-    this.tools = Array.from(elements).map(el => {
-      const rect = el.getBoundingClientRect();
+      cardElements.forEach((el, index) => {
+        const rect = el.getBoundingClientRect();
+        const gridRect = this.gridElement.getBoundingClientRect();
+        const category = el.getAttribute('data-category') || 'other';
 
-      // Position RELATIV zum Canvas
-      return {
-        element: el,
-        category: el.dataset.category || 'other',
-        name: el.dataset.toolName || 
-              el.querySelector('.square-title-large')?.textContent || 
-              'Unknown',
-        center: {
-          x: (rect.left + rect.width / 2) - canvasRect.left,
-          y: (rect.top + rect.height / 2) - canvasRect.top
-        },
-        rect: rect
-      };
-    });
-
-    this.buildNetwork();
-  }
-
-  // =========================================
-  // NETWORK BUILDING
-  // =========================================
-
-  buildNetwork() {
-    this.connections = [];
-
-    if (this.tools.length < 2) return;
-
-    const usedPairs = new Set();
-
-    this.tools.forEach((tool) => {
-      const candidates = this.findBestConnections(tool);
-
-      candidates.slice(0, this.config.maxConnectionsPerTool).forEach(candidate => {
-        const pair1 = `${tool.name}-${candidate.tool.name}`;
-        const pair2 = `${candidate.tool.name}-${tool.name}`;
-
-        if (usedPairs.has(pair1) || usedPairs.has(pair2)) return;
-
-        usedPairs.add(pair1);
-        usedPairs.add(pair2);
-
-        const path = this.calculatePath(tool, candidate.tool);
-        const colors = this.colors[tool.category] || this.colors.other;
-
-        this.connections.push({
-          from: tool,
-          to: candidate.tool,
-          path: path,
-          color: colors.base,
-          glowColor: colors.glow,
-          score: candidate.score,
-          animationOffset: Math.random() * Math.PI * 2
+        this.cards.push({
+          element: el,
+          category: category,
+          x: rect.left - gridRect.left + rect.width / 2,
+          y: rect.top - gridRect.top + rect.height / 2,
+          width: rect.width,
+          height: rect.height,
+          index: index
         });
       });
-    });
 
-    console.log(`🕸️ Netzwerk: ${this.connections.length} Verbindungen (${this.tools.length} Tools)`);
-  }
-
-  findBestConnections(tool) {
-    const candidates = [];
-
-    this.tools.forEach(otherTool => {
-      if (tool === otherTool) return;
-
-      const distance = this.getDistance(tool.center, otherTool.center);
-
-      if (distance > this.config.maxDistance || distance < this.config.minDistance) return;
-
-      let score = 1000 - distance;
-
-      if (tool.category === otherTool.category) {
-        score += 400 * this.config.categoryWeights.same;
-      } else if (this.isRelatedCategory(tool.category, otherTool.category)) {
-        score += 200 * this.config.categoryWeights.related;
-      } else {
-        score += 50 * this.config.categoryWeights.different;
-      }
-
-      const distanceRatio = distance / this.config.maxDistance;
-      score *= (1 - distanceRatio * 0.4);
-
-      candidates.push({ tool: otherTool, score, distance });
-    });
-
-    return candidates.sort((a, b) => b.score - a.score);
-  }
-
-  isRelatedCategory(cat1, cat2) {
-    return this.relatedCategories[cat1]?.includes(cat2) || false;
-  }
-
-  getDistance(p1, p2) {
-    const dx = p2.x - p1.x;
-    const dy = p2.y - p1.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  // =========================================
-  // PATH CALCULATION
-  // =========================================
-
-  calculatePath(fromTool, toTool) {
-    const start = fromTool.center;
-    const end = toTool.center;
-
-    const dx = end.x - start.x;
-    const dy = end.y - start.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < 200) {
-      return [start, end];
+      console.log(\`🎯 Scanned \${this.cards.length} cards\`);
     }
 
-    const curveAmount = distance * this.config.curveIntensity;
-    const midX = (start.x + end.x) / 2;
-    const midY = (start.y + end.y) / 2;
+    generateConnections() {
+      this.connections = [];
 
-    const perpX = -dy / distance;
-    const perpY = dx / distance;
-
-    const offsetVariation = (Math.random() - 0.5) * 0.4 + 1;
-
-    const controlPoint = {
-      x: midX + perpX * curveAmount * offsetVariation,
-      y: midY + perpY * curveAmount * offsetVariation
-    };
-
-    return this.bezierToPoints(start, controlPoint, end, 25);
-  }
-
-  bezierToPoints(p0, p1, p2, steps = 25) {
-    const points = [];
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const mt = 1 - t;
-      points.push({
-        x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
-        y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y
+      // Same category connections
+      const categoryGroups = {};
+      this.cards.forEach(card => {
+        if (!categoryGroups[card.category]) {
+          categoryGroups[card.category] = [];
+        }
+        categoryGroups[card.category].push(card);
       });
-    }
-    return points;
-  }
 
-  // =========================================
-  // ANIMATION LOOP
-  // =========================================
+      Object.values(categoryGroups).forEach(group => {
+        if (group.length > 1) {
+          for (let i = 0; i < group.length - 1; i++) {
+            this.connections.push({
+              from: group[i],
+              to: group[i + 1],
+              type: 'alternative',
+              category: group[i].category
+            });
+          }
+        }
+      });
 
-  start() {
-    const animate = (timestamp) => {
-      this.draw(timestamp);
-      this.animationFrame = requestAnimationFrame(animate);
-    };
+      // Neighbor connections
+      this.cards.forEach((card, i) => {
+        const neighbors = this.cards.filter(other => {
+          if (other === card) return false;
+          const dx = Math.abs(other.x - card.x);
+          const dy = Math.abs(other.y - card.y);
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          return distance < 400 && distance > 50;
+        });
 
-    this.animationFrame = requestAnimationFrame(animate);
-  }
+        neighbors.slice(0, 2).forEach(neighbor => {
+          if (!this.connections.some(c => 
+            (c.from === card && c.to === neighbor) ||
+            (c.from === neighbor && c.to === card)
+          )) {
+            this.connections.push({
+              from: card,
+              to: neighbor,
+              type: 'workflow',
+              category: card.category
+            });
+          }
+        });
+      });
 
-  draw(timestamp) {
-    if (!this.ctx || !this.canvas) return;
-
-    const ctx = this.ctx;
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    if (this.connections.length === 0) return;
-
-    this.connections.forEach(conn => {
-      this.drawConnection(ctx, conn, timestamp);
-    });
-  }
-
-  drawConnection(ctx, conn, timestamp) {
-    if (!conn.path || conn.path.length < 2) return;
-
-    // Stärkeres Pulsieren
-    const pulse = Math.sin(timestamp * this.config.pulseSpeed + conn.animationOffset) * 0.5 + 0.5;
-    const pulseMultiplier = 1 + pulse * this.config.pulseAmplitude;
-
-    const opacity = this.config.baseOpacity * pulseMultiplier;
-    const glowOpacity = this.config.glowOpacity * pulseMultiplier;
-
-    // Starker Glow Layer
-    ctx.beginPath();
-    ctx.moveTo(conn.path[0].x, conn.path[0].y);
-    for (let i = 1; i < conn.path.length; i++) {
-      ctx.lineTo(conn.path[i].x, conn.path[i].y);
-    }
-    ctx.strokeStyle = conn.glowColor.replace(/[\d\.]+\)$/, `${glowOpacity})`);
-    ctx.lineWidth = this.config.glowWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-
-    // Main Line (kräftig!)
-    ctx.beginPath();
-    ctx.moveTo(conn.path[0].x, conn.path[0].y);
-    for (let i = 1; i < conn.path.length; i++) {
-      ctx.lineTo(conn.path[i].x, conn.path[i].y);
+      console.log(\`🕸️ Generated \${this.connections.length} connections\`);
     }
 
-    const r = parseInt(conn.color.slice(1, 3), 16);
-    const g = parseInt(conn.color.slice(3, 5), 16);
-    const b = parseInt(conn.color.slice(5, 7), 16);
+    initParticles() {
+      this.particles = [];
 
-    ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    ctx.lineWidth = this.config.lineWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-  }
+      this.connections.forEach((conn, connIndex) => {
+        const particleCount = this.particleSettings.count;
 
-  // =========================================
-  // PUBLIC API
-  // =========================================
+        for (let i = 0; i < particleCount; i++) {
+          this.particles.push({
+            connection: conn,
+            connectionIndex: connIndex,
+            progress: i / particleCount,  // Distributed along line
+            speed: this.particleSettings.speed * (0.8 + Math.random() * 0.4),
+            size: this.particleSettings.size * (0.7 + Math.random() * 0.6),
+            offset: Math.random() * Math.PI * 2  // For variation
+          });
+        }
+      });
 
-  destroy() {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
+      console.log(\`✨ Initialized \${this.particles.length} particles\`);
     }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
+
+    handleHover(e) {
+      const card = e.target.closest('.card-square');
+      if (card && card !== this.hoveredCard) {
+        this.hoveredCard = card;
+      }
     }
-    if (this.ctx) {
+
+    handleHoverOut(e) {
+      const card = e.target.closest('.card-square');
+      if (card === this.hoveredCard) {
+        this.hoveredCard = null;
+      }
+    }
+
+    isConnectionActive(connection) {
+      if (!this.hoveredCard) return true;
+
+      const hoveredCardData = this.cards.find(c => c.element === this.hoveredCard);
+      if (!hoveredCardData) return true;
+
+      return connection.from === hoveredCardData || connection.to === hoveredCardData;
+    }
+
+    drawGradientLine(from, to, color, isActive) {
+      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+
+      // Create color gradient
+      const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
+      const toColor = this.categoryColors[to.category] || this.categoryColors.other;
+
+      const activeMultiplier = isActive ? 1.5 : 0.3;
+      const baseOpacity = this.glowSettings.baseOpacity * activeMultiplier;
+      const glowOpacity = this.glowSettings.glowOpacity * activeMultiplier;
+
+      // Gradient stops
+      gradient.addColorStop(0, \`rgba(\${fromColor.r}, \${fromColor.g}, \${fromColor.b}, \${baseOpacity})\`);
+      gradient.addColorStop(0.5, \`rgba(\${Math.round((fromColor.r + toColor.r)/2)}, \${Math.round((fromColor.g + toColor.g)/2)}, \${Math.round((fromColor.b + toColor.b)/2)}, \${baseOpacity * 1.2})\`);
+      gradient.addColorStop(1, \`rgba(\${toColor.r}, \${toColor.g}, \${toColor.b}, \${baseOpacity})\`);
+
+      // Ultra Glow
+      const glowWidth = this.glowSettings.glowWidth * (isActive ? 1.5 : 1);
+      this.ctx.shadowBlur = glowWidth;
+      this.ctx.shadowColor = gradient;
+
+      // Draw line
+      this.ctx.strokeStyle = gradient;
+      this.ctx.lineWidth = this.glowSettings.lineWidth * (isActive ? 1.3 : 1);
+      this.ctx.lineCap = 'round';
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(from.x, from.y);
+      this.ctx.lineTo(to.x, to.y);
+      this.ctx.stroke();
+
+      // Extra glow layer
+      this.ctx.shadowBlur = glowWidth * 2;
+      this.ctx.globalAlpha = glowOpacity;
+      this.ctx.stroke();
+      this.ctx.globalAlpha = 1;
+
+      this.ctx.shadowBlur = 0;
+    }
+
+    drawParticle(particle, time) {
+      const conn = particle.connection;
+      const isActive = this.isConnectionActive(conn);
+
+      if (!isActive && Math.random() > 0.3) return; // Skip some particles on inactive
+
+      // Update position
+      particle.progress += particle.speed;
+      if (particle.progress > 1) particle.progress = 0;
+
+      // Calculate position on line
+      const x = conn.from.x + (conn.to.x - conn.from.x) * particle.progress;
+      const y = conn.from.y + (conn.to.y - conn.from.y) * particle.progress;
+
+      // Get color (interpolate between from and to)
+      const fromColor = this.categoryColors[conn.from.category] || this.categoryColors.other;
+      const toColor = this.categoryColors[conn.to.category] || this.categoryColors.other;
+
+      const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * particle.progress);
+      const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * particle.progress);
+      const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * particle.progress);
+
+      const activeMultiplier = isActive ? 2 : 0.5;
+      const opacity = this.particleSettings.opacity * activeMultiplier;
+
+      // Ultra Glow for particles
+      this.ctx.shadowBlur = this.glowSettings.particleGlow * activeMultiplier;
+      this.ctx.shadowColor = \`rgba(\${r}, \${g}, \${b}, \${opacity})\`;
+
+      // Draw particle
+      this.ctx.fillStyle = \`rgba(\${r}, \${g}, \${b}, \${opacity})\`;
+      this.ctx.beginPath();
+      this.ctx.arc(x, y, particle.size * (isActive ? 1.5 : 1), 0, Math.PI * 2);
+      this.ctx.fill();
+
+      // Extra glow
+      this.ctx.shadowBlur = this.glowSettings.particleGlow * 2 * activeMultiplier;
+      this.ctx.globalAlpha = 0.5;
+      this.ctx.fill();
+      this.ctx.globalAlpha = 1;
+
+      this.ctx.shadowBlur = 0;
+    }
+
+    animate(time) {
+      if (!this.ctx || !this.canvas) return;
+
+      // Clear
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Draw connections with gradients
+      this.connections.forEach(conn => {
+        const isActive = this.isConnectionActive(conn);
+        this.drawGradientLine(conn.from, conn.to, conn.category, isActive);
+      });
+
+      // Draw particles
+      this.particles.forEach(particle => {
+        this.drawParticle(particle, time);
+      });
+
+      this.animationFrame = requestAnimationFrame((t) => this.animate(t));
     }
-    console.log('🔴 GridSynchronizedNetwork destroyed');
-  }
 
-  refresh() {
-    this.scanTools();
-  }
-
-  setOpacity(value) {
-    this.config.baseOpacity = Math.max(0, Math.min(1, value));
-    this.config.glowOpacity = value * 0.5;
-  }
-
-  setMaxConnections(value) {
-    this.config.maxConnectionsPerTool = Math.max(1, Math.min(10, value));
-    this.buildNetwork();
-  }
-
-  getStats() {
-    return {
-      tools: this.tools.length,
-      connections: this.connections.length,
-      isMobile: this.isMobile,
-      canvasSize: this.canvas ? `${this.canvas.width}x${this.canvas.height}` : 'N/A',
-      gridSize: this.gridElement ? `${this.gridElement.offsetWidth}x${this.gridElement.offsetHeight}` : 'N/A'
-    };
-  }
-}
-
-// =========================================
-// AUTO-INITIALIZE
-// =========================================
-
-window.addEventListener('quantum:ready', () => {
-  console.log('🕸️ GridSynchronizedNetwork: Received quantum:ready event');
-
-  if (window.colorFlow) {
-    console.log('⚠️ ColorFlow already exists');
-    return;
-  }
-
-  setTimeout(() => {
-    try {
-      window.colorFlow = new GridSynchronizedNetwork();
-    } catch (error) {
-      console.error('❌ GridSynchronizedNetwork initialization failed:', error);
+    startAnimation() {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      this.animate(0);
     }
-  }, 300);
-});
 
-// Debug
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  window.debugColorFlow = () => {
-    if (!window.colorFlow) return;
-    const stats = window.colorFlow.getStats();
-    console.table(stats);
+    handleResize() {
+      this.isMobile = window.innerWidth < 768;
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => {
+        this.setupCanvas();
+        this.scanTools();
+        this.generateConnections();
+        this.initParticles();
+      }, 250);
+    }
+
+    setupResizeObserver() {
+      if (!this.gridElement) return;
+
+      this.resizeObserver = new ResizeObserver(() => {
+        this.setupCanvas();
+        this.scanTools();
+        this.generateConnections();
+        this.initParticles();
+      });
+
+      this.resizeObserver.observe(this.gridElement);
+    }
+
+    destroy() {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+      if (this.canvas && this.canvas.parentNode) {
+        this.canvas.parentNode.removeChild(this.canvas);
+      }
+    }
+  }
+
+  // Auto-initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.colorFlowNetwork = new GridSynchronizedNetworkUltra();
+    });
+  } else {
+    window.colorFlowNetwork = new GridSynchronizedNetworkUltra();
+  }
+
+  // Debug helper
+  window.debugColorFlow = function() {
+    const net = window.colorFlowNetwork;
+    if (!net) {
+      console.log('❌ Network not initialized');
+      return;
+    }
+    console.group('🎨 Color Flow Ultra Stats');
+    console.log('Cards:', net.cards.length);
+    console.log('Connections:', net.connections.length);
+    console.log('Particles:', net.particles.length);
+    console.log('Canvas:', net.canvas ? \`\${net.canvas.width}x\${net.canvas.height}\` : 'Not created');
+    console.log('Mobile:', net.isMobile);
+    console.log('Hovered:', net.hoveredCard ? 'Yes' : 'No');
+    console.groupEnd();
   };
-  console.log('🛠️ Debug: window.debugColorFlow() verfügbar');
-}
+
+})();
