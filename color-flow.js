@@ -1,52 +1,42 @@
 // =========================================
-// QUANTUM AI HUB — GRID-ATTACHED NETWORK FLOW
-// Version 5.0 - Fixed to Grid • Scrolls Together
-// Linien sind Teil des Grids und scrollen MIT!
+// QUANTUM AI HUB — GRID-SYNCHRONIZED NETWORK
+// Version 6.0 - Exact Grid Size • Strong Glow
+// Canvas = Grid-Größe • Stärkere Linien • Perfekt synchronisiert
 // =========================================
 
 'use strict';
 
-class GridAttachedNetworkFlow {
+class GridSynchronizedNetwork {
 
   constructor() {
-    // ✅ Verwende bestehendes Canvas ODER erstelle im Grid
-    this.canvas = this.findOrCreateCanvas();
-
-    if (!this.canvas) {
-      console.warn('⚠️ Canvas nicht verfügbar');
-      return;
-    }
-
-    this.ctx = this.canvas.getContext('2d', { 
-      alpha: true, 
-      desynchronized: true,
-      willReadFrequently: false 
-    });
+    this.canvas = null;
+    this.ctx = null;
+    this.gridElement = null;
 
     // State
     this.tools = [];
     this.connections = [];
     this.animationFrame = null;
-    this.lastUpdate = 0;
-    this.scrollContainer = null;
+    this.resizeObserver = null;
 
     // Performance
     this.isMobile = this.detectMobile();
     this.targetFPS = 60;
 
-    // Configuration
+    // Configuration - STÄRKERE LINIEN!
     this.config = {
       maxConnectionsPerTool: this.isMobile ? 3 : 4,
       maxDistance: this.isMobile ? 450 : 600,
       minDistance: 120,
 
-      lineWidth: this.isMobile ? 1.5 : 2,
-      glowWidth: this.isMobile ? 3 : 4,
-      baseOpacity: 0.15,
-      glowOpacity: 0.08,
+      // Stärkere visuelle Präsenz
+      lineWidth: this.isMobile ? 2 : 2.5,
+      glowWidth: this.isMobile ? 5 : 6,
+      baseOpacity: 0.28,        // Deutlich sichtbarer!
+      glowOpacity: 0.15,         // Starker Glow!
 
-      pulseSpeed: 0.0012,
-      pulseAmplitude: 0.08,
+      pulseSpeed: 0.0015,
+      pulseAmplitude: 0.12,      // Stärkeres Pulsieren
 
       categoryWeights: {
         same: 4,
@@ -57,18 +47,17 @@ class GridAttachedNetworkFlow {
       curveIntensity: this.isMobile ? 0.25 : 0.35
     };
 
-    // Farben
+    // Farben - kräftiger!
     this.colors = {
-      text: { base: '#00D4FF', glow: 'rgba(0, 212, 255, 0.3)' },
-      image: { base: '#E040FB', glow: 'rgba(224, 64, 251, 0.3)' },
-      code: { base: '#7C4DFF', glow: 'rgba(124, 77, 255, 0.3)' },
-      audio: { base: '#FF6B9D', glow: 'rgba(255, 107, 157, 0.3)' },
-      video: { base: '#448AFF', glow: 'rgba(68, 138, 255, 0.3)' },
-      data: { base: '#1DE9B6', glow: 'rgba(29, 233, 182, 0.3)' },
-      other: { base: '#B0BEC5', glow: 'rgba(176, 190, 197, 0.3)' }
+      text: { base: '#00D4FF', glow: 'rgba(0, 212, 255, 0.5)' },
+      image: { base: '#E040FB', glow: 'rgba(224, 64, 251, 0.5)' },
+      code: { base: '#7C4DFF', glow: 'rgba(124, 77, 255, 0.5)' },
+      audio: { base: '#FF6B9D', glow: 'rgba(255, 107, 157, 0.5)' },
+      video: { base: '#448AFF', glow: 'rgba(68, 138, 255, 0.5)' },
+      data: { base: '#1DE9B6', glow: 'rgba(29, 233, 182, 0.5)' },
+      other: { base: '#B0BEC5', glow: 'rgba(176, 190, 197, 0.5)' }
     };
 
-    // Kategorie-Beziehungen
     this.relatedCategories = {
       text: ['code', 'data'],
       image: ['video'],
@@ -78,94 +67,36 @@ class GridAttachedNetworkFlow {
       data: ['text', 'code']
     };
 
-    // Setup
-    this.setupCanvas();
-    this.observeTools();
-    this.start();
-
-    console.log('✅ GridAttachedNetworkFlow v5.0 initialized');
-    console.log(`📱 Mobile: ${this.isMobile}`);
+    // Init
+    this.init();
   }
 
   // =========================================
-  // CANVAS SETUP - ATTACHED TO GRID
+  // INITIALIZATION
   // =========================================
 
-  findOrCreateCanvas() {
-    // Versuche bestehendes Canvas zu finden
-    let canvas = document.getElementById('connection-canvas') || 
-                 document.querySelector('.connection-canvas');
+  init() {
+    // Warte auf Grid-Element
+    const checkGrid = () => {
+      this.gridElement = document.getElementById('tool-grid') || 
+                         document.querySelector('.tool-grid-squares');
 
-    if (canvas) {
-      console.log('✅ Canvas gefunden, repositioniere...');
-      this.repositionCanvas(canvas);
-      return canvas;
-    }
+      if (!this.gridElement) {
+        setTimeout(checkGrid, 100);
+        return;
+      }
 
-    // Erstelle neues Canvas im Grid-Container
-    console.log('⚠️ Canvas nicht gefunden, erstelle neues...');
-    return this.createCanvasInGrid();
-  }
+      this.setupCanvas();
+      this.observeGrid();
+      this.observeTools();
+      this.start();
 
-  repositionCanvas(canvas) {
-    // Finde Grid-Container
-    const grid = document.getElementById('tool-grid') || 
-                 document.querySelector('.tool-grid-squares');
+      console.log('✅ GridSynchronizedNetwork v6.0 initialized');
+      console.log(`📱 Mobile: ${this.isMobile}`);
+      console.log(`📐 Grid Size: ${this.gridElement.offsetWidth}x${this.gridElement.offsetHeight}`);
+    };
 
-    if (!grid) return;
-
-    const container = grid.parentElement;
-
-    // Canvas direkt VOR das Grid setzen (als Sibling)
-    if (canvas.parentElement !== container) {
-      container.insertBefore(canvas, grid);
-    }
-
-    // Stelle sicher, dass Canvas die richtigen Styles hat
-    canvas.style.position = 'absolute';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '0'; // Unter den Karten
-  }
-
-  createCanvasInGrid() {
-    const grid = document.getElementById('tool-grid') || 
-                 document.querySelector('.tool-grid-squares');
-
-    if (!grid) {
-      console.error('❌ Grid nicht gefunden!');
-      return null;
-    }
-
-    const container = grid.parentElement;
-
-    // Erstelle Canvas
-    const canvas = document.createElement('canvas');
-    canvas.id = 'connection-canvas';
-    canvas.className = 'connection-canvas';
-
-    // Styles für absolute Positionierung
-    canvas.style.position = 'absolute';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '0';
-
-    // Container muss position: relative haben
-    if (getComputedStyle(container).position === 'static') {
-      container.style.position = 'relative';
-    }
-
-    // Canvas VOR dem Grid einfügen
-    container.insertBefore(canvas, grid);
-
-    console.log('✅ Canvas im Grid erstellt');
-    return canvas;
+    checkGrid();
   }
 
   detectMobile() {
@@ -176,25 +107,104 @@ class GridAttachedNetworkFlow {
     return hasTouch || isSmallScreen || isMobileUA;
   }
 
+  // =========================================
+  // CANVAS SETUP - EXAKTE GRID-GRÖSSE
+  // =========================================
+
   setupCanvas() {
+    if (!this.gridElement) return;
+
+    // Erstelle Canvas wenn nicht vorhanden
+    if (!this.canvas) {
+      this.canvas = document.createElement('canvas');
+      this.canvas.id = 'grid-network-canvas';
+      this.canvas.className = 'connection-canvas';
+
+      // Canvas direkt VOR das Grid setzen (als Sibling)
+      this.gridElement.parentElement.insertBefore(this.canvas, this.gridElement);
+
+      this.ctx = this.canvas.getContext('2d', { 
+        alpha: true, 
+        desynchronized: true,
+        willReadFrequently: false 
+      });
+    }
+
+    // WICHTIG: Canvas hat EXAKT die gleiche Größe wie das Grid!
+    const gridRect = this.gridElement.getBoundingClientRect();
+    const gridStyles = window.getComputedStyle(this.gridElement);
+
+    // Grid-Position relativ zum Parent
+    const parent = this.gridElement.parentElement;
+    const parentRect = parent.getBoundingClientRect();
+
     const dpr = this.isMobile 
       ? Math.min(window.devicePixelRatio || 1, 2)
       : Math.min(window.devicePixelRatio || 1, 2.5);
 
-    // Canvas füllt den PARENT Container aus (nicht das ganze Viewport!)
-    const parent = this.canvas.parentElement;
-    if (!parent) return;
+    // Canvas EXAKT über dem Grid positionieren
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
+    this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
+    this.canvas.style.width = gridRect.width + 'px';
+    this.canvas.style.height = gridRect.height + 'px';
+    this.canvas.style.pointerEvents = 'none';
+    this.canvas.style.zIndex = '0';
 
-    const rect = parent.getBoundingClientRect();
-
-    this.canvas.width = rect.width * dpr;
-    this.canvas.height = rect.height * dpr;
-    this.canvas.style.width = '100%';
-    this.canvas.style.height = '100%';
+    // Canvas-Größe mit DPR
+    this.canvas.width = gridRect.width * dpr;
+    this.canvas.height = gridRect.height * dpr;
 
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
+
+    // Parent braucht position: relative
+    if (window.getComputedStyle(parent).position === 'static') {
+      parent.style.position = 'relative';
+    }
+
+    console.log(`📐 Canvas: ${gridRect.width}x${gridRect.height}px`);
+  }
+
+  // =========================================
+  // GRID SIZE OBSERVER
+  // =========================================
+
+  observeGrid() {
+    if (!this.gridElement) return;
+
+    // ResizeObserver für Grid-Größenänderungen
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target === this.gridElement) {
+          // Grid hat sich geändert → Canvas neu positionieren
+          this.setupCanvas();
+          this.scanTools();
+        }
+      }
+    });
+
+    this.resizeObserver.observe(this.gridElement);
+
+    // Window Resize
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        this.setupCanvas();
+        this.scanTools();
+      }, 150);
+    }, { passive: true });
+
+    // Scroll Handler
+    let scrollTimer = null;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        this.setupCanvas(); // Position aktualisieren
+      }, 50);
+    }, { passive: true });
   }
 
   // =========================================
@@ -203,87 +213,64 @@ class GridAttachedNetworkFlow {
 
   observeTools() {
     let debounceTimer = null;
-    let isScanning = false;
 
     const scan = () => {
-      if (isScanning) return;
-      isScanning = true;
-
-      requestAnimationFrame(() => {
-        const elements = document.querySelectorAll('.card-square');
-
-        if (elements.length === 0) {
-          this.tools = [];
-          this.connections = [];
-          isScanning = false;
-          return;
-        }
-
-        // WICHTIG: Positionen relativ zum Canvas-Parent berechnen!
-        const canvasParent = this.canvas.parentElement;
-        const canvasRect = canvasParent ? canvasParent.getBoundingClientRect() : { left: 0, top: 0 };
-
-        this.tools = Array.from(elements).map(el => {
-          const rect = el.getBoundingClientRect();
-
-          // Position RELATIV zum Canvas berechnen
-          return {
-            element: el,
-            category: el.dataset.category || 'other',
-            name: el.dataset.toolName || 
-                  el.querySelector('.square-title-large')?.textContent || 
-                  'Unknown',
-            center: {
-              x: rect.left + rect.width / 2 - canvasRect.left,
-              y: rect.top + rect.height / 2 - canvasRect.top
-            },
-            rect: rect
-          };
-        });
-
-        this.buildIntelligentNetwork();
-        isScanning = false;
-      });
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => this.scanTools(), 150);
     };
 
-    setTimeout(scan, 150);
+    // Initial scan
+    setTimeout(() => this.scanTools(), 200);
 
     // Mutation Observer
-    const observer = new MutationObserver(() => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(scan, 200);
-    });
+    const observer = new MutationObserver(() => scan());
 
     observer.observe(document.body, {
       childList: true,
       subtree: true
     });
+  }
 
-    // Resize Handler
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        this.setupCanvas();
-        scan();
-      }, 150);
-    }, { passive: true });
+  scanTools() {
+    if (!this.canvas || !this.gridElement) return;
 
-    // Scroll Handler - WICHTIG: Positionen NEU berechnen!
-    let scrollTimer = null;
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        scan(); // Positionen aktualisieren
-      }, 50); // Schneller als vorher, damit es smooth bleibt
-    }, { passive: true });
+    const elements = document.querySelectorAll('.card-square');
+
+    if (elements.length === 0) {
+      this.tools = [];
+      this.connections = [];
+      return;
+    }
+
+    // Canvas-Position relativ zum Viewport
+    const canvasRect = this.canvas.getBoundingClientRect();
+
+    this.tools = Array.from(elements).map(el => {
+      const rect = el.getBoundingClientRect();
+
+      // Position RELATIV zum Canvas
+      return {
+        element: el,
+        category: el.dataset.category || 'other',
+        name: el.dataset.toolName || 
+              el.querySelector('.square-title-large')?.textContent || 
+              'Unknown',
+        center: {
+          x: (rect.left + rect.width / 2) - canvasRect.left,
+          y: (rect.top + rect.height / 2) - canvasRect.top
+        },
+        rect: rect
+      };
+    });
+
+    this.buildNetwork();
   }
 
   // =========================================
-  // INTELLIGENT NETWORK BUILDING
+  // NETWORK BUILDING
   // =========================================
 
-  buildIntelligentNetwork() {
+  buildNetwork() {
     this.connections = [];
 
     if (this.tools.length < 2) return;
@@ -317,7 +304,7 @@ class GridAttachedNetworkFlow {
       });
     });
 
-    console.log(`🕸️ Netzwerk: ${this.connections.length} Verbindungen`);
+    console.log(`🕸️ Netzwerk: ${this.connections.length} Verbindungen (${this.tools.length} Tools)`);
   }
 
   findBestConnections(tool) {
@@ -410,8 +397,8 @@ class GridAttachedNetworkFlow {
   // =========================================
 
   start() {
-    const animate = (currentTime) => {
-      this.draw(currentTime);
+    const animate = (timestamp) => {
+      this.draw(timestamp);
       this.animationFrame = requestAnimationFrame(animate);
     };
 
@@ -419,6 +406,8 @@ class GridAttachedNetworkFlow {
   }
 
   draw(timestamp) {
+    if (!this.ctx || !this.canvas) return;
+
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -432,27 +421,26 @@ class GridAttachedNetworkFlow {
   drawConnection(ctx, conn, timestamp) {
     if (!conn.path || conn.path.length < 2) return;
 
+    // Stärkeres Pulsieren
     const pulse = Math.sin(timestamp * this.config.pulseSpeed + conn.animationOffset) * 0.5 + 0.5;
     const pulseMultiplier = 1 + pulse * this.config.pulseAmplitude;
 
     const opacity = this.config.baseOpacity * pulseMultiplier;
     const glowOpacity = this.config.glowOpacity * pulseMultiplier;
 
-    // Glow Layer
-    if (!this.isMobile || glowOpacity > 0.03) {
-      ctx.beginPath();
-      ctx.moveTo(conn.path[0].x, conn.path[0].y);
-      for (let i = 1; i < conn.path.length; i++) {
-        ctx.lineTo(conn.path[i].x, conn.path[i].y);
-      }
-      ctx.strokeStyle = conn.glowColor.replace(/[\d\.]+\)$/, `${glowOpacity})`);
-      ctx.lineWidth = this.config.glowWidth;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
+    // Starker Glow Layer
+    ctx.beginPath();
+    ctx.moveTo(conn.path[0].x, conn.path[0].y);
+    for (let i = 1; i < conn.path.length; i++) {
+      ctx.lineTo(conn.path[i].x, conn.path[i].y);
     }
+    ctx.strokeStyle = conn.glowColor.replace(/[\d\.]+\)$/, `${glowOpacity})`);
+    ctx.lineWidth = this.config.glowWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
 
-    // Main Line
+    // Main Line (kräftig!)
     ctx.beginPath();
     ctx.moveTo(conn.path[0].x, conn.path[0].y);
     for (let i = 1; i < conn.path.length; i++) {
@@ -478,12 +466,17 @@ class GridAttachedNetworkFlow {
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
     }
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    console.log('🔴 GridAttachedNetworkFlow destroyed');
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    if (this.ctx) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+    console.log('🔴 GridSynchronizedNetwork destroyed');
   }
 
   refresh() {
-    this.buildIntelligentNetwork();
+    this.scanTools();
   }
 
   setOpacity(value) {
@@ -493,7 +486,7 @@ class GridAttachedNetworkFlow {
 
   setMaxConnections(value) {
     this.config.maxConnectionsPerTool = Math.max(1, Math.min(10, value));
-    this.buildIntelligentNetwork();
+    this.buildNetwork();
   }
 
   getStats() {
@@ -501,7 +494,8 @@ class GridAttachedNetworkFlow {
       tools: this.tools.length,
       connections: this.connections.length,
       isMobile: this.isMobile,
-      canvasPosition: this.canvas.style.position
+      canvasSize: this.canvas ? `${this.canvas.width}x${this.canvas.height}` : 'N/A',
+      gridSize: this.gridElement ? `${this.gridElement.offsetWidth}x${this.gridElement.offsetHeight}` : 'N/A'
     };
   }
 }
@@ -511,7 +505,7 @@ class GridAttachedNetworkFlow {
 // =========================================
 
 window.addEventListener('quantum:ready', () => {
-  console.log('🕸️ GridAttachedFlow: Received quantum:ready event');
+  console.log('🕸️ GridSynchronizedNetwork: Received quantum:ready event');
 
   if (window.colorFlow) {
     console.log('⚠️ ColorFlow already exists');
@@ -520,13 +514,11 @@ window.addEventListener('quantum:ready', () => {
 
   setTimeout(() => {
     try {
-      window.colorFlow = new GridAttachedNetworkFlow();
-      console.log('✅ GridAttachedFlow ready');
-      console.log('📌 Canvas Position:', window.colorFlow.canvas.style.position);
+      window.colorFlow = new GridSynchronizedNetwork();
     } catch (error) {
-      console.error('❌ GridAttachedFlow initialization failed:', error);
+      console.error('❌ GridSynchronizedNetwork initialization failed:', error);
     }
-  }, 200);
+  }, 300);
 });
 
 // Debug
