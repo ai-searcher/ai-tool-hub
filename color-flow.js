@@ -1,15 +1,17 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V8.0 FIXED
-// Premium Edition - Bug Fixed
-// - Realtime instant hover
-// - HD crystal clear rendering
-// - Intelligent connection algorithm
+// GRID SYNCHRONIZED NETWORK V9.0 MOBILE ULTRA
+// Maximum Performance & Efficiency Edition
+// - Adaptive quality based on device
+// - Battery-aware rendering
+// - Touch-optimized
+// - Memory efficient
+// - FPS-adaptive
 // =========================================
 
 (function() {
   'use strict';
 
-  class GridSynchronizedNetworkUltra {
+  class GridSynchronizedNetworkMobile {
     constructor() {
       this.canvas = null;
       this.ctx = null;
@@ -20,30 +22,107 @@
       this.particles = [];
       this.animationFrame = null;
       this.resizeObserver = null;
+      this.intersectionObserver = null;
       this.hoveredCard = null;
       this.lastTime = 0;
       this.canvasWidth = 0;
       this.canvasHeight = 0;
-      this.isMobile = window.innerWidth < 768;
+      this.isVisible = true;
+      this.isLowPowerMode = false;
+      this.currentFPS = 60;
+      this.frameCount = 0;
+      this.lastFPSCheck = 0;
 
-      // Ultra Glow Settings
-      this.glowSettings = {
-        baseOpacity: 0.5,
-        glowOpacity: 0.35,
-        lineWidth: 4,
+      // Device Detection
+      this.isMobile = this.detectMobile();
+      this.isTablet = this.detectTablet();
+      this.supportsTouch = 'ontouchstart' in window;
+
+      // Adaptive Settings based on device
+      this.setupAdaptiveSettings();
+
+      this.activeConnections = new Map();
+
+      this.init();
+    }
+
+    detectMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+        || window.innerWidth < 768;
+    }
+
+    detectTablet() {
+      return /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768 && window.innerWidth < 1024;
+    }
+
+    setupAdaptiveSettings() {
+      // Base settings for desktop
+      let baseSettings = {
+        qualityMultiplier: 1.5,
+        particleCount: 30,
         glowWidth: 18,
-        hoverTransitionSpeed: 0.25,
-        particleGlow: 30
+        lineWidth: 4,
+        particleSize: 3.5,
+        hoverSpeed: 0.25,
+        particleEasing: 0.12,
+        connectionDistance: 350,
+        bridgeDistance: 400,
+        maxConnections: 2,
+        enableCircular: true,
+        enableBridges: true,
+        baseOpacity: 0.5,
+        glowOpacity: 0.35
       };
 
-      // Particle System
+      // Mobile optimizations
+      if (this.isMobile) {
+        baseSettings = {
+          qualityMultiplier: 1.0,      // 🔴 No HD on mobile
+          particleCount: 15,           // 🔴 50% fewer particles
+          glowWidth: 12,               // 🔴 Smaller glow
+          lineWidth: 3,                // 🔴 Thinner lines
+          particleSize: 2.5,           // 🔴 Smaller particles
+          hoverSpeed: 0.35,            // 🔴 Faster (less frames)
+          particleEasing: 0.15,        // 🔴 Faster
+          connectionDistance: 300,     // 🔴 Shorter distance
+          bridgeDistance: 350,         // 🔴 Shorter distance
+          maxConnections: 1,           // 🔴 Only 1 connection
+          enableCircular: false,       // 🔴 Disable circular
+          enableBridges: false,        // 🔴 Disable bridges
+          baseOpacity: 0.45,
+          glowOpacity: 0.30
+        };
+      }
+
+      // Tablet optimizations (middle ground)
+      if (this.isTablet) {
+        baseSettings.qualityMultiplier = 1.2;
+        baseSettings.particleCount = 20;
+        baseSettings.maxConnections = 2;
+        baseSettings.enableCircular = false;
+        baseSettings.enableBridges = true;
+      }
+
+      // Apply settings
+      this.settings = baseSettings;
+
+      // Glow Settings
+      this.glowSettings = {
+        baseOpacity: this.settings.baseOpacity,
+        glowOpacity: this.settings.glowOpacity,
+        lineWidth: this.settings.lineWidth,
+        glowWidth: this.settings.glowWidth,
+        hoverTransitionSpeed: this.settings.hoverSpeed,
+        particleGlow: this.settings.glowWidth * 1.5
+      };
+
+      // Particle Settings
       this.particleSettings = {
-        count: 30,
+        count: this.settings.particleCount,
         speed: 0.0025,
-        size: 3.5,
-        glow: 25,
+        size: this.settings.particleSize,
         opacity: 0.95,
-        easing: 0.12
+        easing: this.settings.particleEasing
       };
 
       // Category Colors
@@ -57,16 +136,19 @@
         other: { r: 148, g: 163, b: 184 }
       };
 
-      // HD Rendering (angepasst)
-      this.qualityMultiplier = 1.5; // 🔴 REDUZIERT von 2 auf 1.5 für bessere Performance
-
-      this.activeConnections = new Map();
-
-      this.init();
+      console.log(`📱 Device: ${this.isMobile ? 'Mobile' : this.isTablet ? 'Tablet' : 'Desktop'}`);
+      console.log(`⚙️ Quality: ${this.settings.qualityMultiplier}x`);
+      console.log(`✨ Particles: ${this.settings.particleCount} per connection`);
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v8.0 FIXED initialized');
+      console.log('🚀 GridSynchronizedNetwork v9.0 MOBILE ULTRA');
+
+      // Battery API
+      this.setupBatteryAPI();
+
+      // Visibility API (pause when hidden)
+      this.setupVisibilityAPI();
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -76,16 +158,61 @@
         setTimeout(() => this.setup(), 100);
       }
 
-      window.addEventListener('resize', () => this.handleResize());
+      // Debounced resize
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => this.handleResize(), 300);
+      }, { passive: true });
+    }
+
+    setupBatteryAPI() {
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+          this.updateBatteryStatus(battery);
+          battery.addEventListener('chargingchange', () => this.updateBatteryStatus(battery));
+          battery.addEventListener('levelchange', () => this.updateBatteryStatus(battery));
+        });
+      }
+    }
+
+    updateBatteryStatus(battery) {
+      // Enable low power mode if battery < 20% and not charging
+      const wasLowPower = this.isLowPowerMode;
+      this.isLowPowerMode = !battery.charging && battery.level < 0.2;
+
+      if (this.isLowPowerMode !== wasLowPower) {
+        console.log(`🔋 Low Power Mode: ${this.isLowPowerMode ? 'ON' : 'OFF'}`);
+
+        if (this.isLowPowerMode) {
+          // Reduce quality further
+          this.particleSettings.count = Math.max(5, this.particleSettings.count / 2);
+          this.glowSettings.glowWidth *= 0.7;
+        }
+      }
+    }
+
+    setupVisibilityAPI() {
+      document.addEventListener('visibilitychange', () => {
+        this.isVisible = !document.hidden;
+
+        if (!this.isVisible) {
+          console.log('👁️ Page hidden - pausing animation');
+          if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+          }
+        } else {
+          console.log('👁️ Page visible - resuming animation');
+          this.startAnimation();
+        }
+      }, { passive: true });
     }
 
     setup() {
-      console.log('🔧 Setup starting...');
-
       this.gridElement = document.getElementById('tool-grid');
 
       if (!this.gridElement) {
-        console.warn('⚠️ Grid not found, retrying...');
         setTimeout(() => this.setup(), 500);
         return;
       }
@@ -101,14 +228,14 @@
       this.scanTools();
       this.generateIntelligentConnections();
       this.initParticles();
-      this.setupHoverDetection();
+      this.setupInputDetection();
+      this.setupIntersectionObserver();
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Ultra Premium Network initialized!');
-      console.log(`🕸️ Intelligent Connections: ${this.connections.length}`);
-      console.log(`✨ HD Particles: ${this.particles.length}`);
-      console.log(`🎨 Quality: ${this.qualityMultiplier}x`);
+      console.log('✅ Mobile Ultra initialized!');
+      console.log(`🕸️ Connections: ${this.connections.length}`);
+      console.log(`✨ Particles: ${this.particles.length}`);
     }
 
     setupCanvas() {
@@ -119,13 +246,11 @@
         this.canvas.style.pointerEvents = 'none';
         this.canvas.style.zIndex = '1';
         this.containerElement.insertBefore(this.canvas, this.gridElement);
-        console.log('✅ Canvas created');
       }
 
       const gridRect = this.gridElement.getBoundingClientRect();
       const parentRect = this.containerElement.getBoundingClientRect();
 
-      // Store logical dimensions
       this.canvasWidth = gridRect.width;
       this.canvasHeight = gridRect.height;
 
@@ -134,8 +259,11 @@
       this.canvas.style.width = this.canvasWidth + 'px';
       this.canvas.style.height = this.canvasHeight + 'px';
 
-      // HD RENDERING - Fixed scaling
-      const hdRatio = window.devicePixelRatio * this.qualityMultiplier;
+      // Adaptive quality
+      const dpr = window.devicePixelRatio || 1;
+      const effectiveDPR = Math.min(dpr, 2); // Cap at 2x for performance
+      const hdRatio = effectiveDPR * this.settings.qualityMultiplier;
+
       this.canvas.width = this.canvasWidth * hdRatio;
       this.canvas.height = this.canvasHeight * hdRatio;
 
@@ -145,15 +273,11 @@
         willReadFrequently: false
       });
 
-      // WICHTIG: Scale NACH dem Kontext holen
       this.ctx.scale(hdRatio, hdRatio);
-
-      // HD Antialiasing
       this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = 'high';
+      this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
 
-      console.log(`📐 Canvas: ${this.canvasWidth}x${this.canvasHeight}px @ ${hdRatio}x DPR`);
-      console.log(`📐 Physical: ${this.canvas.width}x${this.canvas.height}px`);
+      console.log(`📐 Canvas: ${this.canvasWidth}x${this.canvasHeight} @ ${hdRatio}x`);
     }
 
     scanTools() {
@@ -176,46 +300,66 @@
         });
       });
 
-      console.log(`🎯 Scanned ${this.cards.length} cards`);
+      console.log(`🎯 Cards: ${this.cards.length}`);
     }
 
-    setupHoverDetection() {
-      // Direct event listeners
-      this.cards.forEach((card) => {
-        card.element.addEventListener('mouseenter', () => {
-          this.hoveredCard = card;
-        });
+    setupInputDetection() {
+      if (this.supportsTouch) {
+        // Touch events for mobile
+        this.cards.forEach((card) => {
+          card.element.addEventListener('touchstart', () => {
+            this.hoveredCard = card;
+          }, { passive: true });
 
-        card.element.addEventListener('mouseleave', () => {
-          if (this.hoveredCard === card) {
-            this.hoveredCard = null;
+          card.element.addEventListener('touchend', () => {
+            setTimeout(() => {
+              if (this.hoveredCard === card) {
+                this.hoveredCard = null;
+              }
+            }, 500); // Keep highlight for 500ms
+          }, { passive: true });
+        });
+      } else {
+        // Mouse events for desktop
+        this.cards.forEach((card) => {
+          card.element.addEventListener('mouseenter', () => {
+            this.hoveredCard = card;
+          }, { passive: true });
+
+          card.element.addEventListener('mouseleave', () => {
+            if (this.hoveredCard === card) {
+              this.hoveredCard = null;
+            }
+          }, { passive: true });
+        });
+      }
+    }
+
+    setupIntersectionObserver() {
+      // Pause animation when canvas is not visible
+      this.intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const wasVisible = this.isVisible;
+          this.isVisible = entry.isIntersecting;
+
+          if (!wasVisible && this.isVisible) {
+            this.startAnimation();
+          } else if (wasVisible && !this.isVisible) {
+            if (this.animationFrame) {
+              cancelAnimationFrame(this.animationFrame);
+              this.animationFrame = null;
+            }
           }
         });
-      });
+      }, { threshold: 0.1 });
 
-      // Fallback
-      document.addEventListener('mousemove', (e) => {
-        const el = document.elementFromPoint(e.clientX, e.clientY);
-        const card = el?.closest('.card-square');
-
-        if (card) {
-          const cardData = this.cards.find(c => c.element === card);
-          if (cardData) {
-            this.hoveredCard = cardData;
-          }
-        } else {
-          this.hoveredCard = null;
-        }
-      });
-
-      console.log('✅ Hover detection ready');
+      this.intersectionObserver.observe(this.canvas);
     }
 
     generateIntelligentConnections() {
       this.connections = [];
       const categoryGroups = {};
 
-      // Group by category
       this.cards.forEach(card => {
         if (!categoryGroups[card.category]) {
           categoryGroups[card.category] = [];
@@ -226,7 +370,6 @@
       // Layer 1: Same Category
       Object.entries(categoryGroups).forEach(([category, group]) => {
         if (group.length > 1) {
-          // Sort by position
           group.sort((a, b) => {
             if (Math.abs(a.y - b.y) < 100) {
               return a.x - b.x;
@@ -234,13 +377,12 @@
             return a.y - b.y;
           });
 
-          // Sequential connections
           for (let i = 0; i < group.length - 1; i++) {
             this.addConnection(group[i], group[i + 1], 'alternative', 1.0);
           }
 
-          // Circular (optional)
-          if (group.length > 3) {
+          // Circular only if enabled
+          if (this.settings.enableCircular && group.length > 3) {
             this.addConnection(group[0], group[group.length - 1], 'circular', 0.5);
           }
         }
@@ -251,10 +393,10 @@
         const nearby = this.cards
           .filter(other => {
             if (other === card || other.category === card.category) return false;
-            return this.getDistance(card, other) < 350;
+            return this.getDistance(card, other) < this.settings.connectionDistance;
           })
           .sort((a, b) => this.getDistance(card, a) - this.getDistance(card, b))
-          .slice(0, 2);
+          .slice(0, this.settings.maxConnections);
 
         nearby.forEach(neighbor => {
           if (!this.connectionExists(card, neighbor)) {
@@ -263,33 +405,35 @@
         });
       });
 
-      // Layer 3: Category Bridges
-      const categories = Object.keys(categoryGroups);
-      categories.forEach((catA, i) => {
-        categories.slice(i + 1).forEach(catB => {
-          const groupA = categoryGroups[catA];
-          const groupB = categoryGroups[catB];
+      // Layer 3: Bridges (if enabled)
+      if (this.settings.enableBridges) {
+        const categories = Object.keys(categoryGroups);
+        categories.forEach((catA, i) => {
+          categories.slice(i + 1).forEach(catB => {
+            const groupA = categoryGroups[catA];
+            const groupB = categoryGroups[catB];
 
-          let minDist = Infinity;
-          let closestPair = null;
+            let minDist = Infinity;
+            let closestPair = null;
 
-          groupA.forEach(cardA => {
-            groupB.forEach(cardB => {
-              const dist = this.getDistance(cardA, cardB);
-              if (dist < minDist && dist < 400) {
-                minDist = dist;
-                closestPair = [cardA, cardB];
-              }
+            groupA.forEach(cardA => {
+              groupB.forEach(cardB => {
+                const dist = this.getDistance(cardA, cardB);
+                if (dist < minDist && dist < this.settings.bridgeDistance) {
+                  minDist = dist;
+                  closestPair = [cardA, cardB];
+                }
+              });
             });
+
+            if (closestPair && !this.connectionExists(closestPair[0], closestPair[1])) {
+              this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.6);
+            }
           });
-
-          if (closestPair && !this.connectionExists(closestPair[0], closestPair[1])) {
-            this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.6);
-          }
         });
-      });
+      }
 
-      console.log(`🧠 Generated ${this.connections.length} intelligent connections`);
+      console.log(`🧠 Connections: ${this.connections.length}`);
     }
 
     getDistance(card1, card2) {
@@ -335,7 +479,7 @@
         }
       });
 
-      console.log(`✨ Initialized ${this.particles.length} particles`);
+      console.log(`✨ Particles: ${this.particles.length}`);
     }
 
     isConnectionActive(connection) {
@@ -392,10 +536,13 @@
       this.ctx.lineTo(to.x, to.y);
       this.ctx.stroke();
 
-      this.ctx.shadowBlur = glowWidth * 2.5;
-      this.ctx.globalAlpha = glowOpacity;
-      this.ctx.stroke();
-      this.ctx.globalAlpha = 1;
+      // Skip extra glow on low power mode
+      if (!this.isLowPowerMode) {
+        this.ctx.shadowBlur = glowWidth * 2.5;
+        this.ctx.globalAlpha = glowOpacity;
+        this.ctx.stroke();
+        this.ctx.globalAlpha = 1;
+      }
 
       this.ctx.shadowBlur = 0;
     }
@@ -404,6 +551,8 @@
       const conn = particle.connection;
       const activeState = this.activeConnections.get(conn) || 1;
 
+      // Aggressive culling on low power
+      if (this.isLowPowerMode && activeState < 0.5) return;
       if (activeState < 0.4 && Math.random() > activeState) return;
 
       particle.targetProgress += particle.speed;
@@ -435,23 +584,45 @@
       this.ctx.arc(x, y, particle.size * this.lerp(0.7, 1.4, activeState), 0, Math.PI * 2);
       this.ctx.fill();
 
-      this.ctx.shadowBlur = this.glowSettings.particleGlow * 2.5 * activeState;
-      this.ctx.globalAlpha = 0.6 * activeState;
-      this.ctx.fill();
-      this.ctx.globalAlpha = 1;
+      // Skip extra glow on mobile/low power
+      if (!this.isMobile && !this.isLowPowerMode) {
+        this.ctx.shadowBlur = this.glowSettings.particleGlow * 2.5 * activeState;
+        this.ctx.globalAlpha = 0.6 * activeState;
+        this.ctx.fill();
+        this.ctx.globalAlpha = 1;
+      }
 
       this.ctx.shadowBlur = 0;
     }
 
+    updateFPS(time) {
+      this.frameCount++;
+
+      if (time - this.lastFPSCheck > 1000) {
+        this.currentFPS = this.frameCount;
+        this.frameCount = 0;
+        this.lastFPSCheck = time;
+
+        // Adaptive quality based on FPS
+        if (this.currentFPS < 30 && !this.isMobile) {
+          console.warn(`⚠️ Low FPS detected: ${this.currentFPS}`);
+          // Reduce quality on the fly
+          this.particleSettings.count = Math.max(10, this.particleSettings.count - 5);
+        }
+      }
+    }
+
     animate(time) {
-      if (!this.ctx || !this.canvas) return;
+      if (!this.ctx || !this.canvas || !this.isVisible) return;
 
       const deltaTime = time - this.lastTime;
       this.lastTime = time;
 
+      // FPS monitoring
+      this.updateFPS(time);
+
       this.updateActiveStates();
 
-      // 🔴 FIXED: Use logical dimensions for clear
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
       // Draw connections
@@ -473,31 +644,33 @@
         cancelAnimationFrame(this.animationFrame);
       }
       this.lastTime = performance.now();
-      console.log('🎬 Animation started');
+      this.lastFPSCheck = this.lastTime;
+      this.frameCount = 0;
       this.animate(this.lastTime);
     }
 
     handleResize() {
-      this.isMobile = window.innerWidth < 768;
-      clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(() => {
-        this.setupCanvas();
-        this.scanTools();
-        this.generateIntelligentConnections();
-        this.initParticles();
-        this.setupHoverDetection();
-      }, 250);
+      this.isMobile = this.detectMobile();
+      this.isTablet = this.detectTablet();
+      this.setupAdaptiveSettings();
+      this.setupCanvas();
+      this.scanTools();
+      this.generateIntelligentConnections();
+      this.initParticles();
+      this.setupInputDetection();
     }
 
     setupResizeObserver() {
       if (!this.gridElement) return;
 
       this.resizeObserver = new ResizeObserver(() => {
-        this.setupCanvas();
-        this.scanTools();
-        this.generateIntelligentConnections();
-        this.initParticles();
-        this.setupHoverDetection();
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          this.setupCanvas();
+          this.scanTools();
+          this.generateIntelligentConnections();
+          this.initParticles();
+        }, 250);
       });
 
       this.resizeObserver.observe(this.gridElement);
@@ -510,6 +683,9 @@
       if (this.resizeObserver) {
         this.resizeObserver.disconnect();
       }
+      if (this.intersectionObserver) {
+        this.intersectionObserver.disconnect();
+      }
       if (this.canvas && this.canvas.parentNode) {
         this.canvas.parentNode.removeChild(this.canvas);
       }
@@ -519,10 +695,10 @@
   // Auto-initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      window.colorFlowNetwork = new GridSynchronizedNetworkUltra();
+      window.colorFlowNetwork = new GridSynchronizedNetworkMobile();
     });
   } else {
-    window.colorFlowNetwork = new GridSynchronizedNetworkUltra();
+    window.colorFlowNetwork = new GridSynchronizedNetworkMobile();
   }
 
   // Debug helper
@@ -532,13 +708,16 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v8.0 FIXED');
-    console.log('Cards:', net.cards.length);
+    console.group('🚀 Color Flow v9.0 MOBILE ULTRA');
+    console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
+    console.log('Touch:', net.supportsTouch ? 'Yes' : 'No');
+    console.log('Quality:', net.settings.qualityMultiplier + 'x');
+    console.log('Particles/Connection:', net.particleSettings.count);
+    console.log('Total Particles:', net.particles.length);
     console.log('Connections:', net.connections.length);
-    console.log('Particles:', net.particles.length);
-    console.log('Quality:', net.qualityMultiplier + 'x');
-    console.log('Canvas Logical:', net.canvasWidth + 'x' + net.canvasHeight);
-    console.log('Canvas Physical:', net.canvas.width + 'x' + net.canvas.height);
+    console.log('Current FPS:', net.currentFPS);
+    console.log('Low Power Mode:', net.isLowPowerMode ? 'ON 🔋' : 'OFF');
+    console.log('Visible:', net.isVisible ? 'Yes 👁️' : 'No');
     console.log('Hovered:', net.hoveredCard ? net.hoveredCard.category : 'None');
     console.groupEnd();
   };
