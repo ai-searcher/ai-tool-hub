@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - Standalone CSS
-   Version: 1.0
-   Nutzung: <link rel="stylesheet" href="flip-card.css">
+   FLIP CARD SYSTEM - Mobile-Optimized CSS
+   Version: 2.0 PERFORMANCE
+   Ultra-smooth für alle Geräte
    ══════════════════════════════════════════════════════════ */
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -9,58 +9,93 @@
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 :root {
-  --flip-duration: 0.6s;
-  --flip-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --flip-duration: 0.5s;
+  --flip-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* easeOutQuad - smooth */
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   3D CARD CONTAINER
+   3D CARD CONTAINER - Hardware Accelerated
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 .card-square {
+  /* 3D Context */
   transform-style: preserve-3d !important;
+  perspective: 1000px;
+  
+  /* Hardware Acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  
+  /* Smooth Transition */
   transition: transform var(--flip-duration) var(--flip-timing);
+  
+  /* Prevent flickering */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  
+  /* Position */
   position: relative;
+  overflow: visible !important; /* Wichtig für 3D */
 }
 
 /* Flipped State */
 .card-square.is-flipped {
-  transform: rotateY(180deg) !important;
+  transform: rotateY(180deg) translateZ(0) !important;
+  -webkit-transform: rotateY(180deg) translateZ(0) !important;
 }
 
-/* Disable Breathing während Flip */
-.card-square.is-flipped {
+/* Disable Breathing während Flip + Hover */
+.card-square.is-flipped,
+.card-square.is-flipping {
   animation: none !important;
+  pointer-events: none; /* Verhindert doppelte Clicks während Flip */
+}
+
+/* Re-enable nach Flip */
+.card-square.is-flipped {
+  pointer-events: auto;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   CARD FACES (Front & Back)
+   CARD FACES (Front & Back) - Optimized
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 .card-face {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
-  border-radius: inherit;
   top: 0;
   left: 0;
+  border-radius: inherit;
+  
+  /* Critical for smooth flip */
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  -moz-backface-visibility: hidden !important;
+  
+  /* Hardware Acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  
+  /* Prevent text rendering issues */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Front Face */
 .card-face-front {
   z-index: 2;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
   position: relative;
-  width: 100%;
-  height: 100%;
+  transform: rotateY(0deg) translateZ(1px);
+  -webkit-transform: rotateY(0deg) translateZ(1px);
 }
 
 /* Back Face */
 .card-face-back {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(1px);
+  -webkit-transform: rotateY(180deg) translateZ(1px);
   background: var(--bg-card, #1A1E37);
   border: 2px solid var(--border, #2A2E47);
   padding: 18px;
@@ -68,10 +103,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: auto; /* Falls Content zu lang */
+  -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
   z-index: 1;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -83,15 +117,16 @@
   color: var(--text-dim, #A0A0B0);
   font-size: 0.9rem;
   opacity: 0.5;
+  pointer-events: none;
 }
 
-/* Close Button */
+/* Close Button - Touch Optimized */
 .card-back-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 28px;
-  height: 28px;
+  top: 10px;
+  right: 10px;
+  width: 36px;  /* Größer für Touch */
+  height: 36px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -100,38 +135,95 @@
   justify-content: center;
   color: var(--text-secondary, #E0E0F0);
   cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 10;
-  font-size: 16px;
+  z-index: 100;
+  font-size: 18px;
   padding: 0;
   font-weight: 400;
+  
+  /* Touch Target Size (min 44x44px iOS) */
+  min-width: 44px;
+  min-height: 44px;
+  
+  /* Hardware Acceleration */
+  transform: translateZ(2px);
+  will-change: transform;
+  
+  /* Smooth Transition */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Touch Optimization */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .card-back-close:hover {
   background: rgba(255, 255, 255, 0.15);
   color: var(--primary, #00F3FF);
-  transform: rotate(90deg) scale(1.1);
+  transform: rotate(90deg) scale(1.1) translateZ(2px);
   border-color: var(--primary, #00F3FF);
 }
 
 .card-back-close:active {
-  transform: rotate(90deg) scale(0.95);
+  transform: rotate(90deg) scale(0.95) translateZ(2px);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MOBILE RESPONSIVE
+   MOBILE RESPONSIVE - Performance First
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 @media (max-width: 767px) {
+  :root {
+    --flip-duration: 0.4s; /* Schneller auf Mobile */
+  }
+  
+  .card-square {
+    /* Reduced motion für schwächere Geräte */
+    transition: transform 0.4s ease-out;
+  }
+  
   .card-face-back {
     padding: 14px;
+    font-size: 0.9rem;
   }
 
   .card-back-close {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 16px;
+    top: 8px;
+    right: 8px;
   }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOUCH OPTIMIZATIONS - iOS/Android
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Prevent double-tap zoom */
+.card-square,
+.card-face,
+.card-back-close {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Smooth touch feedback */
+.card-square:active:not(.is-flipped):not(.is-flipping) {
+  transform: scale(0.98) translateZ(0);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LOADING STATE - Prevent FOUC
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-square:not(.flip-ready) .card-face-back {
+  display: none !important;
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -143,34 +235,38 @@
   outline-offset: 4px;
 }
 
-.card-square,
-.card-back-close {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Reduced Motion */
+/* Reduced Motion - Fallback ohne 3D */
 @media (prefers-reduced-motion: reduce) {
   .card-square {
-    transition: none !important;
+    transition: opacity 0.3s ease !important;
+    transform: none !important;
   }
 
   .card-square.is-flipped {
-    transform: rotateY(0deg) !important;
-  }
-
-  .card-face-back {
-    position: relative !important;
     transform: none !important;
-    display: none;
+  }
+  
+  /* Instant switch statt 3D flip */
+  .card-face-front {
+    opacity: 1;
+    transition: opacity 0.15s ease;
+  }
+  
+  .card-face-back {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    transform: none !important;
+    position: absolute;
   }
 
   .card-square.is-flipped .card-face-front {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .card-square.is-flipped .card-face-back {
-    display: flex !important;
+    opacity: 1;
+    position: relative;
   }
 }
 
@@ -183,6 +279,21 @@
   .card-back-close {
     border-width: 2px;
   }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PERFORMANCE OPTIMIZATIONS
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Remove will-change after flip */
+.card-square:not(.is-flipping):not(.is-flipped) {
+  will-change: auto;
+}
+
+/* Optimize repaints */
+.card-square * {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* ═══════════════════════════════════════════════════════════
