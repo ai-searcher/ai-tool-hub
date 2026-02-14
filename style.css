@@ -2525,3 +2525,35 @@ a:focus-visible {
 .debug .connection-canvas {
   outline: 2px dashed rgba(255, 0, 0, 0.3);
 }
+
+/* =========================================
+   COLOR FLOW Z-INDEX FIX
+   (Am Ende der Datei hinzugefügt)
+   ========================================= */
+
+/* Canvas - Sichtbar über Container Background */
+.connection-canvas {
+  position: absolute !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  top: 0;
+  left: 0;
+}
+
+/* Grid - Über Canvas aber unter Squares */
+#tool-grid {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Squares - Ganz oben */
+.card-square {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Container - Basis-Layer */
+.main .container {
+  position: relative !important;
+  /* Kein z-index - bleibt bei auto/0 */
+}
