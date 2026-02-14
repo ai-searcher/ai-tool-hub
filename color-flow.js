@@ -1,51 +1,73 @@
 // =========================================
-// QUANTUM AI HUB — INTELLIGENT COLOR FLOW
-// Production Ready Version 2.0
-// Smart Routing • Performance Optimized • Zero Text Occlusion
+// QUANTUM AI HUB — ULTIMATE NETWORK FLOW
+// Version 4.0 - Always-On Neural Network
+// Mobile First • Full Performance • Permanent Network
 // =========================================
 
 'use strict';
 
-class IntelligentColorFlow {
+class UltimateNetworkFlow {
 
   constructor() {
-    // ✅ Verwende bestehendes Canvas aus HTML (kein Duplikat!)
+    // ✅ Verwende bestehendes Canvas
     this.canvas = document.getElementById('connection-canvas') || 
                   document.querySelector('.connection-canvas') ||
                   this.createFallbackCanvas();
 
     if (!this.canvas) {
-      console.warn('⚠️ Canvas nicht verfügbar, ColorFlow deaktiviert');
+      console.warn('⚠️ Canvas nicht verfügbar');
       return;
     }
 
-    this.ctx = this.canvas.getContext('2d', { alpha: true, desynchronized: true });
+    this.ctx = this.canvas.getContext('2d', { 
+      alpha: true, 
+      desynchronized: true,
+      willReadFrequently: false 
+    });
 
     // State
     this.tools = [];
-    this.activeConnections = [];
+    this.connections = [];
     this.animationFrame = null;
     this.lastUpdate = 0;
     this.isInitialized = false;
 
-    // Configuration
+    // Performance
+    this.isMobile = this.detectMobile();
+    this.targetFPS = 60; // Volle Power!
+    this.frameInterval = 1000 / this.targetFPS;
+
+    // Configuration - Optimiert für Mobile & Desktop
     this.config = {
-      maxConnectionsPerTool: 3,          // Weniger = übersichtlicher
-      maxDistance: 600,                   // Nur nahe Tools verbinden
-      lineWidth: 1.5,                     
-      glowWidth: 3,
-      opacity: 0.15,                      // Dezent, stört nicht
-      glowOpacity: 0.08,
-      animationSpeed: 0.0008,             // Langsame Animation
-      updateInterval: 100,                // 10 FPS für Smooth
-      categoryWeights: {                  // Intelligente Verbindungen
-        same: 3,                          // Gleiche Kategorie bevorzugen
-        related: 2,                       // Verwandte Kategorien
-        different: 0.5                    // Andere seltener
-      }
+      // Connection Settings
+      maxConnectionsPerTool: this.isMobile ? 3 : 4,
+      maxDistance: this.isMobile ? 450 : 600,
+      minDistance: 120, // Zu nah = nicht verbinden
+
+      // Visual Settings
+      lineWidth: this.isMobile ? 1.5 : 2,
+      glowWidth: this.isMobile ? 3 : 4,
+      baseOpacity: 0.12, // Dezent aber sichtbar
+      glowOpacity: 0.06,
+
+      // Animation
+      pulseSpeed: 0.0012,
+      pulseAmplitude: 0.08,
+      flowSpeed: 0.00015, // Langsamer Flow-Effekt
+
+      // Smart Connection
+      categoryWeights: {
+        same: 4,      // Stark bevorzugt
+        related: 2.5,
+        different: 0.3
+      },
+
+      // Layout
+      avoidOverlap: true,
+      curveIntensity: this.isMobile ? 0.25 : 0.35
     };
 
-    // Kategorie-Farben (passend zu deinem Design)
+    // Farben - Dein Design
     this.colors = {
       text: { base: '#00D4FF', glow: 'rgba(0, 212, 255, 0.3)' },
       image: { base: '#E040FB', glow: 'rgba(224, 64, 251, 0.3)' },
@@ -56,7 +78,7 @@ class IntelligentColorFlow {
       other: { base: '#B0BEC5', glow: 'rgba(176, 190, 197, 0.3)' }
     };
 
-    // Verwandte Kategorien (für intelligente Verbindungen)
+    // Kategorie-Beziehungen
     this.relatedCategories = {
       text: ['code', 'data'],
       image: ['video'],
@@ -71,8 +93,28 @@ class IntelligentColorFlow {
     this.observeTools();
     this.start();
 
-    console.log('✅ IntelligentColorFlow v2.0 initialized');
+    console.log('✅ UltimateNetworkFlow v4.0 initialized');
+    console.log(`📱 Mobile: ${this.isMobile}, Target FPS: ${this.targetFPS}`);
     this.isInitialized = true;
+  }
+
+  // =========================================
+  // MOBILE DETECTION
+  // =========================================
+
+  detectMobile() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Touch-fähig
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Screen Size
+    const isSmallScreen = window.innerWidth < 768;
+
+    // User Agent Check
+    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase());
+
+    return hasTouch || isSmallScreen || isMobileUA;
   }
 
   // =========================================
@@ -80,17 +122,19 @@ class IntelligentColorFlow {
   // =========================================
 
   createFallbackCanvas() {
-    console.warn('⚠️ Canvas nicht gefunden, erstelle Fallback');
     const canvas = document.createElement('canvas');
     canvas.id = 'connection-canvas';
     canvas.className = 'connection-canvas';
-    // Am ANFANG einfügen, nicht am Ende!
     document.body.insertBefore(canvas, document.body.firstChild);
     return canvas;
   }
 
   setupCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Max 2x für Performance
+    // Adaptive DPR für Performance
+    const dpr = this.isMobile 
+      ? Math.min(window.devicePixelRatio || 1, 2)  // Mobile: max 2x
+      : Math.min(window.devicePixelRatio || 1, 2.5); // Desktop: max 2.5x
+
     const rect = document.documentElement.getBoundingClientRect();
 
     this.canvas.width = rect.width * dpr;
@@ -102,7 +146,7 @@ class IntelligentColorFlow {
 
     // Optimierungen
     this.ctx.imageSmoothingEnabled = true;
-    this.ctx.imageSmoothingQuality = 'high';
+    this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
   }
 
   // =========================================
@@ -111,145 +155,172 @@ class IntelligentColorFlow {
 
   observeTools() {
     let debounceTimer = null;
+    let isScanning = false;
 
     const scan = () => {
-      const elements = document.querySelectorAll('.card-square');
+      if (isScanning) return;
+      isScanning = true;
 
-      if (elements.length === 0) {
-        this.tools = [];
-        this.activeConnections = [];
-        return;
-      }
+      requestAnimationFrame(() => {
+        const elements = document.querySelectorAll('.card-square');
 
-      this.tools = Array.from(elements).map(el => {
-        const rect = el.getBoundingClientRect();
-        return {
-          element: el,
-          category: el.dataset.category || 'other',
-          name: el.dataset.toolName || el.querySelector('.square-title-large')?.textContent || 'Unknown',
-          center: {
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2
-          },
-          rect: rect
-        };
+        if (elements.length === 0) {
+          this.tools = [];
+          this.connections = [];
+          isScanning = false;
+          return;
+        }
+
+        // Update tool positions
+        this.tools = Array.from(elements).map(el => {
+          const rect = el.getBoundingClientRect();
+          return {
+            element: el,
+            category: el.dataset.category || 'other',
+            name: el.dataset.toolName || 
+                  el.querySelector('.square-title-large')?.textContent || 
+                  'Unknown',
+            center: {
+              x: rect.left + rect.width / 2,
+              y: rect.top + rect.height / 2
+            },
+            rect: rect
+          };
+        });
+
+        // Berechne Netzwerk
+        this.buildIntelligentNetwork();
+
+        isScanning = false;
       });
-
-      this.calculateIntelligentConnections();
     };
 
-    // Initial scan nach kurzer Verzögerung (DOM ready)
-    setTimeout(scan, 100);
+    // Initial scan mit Verzögerung
+    setTimeout(scan, 150);
 
-    // MutationObserver für dynamische Updates
+    // Mutation Observer für DOM Changes
     const observer = new MutationObserver(() => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(scan, 150);
+      debounceTimer = setTimeout(scan, 200);
     });
 
     observer.observe(document.body, {
       childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class']
+      subtree: true
     });
 
-    // Resize Handler (debounced)
+    // Resize Handler (throttled)
     let resizeTimer = null;
+    let isResizing = false;
+
     window.addEventListener('resize', () => {
+      if (isResizing) return;
+
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        isResizing = true;
         this.setupCanvas();
         scan();
-      }, 200);
-    });
+        setTimeout(() => { isResizing = false; }, 100);
+      }, 150);
+    }, { passive: true });
 
-    // Scroll Handler für bessere Performance
+    // Scroll Handler (nur wenn nötig)
     let scrollTimer = null;
+    let lastScrollY = window.scrollY;
+
     window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(scan, 100);
+      // Nur bei größeren Scroll-Änderungen neu scannen
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY) > 100) {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          scan();
+          lastScrollY = currentScrollY;
+        }, 150);
+      }
     }, { passive: true });
   }
 
   // =========================================
-  // INTELLIGENT CONNECTION ALGORITHM
+  // INTELLIGENT NETWORK BUILDING
   // =========================================
 
-  calculateIntelligentConnections() {
-    this.activeConnections = [];
+  buildIntelligentNetwork() {
+    this.connections = [];
 
     if (this.tools.length < 2) return;
 
+    const usedPairs = new Set();
+
     // Für jedes Tool die besten Verbindungen finden
     this.tools.forEach((tool, index) => {
-      const candidates = this.findConnectionCandidates(tool, index);
+      const candidates = this.findBestConnections(tool);
 
-      // Top N Verbindungen basierend auf Score
-      const topConnections = candidates
-        .slice(0, this.config.maxConnectionsPerTool);
+      candidates.slice(0, this.config.maxConnectionsPerTool).forEach(candidate => {
+        // Erstelle eindeutigen Pair-Key (bidirektional)
+        const pair1 = `${tool.name}-${candidate.tool.name}`;
+        const pair2 = `${candidate.tool.name}-${tool.name}`;
 
-      topConnections.forEach(conn => {
-        // Prüfe ob diese Verbindung schon existiert (bidirektional)
-        const exists = this.activeConnections.some(existing => 
-          (existing.from === tool && existing.to === conn.tool) ||
-          (existing.from === conn.tool && existing.to === tool)
-        );
+        if (usedPairs.has(pair1) || usedPairs.has(pair2)) return;
 
-        if (!exists) {
-          const path = this.calculateSmartPath(tool, conn.tool);
-          const colors = this.colors[tool.category] || this.colors.other;
+        usedPairs.add(pair1);
+        usedPairs.add(pair2);
 
-          this.activeConnections.push({
-            from: tool,
-            to: conn.tool,
-            path: path,
-            color: colors.base,
-            glowColor: colors.glow,
-            score: conn.score,
-            animationOffset: Math.random() * Math.PI * 2 // Für Animation
-          });
-        }
+        // Erstelle Verbindung
+        const path = this.calculatePath(tool, candidate.tool);
+        const colors = this.colors[tool.category] || this.colors.other;
+
+        this.connections.push({
+          from: tool,
+          to: candidate.tool,
+          path: path,
+          color: colors.base,
+          glowColor: colors.glow,
+          score: candidate.score,
+          animationOffset: Math.random() * Math.PI * 2, // Für Pulsieren
+          flowOffset: Math.random() * Math.PI * 2        // Für Flow-Effekt
+        });
       });
     });
 
-    console.log(`🔗 ${this.activeConnections.length} intelligente Verbindungen erstellt`);
+    console.log(`🕸️ Netzwerk erstellt: ${this.connections.length} Verbindungen`);
   }
 
-  findConnectionCandidates(tool, toolIndex) {
+  findBestConnections(tool) {
     const candidates = [];
 
-    this.tools.forEach((otherTool, otherIndex) => {
-      if (toolIndex === otherIndex) return;
+    this.tools.forEach(otherTool => {
+      if (tool === otherTool) return;
 
       const distance = this.getDistance(tool.center, otherTool.center);
 
-      // Zu weit weg = ignorieren
-      if (distance > this.config.maxDistance) return;
+      // Zu weit oder zu nah = ignorieren
+      if (distance > this.config.maxDistance || distance < this.config.minDistance) return;
 
       // Score berechnen
-      let score = 1000 - distance; // Nähe bevorzugen
+      let score = 1000 - distance;
 
-      // Kategorie-Bonus
+      // Kategorie-Boost
       if (tool.category === otherTool.category) {
-        score += 200 * this.config.categoryWeights.same;
+        score += 400 * this.config.categoryWeights.same;
       } else if (this.isRelatedCategory(tool.category, otherTool.category)) {
-        score += 100 * this.config.categoryWeights.related;
+        score += 200 * this.config.categoryWeights.related;
       } else {
         score += 50 * this.config.categoryWeights.different;
       }
 
-      // Vermeiden von Überlappungen mit anderen Verbindungen
-      const wouldOverlap = this.activeConnections.some(conn => 
-        this.pathsWouldIntersect(tool.center, otherTool.center, conn.from.center, conn.to.center)
-      );
+      // Distanz-Penalty (Nähe bevorzugen)
+      const distanceRatio = distance / this.config.maxDistance;
+      score *= (1 - distanceRatio * 0.4);
 
-      if (wouldOverlap) score -= 150;
-
-      candidates.push({ tool: otherTool, score, distance });
+      candidates.push({ 
+        tool: otherTool, 
+        score, 
+        distance 
+      });
     });
 
-    // Nach Score sortieren (höher = besser)
     return candidates.sort((a, b) => b.score - a.score);
   }
 
@@ -263,99 +334,44 @@ class IntelligentColorFlow {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  pathsWouldIntersect(a1, a2, b1, b2) {
-    // Vereinfachter Intersektions-Check
-    const denom = (b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y);
-    if (Math.abs(denom) < 0.001) return false; // Parallel
-
-    const ua = ((b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x)) / denom;
-    const ub = ((a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x)) / denom;
-
-    return ua > 0.2 && ua < 0.8 && ub > 0.2 && ub < 0.8; // Mitte schneidet
-  }
-
   // =========================================
-  // SMART PATH CALCULATION (Vermeidet Karten!)
+  // PATH CALCULATION
   // =========================================
 
-  calculateSmartPath(fromTool, toTool) {
+  calculatePath(fromTool, toTool) {
     const start = fromTool.center;
     const end = toTool.center;
 
-    // Prüfe direkte Linie
-    if (!this.pathIntersectsAnyCard(start, end, fromTool, toTool)) {
-      return [start, end]; // Direkte Verbindung
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Gerade Linie für kurze Distanzen
+    if (distance < 200) {
+      return [start, end];
     }
 
-    // Berechne Ausweichpfad (Curved)
+    // Bézierkurve für längere Distanzen
+    const curveAmount = distance * this.config.curveIntensity;
     const midX = (start.x + end.x) / 2;
     const midY = (start.y + end.y) / 2;
 
-    // Perpendicular offset für Kurve
-    const dx = end.x - start.x;
-    const dy = end.y - start.y;
-    const len = Math.sqrt(dx * dx + dy * dy);
+    // Perpendicular offset
+    const perpX = -dy / distance;
+    const perpY = dx / distance;
 
-    const perpX = -dy / len;
-    const perpY = dx / len;
-
-    // Kurven-Offset (30-80px)
-    const offset = 50 + Math.random() * 30;
+    // Variabler Offset für organisches Aussehen
+    const offsetVariation = (Math.random() - 0.5) * 0.4 + 1;
 
     const controlPoint = {
-      x: midX + perpX * offset,
-      y: midY + perpY * offset
+      x: midX + perpX * curveAmount * offsetVariation,
+      y: midY + perpY * curveAmount * offsetVariation
     };
 
-    // Quadratische Bézierkurve als Pfad-Punkte
-    return this.bezierToPoints(start, controlPoint, end, 20);
+    return this.bezierToPoints(start, controlPoint, end, 25);
   }
 
-  pathIntersectsAnyCard(start, end, fromTool, toTool) {
-    return this.tools.some(tool => {
-      if (tool === fromTool || tool === toTool) return false;
-      return this.lineIntersectsRect(start, end, tool.rect);
-    });
-  }
-
-  lineIntersectsRect(p1, p2, rect) {
-    // Erweitere Rect um Padding (Text-Bereich)
-    const padding = 20;
-    const r = {
-      left: rect.left - padding,
-      right: rect.right + padding,
-      top: rect.top - padding,
-      bottom: rect.bottom + padding
-    };
-
-    // Liang-Barsky Line Clipping
-    const dx = p2.x - p1.x;
-    const dy = p2.y - p1.y;
-
-    let t0 = 0, t1 = 1;
-
-    const clipTest = (p, q) => {
-      if (Math.abs(p) < 0.00001) return q >= 0;
-      const t = q / p;
-      if (p < 0) {
-        if (t > t1) return false;
-        if (t > t0) t0 = t;
-      } else {
-        if (t < t0) return false;
-        if (t < t1) t1 = t;
-      }
-      return true;
-    };
-
-    if (!clipTest(-dx, p1.x - r.left)) return false;
-    if (!clipTest(dx, r.right - p1.x)) return false;
-    if (!clipTest(-dy, p1.y - r.top)) return false;
-    if (!clipTest(dy, r.bottom - p1.y)) return false;
-
-    return t0 < t1;
-  }
-
-  bezierToPoints(p0, p1, p2, steps = 20) {
+  bezierToPoints(p0, p1, p2, steps = 25) {
     const points = [];
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
@@ -369,23 +385,22 @@ class IntelligentColorFlow {
   }
 
   // =========================================
-  // ANIMATION & RENDERING
+  // ANIMATION LOOP - FULL PERFORMANCE
   // =========================================
 
   start() {
-    if (this.animationFrame) {
-      cancelAnimationFrame(this.animationFrame);
-    }
+    let lastFrameTime = performance.now();
 
-    const animate = (timestamp) => {
-      // Throttle zu 60 FPS
-      if (timestamp - this.lastUpdate < 16) {
-        this.animationFrame = requestAnimationFrame(animate);
-        return;
+    const animate = (currentTime) => {
+      // Frame-Timing (aber keine künstliche Drosselung!)
+      const deltaTime = currentTime - lastFrameTime;
+
+      // Optional: Bei sehr langsamen Geräten begrenzen
+      if (deltaTime >= this.frameInterval - 1) {
+        lastFrameTime = currentTime - (deltaTime % this.frameInterval);
+        this.draw(currentTime);
       }
 
-      this.lastUpdate = timestamp;
-      this.draw(timestamp);
       this.animationFrame = requestAnimationFrame(animate);
     };
 
@@ -398,42 +413,45 @@ class IntelligentColorFlow {
     // Clear
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    if (this.activeConnections.length === 0) return;
+    if (this.connections.length === 0) return;
 
     // Zeichne alle Verbindungen
-    this.activeConnections.forEach(conn => {
-      this.drawAnimatedConnection(ctx, conn, timestamp);
+    this.connections.forEach(conn => {
+      this.drawConnection(ctx, conn, timestamp);
     });
   }
 
-  drawAnimatedConnection(ctx, conn, timestamp) {
+  drawConnection(ctx, conn, timestamp) {
     if (!conn.path || conn.path.length < 2) return;
 
-    // Pulsierender Opacity-Effekt
-    const pulse = Math.sin(timestamp * this.config.animationSpeed + conn.animationOffset) * 0.5 + 0.5;
-    const opacity = this.config.opacity + pulse * 0.05;
-    const glowOpacity = this.config.glowOpacity + pulse * 0.03;
+    // Pulse-Effekt (subtil)
+    const pulse = Math.sin(timestamp * this.config.pulseSpeed + conn.animationOffset) * 0.5 + 0.5;
+    const pulseMultiplier = 1 + pulse * this.config.pulseAmplitude;
 
-    // Glow-Layer (darunter)
+    const opacity = this.config.baseOpacity * pulseMultiplier;
+    const glowOpacity = this.config.glowOpacity * pulseMultiplier;
+
+    // Glow Layer (optional, wenn Performance OK)
+    if (!this.isMobile || glowOpacity > 0.03) {
+      ctx.beginPath();
+      ctx.moveTo(conn.path[0].x, conn.path[0].y);
+      for (let i = 1; i < conn.path.length; i++) {
+        ctx.lineTo(conn.path[i].x, conn.path[i].y);
+      }
+      ctx.strokeStyle = conn.glowColor.replace(/[\d\.]+\)$/, `${glowOpacity})`);
+      ctx.lineWidth = this.config.glowWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    }
+
+    // Main Line
     ctx.beginPath();
     ctx.moveTo(conn.path[0].x, conn.path[0].y);
     for (let i = 1; i < conn.path.length; i++) {
       ctx.lineTo(conn.path[i].x, conn.path[i].y);
     }
-    ctx.strokeStyle = conn.glowColor.replace(/[\d\.]+\)$/, `${glowOpacity})`);
-    ctx.lineWidth = this.config.glowWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
 
-    // Haupt-Linie (darüber)
-    ctx.beginPath();
-    ctx.moveTo(conn.path[0].x, conn.path[0].y);
-    for (let i = 1; i < conn.path.length; i++) {
-      ctx.lineTo(conn.path[i].x, conn.path[i].y);
-    }
-
-    // Konvertiere Hex zu RGBA
     const r = parseInt(conn.color.slice(1, 3), 16);
     const g = parseInt(conn.color.slice(3, 5), 16);
     const b = parseInt(conn.color.slice(5, 7), 16);
@@ -453,61 +471,83 @@ class IntelligentColorFlow {
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
     }
-    if (this.canvas) {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    console.log('🔴 IntelligentColorFlow destroyed');
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    console.log('🔴 UltimateNetworkFlow destroyed');
   }
 
   refresh() {
-    this.calculateIntelligentConnections();
+    this.buildIntelligentNetwork();
   }
 
   setOpacity(value) {
-    this.config.opacity = Math.max(0, Math.min(1, value));
+    this.config.baseOpacity = Math.max(0, Math.min(1, value));
+    this.config.glowOpacity = value * 0.5;
   }
 
   setMaxConnections(value) {
     this.config.maxConnectionsPerTool = Math.max(1, Math.min(10, value));
-    this.calculateIntelligentConnections();
+    this.buildIntelligentNetwork();
+  }
+
+  getStats() {
+    return {
+      tools: this.tools.length,
+      connections: this.connections.length,
+      isMobile: this.isMobile,
+      targetFPS: this.targetFPS,
+      config: this.config
+    };
   }
 }
 
 // =========================================
-// AUTO-INITIALIZE WHEN APP IS READY
+// AUTO-INITIALIZE
 // =========================================
 
 window.addEventListener('quantum:ready', () => {
-  console.log('🎨 ColorFlow: Received quantum:ready event');
+  console.log('🕸️ NetworkFlow: Received quantum:ready event');
 
   if (window.colorFlow) {
-    console.log('⚠️ ColorFlow already exists, skipping initialization');
+    console.log('⚠️ ColorFlow already exists');
     return;
   }
 
-  // Kleine Verzögerung damit DOM vollständig gerendert ist
   setTimeout(() => {
     try {
-      window.colorFlow = new IntelligentColorFlow();
-      console.log('✅ ColorFlow ready:', window.colorFlow);
+      window.colorFlow = new UltimateNetworkFlow();
+      console.log('✅ NetworkFlow ready:', window.colorFlow.getStats());
     } catch (error) {
-      console.error('❌ ColorFlow initialization failed:', error);
+      console.error('❌ NetworkFlow initialization failed:', error);
     }
   }, 200);
 });
 
-// Debug Helper (nur in Development)
+// Debug & Performance Monitor
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   window.debugColorFlow = () => {
-    if (!window.colorFlow) {
-      console.warn('ColorFlow not initialized');
-      return;
-    }
-    console.log({
-      tools: window.colorFlow.tools.length,
-      connections: window.colorFlow.activeConnections.length,
-      config: window.colorFlow.config
-    });
+    if (!window.colorFlow) return;
+    const stats = window.colorFlow.getStats();
+    console.table(stats);
+    console.log('Connections:', window.colorFlow.connections.map(c => 
+      `${c.from.name} → ${c.to.name} (${Math.round(c.score)})`
+    ));
   };
+
+  // FPS Monitor
+  let frames = 0;
+  let lastFPSUpdate = performance.now();
+
+  setInterval(() => {
+    const now = performance.now();
+    const fps = Math.round(frames * 1000 / (now - lastFPSUpdate));
+    console.log(`📊 FPS: ${fps}`);
+    frames = 0;
+    lastFPSUpdate = now;
+  }, 2000);
+
+  window.addEventListener('quantum:ready', () => {
+    setInterval(() => { frames++; }, 16);
+  });
+
   console.log('🛠️ Debug: window.debugColorFlow() verfügbar');
 }
