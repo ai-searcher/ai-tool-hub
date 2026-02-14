@@ -2266,7 +2266,7 @@ a:focus-visible {
   position: absolute !important;
   left: 18px !important;               /* equal to card padding desktop */
   right: 18px !important;
-  bottom: 2px !important;             /* konstante Y-Offset (feinjustierbar) */
+  bottom: 0px !important;             /* konstante Y-Offset (feinjustierbar) */
   height: 22px !important;
   margin: 0 !important;
   padding: 0 !important;
