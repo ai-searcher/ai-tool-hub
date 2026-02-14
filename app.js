@@ -751,40 +751,21 @@ const ui = {
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   const contextTexts = this.getContextText(tool);
 
-  // ⚠️ WICHTIG: Keine Back-Face hier! flip-card.js erstellt sie!
   return `
     <div class="card-square" 
          data-tool-id="${this.escapeHtml(String(tool.id))}"
          data-category="${this.escapeHtml(categoryName)}"
          data-tool-name="${this.escapeHtml(tool.title)}"
          data-href="${this.escapeHtml(tool.link)}"
-         data-description="${this.escapeHtml(tool.description || '')}"
-         data-rating="${this.escapeHtml(String(tool.rating || 0))}"
-         data-is-free="${this.escapeHtml(String(tool.is_free || false))}"
-         data-tags="${this.escapeHtml(JSON.stringify(tool.tags || []))}"
          tabindex="0"
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
 
-      <!-- Content wird von flip-card.js in Front-Face gewrapped -->
-      <div class="square-content-centered">
-        <div class="square-category-badge" aria-hidden="true">
-          ${this.escapeHtml(categoryDisplay)}
-        </div>
-        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-          ${this.escapeHtml(tool.title)}
-        </h3>
-        <div class="context-marquee" aria-hidden="true">
-          <div class="marquee-track" role="presentation">
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
+      <!-- FRONT SIDE -->
+      <div class="card-face card-face-front">
+        <div class="square-content-centered">
+      `;
+    }
 
   render() {
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
