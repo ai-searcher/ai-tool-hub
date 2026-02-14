@@ -1,34 +1,66 @@
 // =========================================
-// QUANTUM AI HUB - APP.JS FIXED
-// Version: 1.0.1 - Button Reliability Fix
+// QUANTUM AI HUB - APP.JS WITH FLIP CARDS
+// Version: 1.1.0 FLIP
+// Production Ready + 3D Flip Card System
 // =========================================
 'use strict';
-
-// ========================================= 
-// KRITISCHE FIXES:
-// 1. ✅ Event Delegation optimiert
-// 2. ✅ Touch-Events für Mobile hinzugefügt
-// 3. ✅ Doppelklick-Prevention
-// 4. ✅ Handler Cleanup verbessert
-// 5. ✅ Passive Events wo möglich
-// 6. ✅ RAF für bessere Performance
-// 7. ✅ Debounce optimiert
-// =========================================
 
 // ======= DEBUG: globaler Error- und Fetch-Logger =======
 window.addEventListener('error', (e) => {
   try {
-    console.error('Global error:', {
+    console.error('Global error event:', {
       message: e.message,
       filename: e.filename,
-      lineno: e.lineno
+      lineno: e.lineno,
+      colno: e.colno,
+      error: e.error
     });
   } catch (err) {
     console.error('error listener failed', err);
   }
 });
 
-// ========================================= 
+// Wrap fetch to log failing requests
+(function() {
+  if (!window.fetch) return;
+  const _origFetch = window.fetch;
+  window.fetch = async function(resource, init) {
+    try {
+      const res = await _origFetch(resource, init);
+      if (!res.ok) {
+        console.warn('Fetch non-ok:', {
+          url: String(resource),
+          status: res.status,
+          statusText: res.statusText
+        });
+      }
+      return res;
+    } catch (err) {
+      try {
+        console.error('Fetch failed:', {
+          url: String(resource),
+          error: err
+        });
+      } catch (e) {}
+      throw err;
+    }
+  };
+})();
+
+// GLOBAL DEBUG: make unhandled promise rejections visible
+window.addEventListener('unhandledrejection', (ev) => {
+  try {
+    console.group('%cUnhandled Promise Rejection (global)', 'color:#fff;background:#d9534f;padding:3px;border-radius:4px;');
+    console.error('reason:', ev.reason);
+    if (ev.reason && ev.reason.stack) console.error(ev.reason.stack);
+    console.trace();
+    console.groupEnd();
+  } catch (e) {
+    console.error('unhandledrejection logging failed', e);
+  }
+});
+
+// =========================================
 // CONFIGURATION
 // =========================================
 const CONFIG = {
@@ -51,17 +83,16 @@ const CONFIG = {
     logErrors: true,
     strictMode: false
   },
-  // 🆕 UI-Performance Settings
   ui: {
-    clickDebounce: 100,        // Prevent double-clicks
-    touchDelay: 50,            // Touch response delay
-    usePassiveEvents: true,    // Better scroll performance
-    useRAF: true               // RequestAnimationFrame
+    clickDebounce: 100,
+    touchDelay: 50,
+    usePassiveEvents: true,
+    useRAF: true
   }
 };
 
-// ========================================= 
-// DEFAULT TOOLS
+// =========================================
+// DEFAULT TOOLS (Always Available)
 // =========================================
 const DEFAULT_TOOLS = [
   {
@@ -93,7 +124,36 @@ const DEFAULT_TOOLS = [
   }
 ];
 
-// ========================================= 
+// =========================================
+// VALIDATION RULES
+// =========================================
+const VALIDATION_RULES = {
+  required: ['id', 'title', 'link'],
+  optional: ['description', 'category', 'tags', 'is_free', 'rating', 'provider', 'added', 'featured'],
+  types: {
+    id: 'number',
+    title: 'string',
+    link: 'string',
+    description: 'string',
+    category: 'string',
+    tags: 'array',
+    is_free: 'boolean',
+    rating: 'number',
+    provider: 'string',
+    added: 'string',
+    featured: 'boolean'
+  },
+  ranges: {
+    rating: { min: 0, max: 5 },
+    title: { minLength: 2, maxLength: 50 }
+  },
+  patterns: {
+    link: /^https?:\/\/.+/i,
+    category: /^(text|image|code|audio|video|data|other)$/i
+  }
+};
+
+// =========================================
 // UTILITIES
 // =========================================
 const $ = (selector) => document.querySelector(selector);
@@ -115,7 +175,6 @@ const sanitizeInput = (input) => {
     .substring(0, CONFIG.search.maxLength);
 };
 
-// 🔧 FIXED: Optimierter Debounce mit Leading Edge Option
 const debounce = (func, wait, immediate = false) => {
   let timeout;
   return function executedFunction(...args) {
@@ -131,7 +190,6 @@ const debounce = (func, wait, immediate = false) => {
   };
 };
 
-// 🆕 Throttle für Click-Events (verhindert Doppelklicks)
 const throttle = (func, limit) => {
   let inThrottle;
   return function(...args) {
@@ -143,7 +201,6 @@ const throttle = (func, limit) => {
   };
 };
 
-// 🆕 RAF Wrapper für smooth UI updates
 const rafUpdate = (callback) => {
   if (CONFIG.ui.useRAF) {
     requestAnimationFrame(callback);
@@ -152,7 +209,7 @@ const rafUpdate = (callback) => {
   }
 };
 
-// ========================================= 
+// =========================================
 // STATE MANAGEMENT
 // =========================================
 const state = {
@@ -167,7 +224,6 @@ const state = {
     categories: 0,
     featured: 0
   },
-  // 🆕 UI State
   ui: {
     lastClickTime: 0,
     activeCard: null,
@@ -175,8 +231,8 @@ const state = {
   }
 };
 
-// ========================================= 
-// SUPABASE CLIENT
+// =========================================
+// SUPABASE CLIENT (No Library)
 // =========================================
 const supabase = {
   async fetch(endpoint, options = {}) {
@@ -226,8 +282,233 @@ const supabase = {
   }
 };
 
-// ========================================= 
-// DATA LOADING
+// =========================================
+// DATA VALIDATION
+// =========================================
+const validator = {
+  validateTool(tool, index) {
+    const errors = [];
+    const warnings = [];
+
+    // Check required fields
+    VALIDATION_RULES.required.forEach(field => {
+      if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
+        errors.push({
+          type: 'MISSING_FIELD',
+          field,
+          message: `Tool #${index + 1}: Required field "${field}" is missing`,
+          tool: tool.title || 'Unknown'
+        });
+      }
+    });
+
+    // Check types
+    Object.keys(tool).forEach(field => {
+      const expectedType = VALIDATION_RULES.types[field];
+      if (!expectedType) return;
+
+      const actualType = Array.isArray(tool[field]) ? 'array' : typeof tool[field];
+      if (actualType !== expectedType && tool[field] !== null) {
+        errors.push({
+          type: 'WRONG_TYPE',
+          field,
+          message: `Tool "${tool.title}": Field "${field}" should be ${expectedType}, got ${actualType}`,
+          expected: expectedType,
+          actual: actualType
+        });
+      }
+    });
+
+    // Check ranges
+    if (tool.rating !== undefined && tool.rating !== null) {
+      const { min, max } = VALIDATION_RULES.ranges.rating;
+      if (tool.rating < min || tool.rating > max) {
+        warnings.push({
+          type: 'OUT_OF_RANGE',
+          field: 'rating',
+          message: `Tool "${tool.title}": Rating ${tool.rating} is outside range ${min}-${max}`
+        });
+      }
+    }
+
+    if (tool.title) {
+      const { minLength, maxLength } = VALIDATION_RULES.ranges.title;
+      if (tool.title.length < minLength || tool.title.length > maxLength) {
+        warnings.push({
+          type: 'INVALID_LENGTH',
+          field: 'title',
+          message: `Tool "${tool.title}": Title length ${tool.title.length} outside ${minLength}-${maxLength}`
+        });
+      }
+    }
+
+    // Check patterns
+    if (tool.link && !VALIDATION_RULES.patterns.link.test(tool.link)) {
+      errors.push({
+        type: 'INVALID_PATTERN',
+        field: 'link',
+        message: `Tool "${tool.title}": Invalid URL "${tool.link}"`,
+        hint: 'URL must start with http:// or https://'
+      });
+    }
+
+    if (tool.category && !VALIDATION_RULES.patterns.category.test(tool.category)) {
+      warnings.push({
+        type: 'INVALID_CATEGORY',
+        field: 'category',
+        message: `Tool "${tool.title}": Unknown category "${tool.category}"`,
+        hint: 'Valid: text, image, code, audio, video, data, other'
+      });
+    }
+
+    return { errors, warnings };
+  },
+
+  autoFix(tool) {
+    const fixed = { ...tool };
+
+    // Fix missing ID
+    if (!fixed.id || typeof fixed.id !== 'number') {
+      fixed.id = Date.now() + Math.floor(Math.random() * 1000);
+      console.log(`🔧 Auto-fix: Generated ID for "${fixed.title}"`);
+    }
+
+    // Fix missing protocol
+    if (fixed.link && !fixed.link.match(/^https?:\/\//i)) {
+      fixed.link = 'https://' + fixed.link;
+      console.log(`🔧 Auto-fix: Added https:// to "${fixed.title}"`);
+    }
+
+    // Fix missing description
+    if (!fixed.description || fixed.description === '') {
+      fixed.description = `${fixed.title} - AI Tool`;
+      console.log(`🔧 Auto-fix: Generated description for "${fixed.title}"`);
+    }
+
+    // Fix missing category
+    if (!fixed.category) {
+      fixed.category = this.detectCategory(fixed);
+      console.log(`🔧 Auto-fix: Detected category "${fixed.category}" for "${fixed.title}"`);
+    }
+
+    // Fix rating range
+    if (fixed.rating !== undefined && fixed.rating !== null) {
+      if (fixed.rating < 0) fixed.rating = 0;
+      if (fixed.rating > 5) fixed.rating = 5;
+    }
+
+    return fixed;
+  },
+
+  detectCategory(tool) {
+    const text = `${tool.title} ${tool.description || ''}`.toLowerCase();
+    const patterns = {
+      text: ['chat', 'text', 'write', 'language', 'gpt', 'claude', 'conversation'],
+      image: ['image', 'photo', 'art', 'visual', 'picture', 'midjourney', 'dall'],
+      code: ['code', 'dev', 'github', 'programming', 'copilot', 'cursor'],
+      audio: ['audio', 'music', 'voice', 'sound', 'speech', 'eleven'],
+      video: ['video', 'film', 'animation', 'runway']
+    };
+
+    for (const [category, keywords] of Object.entries(patterns)) {
+      if (keywords.some(kw => text.includes(kw))) {
+        return category;
+      }
+    }
+
+    return 'other';
+  },
+
+  validateAll(tools) {
+    const allErrors = [];
+    const allWarnings = [];
+    const validTools = [];
+    const invalidTools = [];
+    const seenIds = new Set();
+    const seenTitles = new Set();
+
+    tools.forEach((tool, index) => {
+      const processedTool = CONFIG.validation.autoFix ? this.autoFix(tool) : tool;
+      const { errors, warnings } = this.validateTool(processedTool, index);
+
+      // Check for duplicate IDs
+      if (processedTool.id && seenIds.has(processedTool.id)) {
+        errors.push({
+          type: 'DUPLICATE_ID',
+          field: 'id',
+          message: `Tool "${processedTool.title}": Duplicate ID ${processedTool.id}`
+        });
+      }
+      seenIds.add(processedTool.id);
+
+      // Check for duplicate titles
+      const titleLower = processedTool.title?.toLowerCase();
+      if (titleLower && seenTitles.has(titleLower)) {
+        warnings.push({
+          type: 'DUPLICATE_TITLE',
+          field: 'title',
+          message: `Tool "${processedTool.title}": Duplicate title detected`
+        });
+      }
+      seenTitles.add(titleLower);
+
+      allErrors.push(...errors);
+      allWarnings.push(...warnings);
+
+      if (errors.length === 0) {
+        validTools.push(processedTool);
+      } else {
+        invalidTools.push({ tool: processedTool, errors });
+      }
+    });
+
+    return {
+      valid: allErrors.length === 0,
+      validTools,
+      invalidTools,
+      errors: allErrors,
+      warnings: allWarnings,
+      stats: {
+        total: tools.length,
+        valid: validTools.length,
+        invalid: invalidTools.length,
+        errorCount: allErrors.length,
+        warningCount: allWarnings.length
+      }
+    };
+  },
+
+  displayReport(validation) {
+    if (!CONFIG.validation.logErrors) return;
+
+    console.group('📊 VALIDATION REPORT');
+    console.log(`✅ Valid: ${validation.stats.valid}`);
+    console.log(`❌ Invalid: ${validation.stats.invalid}`);
+    console.log(`⚠️ Warnings: ${validation.stats.warningCount}`);
+    console.log(`📦 Total: ${validation.stats.total}`);
+
+    if (validation.errors.length > 0) {
+      console.group('❌ ERRORS:');
+      validation.errors.forEach((error, i) => {
+        console.error(`${i + 1}. ${error.message}`);
+      });
+      console.groupEnd();
+    }
+
+    if (validation.warnings.length > 0) {
+      console.group('⚠️ WARNINGS:');
+      validation.warnings.forEach((warning, i) => {
+        console.warn(`${i + 1}. ${warning.message}`);
+      });
+      console.groupEnd();
+    }
+
+    console.groupEnd();
+  }
+};
+
+// =========================================
+// DATA LOADING (Triple Fallback)
 // =========================================
 const dataLoader = {
   async loadFromSupabase() {
@@ -241,6 +522,7 @@ const dataLoader = {
         state.dataSource = 'supabase';
         return tools;
       }
+
       return null;
     } catch (error) {
       console.warn('⚠️ Supabase failed:', error.message);
@@ -253,7 +535,10 @@ const dataLoader = {
 
     try {
       console.log('🔄 Trying local JSON...');
+      console.log('📍 Current URL:', window.location.href);
+      console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
 
+      let data = null;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -262,26 +547,42 @@ const dataLoader = {
           signal: controller.signal
         });
 
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response OK:', response.ok);
+        console.log('📥 Response headers:', [...response.headers.entries()]);
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
-
-        const tools = Array.isArray(data) ? data : (data.tools || data);
-
-        if (tools && tools.length > 0) {
-          console.log('✅ Loaded from data.json:', tools.length, 'tools');
-          state.dataSource = 'json';
-          return tools;
-        }
-
-        return null;
+        data = await response.json();
       } finally {
         clearTimeout(timeoutId);
       }
+
+      console.log('📦 JSON parsed successfully');
+
+      if (!data) {
+        console.warn('⚠️ JSON parsed but empty');
+        return null;
+      }
+
+      const tools = Array.isArray(data) ? data : (data.tools || data);
+
+      if (tools && tools.length > 0) {
+        console.log('✅ Loaded from data.json:', tools.length, 'tools');
+        state.dataSource = 'json';
+        return tools;
+      }
+
+      console.warn('⚠️ JSON loaded but no tools found');
+      return null;
     } catch (error) {
-      console.error('❌ JSON load failed:', error.message);
+      console.error('❌ JSON load failed:');
+      console.error('❌ Error type:', error.constructor.name);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      console.error('❌ Full error:', error);
       return null;
     }
   },
@@ -307,19 +608,16 @@ const dataLoader = {
   }
 };
 
-// ========================================= 
-// UI RENDERING
+// =========================================
+// UI RENDERING WITH FLIP CARDS
 // =========================================
 const ui = {
   elements: {},
-
-  // 🆕 Event Handler References (für Cleanup)
   handlers: {
     grid: null,
     search: null,
     searchClear: null,
-    retry: null,
-    modal: null
+    retry: null
   },
 
   cacheElements() {
@@ -343,6 +641,10 @@ const ui = {
   showState(stateName) {
     const states = ['loading', 'error', 'empty'];
 
+    try {
+      console.log(`[ui.showState] -> requested state: "${stateName}"`);
+    } catch (e) {}
+
     rafUpdate(() => {
       states.forEach(s => {
         const el = this.elements[s];
@@ -352,13 +654,29 @@ const ui = {
       });
 
       if (this.elements.toolGrid) {
+        const prevInline = this.elements.toolGrid.getAttribute('style') || '';
+
+        try {
+          console.log(`[ui.showState] toolGrid previous inline style: "${prevInline}"`);
+        } catch (e) {}
+
         if (stateName === 'grid') {
           this.elements.toolGrid.style.display = 'grid';
           this.elements.toolGrid.style.removeProperty('visibility');
           this.elements.toolGrid.style.removeProperty('opacity');
+
+          try {
+            console.log('[ui.showState] toolGrid set to display: grid');
+          } catch (e) {}
         } else {
           this.elements.toolGrid.style.display = 'none';
+
+          try {
+            console.log(`[ui.showState] toolGrid hidden for state "${stateName}"`);
+          } catch (e) {}
         }
+      } else {
+        console.warn('[ui.showState] toolGrid element NOT found in cached elements');
       }
     });
   },
@@ -404,13 +722,6 @@ const ui = {
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
 
-  escapeHtml(text) {
-    if (text === null || text === undefined) return '';
-    const div = document.createElement('div');
-    div.textContent = String(text);
-    return div.innerHTML;
-  },
-
   getContextText(tool) {
     if (!tool.badges || !tool.badges.length) {
       const fallback = [
@@ -427,6 +738,14 @@ const ui = {
     });
   },
 
+  escapeHtml(text) {
+    if (text === null || text === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
+  },
+
+  // 🔄 FLIP CARD: Modified renderCard with Front/Back
   renderCard(tool) {
     const categoryName = tool.category_name || tool.category || 'other';
     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
@@ -441,32 +760,57 @@ const ui = {
            tabindex="0"
            role="article"
            aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
-        <div class="square-content-centered">
-          <div class="square-category-badge" aria-hidden="true">
-            ${this.escapeHtml(categoryDisplay)}
-          </div>
-          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-            ${this.escapeHtml(tool.title)}
-          </h3>
-          <div class="context-marquee" aria-hidden="true">
-            <div class="marquee-track" role="presentation">
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+
+        <!-- FRONT SIDE -->
+        <div class="card-face card-face-front">
+          <div class="square-content-centered">
+            <div class="square-category-badge" aria-hidden="true">
+              ${this.escapeHtml(categoryDisplay)}
+            </div>
+            <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+              ${this.escapeHtml(tool.title)}
+            </h3>
+            <div class="context-marquee" aria-hidden="true">
+              <div class="marquee-track" role="presentation">
+                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+              </div>
             </div>
           </div>
-          <a class="card-overlay-link"
-             role="button"
-             tabindex="-1"
-             data-href="${this.escapeHtml(tool.link)}"
-             aria-label="${this.escapeHtml(tool.title)} öffnen">
-          </a>
+        </div>
+
+        <!-- BACK SIDE (Details) -->
+        <div class="card-face card-face-back">
+          <button class="card-back-close" aria-label="Zurück" onclick="event.stopPropagation(); this.closest('.card-square').classList.remove('is-flipped');">
+            ✕
+          </button>
+
+          <div class="card-back-header">
+            <div>
+              <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
+              <div class="card-back-category">${this.escapeHtml(categoryDisplay)}</div>
+            </div>
+          </div>
+
+          <div class="card-back-description">
+            ${this.escapeHtml(tool.description || 'Keine Beschreibung verfügbar.')}
+          </div>
+
+          <div class="card-back-footer">
+            <a href="${this.escapeHtml(tool.link)}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="card-back-button card-back-button-primary"
+               onclick="event.stopPropagation();">
+              Öffnen ↗
+            </a>
+          </div>
         </div>
       </div>
     `;
   },
 
   render() {
-    // Filter tools based on search
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
       const query = state.searchQuery.toLowerCase();
       state.filtered = state.tools.filter(tool =>
@@ -512,12 +856,12 @@ const ui = {
     });
   },
 
-  // 🔧 FIXED: Optimierte Event Handler mit Touch Support
+  // 🔄 FLIP CARD: Modified handler with Flip Toggle
   attachCardHandlers() {
-    const grid = this.elements.toolGrid || getElement('#tool-grid');
+    const grid = this.elements.toolGrid || $('#tool-grid');
     if (!grid) return;
 
-    // 🔧 Cleanup: Remove old handlers
+    // Cleanup old handlers
     if (this.handlers.grid) {
       if (this.handlers.grid.click) {
         grid.removeEventListener('click', this.handlers.grid.click);
@@ -525,7 +869,6 @@ const ui = {
       if (this.handlers.grid.keydown) {
         grid.removeEventListener('keydown', this.handlers.grid.keydown);
       }
-      // 🆕 Touch handlers cleanup
       if (this.handlers.grid.touchstart) {
         grid.removeEventListener('touchstart', this.handlers.grid.touchstart);
       }
@@ -534,34 +877,28 @@ const ui = {
       }
     }
 
-    // 🆕 Touch State Management
     let touchStartTime = 0;
     let touchStartTarget = null;
 
-    // 🔧 FIXED: Click Handler mit Throttle und besserer Event Delegation
+    // 🔄 Click Handler with FLIP
     const clickHandler = throttle((e) => {
-      // Ignore if modal is open
-      if (state.ui.isModalOpen) return;
-
       const card = e.target.closest('.card-square');
       if (!card) return;
 
-      const overlay = e.target.closest('.card-overlay-link');
+      // Don't flip if clicking close button or link
+      if (e.target.closest('.card-back-close') || e.target.closest('.card-back-button-primary')) {
+        return;
+      }
 
-      // 🔧 Prevent default behavior
       e.preventDefault();
       e.stopPropagation();
 
-      const toolName = card.dataset.toolName || 
-                       card.getAttribute('data-tool-name') || 
-                       card.querySelector('.square-title-large')?.textContent || 
+      const toolName = card.dataset.toolName ||
+                       card.getAttribute('data-tool-name') ||
+                       card.querySelector('.square-title-large')?.textContent ||
                        'Unknown';
 
-      const href = (overlay?.getAttribute('data-href')) || 
-                   card.getAttribute('data-href') || 
-                   (overlay?.getAttribute('href'));
-
-      // 🆕 Track click
+      // Analytics
       try {
         if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
           analytics.trackToolClick(toolName);
@@ -570,27 +907,13 @@ const ui = {
         console.warn('Analytics tracking failed', err);
       }
 
-      // 🔧 Open Modal if function exists
-      if (typeof openToolModal === 'function') {
-        try {
-          openToolModal({
-            title: toolName,
-            href: href,
-            description: card.getAttribute('aria-label') || toolName,
-            cardElement: card
-          });
-        } catch (err) {
-          console.error('openToolModal error:', err);
-          // Fallback: toggle armed state
-          card.classList.toggle('card-armed');
-        }
-      } else {
-        // Fallback: toggle armed state
-        card.classList.toggle('card-armed');
-      }
+      // 🔄 TOGGLE FLIP
+      card.classList.toggle('is-flipped');
+      console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
+
     }, CONFIG.ui.clickDebounce);
 
-    // 🆕 Touch Start Handler
+    // Touch handlers
     const touchStartHandler = (e) => {
       const card = e.target.closest('.card-square');
       if (!card) return;
@@ -598,25 +921,17 @@ const ui = {
       touchStartTime = Date.now();
       touchStartTarget = card;
 
-      // Visual feedback
       card.classList.add('card-touch-active');
-
-      // Remove after delay
-      setTimeout(() => {
-        card.classList.remove('card-touch-active');
-      }, 200);
+      setTimeout(() => card.classList.remove('card-touch-active'), 200);
     };
 
-    // 🆕 Touch End Handler
     const touchEndHandler = (e) => {
       const card = e.target.closest('.card-square');
       if (!card || card !== touchStartTarget) return;
 
       const touchDuration = Date.now() - touchStartTime;
 
-      // Only trigger if touch was quick (< 500ms)
       if (touchDuration < 500) {
-        // Simulate click after small delay for better feel
         setTimeout(() => {
           clickHandler(e);
         }, CONFIG.ui.touchDelay);
@@ -625,7 +940,7 @@ const ui = {
       touchStartTarget = null;
     };
 
-    // 🔧 FIXED: Keyboard Handler
+    // Keyboard handler
     const keyHandler = (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
 
@@ -634,17 +949,17 @@ const ui = {
 
       e.preventDefault();
 
-      // Trigger click on the card
       const fakeEvent = {
         target: card,
         preventDefault: () => {},
-        stopPropagation: () => {}
+        stopPropagation: () => {},
+        closest: (sel) => sel === '.card-square' ? card : null
       };
 
       clickHandler(fakeEvent);
     };
 
-    // 🔧 Store handlers for cleanup
+    // Store & attach
     this.handlers.grid = {
       click: clickHandler,
       keydown: keyHandler,
@@ -652,33 +967,29 @@ const ui = {
       touchend: touchEndHandler
     };
 
-    // 🔧 Attach with appropriate options
     const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: false } : false;
 
     grid.addEventListener('click', clickHandler, passiveOption);
     grid.addEventListener('keydown', keyHandler, passiveOption);
-
-    // 🆕 Touch events for mobile
     grid.addEventListener('touchstart', touchStartHandler, { passive: true });
     grid.addEventListener('touchend', touchEndHandler, passiveOption);
 
-    console.log('✅ Card handlers attached with touch support');
+    console.log('✅ Card handlers attached with flip support');
   }
 };
 
-// ========================================= 
+// =========================================
 // SEARCH FUNCTIONALITY
 // =========================================
 const search = {
   init() {
     if (!ui.elements.search) return;
 
-    // 🔧 Cleanup old handler
+    // Cleanup old handler
     if (ui.handlers.search) {
       ui.elements.search.removeEventListener('input', ui.handlers.search);
     }
 
-    // 🔧 FIXED: Debounced search with better performance
     const handleInput = debounce((e) => {
       const value = sanitizeInput(e.target.value);
       state.searchQuery = value;
@@ -694,9 +1005,7 @@ const search = {
           if (typeof analytics !== 'undefined' && analytics.trackSearch) {
             analytics.trackSearch(value);
           }
-        } catch (err) {
-          // Silent fail
-        }
+        } catch (err) {}
       }
 
       ui.render();
@@ -705,9 +1014,8 @@ const search = {
     ui.handlers.search = handleInput;
     ui.elements.search.addEventListener('input', handleInput);
 
-    // 🔧 Search Clear Button
+    // Search Clear Button
     if (ui.elements.searchClear) {
-      // Cleanup old handler
       if (ui.handlers.searchClear) {
         ui.elements.searchClear.removeEventListener('click', ui.handlers.searchClear);
       }
@@ -728,11 +1036,11 @@ const search = {
       ui.elements.searchClear.addEventListener('click', clearHandler);
     }
 
-    console.log('✅ Search initialized with debounce');
+    console.log('✅ Search initialized');
   }
 };
 
-// ========================================= 
+// =========================================
 // ANALYTICS
 // =========================================
 const analytics = {
@@ -771,7 +1079,7 @@ const analytics = {
   }
 };
 
-// ========================================= 
+// =========================================
 // ERROR HANDLING
 // =========================================
 const errorHandler = {
@@ -785,9 +1093,7 @@ const errorHandler = {
 
     try {
       analytics.trackError(context, error.message);
-    } catch (err) {
-      // Silent fail
-    }
+    } catch (err) {}
 
     ui.showState('error');
   },
@@ -795,7 +1101,6 @@ const errorHandler = {
   setupRetry() {
     if (!ui.elements.retryButton) return;
 
-    // Cleanup old handler
     if (ui.handlers.retry) {
       ui.elements.retryButton.removeEventListener('click', ui.handlers.retry);
     }
@@ -810,143 +1115,48 @@ const errorHandler = {
   }
 };
 
-// ========================================= 
-// MODAL SYSTEM - FIXED
 // =========================================
-function createToolModal() {
-  if (document.getElementById('tool-modal')) return;
-
-  const modal = document.createElement('div');
-  modal.id = 'tool-modal';
-  modal.style.cssText = `
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(0,0,0,0.7);
-    align-items: center;
-    justify-content: center;
-  `;
-
-  modal.innerHTML = `
-    <div class="modal-box" 
-         role="dialog" 
-         aria-modal="true"
-         style="background:#0f1224;border-radius:14px;padding:24px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.6)">
-      <h3 id="tool-modal-title" style="color:var(--primary);margin-bottom:8px">Tool</h3>
-      <p id="tool-modal-desc" style="color:var(--text-dim);margin-bottom:12px"></p>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-        <a id="tool-modal-open" 
-           class="card-link"
-           style="display:inline-flex;padding:8px 12px;border-radius:8px;background:var(--primary);color:var(--bg-dark);text-decoration:none">
-          Öffnen
-        </a>
-        <button id="tool-modal-close"
-                style="background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:var(--text-secondary);cursor:pointer">
-          Schließen
-        </button>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  // 🔧 FIXED: Modal click handler mit besserer Event Delegation
-  const modalClickHandler = (e) => {
-    if (e.target === modal || e.target.id === 'tool-modal-close') {
-      closeToolModal();
-    }
-  };
-
-  ui.handlers.modal = modalClickHandler;
-  modal.addEventListener('click', modalClickHandler);
-
-  // 🔧 Keyboard handler
-  if (!document.toolModalEscapeHandlerAttached) {
-    const escHandler = (e) => {
-      if (e.key === 'Escape' && state.ui.isModalOpen) {
-        closeToolModal();
-      }
-    };
-
-    document.addEventListener('keydown', escHandler);
-    document.toolModalEscapeHandlerAttached = true;
+// KEYBOARD SHORTCUTS
+// =========================================
+document.addEventListener('keydown', (e) => {
+  // ESC: Close all flipped cards
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.card-square.is-flipped')
+      .forEach(card => card.classList.remove('is-flipped'));
   }
 
-  console.log('✅ Modal created');
-}
-
-function openToolModal(tool) {
-  createToolModal();
-
-  const modal = document.getElementById('tool-modal');
-  if (!modal) return;
-
-  state.ui.isModalOpen = true;
-
-  const titleEl = modal.querySelector('#tool-modal-title');
-  const descEl = modal.querySelector('#tool-modal-desc');
-  const openLink = modal.querySelector('#tool-modal-open');
-
-  if (titleEl) titleEl.textContent = tool.title || 'Tool';
-  if (descEl) descEl.textContent = tool.description || '';
-  if (openLink) {
-    openLink.href = tool.href || '#';
-    openLink.target = '_blank';
+  // Ctrl/Cmd + K: Focus search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    if (ui.elements.search) ui.elements.search.focus();
   }
+});
 
-  rafUpdate(() => {
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('open'), 10);
-  });
-
-  console.log('✅ Modal opened:', tool.title);
-}
-
-function closeToolModal() {
-  const modal = document.getElementById('tool-modal');
-  if (!modal) return;
-
-  state.ui.isModalOpen = false;
-
-  rafUpdate(() => {
-    modal.classList.remove('open');
-    setTimeout(() => {
-      modal.style.display = 'none';
-    }, 200);
-  });
-
-  console.log('✅ Modal closed');
-}
-
-// 🔧 Global modal functions
-window.openToolModal = openToolModal;
-window.closeToolModal = closeToolModal;
-
-// ========================================= 
+// =========================================
 // INITIALIZATION
 // =========================================
 const app = {
   async init() {
     try {
-      console.log('🚀 Initializing Quantum AI Hub...');
-      console.log('Config:', CONFIG);
+      console.log('🚀 Initializing Quantum AI Hub with Flip Cards...');
 
       ui.cacheElements();
       errorHandler.setupRetry();
       ui.showState('loading');
 
-      // Load data
       const rawTools = await dataLoader.load();
 
       if (!rawTools || rawTools.length === 0) {
         throw new Error('No data available from any source');
       }
 
-      console.log('✅ Raw tools loaded:', rawTools.length);
+      console.log('✅ Tools loaded:', rawTools.length);
 
-      // Use tools as-is (simplified validation)
-      state.tools = rawTools;
+      // Validate tools
+      const validation = validator.validateAll(rawTools);
+      validator.displayReport(validation);
+
+      state.tools = validation.validTools;
       state.filtered = [...state.tools];
       state.loading = false;
 
@@ -954,31 +1164,24 @@ const app = {
         throw new Error('No valid tools after validation');
       }
 
-      console.log('✅ Valid tools ready:', state.tools.length);
-
-      // Update UI
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
       search.init();
 
       console.log('✅ App initialized successfully!');
+      console.log('🔄 Flip Card System active');
 
-      // Dispatch ready event
       try {
         if (!window.appState) window.appState = state;
         window.dispatchEvent(new Event('quantum:ready'));
-      } catch (e) {
-        console.debug('Could not dispatch quantum:ready', e);
-      }
+      } catch (e) {}
 
     } catch (error) {
-      console.error('❌ CRITICAL ERROR in init:', error);
+      console.error('❌ CRITICAL ERROR:', error);
 
-      // Emergency fallback
       try {
-        console.log('🚨 EMERGENCY: Activating fallback to defaults...');
-
+        console.log('🚨 EMERGENCY: Using defaults...');
         state.tools = DEFAULT_TOOLS;
         state.filtered = [...state.tools];
         state.loading = false;
@@ -991,7 +1194,6 @@ const app = {
         search.init();
 
         console.log('✅ Emergency recovery successful!');
-
         window.dispatchEvent(new Event('quantum:ready'));
       } catch (recoveryError) {
         console.error('❌ EMERGENCY RECOVERY FAILED:', recoveryError);
@@ -1001,14 +1203,14 @@ const app = {
   }
 };
 
-// ========================================= 
+// =========================================
 // START APPLICATION
 // =========================================
 const startApp = async () => {
   try {
     await app.init();
   } catch (e) {
-    console.error('App init failed (caught):', e);
+    console.error('App init failed:', e);
   }
 };
 
@@ -1018,7 +1220,7 @@ if (document.readyState === 'loading') {
   startApp();
 }
 
-// ========================================= 
+// =========================================
 // DEBUG MODE
 // =========================================
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -1027,4 +1229,4 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   console.log('🐛 Debug mode: window.appState and window.appConfig available');
 }
 
-console.log('📱 App.js v1.0.1 loaded - Button reliability fixed!');
+console.log('🔄 app.js v1.1.0 FLIP loaded - 3D Flip Card System ready!');
