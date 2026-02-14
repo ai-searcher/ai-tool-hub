@@ -1,17 +1,21 @@
+
 // =========================================
-// GRID SYNCHRONIZED NETWORK V11.2 FIXED
-// Fixed: Fallback für wenige Cards
+// GRID SYNCHRONIZED NETWORK V12.0 ULTIMATE
+// All Features + Guaranteed Working
+// - 4 Connection Types (solid/dashed/dotted/curved)
+// - Intelligent Cluster Detection
+// - Robust Fallback System
+// - Performance Optimized
+// - Mobile Friendly
+// - Thin Thread Lines
+// - Flowing Glow Effect
 // =========================================
 
 (function() {
   'use strict';
 
-  console.log('🔍 [DEBUG] Script loaded!');
-
-  class GridSynchronizedNetworkTurbo {
+  class GridSynchronizedNetworkUltimate {
     constructor() {
-      console.log('🔍 [DEBUG] Constructor called');
-
       this.canvas = null;
       this.ctx = null;
       this.gridElement = null;
@@ -21,22 +25,23 @@
       this.animationFrame = null;
       this.resizeObserver = null;
       this.hoveredCard = null;
-      this.lastTime = 0;
       this.canvasWidth = 0;
       this.canvasHeight = 0;
       this.glowTime = 0;
 
-      this.frameSkip = 0;
+      // Performance optimization
       this.targetFPS = 60;
       this.frameInterval = 1000 / this.targetFPS;
       this.then = 0;
 
+      // Device Detection
       this.isMobile = window.innerWidth < 768;
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
+      // Object pooling for performance
       this.gradientCache = new Map();
-      this.colorCache = new Map();
 
+      // Connection type definitions (4 types for variety!)
       this.connectionTypes = {
         primary: {
           style: 'solid',
@@ -44,7 +49,7 @@
           dashPattern: [],
           glowIntensity: 1.0,
           flowSpeed: 1.0,
-          color: 'gradient'
+          priority: 4
         },
         secondary: {
           style: 'dashed',
@@ -52,7 +57,7 @@
           dashPattern: [8, 4],
           glowIntensity: 0.8,
           flowSpeed: 0.7,
-          color: 'gradient'
+          priority: 2
         },
         bridge: {
           style: 'dotted',
@@ -60,7 +65,7 @@
           dashPattern: [2, 6],
           glowIntensity: 0.6,
           flowSpeed: 0.5,
-          color: 'mixed'
+          priority: 1
         },
         cluster: {
           style: 'curved',
@@ -68,8 +73,8 @@
           dashPattern: [],
           glowIntensity: 0.9,
           flowSpeed: 0.8,
-          color: 'gradient',
-          curve: true
+          curve: true,
+          priority: 3
         }
       };
 
@@ -80,9 +85,6 @@
     }
 
     setupAdaptiveSettings() {
-      console.log('🔍 [DEBUG] Setup adaptive settings');
-      console.log('🔍 [DEBUG] Device:', this.isMobile ? 'Mobile' : this.isTablet ? 'Tablet' : 'Desktop');
-
       if (this.isMobile) {
         this.settings = {
           qualityMultiplier: 1.0,
@@ -91,14 +93,15 @@
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: false,
-          enableClustering: true,
-          enableHierarchy: true,
           maxPrimaryConnections: 2,
           maxSecondaryConnections: 1,
+          maxBridgeConnections: 2,
           hoverSpeed: 0.30,
           baseOpacity: 0.35,
           glowOpacity: 0.50,
-          useSimplifiedRendering: true
+          useSimplifiedRendering: true,
+          minClusterSize: 2,
+          maxDistance: 400
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -108,14 +111,15 @@
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: true,
-          enableClustering: true,
-          enableHierarchy: true,
           maxPrimaryConnections: 3,
           maxSecondaryConnections: 2,
+          maxBridgeConnections: 3,
           hoverSpeed: 0.25,
           baseOpacity: 0.40,
           glowOpacity: 0.45,
-          useSimplifiedRendering: false
+          useSimplifiedRendering: false,
+          minClusterSize: 2,
+          maxDistance: 450
         };
       } else {
         this.settings = {
@@ -125,14 +129,15 @@
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: true,
-          enableClustering: true,
-          enableHierarchy: true,
           maxPrimaryConnections: 4,
           maxSecondaryConnections: 3,
+          maxBridgeConnections: 4,
           hoverSpeed: 0.25,
           baseOpacity: 0.45,
           glowOpacity: 0.40,
-          useSimplifiedRendering: false
+          useSimplifiedRendering: false,
+          minClusterSize: 2,
+          maxDistance: 500
         };
       }
 
@@ -148,18 +153,14 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v11.2 FIXED');
+      console.log('🚀 GridSynchronizedNetwork v12.0 ULTIMATE');
 
       window.addEventListener('quantum:ready', () => {
-        console.log('🔍 [DEBUG] Quantum ready event');
         setTimeout(() => this.setup(), 50);
       });
 
       if (document.readyState === 'complete') {
-        console.log('🔍 [DEBUG] Document ready, calling setup');
         setTimeout(() => this.setup(), 100);
-      } else {
-        console.log('🔍 [DEBUG] Waiting for document ready...');
       }
 
       let resizeTimeout;
@@ -170,22 +171,17 @@
     }
 
     setup() {
-      console.log('🔍 [DEBUG] Setup starting...');
-
       this.gridElement = document.getElementById('tool-grid');
-      console.log('🔍 [DEBUG] Grid element:', this.gridElement);
 
       if (!this.gridElement) {
-        console.warn('⚠️ [DEBUG] Grid element NOT found! Retrying in 500ms...');
         setTimeout(() => this.setup(), 500);
         return;
       }
 
       this.containerElement = this.gridElement.parentElement;
-      console.log('🔍 [DEBUG] Container element:', this.containerElement);
 
       if (!this.containerElement) {
-        console.error('❌ [DEBUG] Container not found!');
+        console.error('❌ Container not found!');
         return;
       }
 
@@ -193,14 +189,16 @@
       this.scanTools();
 
       if (this.cards.length === 0) {
-        console.error('❌ [DEBUG] NO CARDS FOUND! Check .card-square selector!');
+        console.warn('⚠️ No cards found');
         return;
       }
 
+      // Try intelligent algorithm first
       this.generateIntelligentConnections();
 
+      // Fallback if no connections generated
       if (this.connections.length === 0) {
-        console.warn('⚠️ [DEBUG] NO CONNECTIONS from intelligent algo, using FALLBACK!');
+        console.log('📋 Using fallback connection generation');
         this.generateFallbackConnections();
       }
 
@@ -208,14 +206,11 @@
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Turbo Intelligent Network initialized!');
-      console.log(`🕸️ Connections: ${this.connections.length}`);
-      this.printConnectionStats();
+      console.log('✅ Ultimate Network initialized!');
+      console.log(`🕸️ ${this.connections.length} connections (${this.countTypes().join(', ')})`);
     }
 
     setupCanvas() {
-      console.log('🔍 [DEBUG] Setting up canvas...');
-
       if (!this.canvas) {
         this.canvas = document.createElement('canvas');
         this.canvas.className = 'connection-canvas';
@@ -224,7 +219,6 @@
         this.canvas.style.zIndex = '1';
         this.canvas.style.willChange = 'transform';
         this.containerElement.insertBefore(this.canvas, this.gridElement);
-        console.log('🔍 [DEBUG] Canvas created and inserted');
       }
 
       const gridRect = this.gridElement.getBoundingClientRect();
@@ -232,8 +226,6 @@
 
       this.canvasWidth = gridRect.width;
       this.canvasHeight = gridRect.height;
-
-      console.log('🔍 [DEBUG] Canvas dimensions:', this.canvasWidth, 'x', this.canvasHeight);
 
       this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
       this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
@@ -255,24 +247,16 @@
       this.ctx.scale(hdRatio, hdRatio);
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'high';
-
-      console.log('📐 Canvas:', this.canvasWidth + 'x' + this.canvasHeight + 'px @ ' + hdRatio + 'x');
     }
 
     scanTools() {
-      console.log('🔍 [DEBUG] Scanning for cards...');
-
       const cardElements = this.gridElement.querySelectorAll('.card-square');
-      console.log('🔍 [DEBUG] Found', cardElements.length, 'card elements');
-
       this.cards = [];
 
       cardElements.forEach((el, index) => {
         const rect = el.getBoundingClientRect();
         const gridRect = this.gridElement.getBoundingClientRect();
         const category = el.getAttribute('data-category') || 'other';
-
-        console.log('🔍 [DEBUG] Card', index, ':', category);
 
         this.cards.push({
           element: el,
@@ -286,13 +270,10 @@
           degree: 0
         });
       });
-
-      console.log('🎯 Scanned', this.cards.length, 'cards');
     }
 
     setupInputDetection() {
       const isTouchDevice = 'ontouchstart' in window;
-      console.log('🔍 [DEBUG] Touch device:', isTouchDevice);
 
       this.cards.forEach((card) => {
         if (isTouchDevice) {
@@ -321,36 +302,28 @@
       });
     }
 
+    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
-      console.log('🔍 [DEBUG] Generating intelligent connections...');
-
       this.connections = [];
-
       const clusters = this.detectClusters();
-      console.log('🔍 [DEBUG] Detected', clusters.length, 'clusters');
 
       if (clusters.length > 0) {
         this.generatePrimaryConnections(clusters);
         this.generateSecondaryConnections(clusters);
         this.generateBridgeConnections(clusters);
 
-        if (this.settings.enableClustering) {
+        if (this.settings.enableCurves) {
           this.generateClusterConnections(clusters);
         }
 
         this.optimizeConnections();
       }
-
-      console.log('🧠 Generated', this.connections.length, 'intelligent connections');
     }
 
-    // 🔴 NEW: FALLBACK wenn intelligent algo keine Connections generiert
+    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
-      console.log('🔄 [FALLBACK] Using simple connection generation...');
-
       const categoryGroups = {};
 
-      // Group by category
       this.cards.forEach(card => {
         if (!categoryGroups[card.category]) {
           categoryGroups[card.category] = [];
@@ -358,59 +331,86 @@
         categoryGroups[card.category].push(card);
       });
 
-      // Connect within categories (simple sequential)
+      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
-          // Sort by position
           group.sort((a, b) => {
-            if (Math.abs(a.y - b.y) < 100) {
-              return a.x - b.x;
-            }
+            if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
             return a.y - b.y;
           });
 
-          // Sequential connections
-          const maxConnections = Math.min(
-            group.length - 1,
-            this.isMobile ? 2 : 4
-          );
-
-          for (let i = 0; i < maxConnections; i++) {
+          const max = Math.min(group.length - 1, this.settings.maxPrimaryConnections);
+          for (let i = 0; i < max; i++) {
             this.addConnection(group[i], group[i + 1], 'primary', 1.0);
           }
         }
       });
 
-      // Cross-category connections for variety
-      const categories = Object.keys(categoryGroups);
-      if (categories.length > 1) {
-        for (let i = 0; i < categories.length - 1; i++) {
-          const groupA = categoryGroups[categories[i]];
-          const groupB = categoryGroups[categories[i + 1]];
+      // Secondary: Skip connections within larger groups
+      Object.values(categoryGroups).forEach(group => {
+        if (group.length > 3) {
+          group.sort((a, b) => {
+            if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+            return a.y - b.y;
+          });
 
-          if (groupA.length > 0 && groupB.length > 0) {
-            // Connect closest pair
-            let minDist = Infinity;
-            let closestPair = null;
-
-            groupA.forEach(cardA => {
-              groupB.forEach(cardB => {
-                const dist = this.getDistance(cardA, cardB);
-                if (dist < minDist && dist < 600) {
-                  minDist = dist;
-                  closestPair = [cardA, cardB];
-                }
-              });
-            });
-
-            if (closestPair) {
-              this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.7);
+          const max = Math.min(Math.floor(group.length / 2), this.settings.maxSecondaryConnections);
+          for (let i = 0; i < max; i++) {
+            const from = group[i * 2];
+            const to = group[Math.min(i * 2 + 2, group.length - 1)];
+            if (from !== to && !this.connectionExists(from, to)) {
+              this.addConnection(from, to, 'secondary', 0.7);
             }
+          }
+        }
+      });
+
+      // Bridge: Connect different categories
+      const categories = Object.keys(categoryGroups);
+      const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
+
+      for (let i = 0; i < maxBridges; i++) {
+        const groupA = categoryGroups[categories[i]];
+        const groupB = categoryGroups[categories[i + 1]];
+
+        if (groupA && groupB && groupA.length > 0 && groupB.length > 0) {
+          let minDist = Infinity;
+          let closestPair = null;
+
+          groupA.forEach(cardA => {
+            groupB.forEach(cardB => {
+              const dist = this.getDistance(cardA, cardB);
+              if (dist < minDist && dist < 600) {
+                minDist = dist;
+                closestPair = [cardA, cardB];
+              }
+            });
+          });
+
+          if (closestPair && !this.connectionExists(closestPair[0], closestPair[1])) {
+            this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.6);
           }
         }
       }
 
-      console.log('🔄 [FALLBACK] Generated', this.connections.length, 'fallback connections');
+      // Cluster: Curved connections for visual variety
+      if (this.settings.enableCurves) {
+        Object.values(categoryGroups).forEach(group => {
+          if (group.length > 3) {
+            group.sort((a, b) => {
+              if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+              return a.y - b.y;
+            });
+
+            const start = group[0];
+            const end = group[group.length - 1];
+
+            if (!this.connectionExists(start, end) && this.getDistance(start, end) < 600) {
+              this.addConnection(start, end, 'cluster', 0.5);
+            }
+          }
+        });
+      }
     }
 
     detectClusters() {
@@ -426,16 +426,10 @@
       const clusters = [];
 
       Object.entries(categoryGroups).forEach(([category, cards]) => {
-        // 🔴 SKIP if only 1 card
-        if (cards.length < 2) {
-          console.log('🔍 [DEBUG] Skipping category', category, '(only', cards.length, 'card)');
-          return;
-        }
+        if (cards.length < this.settings.minClusterSize) return;
 
         cards.sort((a, b) => {
-          if (Math.abs(a.y - b.y) < 100) {
-            return a.x - b.x;
-          }
+          if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
           return a.y - b.y;
         });
 
@@ -444,29 +438,26 @@
 
         for (let i = 1; i < cards.length; i++) {
           const dist = this.getDistance(cards[i-1], cards[i]);
-          if (dist < 400) {
+          if (dist < this.settings.maxDistance) {
             currentCluster.push(cards[i]);
           } else {
-            if (currentCluster.length > 0) {
+            if (currentCluster.length >= this.settings.minClusterSize) {
               spatialClusters.push(currentCluster);
             }
             currentCluster = [cards[i]];
           }
         }
-        if (currentCluster.length > 0) {
+        if (currentCluster.length >= this.settings.minClusterSize) {
           spatialClusters.push(currentCluster);
         }
 
         spatialClusters.forEach(cluster => {
-          if (cluster.length > 1) {
-            clusters.push({
-              category: category,
-              cards: cluster,
-              center: this.getClusterCenter(cluster)
-            });
-            cluster.forEach(card => card.cluster = clusters.length - 1);
-            console.log('🔍 [DEBUG] Created cluster:', category, 'with', cluster.length, 'cards');
-          }
+          clusters.push({
+            category: category,
+            cards: cluster,
+            center: this.getClusterCenter(cluster)
+          });
+          cluster.forEach(card => card.cluster = clusters.length - 1);
         });
       });
 
@@ -476,36 +467,20 @@
     getClusterCenter(cards) {
       const sumX = cards.reduce((sum, card) => sum + card.x, 0);
       const sumY = cards.reduce((sum, card) => sum + card.y, 0);
-      return {
-        x: sumX / cards.length,
-        y: sumY / cards.length
-      };
+      return { x: sumX / cards.length, y: sumY / cards.length };
     }
 
     generatePrimaryConnections(clusters) {
       clusters.forEach(cluster => {
         const cards = cluster.cards;
-        const maxConnections = Math.min(
-          cards.length - 1,
-          this.settings.maxPrimaryConnections
-        );
+        const max = Math.min(cards.length - 1, this.settings.maxPrimaryConnections);
 
-        for (let i = 0; i < maxConnections; i++) {
-          this.addConnection(
-            cards[i], 
-            cards[i + 1], 
-            'primary',
-            1.0
-          );
+        for (let i = 0; i < max; i++) {
+          this.addConnection(cards[i], cards[i + 1], 'primary', 1.0);
         }
 
         if (cards.length > 4 && !this.isMobile) {
-          this.addConnection(
-            cards[0],
-            cards[cards.length - 1],
-            'primary',
-            0.6
-          );
+          this.addConnection(cards[0], cards[cards.length - 1], 'primary', 0.6);
         }
       });
     }
@@ -514,12 +489,12 @@
       clusters.forEach(cluster => {
         const cards = cluster.cards;
         if (cards.length > 3) {
-          const maxSecondary = Math.min(
+          const max = Math.min(
             Math.floor(cards.length / 2),
             this.settings.maxSecondaryConnections
           );
 
-          for (let i = 0; i < maxSecondary; i++) {
+          for (let i = 0; i < max; i++) {
             const from = cards[i * 2];
             const to = cards[Math.min(i * 2 + 2, cards.length - 1)];
 
@@ -532,8 +507,15 @@
     }
 
     generateBridgeConnections(clusters) {
-      for (let i = 0; i < clusters.length; i++) {
-        for (let j = i + 1; j < clusters.length; j++) {
+      const maxBridges = Math.min(
+        Math.floor(clusters.length * 1.5),
+        this.settings.maxBridgeConnections
+      );
+
+      let bridgesCreated = 0;
+
+      for (let i = 0; i < clusters.length && bridgesCreated < maxBridges; i++) {
+        for (let j = i + 1; j < clusters.length && bridgesCreated < maxBridges; j++) {
           const clusterA = clusters[i];
           const clusterB = clusters[j];
 
@@ -550,21 +532,15 @@
             });
           });
 
-          if (closestPair && minDist < 500 && !this.connectionExists(closestPair[0], closestPair[1])) {
-            this.addConnection(
-              closestPair[0],
-              closestPair[1],
-              'bridge',
-              0.5
-            );
+          if (closestPair && minDist < this.settings.maxDistance && !this.connectionExists(closestPair[0], closestPair[1])) {
+            this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.5);
+            bridgesCreated++;
           }
         }
       }
     }
 
     generateClusterConnections(clusters) {
-      if (!this.settings.enableCurves) return;
-
       clusters.forEach(cluster => {
         const cards = cluster.cards;
         if (cards.length > 3) {
@@ -579,7 +555,6 @@
     }
 
     optimizeConnections() {
-      // Reset degrees
       this.cards.forEach(card => card.degree = 0);
 
       this.connections.forEach(conn => {
@@ -587,32 +562,16 @@
         conn.to.degree++;
       });
 
-      const beforeCount = this.connections.length;
-
       this.connections = this.connections.filter(conn => {
         const maxDegree = this.isMobile ? 4 : 6;
         return conn.from.degree <= maxDegree && conn.to.degree <= maxDegree;
       });
 
-      if (beforeCount !== this.connections.length) {
-        console.log('🔍 [DEBUG] Optimized: removed', beforeCount - this.connections.length, 'overloaded connections');
-      }
-
       this.connections.sort((a, b) => {
-        const scoreA = this.getConnectionScore(a);
-        const scoreB = this.getConnectionScore(b);
+        const scoreA = (this.connectionTypes[a.type]?.priority || 1) * a.weight;
+        const scoreB = (this.connectionTypes[b.type]?.priority || 1) * b.weight;
         return scoreB - scoreA;
       });
-    }
-
-    getConnectionScore(conn) {
-      const typeScores = {
-        primary: 4,
-        cluster: 3,
-        secondary: 2,
-        bridge: 1
-      };
-      return (typeScores[conn.type] || 1) * conn.weight;
     }
 
     getDistance(card1, card2) {
@@ -660,18 +619,13 @@
         const targetState = isActive ? 1 : 0.25;
         const currentState = this.activeConnections.get(conn) || 1;
 
-        const newState = this.lerp(
-          currentState, 
-          targetState, 
-          this.settings.hoverSpeed
-        );
-
+        const newState = this.lerp(currentState, targetState, this.settings.hoverSpeed);
         this.activeConnections.set(conn, newState);
       });
     }
 
     getGradient(from, to, fromColor, toColor, baseOpacity) {
-      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity}`;
+      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity.toFixed(2)}`;
 
       if (this.gradientCache.has(key)) {
         return this.gradientCache.get(key);
@@ -701,6 +655,7 @@
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
+      // Base line
       this.ctx.strokeStyle = gradient;
       this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
       this.ctx.lineCap = 'round';
@@ -717,6 +672,7 @@
 
       this.ctx.setLineDash([]);
 
+      // Flowing glow
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
@@ -812,15 +768,11 @@
     }
 
     startAnimation() {
-      console.log('🔍 [DEBUG] Starting animation...');
-
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
       }
       this.then = performance.now();
       this.animate(this.then);
-
-      console.log('🎬 Animation started');
     }
 
     handleResize() {
@@ -855,19 +807,12 @@
       this.resizeObserver.observe(this.gridElement);
     }
 
-    printConnectionStats() {
-      const stats = {
-        primary: 0,
-        secondary: 0,
-        bridge: 0,
-        cluster: 0
-      };
-
-      this.connections.forEach(conn => {
-        stats[conn.type]++;
-      });
-
-      console.log('📊 Connection Types:', stats);
+    countTypes() {
+      const stats = { primary: 0, secondary: 0, bridge: 0, cluster: 0 };
+      this.connections.forEach(conn => stats[conn.type]++);
+      return Object.entries(stats)
+        .filter(([_, count]) => count > 0)
+        .map(([type, count]) => `${count} ${type}`);
     }
 
     destroy() {
@@ -881,18 +826,15 @@
         this.canvas.parentNode.removeChild(this.canvas);
       }
       this.gradientCache.clear();
-      this.colorCache.clear();
     }
   }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('🔍 [DEBUG] DOMContentLoaded fired');
-      window.colorFlowNetwork = new GridSynchronizedNetworkTurbo();
+      window.colorFlowNetwork = new GridSynchronizedNetworkUltimate();
     });
   } else {
-    console.log('🔍 [DEBUG] Document already ready');
-    window.colorFlowNetwork = new GridSynchronizedNetworkTurbo();
+    window.colorFlowNetwork = new GridSynchronizedNetworkUltimate();
   }
 
   window.debugColorFlow = function() {
@@ -901,17 +843,16 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v11.2 FIXED');
-    console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet' : 'Desktop 🖥️');
+    console.group('🚀 Color Flow v12.0 ULTIMATE');
+    console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
-    console.log('Total Connections:', net.connections.length);
-    net.printConnectionStats();
+    console.log('Connections:', net.connections.length);
+    console.log('Types:', net.countTypes().join(', '));
     console.log('Gradient Cache:', net.gradientCache.size);
-    console.log('Curves Enabled:', net.settings.enableCurves);
-    console.log('FPS Target:', net.targetFPS);
-    console.log('Canvas:', net.canvas);
-    console.log('Hovered:', net.hoveredCard ? net.hoveredCard.category : 'None');
+    console.log('Curves:', net.settings.enableCurves);
+    console.log('FPS:', net.targetFPS);
     console.groupEnd();
   };
 
 })();
+
