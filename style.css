@@ -1902,11 +1902,10 @@ a:focus-visible {
   text-overflow: ellipsis;
 }
 
-/* small device tweaks (improve spacing) */
 @media (max-width: 767px) {
   .card-square { padding: 14px; border-radius: 14px; }
   .square-title-large { margin-left: 12px; font-size: 1rem; }
-  .context-marquee { margin: 0 !important; height: 21px; } /* Kein margin! */
+  .context-marquee { margin: 0 !important; height: 21px; }  /* ← KEIN margin-left/right! */
 }
 
 
