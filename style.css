@@ -2421,14 +2421,15 @@ a:focus-visible {
 
 
 .card-square .context-marquee {
-  left: calc(-1 * var(--marquee-overscan)) !important;
-  right: calc(-1 * var(--marquee-overscan)) !important;
+  left: 0px !important;      /* ← Direkt am linken Rand */
+  right: 0px !important;     /* ← Direkt am rechten Rand */
   margin: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
   border-bottom-left-radius: inherit !important;
   border-bottom-right-radius: inherit !important;
 }
+
 
 /* Kein "Innenabstand", damit Text bis zur Linie kommt */
 .card-square .context-marquee .marquee-seq {
