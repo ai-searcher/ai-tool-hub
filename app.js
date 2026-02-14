@@ -965,9 +965,9 @@ const ui = {
       touchend: touchEndHandler
     };
 
-    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: false } : false;
+    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
 
-    grid.addEventListener('click', throttledClickHandler, true);
+    grid.addEventListener('click', clickHandler, false);
     grid.addEventListener('keydown', keyHandler, passiveOption);
     grid.addEventListener('touchstart', touchStartHandler, { passive: true });
     grid.addEventListener('touchend', touchEndHandler, passiveOption);
