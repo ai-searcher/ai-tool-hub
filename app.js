@@ -761,11 +761,24 @@ const ui = {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
 
-      <!-- FRONT SIDE -->
-      <div class="card-face card-face-front">
-        <div class="square-content-centered">
-      `;
-    }
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
+        </div>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 
   render() {
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -814,129 +827,125 @@ const ui = {
   },
 
   // 🔄 FLIP CARD: Modified handler with Flip Toggle
-  attachCardHandlers() {
-    const grid = this.elements.toolGrid || $('#tool-grid');
-    if (!grid) return;
+attachCardHandlers() {
+  const grid = this.elements.toolGrid || $('#tool-grid');
+  if (!grid) return;
 
-    // Cleanup old handlers
-    if (this.handlers.grid) {
-      if (this.handlers.grid.click) {
-        grid.removeEventListener('click', this.handlers.grid.click);
-      }
-      if (this.handlers.grid.keydown) {
-        grid.removeEventListener('keydown', this.handlers.grid.keydown);
-      }
-      if (this.handlers.grid.touchstart) {
-        grid.removeEventListener('touchstart', this.handlers.grid.touchstart);
-      }
-      if (this.handlers.grid.touchend) {
-        grid.removeEventListener('touchend', this.handlers.grid.touchend);
-      }
+  // Cleanup old handlers
+  if (this.handlers.grid) {
+    if (this.handlers.grid.click) {
+      grid.removeEventListener('click', this.handlers.grid.click);
+    }
+    if (this.handlers.grid.keydown) {
+      grid.removeEventListener('keydown', this.handlers.grid.keydown);
+    }
+    if (this.handlers.grid.touchstart) {
+      grid.removeEventListener('touchstart', this.handlers.grid.touchstart);
+    }
+    if (this.handlers.grid.touchend) {
+      grid.removeEventListener('touchend', this.handlers.grid.touchend);
+    }
+  }
+
+  let touchStartTime = 0;
+  let touchStartTarget = null;
+
+  // Click Handler - ANALYTICS ONLY (flip-card.js macht das Flipping)
+  const clickHandler = (e) => {
+    const card = e.target.closest('.card-square');
+    if (!card) return;
+
+    // Ignore wenn Karte geflippt oder Back-Face Elemente
+    if (card.classList.contains('is-flipped') || 
+        e.target.closest('.card-back-close') ||
+        e.target.closest('.card-face-back') ||
+        e.target.closest('.card-back-button')) {
+      return; // flip-card.js übernimmt
     }
 
-    let touchStartTime = 0;
-    let touchStartTarget = null;
+    const toolName = card.dataset.toolName ||
+                     card.getAttribute('data-tool-name') ||
+                     card.querySelector('.square-title-large')?.textContent ||
+                     'Unknown';
 
-    // Analytics Handler - KEIN FLIP! flip-card.js macht das!
-const clickHandler = (e) => {
-  const card = e.target.closest('.card-square');
-  if (!card) return;
-
-  // ⚠️ WICHTIG: Kein preventDefault! flip-card.js braucht das Event!
-  // ⚠️ WICHTIG: Kein Flip-Toggle! flip-card.js macht das!
-
-  // Ignore flipped cards & back-face elements
-  if (card.classList.contains('is-flipped') || 
-      e.target.closest('.card-back-close') ||
-      e.target.closest('.card-face-back')) {
-    return; // Let flip-card.js handle it
-  }
-
-  const toolName = card.dataset.toolName ||
-                   card.getAttribute('data-tool-name') ||
-                   card.querySelector('.square-title-large')?.textContent ||
-                   'Unknown';
-
-  // Analytics only
-  try {
-    if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
-      analytics.trackToolClick(toolName);
-    }
-  } catch (err) {
-    console.warn('Analytics tracking failed', err);
-  }
-
-  // ✅ KEIN FLIP HIER! flip-card.js übernimmt!
-  console.log(`📊 Analytics tracked: ${toolName}`);
-};
-
-// Kein Throttle nötig - flip-card.js hat eigenes
-
-    // Touch handlers
-    const touchStartHandler = (e) => {
-      const card = e.target.closest('.card-square');
-      if (!card) return;
-
-      touchStartTime = Date.now();
-      touchStartTarget = card;
-
-      card.classList.add('card-touch-active');
-      setTimeout(() => card.classList.remove('card-touch-active'), 200);
-    };
-
-    const touchEndHandler = (e) => {
-      const card = e.target.closest('.card-square');
-      if (!card || card !== touchStartTarget) return;
-
-      const touchDuration = Date.now() - touchStartTime;
-
-      if (touchDuration < 500) {
-        setTimeout(() => {
-          clickHandler(e);
-        }, CONFIG.ui.touchDelay);
+    // Analytics
+    try {
+      if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
+        analytics.trackToolClick(toolName);
       }
+    } catch (err) {
+      console.warn('Analytics tracking failed', err);
+    }
 
-      touchStartTarget = null;
+    console.log(`📊 Analytics: ${toolName}`);
+  };
+
+  // Touch handlers
+  const touchStartHandler = (e) => {
+    const card = e.target.closest('.card-square');
+    if (!card) return;
+
+    touchStartTime = Date.now();
+    touchStartTarget = card;
+
+    card.classList.add('card-touch-active');
+    setTimeout(() => card.classList.remove('card-touch-active'), 200);
+  };
+
+  const touchEndHandler = (e) => {
+    const card = e.target.closest('.card-square');
+    if (!card || card !== touchStartTarget) return;
+
+    const touchDuration = Date.now() - touchStartTime;
+
+    if (touchDuration < 500) {
+      setTimeout(() => {
+        clickHandler(e);
+      }, CONFIG.ui.touchDelay);
+    }
+
+    touchStartTarget = null;
+  };
+
+  // Keyboard handler
+  const keyHandler = (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+
+    const card = e.target.closest('.card-square');
+    if (!card) return;
+
+    e.preventDefault();
+
+    const fakeEvent = {
+      target: card,
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      stopImmediatePropagation: () => {},
+      closest: (sel) => sel === '.card-square' ? card : null
     };
 
-    // Keyboard handler
-    const keyHandler = (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
+    clickHandler(fakeEvent);
+  };
 
-      const card = e.target.closest('.card-square');
-      if (!card) return;
+  // Store handlers
+  this.handlers.grid = {
+    click: clickHandler,
+    keydown: keyHandler,
+    touchstart: touchStartHandler,
+    touchend: touchEndHandler
+  };
 
-      e.preventDefault();
+  // Attach listeners
+  const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
 
-      const fakeEvent = {
-        target: card,
-        preventDefault: () => {},
-        stopPropagation: () => {},
-        closest: (sel) => sel === '.card-square' ? card : null
-      };
+  grid.addEventListener('click', clickHandler, false);
+  grid.addEventListener('keydown', keyHandler, passiveOption);
+  grid.addEventListener('touchstart', touchStartHandler, { passive: true });
+  grid.addEventListener('touchend', touchEndHandler, passiveOption);
 
-      clickHandler(fakeEvent);
-    };
+  console.log('✅ Card handlers attached (flip-card.js compatible)');
+}
 
-     // Store & attach
-    // Store & attach
-    this.handlers.grid = {
-      click: clickHandler,
-      keydown: keyHandler,
-      touchstart: touchStartHandler,
-      touchend: touchEndHandler
-    };
-
-    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
-
-    grid.addEventListener('click', clickHandler, false);  // ← GEÄNDERT: kein throttle, capture: false
-    grid.addEventListener('keydown', keyHandler, passiveOption);
-    grid.addEventListener('touchstart', touchStartHandler, { passive: true });
-    grid.addEventListener('touchend', touchEndHandler, passiveOption);
-
-    console.log('✅ Card handlers attached (flip-card.js compatible)');
-  }
-};
 
 // =========================================
 // SEARCH FUNCTIONALITY
