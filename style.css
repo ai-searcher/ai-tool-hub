@@ -2840,14 +2840,17 @@ a:focus-visible {
    END FLIP CARD ADDON
    ════════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════
    🚨 EMERGENCY OVERRIDE - MARQUEE 1MM VOM RAND + 3MM HÖHER
+   Version 2.0 - Kompatibel mit flip-card.js
    Überschreibt alle vorherigen 47 Blöcke!
-   Datum: 14.02.2026 - Update: 20:55 Uhr
-   ═══════════════════════════════════════════════════════════════ */
+   Datum: 14.02.2026 - Update: 21:54 Uhr
+   ═══════════════════════════════════════════════════════════ */
 
 /* MARQUEE: 1mm (4px) vom Rand + 3mm (11px) vom Boden */
-.card-square .context-marquee {
+/* Beide Selektoren für Kompatibilität mit/ohne flip-card.js */
+.card-square .context-marquee,
+.card-face-front .context-marquee {
   position: absolute !important;
   left: 4px !important;              /* 1mm vom linken Rand */
   right: 4px !important;             /* 1mm vom rechten Rand */
@@ -2869,7 +2872,8 @@ a:focus-visible {
 }
 
 /* Track Animation - FIXED */
-.card-square .context-marquee .marquee-track {
+.card-square .context-marquee .marquee-track,
+.card-face-front .context-marquee .marquee-track {
   display: inline-flex !important;
   white-space: nowrap !important;
   will-change: transform;
@@ -2878,7 +2882,8 @@ a:focus-visible {
 }
 
 /* Sequence - FIXED */
-.card-square .context-marquee .marquee-seq {
+.card-square .context-marquee .marquee-seq,
+.card-face-front .context-marquee .marquee-seq {
   display: inline-block !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -2892,49 +2897,58 @@ a:focus-visible {
 
 /* Entferne Fade-Overlays */
 .card-square .context-marquee::before,
-.card-square .context-marquee::after {
+.card-square .context-marquee::after,
+.card-face-front .context-marquee::before,
+.card-face-front .context-marquee::after {
   display: none !important;
   content: none !important;
   opacity: 0 !important;
 }
 
 /* Hover: Langsamer */
-.card-square:hover .context-marquee .marquee-track {
+.card-square:hover .context-marquee .marquee-track,
+.card-square:hover .card-face-front .context-marquee .marquee-track {
   animation-duration: 28s !important;
 }
 
 /* Mobile: 1mm vom Rand + 3mm höher */
 @media (max-width: 767px) {
-  .card-square .context-marquee {
+  .card-square .context-marquee,
+  .card-face-front .context-marquee {
     left: 4px !important;
     right: 4px !important;
-    bottom: 11px !important;           /* 3mm höher auch auf Mobile */
+    bottom: 11px !important;
     height: 21px !important;
   }
 
-  .card-square .context-marquee .marquee-seq {
+  .card-square .context-marquee .marquee-seq,
+  .card-face-front .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
     padding-right: 2rem !important;
     line-height: 21px !important;
   }
 
-  .card-square .context-marquee .marquee-track {
+  .card-square .context-marquee .marquee-track,
+  .card-face-front .context-marquee .marquee-track {
     animation-duration: 18s !important;
   }
 }
 
 /* Accessibility: Pause on Focus */
 .card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
+.card-square.card-armed .context-marquee .marquee-track,
+.card-face-front:focus-within .context-marquee .marquee-track {
   animation-play-state: paused !important;
 }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .card-square .context-marquee .marquee-track {
+  .card-square .context-marquee .marquee-track,
+  .card-face-front .context-marquee .marquee-track {
     animation: none !important;
     transform: translateX(0) !important;
   }
 }
 
-/* END EMERGENCY OVERRIDE */
+/* END EMERGENCY OVERRIDE V2.0 */
+
