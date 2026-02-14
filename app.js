@@ -747,38 +747,68 @@ const ui = {
 
   // 🔄 FLIP CARD: Modified renderCard with Front/Back
   renderCard(tool) {
-  const categoryName = tool.category_name || tool.category || 'other';
-  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-  const contextTexts = this.getContextText(tool);
+    const categoryName = tool.category_name || tool.category || 'other';
+    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+    const contextTexts = this.getContextText(tool);
 
-  return `
-    <div class="card-square" 
-         data-tool-id="${this.escapeHtml(String(tool.id))}"
-         data-category="${this.escapeHtml(categoryName)}"
-         data-tool-name="${this.escapeHtml(tool.title)}"
-         data-href="${this.escapeHtml(tool.link)}"
-         tabindex="0"
-         role="article"
-         aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
+    return `
+      <div class="card-square" 
+           data-tool-id="${this.escapeHtml(String(tool.id))}"
+           data-category="${this.escapeHtml(categoryName)}"
+           data-tool-name="${this.escapeHtml(tool.title)}"
+           data-href="${this.escapeHtml(tool.link)}"
+           tabindex="0"
+           role="article"
+           aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
 
-      <div class="square-content-centered">
-        <div class="square-category-badge" aria-hidden="true">
-          ${this.escapeHtml(categoryDisplay)}
+        <!-- FRONT SIDE -->
+        <div class="card-face card-face-front">
+          <div class="square-content-centered">
+            <div class="square-category-badge" aria-hidden="true">
+              ${this.escapeHtml(categoryDisplay)}
+            </div>
+            <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+              ${this.escapeHtml(tool.title)}
+            </h3>
+            <div class="context-marquee" aria-hidden="true">
+              <div class="marquee-track" role="presentation">
+                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+                <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-          ${this.escapeHtml(tool.title)}
-        </h3>
-        <div class="context-marquee" aria-hidden="true">
-          <div class="marquee-track" role="presentation">
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+
+        <!-- BACK SIDE (Details) -->
+        <div class="card-face card-face-back">
+          <button class="card-back-close" aria-label="Zurück" onclick="event.stopPropagation(); this.closest('.card-square').classList.remove('is-flipped');">
+            ✕
+          </button>
+
+          <div class="card-back-header">
+            <div>
+              <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
+              <div class="card-back-category">${this.escapeHtml(categoryDisplay)}</div>
+            </div>
+          </div>
+
+          <div class="card-back-description">
+            ${this.escapeHtml(tool.description || 'Keine Beschreibung verfügbar.')}
+          </div>
+
+          <div class="card-back-footer">
+            <a href="${this.escapeHtml(tool.link)}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               class="card-back-button card-back-button-primary"
+               onclick="event.stopPropagation();">
+              Öffnen ↗
+            </a>
           </div>
         </div>
       </div>
-    </div>
-  `;
-}
-
+    `;
+  },
 
   render() {
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -827,125 +857,131 @@ const ui = {
   },
 
   // 🔄 FLIP CARD: Modified handler with Flip Toggle
-attachCardHandlers() {
-  const grid = this.elements.toolGrid || $('#tool-grid');
-  if (!grid) return;
+  attachCardHandlers() {
+    const grid = this.elements.toolGrid || $('#tool-grid');
+    if (!grid) return;
 
-  // Cleanup old handlers
-  if (this.handlers.grid) {
-    if (this.handlers.grid.click) {
-      grid.removeEventListener('click', this.handlers.grid.click);
+    // Cleanup old handlers
+    if (this.handlers.grid) {
+      if (this.handlers.grid.click) {
+        grid.removeEventListener('click', this.handlers.grid.click);
+      }
+      if (this.handlers.grid.keydown) {
+        grid.removeEventListener('keydown', this.handlers.grid.keydown);
+      }
+      if (this.handlers.grid.touchstart) {
+        grid.removeEventListener('touchstart', this.handlers.grid.touchstart);
+      }
+      if (this.handlers.grid.touchend) {
+        grid.removeEventListener('touchend', this.handlers.grid.touchend);
+      }
     }
-    if (this.handlers.grid.keydown) {
-      grid.removeEventListener('keydown', this.handlers.grid.keydown);
-    }
-    if (this.handlers.grid.touchstart) {
-      grid.removeEventListener('touchstart', this.handlers.grid.touchstart);
-    }
-    if (this.handlers.grid.touchend) {
-      grid.removeEventListener('touchend', this.handlers.grid.touchend);
-    }
+
+    let touchStartTime = 0;
+    let touchStartTarget = null;
+
+    // 🔄 Click Handler with FLIP - FIXED
+const clickHandler = (e) => {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  // WICHTIG: Verhindere Event-Bubbling komplett
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  // Don't flip if clicking close button
+  if (e.target.closest('.card-back-close')) {
+    return;
   }
 
-  let touchStartTime = 0;
-  let touchStartTarget = null;
+  const toolName = card.dataset.toolName ||
+                   card.getAttribute('data-tool-name') ||
+                   card.querySelector('.square-title-large')?.textContent ||
+                   'Unknown';
 
-  // Click Handler - ANALYTICS ONLY (flip-card.js macht das Flipping)
-  const clickHandler = (e) => {
-    const card = e.target.closest('.card-square');
-    if (!card) return;
-
-    // Ignore wenn Karte geflippt oder Back-Face Elemente
-    if (card.classList.contains('is-flipped') || 
-        e.target.closest('.card-back-close') ||
-        e.target.closest('.card-face-back') ||
-        e.target.closest('.card-back-button')) {
-      return; // flip-card.js übernimmt
+  // Analytics
+  try {
+    if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
+      analytics.trackToolClick(toolName);
     }
+  } catch (err) {
+    console.warn('Analytics tracking failed', err);
+  }
 
-    const toolName = card.dataset.toolName ||
-                     card.getAttribute('data-tool-name') ||
-                     card.querySelector('.square-title-large')?.textContent ||
-                     'Unknown';
+  // 🔄 TOGGLE FLIP
+  card.classList.toggle('is-flipped');
+  console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
+};
 
-    // Analytics
-    try {
-      if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
-        analytics.trackToolClick(toolName);
-      }
-    } catch (err) {
-      console.warn('Analytics tracking failed', err);
-    }
+// Throttle NACH der Funktion mit längerer Delay
+const throttledClickHandler = throttle(clickHandler, 300);
 
-    console.log(`📊 Analytics: ${toolName}`);
-  };
+    
+    // Touch handlers
+    const touchStartHandler = (e) => {
+      const card = e.target.closest('.card-square');
+      if (!card) return;
 
-  // Touch handlers
-  const touchStartHandler = (e) => {
-    const card = e.target.closest('.card-square');
-    if (!card) return;
+      touchStartTime = Date.now();
+      touchStartTarget = card;
 
-    touchStartTime = Date.now();
-    touchStartTarget = card;
-
-    card.classList.add('card-touch-active');
-    setTimeout(() => card.classList.remove('card-touch-active'), 200);
-  };
-
-  const touchEndHandler = (e) => {
-    const card = e.target.closest('.card-square');
-    if (!card || card !== touchStartTarget) return;
-
-    const touchDuration = Date.now() - touchStartTime;
-
-    if (touchDuration < 500) {
-      setTimeout(() => {
-        clickHandler(e);
-      }, CONFIG.ui.touchDelay);
-    }
-
-    touchStartTarget = null;
-  };
-
-  // Keyboard handler
-  const keyHandler = (e) => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-
-    const card = e.target.closest('.card-square');
-    if (!card) return;
-
-    e.preventDefault();
-
-    const fakeEvent = {
-      target: card,
-      preventDefault: () => {},
-      stopPropagation: () => {},
-      stopImmediatePropagation: () => {},
-      closest: (sel) => sel === '.card-square' ? card : null
+      card.classList.add('card-touch-active');
+      setTimeout(() => card.classList.remove('card-touch-active'), 200);
     };
 
-    clickHandler(fakeEvent);
-  };
+    const touchEndHandler = (e) => {
+      const card = e.target.closest('.card-square');
+      if (!card || card !== touchStartTarget) return;
 
-  // Store handlers
-  this.handlers.grid = {
-    click: clickHandler,
-    keydown: keyHandler,
-    touchstart: touchStartHandler,
-    touchend: touchEndHandler
-  };
+      const touchDuration = Date.now() - touchStartTime;
 
-  // Attach listeners
-  const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
+      if (touchDuration < 500) {
+        setTimeout(() => {
+          clickHandler(e);
+        }, CONFIG.ui.touchDelay);
+      }
 
-  grid.addEventListener('click', clickHandler, false);
-  grid.addEventListener('keydown', keyHandler, passiveOption);
-  grid.addEventListener('touchstart', touchStartHandler, { passive: true });
-  grid.addEventListener('touchend', touchEndHandler, passiveOption);
+      touchStartTarget = null;
+    };
 
-  console.log('✅ Card handlers attached (flip-card.js compatible)');
-}
+    // Keyboard handler
+    const keyHandler = (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
 
+      const card = e.target.closest('.card-square');
+      if (!card) return;
+
+      e.preventDefault();
+
+      const fakeEvent = {
+        target: card,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        closest: (sel) => sel === '.card-square' ? card : null
+      };
+
+      clickHandler(fakeEvent);
+    };
+
+    // Store & attach
+    this.handlers.grid = {
+      click: clickHandler,
+      keydown: keyHandler,
+      touchstart: touchStartHandler,
+      touchend: touchEndHandler
+    };
+
+    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: false } : false;
+
+    grid.addEventListener('click', throttledClickHandler, true);
+    grid.addEventListener('keydown', keyHandler, passiveOption);
+    grid.addEventListener('touchstart', touchStartHandler, { passive: true });
+    grid.addEventListener('touchend', touchEndHandler, passiveOption);
+
+    console.log('✅ Card handlers attached with flip support');
+  }
+};
 
 // =========================================
 // SEARCH FUNCTIONALITY
@@ -1199,4 +1235,3 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 }
 
 console.log('🔄 app.js v1.1.0 FLIP loaded - 3D Flip Card System ready!');
-
