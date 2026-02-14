@@ -1,18 +1,25 @@
 /* ===========================
-   ROUTING / OBSTACLE AVOIDANCE
-   (Insert into color-flow.js inside SmartColorFlow class)
+   ROUTING / OBSTACLE AVOIDANCE (CSS-pixel-kompatibel)
+   (Replace the corresponding methods inside SmartColorFlow)
    =========================== */
 
-/* Grid / Pathfinding helpers */
 buildGrid(cellSize = 18) {
-  const canvas = this.canvas;
-  const w = Math.max(1, Math.ceil(canvas.width / cellSize));
-  const h = Math.max(1, Math.ceil(canvas.height / cellSize));
+  // cellSize is in CSS pixels (not device pixels) — keep consistent with getBoundingClientRect()
+  const canvasRect = this.canvas.getBoundingClientRect();
+  const cssWidth = Math.max(1, canvasRect.width);
+  const cssHeight = Math.max(1, canvasRect.height);
+
+  const cols = Math.max(1, Math.ceil(cssWidth / cellSize));
+  const rows = Math.max(1, Math.ceil(cssHeight / cellSize));
+
   this._grid = {
-    cellSize,
-    cols: w,
-    rows: h,
-    cells: new Uint8Array(w * h) // 0 = free, 1 = obstacle
+    cellSize,      // CSS px per cell
+    cols,
+    rows,
+    cssWidth,
+    cssHeight,
+    canvasRect,    // cache for conversions
+    cells: new Uint8Array(cols * rows) // 0 = free, 1 = obstacle
   };
   return this._grid;
 }
@@ -23,17 +30,26 @@ _gridIndex(col, row) {
 
 markObstaclesFromTools(pad = 6) {
   if (!this._grid) this.buildGrid();
-  const { cellSize, cols, rows, cells } = this._grid;
-  // reset
+  const { cellSize, cols, rows, cells, canvasRect } = this._grid;
+  // reset obstacle map
   cells.fill(0);
-  // for each tool box mark covered cells
+
+  // For coordinate conversions: use CSS coordinates relative to canvas
+  // pad is in CSS px
   this.tools.forEach(t => {
+    if (!t.element) return;
     const rect = t.element.getBoundingClientRect();
-    // convert from page coords -> canvas coords (assume canvas origin 0,0 = page top-left)
-    const x1 = Math.max(0, Math.floor((rect.left - pad) / cellSize));
-    const y1 = Math.max(0, Math.floor((rect.top - pad) / cellSize));
-    const x2 = Math.min(cols - 1, Math.ceil((rect.right + pad) / cellSize));
-    const y2 = Math.min(rows - 1, Math.ceil((rect.bottom + pad) / cellSize));
+    // compute bounds relative to canvas (CSS px)
+    const left = rect.left - canvasRect.left;
+    const top = rect.top - canvasRect.top;
+    const right = rect.right - canvasRect.left;
+    const bottom = rect.bottom - canvasRect.top;
+
+    const x1 = Math.max(0, Math.floor((left - pad) / cellSize));
+    const y1 = Math.max(0, Math.floor((top - pad) / cellSize));
+    const x2 = Math.min(cols - 1, Math.ceil((right + pad) / cellSize));
+    const y2 = Math.min(rows - 1, Math.ceil((bottom + pad) / cellSize));
+
     for (let r = y1; r <= y2; r++) {
       for (let c = x1; c <= x2; c++) {
         cells[this._gridIndex(c, r)] = 1;
@@ -43,18 +59,24 @@ markObstaclesFromTools(pad = 6) {
 }
 
 _pointToGrid(pt) {
-  const { cellSize } = this._grid;
+  // pt is expected in CSS/viewport coordinates (e.g. from getBoundingClientRect centers)
+  // convert to coordinates relative to canvas (CSS px) then to grid cell
+  if (!this._grid) this.buildGrid();
+  const { cellSize, cols, rows, canvasRect } = this._grid;
+  const localX = pt.x - canvasRect.left;
+  const localY = pt.y - canvasRect.top;
   return {
-    c: Math.max(0, Math.min(this._grid.cols - 1, Math.floor(pt.x / cellSize))),
-    r: Math.max(0, Math.min(this._grid.rows - 1, Math.floor(pt.y / cellSize)))
+    c: Math.max(0, Math.min(cols - 1, Math.floor(localX / cellSize))),
+    r: Math.max(0, Math.min(rows - 1, Math.floor(localY / cellSize)))
   };
 }
 
 _gridToPoint(node) {
-  const { cellSize } = this._grid;
+  // returns a point in CSS pixels relative to the canvas (center of cell)
+  const { cellSize, canvasRect } = this._grid;
   return {
-    x: node.c * cellSize + cellSize / 2,
-    y: node.r * cellSize + cellSize / 2
+    x: node.c * cellSize + cellSize / 2 + canvasRect.left,
+    y: node.r * cellSize + cellSize / 2 + canvasRect.top
   };
 }
 
