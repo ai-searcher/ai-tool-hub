@@ -761,7 +761,6 @@ const ui = {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
       
-      <!-- VORDERSEITE -->
       <div class="card-face card-face-front">
         <div class="square-content-centered">
           <div class="square-category-badge" aria-hidden="true">
@@ -779,17 +778,17 @@ const ui = {
         </div>
       </div>
       
-      <!-- RÜCKSEITE - LEER -->
       <div class="card-face card-face-back">
         <button class="card-back-close" aria-label="Schließen">×</button>
-        <div class="card-back-placeholder">
-          <strong style="color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; display: block;">${this.escapeHtml(tool.title)}</strong>
-          <p style="color: var(--text-dim); font-size: 0.9rem; margin: 0;">Mehr Details kommen bald...</p>
+        <div class="card-back-content">
+          <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
+          <p class="card-back-text">Mehr Details kommen bald...</p>
         </div>
       </div>
     </div>
   `;
 }
+
 
 
 
