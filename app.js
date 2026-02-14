@@ -1251,31 +1251,36 @@ class SmartColorFlow {
 
     const update = ()=>{
 
-      this.tools = [];
+  this.tools = [];
 
-      document.querySelectorAll(".card-square").forEach(el=>{
+  document.querySelectorAll(".card-square").forEach(el=>{
 
+    this.tools.push({
+
+      element: el,
+
+      category: el.dataset.category || "other",
+
+      connections: [],
+
+      // FIX: dynamic positions (always correct)
+      get x(){
         const rect = el.getBoundingClientRect();
+        return rect.left + rect.width / 2;
+      },
 
-        this.tools.push({
+      get y(){
+        const rect = el.getBoundingClientRect();
+        return rect.top + rect.height / 2;
+      }
 
-          element: el,
+    });
 
-          x: rect.left + rect.width/2,
+  });
 
-          y: rect.top + rect.height/2,
+  this.calculateConnections();
 
-          category: el.dataset.category || "other",
-
-          connections: []
-
-        });
-
-      });
-
-      this.calculateConnections();
-
-    };
+};
 
     new MutationObserver(update).observe(document.body,{childList:true,subtree:true});
 
