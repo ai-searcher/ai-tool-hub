@@ -1,18 +1,16 @@
 // =========================================
-// QUANTUM AI HUB — ULTIMATE NETWORK FLOW
-// Version 4.0 - Always-On Neural Network
-// Mobile First • Full Performance • Permanent Network
+// QUANTUM AI HUB — GRID-ATTACHED NETWORK FLOW
+// Version 5.0 - Fixed to Grid • Scrolls Together
+// Linien sind Teil des Grids und scrollen MIT!
 // =========================================
 
 'use strict';
 
-class UltimateNetworkFlow {
+class GridAttachedNetworkFlow {
 
   constructor() {
-    // ✅ Verwende bestehendes Canvas
-    this.canvas = document.getElementById('connection-canvas') || 
-                  document.querySelector('.connection-canvas') ||
-                  this.createFallbackCanvas();
+    // ✅ Verwende bestehendes Canvas ODER erstelle im Grid
+    this.canvas = this.findOrCreateCanvas();
 
     if (!this.canvas) {
       console.warn('⚠️ Canvas nicht verfügbar');
@@ -30,44 +28,36 @@ class UltimateNetworkFlow {
     this.connections = [];
     this.animationFrame = null;
     this.lastUpdate = 0;
-    this.isInitialized = false;
+    this.scrollContainer = null;
 
     // Performance
     this.isMobile = this.detectMobile();
-    this.targetFPS = 60; // Volle Power!
-    this.frameInterval = 1000 / this.targetFPS;
+    this.targetFPS = 60;
 
-    // Configuration - Optimiert für Mobile & Desktop
+    // Configuration
     this.config = {
-      // Connection Settings
       maxConnectionsPerTool: this.isMobile ? 3 : 4,
       maxDistance: this.isMobile ? 450 : 600,
-      minDistance: 120, // Zu nah = nicht verbinden
+      minDistance: 120,
 
-      // Visual Settings
       lineWidth: this.isMobile ? 1.5 : 2,
       glowWidth: this.isMobile ? 3 : 4,
-      baseOpacity: 0.12, // Dezent aber sichtbar
-      glowOpacity: 0.06,
+      baseOpacity: 0.15,
+      glowOpacity: 0.08,
 
-      // Animation
       pulseSpeed: 0.0012,
       pulseAmplitude: 0.08,
-      flowSpeed: 0.00015, // Langsamer Flow-Effekt
 
-      // Smart Connection
       categoryWeights: {
-        same: 4,      // Stark bevorzugt
+        same: 4,
         related: 2.5,
         different: 0.3
       },
 
-      // Layout
-      avoidOverlap: true,
       curveIntensity: this.isMobile ? 0.25 : 0.35
     };
 
-    // Farben - Dein Design
+    // Farben
     this.colors = {
       text: { base: '#00D4FF', glow: 'rgba(0, 212, 255, 0.3)' },
       image: { base: '#E040FB', glow: 'rgba(224, 64, 251, 0.3)' },
@@ -93,58 +83,116 @@ class UltimateNetworkFlow {
     this.observeTools();
     this.start();
 
-    console.log('✅ UltimateNetworkFlow v4.0 initialized');
-    console.log(`📱 Mobile: ${this.isMobile}, Target FPS: ${this.targetFPS}`);
-    this.isInitialized = true;
+    console.log('✅ GridAttachedNetworkFlow v5.0 initialized');
+    console.log(`📱 Mobile: ${this.isMobile}`);
   }
 
   // =========================================
-  // MOBILE DETECTION
+  // CANVAS SETUP - ATTACHED TO GRID
   // =========================================
 
-  detectMobile() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
+  findOrCreateCanvas() {
+    // Versuche bestehendes Canvas zu finden
+    let canvas = document.getElementById('connection-canvas') || 
+                 document.querySelector('.connection-canvas');
 
-    // Touch-fähig
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (canvas) {
+      console.log('✅ Canvas gefunden, repositioniere...');
+      this.repositionCanvas(canvas);
+      return canvas;
+    }
 
-    // Screen Size
-    const isSmallScreen = window.innerWidth < 768;
-
-    // User Agent Check
-    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase());
-
-    return hasTouch || isSmallScreen || isMobileUA;
+    // Erstelle neues Canvas im Grid-Container
+    console.log('⚠️ Canvas nicht gefunden, erstelle neues...');
+    return this.createCanvasInGrid();
   }
 
-  // =========================================
-  // CANVAS MANAGEMENT
-  // =========================================
+  repositionCanvas(canvas) {
+    // Finde Grid-Container
+    const grid = document.getElementById('tool-grid') || 
+                 document.querySelector('.tool-grid-squares');
 
-  createFallbackCanvas() {
+    if (!grid) return;
+
+    const container = grid.parentElement;
+
+    // Canvas direkt VOR das Grid setzen (als Sibling)
+    if (canvas.parentElement !== container) {
+      container.insertBefore(canvas, grid);
+    }
+
+    // Stelle sicher, dass Canvas die richtigen Styles hat
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '0'; // Unter den Karten
+  }
+
+  createCanvasInGrid() {
+    const grid = document.getElementById('tool-grid') || 
+                 document.querySelector('.tool-grid-squares');
+
+    if (!grid) {
+      console.error('❌ Grid nicht gefunden!');
+      return null;
+    }
+
+    const container = grid.parentElement;
+
+    // Erstelle Canvas
     const canvas = document.createElement('canvas');
     canvas.id = 'connection-canvas';
     canvas.className = 'connection-canvas';
-    document.body.insertBefore(canvas, document.body.firstChild);
+
+    // Styles für absolute Positionierung
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '0';
+
+    // Container muss position: relative haben
+    if (getComputedStyle(container).position === 'static') {
+      container.style.position = 'relative';
+    }
+
+    // Canvas VOR dem Grid einfügen
+    container.insertBefore(canvas, grid);
+
+    console.log('✅ Canvas im Grid erstellt');
     return canvas;
   }
 
-  setupCanvas() {
-    // Adaptive DPR für Performance
-    const dpr = this.isMobile 
-      ? Math.min(window.devicePixelRatio || 1, 2)  // Mobile: max 2x
-      : Math.min(window.devicePixelRatio || 1, 2.5); // Desktop: max 2.5x
+  detectMobile() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isSmallScreen = window.innerWidth < 768;
+    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase());
+    return hasTouch || isSmallScreen || isMobileUA;
+  }
 
-    const rect = document.documentElement.getBoundingClientRect();
+  setupCanvas() {
+    const dpr = this.isMobile 
+      ? Math.min(window.devicePixelRatio || 1, 2)
+      : Math.min(window.devicePixelRatio || 1, 2.5);
+
+    // Canvas füllt den PARENT Container aus (nicht das ganze Viewport!)
+    const parent = this.canvas.parentElement;
+    if (!parent) return;
+
+    const rect = parent.getBoundingClientRect();
 
     this.canvas.width = rect.width * dpr;
     this.canvas.height = rect.height * dpr;
-    this.canvas.style.width = rect.width + 'px';
-    this.canvas.style.height = rect.height + 'px';
+    this.canvas.style.width = '100%';
+    this.canvas.style.height = '100%';
 
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    // Optimierungen
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
   }
@@ -171,9 +219,14 @@ class UltimateNetworkFlow {
           return;
         }
 
-        // Update tool positions
+        // WICHTIG: Positionen relativ zum Canvas-Parent berechnen!
+        const canvasParent = this.canvas.parentElement;
+        const canvasRect = canvasParent ? canvasParent.getBoundingClientRect() : { left: 0, top: 0 };
+
         this.tools = Array.from(elements).map(el => {
           const rect = el.getBoundingClientRect();
+
+          // Position RELATIV zum Canvas berechnen
           return {
             element: el,
             category: el.dataset.category || 'other',
@@ -181,24 +234,21 @@ class UltimateNetworkFlow {
                   el.querySelector('.square-title-large')?.textContent || 
                   'Unknown',
             center: {
-              x: rect.left + rect.width / 2,
-              y: rect.top + rect.height / 2
+              x: rect.left + rect.width / 2 - canvasRect.left,
+              y: rect.top + rect.height / 2 - canvasRect.top
             },
             rect: rect
           };
         });
 
-        // Berechne Netzwerk
         this.buildIntelligentNetwork();
-
         isScanning = false;
       });
     };
 
-    // Initial scan mit Verzögerung
     setTimeout(scan, 150);
 
-    // Mutation Observer für DOM Changes
+    // Mutation Observer
     const observer = new MutationObserver(() => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(scan, 200);
@@ -209,36 +259,23 @@ class UltimateNetworkFlow {
       subtree: true
     });
 
-    // Resize Handler (throttled)
+    // Resize Handler
     let resizeTimer = null;
-    let isResizing = false;
-
     window.addEventListener('resize', () => {
-      if (isResizing) return;
-
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        isResizing = true;
         this.setupCanvas();
         scan();
-        setTimeout(() => { isResizing = false; }, 100);
       }, 150);
     }, { passive: true });
 
-    // Scroll Handler (nur wenn nötig)
+    // Scroll Handler - WICHTIG: Positionen NEU berechnen!
     let scrollTimer = null;
-    let lastScrollY = window.scrollY;
-
     window.addEventListener('scroll', () => {
-      // Nur bei größeren Scroll-Änderungen neu scannen
-      const currentScrollY = window.scrollY;
-      if (Math.abs(currentScrollY - lastScrollY) > 100) {
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => {
-          scan();
-          lastScrollY = currentScrollY;
-        }, 150);
-      }
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        scan(); // Positionen aktualisieren
+      }, 50); // Schneller als vorher, damit es smooth bleibt
     }, { passive: true });
   }
 
@@ -253,12 +290,10 @@ class UltimateNetworkFlow {
 
     const usedPairs = new Set();
 
-    // Für jedes Tool die besten Verbindungen finden
-    this.tools.forEach((tool, index) => {
+    this.tools.forEach((tool) => {
       const candidates = this.findBestConnections(tool);
 
       candidates.slice(0, this.config.maxConnectionsPerTool).forEach(candidate => {
-        // Erstelle eindeutigen Pair-Key (bidirektional)
         const pair1 = `${tool.name}-${candidate.tool.name}`;
         const pair2 = `${candidate.tool.name}-${tool.name}`;
 
@@ -267,7 +302,6 @@ class UltimateNetworkFlow {
         usedPairs.add(pair1);
         usedPairs.add(pair2);
 
-        // Erstelle Verbindung
         const path = this.calculatePath(tool, candidate.tool);
         const colors = this.colors[tool.category] || this.colors.other;
 
@@ -278,13 +312,12 @@ class UltimateNetworkFlow {
           color: colors.base,
           glowColor: colors.glow,
           score: candidate.score,
-          animationOffset: Math.random() * Math.PI * 2, // Für Pulsieren
-          flowOffset: Math.random() * Math.PI * 2        // Für Flow-Effekt
+          animationOffset: Math.random() * Math.PI * 2
         });
       });
     });
 
-    console.log(`🕸️ Netzwerk erstellt: ${this.connections.length} Verbindungen`);
+    console.log(`🕸️ Netzwerk: ${this.connections.length} Verbindungen`);
   }
 
   findBestConnections(tool) {
@@ -295,13 +328,10 @@ class UltimateNetworkFlow {
 
       const distance = this.getDistance(tool.center, otherTool.center);
 
-      // Zu weit oder zu nah = ignorieren
       if (distance > this.config.maxDistance || distance < this.config.minDistance) return;
 
-      // Score berechnen
       let score = 1000 - distance;
 
-      // Kategorie-Boost
       if (tool.category === otherTool.category) {
         score += 400 * this.config.categoryWeights.same;
       } else if (this.isRelatedCategory(tool.category, otherTool.category)) {
@@ -310,15 +340,10 @@ class UltimateNetworkFlow {
         score += 50 * this.config.categoryWeights.different;
       }
 
-      // Distanz-Penalty (Nähe bevorzugen)
       const distanceRatio = distance / this.config.maxDistance;
       score *= (1 - distanceRatio * 0.4);
 
-      candidates.push({ 
-        tool: otherTool, 
-        score, 
-        distance 
-      });
+      candidates.push({ tool: otherTool, score, distance });
     });
 
     return candidates.sort((a, b) => b.score - a.score);
@@ -346,21 +371,17 @@ class UltimateNetworkFlow {
     const dy = end.y - start.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // Gerade Linie für kurze Distanzen
     if (distance < 200) {
       return [start, end];
     }
 
-    // Bézierkurve für längere Distanzen
     const curveAmount = distance * this.config.curveIntensity;
     const midX = (start.x + end.x) / 2;
     const midY = (start.y + end.y) / 2;
 
-    // Perpendicular offset
     const perpX = -dy / distance;
     const perpY = dx / distance;
 
-    // Variabler Offset für organisches Aussehen
     const offsetVariation = (Math.random() - 0.5) * 0.4 + 1;
 
     const controlPoint = {
@@ -385,22 +406,12 @@ class UltimateNetworkFlow {
   }
 
   // =========================================
-  // ANIMATION LOOP - FULL PERFORMANCE
+  // ANIMATION LOOP
   // =========================================
 
   start() {
-    let lastFrameTime = performance.now();
-
     const animate = (currentTime) => {
-      // Frame-Timing (aber keine künstliche Drosselung!)
-      const deltaTime = currentTime - lastFrameTime;
-
-      // Optional: Bei sehr langsamen Geräten begrenzen
-      if (deltaTime >= this.frameInterval - 1) {
-        lastFrameTime = currentTime - (deltaTime % this.frameInterval);
-        this.draw(currentTime);
-      }
-
+      this.draw(currentTime);
       this.animationFrame = requestAnimationFrame(animate);
     };
 
@@ -409,13 +420,10 @@ class UltimateNetworkFlow {
 
   draw(timestamp) {
     const ctx = this.ctx;
-
-    // Clear
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.connections.length === 0) return;
 
-    // Zeichne alle Verbindungen
     this.connections.forEach(conn => {
       this.drawConnection(ctx, conn, timestamp);
     });
@@ -424,14 +432,13 @@ class UltimateNetworkFlow {
   drawConnection(ctx, conn, timestamp) {
     if (!conn.path || conn.path.length < 2) return;
 
-    // Pulse-Effekt (subtil)
     const pulse = Math.sin(timestamp * this.config.pulseSpeed + conn.animationOffset) * 0.5 + 0.5;
     const pulseMultiplier = 1 + pulse * this.config.pulseAmplitude;
 
     const opacity = this.config.baseOpacity * pulseMultiplier;
     const glowOpacity = this.config.glowOpacity * pulseMultiplier;
 
-    // Glow Layer (optional, wenn Performance OK)
+    // Glow Layer
     if (!this.isMobile || glowOpacity > 0.03) {
       ctx.beginPath();
       ctx.moveTo(conn.path[0].x, conn.path[0].y);
@@ -472,7 +479,7 @@ class UltimateNetworkFlow {
       cancelAnimationFrame(this.animationFrame);
     }
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    console.log('🔴 UltimateNetworkFlow destroyed');
+    console.log('🔴 GridAttachedNetworkFlow destroyed');
   }
 
   refresh() {
@@ -494,8 +501,7 @@ class UltimateNetworkFlow {
       tools: this.tools.length,
       connections: this.connections.length,
       isMobile: this.isMobile,
-      targetFPS: this.targetFPS,
-      config: this.config
+      canvasPosition: this.canvas.style.position
     };
   }
 }
@@ -505,7 +511,7 @@ class UltimateNetworkFlow {
 // =========================================
 
 window.addEventListener('quantum:ready', () => {
-  console.log('🕸️ NetworkFlow: Received quantum:ready event');
+  console.log('🕸️ GridAttachedFlow: Received quantum:ready event');
 
   if (window.colorFlow) {
     console.log('⚠️ ColorFlow already exists');
@@ -514,40 +520,21 @@ window.addEventListener('quantum:ready', () => {
 
   setTimeout(() => {
     try {
-      window.colorFlow = new UltimateNetworkFlow();
-      console.log('✅ NetworkFlow ready:', window.colorFlow.getStats());
+      window.colorFlow = new GridAttachedNetworkFlow();
+      console.log('✅ GridAttachedFlow ready');
+      console.log('📌 Canvas Position:', window.colorFlow.canvas.style.position);
     } catch (error) {
-      console.error('❌ NetworkFlow initialization failed:', error);
+      console.error('❌ GridAttachedFlow initialization failed:', error);
     }
   }, 200);
 });
 
-// Debug & Performance Monitor
+// Debug
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   window.debugColorFlow = () => {
     if (!window.colorFlow) return;
     const stats = window.colorFlow.getStats();
     console.table(stats);
-    console.log('Connections:', window.colorFlow.connections.map(c => 
-      `${c.from.name} → ${c.to.name} (${Math.round(c.score)})`
-    ));
   };
-
-  // FPS Monitor
-  let frames = 0;
-  let lastFPSUpdate = performance.now();
-
-  setInterval(() => {
-    const now = performance.now();
-    const fps = Math.round(frames * 1000 / (now - lastFPSUpdate));
-    console.log(`📊 FPS: ${fps}`);
-    frames = 0;
-    lastFPSUpdate = now;
-  }, 2000);
-
-  window.addEventListener('quantum:ready', () => {
-    setInterval(() => { frames++; }, 16);
-  });
-
   console.log('🛠️ Debug: window.debugColorFlow() verfügbar');
 }
