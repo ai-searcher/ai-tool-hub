@@ -1132,6 +1132,10 @@ const app = {
         throw new Error('No valid tools after validation');
       }
 
+      // Set global state BEFORE rendering (for flip-card.js)
+      if (!window.appState) window.appState = state;
+      console.log('✅ appState set:', state.tools.length, 'tools');
+
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
