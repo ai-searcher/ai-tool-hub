@@ -1,0 +1,190 @@
+/* ═══════════════════════════════════════════════════════════
+   FLIP CARD SYSTEM - Standalone CSS
+   Version: 1.0
+   Nutzung: <link rel="stylesheet" href="flip-card.css">
+   ══════════════════════════════════════════════════════════ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   VARIABLES
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+  --flip-duration: 0.6s;
+  --flip-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3D CARD CONTAINER
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-square {
+  transform-style: preserve-3d !important;
+  transition: transform var(--flip-duration) var(--flip-timing);
+  position: relative;
+}
+
+/* Flipped State */
+.card-square.is-flipped {
+  transform: rotateY(180deg) !important;
+}
+
+/* Disable Breathing während Flip */
+.card-square.is-flipped {
+  animation: none !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CARD FACES (Front & Back)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  border-radius: inherit;
+  top: 0;
+  left: 0;
+}
+
+/* Front Face */
+.card-face-front {
+  z-index: 2;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Back Face */
+.card-face-back {
+  transform: rotateY(180deg);
+  background: var(--bg-card, #1A1E37);
+  border: 2px solid var(--border, #2A2E47);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BACK SIDE CONTENT
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-back-placeholder {
+  text-align: center;
+  color: var(--text-dim, #A0A0B0);
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+
+/* Close Button */
+.card-back-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #E0E0F0);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-size: 16px;
+  padding: 0;
+  font-weight: 400;
+}
+
+.card-back-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--primary, #00F3FF);
+  transform: rotate(90deg) scale(1.1);
+  border-color: var(--primary, #00F3FF);
+}
+
+.card-back-close:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE RESPONSIVE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@media (max-width: 767px) {
+  .card-face-back {
+    padding: 14px;
+  }
+
+  .card-back-close {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ACCESSIBILITY
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.card-square:focus-visible {
+  outline: 2px solid rgba(0, 243, 255, 0.5);
+  outline-offset: 4px;
+}
+
+.card-square,
+.card-back-close {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .card-square {
+    transition: none !important;
+  }
+
+  .card-square.is-flipped {
+    transform: rotateY(0deg) !important;
+  }
+
+  .card-face-back {
+    position: relative !important;
+    transform: none !important;
+    display: none;
+  }
+
+  .card-square.is-flipped .card-face-front {
+    display: none;
+  }
+
+  .card-square.is-flipped .card-face-back {
+    display: flex !important;
+  }
+}
+
+/* High Contrast */
+@media (prefers-contrast: high) {
+  .card-face-back {
+    border-width: 3px;
+  }
+
+  .card-back-close {
+    border-width: 2px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   END FLIP CARD SYSTEM
+   ══════════════════════════════════════════════════════════ */
