@@ -2374,3 +2374,22 @@ a:focus-visible {
   padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
 }
 
+/* === Layout: Badge & Titel exakt positionieren === */
+:root {
+  --edge-left: 11px;  /* ~3mm */
+  --edge-top: 15px;   /* ~4mm */
+}
+
+/* Content-Container: definiert die "Innenkante" */
+.card-square > .square-content-centered {
+  padding-left: var(--edge-left) !important;
+  padding-top: var(--edge-top) !important;
+}
+
+/* Sicherheit: falls alte Margins den Titel noch verschieben */
+.card-square .square-category-badge,
+.card-square .square-title-large {
+  margin-left: 0 !important;
+}
+
+
