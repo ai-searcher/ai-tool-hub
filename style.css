@@ -2501,3 +2501,27 @@ a:focus-visible {
   opacity: 0.28 !important; /* adjust to taste */
   filter: blur(0px) !important;
 }
+
+/* =========================================
+   CONNECTION CANVAS - COLOR FLOW SYSTEM
+   ========================================= */
+
+.connection-canvas,
+#connection-canvas,
+#grid-network-canvas {
+  /* Position */
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* Behavior */
+  pointer-events: none;  /* Klicks gehen durch Canvas zu Karten */
+  z-index: 0 !important; /* Immer unter Karten */
+  
+  /* Size wird per JavaScript gesetzt */
+}
+
+/* Optional: Canvas Debug Mode (nur Development) */
+.debug .connection-canvas {
+  outline: 2px dashed rgba(255, 0, 0, 0.3);
+}
