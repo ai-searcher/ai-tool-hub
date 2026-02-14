@@ -238,7 +238,7 @@
 
     // Flip
     card.classList.add('is-flipped');
-    console.log('🔄 Card flipped:', tool.title || card.dataset.toolName || 'Unknown');
+    console.log('🔄 Card flipped:', card.dataset.toolName || 'Unknown');
   }
 
   /**
