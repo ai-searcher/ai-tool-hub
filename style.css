@@ -67,6 +67,7 @@
   --z-dropdown: 10;
   --z-sticky: 100;
   --z-overlay: 1000;
+  
 }
 
 /* ==================== RESET & BASE ==================== */
@@ -2773,8 +2774,7 @@ a:focus-visible {
   outline-offset: 4px;
 }
 
-.card-square,
-.card-back-close {
+.card-square {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -2802,16 +2802,6 @@ a:focus-visible {
     left: 0 !important;
     right: 0 !important;
   }
-
-  .card-face-back {
-    padding: 14px;
-  }
-
-  .card-back-close {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
-  }
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2824,30 +2814,7 @@ a:focus-visible {
   animation-play-state: paused !important;
 }
 
-/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .card-square {
-    transition: none !important;
-  }
-
-  .card-square.is-flipped {
-    transform: rotateY(0deg) !important;
-  }
-
-  .card-face-back {
-    position: relative !important;
-    transform: none !important;
-    display: none;
-  }
-
-  .card-square.is-flipped .card-face-front {
-    display: none;
-  }
-
-  .card-square.is-flipped .card-face-back {
-    display: flex !important;
-  }
-
   .context-marquee .marquee-track {
     animation: none !important;
   }
@@ -2857,6 +2824,7 @@ a:focus-visible {
     mask-image: none !important;
   }
 }
+
 
 /* High Contrast */
 @media (prefers-contrast: high) {
