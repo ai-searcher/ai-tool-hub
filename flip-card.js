@@ -186,7 +186,7 @@
       code: 'Code',
       audio: 'Audio',
       video: 'Video',
-       'Daten',
+       data: 'Daten',
       other: 'Andere'
     };
     return names[category] || 'Andere';
@@ -202,7 +202,7 @@
       code: '#7C4DFF',
       audio: '#FF6B9D',
       video: '#448AFF',
-       '#1DE9B6',
+       data: '#1DE9B6',
       other: '#B0BEC5'
     };
     return colors[category] || '#B0BEC5';
