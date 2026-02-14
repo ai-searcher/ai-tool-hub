@@ -2915,8 +2915,8 @@ a:focus-visible {
 @media (max-width: 767px) {
   .card-square .context-marquee,
   .card-face-front .context-marquee {
-    left: 4px !important;
-    right: 4px !important;
+    left: 24px !important;
+    right: 24px !important;
     bottom: 11px !important;
     height: 21px !important;
   }
