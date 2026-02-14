@@ -777,7 +777,7 @@ renderCard(tool) {
       </div>
     </div>
   `;
-}
+},
 
 
 
