@@ -1,142 +1,180 @@
 /**
  * ═══════════════════════════════════════════════════════════
- * FLIP CARD SYSTEM - Ultra-Simple Version
- * 1 Click = 1 Flip - Garantiert!
+ * FLIP CARD SYSTEM - GLITCH-FREE VERSION
+ * Version: 2.0 - Robust & Smooth
  * ══════════════════════════════════════════════════════════
  */
 
 (function() {
   'use strict';
 
-  console.log('🔄 FlipCard Ultra-Simple loading...');
+  console.log('🔄 FlipCard v2.0 loading...');
 
-  // Warte bis DOM ready
+  let isInitialized = false;
+
   function init() {
+    if (isInitialized) return;
+    
     const grid = document.querySelector('#tool-grid');
     if (!grid) {
-      console.warn('⚠️ Grid not found, retrying...');
       setTimeout(init, 100);
       return;
     }
 
-    // Bereite Cards vor
-    prepareCards();
+    // Prepare all cards once
+    prepareAllCards();
 
-    // Event Delegation auf Grid
-    grid.addEventListener('click', handleGridClick, false);
+    // Single event listener on grid (Event Delegation)
+    grid.addEventListener('click', handleClick, false);
 
-    console.log('✅ FlipCard ready - 1 click = 1 flip');
+    // ESC to close all
+    document.addEventListener('keydown', handleKeydown);
+
+    isInitialized = true;
+    console.log('✅ FlipCard v2.0 ready');
   }
 
   /**
-   * Bereite alle Cards vor
+   * Prepare all cards with back faces
    */
-  function prepareCards() {
+  function prepareAllCards() {
     const cards = document.querySelectorAll('.card-square');
-    let count = 0;
+    let prepared = 0;
 
     cards.forEach(card => {
-      // Prüfe ob Back-Face existiert
-      if (!card.querySelector('.card-face-back')) {
-        createBackFace(card);
-        count++;
+      if (!card.dataset.flipReady) {
+        prepareCard(card);
+        prepared++;
       }
     });
 
-    console.log(`✅ ${count} back-faces created`);
+    console.log(`✅ ${prepared} cards prepared`);
   }
 
   /**
-   * Erstelle Rückseite
+   * Prepare single card
    */
-  function createBackFace(card) {
+  function prepareCard(card) {
+    // Mark as prepared
+    card.dataset.flipReady = 'true';
+
+    // Get tool info
     const toolName = card.dataset.toolName || 
                      card.querySelector('.square-title-large')?.textContent || 
                      'Tool';
+    
+    const toolUrl = card.dataset.href || '';
 
+    // Wrap existing content in front face
+    const existingContent = card.innerHTML;
+    const frontFace = document.createElement('div');
+    frontFace.className = 'card-face card-face-front';
+    frontFace.innerHTML = existingContent;
+
+    // Create back face
     const backFace = document.createElement('div');
     backFace.className = 'card-face card-face-back';
     backFace.innerHTML = `
-      <button class="card-back-close" aria-label="Schließen">×</button>
-      <div class="card-back-placeholder">
-        <strong>${toolName}</strong><br>
-        Mehr Details kommen bald...
+      <button class="card-back-close" aria-label="Schließen" type="button">×</button>
+      <div class="card-back-content">
+        <h3>${escapeHtml(toolName)}</h3>
+        <p>Mehr Informationen kommen bald...</p>
+        ${toolUrl ? `<a href="${escapeHtml(toolUrl)}" target="_blank" rel="noopener noreferrer" class="card-back-link" style="color: var(--primary); text-decoration: underline;">Tool öffnen →</a>` : ''}
       </div>
     `;
-    
+
+    // Clear and rebuild
+    card.innerHTML = '';
+    card.appendChild(frontFace);
     card.appendChild(backFace);
   }
 
   /**
-   * Handle Grid Click (Event Delegation)
+   * Handle clicks
    */
-  function handleGridClick(e) {
-    // Check if Close Button
+  function handleClick(e) {
+    // Close button clicked?
     const closeBtn = e.target.closest('.card-back-close');
     if (closeBtn) {
       e.preventDefault();
       e.stopPropagation();
       const card = closeBtn.closest('.card-square');
       if (card) {
-        flipCard(card, false); // Force close
+        card.classList.remove('is-flipped');
+        console.log('🔄 Card closed');
       }
       return;
     }
 
-    // Check if Card
-    const card = e.target.closest('.card-square');
-    if (!card) return;
-
-    // Ignore if clicking on overlay link
-    if (e.target.closest('.card-overlay-link')) {
-      return; // Let overlay link work
+    // Link in back face clicked? Let it through
+    if (e.target.closest('.card-back-link')) {
+      return; // Don't prevent default
     }
 
-    // Prevent default & stop propagation
+    // Card clicked?
+    const card = e.target.closest('.card-square');
+    if (!card || !card.dataset.flipReady) return;
+
+    // Don't flip if already flipped (unless clicking close)
+    if (card.classList.contains('is-flipped')) {
+      return;
+    }
+
+    // Prevent default & flip
     e.preventDefault();
     e.stopPropagation();
 
-    // Toggle Flip
-    flipCard(card);
+    // Close all other flipped cards
+    document.querySelectorAll('.card-square.is-flipped').forEach(other => {
+      if (other !== card) {
+        other.classList.remove('is-flipped');
+      }
+    });
+
+    // Flip this card
+    card.classList.add('is-flipped');
+    console.log('🔄 Card flipped:', card.dataset.toolName || 'Unknown');
   }
 
   /**
-   * Flip Card (Simple Toggle)
+   * Handle keyboard
    */
-  function flipCard(card, toggle = true) {
-    if (toggle) {
-      card.classList.toggle('is-flipped');
-    } else {
-      card.classList.remove('is-flipped');
+  function handleKeydown(e) {
+    if (e.key === 'Escape') {
+      const flipped = document.querySelectorAll('.card-square.is-flipped');
+      if (flipped.length > 0) {
+        flipped.forEach(card => card.classList.remove('is-flipped'));
+        console.log('🔄 All cards closed (ESC)');
+      }
     }
-
-    const isFlipped = card.classList.contains('is-flipped');
-    const toolName = card.dataset.toolName || 'Tool';
-    
-    console.log(`🔄 ${isFlipped ? 'Flipped' : 'Unflipped'}: ${toolName}`);
   }
 
-  // ESC to close all
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.card-square.is-flipped').forEach(card => {
-        card.classList.remove('is-flipped');
-      });
-      console.log('🔄 All cards closed (ESC)');
-    }
-  });
+  /**
+   * Escape HTML
+   */
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = String(text || '');
+    return div.innerHTML;
+  }
 
-  // Start
+  // Auto-start
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-})();
+  // Re-prepare cards after search/filter
+  const observer = new MutationObserver(() => {
+    prepareAllCards();
+  });
 
-/**
- * ═══════════════════════════════════════════════════════════
- * END FLIP CARD SYSTEM
- * ══════════════════════════════════════════════════════════
- */
+  setTimeout(() => {
+    const grid = document.querySelector('#tool-grid');
+    if (grid) {
+      observer.observe(grid, { childList: true });
+    }
+  }, 1000);
+
+})();
