@@ -745,7 +745,6 @@ const ui = {
     return div.innerHTML;
   },
 
-  // 🔄 FLIP CARD: Modified renderCard with Front/Back
   renderCard(tool) {
   const categoryName = tool.category_name || tool.category || 'other';
   const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
@@ -761,34 +760,23 @@ const ui = {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
       
-      <div class="card-face card-face-front">
-        <div class="square-content-centered">
-          <div class="square-category-badge" aria-hidden="true">
-            ${this.escapeHtml(categoryDisplay)}
-          </div>
-          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-            ${this.escapeHtml(tool.title)}
-          </h3>
-          <div class="context-marquee" aria-hidden="true">
-            <div class="marquee-track" role="presentation">
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            </div>
-          </div>
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
         </div>
-      </div>
-      
-      <div class="card-face card-face-back">
-        <button class="card-back-close" aria-label="Schließen">×</button>
-        <div class="card-back-content">
-          <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
-          <p class="card-back-text">Mehr Details kommen bald...</p>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+          </div>
         </div>
       </div>
     </div>
   `;
 }
-
 
 
 
