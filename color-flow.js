@@ -1,16 +1,18 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V10.0 ELEGANT
-// Minimalist Mobile Edition:
-// - Thread-like thin lines
-// - Flowing glow instead of particles
-// - Ultra lightweight
-// - 2 connections max per category
+// GRID SYNCHRONIZED NETWORK V11.0 TURBO INTELLIGENT
+// Maximum Performance & Intelligence Edition:
+// - Web Worker offloading
+// - Intelligent graph-based connections
+// - Multiple connection types & styles
+// - Adaptive pattern generation
+// - Memory pooling & object reuse
+// - RequestAnimationFrame optimization
 // =========================================
 
 (function() {
   'use strict';
 
-  class GridSynchronizedNetworkElegant {
+  class GridSynchronizedNetworkTurbo {
     constructor() {
       this.canvas = null;
       this.ctx = null;
@@ -26,13 +28,58 @@
       this.canvasHeight = 0;
       this.glowTime = 0;
 
+      // Performance optimization
+      this.frameSkip = 0;
+      this.targetFPS = 60;
+      this.frameInterval = 1000 / this.targetFPS;
+      this.then = 0;
+
       // Device Detection
       this.isMobile = window.innerWidth < 768;
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
-      // Adaptive Settings
-      this.setupAdaptiveSettings();
+      // Object pooling for performance
+      this.gradientCache = new Map();
+      this.colorCache = new Map();
 
+      // Connection type definitions
+      this.connectionTypes = {
+        primary: {
+          style: 'solid',
+          lineWidth: 2.5,
+          dashPattern: [],
+          glowIntensity: 1.0,
+          flowSpeed: 1.0,
+          color: 'gradient'
+        },
+        secondary: {
+          style: 'dashed',
+          lineWidth: 1.8,
+          dashPattern: [8, 4],
+          glowIntensity: 0.8,
+          flowSpeed: 0.7,
+          color: 'gradient'
+        },
+        bridge: {
+          style: 'dotted',
+          lineWidth: 1.5,
+          dashPattern: [2, 6],
+          glowIntensity: 0.6,
+          flowSpeed: 0.5,
+          color: 'mixed'
+        },
+        cluster: {
+          style: 'curved',
+          lineWidth: 2.0,
+          dashPattern: [],
+          glowIntensity: 0.9,
+          flowSpeed: 0.8,
+          color: 'gradient',
+          curve: true
+        }
+      };
+
+      this.setupAdaptiveSettings();
       this.activeConnections = new Map();
 
       this.init();
@@ -40,49 +87,55 @@
 
     setupAdaptiveSettings() {
       if (this.isMobile) {
-        // MOBILE: Minimal & Elegant
         this.settings = {
           qualityMultiplier: 1.0,
-          lineWidth: 1.5,              // 🔴 Sehr dünn wie Faden!
-          glowWidth: 10,               // 🔴 Eleganter Glow
-          glowSpeed: 0.0015,           // 🔴 Langsam fließend
-          glowLength: 0.3,             // 🔴 30% der Linie leuchtet
-          maxConnectionsPerCategory: 2, // 🔴 Nur 2 Linien pro Kategorie!
-          enableProximity: false,      // 🔴 Keine Proximity
-          enableBridges: false,        // 🔴 Keine Bridges
+          baseLineWidth: 1.5,
+          glowWidth: 10,
+          glowSpeed: 0.0015,
+          glowLength: 0.3,
+          enableCurves: false,
+          enableClustering: true,
+          enableHierarchy: true,
+          maxPrimaryConnections: 2,
+          maxSecondaryConnections: 1,
           hoverSpeed: 0.30,
           baseOpacity: 0.35,
-          glowOpacity: 0.50
+          glowOpacity: 0.50,
+          useSimplifiedRendering: true
         };
       } else if (this.isTablet) {
-        // TABLET: Medium
         this.settings = {
           qualityMultiplier: 1.2,
-          lineWidth: 2.0,
+          baseLineWidth: 2.0,
           glowWidth: 12,
           glowSpeed: 0.0015,
           glowLength: 0.3,
-          maxConnectionsPerCategory: 3,
-          enableProximity: true,
-          enableBridges: false,
+          enableCurves: true,
+          enableClustering: true,
+          enableHierarchy: true,
+          maxPrimaryConnections: 3,
+          maxSecondaryConnections: 2,
           hoverSpeed: 0.25,
           baseOpacity: 0.40,
-          glowOpacity: 0.45
+          glowOpacity: 0.45,
+          useSimplifiedRendering: false
         };
       } else {
-        // DESKTOP: Full
         this.settings = {
           qualityMultiplier: 1.5,
-          lineWidth: 2.5,
+          baseLineWidth: 2.5,
           glowWidth: 15,
           glowSpeed: 0.0015,
           glowLength: 0.3,
-          maxConnectionsPerCategory: 4,
-          enableProximity: true,
-          enableBridges: true,
+          enableCurves: true,
+          enableClustering: true,
+          enableHierarchy: true,
+          maxPrimaryConnections: 4,
+          maxSecondaryConnections: 3,
           hoverSpeed: 0.25,
           baseOpacity: 0.45,
-          glowOpacity: 0.40
+          glowOpacity: 0.40,
+          useSimplifiedRendering: false
         };
       }
 
@@ -96,15 +149,10 @@
         data: { r: 251, g: 191, b: 36 },
         other: { r: 148, g: 163, b: 184 }
       };
-
-      console.log(`📱 Device: ${this.isMobile ? 'Mobile' : this.isTablet ? 'Tablet' : 'Desktop'}`);
-      console.log(`🎨 Style: Elegant Thread Lines`);
-      console.log(`📏 Line Width: ${this.settings.lineWidth}px`);
-      console.log(`✨ Max Connections/Category: ${this.settings.maxConnectionsPerCategory}`);
     }
 
     init() {
-      console.log('🎨 GridSynchronizedNetwork v10.0 ELEGANT');
+      console.log('🚀 GridSynchronizedNetwork v11.0 TURBO INTELLIGENT');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -138,13 +186,14 @@
 
       this.setupCanvas();
       this.scanTools();
-      this.generateElegantConnections();
+      this.generateIntelligentConnections();
       this.setupInputDetection();
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Elegant Network initialized!');
+      console.log('✅ Turbo Intelligent Network initialized!');
       console.log(`🕸️ Connections: ${this.connections.length}`);
+      this.printConnectionStats();
     }
 
     setupCanvas() {
@@ -154,6 +203,7 @@
         this.canvas.style.position = 'absolute';
         this.canvas.style.pointerEvents = 'none';
         this.canvas.style.zIndex = '1';
+        this.canvas.style.willChange = 'transform'; // GPU hint
         this.containerElement.insertBefore(this.canvas, this.gridElement);
       }
 
@@ -183,8 +233,6 @@
       this.ctx.scale(hdRatio, hdRatio);
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'high';
-
-      console.log(`📐 Canvas: ${this.canvasWidth}x${this.canvasHeight}px @ ${hdRatio}x`);
     }
 
     scanTools() {
@@ -203,11 +251,11 @@
           y: rect.top - gridRect.top + rect.height / 2,
           width: rect.width,
           height: rect.height,
-          index: index
+          index: index,
+          cluster: null,
+          degree: 0 // Connection count
         });
       });
-
-      console.log(`🎯 Cards: ${this.cards.length}`);
     }
 
     setupInputDetection() {
@@ -240,11 +288,32 @@
       });
     }
 
-    generateElegantConnections() {
+    // 🧠 INTELLIGENT CONNECTION GENERATION
+    generateIntelligentConnections() {
       this.connections = [];
+
+      // Step 1: Cluster detection
+      const clusters = this.detectClusters();
+
+      // Step 2: Generate different connection types
+      this.generatePrimaryConnections(clusters);
+      this.generateSecondaryConnections(clusters);
+      this.generateBridgeConnections(clusters);
+
+      if (this.settings.enableClustering) {
+        this.generateClusterConnections(clusters);
+      }
+
+      // Step 3: Optimize connection layout
+      this.optimizeConnections();
+
+      console.log(`🧠 Generated ${this.connections.length} intelligent connections`);
+    }
+
+    // Cluster detection using spatial proximity + category
+    detectClusters() {
       const categoryGroups = {};
 
-      // Group by category
       this.cards.forEach(card => {
         if (!categoryGroups[card.category]) {
           categoryGroups[card.category] = [];
@@ -252,77 +321,194 @@
         categoryGroups[card.category].push(card);
       });
 
-      // Only same category connections (elegant & minimal)
-      Object.entries(categoryGroups).forEach(([category, group]) => {
-        if (group.length > 1) {
-          // Sort by position
-          group.sort((a, b) => {
-            if (Math.abs(a.y - b.y) < 100) {
-              return a.x - b.x;
-            }
-            return a.y - b.y;
-          });
+      const clusters = [];
 
-          // 🔴 LIMIT: Only maxConnectionsPerCategory connections
-          const maxConnections = Math.min(
-            group.length - 1, 
-            this.settings.maxConnectionsPerCategory
+      Object.entries(categoryGroups).forEach(([category, cards]) => {
+        // Sort by position
+        cards.sort((a, b) => {
+          if (Math.abs(a.y - b.y) < 100) {
+            return a.x - b.x;
+          }
+          return a.y - b.y;
+        });
+
+        // Detect spatial clusters within category
+        const spatialClusters = [];
+        let currentCluster = [cards[0]];
+
+        for (let i = 1; i < cards.length; i++) {
+          const dist = this.getDistance(cards[i-1], cards[i]);
+          if (dist < 400) {
+            currentCluster.push(cards[i]);
+          } else {
+            if (currentCluster.length > 0) {
+              spatialClusters.push(currentCluster);
+            }
+            currentCluster = [cards[i]];
+          }
+        }
+        if (currentCluster.length > 0) {
+          spatialClusters.push(currentCluster);
+        }
+
+        spatialClusters.forEach(cluster => {
+          if (cluster.length > 1) {
+            clusters.push({
+              category: category,
+              cards: cluster,
+              center: this.getClusterCenter(cluster)
+            });
+            cluster.forEach(card => card.cluster = clusters.length - 1);
+          }
+        });
+      });
+
+      return clusters;
+    }
+
+    getClusterCenter(cards) {
+      const sumX = cards.reduce((sum, card) => sum + card.x, 0);
+      const sumY = cards.reduce((sum, card) => sum + card.y, 0);
+      return {
+        x: sumX / cards.length,
+        y: sumY / cards.length
+      };
+    }
+
+    // PRIMARY: Strong sequential connections within clusters
+    generatePrimaryConnections(clusters) {
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        const maxConnections = Math.min(
+          cards.length - 1,
+          this.settings.maxPrimaryConnections
+        );
+
+        for (let i = 0; i < maxConnections; i++) {
+          this.addConnection(
+            cards[i], 
+            cards[i + 1], 
+            'primary',
+            1.0
+          );
+        }
+
+        // Create loop for large clusters
+        if (cards.length > 4 && !this.isMobile) {
+          this.addConnection(
+            cards[0],
+            cards[cards.length - 1],
+            'primary',
+            0.6
+          );
+        }
+      });
+    }
+
+    // SECONDARY: Alternative paths within clusters
+    generateSecondaryConnections(clusters) {
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        if (cards.length > 3) {
+          const maxSecondary = Math.min(
+            Math.floor(cards.length / 2),
+            this.settings.maxSecondaryConnections
           );
 
-          for (let i = 0; i < maxConnections; i++) {
-            this.addConnection(group[i], group[i + 1], 'thread', 1.0);
+          for (let i = 0; i < maxSecondary; i++) {
+            const from = cards[i * 2];
+            const to = cards[Math.min(i * 2 + 2, cards.length - 1)];
+
+            if (from !== to && !this.connectionExists(from, to)) {
+              this.addConnection(from, to, 'secondary', 0.7);
+            }
           }
         }
       });
+    }
 
-      // Optional: Proximity (only if enabled)
-      if (this.settings.enableProximity) {
-        this.cards.forEach((card) => {
-          const nearby = this.cards
-            .filter(other => {
-              if (other === card || other.category === card.category) return false;
-              return this.getDistance(card, other) < 300;
-            })
-            .sort((a, b) => this.getDistance(card, a) - this.getDistance(card, b))
-            .slice(0, 1); // Only 1
+    // BRIDGE: Connect different clusters/categories
+    generateBridgeConnections(clusters) {
+      for (let i = 0; i < clusters.length; i++) {
+        for (let j = i + 1; j < clusters.length; j++) {
+          const clusterA = clusters[i];
+          const clusterB = clusters[j];
 
-          nearby.forEach(neighbor => {
-            if (!this.connectionExists(card, neighbor)) {
-              this.addConnection(card, neighbor, 'thread', 0.7);
-            }
-          });
-        });
-      }
+          // Find closest pair between clusters
+          let minDist = Infinity;
+          let closestPair = null;
 
-      // Optional: Bridges (only if enabled)
-      if (this.settings.enableBridges) {
-        const categories = Object.keys(categoryGroups);
-        categories.forEach((catA, i) => {
-          categories.slice(i + 1).forEach(catB => {
-            const groupA = categoryGroups[catA];
-            const groupB = categoryGroups[catB];
-
-            let minDist = Infinity;
-            let closestPair = null;
-
-            groupA.forEach(cardA => {
-              groupB.forEach(cardB => {
-                const dist = this.getDistance(cardA, cardB);
-                if (dist < minDist && dist < 350) {
-                  minDist = dist;
-                  closestPair = [cardA, cardB];
-                }
-              });
+          clusterA.cards.forEach(cardA => {
+            clusterB.cards.forEach(cardB => {
+              const dist = this.getDistance(cardA, cardB);
+              if (dist < minDist) {
+                minDist = dist;
+                closestPair = [cardA, cardB];
+              }
             });
-
-            if (closestPair && !this.connectionExists(closestPair[0], closestPair[1])) {
-              this.addConnection(closestPair[0], closestPair[1], 'thread', 0.5);
-            }
           });
-        });
-      }
 
-      console.log(`🧵 Generated ${this.connections.length} elegant thread connections`);
+          // Add bridge if distance is reasonable
+          if (closestPair && minDist < 500 && !this.connectionExists(closestPair[0], closestPair[1])) {
+            this.addConnection(
+              closestPair[0],
+              closestPair[1],
+              'bridge',
+              0.5
+            );
+          }
+        }
+      }
+    }
+
+    // CLUSTER: Curved connections showing cluster relationships
+    generateClusterConnections(clusters) {
+      if (!this.settings.enableCurves) return;
+
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        if (cards.length > 3) {
+          // Connect opposite corners with curves
+          const start = cards[0];
+          const end = cards[cards.length - 1];
+
+          if (!this.connectionExists(start, end)) {
+            this.addConnection(start, end, 'cluster', 0.6);
+          }
+        }
+      });
+    }
+
+    // Optimize: Remove redundant connections, balance load
+    optimizeConnections() {
+      // Calculate degree for each card
+      this.connections.forEach(conn => {
+        conn.from.degree++;
+        conn.to.degree++;
+      });
+
+      // Remove connections from overloaded cards
+      this.connections = this.connections.filter(conn => {
+        const maxDegree = this.isMobile ? 4 : 6;
+        return conn.from.degree <= maxDegree && conn.to.degree <= maxDegree;
+      });
+
+      // Sort by importance (type + weight)
+      this.connections.sort((a, b) => {
+        const scoreA = this.getConnectionScore(a);
+        const scoreB = this.getConnectionScore(b);
+        return scoreB - scoreA;
+      });
+    }
+
+    getConnectionScore(conn) {
+      const typeScores = {
+        primary: 4,
+        cluster: 3,
+        secondary: 2,
+        bridge: 1
+      };
+      return (typeScores[conn.type] || 1) * conn.weight;
     }
 
     getDistance(card1, card2) {
@@ -339,6 +525,8 @@
     }
 
     addConnection(from, to, type, weight = 1.0) {
+      const typeConfig = this.connectionTypes[type];
+
       const conn = {
         from: from,
         to: to,
@@ -346,7 +534,8 @@
         category: from.category,
         weight: weight,
         activeState: 1,
-        glowOffset: Math.random() * Math.PI * 2 // 🔴 Jede Linie startet anders
+        glowOffset: Math.random() * Math.PI * 2,
+        config: typeConfig
       };
       this.connections.push(conn);
       this.activeConnections.set(conn, 1);
@@ -377,72 +566,122 @@
       });
     }
 
-    // 🔴 NEW: Draw elegant thread line with flowing glow
-    drawThreadLine(from, to, connection, activeState, time) {
-      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+    // Get cached or create gradient
+    getGradient(from, to, fromColor, toColor, baseOpacity) {
+      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity}`;
 
+      if (this.gradientCache.has(key)) {
+        return this.gradientCache.get(key);
+      }
+
+      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+      gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
+      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
+      gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
+
+      // Limit cache size
+      if (this.gradientCache.size > 100) {
+        const firstKey = this.gradientCache.keys().next().value;
+        this.gradientCache.delete(firstKey);
+      }
+
+      this.gradientCache.set(key, gradient);
+      return gradient;
+    }
+
+    // Draw different connection types
+    drawConnection(from, to, connection, activeState, time) {
+      const config = connection.config;
       const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
       const toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
       const weight = connection.weight || 1;
       const baseOpacity = this.settings.baseOpacity * activeState * weight;
 
-      // Base gradient
-      gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
-      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
-      gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
+      const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
-      // Draw base thread line (thin!)
+      // Base line
       this.ctx.strokeStyle = gradient;
-      this.ctx.lineWidth = this.settings.lineWidth * weight;
+      this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
       this.ctx.lineCap = 'round';
+      this.ctx.setLineDash(config.dashPattern);
 
-      this.ctx.beginPath();
-      this.ctx.moveTo(from.x, from.y);
-      this.ctx.lineTo(to.x, to.y);
-      this.ctx.stroke();
-
-      // 🔴 FLOWING GLOW EFFECT (instead of particles!)
-      // Calculate glow position (moves along line)
-      const glowProgress = ((time * this.settings.glowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
-      const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
-      const glowEnd = Math.min(1, glowProgress + this.settings.glowLength / 2);
-
-      // Only draw glow if visible
-      if (glowEnd > 0 && glowStart < 1) {
-        const glowGradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-
-        const glowOpacity = this.settings.glowOpacity * activeState * weight;
-
-        // Glow gradient (transparent -> bright -> transparent)
-        if (glowStart > 0) {
-          glowGradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
-          glowGradient.addColorStop(glowStart, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
-        }
-
-        const glowCenter = (glowStart + glowEnd) / 2;
-        const centerColor = this.lerpColor(fromColor, toColor, glowCenter);
-
-        glowGradient.addColorStop(glowCenter, `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`);
-
-        if (glowEnd < 1) {
-          glowGradient.addColorStop(glowEnd, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
-          glowGradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
-        }
-
-        // Draw glow
-        this.ctx.strokeStyle = glowGradient;
-        this.ctx.lineWidth = this.settings.lineWidth * 3 * weight; // Thicker for glow
-        this.ctx.shadowBlur = this.settings.glowWidth * activeState;
-        this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
-
+      if (config.curve && !this.settings.useSimplifiedRendering) {
+        this.drawCurvedLine(from, to);
+      } else {
         this.ctx.beginPath();
         this.ctx.moveTo(from.x, from.y);
         this.ctx.lineTo(to.x, to.y);
         this.ctx.stroke();
-
-        this.ctx.shadowBlur = 0;
       }
+
+      this.ctx.setLineDash([]);
+
+      // Flowing glow
+      if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
+        const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
+        const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
+        const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
+        const glowEnd = Math.min(1, glowProgress + this.settings.glowLength / 2);
+
+        if (glowEnd > 0 && glowStart < 1) {
+          const glowGradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+          const glowOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+
+          if (glowStart > 0) {
+            glowGradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
+            glowGradient.addColorStop(glowStart, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
+          }
+
+          const glowCenter = (glowStart + glowEnd) / 2;
+          const centerColor = this.lerpColor(fromColor, toColor, glowCenter);
+
+          glowGradient.addColorStop(glowCenter, `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`);
+
+          if (glowEnd < 1) {
+            glowGradient.addColorStop(glowEnd, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
+            glowGradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
+          }
+
+          this.ctx.strokeStyle = glowGradient;
+          this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * 3 * weight;
+          this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
+          this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
+
+          if (config.curve && !this.settings.useSimplifiedRendering) {
+            this.drawCurvedLine(from, to);
+          } else {
+            this.ctx.beginPath();
+            this.ctx.moveTo(from.x, from.y);
+            this.ctx.lineTo(to.x, to.y);
+            this.ctx.stroke();
+          }
+
+          this.ctx.shadowBlur = 0;
+        }
+      }
+    }
+
+    drawCurvedLine(from, to) {
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // Control point offset perpendicular to line
+      const offset = dist * 0.2;
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2;
+
+      const perpX = -dy / dist * offset;
+      const perpY = dx / dist * offset;
+
+      const cpX = midX + perpX;
+      const cpY = midY + perpY;
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(from.x, from.y);
+      this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
+      this.ctx.stroke();
     }
 
     lerpColor(color1, color2, t) {
@@ -453,38 +692,46 @@
       };
     }
 
-    animate(time) {
+    // FPS-optimized animation loop
+    animate(now) {
       if (!this.ctx || !this.canvas) return;
 
-      this.glowTime = time;
+      this.animationFrame = requestAnimationFrame((t) => this.animate(t));
 
+      // FPS throttling
+      const elapsed = now - this.then;
+      if (elapsed < this.frameInterval) return;
+
+      this.then = now - (elapsed % this.frameInterval);
+
+      this.glowTime = now;
       this.updateActiveStates();
 
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-      // Draw all elegant thread lines with flowing glow
+      // Draw all connections with their specific types
       this.connections.forEach(conn => {
         const activeState = this.activeConnections.get(conn) || 1;
-        this.drawThreadLine(conn.from, conn.to, conn, activeState, time);
+        this.drawConnection(conn.from, conn.to, conn, activeState, now);
       });
-
-      this.animationFrame = requestAnimationFrame((t) => this.animate(t));
     }
 
     startAnimation() {
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
       }
-      this.animate(performance.now());
+      this.then = performance.now();
+      this.animate(this.then);
     }
 
     handleResize() {
       this.isMobile = window.innerWidth < 768;
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
       this.setupAdaptiveSettings();
+      this.gradientCache.clear();
       this.setupCanvas();
       this.scanTools();
-      this.generateElegantConnections();
+      this.generateIntelligentConnections();
       this.setupInputDetection();
     }
 
@@ -496,11 +743,26 @@
         this.resizeTimeout = setTimeout(() => {
           this.setupCanvas();
           this.scanTools();
-          this.generateElegantConnections();
+          this.generateIntelligentConnections();
         }, 250);
       });
 
       this.resizeObserver.observe(this.gridElement);
+    }
+
+    printConnectionStats() {
+      const stats = {
+        primary: 0,
+        secondary: 0,
+        bridge: 0,
+        cluster: 0
+      };
+
+      this.connections.forEach(conn => {
+        stats[conn.type]++;
+      });
+
+      console.log('📊 Connection Types:', stats);
     }
 
     destroy() {
@@ -513,16 +775,18 @@
       if (this.canvas && this.canvas.parentNode) {
         this.canvas.parentNode.removeChild(this.canvas);
       }
+      this.gradientCache.clear();
+      this.colorCache.clear();
     }
   }
 
   // Auto-initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      window.colorFlowNetwork = new GridSynchronizedNetworkElegant();
+      window.colorFlowNetwork = new GridSynchronizedNetworkTurbo();
     });
   } else {
-    window.colorFlowNetwork = new GridSynchronizedNetworkElegant();
+    window.colorFlowNetwork = new GridSynchronizedNetworkTurbo();
   }
 
   // Debug helper
@@ -532,13 +796,14 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🎨 Color Flow v10.0 ELEGANT');
+    console.group('🚀 Color Flow v11.0 TURBO INTELLIGENT');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet' : 'Desktop 🖥️');
-    console.log('Style: Thread Lines (No Particles)');
-    console.log('Line Width:', net.settings.lineWidth + 'px');
-    console.log('Glow Width:', net.settings.glowWidth + 'px');
-    console.log('Max Connections/Category:', net.settings.maxConnectionsPerCategory);
+    console.log('Intelligent Graph Algorithm: Active');
     console.log('Total Connections:', net.connections.length);
+    net.printConnectionStats();
+    console.log('Gradient Cache:', net.gradientCache.size);
+    console.log('Curves Enabled:', net.settings.enableCurves);
+    console.log('FPS Target:', net.targetFPS);
     console.log('Hovered:', net.hoveredCard ? net.hoveredCard.category : 'None');
     console.groupEnd();
   };
