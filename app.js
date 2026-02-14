@@ -880,42 +880,35 @@ const ui = {
     let touchStartTime = 0;
     let touchStartTarget = null;
 
-    // 🔄 Click Handler with FLIP - FIXED
-const clickHandler = (e) => {
-  const card = e.target.closest('.card-square');
-  if (!card) return;
+      // Click Handler - ANALYTICS ONLY (flip-card.js handles flipping)
+  const clickHandler = (e) => {
+    const card = e.target.closest('.card-square');
+    if (!card) return;
 
-  // WICHTIG: Verhindere Event-Bubbling komplett
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-
-  // Don't flip if clicking close button
-  if (e.target.closest('.card-back-close')) {
-    return;
-  }
-
-  const toolName = card.dataset.toolName ||
-                   card.getAttribute('data-tool-name') ||
-                   card.querySelector('.square-title-large')?.textContent ||
-                   'Unknown';
-
-  // Analytics
-  try {
-    if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
-      analytics.trackToolClick(toolName);
+    // Ignore flipped cards & back-face elements
+    if (card.classList.contains('is-flipped') || 
+        e.target.closest('.card-back-close') ||
+        e.target.closest('.card-face-back') ||
+        e.target.closest('.card-back-button')) {
+      return; // Let flip-card.js handle it
     }
-  } catch (err) {
-    console.warn('Analytics tracking failed', err);
-  }
 
-  // 🔄 TOGGLE FLIP
-  card.classList.toggle('is-flipped');
-  console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
-};
+    const toolName = card.dataset.toolName ||
+                     card.getAttribute('data-tool-name') ||
+                     card.querySelector('.square-title-large')?.textContent ||
+                     'Unknown';
 
-// Throttle NACH der Funktion mit längerer Delay
-const throttledClickHandler = throttle(clickHandler, 300);
+    // Analytics only
+    try {
+      if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
+        analytics.trackToolClick(toolName);
+      }
+    } catch (err) {
+      console.warn('Analytics tracking failed', err);
+    }
+
+    console.log(`📊 Analytics: ${toolName}`);
+  };
 
     
     // Touch handlers
