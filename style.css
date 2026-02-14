@@ -2557,3 +2557,29 @@ a:focus-visible {
   position: relative !important;
   /* Kein z-index - bleibt bei auto/0 */
 }
+
+/* ================================================ */
+/* FIX: Keine Linie auf Cards bei Hover/Klick      */
+/* ================================================ */
+
+.card-square::before {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.card-square:hover::before {
+  display: none !important;
+}
+
+.card-square:active::before,
+.card-square.card-armed::before {
+  display: none !important;
+}
+
+/* Optional: Auch Glow-Shadow entfernen */
+.card-square::after {
+  display: none !important;
+}
+
+/* ================================================ */
+
