@@ -1,298 +1,239 @@
-// ==================== SMART COLOR FLOW SYSTEM ====================
+/* ===========================
+   ROUTING / OBSTACLE AVOIDANCE
+   (Insert into color-flow.js inside SmartColorFlow class)
+   =========================== */
 
-class SmartColorFlow {
-  constructor() {
-    this.canvas = null;
-    this.ctx = null;
-    this.tools = [];
-    this.focusedTool = null;
-    
-        this.colors = {
-      text:  { r: 0,   g: 243, b: 255 },
-      image: { r: 236, g: 72,  b: 153 },
-      code:  { r: 139, g: 92,  b: 246 },
-      video: { r: 239, g: 68,  b: 68  },
-      audio: { r: 255, g: 107, b: 157 },
-      data: { r: 29, g: 233, b: 182 },
-      other: { r: 176, g: 190, b: 197 }
-    };
-  }
-  
-  // ---- Ersetze die alte async init() Funktion durch diesen kompletten Block ----
-async init() {
-  console.log('🎨 Color Flow starting.');
-
-  const startWhenReady = () => {
-    // 1) Wenn Karten bereits im DOM sind → sofort starten
-    if (document.querySelectorAll('.card-square').length > 0) {
-      this.start();
-      return true;
-    }
-    // 2) Fallback: app-exposed states (debug/prod)
-    if (window.appState && Array.isArray(window.appState.tools) && window.appState.tools.length > 0) {
-      this.start();
-      return true;
-    }
-    if (window.state && Array.isArray(window.state.tools) && window.state.tools.length > 0) {
-      this.start();
-      return true;
-    }
-    return false;
+/* Grid / Pathfinding helpers */
+buildGrid(cellSize = 18) {
+  const canvas = this.canvas;
+  const w = Math.max(1, Math.ceil(canvas.width / cellSize));
+  const h = Math.max(1, Math.ceil(canvas.height / cellSize));
+  this._grid = {
+    cellSize,
+    cols: w,
+    rows: h,
+    cells: new Uint8Array(w * h) // 0 = free, 1 = obstacle
   };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!startWhenReady()) this.waitForTools();
-    });
-  } else {
-    if (!startWhenReady()) this.waitForTools();
-  }
-
-  // Hook: app kann 'quantum:ready' dispatchen sobald UI gerendert ist
-  window.addEventListener('quantum:ready', () => {
-    if (!this.started) this.start();
-  }, { once: true });
-}
-  
-  // ---- Ersetze die alte waitForTools() Funktion durch diesen Block ----
-waitForTools() {
-  const check = setInterval(() => {
-    if (document.querySelectorAll('.card-square').length > 0 ||
-        (window.appState && Array.isArray(window.appState.tools) && window.appState.tools.length > 0) ||
-        (window.state && Array.isArray(window.state.tools) && window.state.tools.length > 0)) {
-      clearInterval(check);
-      this.start();
-      return;
-    }
-  }, 150);
-
-  // timeout nach 12s, aber es bleibt das 'quantum:ready' Event als Fallback
-  setTimeout(() => clearInterval(check), 12000);
-}
-  
-    start() {
-    // prevent double-initialization
-    if (this.started) return;
-
-    this.canvas = document.getElementById('connection-canvas');
-    if (!this.canvas) return;
-    
-    this.ctx = this.canvas.getContext('2d');
-    if (!this.ctx) {
-      console.warn('Color Flow: 2D context not available; aborting start().');
-      return;
-    }
-
-    // mark as started to avoid multiple initializations
-    this.started = true;
-
-    this.setupCanvas();
-    this.parseTools();
-    this.calculateConnections();
-    this.setupScrollObserver();
-    this.setupTouchInteractions();
-    this.setupLegend();
-    this.showOnboardingIfNeeded();
-    this.draw();
-    
-    window.addEventListener('resize', () => this.requestRedraw());
-    window.addEventListener('scroll', () => this.requestRedraw(), { passive: true });
-    
-    console.log('✅ Color Flow ready!', this.tools.length, 'tools');
-  } 
-  
-    setupCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    // set physical pixel size
-    this.canvas.width = Math.max(1, Math.round(window.innerWidth * dpr));
-    this.canvas.height = Math.max(1, Math.round(document.documentElement.scrollHeight * dpr));
-    // set CSS size
-    this.canvas.style.width = window.innerWidth + 'px';
-    this.canvas.style.height = document.documentElement.scrollHeight + 'px';
-    // reset transform & scale exactly once (avoid cumulative scaling)
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-    this.ctx.scale(dpr, dpr);
-  }
-  
-  parseTools() {
-    const toolElements = document.querySelectorAll('.card-square');
-    this.tools = Array.from(toolElements).map(el => ({
-      id: el.dataset.toolId || el.querySelector('.square-title-large')?.textContent,
-      element: el,
-      category: el.dataset.category || 'other',
-      position: null,
-      connections: []
-    }));
-  }
-  
-  calculateConnections() {
-    this.tools.forEach((tool1, i) => {
-      this.tools.slice(i + 1).forEach(tool2 => {
-        if (tool1.category === tool2.category) {
-          const color = this.colors[tool1.category] || this.colors.other;
-          tool1.connections.push({ tool: tool2, type: 'alternative', color, strength: 0.8 });
-          tool2.connections.push({ tool: tool1, type: 'alternative', color, strength: 0.8 });
-        }
-      });
-    });
-  }
-  
-    draw() {
-    // defensive guard: ensure ctx and canvas are available
-    if (!this.ctx || !this.canvas) return;
-
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    this.tools.forEach(tool => {
-      tool.position = this.getToolCenter(tool.element);
-    });
-    
-    this.tools.forEach(tool => {
-      tool.connections.forEach(conn => this.drawConnection(tool, conn));
-    });
-  }
-  
-  drawConnection(tool, connection) {
-    const pos1 = tool.position;
-    const pos2 = connection.tool.position;
-    if (!pos1 || !pos2) return;
-    
-    const inViewport = this.isToolInViewport(tool) || this.isToolInViewport(connection.tool);
-    let opacity = 0.1;
-    
-    if (this.focusedTool === tool.id || this.focusedTool === connection.tool.id) {
-      opacity = 0.7;
-    } else if (inViewport) {
-      opacity = 0.25;
-    }
-    
-    this.ctx.beginPath();
-    this.ctx.moveTo(pos1.x, pos1.y);
-    
-    const midX = (pos1.x + pos2.x) / 2;
-    const midY = (pos1.y + pos2.y) / 2;
-    this.ctx.quadraticCurveTo(midX, midY - 30, pos2.x, pos2.y);
-    
-    this.ctx.lineWidth = connection.strength * 2;
-    this.ctx.setLineDash(connection.type === 'alternative' ? [] : [10, 5]);
-    
-    const color = connection.color;
-    this.ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`;
-    
-    if (opacity > 0.5) {
-      this.ctx.shadowBlur = 15;
-      this.ctx.shadowColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.6)`;
-    } else {
-      this.ctx.shadowBlur = 0;
-    }
-    
-    this.ctx.stroke();
-    this.ctx.setLineDash([]);
-    this.ctx.shadowBlur = 0;
-  }
-  
-  getToolCenter(element) {
-    const rect = element.getBoundingClientRect();
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    return {
-      x: rect.left + scrollX + rect.width / 2,
-      y: rect.top + scrollY + rect.height / 2
-    };
-  }
-  
-  isToolInViewport(tool) {
-    const rect = tool.element.getBoundingClientRect();
-    const center = rect.top + rect.height / 2;
-    return center > window.innerHeight * 0.2 && center < window.innerHeight * 0.8;
-  }
-  
-  setupScrollObserver() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          const toolId = entry.target.dataset.toolId || 
-                         entry.target.querySelector('.square-title-large')?.textContent;
-          if (this.focusedTool !== toolId) {
-            this.focusedTool = toolId;
-            this.requestRedraw();
-          }
-        }
-      });
-    }, { threshold: [0.5], rootMargin: '-20% 0px -20% 0px' });
-    
-    this.tools.forEach(tool => observer.observe(tool.element));
-  }
-  
-  setupTouchInteractions() {
-    this.tools.forEach(tool => {
-      tool.element.addEventListener('click', (e) => {
-        if (!e.target.closest('a, button')) {
-          e.preventDefault();
-          this.showToolConnections(tool);
-        }
-      });
-    });
-  }
-  
-  showToolConnections(tool) {
-    this.focusedTool = tool.id;
-    this.draw();
-    tool.element.classList.add('connection-active');
-    
-    setTimeout(() => {
-      tool.element.classList.remove('connection-active');
-      this.focusedTool = null;
-      this.draw();
-    }, 3000);
-  }
-  
-  setupLegend() {
-    const toggleBtn = document.querySelector('.legend-toggle');
-    const panel = document.getElementById('legend-panel');
-    const closeBtn = panel?.querySelector('.legend-close');
-    
-    if (!toggleBtn || !panel) return;
-    
-    toggleBtn.addEventListener('click', () => panel.classList.add('active'));
-    if (closeBtn) closeBtn.addEventListener('click', () => panel.classList.remove('active'));
-    panel.addEventListener('click', (e) => { if (e.target === panel) panel.classList.remove('active'); });
-  }
-  
-  showOnboardingIfNeeded() {
-    if (localStorage.getItem('colorflow-seen')) return;
-    
-    setTimeout(() => {
-      const toast = document.createElement('div');
-      toast.className = 'onboarding-toast';
-      toast.innerHTML = `
-        <div class="toast-content">
-          <span class="toast-icon">💡</span>
-          <div class="toast-text">
-            <strong>Tipp:</strong>
-            <small>Linien zeigen Tool-Beziehungen! Tippe auf ein Tool für Details.</small>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(toast);
-      requestAnimationFrame(() => toast.classList.add('visible'));
-      setTimeout(() => {
-        toast.classList.remove('visible');
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
-      localStorage.setItem('colorflow-seen', 'true');
-    }, 1000);
-  }
-  
-  requestRedraw() {
-    if (this.updateTimeout) return;
-    this.updateTimeout = setTimeout(() => {
-      this.setupCanvas();
-      this.draw();
-      this.updateTimeout = null;
-    }, 100);
-  }
+  return this._grid;
 }
 
-const colorFlow = new SmartColorFlow();
-colorFlow.init();
+_gridIndex(col, row) {
+  return row * this._grid.cols + col;
+}
+
+markObstaclesFromTools(pad = 6) {
+  if (!this._grid) this.buildGrid();
+  const { cellSize, cols, rows, cells } = this._grid;
+  // reset
+  cells.fill(0);
+  // for each tool box mark covered cells
+  this.tools.forEach(t => {
+    const rect = t.element.getBoundingClientRect();
+    // convert from page coords -> canvas coords (assume canvas origin 0,0 = page top-left)
+    const x1 = Math.max(0, Math.floor((rect.left - pad) / cellSize));
+    const y1 = Math.max(0, Math.floor((rect.top - pad) / cellSize));
+    const x2 = Math.min(cols - 1, Math.ceil((rect.right + pad) / cellSize));
+    const y2 = Math.min(rows - 1, Math.ceil((rect.bottom + pad) / cellSize));
+    for (let r = y1; r <= y2; r++) {
+      for (let c = x1; c <= x2; c++) {
+        cells[this._gridIndex(c, r)] = 1;
+      }
+    }
+  });
+}
+
+_pointToGrid(pt) {
+  const { cellSize } = this._grid;
+  return {
+    c: Math.max(0, Math.min(this._grid.cols - 1, Math.floor(pt.x / cellSize))),
+    r: Math.max(0, Math.min(this._grid.rows - 1, Math.floor(pt.y / cellSize)))
+  };
+}
+
+_gridToPoint(node) {
+  const { cellSize } = this._grid;
+  return {
+    x: node.c * cellSize + cellSize / 2,
+    y: node.r * cellSize + cellSize / 2
+  };
+}
+
+/* Simple A* on grid (4-way or 8-way neighbors) */
+findPathAstar(startPt, endPt, allowDiagonal = true, maxNodes = 5000) {
+  if (!this._grid) this.buildGrid();
+  const { cols, rows, cells } = this._grid;
+  const start = this._pointToGrid(startPt);
+  const goal  = this._pointToGrid(endPt);
+  const key = (c, r) => (r * cols + c);
+
+  // quick bounds check
+  if (cells[key(goal.c, goal.r)] === 1 || cells[key(start.c, start.r)] === 1) {
+    return null; // no path if start or goal inside obstacle
+  }
+
+  const open = new TinyHeap((a,b) => a.f - b.f);
+  const cameFrom = new Int32Array(cols * rows).fill(-1);
+  const gScore = new Float32Array(cols * rows).fill(Infinity);
+  const fScore = new Float32Array(cols * rows).fill(Infinity);
+  const startIdx = key(start.c, start.r);
+  gScore[startIdx] = 0;
+  fScore[startIdx] = this._heuristic(start, goal);
+  open.push({ idx: startIdx, c: start.c, r: start.r, f: fScore[startIdx] });
+
+  const neighborOffsets = allowDiagonal ? 
+    [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]] :
+    [[1,0],[-1,0],[0,1],[0,-1]];
+
+  let processed = 0;
+  while (open.size() && processed < maxNodes) {
+    const cur = open.pop();
+    processed++;
+    const curIdx = cur.idx;
+    if (curIdx === key(goal.c, goal.r)) {
+      // reconstruct path
+      const path = [];
+      let node = curIdx;
+      while (node !== -1) {
+        const c = node % cols;
+        const r = Math.floor(node / cols);
+        path.push({ c, r });
+        node = cameFrom[node];
+      }
+      path.reverse();
+      return path.map(n => this._gridToPoint(n));
+    }
+
+    // neighbors
+    for (let i = 0; i < neighborOffsets.length; i++) {
+      const nc = cur.c + neighborOffsets[i][0];
+      const nr = cur.r + neighborOffsets[i][1];
+      if (nc < 0 || nr < 0 || nc >= cols || nr >= rows) continue;
+      const nIdx = key(nc, nr);
+      if (cells[nIdx] === 1) continue; // obstacle
+      const tentativeG = gScore[curIdx] + ((i < 4) ? 1 : 1.4142); // diag cost
+      if (tentativeG < gScore[nIdx]) {
+        cameFrom[nIdx] = curIdx;
+        gScore[nIdx] = tentativeG;
+        const h = this._heuristic({c:nc,r:nr}, goal);
+        fScore[nIdx] = tentativeG + h;
+        open.push({ idx: nIdx, c: nc, r: nr, f: fScore[nIdx] });
+      }
+    }
+  }
+  return null; // failed or too long
+}
+
+_heuristic(a, b) {
+  // diagonal-aware octile distance
+  const dx = Math.abs(a.c - b.c);
+  const dy = Math.abs(a.r - b.r);
+  return Math.max(dx, dy) + 0.4142 * Math.min(dx, dy);
+}
+
+/* Tiny binary heap implementation (min-heap) - lightweight */
+class TinyHeap {
+  constructor(cmp){ this.cmp = cmp; this.nodes = []; }
+  push(x){ this.nodes.push(x); this._siftUp(this.nodes.length-1); }
+  pop(){ if(this.nodes.length===0) return null; const r=this.nodes[0]; const last=this.nodes.pop(); if(this.nodes.length){this.nodes[0]=last; this._siftDown(0);} return r; }
+  size(){ return this.nodes.length; }
+  _siftUp(i){ const n=this.nodes; const cmp=this.cmp; while(i>0){const p=(i-1)>>1; if(cmp(n[i],n[p])>=0) break; [n[i],n[p]]=[n[p],n[i]]; i=p;} }
+  _siftDown(i){ const n=this.nodes; const cmp=this.cmp; const len=n.length; while(true){ let l=i*2+1; if(l>=len) break; let r=l+1; let m=l; if(r<len && cmp(n[r], n[l])<0) m=r; if(cmp(n[m], n[i])>=0) break; [n[i], n[m]]=[n[m], n[i]]; i=m; } }
+}
+
+/* Smooth path (Chaikin's corner-cutting) */
+smoothPath(points, iterations = 2) {
+  if (!points || points.length < 3) return points;
+  let pts = points.map(p => ({x: p.x, y: p.y}));
+  for (let it = 0; it < iterations; it++) {
+    const out = [];
+    out.push(pts[0]);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i];
+      const p1 = pts[i+1];
+      const Q = { x: 0.75*p0.x + 0.25*p1.x, y: 0.75*p0.y + 0.25*p1.y };
+      const R = { x: 0.25*p0.x + 0.75*p1.x, y: 0.25*p0.y + 0.75*p1.y };
+      out.push(Q);
+      out.push(R);
+    }
+    out.push(pts[pts.length - 1]);
+    pts = out;
+  }
+  return pts;
+}
+
+/* draw path on canvas context (expects already scaled coords) */
+drawPath(ctx, pts, color, width = 2, dashed = false) {
+  if (!pts || pts.length < 2) return;
+  ctx.save();
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = width;
+  ctx.strokeStyle = color;
+  if (dashed) ctx.setLineDash([6,6]); else ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+  ctx.stroke();
+  ctx.restore();
+}
+
+/* Integration: replace simple connection calc with route-based one */
+calculateConnectionsWithRouting() {
+  // ensure grid exists and obstacles are up-to-date
+  this.buildGrid(this.routingCellSize || 18);
+  this.markObstaclesFromTools(this.routingPad || 6);
+
+  // for each tool compute anchors and path to others (or a subset)
+  this.tools.forEach((t, i) => {
+    t.connections = [];
+    const rect1 = t.element.getBoundingClientRect();
+    const anchors1 = [
+      { x: rect1.left - 6, y: rect1.top + rect1.height / 2 }, // left
+      { x: rect1.right + 6, y: rect1.top + rect1.height / 2 }, // right
+      { x: rect1.left + rect1.width/2, y: rect1.top - 6 }, // top
+      { x: rect1.left + rect1.width/2, y: rect1.bottom + 6 } // bottom
+    ];
+
+    this.tools.slice(i+1).forEach(t2 => {
+      const rect2 = t2.element.getBoundingClientRect();
+      const anchors2 = [
+        { x: rect2.left - 6, y: rect2.top + rect2.height / 2 },
+        { x: rect2.right + 6, y: rect2.top + rect2.height / 2 },
+        { x: rect2.left + rect2.width/2, y: rect2.top - 6 },
+        { x: rect2.left + rect2.width/2, y: rect2.bottom + 6 }
+      ];
+
+      // try combinations of anchors to find a viable path
+      let bestPath = null;
+      for (const a1 of anchors1) {
+        for (const a2 of anchors2) {
+          const rawPath = this.findPathAstar(a1, a2, true, 8000);
+          if (!rawPath) continue;
+          const smooth = this.smoothPath(rawPath, 2);
+          // choose shortest euclidean length
+          const len = smooth.reduce((acc, p, idx, arr) => {
+            if (idx === 0) return 0;
+            const dx = p.x - arr[idx-1].x; const dy = p.y - arr[idx-1].y;
+            return acc + Math.hypot(dx,dy);
+          }, 0);
+          if (!bestPath || len < bestPath.len) bestPath = { path: smooth, len, start: a1, end: a2 };
+        }
+      }
+
+      if (bestPath) {
+        const color = this.colors[t.category] || this.colors.other;
+        t.connections.push({ target: t2, path: bestPath.path, color });
+        // symmetrical
+        t2.connections = t2.connections || [];
+        t2.connections.push({ target: t, path: bestPath.path.slice().reverse(), color });
+      } else {
+        // fallback: store null -> calling draw will use simple bezier or low alpha line
+        t.connections.push({ target: t2, path: null, color: this.colors.other });
+      }
+    });
+  });
+}
+
+/* Hook into your draw() function:
+   when drawing connections, check connection.path; if present use drawPath(),
+   otherwise fallback to previous bezier draw. */
