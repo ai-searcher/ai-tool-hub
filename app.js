@@ -938,24 +938,23 @@ const clickHandler = (e) => {
     };
 
      // Store & attach
-this.handlers.grid = {
-  click: clickHandler,  // ← OHNE throttle!
-  keydown: keyHandler,
-  touchstart: touchStartHandler,
-  touchend: touchEndHandler
-};
+    // Store & attach
+    this.handlers.grid = {
+      click: clickHandler,
+      keydown: keyHandler,
+      touchstart: touchStartHandler,
+      touchend: touchEndHandler
+    };
 
-const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;  // ← passive: true!
+    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
 
-grid.addEventListener('click', clickHandler, false);  // ← capture: false, nicht true!
-grid.addEventListener('keydown', keyHandler, passiveOption);
-grid.addEventListener('touchstart', touchStartHandler, { passive: true });
-grid.addEventListener('touchend', touchEndHandler, passiveOption);
+    grid.addEventListener('click', clickHandler, false);  // ← GEÄNDERT: kein throttle, capture: false
+    grid.addEventListener('keydown', keyHandler, passiveOption);
+    grid.addEventListener('touchstart', touchStartHandler, { passive: true });
+    grid.addEventListener('touchend', touchEndHandler, passiveOption);
 
-console.log('✅ Card handlers attached (flip-card.js compatible)');
-
-  
-   }
+    console.log('✅ Card handlers attached (flip-card.js compatible)');
+  }
 };
 
 // =========================================
