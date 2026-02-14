@@ -1,8 +1,8 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V8.0 ULTRA
-// Premium Edition:
+// GRID SYNCHRONIZED NETWORK V8.0 FIXED
+// Premium Edition - Bug Fixed
 // - Realtime instant hover
-// - 4K crystal clear rendering
+// - HD crystal clear rendering
 // - Intelligent connection algorithm
 // =========================================
 
@@ -22,29 +22,31 @@
       this.resizeObserver = null;
       this.hoveredCard = null;
       this.lastTime = 0;
+      this.canvasWidth = 0;
+      this.canvasHeight = 0;
       this.isMobile = window.innerWidth < 768;
 
-      // Ultra Glow Settings - INSTANT RESPONSE
+      // Ultra Glow Settings
       this.glowSettings = {
-        baseOpacity: 0.5,           // Höher für bessere Sichtbarkeit
+        baseOpacity: 0.5,
         glowOpacity: 0.35,
-        lineWidth: 4,               // Dicker für HD
-        glowWidth: 18,              // Größer für HD
-        hoverTransitionSpeed: 0.25, // 🔴 4x schneller! (war 0.08)
+        lineWidth: 4,
+        glowWidth: 18,
+        hoverTransitionSpeed: 0.25,
         particleGlow: 30
       };
 
-      // Particle System - HD
+      // Particle System
       this.particleSettings = {
         count: 30,
         speed: 0.0025,
-        size: 3.5,                  // Größer für HD
+        size: 3.5,
         glow: 25,
         opacity: 0.95,
-        easing: 0.12                // 🔴 Schneller! (war 0.05)
+        easing: 0.12
       };
 
-      // Category Colors - Enhanced
+      // Category Colors
       this.categoryColors = {
         text: { r: 0, g: 243, b: 255 },
         image: { r: 236, g: 72, b: 153 },
@@ -55,8 +57,8 @@
         other: { r: 148, g: 163, b: 184 }
       };
 
-      // HD Rendering
-      this.qualityMultiplier = 2; // 🔴 2x Resolution für HD!
+      // HD Rendering (angepasst)
+      this.qualityMultiplier = 1.5; // 🔴 REDUZIERT von 2 auf 1.5 für bessere Performance
 
       this.activeConnections = new Map();
 
@@ -64,7 +66,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v8.0 ULTRA Premium initialized');
+      console.log('🚀 GridSynchronizedNetwork v8.0 FIXED initialized');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -78,9 +80,12 @@
     }
 
     setup() {
+      console.log('🔧 Setup starting...');
+
       this.gridElement = document.getElementById('tool-grid');
 
       if (!this.gridElement) {
+        console.warn('⚠️ Grid not found, retrying...');
         setTimeout(() => this.setup(), 500);
         return;
       }
@@ -94,7 +99,7 @@
 
       this.setupCanvas();
       this.scanTools();
-      this.generateIntelligentConnections(); // 🔴 Intelligenter Algorithmus!
+      this.generateIntelligentConnections();
       this.initParticles();
       this.setupHoverDetection();
       this.startAnimation();
@@ -114,33 +119,41 @@
         this.canvas.style.pointerEvents = 'none';
         this.canvas.style.zIndex = '1';
         this.containerElement.insertBefore(this.canvas, this.gridElement);
+        console.log('✅ Canvas created');
       }
 
       const gridRect = this.gridElement.getBoundingClientRect();
       const parentRect = this.containerElement.getBoundingClientRect();
 
+      // Store logical dimensions
+      this.canvasWidth = gridRect.width;
+      this.canvasHeight = gridRect.height;
+
       this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
       this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
-      this.canvas.style.width = gridRect.width + 'px';
-      this.canvas.style.height = gridRect.height + 'px';
+      this.canvas.style.width = this.canvasWidth + 'px';
+      this.canvas.style.height = this.canvasHeight + 'px';
 
-      // 🔴 HD RENDERING - 2x devicePixelRatio für crystal clear
+      // HD RENDERING - Fixed scaling
       const hdRatio = window.devicePixelRatio * this.qualityMultiplier;
-      this.canvas.width = gridRect.width * hdRatio;
-      this.canvas.height = gridRect.height * hdRatio;
+      this.canvas.width = this.canvasWidth * hdRatio;
+      this.canvas.height = this.canvasHeight * hdRatio;
 
       this.ctx = this.canvas.getContext('2d', { 
         alpha: true,
         desynchronized: true,
-        willReadFrequently: false // Performance
+        willReadFrequently: false
       });
+
+      // WICHTIG: Scale NACH dem Kontext holen
       this.ctx.scale(hdRatio, hdRatio);
 
-      // 🔴 HD Antialiasing
+      // HD Antialiasing
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'high';
 
-      console.log(`📐 Canvas HD: ${gridRect.width}x${gridRect.height}px @ ${hdRatio}x`);
+      console.log(`📐 Canvas: ${this.canvasWidth}x${this.canvasHeight}px @ ${hdRatio}x DPR`);
+      console.log(`📐 Physical: ${this.canvas.width}x${this.canvas.height}px`);
     }
 
     scanTools() {
@@ -167,15 +180,13 @@
     }
 
     setupHoverDetection() {
-      // Direct event listeners for instant response
+      // Direct event listeners
       this.cards.forEach((card) => {
-        const el = card.element;
-
-        el.addEventListener('mouseenter', () => {
+        card.element.addEventListener('mouseenter', () => {
           this.hoveredCard = card;
         });
 
-        el.addEventListener('mouseleave', () => {
+        card.element.addEventListener('mouseleave', () => {
           if (this.hoveredCard === card) {
             this.hoveredCard = null;
           }
@@ -184,8 +195,8 @@
 
       // Fallback
       document.addEventListener('mousemove', (e) => {
-        const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
-        const card = hoveredElement?.closest('.card-square');
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        const card = el?.closest('.card-square');
 
         if (card) {
           const cardData = this.cards.find(c => c.element === card);
@@ -196,9 +207,10 @@
           this.hoveredCard = null;
         }
       });
+
+      console.log('✅ Hover detection ready');
     }
 
-    // 🧠 INTELLIGENT CONNECTION ALGORITHM
     generateIntelligentConnections() {
       this.connections = [];
       const categoryGroups = {};
@@ -211,56 +223,53 @@
         categoryGroups[card.category].push(card);
       });
 
-      // 1. SAME CATEGORY CONNECTIONS (strong relationships)
+      // Layer 1: Same Category
       Object.entries(categoryGroups).forEach(([category, group]) => {
         if (group.length > 1) {
-          // Smart sorting: by position (left to right, top to bottom)
+          // Sort by position
           group.sort((a, b) => {
             if (Math.abs(a.y - b.y) < 100) {
-              return a.x - b.x; // Same row: sort by x
+              return a.x - b.x;
             }
-            return a.y - b.y; // Different rows: sort by y
+            return a.y - b.y;
           });
 
-          // Connect sequential items
+          // Sequential connections
           for (let i = 0; i < group.length - 1; i++) {
             this.addConnection(group[i], group[i + 1], 'alternative', 1.0);
           }
 
-          // Connect first and last (circular)
+          // Circular (optional)
           if (group.length > 3) {
             this.addConnection(group[0], group[group.length - 1], 'circular', 0.5);
           }
         }
       });
 
-      // 2. SMART PROXIMITY CONNECTIONS (workflow relationships)
+      // Layer 2: Proximity
       this.cards.forEach((card) => {
-        // Find nearby cards from different categories
-        const nearbyDifferent = this.cards
+        const nearby = this.cards
           .filter(other => {
             if (other === card || other.category === card.category) return false;
-            const distance = this.getDistance(card, other);
-            return distance < 350;
+            return this.getDistance(card, other) < 350;
           })
           .sort((a, b) => this.getDistance(card, a) - this.getDistance(card, b))
-          .slice(0, 2); // Top 2 closest
+          .slice(0, 2);
 
-        nearbyDifferent.forEach(neighbor => {
+        nearby.forEach(neighbor => {
           if (!this.connectionExists(card, neighbor)) {
             this.addConnection(card, neighbor, 'workflow', 0.8);
           }
         });
       });
 
-      // 3. CATEGORY BRIDGES (connect different category groups)
+      // Layer 3: Category Bridges
       const categories = Object.keys(categoryGroups);
       categories.forEach((catA, i) => {
         categories.slice(i + 1).forEach(catB => {
           const groupA = categoryGroups[catA];
           const groupB = categoryGroups[catB];
 
-          // Find closest pair between categories
           let minDist = Infinity;
           let closestPair = null;
 
@@ -280,7 +289,7 @@
         });
       });
 
-      console.log(`🧠 Intelligent connections generated: ${this.connections.length}`);
+      console.log(`🧠 Generated ${this.connections.length} intelligent connections`);
     }
 
     getDistance(card1, card2) {
@@ -321,13 +330,12 @@
             progress: i / particleCount,
             targetProgress: i / particleCount,
             speed: this.particleSettings.speed * (0.8 + Math.random() * 0.4) * conn.weight,
-            size: this.particleSettings.size * (0.7 + Math.random() * 0.6),
-            offset: Math.random() * Math.PI * 2
+            size: this.particleSettings.size * (0.7 + Math.random() * 0.6)
           });
         }
       });
 
-      console.log(`✨ HD Particles initialized: ${this.particles.length}`);
+      console.log(`✨ Initialized ${this.particles.length} particles`);
     }
 
     isConnectionActive(connection) {
@@ -339,14 +347,12 @@
       return start + (end - start) * t;
     }
 
-    updateActiveStates(deltaTime) {
-      // 🔴 INSTANT HOVER - Schnellere Transitions
+    updateActiveStates() {
       this.connections.forEach(conn => {
         const isActive = this.isConnectionActive(conn);
-        const targetState = isActive ? 1 : 0.25; // 0.25 statt 0.3 = dimmer
+        const targetState = isActive ? 1 : 0.25;
         const currentState = this.activeConnections.get(conn) || 1;
 
-        // Schnellere Interpolation
         const newState = this.lerp(
           currentState, 
           targetState, 
@@ -363,7 +369,6 @@
       const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
       const toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
-      // Weight-based opacity
       const weight = connection.weight || 1;
       const opacity = this.lerp(0.25, 1.8, activeState) * weight;
       const baseOpacity = this.glowSettings.baseOpacity * opacity;
@@ -373,7 +378,6 @@
       gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.2})`);
       gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
 
-      // HD Line rendering
       const glowWidth = this.glowSettings.glowWidth * this.lerp(0.5, 1.3, activeState);
       this.ctx.shadowBlur = glowWidth;
       this.ctx.shadowColor = gradient;
@@ -388,7 +392,6 @@
       this.ctx.lineTo(to.x, to.y);
       this.ctx.stroke();
 
-      // Extra HD glow layer
       this.ctx.shadowBlur = glowWidth * 2.5;
       this.ctx.globalAlpha = glowOpacity;
       this.ctx.stroke();
@@ -397,7 +400,7 @@
       this.ctx.shadowBlur = 0;
     }
 
-    drawParticle(particle, time, deltaTime) {
+    drawParticle(particle) {
       const conn = particle.connection;
       const activeState = this.activeConnections.get(conn) || 1;
 
@@ -424,7 +427,6 @@
 
       const opacity = this.particleSettings.opacity * this.lerp(0.3, 1.3, activeState);
 
-      // HD Particle rendering
       this.ctx.shadowBlur = this.glowSettings.particleGlow * this.lerp(0.4, 1.6, activeState);
       this.ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${opacity})`;
 
@@ -433,7 +435,6 @@
       this.ctx.arc(x, y, particle.size * this.lerp(0.7, 1.4, activeState), 0, Math.PI * 2);
       this.ctx.fill();
 
-      // Extra glow
       this.ctx.shadowBlur = this.glowSettings.particleGlow * 2.5 * activeState;
       this.ctx.globalAlpha = 0.6 * activeState;
       this.ctx.fill();
@@ -448,10 +449,10 @@
       const deltaTime = time - this.lastTime;
       this.lastTime = time;
 
-      this.updateActiveStates(deltaTime);
+      this.updateActiveStates();
 
-      // HD Clear
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      // 🔴 FIXED: Use logical dimensions for clear
+      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
       // Draw connections
       this.connections.forEach(conn => {
@@ -461,7 +462,7 @@
 
       // Draw particles
       this.particles.forEach(particle => {
-        this.drawParticle(particle, time, deltaTime);
+        this.drawParticle(particle);
       });
 
       this.animationFrame = requestAnimationFrame((t) => this.animate(t));
@@ -472,6 +473,7 @@
         cancelAnimationFrame(this.animationFrame);
       }
       this.lastTime = performance.now();
+      console.log('🎬 Animation started');
       this.animate(this.lastTime);
     }
 
@@ -530,12 +532,13 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow Ultra Premium v8.0');
+    console.group('🚀 Color Flow v8.0 FIXED');
     console.log('Cards:', net.cards.length);
-    console.log('Intelligent Connections:', net.connections.length);
-    console.log('HD Particles:', net.particles.length);
-    console.log('Quality Multiplier:', net.qualityMultiplier + 'x');
-    console.log('Canvas Resolution:', net.canvas.width + 'x' + net.canvas.height);
+    console.log('Connections:', net.connections.length);
+    console.log('Particles:', net.particles.length);
+    console.log('Quality:', net.qualityMultiplier + 'x');
+    console.log('Canvas Logical:', net.canvasWidth + 'x' + net.canvasHeight);
+    console.log('Canvas Physical:', net.canvas.width + 'x' + net.canvas.height);
     console.log('Hovered:', net.hoveredCard ? net.hoveredCard.category : 'None');
     console.groupEnd();
   };
