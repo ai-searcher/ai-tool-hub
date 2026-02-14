@@ -1,6 +1,6 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V11.1 DEBUG
-// Debug Version mit ausführlichen Logs
+// GRID SYNCHRONIZED NETWORK V11.2 FIXED
+// Fixed: Fallback für wenige Cards
 // =========================================
 
 (function() {
@@ -148,7 +148,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v11.1 DEBUG');
+      console.log('🚀 GridSynchronizedNetwork v11.2 FIXED');
 
       window.addEventListener('quantum:ready', () => {
         console.log('🔍 [DEBUG] Quantum ready event');
@@ -200,8 +200,8 @@
       this.generateIntelligentConnections();
 
       if (this.connections.length === 0) {
-        console.error('❌ [DEBUG] NO CONNECTIONS GENERATED!');
-        return;
+        console.warn('⚠️ [DEBUG] NO CONNECTIONS from intelligent algo, using FALLBACK!');
+        this.generateFallbackConnections();
       }
 
       this.setupInputDetection();
@@ -329,17 +329,88 @@
       const clusters = this.detectClusters();
       console.log('🔍 [DEBUG] Detected', clusters.length, 'clusters');
 
-      this.generatePrimaryConnections(clusters);
-      this.generateSecondaryConnections(clusters);
-      this.generateBridgeConnections(clusters);
+      if (clusters.length > 0) {
+        this.generatePrimaryConnections(clusters);
+        this.generateSecondaryConnections(clusters);
+        this.generateBridgeConnections(clusters);
 
-      if (this.settings.enableClustering) {
-        this.generateClusterConnections(clusters);
+        if (this.settings.enableClustering) {
+          this.generateClusterConnections(clusters);
+        }
+
+        this.optimizeConnections();
       }
 
-      this.optimizeConnections();
-
       console.log('🧠 Generated', this.connections.length, 'intelligent connections');
+    }
+
+    // 🔴 NEW: FALLBACK wenn intelligent algo keine Connections generiert
+    generateFallbackConnections() {
+      console.log('🔄 [FALLBACK] Using simple connection generation...');
+
+      const categoryGroups = {};
+
+      // Group by category
+      this.cards.forEach(card => {
+        if (!categoryGroups[card.category]) {
+          categoryGroups[card.category] = [];
+        }
+        categoryGroups[card.category].push(card);
+      });
+
+      // Connect within categories (simple sequential)
+      Object.values(categoryGroups).forEach(group => {
+        if (group.length > 1) {
+          // Sort by position
+          group.sort((a, b) => {
+            if (Math.abs(a.y - b.y) < 100) {
+              return a.x - b.x;
+            }
+            return a.y - b.y;
+          });
+
+          // Sequential connections
+          const maxConnections = Math.min(
+            group.length - 1,
+            this.isMobile ? 2 : 4
+          );
+
+          for (let i = 0; i < maxConnections; i++) {
+            this.addConnection(group[i], group[i + 1], 'primary', 1.0);
+          }
+        }
+      });
+
+      // Cross-category connections for variety
+      const categories = Object.keys(categoryGroups);
+      if (categories.length > 1) {
+        for (let i = 0; i < categories.length - 1; i++) {
+          const groupA = categoryGroups[categories[i]];
+          const groupB = categoryGroups[categories[i + 1]];
+
+          if (groupA.length > 0 && groupB.length > 0) {
+            // Connect closest pair
+            let minDist = Infinity;
+            let closestPair = null;
+
+            groupA.forEach(cardA => {
+              groupB.forEach(cardB => {
+                const dist = this.getDistance(cardA, cardB);
+                if (dist < minDist && dist < 600) {
+                  minDist = dist;
+                  closestPair = [cardA, cardB];
+                }
+              });
+            });
+
+            if (closestPair) {
+              this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.7);
+            }
+          }
+        }
+      }
+
+      console.log('🔄 [FALLBACK] Generated', this.connections.length, 'fallback connections');
     }
 
     detectClusters() {
@@ -355,6 +426,12 @@
       const clusters = [];
 
       Object.entries(categoryGroups).forEach(([category, cards]) => {
+        // 🔴 SKIP if only 1 card
+        if (cards.length < 2) {
+          console.log('🔍 [DEBUG] Skipping category', category, '(only', cards.length, 'card)');
+          return;
+        }
+
         cards.sort((a, b) => {
           if (Math.abs(a.y - b.y) < 100) {
             return a.x - b.x;
@@ -388,6 +465,7 @@
               center: this.getClusterCenter(cluster)
             });
             cluster.forEach(card => card.cluster = clusters.length - 1);
+            console.log('🔍 [DEBUG] Created cluster:', category, 'with', cluster.length, 'cards');
           }
         });
       });
@@ -501,15 +579,24 @@
     }
 
     optimizeConnections() {
+      // Reset degrees
+      this.cards.forEach(card => card.degree = 0);
+
       this.connections.forEach(conn => {
         conn.from.degree++;
         conn.to.degree++;
       });
 
+      const beforeCount = this.connections.length;
+
       this.connections = this.connections.filter(conn => {
         const maxDegree = this.isMobile ? 4 : 6;
         return conn.from.degree <= maxDegree && conn.to.degree <= maxDegree;
       });
+
+      if (beforeCount !== this.connections.length) {
+        console.log('🔍 [DEBUG] Optimized: removed', beforeCount - this.connections.length, 'overloaded connections');
+      }
 
       this.connections.sort((a, b) => {
         const scoreA = this.getConnectionScore(a);
@@ -744,6 +831,9 @@
       this.setupCanvas();
       this.scanTools();
       this.generateIntelligentConnections();
+      if (this.connections.length === 0) {
+        this.generateFallbackConnections();
+      }
       this.setupInputDetection();
     }
 
@@ -756,6 +846,9 @@
           this.setupCanvas();
           this.scanTools();
           this.generateIntelligentConnections();
+          if (this.connections.length === 0) {
+            this.generateFallbackConnections();
+          }
         }, 250);
       });
 
@@ -808,7 +901,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v11.1 DEBUG');
+    console.group('🚀 Color Flow v11.2 FIXED');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Total Connections:', net.connections.length);
