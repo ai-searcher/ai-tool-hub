@@ -2327,8 +2327,8 @@ a:focus-visible {
 
 .card-square .context-marquee {
   position: absolute !important;
-  left: 18px !important;               /* equal to card padding desktop */
-  right: 18px !important;
+  left: 20px !important;               /* equal to card padding desktop */
+  right: 20px !important;
   bottom: 0px !important;             /* konstante Y-Offset (feinjustierbar) */
   height: 22px !important;
   margin: 0 !important;
