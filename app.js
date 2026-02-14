@@ -760,7 +760,7 @@ renderCard(tool) {
          tabindex="0"
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
-
+      
       <div class="square-content-centered">
         <div class="square-category-badge" aria-hidden="true">
           ${this.escapeHtml(categoryDisplay)}
@@ -777,7 +777,8 @@ renderCard(tool) {
       </div>
     </div>
   `;
-},
+}
+
 
 
   render() {
