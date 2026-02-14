@@ -1201,3 +1201,164 @@ function attachDoubleClickHandlers() {
     if (e.target && e.target.id === 'tool-modal-close') closeToolModal();
   });
 }
+  
+  
+  /* =====================================================
+   SMART COLOR FLOW — COMPLETE PRODUCTION SYSTEM
+   ===================================================== */
+
+class SmartColorFlow {
+
+  constructor(){
+
+    this.canvas = document.createElement("canvas");
+
+    this.canvas.className = "connection-canvas";
+
+    this.ctx = this.canvas.getContext("2d");
+
+    document.body.appendChild(this.canvas);
+
+    this.tools = [];
+
+    this.colors = {
+      text:"#00E5FF",
+      image:"#FF3AF2",
+      code:"#39FF14",
+      audio:"#FFA500",
+      other:"#888"
+    };
+
+    this.resize();
+
+    window.addEventListener("resize",()=>this.resize());
+
+    this.observeTools();
+
+    this.loop();
+  }
+
+
+  resize(){
+
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+
+  }
+
+
+  observeTools(){
+
+    const update = ()=>{
+
+      this.tools = [];
+
+      document.querySelectorAll(".card-square").forEach(el=>{
+
+        const rect = el.getBoundingClientRect();
+
+        this.tools.push({
+
+          element: el,
+
+          x: rect.left + rect.width/2,
+
+          y: rect.top + rect.height/2,
+
+          category: el.dataset.category || "other",
+
+          connections: []
+
+        });
+
+      });
+
+      this.calculateConnections();
+
+    };
+
+    new MutationObserver(update).observe(document.body,{childList:true,subtree:true});
+
+    window.addEventListener("quantum:ready",update);
+
+    update();
+  }
+
+
+  calculateConnections(){
+
+    for(let i=0;i<this.tools.length;i++){
+
+      const a=this.tools[i];
+
+      a.connections=[];
+
+      for(let j=i+1;j<this.tools.length;j++){
+
+        const b=this.tools[j];
+
+        const dx=b.x-a.x;
+        const dy=b.y-a.y;
+
+        const dist=Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<600){
+
+          const color=this.colors[a.category]||this.colors.other;
+
+          a.connections.push({target:b,color});
+
+          b.connections=b.connections||[];
+
+          b.connections.push({target:a,color});
+        }
+      }
+    }
+  }
+
+
+  draw(){
+
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+
+    this.ctx.lineWidth=2;
+
+    this.tools.forEach(tool=>{
+
+      tool.connections.forEach(conn=>{
+
+        this.ctx.strokeStyle=conn.color;
+
+        this.ctx.beginPath();
+
+        this.ctx.moveTo(tool.x,tool.y);
+
+        this.ctx.lineTo(conn.target.x,conn.target.y);
+
+        this.ctx.stroke();
+
+      });
+
+    });
+
+  }
+
+
+  loop(){
+
+    this.draw();
+
+    requestAnimationFrame(()=>this.loop());
+
+  }
+
+}
+
+
+/* START SYSTEM */
+
+window.addEventListener("quantum:ready",()=>{
+
+  window.colorFlow=new SmartColorFlow();
+
+});
