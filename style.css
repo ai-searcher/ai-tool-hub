@@ -2266,7 +2266,7 @@ a:focus-visible {
   position: absolute !important;
   left: 18px !important;               /* equal to card padding desktop */
   right: 18px !important;
-  bottom: 14px !important;             /* konstante Y-Offset (feinjustierbar) */
+  bottom: 5px !important;             /* konstante Y-Offset (feinjustierbar) */
   height: 22px !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -2286,7 +2286,7 @@ a:focus-visible {
   display: inline-flex !important;
   white-space: nowrap !important;
   will-change: transform;
-  animation: elegantMarqueeFlow 18s linear infinite !important;
+  animation: elegantMarqueeFlow 15s linear infinite !important;
   transform: translateZ(0); /* avoid subpixel weirdness */
 }
 
