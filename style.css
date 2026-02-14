@@ -2655,87 +2655,140 @@ a:focus-visible {
 /* ================================================ */
 
 /* ═════════════════════════════════════════════════════════
-   FLIP CARD ADDON - AKTUALISIERT MIT MARQUEE FIX
+   FLIP CARD ADDON - PERFEKTE MARQUEE POSITION
    Füge das ans ENDE deiner style.css ein
    ════════════════════════════════════════════════════════ */
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MARQUEE POSITION FIX
+   MARQUEE POSITION FIX - EXAKT WIE ORIGINAL
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* 🔧 Fix: Card Face Front Struktur */
+/* 🔧 Card Face Front muss relative bleiben */
 .card-face-front {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
+/* 🔧 Content Container - WICHTIG für Marquee */
 .card-face-front .square-content-centered {
-  position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  gap: 0;
+  padding: 14px;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
-/* 🔧 Fix: Marquee exakte Original-Position */
+/* 🔧 MARQUEE - EXAKT WIE ORIGINAL (rand-bis-rand mit overscan) */
 .card-face-front .context-marquee {
-  position: absolute;
-  bottom: 14px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 5;
+  position: absolute !important;
+  left: calc(-1 * var(--marquee-overscan, 12px)) !important;
+  right: calc(-1 * var(--marquee-overscan, 12px)) !important;
+  bottom: 0px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  border-bottom-left-radius: inherit !important;
+  border-bottom-right-radius: inherit !important;
+  align-self: stretch;
+  flex-shrink: 0;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%) !important;
 }
 
+/* 🔧 Marquee Track - Original Animation */
 .card-face-front .context-marquee .marquee-track {
-  display: flex;
-  white-space: nowrap;
-  animation: marqueeScroll 30s linear infinite;
+  display: inline-flex !important;
+  white-space: nowrap !important;
   will-change: transform;
+  animation: elegantMarqueeFlow 15s linear infinite !important;
+  transform: translateZ(0);
 }
 
+/* 🔧 Marquee Sequence - Original Styling */
 .card-face-front .context-marquee .marquee-seq {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 16px;
-  font-size: 0.72rem;
+  display: inline-block !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 0.72rem !important;
+  line-height: 22px !important;
+  padding: 0 1.5rem !important;
+  min-width: 40% !important;
+  pointer-events: none !important;
   font-weight: 500;
-  color: var(--text-dim);
   letter-spacing: 0.02em;
 }
 
-/* Title & Badge */
-.card-face-front .square-title-large {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-align: center;
-  line-height: 1.3;
-  margin: 0;
-  padding: 0 12px;
-  max-width: 90%;
-  word-wrap: break-word;
-  z-index: 2;
+/* 🔧 Entferne Fade-Overlays (verursachen sichtbare Balken) */
+.card-face-front .context-marquee::before,
+.card-face-front .context-marquee::after {
+  display: none !important;
+  content: none !important;
 }
 
+/* 🔧 Category Badge - Original Position */
 .card-face-front .square-category-badge {
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--text-dim);
-  background: var(--primary-dim);
-  padding: 6px 14px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
   letter-spacing: 0.08em;
-  margin-bottom: 16px;
-  z-index: 2;
+  color: var(--primary);
+  background: var(--primary-dim);
+  padding: 5px 12px;
+  border-radius: 16px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  align-self: flex-start;
+  margin: 0 0 8px 0;
+  flex-shrink: 0;
+}
+
+/* 🔧 Title - Original Position */
+.card-face-front .square-title-large {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0 0 auto 0;
+  padding: 0;
+  transition: color var(--transition-fast);
+  max-width: 100%;
+  word-wrap: break-word;
+  align-self: flex-start;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* 🔧 Mobile Marquee Anpassung */
+@media (max-width: 767px) {
+  .card-face-front .context-marquee {
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .card-face-front .context-marquee .marquee-seq {
+    font-size: 0.66rem !important;
+    padding-left: 0 !important;
+    padding-right: 2rem !important;
+    min-width: 45% !important;
+  }
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3033,6 +3086,12 @@ button,
   .card-square.is-flipped .card-face-back {
     display: flex !important;
   }
+
+  /* Marquee Stop bei Reduced Motion */
+  .card-face-front .context-marquee .marquee-track {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
 }
 
 /* High Contrast Mode */
@@ -3050,7 +3109,21 @@ button,
   }
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MARQUEE ACCESSIBILITY
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Pausieren bei Focus oder Armed State */
+.card-square:focus-within .card-face-front .context-marquee .marquee-track,
+.card-square.card-armed .card-face-front .context-marquee .marquee-track {
+  animation-play-state: paused !important;
+}
+
+/* Slower on Hover */
+.card-square:hover .card-face-front .context-marquee .marquee-track {
+  animation-duration: 28s !important;
+}
+
 /* ═════════════════════════════════════════════════════════
    END FLIP CARD ADDON
    ════════════════════════════════════════════════════════ */
-
