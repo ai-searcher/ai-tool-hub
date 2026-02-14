@@ -1,14 +1,12 @@
-
 // =========================================
-// GRID SYNCHRONIZED NETWORK V12.0 ULTIMATE
-// All Features + Guaranteed Working
+// GRID SYNCHRONIZED NETWORK V12.1 ULTIMATE ENHANCED
+// Enhanced: Beautiful & Vibrant on Mobile!
 // - 4 Connection Types (solid/dashed/dotted/curved)
+// - Mobile-Enhanced: Thinner lines, Higher opacity, Faster flow
 // - Intelligent Cluster Detection
-// - Robust Fallback System
-// - Performance Optimized
-// - Mobile Friendly
-// - Thin Thread Lines
-// - Flowing Glow Effect
+// - Vibrant Colors & Glow
+// - Touch Feedback
+// - Smooth 60fps
 // =========================================
 
 (function() {
@@ -28,6 +26,7 @@
       this.canvasWidth = 0;
       this.canvasHeight = 0;
       this.glowTime = 0;
+      this.pulseTime = 0; // 🆕 Für Pulse-Effekt
 
       // Performance optimization
       this.targetFPS = 60;
@@ -49,7 +48,8 @@
           dashPattern: [],
           glowIntensity: 1.0,
           flowSpeed: 1.0,
-          priority: 4
+          priority: 4,
+          pulseEnabled: true // 🆕
         },
         secondary: {
           style: 'dashed',
@@ -57,7 +57,8 @@
           dashPattern: [8, 4],
           glowIntensity: 0.8,
           flowSpeed: 0.7,
-          priority: 2
+          priority: 2,
+          pulseEnabled: true // 🆕
         },
         bridge: {
           style: 'dotted',
@@ -65,7 +66,8 @@
           dashPattern: [2, 6],
           glowIntensity: 0.6,
           flowSpeed: 0.5,
-          priority: 1
+          priority: 1,
+          pulseEnabled: false
         },
         cluster: {
           style: 'curved',
@@ -74,7 +76,8 @@
           glowIntensity: 0.9,
           flowSpeed: 0.8,
           curve: true,
-          priority: 3
+          priority: 3,
+          pulseEnabled: true // 🆕
         }
       };
 
@@ -86,40 +89,49 @@
 
     setupAdaptiveSettings() {
       if (this.isMobile) {
+        // 📱 MOBILE: SCHÖN & LEBENDIG!
         this.settings = {
           qualityMultiplier: 1.0,
-          baseLineWidth: 1.5,
-          glowWidth: 10,
-          glowSpeed: 0.0015,
-          glowLength: 0.3,
+          baseLineWidth: 1.2,              // 🎨 Dünner! (war 1.5)
+          glowWidth: 12,                   // ✨ Mehr Glow! (war 10)
+          glowSpeed: 0.0025,               // ⚡ Schneller! (war 0.0015)
+          glowLength: 0.45,                // 🌟 Länger! (war 0.3)
           enableCurves: false,
-          maxPrimaryConnections: 2,
-          maxSecondaryConnections: 1,
+          maxPrimaryConnections: 3,        // 🔗 Mehr! (war 2)
+          maxSecondaryConnections: 2,      // 🔗 Mehr! (war 1)
           maxBridgeConnections: 2,
-          hoverSpeed: 0.30,
-          baseOpacity: 0.35,
-          glowOpacity: 0.50,
-          useSimplifiedRendering: true,
+          hoverSpeed: 0.25,                // ⚡ Schneller! (war 0.30)
+          baseOpacity: 0.55,               // 🎨 Sichtbarer! (war 0.35)
+          glowOpacity: 0.75,               // ✨ Intensiver! (war 0.50)
+          useSimplifiedRendering: false,   // 🎨 Full Quality! (war true)
           minClusterSize: 2,
-          maxDistance: 400
+          maxDistance: 380,                // Etwas kürzer für Klarheit
+          pulseSpeed: 0.0008,              // 🆕 Pulse-Effekt
+          pulseIntensity: 0.15,            // 🆕 Pulse-Stärke
+          touchFeedback: true,             // 🆕 Touch-Feedback
+          vibrantColors: true              // 🆕 Intensivere Farben
         };
       } else if (this.isTablet) {
         this.settings = {
           qualityMultiplier: 1.2,
-          baseLineWidth: 2.0,
-          glowWidth: 12,
-          glowSpeed: 0.0015,
-          glowLength: 0.3,
+          baseLineWidth: 1.8,
+          glowWidth: 14,
+          glowSpeed: 0.002,
+          glowLength: 0.35,
           enableCurves: true,
           maxPrimaryConnections: 3,
           maxSecondaryConnections: 2,
           maxBridgeConnections: 3,
-          hoverSpeed: 0.25,
-          baseOpacity: 0.40,
-          glowOpacity: 0.45,
+          hoverSpeed: 0.23,
+          baseOpacity: 0.48,
+          glowOpacity: 0.58,
           useSimplifiedRendering: false,
           minClusterSize: 2,
-          maxDistance: 450
+          maxDistance: 450,
+          pulseSpeed: 0.0006,
+          pulseIntensity: 0.12,
+          touchFeedback: true,
+          vibrantColors: true
         };
       } else {
         this.settings = {
@@ -137,23 +149,40 @@
           glowOpacity: 0.40,
           useSimplifiedRendering: false,
           minClusterSize: 2,
-          maxDistance: 500
+          maxDistance: 500,
+          pulseSpeed: 0.0005,
+          pulseIntensity: 0.10,
+          touchFeedback: false,
+          vibrantColors: false
         };
       }
 
-      this.categoryColors = {
-        text: { r: 0, g: 243, b: 255 },
-        image: { r: 236, g: 72, b: 153 },
-        code: { r: 139, g: 92, b: 246 },
-        video: { r: 239, g: 68, b: 68 },
-        audio: { r: 34, g: 197, b: 94 },
-        data: { r: 251, g: 191, b: 36 },
-        other: { r: 148, g: 163, b: 184 }
-      };
+      // 🎨 VIBRANT COLORS für Mobile!
+      if (this.settings.vibrantColors) {
+        this.categoryColors = {
+          text: { r: 0, g: 255, b: 255 },      // Heller Cyan
+          image: { r: 255, g: 80, b: 170 },    // Helleres Pink
+          code: { r: 150, g: 100, b: 255 },    // Helleres Purple
+          video: { r: 255, g: 75, b: 75 },     // Helleres Red
+          audio: { r: 40, g: 220, b: 110 },    // Helleres Green
+          data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
+          other: { r: 160, g: 175, b: 200 }    // Helleres Gray
+        };
+      } else {
+        this.categoryColors = {
+          text: { r: 0, g: 243, b: 255 },
+          image: { r: 236, g: 72, b: 153 },
+          code: { r: 139, g: 92, b: 246 },
+          video: { r: 239, g: 68, b: 68 },
+          audio: { r: 34, g: 197, b: 94 },
+          data: { r: 251, g: 191, b: 36 },
+          other: { r: 148, g: 163, b: 184 }
+        };
+      }
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v12.0 ULTIMATE');
+      console.log('🚀 GridSynchronizedNetwork v12.1 ULTIMATE ENHANCED');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -167,6 +196,11 @@
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => this.handleResize(), 300);
+      });
+
+      // 🆕 Orientation change für Mobile
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => this.handleResize(), 400);
       });
     }
 
@@ -206,8 +240,9 @@
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Ultimate Network initialized!');
-      console.log(`🕸️ ${this.connections.length} connections (${this.countTypes().join(', ')})`);
+      console.log('✅ Ultimate Enhanced Network initialized!');
+      console.log(`🕸️ ${this.connections.length} vibrant connections`);
+      console.log(`📱 Mobile optimized: ${this.isMobile ? 'YES' : 'NO'}`);
     }
 
     setupCanvas() {
@@ -218,6 +253,7 @@
         this.canvas.style.pointerEvents = 'none';
         this.canvas.style.zIndex = '1';
         this.canvas.style.willChange = 'transform';
+        this.canvas.style.touchAction = 'none'; // 🆕 Better touch handling
         this.containerElement.insertBefore(this.canvas, this.gridElement);
       }
 
@@ -246,7 +282,7 @@
 
       this.ctx.scale(hdRatio, hdRatio);
       this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = 'high';
+      this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
     }
 
     scanTools() {
@@ -277,17 +313,52 @@
 
       this.cards.forEach((card) => {
         if (isTouchDevice) {
-          card.element.addEventListener('touchstart', () => {
+          // 🆕 Besseres Touch-Feedback
+          let touchTimeout;
+
+          card.element.addEventListener('touchstart', (e) => {
             this.hoveredCard = card;
+
+            // 🆕 Visual Touch Feedback
+            if (this.settings.touchFeedback) {
+              card.element.style.transform = 'scale(0.97)';
+              card.element.style.transition = 'transform 0.15s ease';
+            }
+
+            touchTimeout = setTimeout(() => {
+              if (this.hoveredCard === card) {
+                // Touch held - intensify effect
+                if (this.settings.touchFeedback) {
+                  card.element.style.transform = 'scale(0.95)';
+                }
+              }
+            }, 200);
+
           }, { passive: true });
 
           card.element.addEventListener('touchend', () => {
+            clearTimeout(touchTimeout);
+
+            // 🆕 Smooth release
+            if (this.settings.touchFeedback) {
+              card.element.style.transform = '';
+            }
+
             setTimeout(() => {
               if (this.hoveredCard === card) {
                 this.hoveredCard = null;
               }
-            }, 400);
+            }, 350);
           }, { passive: true });
+
+          card.element.addEventListener('touchcancel', () => {
+            clearTimeout(touchTimeout);
+            if (this.settings.touchFeedback) {
+              card.element.style.transform = '';
+            }
+            this.hoveredCard = null;
+          }, { passive: true });
+
         } else {
           card.element.addEventListener('mouseenter', () => {
             this.hoveredCard = card;
@@ -562,8 +633,10 @@
         conn.to.degree++;
       });
 
+      // 📱 Mobile: Max 4 connections per card (war 4)
+      const maxDegree = this.isMobile ? 4 : 6;
+
       this.connections = this.connections.filter(conn => {
-        const maxDegree = this.isMobile ? 4 : 6;
         return conn.from.degree <= maxDegree && conn.to.degree <= maxDegree;
       });
 
@@ -598,6 +671,7 @@
         weight: weight,
         activeState: 1,
         glowOffset: Math.random() * Math.PI * 2,
+        pulseOffset: Math.random() * Math.PI * 2, // 🆕 Pulse-Offset
         config: typeConfig
       };
       this.connections.push(conn);
@@ -632,8 +706,12 @@
       }
 
       const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+
+      // 🎨 Intensivere Gradients für Mobile
+      const midBoost = this.isMobile ? 1.2 : 1.1;
+
       gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
-      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
+      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * midBoost})`);
       gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
 
       if (this.gradientCache.size > 100) {
@@ -651,14 +729,23 @@
       const toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
       const weight = connection.weight || 1;
-      const baseOpacity = this.settings.baseOpacity * activeState * weight;
+
+      // 🆕 PULSE-EFFEKT auf Mobile
+      let pulseMultiplier = 1.0;
+      if (config.pulseEnabled && this.isMobile) {
+        const pulseProgress = (time * this.settings.pulseSpeed + connection.pulseOffset) % (Math.PI * 2);
+        pulseMultiplier = 1.0 + Math.sin(pulseProgress) * this.settings.pulseIntensity;
+      }
+
+      const baseOpacity = this.settings.baseOpacity * activeState * weight * pulseMultiplier;
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
       // Base line
       this.ctx.strokeStyle = gradient;
-      this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
+      this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight * pulseMultiplier;
       this.ctx.lineCap = 'round';
+      this.ctx.lineJoin = 'round'; // 🆕 Smoother joins
       this.ctx.setLineDash(config.dashPattern);
 
       if (config.curve && !this.settings.useSimplifiedRendering) {
@@ -672,8 +759,8 @@
 
       this.ctx.setLineDash([]);
 
-      // Flowing glow
-      if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
+      // Flowing glow - 🆕 Immer aktiv auf Mobile!
+      if (!this.settings.useSimplifiedRendering || activeState > 0.3) {
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
         const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
@@ -681,7 +768,7 @@
 
         if (glowEnd > 0 && glowStart < 1) {
           const glowGradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-          const glowOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+          const glowOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity * pulseMultiplier;
 
           if (glowStart > 0) {
             glowGradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
@@ -699,8 +786,8 @@
           }
 
           this.ctx.strokeStyle = glowGradient;
-          this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * 3 * weight;
-          this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
+          this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * 3 * weight * pulseMultiplier;
+          this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity * pulseMultiplier;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
           if (config.curve && !this.settings.useSimplifiedRendering) {
@@ -757,6 +844,7 @@
       this.then = now - (elapsed % this.frameInterval);
 
       this.glowTime = now;
+      this.pulseTime = now; // 🆕
       this.updateActiveStates();
 
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -843,16 +931,16 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v12.0 ULTIMATE');
+    console.group('🚀 Color Flow v12.1 ULTIMATE ENHANCED');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
     console.log('Types:', net.countTypes().join(', '));
-    console.log('Gradient Cache:', net.gradientCache.size);
-    console.log('Curves:', net.settings.enableCurves);
+    console.log('Mobile Enhanced:', net.isMobile ? 'YES ✨' : 'NO');
+    console.log('Vibrant Colors:', net.settings.vibrantColors ? 'YES 🎨' : 'NO');
+    console.log('Pulse Effect:', net.isMobile ? 'YES 💓' : 'Minimal');
     console.log('FPS:', net.targetFPS);
     console.groupEnd();
   };
 
 })();
-
