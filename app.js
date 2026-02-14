@@ -1253,32 +1253,48 @@ class SmartColorFlow {
 
   this.tools = [];
 
-  document.querySelectorAll(".card-square").forEach(el=>{
+  const elements = document.querySelectorAll(".card-square");
+
+  if (!elements || elements.length === 0) {
+    this.connections = [];
+    return;
+  }
+
+  elements.forEach(el=>{
+
+    if (!el || !el.getBoundingClientRect) return;
+
+    const rect = el.getBoundingClientRect();
 
     this.tools.push({
 
       element: el,
 
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+
       category: el.dataset.category || "other",
 
-      connections: [],
-
-      // FIX: dynamic positions (always correct)
-      get x(){
-        const rect = el.getBoundingClientRect();
-        return rect.left + rect.width / 2;
-      },
-
-      get y(){
-        const rect = el.getBoundingClientRect();
-        return rect.top + rect.height / 2;
-      }
+      connections: []
 
     });
 
   });
 
-  this.calculateConnections();
+  // USE ROUTING VERSION IF EXISTS
+  if (typeof this.calculateConnectionsWithRouting === "function") {
+
+    this.calculateConnectionsWithRouting();
+
+  } else if (typeof this.calculateConnections === "function") {
+
+    this.calculateConnections();
+
+  } else {
+
+    console.warn("No connection calculation function found.");
+
+  }
 
 };
 
