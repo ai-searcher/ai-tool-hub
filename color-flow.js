@@ -1,16 +1,12 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V7.1 FLUID
-// Ultra-Smooth Fluid Edition
-// - Silky smooth 60fps animations
-// - Easing transitions
-// - Optimized performance
-// - Fluid particle flow
+// GRID SYNCHRONIZED NETWORK V7.2 HOVER-FIX
+// Reliable Hover Detection
 // =========================================
 
 (function() {
   'use strict';
 
-  class GridSynchronizedNetworkFluid {
+  class GridSynchronizedNetworkHoverFix {
     constructor() {
       this.canvas = null;
       this.ctx = null;
@@ -22,28 +18,28 @@
       this.animationFrame = null;
       this.resizeObserver = null;
       this.hoveredCard = null;
-      this.hoverProgress = 0; // Smooth hover transition
+      this.hoveredCardIndex = -1;
       this.lastTime = 0;
       this.isMobile = window.innerWidth < 768;
 
-      // Ultra Glow Settings (optimiert für smooth)
+      // Ultra Glow Settings
       this.glowSettings = {
         baseOpacity: 0.45,
         glowOpacity: 0.30,
         lineWidth: 3.5,
         glowWidth: 15,
-        hoverTransitionSpeed: 0.08, // Smooth hover transition
+        hoverTransitionSpeed: 0.08,
         particleGlow: 25
       };
 
-      // Optimized Particle System (weniger für Performance)
+      // Particle System
       this.particleSettings = {
-        count: 25,           // Reduziert von 40 → smooth
-        speed: 0.002,        // Langsamer = flüssiger
+        count: 25,
+        speed: 0.002,
         size: 3,
         glow: 20,
         opacity: 0.9,
-        easing: 0.05         // Smooth movement
+        easing: 0.05
       };
 
       // Category Colors
@@ -57,14 +53,13 @@
         other: { r: 148, g: 163, b: 184 }
       };
 
-      // Hover state tracking
-      this.activeConnections = new Map(); // Smooth active state per connection
+      this.activeConnections = new Map();
 
       this.init();
     }
 
     init() {
-      console.log('🌊 GridSynchronizedNetwork v7.1 FLUID initialized');
+      console.log('🎯 GridSynchronizedNetwork v7.2 HOVER-FIX initialized');
 
       window.addEventListener('quantum:ready', () => {
         console.log('📡 Quantum ready event received');
@@ -76,9 +71,6 @@
       }
 
       window.addEventListener('resize', () => this.handleResize());
-
-      document.addEventListener('mouseover', (e) => this.handleHover(e));
-      document.addEventListener('mouseout', (e) => this.handleHoverOut(e));
     }
 
     setup() {
@@ -103,10 +95,11 @@
       this.scanTools();
       this.generateConnections();
       this.initParticles();
+      this.setupHoverDetection(); // NEW: Separate hover setup
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Fluid Network initialized!');
+      console.log('✅ Network initialized!');
       console.log(`🕸️ Connections: ${this.connections.length}`);
       console.log(`✨ Particles: ${this.particles.length}`);
     }
@@ -117,7 +110,7 @@
         this.canvas.className = 'connection-canvas';
         this.canvas.style.position = 'absolute';
         this.canvas.style.pointerEvents = 'none';
-        this.canvas.style.zIndex = '0';
+        this.canvas.style.zIndex = '1';
         this.containerElement.insertBefore(this.canvas, this.gridElement);
       }
 
@@ -134,7 +127,7 @@
 
       this.ctx = this.canvas.getContext('2d', { 
         alpha: true,
-        desynchronized: true // Performance boost
+        desynchronized: true
       });
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
@@ -164,6 +157,50 @@
       console.log(`🎯 Scanned ${this.cards.length} cards`);
     }
 
+    setupHoverDetection() {
+      console.log('🎯 Setting up hover detection...');
+
+      // Method 1: Direct event listeners on each card
+      this.cards.forEach((card, index) => {
+        const el = card.element;
+
+        // Mouseenter
+        el.addEventListener('mouseenter', () => {
+          this.hoveredCard = card;
+          this.hoveredCardIndex = index;
+          console.log(`🎯 Hover IN: ${card.category} (${index})`);
+        });
+
+        // Mouseleave
+        el.addEventListener('mouseleave', () => {
+          if (this.hoveredCard === card) {
+            this.hoveredCard = null;
+            this.hoveredCardIndex = -1;
+            console.log(`🎯 Hover OUT: ${card.category} (${index})`);
+          }
+        });
+      });
+
+      // Method 2: Fallback with document-level detection
+      document.addEventListener('mousemove', (e) => {
+        const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
+        const card = hoveredElement?.closest('.card-square');
+
+        if (card) {
+          const cardData = this.cards.find(c => c.element === card);
+          if (cardData && cardData !== this.hoveredCard) {
+            this.hoveredCard = cardData;
+            this.hoveredCardIndex = cardData.index;
+          }
+        } else if (this.hoveredCard) {
+          this.hoveredCard = null;
+          this.hoveredCardIndex = -1;
+        }
+      });
+
+      console.log('✅ Hover detection ready');
+    }
+
     generateConnections() {
       this.connections = [];
 
@@ -184,7 +221,7 @@
               to: group[i + 1],
               type: 'alternative',
               category: group[i].category,
-              activeState: 1 // Start full active
+              activeState: 1
             };
             this.connections.push(conn);
             this.activeConnections.set(conn, 1);
@@ -245,47 +282,23 @@
       console.log(`✨ Initialized ${this.particles.length} particles`);
     }
 
-    handleHover(e) {
-      const card = e.target.closest('.card-square');
-      if (card && card !== this.hoveredCard) {
-        this.hoveredCard = card;
-      }
-    }
-
-    handleHoverOut(e) {
-      const card = e.target.closest('.card-square');
-      if (card === this.hoveredCard) {
-        this.hoveredCard = null;
-      }
-    }
-
     isConnectionActive(connection) {
       if (!this.hoveredCard) return true;
 
-      const hoveredCardData = this.cards.find(c => c.element === this.hoveredCard);
-      if (!hoveredCardData) return true;
-
-      return connection.from === hoveredCardData || connection.to === hoveredCardData;
+      // Check if connection involves the hovered card
+      return connection.from === this.hoveredCard || connection.to === this.hoveredCard;
     }
 
-    // Smooth easing function
-    easeInOutCubic(t) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
-    // Lerp (linear interpolation)
     lerp(start, end, t) {
       return start + (end - start) * t;
     }
 
     updateActiveStates(deltaTime) {
-      // Smooth transitions for all connections
       this.connections.forEach(conn => {
         const isActive = this.isConnectionActive(conn);
         const targetState = isActive ? 1 : 0.3;
         const currentState = this.activeConnections.get(conn) || 1;
 
-        // Smooth lerp to target state
         const newState = this.lerp(
           currentState, 
           targetState, 
@@ -302,7 +315,6 @@
       const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
       const toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
-      // Use smooth activeState (0.3 to 1.5)
       const opacity = this.lerp(0.3, 1.5, activeState);
       const baseOpacity = this.glowSettings.baseOpacity * opacity;
       const glowOpacity = this.glowSettings.glowOpacity * opacity;
@@ -324,7 +336,6 @@
       this.ctx.lineTo(to.x, to.y);
       this.ctx.stroke();
 
-      // Extra glow layer
       this.ctx.shadowBlur = glowWidth * 2;
       this.ctx.globalAlpha = glowOpacity;
       this.ctx.stroke();
@@ -337,14 +348,11 @@
       const conn = particle.connection;
       const activeState = this.activeConnections.get(conn) || 1;
 
-      // Skip some particles when inactive (smooth culling)
       if (activeState < 0.5 && Math.random() > activeState) return;
 
-      // Smooth progress update with easing
       particle.targetProgress += particle.speed;
       if (particle.targetProgress > 1) particle.targetProgress = 0;
 
-      // Smooth interpolation to target
       particle.progress = this.lerp(
         particle.progress, 
         particle.targetProgress, 
@@ -371,7 +379,6 @@
       this.ctx.arc(x, y, particle.size * this.lerp(0.8, 1.3, activeState), 0, Math.PI * 2);
       this.ctx.fill();
 
-      // Extra glow
       this.ctx.shadowBlur = this.glowSettings.particleGlow * 2 * activeState;
       this.ctx.globalAlpha = 0.5 * activeState;
       this.ctx.fill();
@@ -383,23 +390,18 @@
     animate(time) {
       if (!this.ctx || !this.canvas) return;
 
-      // Calculate delta time for smooth animations
       const deltaTime = time - this.lastTime;
       this.lastTime = time;
 
-      // Update active states (smooth transitions)
       this.updateActiveStates(deltaTime);
 
-      // Clear with alpha for smooth trails (optional)
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Draw connections with smooth active states
       this.connections.forEach(conn => {
         const activeState = this.activeConnections.get(conn) || 1;
         this.drawGradientLine(conn.from, conn.to, conn.category, activeState);
       });
 
-      // Draw particles with smooth movement
       this.particles.forEach(particle => {
         this.drawParticle(particle, time, deltaTime);
       });
@@ -412,7 +414,7 @@
         cancelAnimationFrame(this.animationFrame);
       }
       this.lastTime = performance.now();
-      console.log('🎬 Fluid animation started');
+      console.log('🎬 Animation started');
       this.animate(this.lastTime);
     }
 
@@ -424,6 +426,7 @@
         this.scanTools();
         this.generateConnections();
         this.initParticles();
+        this.setupHoverDetection();
       }, 250);
     }
 
@@ -435,6 +438,7 @@
         this.scanTools();
         this.generateConnections();
         this.initParticles();
+        this.setupHoverDetection();
       });
 
       this.resizeObserver.observe(this.gridElement);
@@ -456,10 +460,10 @@
   // Auto-initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      window.colorFlowNetwork = new GridSynchronizedNetworkFluid();
+      window.colorFlowNetwork = new GridSynchronizedNetworkHoverFix();
     });
   } else {
-    window.colorFlowNetwork = new GridSynchronizedNetworkFluid();
+    window.colorFlowNetwork = new GridSynchronizedNetworkHoverFix();
   }
 
   // Debug helper
@@ -469,13 +473,12 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🌊 Color Flow Fluid Stats');
+    console.group('🎯 Color Flow Hover-Fix Stats');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
     console.log('Particles:', net.particles.length);
-    console.log('Canvas:', net.canvas ? `${net.canvas.width}x${net.canvas.height}` : 'Not created');
+    console.log('Hovered Card:', net.hoveredCard ? `${net.hoveredCard.category} (${net.hoveredCardIndex})` : 'None');
     console.log('Animation running:', net.animationFrame ? 'Yes' : 'No');
-    console.log('FPS:', Math.round(1000 / (performance.now() - net.lastTime)));
     console.groupEnd();
   };
 
