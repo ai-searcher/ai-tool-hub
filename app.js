@@ -880,39 +880,44 @@ const ui = {
     let touchStartTime = 0;
     let touchStartTarget = null;
 
-    // 🔄 Click Handler with FLIP
-    const clickHandler = throttle((e) => {
-      const card = e.target.closest('.card-square');
-      if (!card) return;
+    // 🔄 Click Handler with FLIP - FIXED
+const clickHandler = (e) => {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
 
-      // Don't flip if clicking close button or link
-      if (e.target.closest('.card-back-close') || e.target.closest('.card-back-button-primary')) {
-        return;
-      }
+  // WICHTIG: Verhindere Event-Bubbling komplett
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
 
-      e.preventDefault();
-      e.stopPropagation();
+  // Don't flip if clicking close button
+  if (e.target.closest('.card-back-close')) {
+    return;
+  }
 
-      const toolName = card.dataset.toolName ||
-                       card.getAttribute('data-tool-name') ||
-                       card.querySelector('.square-title-large')?.textContent ||
-                       'Unknown';
+  const toolName = card.dataset.toolName ||
+                   card.getAttribute('data-tool-name') ||
+                   card.querySelector('.square-title-large')?.textContent ||
+                   'Unknown';
 
-      // Analytics
-      try {
-        if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
-          analytics.trackToolClick(toolName);
-        }
-      } catch (err) {
-        console.warn('Analytics tracking failed', err);
-      }
+  // Analytics
+  try {
+    if (typeof analytics !== 'undefined' && analytics.trackToolClick) {
+      analytics.trackToolClick(toolName);
+    }
+  } catch (err) {
+    console.warn('Analytics tracking failed', err);
+  }
 
-      // 🔄 TOGGLE FLIP
-      card.classList.toggle('is-flipped');
-      console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
+  // 🔄 TOGGLE FLIP
+  card.classList.toggle('is-flipped');
+  console.log(`Card ${toolName} flipped:`, card.classList.contains('is-flipped'));
+};
 
-    }, CONFIG.ui.clickDebounce);
+// Throttle NACH der Funktion mit längerer Delay
+const throttledClickHandler = throttle(clickHandler, 300);
 
+    
     // Touch handlers
     const touchStartHandler = (e) => {
       const card = e.target.closest('.card-square');
@@ -969,7 +974,7 @@ const ui = {
 
     const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: false } : false;
 
-    grid.addEventListener('click', clickHandler, passiveOption);
+    grid.addEventListener('click', throttledClickHandler, true);
     grid.addEventListener('keydown', keyHandler, passiveOption);
     grid.addEventListener('touchstart', touchStartHandler, { passive: true });
     grid.addEventListener('touchend', touchEndHandler, passiveOption);
