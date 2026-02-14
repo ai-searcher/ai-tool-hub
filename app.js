@@ -747,20 +747,22 @@ const ui = {
 
   // 🔄 FLIP CARD: Modified renderCard with Front/Back
   renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-    const contextTexts = this.getContextText(tool);
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const contextTexts = this.getContextText(tool);
 
-    return `
-      <div class="card-square" 
-           data-tool-id="${this.escapeHtml(String(tool.id))}"
-           data-category="${this.escapeHtml(categoryName)}"
-           data-tool-name="${this.escapeHtml(tool.title)}"
-           data-href="${this.escapeHtml(tool.link)}"
-           tabindex="0"
-           role="article"
-           aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
-        
+  return `
+    <div class="card-square" 
+         data-tool-id="${this.escapeHtml(String(tool.id))}"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-href="${this.escapeHtml(tool.link)}"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
+      
+      <!-- VORDERSEITE -->
+      <div class="card-face card-face-front">
         <div class="square-content-centered">
           <div class="square-category-badge" aria-hidden="true">
             ${this.escapeHtml(categoryDisplay)}
@@ -776,8 +778,19 @@ const ui = {
           </div>
         </div>
       </div>
-    `;
-  },
+      
+      <!-- RÜCKSEITE - LEER -->
+      <div class="card-face card-face-back">
+        <button class="card-back-close" aria-label="Schließen">×</button>
+        <div class="card-back-placeholder">
+          <strong style="color: var(--primary); font-size: 1.1rem; margin-bottom: 8px; display: block;">${this.escapeHtml(tool.title)}</strong>
+          <p style="color: var(--text-dim); font-size: 0.9rem; margin: 0;">Mehr Details kommen bald...</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 
 
   render() {
