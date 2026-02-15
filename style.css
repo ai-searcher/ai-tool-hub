@@ -882,9 +882,6 @@ body {
   transform: translateY(-1px);
 }
 
-.card-square:hover .context-marquee .marquee-seq {
-  color: rgba(255, 255, 255, 0.9);
-}
 
 /* Category Badge Colors */
 .card-square[data-category="text"] .square-category-badge { background: var(--glow-text); color: var(--color-text); }
@@ -1620,34 +1617,9 @@ button,
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   MARQUEE FIX - !IMPORTANT OVERRIDE
-   ══════════════════════════════════════════════════════════ */
-
-/* Desktop */
-.card-square .context-marquee .marquee-seq {
-  display: inline-block;
-  padding-left: 1.75rem !important;
-  padding-right: 1.75rem !important;
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.78);
-  letter-spacing: 0.02em;
-  line-height: 22px;
-}
-
-/* Mobile */
-@media (max-width: 767px) {
-  .card-square .context-marquee .marquee-seq {
-    font-size: 0.66rem;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    line-height: 21px;
-  }
-}
 
 /* ═══════════════════════════════════════════════════════════
-   MARQUEE - FINALE VERSION MIT FADE BEIDSEITIG
+   MARQUEE - FINALE VERSION MIT FADE-EFFEKT
    ══════════════════════════════════════════════════════════ */
 
 /* Desktop */
@@ -1661,19 +1633,19 @@ button,
   border-radius: 12px;
   z-index: 2;
   
-  /* ← FADE LINKS & RECHTS */
+  /* FADE-EFFEKT LINKS & RECHTS */
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 12%,
-    black 88%,
+    black 10%,
+    black 90%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 12%,
-    black 88%,
+    black 10%,
+    black 90%,
     transparent 100%
   );
 }
@@ -1684,8 +1656,8 @@ button,
 
 .card-square .context-marquee .marquee-seq {
   display: inline-block;
-  padding-left: 1.75rem !important;
-  padding-right: 1.75rem !important;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
   font-size: 0.68rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.78);
@@ -1698,7 +1670,7 @@ button,
   .card-square .context-marquee {
     height: 21px;
     
-    /* ← FADE für Mobile */
+    /* FADE für Mobile */
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0%,
@@ -1720,9 +1692,9 @@ button,
   }
 
   .card-square .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    font-size: 0.66rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     line-height: 21px;
   }
 }
