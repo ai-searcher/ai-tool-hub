@@ -899,27 +899,6 @@ body {
 .card-square[data-category="video"]:hover .square-category-badge { background: var(--color-video); }
 .card-square[data-category="data"]:hover .square-category-badge { background: var(--color-data); }
 
-/* ==================== MARQUEE ==================== */
-.context-marquee {
-  position: relative;
-  width: 100%;
-  height: 22px;
-  overflow: hidden;
-  margin: 0;
-  pointer-events: none;
-  flex-shrink: 0;
-}
-
-.context-marquee .marquee-track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: marqueeLoop 20s linear infinite;
-}
-
-.card-square:hover .context-marquee .marquee-track {
-  animation-duration: 28s;
-}
-
 /* ==================== RESPONSIVE ==================== */
 
 /* XXL Desktop */
@@ -1422,30 +1401,6 @@ button,
 /* ==================== MARQUEE POSITIONING ==================== */
 
 /* Marquee absolute positioned at card bottom */
-.card-square .context-marquee {
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 11px;
-  height: 22px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.card-square .context-marquee .marquee-track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: marqueeLoop 20s linear infinite;
-}
-
-/* Hover: slower animation */
-.card-square:hover .context-marquee .marquee-track {
-  animation-duration: 28s;
-}
-
 
 /* Mobile adjustments */
 @media (max-width: 767px) {
