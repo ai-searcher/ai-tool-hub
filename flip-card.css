@@ -1,13 +1,12 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.2 - FIXED ASPECT RATIO
+   FLIP CARD SYSTEM - MINIMAL VERSION
    - 180° rotateY Animation
    - Erzwingt 1:1 Quadrate
-   - Color Flow Compatible
    ══════════════════════════════════════════════════════════ */
 
-/* FORCE SQUARE ASPECT RATIO - WICHTIGSTE REGEL! */
+/* FORCE SQUARE ASPECT RATIO */
 .card-square {
-  position: relative;                /* WICHTIG: Für absolute Faces */
+  position: relative;
   aspect-ratio: 1 / 1 !important;
   min-height: 0 !important;
   height: auto !important;
@@ -18,22 +17,7 @@
 .card-square.is-flipped {
   transform: rotateY(180deg) !important;
   z-index: 150 !important;
-  animation: none !important;
   overflow: visible !important;
-}
-
-/* Hover auf geflippten Cards deaktivieren */
-.card-square.is-flipped:hover {
-  transform: rotateY(180deg) !important;
-  animation: none !important;
-}
-
-/* Mobile Active */
-@media (max-width: 767px) {
-  .card-square.is-flipped:active,
-  .card-square.is-flipped.card-touch-active {
-    transform: rotateY(180deg) !important;
-  }
 }
 
 /* Card Faces - 3D Positioned */
@@ -51,28 +35,13 @@
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
-  overflow: inherit;
 }
 
 /* Back Face - Rotated 180° */
 .card-face-back {
   transform: rotateY(180deg);
-  
-  /* Premium Background */
-  background: linear-gradient(135deg, 
-    rgba(20, 24, 48, 0.98) 0%, 
-    rgba(12, 15, 32, 0.98) 100%
-  );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  
-  /* Enhanced Border */
+  background: linear-gradient(135deg, #141830, #0c0f20);
   border: 2px solid rgba(0, 243, 255, 0.25);
-  box-shadow: 
-    0 0 30px rgba(0, 243, 255, 0.12),
-    0 10px 30px rgba(0, 0, 0, 0.6);
-  
-  /* Kompaktes Padding */
   padding: 36px 14px 14px 14px;
   display: flex;
   flex-direction: column;
@@ -81,41 +50,6 @@
   gap: 8px;
   text-align: center;
 }
-
-/* Flip Indicator - Nur Desktop */
-@media (hover: hover) and (pointer: fine) {
-  .card-face-front::after {
-    content: '↻';
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 243, 255, 0.1);
-    border: 1px solid rgba(0, 243, 255, 0.25);
-    border-radius: 50%;
-    color: rgba(0, 243, 255, 0.8);
-    font-size: 14px;
-    opacity: 0;
-    transform: scale(0.85);
-    transition: all 0.3s ease;
-    pointer-events: none;
-    backdrop-filter: blur(6px);
-    z-index: 10;
-  }
-
-  .card-square:not(.is-flipped):hover .card-face-front::after {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   BACK FACE - KOMPAKTE INFOS
-   ══════════════════════════════════════════════════════════ */
 
 /* Category Badge - Oben rechts */
 .card-back-category {
@@ -127,53 +61,48 @@
   font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  backdrop-filter: blur(8px);
-  opacity: 0.85;
+  background: rgba(0, 243, 255, 0.1);
+  color: #00f3ff;
+  border: 1px solid rgba(0, 243, 255, 0.25);
   z-index: 5;
 }
 
-/* Tool Name - Kompakt */
+/* Tool Name */
 .card-back-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
+  color: #fff;
   margin: 0 0 6px 0;
   line-height: 1.1;
   max-width: 90%;
-  
-  /* Max 2 Zeilen */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Rating - Inline */
+/* Rating */
 .card-back-rating {
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(0, 243, 255, 1);
+  color: #00f3ff;
   margin-bottom: 6px;
 }
-
 .card-back-rating::before {
   content: '⭐';
   font-size: 0.9rem;
 }
 
-/* Description - Max 1 Zeile */
+/* Kurzbeschreibung */
 .card-back-description {
   color: rgba(224, 224, 240, 0.85);
   font-size: 0.72rem;
   line-height: 1.3;
   margin: 0 0 12px 0;
   max-width: 90%;
-  
-  /* Nur 1 Zeile */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -186,10 +115,7 @@
   justify-content: center;
   gap: 6px;
   padding: 9px 18px;
-  background: linear-gradient(135deg, 
-    rgba(0, 243, 255, 1) 0%, 
-    rgba(0, 212, 224, 1) 100%
-  );
+  background: #00f3ff;
   color: #0A0E27;
   text-decoration: none;
   border: none;
@@ -201,28 +127,20 @@
   box-shadow: 0 3px 10px rgba(0, 243, 255, 0.25);
   -webkit-tap-highlight-color: transparent;
 }
-
 .card-back-button-link::after {
   content: '→';
   font-size: 1rem;
   transition: transform 0.2s ease;
 }
-
-@media (hover: hover) and (pointer: fine) {
-  .card-back-button-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 16px rgba(0, 243, 255, 0.4);
-  }
-  
-  .card-back-button-link:hover::after {
-    transform: translateX(3px);
-  }
+.card-back-button-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(0, 243, 255, 0.4);
+}
+.card-back-button-link:hover::after {
+  transform: translateX(3px);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   BACKDROP DIM
-   ══════════════════════════════════════════════════════════ */
-
+/* Backdrop Dim */
 .tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
   opacity: 0.35 !important;
   filter: blur(2px) !important;
@@ -230,49 +148,29 @@
   pointer-events: none !important;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   MOBILE OPTIMIZATION - ASPECT RATIO FIX
-   ══════════════════════════════════════════════════════════ */
-
+/* Mobile Anpassungen */
 @media (max-width: 767px) {
-  /* Erzwinge Quadrate auf Mobile */
-  .card-square {
-    aspect-ratio: 1 / 1 !important;
-    min-height: 0 !important;
-    height: auto !important;
-  }
-
   .card-face-back {
     padding: 32px 12px 12px 12px;
     gap: 6px;
   }
-
   .card-back-title {
     font-size: 0.88rem;
-    margin-bottom: 5px;
   }
-
   .card-back-rating {
     font-size: 0.8rem;
   }
-
   .card-back-description {
     font-size: 0.68rem;
-    margin-bottom: 10px;
   }
-
   .card-back-button-link {
     padding: 8px 16px;
     font-size: 0.72rem;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ACCESSIBILITY
-   ══════════════════════════════════════════════════════════ */
-
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .card-square,
   .card-square.is-flipped {
     transition-duration: 0.01ms !important;
   }
