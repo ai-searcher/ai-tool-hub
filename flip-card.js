@@ -1,164 +1,75 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.0 - WITH COLOR FLOW INTEGRATION
+   FLIP CARD SYSTEM - MINIMAL VERSION
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js v10.0 loading...');
+console.log('🚀 flip-card.js minimal loading...');
 
-// Helper: Get category name
-function getCategoryName(category) {
-  const names = {
-    text: 'Text',
-    image: 'Bild',
-    code: 'Code',
-    audio: 'Audio',
-    video: 'Video',
-    data: 'Daten',
-    other: 'Sonstiges'
-  };
-  return names[category] || names.other;
-}
-
-// Helper: Get category color
-function getCategoryColor(category) {
-  const colors = {
-    text: '#00D4FF',
-    image: '#E040FB',
-    code: '#7C4DFF',
-    audio: '#FF6B9D',
-    video: '#448AFF',
-    data: '#1DE9B6',
-    other: '#B0BEC5'
-  };
-  return colors[category] || colors.other;
-}
-
-// Helper: Escape HTML
+// Hilfsfunktionen
 function escapeHtml(text) {
-  if (text == null || text === undefined) return '';
+  if (text == null) return '';
   const div = document.createElement('div');
   div.textContent = String(text);
   return div.innerHTML;
 }
 
-// Helper: Truncate text
 function truncateText(text, maxLength) {
   if (!text) return '';
   text = String(text);
-  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  return text.length > maxLength ? text.substring(0, maxLength) + '…' : text;
 }
 
-// Create COMPACT back face HTML (inkl. Voting-Buttons)
-function createBackFaceHTML(tool) {
-  const categoryName = getCategoryName(tool.category);
-  const categoryColor = getCategoryColor(tool.category);
-  const shortDescription = truncateText(tool.description, 60);
+// Kategorie-Anzeigename
+function getCategoryName(cat) {
+  const names = { text: 'Text', image: 'Bild', code: 'Code', audio: 'Audio', video: 'Video', data: 'Daten', other: 'Sonstiges' };
+  return names[cat] || names.other;
+}
+
+// Rückseite erzeugen (nur Kerninfos)
+function createBackFace(tool) {
+  const catName = getCategoryName(tool.category);
+  const shortDesc = truncateText(tool.description, 60);
   const rating = (tool.rating || 0).toFixed(1);
 
   return `
-    <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
-      ${escapeHtml(categoryName)}
+    <div class="card-face card-face-back">
+      <div class="card-back-category">${escapeHtml(catName)}</div>
+      <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
+      <div class="card-back-rating">${rating}</div>
+      <p class="card-back-description">${escapeHtml(shortDesc)}</p>
+      <a href="#" class="card-back-button-link" onclick="event.preventDefault(); event.stopPropagation();">Mehr Infos</a>
     </div>
-
-    <!-- Voting Buttons -->
-    <div class="card-voting" data-tool-id="${escapeHtml(String(tool.id))}">
-      <button class="vote-btn vote-btn-up" data-vote="up" aria-label="Upvote">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 19V5M5 12l7-7 7 7"/>
-        </svg>
-      </button>
-      <button class="vote-btn vote-btn-down" data-vote="down" aria-label="Downvote">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 5v14M5 12l7 7 7-7"/>
-        </svg>
-      </button>
-    </div>
-
-    <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
-
-    <div class="card-back-rating">${rating}</div>
-
-    <p class="card-back-description">${escapeHtml(shortDescription)}</p>
-
-    <!-- Platzhalter Button "Mehr Infos" (noch ohne Ziel) -->
-    <a href="#" 
-       class="card-back-button-link"
-       onclick="event.preventDefault(); event.stopPropagation();"
-       data-tool-id="${escapeHtml(String(tool.id))}"
-       data-tool-link="${escapeHtml(tool.link)}">
-      Mehr Infos
-    </a>
   `;
 }
 
-// Initialize card for flipping
-function initializeFlipCard(card) {
+// Karte für Flip vorbereiten
+function prepareCard(card) {
   if (card.dataset.flipInitialized === 'true') return;
-  
+
   const toolId = card.dataset.toolId;
-  if (!toolId) {
-    console.warn('❌ No toolId found');
-    return;
-  }
+  if (!toolId) return;
 
-  // Get tool data
   let tool = null;
-  try {
-    if (window.appState && window.appState.tools) {
-      tool = window.appState.tools.find(t => String(t.id) === String(toolId));
-    }
-  } catch (err) {
-    console.error('❌ Error finding tool:', err);
-    return;
+  if (window.appState && window.appState.tools) {
+    tool = window.appState.tools.find(t => String(t.id) === toolId);
   }
+  if (!tool) return;
 
-  if (!tool) {
-    console.warn('❌ Tool not found for ID:', toolId);
-    return;
-  }
-
-  // Wrap existing content in front face + add back face
-  const existingContent = card.innerHTML;
+  // Vorhandenen Inhalt in Frontface packen, Rückseite anhängen
+  const frontContent = card.innerHTML;
   card.innerHTML = `
     <div class="card-face card-face-front">
-      ${existingContent}
+      ${frontContent}
     </div>
-    <div class="card-face card-face-back">
-      ${createBackFaceHTML(tool)}
-    </div>
+    ${createBackFace(tool)}
   `;
-
   card.dataset.flipInitialized = 'true';
-  console.log('✅ Card initialized:', tool.title);
 }
 
-// ═══════════════════════════════════════════════════════════
-// COLOR FLOW INTEGRATION
-// ══════════════════════════════════════════════════════════
-
-function toggleColorFlow(paused) {
-  // Prüfe ob Color Flow System existiert
-  if (window.pauseColorFlow && typeof window.pauseColorFlow === 'function') {
-    window.pauseColorFlow(paused);
-    console.log(paused ? '⏸️ Color Flow paused' : '▶️ Color Flow resumed');
-  }
-  
-  // Alternative: Opacity reduzieren
-  const canvas = document.querySelector('.connection-canvas, #connection-canvas, #grid-network-canvas');
-  if (canvas) {
-    canvas.style.opacity = paused ? '0.15' : '1';
-    canvas.style.transition = 'opacity 0.4s ease';
-  }
-}
-
-// Handle card click (toggle flip)
-function handleCardClick(e) {
-  // Ignore clicks on "Mehr Infos" link (Platzhalter)
-  if (e.target.closest('.card-back-button-link')) {
-    console.log('🚫 Link click ignored (placeholder)');
-    return;
-  }
+// Klick-Handler
+function onCardClick(e) {
+  if (e.target.closest('.card-back-button-link')) return; // Button ignoriert den Flip
 
   const card = e.target.closest('.card-square');
   if (!card) return;
@@ -166,76 +77,43 @@ function handleCardClick(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  // Initialize if needed
   if (card.dataset.flipInitialized !== 'true') {
-    initializeFlipCard(card);
+    prepareCard(card);
   }
 
-  // Toggle flip
   card.classList.toggle('is-flipped');
-  
-  // Pause/Resume Color Flow
-  const anyFlipped = document.querySelector('.card-square.is-flipped');
-  toggleColorFlow(!!anyFlipped);
-  
-  console.log('🔄 Card flipped:', card.dataset.toolName);
 }
 
-// Initialize flip system
-function initFlipSystem() {
-  const toolGrid = document.getElementById('tool-grid');
-  if (!toolGrid) {
-    console.warn('⚠️ Tool grid not found, retrying...');
-    setTimeout(initFlipSystem, 300);
+// Initialisierung
+function initFlip() {
+  const grid = document.getElementById('tool-grid');
+  if (!grid) {
+    setTimeout(initFlip, 300);
     return;
   }
 
-  console.log('🎯 Initializing flip system...');
-
-  // Remove old listeners
-  if (toolGrid._flipClickHandler) {
-    toolGrid.removeEventListener('click', toolGrid._flipClickHandler);
-    toolGrid.removeEventListener('touchend', toolGrid._flipClickHandler);
+  // Event-Listener
+  if (grid._flipHandler) {
+    grid.removeEventListener('click', grid._flipHandler);
   }
+  grid._flipHandler = onCardClick;
+  grid.addEventListener('click', onCardClick);
 
-  // Add new listeners
-  toolGrid._flipClickHandler = handleCardClick;
-  toolGrid.addEventListener('click', handleCardClick);
-  toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
-
-  // Alle bereits existierenden Cards sofort initialisieren
+  // Bereits vorhandene Karten vorbereiten
   document.querySelectorAll('.card-square').forEach(card => {
     if (card.dataset.flipInitialized !== 'true') {
-      initializeFlipCard(card);
+      prepareCard(card);
     }
   });
 
-  console.log('✅ Flip system initialized!');
+  console.log('✅ Flip-System minimal bereit');
 }
 
-// ESC closes flipped cards + resumes Color Flow
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    const flippedCards = document.querySelectorAll('.card-square.is-flipped');
-    if (flippedCards.length > 0) {
-      flippedCards.forEach(card => card.classList.remove('is-flipped'));
-      toggleColorFlow(false); // Resume Color Flow
-    }
-  }
-});
-
-// Wait for DOM + app ready
+// Start
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    requestAnimationFrame(initFlipSystem);
-  });
+  document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFlip));
 } else {
-  requestAnimationFrame(initFlipSystem);
+  requestAnimationFrame(initFlip);
 }
 
-window.addEventListener('quantumready', () => {
-  // Sofort initialisieren (kein setTimeout, um Hüpfer zu vermeiden)
-  initFlipSystem();
-});
-
-console.log('✅ flip-card.js v10.0 loaded!');
+window.addEventListener('quantumready', initFlip);
