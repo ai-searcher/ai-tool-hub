@@ -1,47 +1,31 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - FINAL (Delegated Visuals Edition)
-   - Integrates with style.css: .square-category-badge, .square-title-large,
-     .context-marquee (positioning & typography fully delegated to style.css)
-   - Purpose: Flip logic, backface UI, accessibility, performance-defensive
+   FLIP CARD SYSTEM V9.0 - PREVIEW MODE
+   - Keine Vergrößerung
+   - Kompakte Vorschau
+   - Button führt zur Detailseite
    ══════════════════════════════════════════════════════════ */
 
-/* ─────────────────────────────────────────────────────────────
-   CARD CONTAINER & BASICS
-   ───────────────────────────────────────────────────────────── */
-
+/* Card Container */
 .card-square {
   position: relative;
-  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1),
-              box-shadow 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+  transition: transform 0.3s ease;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  will-change: transform, opacity;
-  /* Layout (padding, size, category badge, title, marquee) are delegated to style.css */
 }
 
-/* Hover lift (desktop only) */
+/* Hover Preview - Nur Desktop */
 @media (hover: hover) and (pointer: fine) {
   .card-square:not(.is-flipped):hover {
-    transform: translateY(-6px);
-    filter: brightness(1.04);
+    transform: translateY(-4px);
+    transition: transform 0.3s ease;
   }
 }
 
-/* Focus visible (keyboard) */
-.card-square:focus-visible {
-  box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.18);
-  outline: none;
-}
-
-/* Flipped card stacking (keeps under canvas z-index=500) */
+/* Flipped State - KEINE Vergrößerung */
 .card-square.is-flipped {
   z-index: 150;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   CARD FACES (no 3D rotation — fade + scale where needed)
-   ───────────────────────────────────────────────────────────── */
-
+/* Card Faces - Base */
 .card-face {
   position: absolute;
   inset: 0;
@@ -49,209 +33,464 @@
   height: 100%;
   border-radius: inherit;
   overflow: hidden;
-  backface-visibility: hidden; /* defensive */
-  transition: opacity 0.32s cubic-bezier(0.25, 0.8, 0.25, 1),
-              visibility 0.32s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* FRONT: visual content layout (title, badge, marquee) is provided by style.css */
+/* Front Face */
 .card-face-front {
-  z-index: 20;
+  z-index: 2;
   position: relative;
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
 }
 
-/* small hover info indicator (purely decorative) */
+/* FLIP INDICATOR - Nur Desktop */
 @media (hover: hover) and (pointer: fine) {
   .card-face-front::after {
-    content: 'ⓘ';
+    content: '↻';
     position: absolute;
     bottom: 8px;
     right: 8px;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 243, 255, 0.10);
-    border: 1px solid rgba(0, 243, 255, 0.24);
+    background: rgba(0, 243, 255, 0.12);
+    border: 1px solid rgba(0, 243, 255, 0.3);
     border-radius: 50%;
-    color: rgba(0, 243, 255, 0.95);
-    font-size: 13px;
+    color: rgba(0, 243, 255, 0.85);
+    font-size: 16px;
+    font-weight: 700;
     opacity: 0;
-    transform: scale(0.92);
-    transition: transform .28s ease, opacity .28s ease;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
-    z-index: 30;
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.32));
+    backdrop-filter: blur(8px);
+    z-index: 10;
   }
 
-  .card-square:hover .card-face-front::after { opacity: 1; transform: scale(1); }
+  .card-square:hover .card-face-front::after {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
 }
 
-/* BACK: contains richer UI — visual design, but positioning of title/badge/marquee is delegated */
+/* Back Face - Kompakt */
 .card-face-back {
-  z-index: 10;
+  z-index: 1;
   opacity: 0;
   visibility: hidden;
-
-  background: linear-gradient(135deg, rgba(18,20,40,0.98), rgba(10,12,28,0.98));
-  backdrop-filter: blur(24px) saturate(130%);
-  -webkit-backdrop-filter: blur(24px) saturate(130%);
-
-  border: 1px solid rgba(255,255,255,0.02);
-  position: relative;
-  padding: 44px 16px 16px 16px; /* internal spacing only */
+  
+  /* Premium Background */
+  background: linear-gradient(135deg, 
+    rgba(26, 30, 55, 0.98) 0%, 
+    rgba(15, 18, 37, 0.98) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  
+  /* Enhanced Border */
+  border: 2px solid rgba(0, 243, 255, 0.3);
+  box-shadow: 
+    0 0 40px rgba(0, 243, 255, 0.15),
+    0 12px 40px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  
+  /* Kompaktes Layout */
+  padding: 42px 16px 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 0;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
 }
 
-/* decorative gradient border */
+/* Subtle Pattern */
 .card-face-back::before {
   content: '';
   position: absolute;
-  inset: -1.5px;
-  background: linear-gradient(135deg, rgba(0,243,255,0.10), rgba(124,77,255,0.06));
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity .36s ease;
-}
-.card-square.is-flipped .card-face-back::before { opacity: 1; }
-
-/* ensure internal children are above overlays */
-.card-face-back > * { position: relative; z-index: 1; }
-
-/* VISIBILITY SWITCH */
-.card-square:not(.is-flipped) .card-face-front { opacity: 1; visibility: visible; pointer-events: auto; }
-.card-square:not(.is-flipped) .card-face-back  { opacity: 0; visibility: hidden;  pointer-events: none;  }
-.card-square.is-flipped .card-face-front        { opacity: 0; visibility: hidden;  pointer-events: none;  }
-.card-square.is-flipped .card-face-back         { opacity: 1; visibility: visible; pointer-events: auto;  }
-
-/* ─────────────────────────────────────────────────────────────
-   BACKDROP DIM (focus other cards) — :has() + .has-flip fallback
-   ───────────────────────────────────────────────────────────── */
-
-.tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped),
-.tool-grid-squares.has-flip .card-square:not(.is-flipped) {
-  opacity: 0.28;
-  filter: blur(2px) grayscale(22%);
-  transition: all .36s ease;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.03) 0%, transparent 50%);
+  z-index: 0;
   pointer-events: none;
 }
-.tool-grid-squares .card-square.is-flipped { opacity: 1; filter: none; }
 
-/* ─────────────────────────────────────────────────────────────
-   PROGRESSIVE REVEAL ANIMATIONS (scoped to backface)
-   ───────────────────────────────────────────────────────────── */
+.card-face-back > * {
+  position: relative;
+  z-index: 1;
+}
 
-.card-square.is-flipped .card-back-header { animation: slideInDown 0.36s ease .08s both; }
-.card-square.is-flipped .card-back-title  { animation: slideInUp   0.36s ease .12s both; }
-.card-square.is-flipped .card-back-rating { animation: slideInUp   0.36s ease .16s both; }
-.card-square.is-flipped .card-back-tagline{ animation: fadeIn      0.36s ease .20s both; }
-.card-square.is-flipped .card-back-features{ animation: slideInUp   0.36s ease .24s both; }
-.card-square.is-flipped .card-back-stats   { animation: fadeIn      0.36s ease .28s both; }
-.card-square.is-flipped .card-back-tags    { animation: slideInUp   0.36s ease .32s both; }
-.card-square.is-flipped .card-back-actions { animation: slideInUp   0.36s ease .36s both; }
+/* Visibility Control */
+.card-square:not(.is-flipped) .card-face-front {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
-@keyframes slideInUp { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform: translateY(0);} }
-@keyframes slideInDown{ from { opacity:0; transform: translateY(-10px);} to { opacity:1; transform: translateY(0);} }
-@keyframes fadeIn     { from { opacity:0; } to { opacity:1; } }
+.card-square:not(.is-flipped) .card-face-back {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 
-/* ─────────────────────────────────────────────────────────────
-   BACKFACE UI: headers, badges, rating, features (visual only)
-   Positioning / typography of title, badge, marquee remain in style.css
-   ───────────────────────────────────────────────────────────── */
+.card-square.is-flipped .card-face-front {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.card-square.is-flipped .card-face-back {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BACKDROP DIM - Fokus auf Preview
+   ══════════════════════════════════════════════════════════ */
+
+.tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
+  opacity: 0.4;
+  filter: blur(1px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.tool-grid-squares .card-square.is-flipped {
+  opacity: 1;
+  filter: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SMOOTH CONTENT ANIMATION
+   ══════════════════════════════════════════════════════════ */
+
+.card-square.is-flipped .card-back-title {
+  animation: slideInUp 0.3s ease 0.1s both;
+}
+
+.card-square.is-flipped .card-back-rating {
+  animation: slideInUp 0.3s ease 0.2s both;
+}
+
+.card-square.is-flipped .card-back-description {
+  animation: slideInUp 0.3s ease 0.3s both;
+}
+
+.card-square.is-flipped .card-back-tags {
+  animation: slideInUp 0.3s ease 0.4s both;
+}
+
+.card-square.is-flipped .card-back-button {
+  animation: slideInUp 0.3s ease 0.5s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CATEGORY BADGE
+   ══════════════════════════════════════════════════════════ */
 
 .card-back-header {
   position: absolute;
   top: 12px;
-  left: 12px;
   right: 12px;
+  z-index: 5;
+  animation: slideInRight 0.3s ease 0.1s both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card-back-category {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  opacity: 0.85;
+}
+
+.card-back-price {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOOL NAME - Kompakt
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(0, 243, 255, 1);
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RATING - Kompakt
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-rating {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
-  z-index: 6;
+  padding: 0 0 10px 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* visual badge (appearance only) */
-.card-back-badge {
+.card-back-rating-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: rgba(0, 243, 255, 1);
+  min-width: 36px;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(0, 243, 255, 0.25);
+}
+
+.rating-bar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.rating-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.rating-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.6s ease;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.card-back-rating-text {
+  font-size: 0.7rem;
+  color: rgba(160, 160, 176, 1);
+  font-weight: 600;
+  min-width: 30px;
+  text-align: right;
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DESCRIPTION - Nur 2-3 Zeilen
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-description {
+  color: rgba(224, 224, 240, 0.9);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin: 0 0 10px 0;
+  flex: 1;
+  
+  /* Max 3 Zeilen */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAGS - Max 3 Stück
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.card-back-tag {
+  padding: 3px 8px;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 6px;
+  font-size: 0.62rem;
+  color: rgba(0, 243, 255, 0.9);
+  font-weight: 600;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+
+/* Nur erste 3 Tags zeigen */
+.card-back-tag:nth-child(n+4) {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-back-tag:hover {
+    background: rgba(0, 243, 255, 0.12);
+    border-color: rgba(0, 243, 255, 0.35);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CTA BUTTON - "Mehr erfahren"
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 4px 9px;
-  border-radius: 10px;
-  font-size: .62rem;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, 
+    rgba(0, 243, 255, 1) 0%, 
+    rgba(0, 212, 224, 1) 100%
+  );
+  color: #0A0E27;
+  text-decoration: none;
+  border-radius: 8px;
   font-weight: 700;
-  backdrop-filter: blur(8px);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  box-shadow: 0 3px 12px rgba(0, 243, 255, 0.3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* back-title visuals only — exact placement controlled by style.css */
-.card-back-title {
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.2;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.28);
-  margin: 0 0 8px 0;
+/* Pfeil-Icon im Button */
+.card-back-button::after {
+  content: '→';
+  font-size: 1rem;
+  transition: transform 0.2s ease;
 }
 
-/* rating / features visual containers */
-.card-back-rating { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-.card-back-features { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
-.card-back-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+@media (hover: hover) and (pointer: fine) {
+  .card-back-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(0, 243, 255, 0.45);
+  }
+  
+  .card-back-button:hover::after {
+    transform: translateX(3px);
+  }
+}
 
-/* CTA zone */
-.card-back-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:auto; padding-top:12px; }
+@media (hover: none) or (pointer: coarse) {
+  .card-back-button:active {
+    transform: scale(0.96);
+  }
+}
 
-/* ─────────────────────────────────────────────────────────────
-   SCROLLBARS / MOBILE / ACCESSIBILITY
-   ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+   ══════════════════════════════════════════════════════════ */
 
-.card-face-back::-webkit-scrollbar { width: 6px; }
-.card-face-back::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-.card-face-back::-webkit-scrollbar-thumb { background: rgba(0,243,255,0.18); border-radius:4px; }
+.card-face-back::-webkit-scrollbar {
+  width: 4px;
+}
+
+.card-face-back::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.card-face-back::-webkit-scrollbar-thumb {
+  background: rgba(0, 243, 255, 0.2);
+  border-radius: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATION
+   ══════════════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
-  .card-face-back { padding: 42px 12px 12px 12px; }
-  .card-back-title { font-size: .95rem; margin-bottom:6px; }
-  .card-back-actions { gap:6px; padding-top:10px; grid-template-columns: 1fr; }
-}
-
-/* Scoped reduced-motion: only for cards */
-@media (prefers-reduced-motion: reduce) {
-  .card-square *, .card-square *::before, .card-square *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  .card-face-back {
+    padding: 38px 14px 14px 14px;
   }
-  .card-face-back { transition: none !important; }
+
+  .card-back-header {
+    top: 10px;
+    right: 10px;
+  }
+
+  .card-back-title {
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+  }
+
+  .card-back-rating {
+    gap: 6px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  .card-back-rating-value {
+    font-size: 1.1rem;
+  }
+
+  .card-back-description {
+    font-size: 0.72rem;
+    margin-bottom: 8px;
+  }
+
+  .card-back-tags {
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .card-back-tag {
+    font-size: 0.6rem;
+    padding: 3px 7px;
+  }
+
+  .card-back-button {
+    padding: 9px 16px;
+    font-size: 0.75rem;
+  }
 }
 
-/* print fallback */
-@media print {
-  .card-square.is-flipped { transform: none; }
-  .card-face-back { position: relative; page-break-inside: avoid; }
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
-/* ─────────────────────────────────────────────────────────────
-   PLACEHOLDERS — NO POSITIONING OR TYPOGRAPHY HERE
-   (style.css is authoritative for these selectors)
-   ───────────────────────────────────────────────────────────── */
-
-/* Category badge — exact visual & positioning must live in style.css */
-.square-category-badge { /* intentionally empty: define in style.css */ }
-
-/* Tool name / hero on front — typography & location in style.css */
-.square-title-large { /* intentionally empty: define in style.css */ }
-
-/* Marquee / context scroller — behavior (animation) / placement in style.css */
-.context-marquee,
-.context-marquee .marquee-track,
-.context-marquee .marquee-seq { /* intentionally empty: define in style.css */ }
+@media (prefers-contrast: high) {
+  .card-face-back {
+    border-width: 3px;
+  }
+}
