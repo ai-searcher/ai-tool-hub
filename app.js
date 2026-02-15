@@ -745,11 +745,11 @@ const ui = {
     return div.innerHTML;
   },
 
-// 🔄 FLIP CARD V10.0: Ultimate UX Edition
-renderCard(tool) {
-  const categoryName = tool.category_name || tool.category || 'other';
-  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-  const contextTexts = this.getContextText(tool);
+   // 🔄 FLIP CARD V10.0: Ultimate UX Edition
+  renderCard(tool) {
+     const categoryName = tool.category_name || tool.category || 'other';
+     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+     const contextTexts = this.getContextText(tool);
   
   // Rating berechnen (falls vorhanden)
   const rating = tool.rating || 4.5;
@@ -878,19 +878,20 @@ renderCard(tool) {
   `;
 },
 
-  // Category Color Helper
-getCategoryColor(category) {
-  const colors = {
-    text: 'rgba(59, 130, 246, 0.2)',
-    image: 'rgba(168, 85, 247, 0.2)',
-    code: 'rgba(34, 197, 94, 0.2)',
-    audio: 'rgba(251, 146, 60, 0.2)',
-    video: 'rgba(236, 72, 153, 0.2)',
-     'rgba(14, 165, 233, 0.2)',
-    other: 'rgba(148, 163, 184, 0.2)'
-  };
-  return colors[category] || colors.other;
-},
+    // Category Color Helper
+  getCategoryColor(category) {
+    const colors = {
+      text: 'rgba(59, 130, 246, 0.2)',
+      image: 'rgba(168, 85, 247, 0.2)',
+      code: 'rgba(34, 197, 94, 0.2)',
+      audio: 'rgba(251, 146, 60, 0.2)',
+      video: 'rgba(236, 72, 153, 0.2)',
+       'rgba(14, 165, 233, 0.2)',
+      other: 'rgba(148, 163, 184, 0.2)'
+    };
+    return colors[category] || colors.other;
+  },
+
 
 
 
