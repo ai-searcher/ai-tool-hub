@@ -10,12 +10,17 @@
   aspect-ratio: 1 / 1 !important;
   min-height: 0 !important;
   height: auto !important;
+
+  /* 3D Flip Basis */
   transform-style: preserve-3d !important;
+  perspective: 1200px;                 /* Tiefe fürs 3D */
+  transition: transform 520ms cubic-bezier(.2,.9,.2,1);
+  will-change: transform;
 }
 
 /* Flipped State - 180° Rotation */
 .card-square.is-flipped {
-  transform: rotateY(180deg) !important;
+  transform: rotateY(180deg) scale(1.18) !important; /* größer + drehen */
   z-index: 150 !important;
   overflow: visible !important;
 }
@@ -33,16 +38,31 @@
 
 /* Front Face */
 .card-face-front {
+  position: absolute;
+  inset: 0;
   z-index: 2;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
   transform: rotateY(0deg);
 }
 
 /* Back Face - Rotated 180° */
 .card-face-back {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
   transform: rotateY(180deg);
+
   background: linear-gradient(135deg, #141830, #0c0f20);
   border: 2px solid rgba(0, 243, 255, 0.25);
   padding: 36px 14px 14px 14px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
