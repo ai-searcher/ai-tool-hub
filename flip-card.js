@@ -1,20 +1,20 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE FIXED
+   FLIP CARD SYSTEM V10.0 - 3D FLIP + DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js loading...');
+console.log('🚀 flip-card.js v10.0 loading...');
 
 // Helper: Get category name
 function getCategoryName(category) {
   const names = {
-    text: 'Text & Chat',
-    image: 'Bilder & Design',
-    code: 'Code & Dev',
-    audio: 'Audio & Voice',
-    video: 'Video & Film',
-    data:  'Daten & Analytics',  // ← FEHLT ""
+    text: 'Text',
+    image: 'Bild',
+    code: 'Code',
+    audio: 'Audio',
+    video: 'Video',
+     'Daten',
     other: 'Sonstiges'
   };
   return names[category] || names.other;
@@ -28,24 +28,10 @@ function getCategoryColor(category) {
     code: '#7C4DFF',
     audio: '#FF6B9D',
     video: '#448AFF',
-    data: '#1DE9B6',  // ← FEHLT ""
+     '#1DE9B6',
     other: '#B0BEC5'
   };
   return colors[category] || colors.other;
-}
-
-// Helper: Generate rating bar
-function generateRatingBar(rating) {
-  const percentage = (rating / 5) * 100;
-  const color = rating >= 4 ? '#00FF9D' : rating >= 3 ? '#FFB800' : '#FF4466';
-  
-  return `
-    <div class="rating-bar-container">
-      <div class="rating-bar-bg">
-        <div class="rating-bar-fill" style="width: ${percentage}%; background: ${color};"></div>
-      </div>
-    </div>
-  `;
 }
 
 // Helper: Escape HTML
@@ -56,88 +42,48 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Create back face HTML
+// Helper: Truncate text
+function truncateText(text, maxLength) {
+  if (!text) return '';
+  text = String(text);
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+}
+
+// Create COMPACT back face HTML
 function createBackFaceHTML(tool) {
   const categoryName = getCategoryName(tool.category);
   const categoryColor = getCategoryColor(tool.category);
-  const ratingBar = generateRatingBar(tool.rating || 0);
-  const priceTag = tool.is_free ? 'Kostenlos' : 'Premium';
-  const priceColor = tool.is_free ? '#00FF9D' : '#FFB800';
-  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [];
+  const shortDescription = truncateText(tool.description, 60);
+  const rating = (tool.rating || 0).toFixed(1);
 
   return `
-    
-    
-    <div class="card-voting" data-tool-id="${tool.id}">
-      <button class="vote-btn vote-btn-up" 
-              data-vote="up" 
-              aria-label="Upvote"
-              type="button">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 5L12 19M12 5L6 11M12 5L18 11"/>
-        </svg>
-      </button>
-      <button class="vote-btn vote-btn-down" 
-              data-vote="down" 
-              aria-label="Downvote"
-              type="button">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 19L12 5M12 19L18 13M12 19L6 13"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="card-back-header">
-      <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
-        ${escapeHtml(categoryName)}
-      </div>
-      <div class="card-back-price" style="color: ${priceColor};">
-        ${priceTag}
-      </div>
+    <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
+      ${escapeHtml(categoryName)}
     </div>
 
     <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
 
-    <div class="card-back-rating">
-      <span class="card-back-rating-value">${(tool.rating || 0).toFixed(1)}</span>
-      ${ratingBar}
-      <span class="card-back-rating-text">/5.0</span>
-    </div>
+    <div class="card-back-rating">${rating}</div>
 
-    <p class="card-back-description">${escapeHtml(tool.description || 'Keine Beschreibung verfügbar')}</p>
+    <p class="card-back-description">${escapeHtml(shortDescription)}</p>
 
-    ${tags.length > 0 ? `
-      <div class="card-back-tags">
-        ${tags.map(tag => `<span class="card-back-tag">${escapeHtml(tag)}</span>`).join('')}
-      </div>
-    ` : ''}
-
-    ${tool.link ? `
-      <a href="${escapeHtml(tool.link)}" 
-         target="_blank" 
-         rel="noopener noreferrer" 
-         class="card-back-button"
-         onclick="event.stopPropagation();">
-        Tool öffnen →
-      </a>
-    ` : ''}
+    <button class="card-back-button-info" 
+            data-tool-id="${tool.id}"
+            onclick="window.openToolDetailModal(${tool.id}); event.stopPropagation();">
+      Mehr Infos
+    </button>
   `;
 }
 
 // Initialize card for flipping
 function initializeFlipCard(card) {
-  if (card.dataset.flipInitialized === 'true') {
-    console.log('⏭️ Card already initialized:', card.dataset.toolName);
-    return;
-  }
+  if (card.dataset.flipInitialized === 'true') return;
   
   const toolId = card.dataset.toolId;
   if (!toolId) {
     console.warn('❌ No toolId found');
     return;
   }
-
-  console.log('🔧 Initializing card:', card.dataset.toolName, 'ID:', toolId);
 
   // Get tool data
   let tool = null;
@@ -155,7 +101,7 @@ function initializeFlipCard(card) {
     return;
   }
 
-  // Wrap existing content in front face
+  // Wrap existing content in front face + add back face
   const existingContent = card.innerHTML;
   card.innerHTML = `
     <div class="card-face card-face-front">
@@ -167,14 +113,14 @@ function initializeFlipCard(card) {
   `;
 
   card.dataset.flipInitialized = 'true';
-  console.log('✅ Card initialized:', card.dataset.toolName);
+  console.log('✅ Card initialized:', tool.title);
 }
 
-// Handle card click
+// Handle card click (toggle flip)
 function handleCardClick(e) {
-  // Ignore if clicking on interactive elements
-  if (e.target.closest('.card-back-button, .vote-btn, .card-voting')) {
-    console.log('🚫 Ignored click on interactive element');
+  // Ignore clicks on "Mehr Infos" button
+  if (e.target.closest('.card-back-button-info')) {
+    console.log('🚫 Button click ignored');
     return;
   }
 
@@ -184,8 +130,6 @@ function handleCardClick(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  console.log('👆 Card clicked:', card.dataset.toolName);
-
   // Initialize if needed
   if (card.dataset.flipInitialized !== 'true') {
     initializeFlipCard(card);
@@ -193,27 +137,24 @@ function handleCardClick(e) {
 
   // Toggle flip
   card.classList.toggle('is-flipped');
-  
-  console.log('🔄 Card flipped:', card.dataset.toolName, 'Flipped:', card.classList.contains('is-flipped'));
+  console.log('🔄 Card flipped:', card.dataset.toolName);
 }
-
 
 // Initialize flip system
 function initFlipSystem() {
   const toolGrid = document.getElementById('tool-grid');
   if (!toolGrid) {
     console.warn('⚠️ Tool grid not found, retrying...');
-    setTimeout(initFlipSystem, 500);
+    setTimeout(initFlipSystem, 300);
     return;
   }
 
-  console.log('🎯 Tool grid found, initializing flip system...');
+  console.log('🎯 Initializing flip system...');
 
   // Remove old listeners
   if (toolGrid._flipClickHandler) {
     toolGrid.removeEventListener('click', toolGrid._flipClickHandler);
     toolGrid.removeEventListener('touchend', toolGrid._flipClickHandler);
-    console.log('🔄 Removed old listeners');
   }
 
   // Add new listeners
@@ -221,27 +162,28 @@ function initFlipSystem() {
   toolGrid.addEventListener('click', handleCardClick);
   toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
 
-
-
   console.log('✅ Flip system initialized!');
-  console.log('📊 Cards available:', document.querySelectorAll('.card-square').length);
 }
 
-// Wait for app to be ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('📄 DOM loaded, waiting 1s...');
-    setTimeout(initFlipSystem, 1000);
-  });
-} else {
-  console.log('📄 DOM already loaded, waiting 1s...');
-  setTimeout(initFlipSystem, 1000);
-}
-
-// Re-initialize on quantum ready
-window.addEventListener('quantumready', () => {
-  console.log('⚡ Quantum ready event fired');
-  setTimeout(initFlipSystem, 500);
+// ESC closes flipped cards
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.card-square.is-flipped')
+      .forEach(card => card.classList.remove('is-flipped'));
+  }
 });
 
-console.log('📄 flip-card.js loaded successfully!');
+// Wait for DOM + app ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(initFlipSystem);
+  });
+} else {
+  requestAnimationFrame(initFlipSystem);
+}
+
+window.addEventListener('quantumready', () => {
+  setTimeout(initFlipSystem, 300);
+});
+
+console.log('✅ flip-card.js v10.0 loaded!');
