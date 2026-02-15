@@ -1,16 +1,16 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - PREMIUM (Overlay-Link kompatibel)
-   - fängt .card-overlay-link ab: Tap = Flip (statt sofort öffnen)
-   - "Tool öffnen" nur auf Rückseite (CTA)
-   - Close (×) klappt sicher zu
-   - Rating als Neural-Progressbar (ohne ⭐)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
+   - keeps FRONT markup (badge/title/marquee) as-is (from style.css)
+   - iOS-safe 3D rotateY flip
+   - disables front overlay-link click stealing
+   - one card open at a time + tap outside to close
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js premium loading...');
+console.log('🚀 flip-card.js loading (mobile-safe)...');
 
-/* ---------- Helpers ---------- */
+/* -------------------- helpers -------------------- */
 function escapeHtml(text) {
   if (text == null) return '';
   const div = document.createElement('div');
@@ -18,10 +18,10 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function clamp01(n) {
+function clamp(n, min, max) {
   n = Number(n);
-  if (!Number.isFinite(n)) return 0;
-  return Math.max(0, Math.min(1, n));
+  if (Number.isNaN(n)) return min;
+  return Math.min(max, Math.max(min, n));
 }
 
 function getCategoryName(cat) {
@@ -37,74 +37,103 @@ function getCategoryName(cat) {
   return names[cat] || names.other;
 }
 
-function truncateText(text, maxLen) {
-  if (!text) return '';
-  const s = String(text).trim();
-  return s.length > maxLen ? s.slice(0, maxLen) + '…' : s;
-}
-
 function getToolById(toolId) {
-  const idStr = String(toolId);
-  const tools =
-    (window.appState && Array.isArray(window.appState.tools) && window.appState.tools) ||
-    (window.__TOOLS__ && Array.isArray(window.__TOOLS__) && window.__TOOLS__) ||
-    [];
-
-  return tools.find(t => String(t.id) === idStr) || null;
+  const id = String(toolId || '');
+  const tools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : null;
+  if (!tools) return null;
+  return tools.find(t => String(t.id) === id) || null;
 }
 
-/* ---------- Back Face Template ---------- */
+function closeAllFlips(exceptCard = null) {
+  document.querySelectorAll('.card-square.is-flipped').forEach(c => {
+    if (exceptCard && c === exceptCard) return;
+    c.classList.remove('is-flipped');
+    c.setAttribute('aria-expanded', 'false');
+  });
+}
+
+/* -------------------- back face markup -------------------- */
+function buildRatingMeter(rating) {
+  // rating: 0..5 => percent 0..100
+  const r = clamp(rating || 0, 0, 5);
+  const percent = Math.round((r / 5) * 100);
+  const label = `${r.toFixed(1)} / 5.0`;
+  return `
+    <div class="qc-rating" aria-label="Bewertung ${escapeHtml(label)}">
+      <div class="qc-rating-top">
+        <span class="qc-rating-label">Rating</span>
+        <span class="qc-rating-value">${escapeHtml(r.toFixed(1))}</span>
+      </div>
+      <div class="qc-rating-meter" role="progressbar"
+           aria-valuemin="0" aria-valuemax="5" aria-valuenow="${escapeHtml(r.toFixed(1))}">
+        <div class="qc-rating-fill" style="width:${percent}%"></div>
+        <div class="qc-rating-glow" style="width:${percent}%"></div>
+      </div>
+      <div class="qc-rating-hint">${escapeHtml(label)}</div>
+    </div>
+  `;
+}
+
 function createBackFace(tool) {
   const catName = getCategoryName(tool.category);
-  const desc = truncateText(tool.description, 140);
-
-  const rating = Number(tool.rating || 0);
-  const ratingClamped = Math.max(0, Math.min(5, rating));
-  const pct = Math.round(clamp01(ratingClamped / 5) * 100);
+  const provider = tool.provider ? String(tool.provider) : '';
+  const desc = tool.description ? String(tool.description) : '';
+  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 6) : [];
+  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 2) : [];
 
   const link = tool.link ? String(tool.link) : '#';
+  const safeLink = escapeHtml(link);
 
   return `
-    <div class="card-face card-face-back" aria-hidden="true">
-      <button class="card-back-close" type="button" data-flip-close aria-label="Schließen">×</button>
+    <div class="card-face card-face-back" role="group" aria-label="Tool Details">
+      <div class="qc-back-top">
+        <!-- Close -->
+        <button class="qc-close" type="button" aria-label="Schließen">×</button>
 
-      <div class="card-back-category">${escapeHtml(catName)}</div>
-
-      <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
-
-      <div class="card-back-rating">
-        <div class="card-back-rating-row">
-          <div class="card-back-rating-label">Rating</div>
-          <div class="card-back-rating-value">${ratingClamped.toFixed(1)}</div>
-        </div>
-
-        <div class="card-back-rating-bar" role="progressbar"
-             aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
-          <div class="card-back-rating-fill" style="width:${pct}%;"></div>
+        <!-- Category badge (reuse style language close to front) -->
+        <div class="qc-back-badges">
+          <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
+            ${escapeHtml(catName)}
+          </span>
         </div>
       </div>
 
-      <p class="card-back-description">${escapeHtml(desc)}</p>
+      <div class="qc-back-body">
+        <!-- Title style aligned with front typography -->
+        <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
 
-      <div class="card-back-actions">
-        <a class="card-back-cta primary" href="${escapeHtml(link)}"
-           target="_blank" rel="noopener noreferrer"
-           data-action="open"
-           onclick="event.stopPropagation();">
+        ${buildRatingMeter(tool.rating)}
+
+        ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
+
+        <p class="qc-desc">${escapeHtml(desc)}</p>
+
+        ${badges.length ? `
+          <div class="qc-badges">
+            ${badges.map(b => `<div class="qc-badge-item">${escapeHtml(b)}</div>`).join('')}
+          </div>
+        ` : ''}
+
+        ${tags.length ? `
+          <div class="qc-tags" aria-label="Tags">
+            ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="qc-actions">
+        <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
           Tool öffnen
         </a>
-
-        <button class="card-back-cta ghost" type="button"
-                data-action="more"
-                onclick="event.stopPropagation();">
-          Mehr Infos
+        <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
+          Zurück
         </button>
       </div>
     </div>
   `;
 }
 
-/* ---------- Prepare card (wrap front + add back) ---------- */
+/* -------------------- prepare card -------------------- */
 function prepareCard(card) {
   if (!card || card.dataset.flipInitialized === 'true') return;
 
@@ -115,93 +144,106 @@ function prepareCard(card) {
   if (!tool) return;
 
   // IMPORTANT:
-  // Wir nehmen den aktuellen Inhalt (Front) wie er ist (inkl. Badge/Title/Marquee aus style.css)
-  const frontContent = card.innerHTML;
+  // - Keep the current FRONT markup exactly as produced by app.js (style.css owns positions)
+  const frontHtml = card.innerHTML;
 
   card.innerHTML = `
-    <div class="card-face card-face-front" aria-hidden="false">
-      ${frontContent}
+    <div class="card-face card-face-front">
+      ${frontHtml}
     </div>
     ${createBackFace(tool)}
   `;
 
+  // Stop front overlay link from hijacking taps/clicks
+  // (style.css has .card-overlay-link pointer-events: auto)
+  const overlay = card.querySelector('.card-face-front .card-overlay-link');
+  if (overlay) {
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.tabIndex = -1;
+    overlay.style.pointerEvents = 'none';
+  }
+
   card.dataset.flipInitialized = 'true';
+  card.setAttribute('aria-expanded', 'false');
+  card.setAttribute('role', 'button');
+  card.tabIndex = 0;
 }
 
-/* ---------- Flip controls ---------- */
-function flipOpen(card) {
-  if (!card) return;
-  if (card.dataset.flipInitialized !== 'true') prepareCard(card);
+/* -------------------- interactions -------------------- */
+function isInteractiveTarget(el) {
+  if (!el) return false;
+  return Boolean(
+    el.closest('a, button, input, textarea, select, [role="button"]')
+  );
+}
 
+function openFlip(card) {
+  if (!card) return;
+  prepareCard(card);
+  closeAllFlips(card);
   card.classList.add('is-flipped');
-
-  // a11y
-  const front = card.querySelector('.card-face-front');
-  const back = card.querySelector('.card-face-back');
-  if (front) front.setAttribute('aria-hidden', 'true');
-  if (back) back.setAttribute('aria-hidden', 'false');
+  card.setAttribute('aria-expanded', 'true');
 }
 
-function flipClose(card) {
+function toggleFlip(card) {
   if (!card) return;
+  prepareCard(card);
 
-  card.classList.remove('is-flipped');
-
-  const front = card.querySelector('.card-face-front');
-  const back = card.querySelector('.card-face-back');
-  if (front) front.setAttribute('aria-hidden', 'false');
-  if (back) back.setAttribute('aria-hidden', 'true');
+  const willOpen = !card.classList.contains('is-flipped');
+  if (willOpen) openFlip(card);
+  else {
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
+  }
 }
 
-/* ---------- Click handler (Overlay-Link fix!) ---------- */
-function onGridClick(e) {
-  const target = e.target;
-
-  const card = target.closest('.card-square');
+function onGridPointerUp(e) {
+  const card = e.target.closest('.card-square');
   if (!card) return;
 
-  // Close button
-  if (target.closest('[data-flip-close]')) {
+  // If user tapped a real CTA inside back, allow it (don't toggle)
+  if (e.target.closest('.qc-btn-primary')) return;
+
+  // Close buttons / close actions
+  if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
     e.preventDefault();
     e.stopPropagation();
-    flipClose(card);
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
     return;
   }
 
-  // Backside action buttons:
-  // - open: darf navigieren (wir stoppen nur propagation, nicht default)
-  // - more: nur placeholder (kein flip)
-  const actionEl = target.closest('[data-action]');
-  if (actionEl) {
-    const action = actionEl.getAttribute('data-action');
-    if (action === 'more') {
-      e.preventDefault();
-      e.stopPropagation();
-      // TODO: hier später Modal/Details
-      console.log('ℹ️ Mehr Infos (placeholder):', card.dataset.toolId);
-    }
-    return;
-  }
+  // If user tapped interactive elements (links/buttons) in back, do not flip
+  // (except our close handlers handled above)
+  if (card.classList.contains('is-flipped') && isInteractiveTarget(e.target)) return;
 
-  // DER WICHTIGE FIX:
-  // Wenn der Tap auf dem Full-Overlay-Link passiert, flippen wir statt zu navigieren.
-  const overlayLink = target.closest('.card-overlay-link');
-  if (overlayLink) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!card.classList.contains('is-flipped')) flipOpen(card);
-    else flipClose(card);
-    return;
-  }
-
-  // Normaler Tap irgendwo auf der Karte:
+  // Otherwise toggle flip
   e.preventDefault();
   e.stopPropagation();
-  if (!card.classList.contains('is-flipped')) flipOpen(card);
-  else flipClose(card);
+  toggleFlip(card);
 }
 
-/* ---------- Init ---------- */
+function onGridKeyDown(e) {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleFlip(card);
+  }
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeAllFlips();
+  }
+}
+
+function onDocumentPointerUp(e) {
+  // Tap outside closes any open card
+  const inCard = e.target.closest('.card-square');
+  if (!inCard) closeAllFlips();
+}
+
+/* -------------------- init / re-init -------------------- */
 function initFlip() {
   const grid = document.getElementById('tool-grid');
   if (!grid) {
@@ -209,25 +251,43 @@ function initFlip() {
     return;
   }
 
-  // Remove old handler if present
-  if (grid._flipHandler) grid.removeEventListener('click', grid._flipHandler);
-  grid._flipHandler = onGridClick;
-  grid.addEventListener('click', onGridClick, { passive: false });
+  // Prepare all current cards
+  grid.querySelectorAll('.card-square').forEach(prepareCard);
 
-  // Prepare existing cards
-  document.querySelectorAll('.card-square').forEach(card => {
-    if (card.dataset.flipInitialized !== 'true') prepareCard(card);
-  });
+  // Remove old handlers if exist
+  if (grid._qcFlipBound) {
+    grid.removeEventListener('pointerup', grid._qcFlipPointerUp, true);
+    grid.removeEventListener('keydown', grid._qcFlipKeyDown, true);
+    document.removeEventListener('pointerup', grid._qcDocPointerUp, true);
+    grid._qcFlipBound = false;
+  }
 
-  console.log('✅ Flip-System premium bereit (Overlay-Link fix aktiv)');
+  // Bind in CAPTURE phase (robust against other listeners)
+  grid._qcFlipPointerUp = onGridPointerUp;
+  grid._qcFlipKeyDown = onGridKeyDown;
+  grid._qcDocPointerUp = onDocumentPointerUp;
+
+  grid.addEventListener('pointerup', onGridPointerUp, true);
+  grid.addEventListener('keydown', onGridKeyDown, true);
+  document.addEventListener('pointerup', onDocumentPointerUp, true);
+
+  grid._qcFlipBound = true;
+
+  // MutationObserver: if app.js re-renders cards, we re-prepare new nodes
+  if (!grid._qcFlipObserver) {
+    grid._qcFlipObserver = new MutationObserver(() => {
+      grid.querySelectorAll('.card-square').forEach(prepareCard);
+    });
+    grid._qcFlipObserver.observe(grid, { childList: true, subtree: true });
+  }
+
+  console.log('✅ Flip-System ready (mobile-safe)');
 }
 
-// Start
+/* -------------------- start -------------------- */
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFlip));
 } else {
   requestAnimationFrame(initFlip);
 }
-
-// Re-init when app signals ready
-window.addEventListener('quantumready', initFlip);
+window.addEventListener('quantumready', () => requestAnimationFrame(initFlip));
