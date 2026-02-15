@@ -1,86 +1,16 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V12.2 ORGANIC
+// GRID SYNCHRONIZED NETWORK V12.1 ULTIMATE ENHANCED
 // Enhanced: Beautiful & Vibrant on Mobile!
-// + Organische, natürliche Kurven (keine starren Grid-Muster)
+// - 4 Connection Types (solid/dashed/dotted/curved)
+// - Mobile-Enhanced: Thinner lines, Higher opacity, Faster flow
+// - Intelligent Cluster Detection
+// - Vibrant Colors & Glow
+// - Touch Feedback
+// - Smooth 60fps
 // =========================================
 
 (function() {
   'use strict';
-
-  // 🆕 PERLIN NOISE für organische Kurven
-  class SimplexNoise {
-    constructor(seed = Math.random()) {
-      this.grad3 = [[1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
-                     [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
-                     [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]];
-      this.p = [];
-      for (let i = 0; i < 256; i++) {
-        this.p[i] = Math.floor(seed * 256);
-        seed = (seed * 16807) % 2147483647;
-      }
-      this.perm = [];
-      for (let i = 0; i < 512; i++) {
-        this.perm[i] = this.p[i & 255];
-      }
-    }
-
-    dot(g, x, y) {
-      return g[0] * x + g[1] * y;
-    }
-
-    noise2D(xin, yin) {
-      const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-      const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-      
-      let n0, n1, n2;
-      const s = (xin + yin) * F2;
-      const i = Math.floor(xin + s);
-      const j = Math.floor(yin + s);
-      const t = (i + j) * G2;
-      const X0 = i - t;
-      const Y0 = j - t;
-      const x0 = xin - X0;
-      const y0 = yin - Y0;
-      
-      let i1, j1;
-      if (x0 > y0) { i1 = 1; j1 = 0; }
-      else { i1 = 0; j1 = 1; }
-      
-      const x1 = x0 - i1 + G2;
-      const y1 = y0 - j1 + G2;
-      const x2 = x0 - 1.0 + 2.0 * G2;
-      const y2 = y0 - 1.0 + 2.0 * G2;
-      
-      const ii = i & 255;
-      const jj = j & 255;
-      const gi0 = this.perm[ii + this.perm[jj]] % 12;
-      const gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
-      const gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
-      
-      let t0 = 0.5 - x0*x0 - y0*y0;
-      if (t0 < 0) n0 = 0.0;
-      else {
-        t0 *= t0;
-        n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0);
-      }
-      
-      let t1 = 0.5 - x1*x1 - y1*y1;
-      if (t1 < 0) n1 = 0.0;
-      else {
-        t1 *= t1;
-        n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1);
-      }
-      
-      let t2 = 0.5 - x2*x2 - y2*y2;
-      if (t2 < 0) n2 = 0.0;
-      else {
-        t2 *= t2;
-        n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2);
-      }
-      
-      return 70.0 * (n0 + n1 + n2);
-    }
-  }
 
   class GridSynchronizedNetworkUltimate {
     constructor() {
@@ -96,10 +26,7 @@
       this.canvasWidth = 0;
       this.canvasHeight = 0;
       this.glowTime = 0;
-      this.pulseTime = 0;
-
-      // 🆕 Perlin Noise für organische Kurven
-      this.noise = new SimplexNoise(Date.now());
+      this.pulseTime = 0; // 🆕 Für Pulse-Effekt
 
       // Performance optimization
       this.targetFPS = 60;
@@ -122,7 +49,7 @@
           glowIntensity: 1.0,
           flowSpeed: 1.0,
           priority: 4,
-          pulseEnabled: true
+          pulseEnabled: true // 🆕
         },
         secondary: {
           style: 'dashed',
@@ -131,7 +58,7 @@
           glowIntensity: 0.8,
           flowSpeed: 0.7,
           priority: 2,
-          pulseEnabled: true
+          pulseEnabled: true // 🆕
         },
         bridge: {
           style: 'dotted',
@@ -150,7 +77,7 @@
           flowSpeed: 0.8,
           curve: true,
           priority: 3,
-          pulseEnabled: true
+          pulseEnabled: true // 🆕
         }
       };
 
@@ -162,31 +89,27 @@
 
     setupAdaptiveSettings() {
       if (this.isMobile) {
+        // 📱 MOBILE: SCHÖN & LEBENDIG!
         this.settings = {
           qualityMultiplier: 1.0,
-          baseLineWidth: 1.2,
-          glowWidth: 12,
-          glowSpeed: 0.0025,
-          glowLength: 0.45,
-          enableCurves: true,  // 🆕 Kurven auf Mobile!
-          maxPrimaryConnections: 3,
-          maxSecondaryConnections: 2,
+          baseLineWidth: 1.2,              // 🎨 Dünner! (war 1.5)
+          glowWidth: 12,                   // ✨ Mehr Glow! (war 10)
+          glowSpeed: 0.0025,               // ⚡ Schneller! (war 0.0015)
+          glowLength: 0.45,                // 🌟 Länger! (war 0.3)
+          enableCurves: false,
+          maxPrimaryConnections: 3,        // 🔗 Mehr! (war 2)
+          maxSecondaryConnections: 2,      // 🔗 Mehr! (war 1)
           maxBridgeConnections: 2,
-          hoverSpeed: 0.25,
-          baseOpacity: 0.55,
-          glowOpacity: 0.75,
-          useSimplifiedRendering: false,
+          hoverSpeed: 0.25,                // ⚡ Schneller! (war 0.30)
+          baseOpacity: 0.55,               // 🎨 Sichtbarer! (war 0.35)
+          glowOpacity: 0.75,               // ✨ Intensiver! (war 0.50)
+          useSimplifiedRendering: false,   // 🎨 Full Quality! (war true)
           minClusterSize: 2,
-          maxDistance: 380,
-          pulseSpeed: 0.0008,
-          pulseIntensity: 0.15,
-          touchFeedback: true,
-          vibrantColors: true,
-          // 🆕 Organische Kurven Settings
-          organicCurves: true,
-          curveComplexity: 0.25,      // Wie stark die Kurven sind
-          waveAmplitude: 25,           // Wellen-Stärke
-          noiseScale: 0.003            // Perlin Noise Frequenz
+          maxDistance: 380,                // Etwas kürzer für Klarheit
+          pulseSpeed: 0.0008,              // 🆕 Pulse-Effekt
+          pulseIntensity: 0.15,            // 🆕 Pulse-Stärke
+          touchFeedback: true,             // 🆕 Touch-Feedback
+          vibrantColors: true              // 🆕 Intensivere Farben
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -208,11 +131,7 @@
           pulseSpeed: 0.0006,
           pulseIntensity: 0.12,
           touchFeedback: true,
-          vibrantColors: true,
-          organicCurves: true,
-          curveComplexity: 0.22,
-          waveAmplitude: 22,
-          noiseScale: 0.0025
+          vibrantColors: true
         };
       } else {
         this.settings = {
@@ -234,23 +153,20 @@
           pulseSpeed: 0.0005,
           pulseIntensity: 0.10,
           touchFeedback: false,
-          vibrantColors: false,
-          organicCurves: true,
-          curveComplexity: 0.20,
-          waveAmplitude: 20,
-          noiseScale: 0.002
+          vibrantColors: false
         };
       }
 
+      // 🎨 VIBRANT COLORS für Mobile!
       if (this.settings.vibrantColors) {
         this.categoryColors = {
-          text: { r: 0, g: 255, b: 255 },
-          image: { r: 255, g: 80, b: 170 },
-          code: { r: 150, g: 100, b: 255 },
-          video: { r: 255, g: 75, b: 75 },
-          audio: { r: 40, g: 220, b: 110 },
-           data: { r: 255, g: 200, b: 50 },
-          other: { r: 160, g: 175, b: 200 }
+          text: { r: 0, g: 255, b: 255 },      // Heller Cyan
+          image: { r: 255, g: 80, b: 170 },    // Helleres Pink
+          code: { r: 150, g: 100, b: 255 },    // Helleres Purple
+          video: { r: 255, g: 75, b: 75 },     // Helleres Red
+          audio: { r: 40, g: 220, b: 110 },    // Helleres Green
+           { r: 255, g: 200, b: 50 },     // Helleres Yellow
+          other: { r: 160, g: 175, b: 200 }    // Helleres Gray
         };
       } else {
         this.categoryColors = {
@@ -259,16 +175,15 @@
           code: { r: 139, g: 92, b: 246 },
           video: { r: 239, g: 68, b: 68 },
           audio: { r: 34, g: 197, b: 94 },
-           data: { r: 251, g: 191, b: 36 },
+           { r: 251, g: 191, b: 36 },
           other: { r: 148, g: 163, b: 184 }
         };
       }
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v12.2 ORGANIC');
+      console.log('🚀 GridSynchronizedNetwork v12.1 ULTIMATE ENHANCED');
 
-      // 🔧 FIX: Korrekter Event-Name
       window.addEventListener('quantumready', () => {
         setTimeout(() => this.setup(), 50);
       });
@@ -283,6 +198,7 @@
         resizeTimeout = setTimeout(() => this.handleResize(), 300);
       });
 
+      // 🆕 Orientation change für Mobile
       window.addEventListener('orientationchange', () => {
         setTimeout(() => this.handleResize(), 400);
       });
@@ -311,8 +227,10 @@
         return;
       }
 
+      // Try intelligent algorithm first
       this.generateIntelligentConnections();
 
+      // Fallback if no connections generated
       if (this.connections.length === 0) {
         console.log('📋 Using fallback connection generation');
         this.generateFallbackConnections();
@@ -325,100 +243,83 @@
       console.log('✅ Ultimate Enhanced Network initialized!');
       console.log(`🕸️ ${this.connections.length} vibrant connections`);
       console.log(`📱 Mobile optimized: ${this.isMobile ? 'YES' : 'NO'}`);
-      console.log(`🌊 Organic curves: ${this.settings.organicCurves ? 'YES' : 'NO'}`);
     }
 
-setupCanvas() {
-  if (!this.canvas) {
-    this.canvas = document.createElement('canvas');
-    this.canvas.className = 'connection-canvas';
-    
-    // 🔧 FIX: Explizite Styles für garantierte Sichtbarkeit
-    this.canvas.style.cssText = `
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      will-change: transform;
-      touch-action: none;
-      display: block !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    `;
-    
-    this.containerElement.insertBefore(this.canvas, this.gridElement);
-  }
+    setupCanvas() {
+      if (!this.canvas) {
+        this.canvas = document.createElement('canvas');
+        this.canvas.className = 'connection-canvas';
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.pointerEvents = 'none';
+        this.canvas.style.zIndex = '1';
+        this.canvas.style.willChange = 'transform';
+        this.canvas.style.touchAction = 'none'; // 🆕 Better touch handling
+        this.containerElement.insertBefore(this.canvas, this.gridElement);
+      }
 
-  // 🔧 FIX: Verwende Container-Größe für vollständige Abdeckung
-  const containerRect = this.containerElement.getBoundingClientRect();
+      const gridRect = this.gridElement.getBoundingClientRect();
+      const parentRect = this.containerElement.getBoundingClientRect();
 
-  this.canvasWidth = containerRect.width;
-  this.canvasHeight = containerRect.height;
+      this.canvasWidth = gridRect.width;
+      this.canvasHeight = gridRect.height;
 
-  // Canvas DOM-Größe (bereits durch cssText auf 100% gesetzt)
-  this.canvas.style.width = this.canvasWidth + 'px';
-  this.canvas.style.height = this.canvasHeight + 'px';
+      this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
+      this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
+      this.canvas.style.width = this.canvasWidth + 'px';
+      this.canvas.style.height = this.canvasHeight + 'px';
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const hdRatio = dpr * this.settings.qualityMultiplier;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const hdRatio = dpr * this.settings.qualityMultiplier;
 
-  // Canvas interne Auflösung (HD)
-  this.canvas.width = this.canvasWidth * hdRatio;
-  this.canvas.height = this.canvasHeight * hdRatio;
+      this.canvas.width = this.canvasWidth * hdRatio;
+      this.canvas.height = this.canvasHeight * hdRatio;
 
-  this.ctx = this.canvas.getContext('2d', { 
-    alpha: true,
-    desynchronized: true,
-    willReadFrequently: false
-  });
+      this.ctx = this.canvas.getContext('2d', { 
+        alpha: true,
+        desynchronized: true,
+        willReadFrequently: false
+      });
 
-  this.ctx.scale(hdRatio, hdRatio);
-  this.ctx.imageSmoothingEnabled = true;
-  this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
-  
-  console.log(`✅ Canvas: ${this.canvasWidth}x${this.canvasHeight} (${this.canvas.width}x${this.canvas.height} internal)`);
-}
+      this.ctx.scale(hdRatio, hdRatio);
+      this.ctx.imageSmoothingEnabled = true;
+      this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
+    }
 
-// 🆕 DIESE FUNKTION FEHLT BEI DIR - FÜGE SIE EIN:
-scanTools() {
-  const cardElements = this.gridElement.querySelectorAll('.card-square');
-  this.cards = [];
+    scanTools() {
+      const cardElements = this.gridElement.querySelectorAll('.card-square');
+      this.cards = [];
 
-  cardElements.forEach((el, index) => {
-    const rect = el.getBoundingClientRect();
-    const gridRect = this.gridElement.getBoundingClientRect();
-    const category = el.getAttribute('data-category') || 'other';
+      cardElements.forEach((el, index) => {
+        const rect = el.getBoundingClientRect();
+        const gridRect = this.gridElement.getBoundingClientRect();
+        const category = el.getAttribute('data-category') || 'other';
 
-    this.cards.push({
-      element: el,
-      category: category,
-      x: rect.left - gridRect.left + rect.width / 2,
-      y: rect.top - gridRect.top + rect.height / 2,
-      width: rect.width,
-      height: rect.height,
-      index: index,
-      cluster: null,
-      degree: 0
-    });
-  });
-  
-  console.log(`✅ Scanned ${this.cards.length} cards`);
-}
-
+        this.cards.push({
+          element: el,
+          category: category,
+          x: rect.left - gridRect.left + rect.width / 2,
+          y: rect.top - gridRect.top + rect.height / 2,
+          width: rect.width,
+          height: rect.height,
+          index: index,
+          cluster: null,
+          degree: 0
+        });
+      });
+    }
 
     setupInputDetection() {
       const isTouchDevice = 'ontouchstart' in window;
 
       this.cards.forEach((card) => {
         if (isTouchDevice) {
+          // 🆕 Besseres Touch-Feedback
           let touchTimeout;
 
           card.element.addEventListener('touchstart', (e) => {
             this.hoveredCard = card;
 
+            // 🆕 Visual Touch Feedback
             if (this.settings.touchFeedback) {
               card.element.style.transform = 'scale(0.97)';
               card.element.style.transition = 'transform 0.15s ease';
@@ -426,6 +327,7 @@ scanTools() {
 
             touchTimeout = setTimeout(() => {
               if (this.hoveredCard === card) {
+                // Touch held - intensify effect
                 if (this.settings.touchFeedback) {
                   card.element.style.transform = 'scale(0.95)';
                 }
@@ -437,6 +339,7 @@ scanTools() {
           card.element.addEventListener('touchend', () => {
             clearTimeout(touchTimeout);
 
+            // 🆕 Smooth release
             if (this.settings.touchFeedback) {
               card.element.style.transform = '';
             }
@@ -470,6 +373,7 @@ scanTools() {
       });
     }
 
+    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -487,6 +391,7 @@ scanTools() {
       }
     }
 
+    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
       const categoryGroups = {};
 
@@ -497,6 +402,7 @@ scanTools() {
         categoryGroups[card.category].push(card);
       });
 
+      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
           group.sort((a, b) => {
@@ -511,6 +417,7 @@ scanTools() {
         }
       });
 
+      // Secondary: Skip connections within larger groups
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 3) {
           group.sort((a, b) => {
@@ -529,6 +436,7 @@ scanTools() {
         }
       });
 
+      // Bridge: Connect different categories
       const categories = Object.keys(categoryGroups);
       const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
 
@@ -556,6 +464,7 @@ scanTools() {
         }
       }
 
+      // Cluster: Curved connections for visual variety
       if (this.settings.enableCurves) {
         Object.values(categoryGroups).forEach(group => {
           if (group.length > 3) {
@@ -724,6 +633,7 @@ scanTools() {
         conn.to.degree++;
       });
 
+      // 📱 Mobile: Max 4 connections per card (war 4)
       const maxDegree = this.isMobile ? 4 : 6;
 
       this.connections = this.connections.filter(conn => {
@@ -761,52 +671,11 @@ scanTools() {
         weight: weight,
         activeState: 1,
         glowOffset: Math.random() * Math.PI * 2,
-        pulseOffset: Math.random() * Math.PI * 2,
-        config: typeConfig,
-        // 🆕 Generate organic path
-        organicPath: this.settings.organicCurves ? this.generateOrganicPath(from, to) : null
+        pulseOffset: Math.random() * Math.PI * 2, // 🆕 Pulse-Offset
+        config: typeConfig
       };
       this.connections.push(conn);
       this.activeConnections.set(conn, 1);
-    }
-
-    // 🆕 NEUE FUNKTION: Organischen Pfad generieren
-    generateOrganicPath(from, to) {
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      
-      const segments = Math.max(4, Math.floor(dist / 60));
-      const path = [];
-
-      for (let i = 0; i <= segments; i++) {
-        const t = i / segments;
-        
-        const baseX = from.x + dx * t;
-        const baseY = from.y + dy * t;
-
-        // Perlin Noise für smooth, organische Abweichung
-        const noiseX = this.noise.noise2D(baseX * this.settings.noiseScale, baseY * this.settings.noiseScale);
-        const noiseY = this.noise.noise2D(baseY * this.settings.noiseScale, baseX * this.settings.noiseScale);
-
-        // Senkrechte zur Linie
-        const perpX = -dy / dist;
-        const perpY = dx / dist;
-
-        // Sinus-Welle für smooth flow
-        const wave = Math.sin(t * Math.PI * 2) * this.settings.waveAmplitude * this.settings.curveComplexity;
-
-        // Kombiniere Noise + Wave
-        const offsetX = (perpX * wave) + (noiseX * this.settings.waveAmplitude * 0.8);
-        const offsetY = (perpY * wave) + (noiseY * this.settings.waveAmplitude * 0.8);
-
-        path.push({
-          x: baseX + offsetX,
-          y: baseY + offsetY
-        });
-      }
-
-      return path;
     }
 
     isConnectionActive(connection) {
@@ -838,6 +707,7 @@ scanTools() {
 
       const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
 
+      // 🎨 Intensivere Gradients für Mobile
       const midBoost = this.isMobile ? 1.2 : 1.1;
 
       gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
@@ -860,6 +730,7 @@ scanTools() {
 
       const weight = connection.weight || 1;
 
+      // 🆕 PULSE-EFFEKT auf Mobile
       let pulseMultiplier = 1.0;
       if (config.pulseEnabled && this.isMobile) {
         const pulseProgress = (time * this.settings.pulseSpeed + connection.pulseOffset) % (Math.PI * 2);
@@ -874,13 +745,10 @@ scanTools() {
       this.ctx.strokeStyle = gradient;
       this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight * pulseMultiplier;
       this.ctx.lineCap = 'round';
-      this.ctx.lineJoin = 'round';
+      this.ctx.lineJoin = 'round'; // 🆕 Smoother joins
       this.ctx.setLineDash(config.dashPattern);
 
-      // 🆕 Zeichne organischen Pfad oder normale Linie
-      if (this.settings.organicCurves && connection.organicPath) {
-        this.drawOrganicPath(connection.organicPath);
-      } else if (config.curve && !this.settings.useSimplifiedRendering) {
+      if (config.curve && !this.settings.useSimplifiedRendering) {
         this.drawCurvedLine(from, to);
       } else {
         this.ctx.beginPath();
@@ -891,7 +759,7 @@ scanTools() {
 
       this.ctx.setLineDash([]);
 
-      // Flowing glow
+      // Flowing glow - 🆕 Immer aktiv auf Mobile!
       if (!this.settings.useSimplifiedRendering || activeState > 0.3) {
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
@@ -922,9 +790,7 @@ scanTools() {
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity * pulseMultiplier;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          if (this.settings.organicCurves && connection.organicPath) {
-            this.drawOrganicPath(connection.organicPath);
-          } else if (config.curve && !this.settings.useSimplifiedRendering) {
+          if (config.curve && !this.settings.useSimplifiedRendering) {
             this.drawCurvedLine(from, to);
           } else {
             this.ctx.beginPath();
@@ -936,32 +802,6 @@ scanTools() {
           this.ctx.shadowBlur = 0;
         }
       }
-    }
-
-    // 🆕 NEUE FUNKTION: Organischen Pfad zeichnen
-    drawOrganicPath(path) {
-      if (!path || path.length < 2) return;
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(path[0].x, path[0].y);
-
-      // Smooth Bezier curves durch alle Punkte
-      for (let i = 1; i < path.length - 1; i++) {
-        const xc = (path[i].x + path[i + 1].x) / 2;
-        const yc = (path[i].y + path[i + 1].y) / 2;
-        this.ctx.quadraticCurveTo(path[i].x, path[i].y, xc, yc);
-      }
-
-      // Letztes Segment
-      const lastIdx = path.length - 1;
-      this.ctx.quadraticCurveTo(
-        path[lastIdx - 1].x, 
-        path[lastIdx - 1].y, 
-        path[lastIdx].x, 
-        path[lastIdx].y
-      );
-
-      this.ctx.stroke();
     }
 
     drawCurvedLine(from, to) {
@@ -1004,7 +844,7 @@ scanTools() {
       this.then = now - (elapsed % this.frameInterval);
 
       this.glowTime = now;
-      this.pulseTime = now;
+      this.pulseTime = now; // 🆕
       this.updateActiveStates();
 
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
@@ -1091,13 +931,15 @@ scanTools() {
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v12.2 ORGANIC');
+    console.group('🚀 Color Flow v12.1 ULTIMATE ENHANCED');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
     console.log('Types:', net.countTypes().join(', '));
-    console.log('Organic Curves:', net.settings.organicCurves ? 'YES 🌊' : 'NO');
-    console.log('Perlin Noise:', 'YES ✨');
+    console.log('Mobile Enhanced:', net.isMobile ? 'YES ✨' : 'NO');
+    console.log('Vibrant Colors:', net.settings.vibrantColors ? 'YES 🎨' : 'NO');
+    console.log('Pulse Effect:', net.isMobile ? 'YES 💓' : 'Minimal');
+    console.log('FPS:', net.targetFPS);
     console.groupEnd();
   };
 
