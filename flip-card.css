@@ -1,6 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V6.0 - PRODUCTION READY
-   Optimized for small squares with perfect proportions
+   FLIP CARD SYSTEM V7.0 - PRODUCTION READY + SMART FEATURES
+   - 15% Scale auf Desktop, 8% auf Mobile
+   - Backdrop Dim Effekt
+   - Hover Preview (3D Tilt)
+   - Smooth Content Animation
+   - Flip Indicator Icon
+   - Touch Feedback
    ══════════════════════════════════════════════════════════ */
 
 /* Card Container */
@@ -8,12 +13,21 @@
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
-/* Flipped State */
+/* Hover Preview - Leichtes 3D Kippen */
+.card-square:not(.is-flipped):hover {
+  transform: translateY(-4px) rotateX(5deg);
+  transition: transform 0.3s ease;
+}
+
+/* Flipped State - 15% Größer + Bounce */
 .card-square.is-flipped {
-  transform: rotateY(180deg);
-  z-index: 100;
+  transform: rotateY(180deg) scale(1.15);
+  z-index: 150;
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
 }
 
 /* Card Faces - Base */
@@ -33,6 +47,37 @@
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
+  position: relative;
+}
+
+/* FLIP INDICATOR - Bottom Right Corner */
+.card-face-front::after {
+  content: '↻';
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 243, 255, 0.12);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  border-radius: 50%;
+  color: rgba(0, 243, 255, 0.85);
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.card-square:hover .card-face-front::after {
+  opacity: 1;
+  transform: scale(1) rotate(180deg);
 }
 
 /* Back Face */
@@ -48,12 +93,13 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   
-  /* Refined Border */
-  border: 2px solid rgba(0, 243, 255, 0.25);
+  /* Enhanced Border + Shadow */
+  border: 2px solid rgba(0, 243, 255, 0.3);
   box-shadow: 
-    0 0 40px rgba(0, 243, 255, 0.12),
-    0 12px 40px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 50px rgba(0, 243, 255, 0.18),
+    0 20px 60px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 243, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   
   /* Perfect Layout */
   padding: 52px 22px 22px 22px;
@@ -69,8 +115,8 @@
   position: absolute;
   inset: 0;
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.02) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.03) 0%, transparent 50%);
   z-index: 0;
   pointer-events: none;
 }
@@ -106,6 +152,57 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
+   BACKDROP DIM - Fokus auf geflippte Karte
+   ══════════════════════════════════════════════════════════ */
+
+.tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
+  opacity: 0.35;
+  filter: blur(2px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+}
+
+.tool-grid-squares .card-square.is-flipped {
+  opacity: 1;
+  filter: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SMOOTH CONTENT ANIMATION - Progressive Reveal
+   ══════════════════════════════════════════════════════════ */
+
+.card-square.is-flipped .card-back-title {
+  animation: slideInUp 0.4s ease 0.2s both;
+}
+
+.card-square.is-flipped .card-back-rating {
+  animation: slideInUp 0.4s ease 0.3s both;
+}
+
+.card-square.is-flipped .card-back-description {
+  animation: slideInUp 0.4s ease 0.4s both;
+}
+
+.card-square.is-flipped .card-back-tags {
+  animation: slideInUp 0.4s ease 0.5s both;
+}
+
+.card-square.is-flipped .card-back-button {
+  animation: slideInUp 0.4s ease 0.6s both;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
    CATEGORY BADGE - TOP RIGHT
    ══════════════════════════════════════════════════════════ */
 
@@ -114,6 +211,18 @@
   top: 16px;
   right: 16px;
   z-index: 5;
+  animation: slideInRight 0.4s ease 0.15s both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .card-back-category {
@@ -271,7 +380,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CTA BUTTON - PREMIUM FEEL
+   CTA BUTTON - PREMIUM FEEL + PULSE
    ══════════════════════════════════════════════════════════ */
 
 .card-back-button {
@@ -292,6 +401,24 @@
   margin-top: auto;
   box-shadow: 0 4px 14px rgba(0, 243, 255, 0.35);
   letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle pulse animation */
+.card-back-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.6s ease;
+}
+
+.card-back-button:hover::before {
+  opacity: 1;
+  transform: scale(2);
 }
 
 .card-back-button:hover {
@@ -340,8 +467,20 @@
     transform-style: flat;
   }
   
+  /* Mobile Scale - nur 8% */
   .card-square.is-flipped {
+    transform: scale(1.08);
+    z-index: 150;
+    transition: transform 0.4s ease;
+  }
+  
+  /* Kein Hover auf Mobile */
+  .card-square:not(.is-flipped):hover {
     transform: none;
+  }
+  
+  .card-square:hover .card-face-front::after {
+    opacity: 0;
   }
   
   /* Simple show/hide */
@@ -360,6 +499,12 @@
   .card-square.is-flipped .card-face-back {
     display: flex;
     transform: none;
+  }
+  
+  /* Touch Feedback */
+  .card-square:active:not(.is-flipped) {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
   }
   
   /* Mobile Proportions */
@@ -426,6 +571,10 @@
    ══════════════════════════════════════════════════════════ */
 
 @media (min-width: 768px) and (max-width: 1023px) {
+  .card-square.is-flipped {
+    transform: rotateY(180deg) scale(1.12);
+  }
+
   .card-face-back {
     padding: 50px 20px 20px 20px;
   }
@@ -454,6 +603,10 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+  
+  .card-square.is-flipped {
+    transition: none;
+  }
 }
 
 /* High Contrast */
@@ -463,6 +616,10 @@
   }
   
   .card-back-category {
+    border-width: 2px;
+  }
+  
+  .card-face-front::after {
     border-width: 2px;
   }
 }
@@ -476,5 +633,9 @@
   .card-face-back {
     position: relative;
     page-break-inside: avoid;
+  }
+  
+  .card-face-front::after {
+    display: none;
   }
 }
