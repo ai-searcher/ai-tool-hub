@@ -1,14 +1,16 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.1 - COLOR FLOW COMPATIBLE
+   FLIP CARD SYSTEM V10.2 - FIXED ASPECT RATIO
    - 180° rotateY Animation
-   - Overflow nur beim Flip
-   - Color Flow Linien bleiben sichtbar
+   - Erzwingt 1:1 Quadrate
+   - Color Flow Compatible
    ══════════════════════════════════════════════════════════ */
 
-/* Card Container - 3D Context (KEIN overflow ändern!) */
+/* FORCE SQUARE ASPECT RATIO - WICHTIGSTE REGEL! */
 .card-square {
+  aspect-ratio: 1 / 1 !important;
+  min-height: 0 !important;
+  height: auto !important;
   transform-style: preserve-3d !important;
-  /* overflow bleibt wie in style.css (visible) */
 }
 
 /* Flipped State - 180° Rotation */
@@ -16,7 +18,7 @@
   transform: rotateY(180deg) !important;
   z-index: 150 !important;
   animation: none !important;
-  overflow: visible !important; /* ← Nur beim Flip */
+  overflow: visible !important;
 }
 
 /* Hover auf geflippten Cards deaktivieren */
@@ -25,7 +27,7 @@
   animation: none !important;
 }
 
-/* Mobile Active - Nur auf NICHT-geflippten Cards */
+/* Mobile Active */
 @media (max-width: 767px) {
   .card-square.is-flipped:active,
   .card-square.is-flipped.card-touch-active {
@@ -44,11 +46,11 @@
   -webkit-backface-visibility: hidden;
 }
 
-/* Front Face - Default Position */
+/* Front Face */
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
-  overflow: inherit; /* ← Erbt von .card-square */
+  overflow: inherit;
 }
 
 /* Back Face - Rotated 180° */
@@ -176,7 +178,7 @@
   text-overflow: ellipsis;
 }
 
-/* "Tool öffnen" Button - Direkter Link */
+/* "Tool öffnen" Button */
 .card-back-button-link {
   display: inline-flex;
   align-items: center;
@@ -228,10 +230,17 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MOBILE OPTIMIZATION
+   MOBILE OPTIMIZATION - ASPECT RATIO FIX
    ══════════════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
+  /* Erzwinge Quadrate auf Mobile */
+  .card-square {
+    aspect-ratio: 1 / 1 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
   .card-face-back {
     padding: 32px 12px 12px 12px;
     gap: 6px;
