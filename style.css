@@ -1775,6 +1775,23 @@ button,
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   GRID MOBILE OPTIMIZATION - Für größere Flip-Cards
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  .tool-grid-squares {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 24px !important;
+    padding: 24px 16px !important;
+    position: relative;
+  }
+  
+  /* Beim Flip: Mehr Platz */
+  .tool-grid-squares:has(.card-square.is-flipped) {
+    gap: 32px !important;
+  }
+}
 
 
 
