@@ -321,3 +321,40 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==================== iOS FLIP MIRROR FIX ==================== */
+
+/* Wichtig: Card bekommt eigenes 3D-Layer + saubere Perspektive */
+.card-square {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+}
+
+/* Beide Seiten: Rückseite wirklich unsichtbar machen */
+.card-face-front,
+.card-face-back {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* iOS Safari: verhindert "Durchscheinen" / Spiegeln */
+.card-face-front {
+  transform: translateZ(0.1px);
+  -webkit-transform: translateZ(0.1px);
+}
+
+.card-face-back {
+  transform: rotateY(180deg) translateZ(0.1px);
+  -webkit-transform: rotateY(180deg) translateZ(0.1px);
+}
+
+/* Optional: wenn du irgendwo opacity/visibility Regeln hast, NICHT mischen */
+.card-square.is-flipped .card-face-front,
+.card-square.is-flipped .card-face-back {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
