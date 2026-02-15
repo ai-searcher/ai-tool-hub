@@ -6,9 +6,6 @@
    - andere Cards abgedunkelt
    ══════════════════════════════════════════════════════════ */
 
-/* DEBUG: Remove after test */
-html { outline: 6px solid lime !important; }
-
 /* FORCE SQUARE ASPECT RATIO + 3D Basis */
 .card-square {
   position: relative;
@@ -41,9 +38,11 @@ html { outline: 6px solid lime !important; }
 /* Front Face */
 .card-face-front {
   z-index: 2;
-  transform: rotateY(0deg);
+  position: absolute; /* ✅ muss absolut bleiben, sonst Layout-Jumps (Flex) */
+  inset: 0;
+  opacity: 1;
+  visibility: visible;
 }
-
 /* Back Face */
 .card-face-back {
   z-index: 1;
