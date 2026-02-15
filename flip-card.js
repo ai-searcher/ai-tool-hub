@@ -66,7 +66,7 @@ function createBackFaceHTML(tool) {
   const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [];
 
   return `
-    <button class="card-back-close" aria-label="Schließen" type="button">×</button>
+    
     
     <div class="card-voting" data-tool-id="${tool.id}">
       <button class="vote-btn vote-btn-up" 
@@ -197,20 +197,6 @@ function handleCardClick(e) {
   console.log('🔄 Card flipped:', card.dataset.toolName, 'Flipped:', card.classList.contains('is-flipped'));
 }
 
-// Handle close button
-function handleCloseClick(e) {
-  const closeBtn = e.target.closest('.card-back-close');
-  if (!closeBtn) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  const card = closeBtn.closest('.card-square');
-  if (card) {
-    card.classList.remove('is-flipped');
-    console.log('❌ Card closed:', card.dataset.toolName);
-  }
-}
 
 // Initialize flip system
 function initFlipSystem() {
