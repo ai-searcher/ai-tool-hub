@@ -813,15 +813,16 @@ body {
 .card-square[data-category="video"]:hover::before { background: var(--color-video); }
 .card-square[data-category="data"]:hover::before { background: var(--color-data); }
 
-/* Content Container */
+/* Content Container (stabil: kein Space-Between, reservierter Platz fürs Marquee) */
 .square-content-centered {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start; /* <- stabil */
   align-items: flex-start;
   height: 100%;
   gap: 0;
   padding: 14px;
+  padding-bottom: 46px; /* <- reserviert Platz für Marquee (22px) + Abstand */
   text-align: left;
   position: relative;
   z-index: 2;
@@ -844,15 +845,18 @@ body {
   flex-shrink: 0;
 }
 
-/* Tool Name */
+/* Tool Name (stabil: keine auto-margins -> keine Sprünge) */
 .square-title-large {
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
-  margin: auto 0 8px 0;
+
+  margin: 8px 0 0 0;     /* <- fix statt auto */
+  min-height: 2.4em;     /* <- Platz für ~2 Zeilen (1.2 * 2) */
   max-width: 100%;
   word-wrap: break-word;
+
   transition: color var(--transition-fast);
   flex-shrink: 0;
 }
@@ -962,11 +966,13 @@ body {
     margin: 0 0 6px 0;
   }
 
-  .square-title-large {
-    font-size: 0.94rem;
-    line-height: 1.15;
-    margin: auto 0 28px 0;
-  }
+.square-title-large {
+  font-size: 0.94rem;
+  line-height: 1.15;
+
+  margin: 6px 0 0 0;  /* fix */
+  min-height: 2.30em; /* ~2 Zeilen */
+}
 
 /* ==================== BREATHING ANIMATION ==================== */
 @keyframes breathing {
