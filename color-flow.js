@@ -11,81 +11,6 @@
 
 (function() {
   'use strict';
-  
-  // 🆕 PERLIN NOISE für organische Kurven
-  class SimplexNoise {
-    constructor(seed = Math.random()) {
-      this.grad3 = [[1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
-                     [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
-                     [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]];
-      this.p = [];
-      for (let i = 0; i < 256; i++) {
-        this.p[i] = Math.floor(seed * 256);
-        seed = (seed * 16807) % 2147483647;
-      }
-      this.perm = [];
-      for (let i = 0; i < 512; i++) {
-        this.perm[i] = this.p[i & 255];
-      }
-    }
-
-    dot(g, x, y) {
-      return g[0] * x + g[1] * y;
-    }
-
-    noise2D(xin, yin) {
-      const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-      const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-      
-      let n0, n1, n2;
-      const s = (xin + yin) * F2;
-      const i = Math.floor(xin + s);
-      const j = Math.floor(yin + s);
-      const t = (i + j) * G2;
-      const X0 = i - t;
-      const Y0 = j - t;
-      const x0 = xin - X0;
-      const y0 = yin - Y0;
-      
-      let i1, j1;
-      if (x0 > y0) { i1 = 1; j1 = 0; }
-      else { i1 = 0; j1 = 1; }
-      
-      const x1 = x0 - i1 + G2;
-      const y1 = y0 - j1 + G2;
-      const x2 = x0 - 1.0 + 2.0 * G2;
-      const y2 = y0 - 1.0 + 2.0 * G2;
-      
-      const ii = i & 255;
-      const jj = j & 255;
-      const gi0 = this.perm[ii + this.perm[jj]] % 12;
-      const gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
-      const gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
-      
-      let t0 = 0.5 - x0*x0 - y0*y0;
-      if (t0 < 0) n0 = 0.0;
-      else {
-        t0 *= t0;
-        n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0);
-      }
-      
-      let t1 = 0.5 - x1*x1 - y1*y1;
-      if (t1 < 0) n1 = 0.0;
-      else {
-        t1 *= t1;
-        n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1);
-      }
-      
-      let t2 = 0.5 - x2*x2 - y2*y2;
-      if (t2 < 0) n2 = 0.0;
-      else {
-        t2 *= t2;
-        n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2);
-      }
-      
-      return 70.0 * (n0 + n1 + n2);
-    }
-  }
 
   class GridSynchronizedNetworkUltimate {
     constructor() {
@@ -102,9 +27,7 @@
       this.canvasHeight = 0;
       this.glowTime = 0;
       this.pulseTime = 0; // 🆕 Für Pulse-Effekt
-      this.noise = new SimplexNoise(Date.now());
 
-      
       // Performance optimization
       this.targetFPS = 60;
       this.frameInterval = 1000 / this.targetFPS;
@@ -186,11 +109,7 @@
           pulseSpeed: 0.0008,              // 🆕 Pulse-Effekt
           pulseIntensity: 0.15,            // 🆕 Pulse-Stärke
           touchFeedback: true,             // 🆕 Touch-Feedback
-          vibrantColors: true,              // 🆕 Intensivere Farben
-          organicCurves: true,
-          curveComplexity: 0.25,
-          waveAmplitude: 25,
-          noiseScale: 0.003
+          vibrantColors: true              // 🆕 Intensivere Farben
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -212,11 +131,7 @@
           pulseSpeed: 0.0006,
           pulseIntensity: 0.12,
           touchFeedback: true,
-          vibrantColors: true,
-          organicCurves: true,
-          curveComplexity: 0.22,
-          waveAmplitude: 22,
-          noiseScale: 0.0025
+          vibrantColors: true
         };
       } else {
         this.settings = {
@@ -238,11 +153,7 @@
           pulseSpeed: 0.0005,
           pulseIntensity: 0.10,
           touchFeedback: false,
-          vibrantColors: false,
-          organicCurves: true,
-          curveComplexity: 0.20,
-          waveAmplitude: 20,
-          noiseScale: 0.002
+          vibrantColors: false
         };
       }
 
@@ -254,7 +165,7 @@
           code: { r: 150, g: 100, b: 255 },    // Helleres Purple
           video: { r: 255, g: 75, b: 75 },     // Helleres Red
           audio: { r: 40, g: 220, b: 110 },    // Helleres Green
-          data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
+           data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
           other: { r: 160, g: 175, b: 200 }    // Helleres Gray
         };
       } else {
@@ -264,7 +175,7 @@
           code: { r: 139, g: 92, b: 246 },
           video: { r: 239, g: 68, b: 68 },
           audio: { r: 34, g: 197, b: 94 },
-          data: { r: 251, g: 191, b: 36 },
+           data: { r: 251, g: 191, b: 36 },
           other: { r: 148, g: 163, b: 184 }
         };
       }
@@ -761,46 +672,10 @@
         activeState: 1,
         glowOffset: Math.random() * Math.PI * 2,
         pulseOffset: Math.random() * Math.PI * 2, // 🆕 Pulse-Offset
-        config: typeConfig,
-        organicPath: this.settings.organicCurves ? this.generateOrganicPath(from, to) : null
+        config: typeConfig
       };
       this.connections.push(conn);
       this.activeConnections.set(conn, 1);
-    }
-    
-    // 🆕 NEUE FUNKTION: Organischen Pfad generieren
-    generateOrganicPath(from, to) {
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      
-      const segments = Math.max(4, Math.floor(dist / 60));
-      const path = [];
-
-      for (let i = 0; i <= segments; i++) {
-        const t = i / segments;
-        
-        const baseX = from.x + dx * t;
-        const baseY = from.y + dy * t;
-
-        const noiseX = this.noise.noise2D(baseX * this.settings.noiseScale, baseY * this.settings.noiseScale);
-        const noiseY = this.noise.noise2D(baseY * this.settings.noiseScale, baseX * this.settings.noiseScale);
-
-        const perpX = -dy / dist;
-        const perpY = dx / dist;
-
-        const wave = Math.sin(t * Math.PI * 2) * this.settings.waveAmplitude * this.settings.curveComplexity;
-
-        const offsetX = (perpX * wave) + (noiseX * this.settings.waveAmplitude * 0.8);
-        const offsetY = (perpY * wave) + (noiseY * this.settings.waveAmplitude * 0.8);
-
-        path.push({
-          x: baseX + offsetX,
-          y: baseY + offsetY
-        });
-      }
-
-      return path;
     }
 
     isConnectionActive(connection) {
@@ -873,9 +748,7 @@
       this.ctx.lineJoin = 'round'; // 🆕 Smoother joins
       this.ctx.setLineDash(config.dashPattern);
 
-      if (this.settings.organicCurves && connection.organicPath) {
-        this.drawOrganicPath(connection.organicPath);
-      } else if (config.curve && !this.settings.useSimplifiedRendering) {
+      if (config.curve && !this.settings.useSimplifiedRendering) {
         this.drawCurvedLine(from, to);
       } else {
         this.ctx.beginPath();
@@ -917,9 +790,7 @@
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity * pulseMultiplier;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          if (this.settings.organicCurves && connection.organicPath) {
-            this.drawOrganicPath(connection.organicPath);
-          } else if (config.curve && !this.settings.useSimplifiedRendering) {
+          if (config.curve && !this.settings.useSimplifiedRendering) {
             this.drawCurvedLine(from, to);
           } else {
             this.ctx.beginPath();
@@ -953,32 +824,8 @@
       this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
       this.ctx.stroke();
     }
-    
-        // 🆕 NEUE FUNKTION: Organischen Pfad zeichnen
-    drawOrganicPath(path) {
-      if (!path || path.length < 2) return;
 
-      this.ctx.beginPath();
-      this.ctx.moveTo(path[0].x, path[0].y);
-
-      for (let i = 1; i < path.length - 1; i++) {
-        const xc = (path[i].x + path[i + 1].x) / 2;
-        const yc = (path[i].y + path[i + 1].y) / 2;
-        this.ctx.quadraticCurveTo(path[i].x, path[i].y, xc, yc);
-      }
-
-      const lastIdx = path.length - 1;
-      this.ctx.quadraticCurveTo(
-        path[lastIdx - 1].x, 
-        path[lastIdx - 1].y, 
-        path[lastIdx].x, 
-        path[lastIdx].y
-      );
-
-      this.ctx.stroke();
-    }
-
-      lerpColor(color1, color2, t) {
+    lerpColor(color1, color2, t) {
       return {
         r: Math.round(color1.r + (color2.r - color1.r) * t),
         g: Math.round(color1.g + (color2.g - color1.g) * t),
@@ -1092,7 +939,6 @@
     console.log('Mobile Enhanced:', net.isMobile ? 'YES ✨' : 'NO');
     console.log('Vibrant Colors:', net.settings.vibrantColors ? 'YES 🎨' : 'NO');
     console.log('Pulse Effect:', net.isMobile ? 'YES 💓' : 'Minimal');
-    console.log('Organic Curves:', net.settings.organicCurves ? 'YES 🌊' : 'NO');
     console.log('FPS:', net.targetFPS);
     console.groupEnd();
   };
