@@ -7,6 +7,7 @@
 
 /* FORCE SQUARE ASPECT RATIO - WICHTIGSTE REGEL! */
 .card-square {
+  position: relative;                /* WICHTIG: Für absolute Faces */
   aspect-ratio: 1 / 1 !important;
   min-height: 0 !important;
   height: auto !important;
