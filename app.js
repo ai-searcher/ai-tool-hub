@@ -761,6 +761,18 @@ renderCard(tool) {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
       
+      <!-- VOTING BUTTONS -->
+      <div class="card-voting" data-tool-id="${tool.id}">
+        <button class="vote-btn vote-btn-up" 
+                data-vote="up" 
+                aria-label="Upvote"
+                type="button"></button>
+        <button class="vote-btn vote-btn-down" 
+                data-vote="down" 
+                aria-label="Downvote"
+                type="button"></button>
+      </div>
+
       <div class="square-content-centered">
         <div class="square-category-badge" aria-hidden="true">
           ${this.escapeHtml(categoryDisplay)}
@@ -778,6 +790,7 @@ renderCard(tool) {
     </div>
   `;
 },
+
 
 
 
@@ -1203,3 +1216,45 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 }
 
 console.log('🔄 app.js v1.1.0 FLIP loaded - 3D Flip Card System ready!');
+
+// ═══════════════════════════════════════════════════════════
+// VOTING SYSTEM
+// ═══════════════════════════════════════════════════════════
+
+function initVotingSystem() {
+  document.addEventListener('click', (e) => {
+    const voteBtn = e.target.closest('.vote-btn');
+    if (!voteBtn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const voteType = voteBtn.dataset.vote;
+    const toolId = voteBtn.closest('.card-voting').dataset.toolId;
+    const otherBtn = voteBtn.parentElement.querySelector(
+      `.vote-btn-${voteType === 'up' ? 'down' : 'up'}`
+    );
+
+    // Toggle active state
+    if (voteBtn.classList.contains('active')) {
+      voteBtn.classList.remove('active');
+      console.log(`🗳️ Vote removed: ${voteType} for tool ${toolId}`);
+    } else {
+      voteBtn.classList.add('active');
+      otherBtn.classList.remove('active');
+      console.log(`🗳️ Vote: ${voteType} for tool ${toolId}`);
+      
+      // Hier später: API-Call für echtes Voting
+      // saveVote(toolId, voteType);
+    }
+  });
+
+  console.log('✅ Voting system initialized');
+}
+
+// Initialize after DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initVotingSystem);
+} else {
+  initVotingSystem();
+}
