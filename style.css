@@ -1662,6 +1662,114 @@ button,
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   VOTING SYSTEM
+   ══════════════════════════════════════════════════════════ */
+
+.card-voting {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 3;
+}
+
+.vote-btn {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  position: relative;
+}
+
+/* Arrow Shapes (nur Outline) */
+.vote-btn::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.vote-btn-up::before {
+  border-bottom: 8px solid rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+.vote-btn-down::before {
+  border-top: 8px solid rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Hover States */
+.vote-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  transform: scale(1.1);
+}
+
+.vote-btn-up:hover::before {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+.vote-btn-down:hover::before {
+  border-top-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Active States (nach Klick) */
+.vote-btn-up.active {
+  background: rgba(0, 150, 100, 0.15);
+  border-color: rgba(0, 200, 130, 0.4);
+}
+
+.vote-btn-up.active::before {
+  border-bottom-color: #00C882;
+}
+
+.vote-btn-down.active {
+  background: rgba(180, 40, 50, 0.15);
+  border-color: rgba(220, 60, 70, 0.4);
+}
+
+.vote-btn-down.active::before {
+  border-top-color: #DC3C46;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .card-voting {
+    top: 10px;
+    right: 10px;
+    gap: 3px;
+  }
+
+  .vote-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .vote-btn-up::before {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 7px;
+  }
+
+  .vote-btn-down::before {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 7px;
+  }
+}
 
 
 
