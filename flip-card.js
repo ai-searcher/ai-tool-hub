@@ -105,54 +105,77 @@
 
   /**
    * Create rich back face HTML
-   */
-  function createBackFaceHTML(tool) {
-    const categoryName = getCategoryName(tool.category);
-    const categoryColor = getCategoryColor(tool.category);
-    const ratingBar = generateRatingBar(tool.rating || 0);
-    const priceTag = tool.is_free ? 'Kostenlos' : 'Premium';
-    const priceColor = tool.is_free ? '#00FF9D' : '#FFB800';
-    const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [];
+ */
+  createBackFaceHTML(tool) {
+  const categoryName = getCategoryName(tool.category);
+  const categoryColor = getCategoryColor(tool.category);
+  const ratingBar = generateRatingBar(tool.rating || 0);
+  const priceTag = tool.is_free ? 'Kostenlos' : 'Premium';
+  const priceColor = tool.is_free ? '#00FF9D' : '#FFB800';
+  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [];
 
-    return `
-      <button class="card-back-close" aria-label="Schließen" type="button">×</button>
-      
-      <div class="card-back-header">
-        <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
-          ${escapeHtml(categoryName)}
-        </div>
-        <div class="card-back-price" style="color: ${priceColor};">
-          ${priceTag}
-        </div>
+  return `
+    <button class="card-back-close" aria-label="Schließen" type="button">×</button>
+    
+    <!-- VOTING BUTTONS AUF RÜCKSEITE -->
+    <div class="card-voting" data-tool-id="${tool.id}">
+      <button class="vote-btn vote-btn-up" 
+              data-vote="up" 
+              aria-label="Upvote"
+              type="button"
+              onclick="event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5L12 19M12 5L6 11M12 5L18 11"/>
+        </svg>
+      </button>
+      <button class="vote-btn vote-btn-down" 
+              data-vote="down" 
+              aria-label="Downvote"
+              type="button"
+              onclick="event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 19L12 5M12 19L18 13M12 19L6 13"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="card-back-header">
+      <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
+        ${escapeHtml(categoryName)}
       </div>
-
-      <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
-
-      <div class="card-back-rating">
-        <span class="card-back-rating-value">${(tool.rating || 0).toFixed(1)}</span>
-        ${ratingBar}
-        <span class="card-back-rating-text">/5.0</span>
+      <div class="card-back-price" style="color: ${priceColor};">
+        ${priceTag}
       </div>
+    </div>
 
-      <p class="card-back-description">${escapeHtml(tool.description || 'Keine Beschreibung verfügbar')}</p>
+    <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
 
-      ${tags.length > 0 ? `
-        <div class="card-back-tags">
-          ${tags.map(tag => `<span class="card-back-tag">${escapeHtml(tag)}</span>`).join('')}
-        </div>
-      ` : ''}
+    <div class="card-back-rating">
+      <span class="card-back-rating-value">${(tool.rating || 0).toFixed(1)}</span>
+      ${ratingBar}
+      <span class="card-back-rating-text">/5.0</span>
+    </div>
 
-      ${tool.link ? `
-        <a href="${escapeHtml(tool.link)}" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="card-back-button"
-           onclick="event.stopPropagation();">
-          Tool öffnen →
-        </a>
-      ` : ''}
-    `;
-  }
+    <p class="card-back-description">${escapeHtml(tool.description || 'Keine Beschreibung verfügbar')}</p>
+
+    ${tags.length > 0 ? `
+      <div class="card-back-tags">
+        ${tags.map(tag => `<span class="card-back-tag">${escapeHtml(tag)}</span>`).join('')}
+      </div>
+    ` : ''}
+
+    ${tool.link ? `
+      <a href="${escapeHtml(tool.link)}" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="card-back-button"
+         onclick="event.stopPropagation();">
+        Tool öffnen →
+      </a>
+    ` : ''}
+  `;
+}
+
 
   /**
    * Generate modern rating bar (Progress Bar)
