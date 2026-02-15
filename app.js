@@ -761,26 +761,6 @@ renderCard(tool) {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
       
-      <!-- VOTING BUTTONS -->
-      <div class="card-voting" data-tool-id="${tool.id}">
-        <button class="vote-btn vote-btn-up" 
-                data-vote="up" 
-                aria-label="Upvote"
-                type="button">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 5L12 19M12 5L6 11M12 5L18 11"/>
-          </svg>
-        </button>
-        <button class="vote-btn vote-btn-down" 
-                data-vote="down" 
-                aria-label="Downvote"
-                type="button">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 19L12 5M12 19L18 13M12 19L6 13"/>
-          </svg>
-        </button>
-      </div>
-
       <div class="square-content-centered">
         <div class="square-category-badge" aria-hidden="true">
           ${this.escapeHtml(categoryDisplay)}
@@ -798,9 +778,6 @@ renderCard(tool) {
     </div>
   `;
 },
-
-
-
 
 
   render() {
