@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.0 - 3D FLIP + DETAIL MODAL
+   FLIP CARD SYSTEM V10.0 - SIMPLE VERSION
+   - 180° Flip ohne Modal
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -67,11 +68,13 @@ function createBackFaceHTML(tool) {
 
     <p class="card-back-description">${escapeHtml(shortDescription)}</p>
 
-    <button class="card-back-button-info" 
-            data-tool-id="${tool.id}"
-            onclick="window.openToolDetailModal(${tool.id}); event.stopPropagation();">
-      Mehr Infos
-    </button>
+    <a href="${escapeHtml(tool.link)}" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="card-back-button-link"
+       onclick="event.stopPropagation();">
+      Tool öffnen
+    </a>
   `;
 }
 
@@ -118,9 +121,9 @@ function initializeFlipCard(card) {
 
 // Handle card click (toggle flip)
 function handleCardClick(e) {
-  // Ignore clicks on "Mehr Infos" button
-  if (e.target.closest('.card-back-button-info')) {
-    console.log('🚫 Button click ignored');
+  // Ignore clicks on "Tool öffnen" link
+  if (e.target.closest('.card-back-button-link')) {
+    console.log('🚫 Link click ignored (opens tool)');
     return;
   }
 
