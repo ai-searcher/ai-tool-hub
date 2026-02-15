@@ -173,19 +173,26 @@
 
 /* Mobile Anpassungen */
 @media (max-width: 767px) {
-/* ✅ iOS-safe: kein rotateY (verursacht Spiegel/Flip-Bugs) */
+  /* ✅ iOS-safe: kein rotateY (verursacht Spiegel/Flip-Bugs) */
   .card-square {
-    transform: none !important;           /* stoppt 3D-Stacking auf Mobile */
-    transform-style: flat !important;
-    perspective: none !important;
-  }
+  transform: none !important;           /* stoppt 3D-Stacking auf Mobile */
+  transform-style: flat !important;
+  perspective: none !important;
+}
 
   /* ✅ wenn geflippt: nur größer werden, Position bleibt */
   .card-square.is-flipped {
-    transform: scale(1.08) !important;    /* optional 1.06–1.12 */
-    z-index: 150 !important;
-  }
+  transform: none !important;            /* ✅ bleibt exakt in der Zelle */
+  z-index: 150 !important;
+}
 
+  /* ✅ "Zoom-Gefühl" ohne Layout-Shift: nur Inhalt wird größer */
+.card-square.is-flipped .card-face-back {
+  transform: scale(1.06);
+  transform-origin: center center;
+}
+  
+  
   /* ✅ Front/Back werden per Opacity umgeschaltet */
   .card-face-front {
     opacity: 1;
