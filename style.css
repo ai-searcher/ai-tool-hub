@@ -1663,7 +1663,7 @@ button,
 }
 
 /* ═══════════════════════════════════════════════════════════
-   VOTING SYSTEM
+   VOTING SYSTEM - APPLE DESIGN
    ══════════════════════════════════════════════════════════ */
 
 .card-voting {
@@ -1672,104 +1672,135 @@ button,
   right: 14px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   z-index: 3;
 }
 
 .vote-btn {
-  width: 28px;
-  height: 28px;
-  background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Arrow Shapes (nur Outline) */
-.vote-btn::before {
-  content: '';
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.vote-btn-up::before {
-  border-bottom: 8px solid rgba(255, 255, 255, 0.5);
-  transform: translateY(1px);
-}
-
-.vote-btn-down::before {
-  border-top: 8px solid rgba(255, 255, 255, 0.5);
-  transform: translateY(-1px);
+/* SVG Arrow Icons */
+.vote-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Hover States */
 .vote-btn:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.vote-btn-up:hover::before {
-  border-bottom-color: rgba(255, 255, 255, 0.8);
+.vote-btn:hover svg {
+  stroke: rgba(255, 255, 255, 0.9);
 }
 
-.vote-btn-down:hover::before {
-  border-top-color: rgba(255, 255, 255, 0.8);
+/* Active Press */
+.vote-btn:active {
+  transform: scale(0.95);
+  transition-duration: 0.1s;
 }
 
-/* Active States (nach Klick) */
+/* Active States - Upvote (Elegant Green) */
 .vote-btn-up.active {
-  background: rgba(0, 150, 100, 0.15);
-  border-color: rgba(0, 200, 130, 0.4);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.12));
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.vote-btn-up.active svg {
+  stroke: #10b981;
+  stroke-width: 2.5;
+}
+
+/* Active States - Downvote (Elegant Red) */
+.vote-btn-down.active {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(185, 28, 28, 0.12));
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.vote-btn-down.active svg {
+  stroke: #ef4444;
+  stroke-width: 2.5;
+}
+
+/* Subtle Glow on Active */
+.vote-btn.active::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 11px;
+  opacity: 0.6;
+  z-index: -1;
+  filter: blur(8px);
+  transition: opacity 0.3s ease;
 }
 
 .vote-btn-up.active::before {
-  border-bottom-color: #00C882;
-}
-
-.vote-btn-down.active {
-  background: rgba(180, 40, 50, 0.15);
-  border-color: rgba(220, 60, 70, 0.4);
+  background: rgba(16, 185, 129, 0.25);
 }
 
 .vote-btn-down.active::before {
-  border-top-color: #DC3C46;
+  background: rgba(239, 68, 68, 0.25);
 }
 
 /* Mobile */
 @media (max-width: 767px) {
   .card-voting {
-    top: 10px;
-    right: 10px;
-    gap: 3px;
+    top: 12px;
+    right: 12px;
+    gap: 5px;
   }
 
   .vote-btn {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
   }
 
-  .vote-btn-up::before {
-    border-left-width: 5px;
-    border-right-width: 5px;
-    border-bottom-width: 7px;
-  }
-
-  .vote-btn-down::before {
-    border-left-width: 5px;
-    border-right-width: 5px;
-    border-top-width: 7px;
+  .vote-btn svg {
+    width: 12px;
+    height: 12px;
   }
 }
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .vote-btn {
+    transition: none;
+  }
+  
+  .vote-btn:hover {
+    transform: none;
+  }
+}
+
 
 
 
