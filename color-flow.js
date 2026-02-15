@@ -186,7 +186,7 @@
           pulseSpeed: 0.0008,              // 🆕 Pulse-Effekt
           pulseIntensity: 0.15,            // 🆕 Pulse-Stärke
           touchFeedback: true,             // 🆕 Touch-Feedback
-          vibrantColors: true              // 🆕 Intensivere Farben
+          vibrantColors: true,              // 🆕 Intensivere Farben
           organicCurves: true,
           curveComplexity: 0.25,
           waveAmplitude: 25,
@@ -254,7 +254,7 @@
           code: { r: 150, g: 100, b: 255 },    // Helleres Purple
           video: { r: 255, g: 75, b: 75 },     // Helleres Red
           audio: { r: 40, g: 220, b: 110 },    // Helleres Green
-           data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
+          data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
           other: { r: 160, g: 175, b: 200 }    // Helleres Gray
         };
       } else {
@@ -264,7 +264,7 @@
           code: { r: 139, g: 92, b: 246 },
           video: { r: 239, g: 68, b: 68 },
           audio: { r: 34, g: 197, b: 94 },
-           data: { r: 251, g: 191, b: 36 },
+          data: { r: 251, g: 191, b: 36 },
           other: { r: 148, g: 163, b: 184 }
         };
       }
@@ -761,7 +761,7 @@
         activeState: 1,
         glowOffset: Math.random() * Math.PI * 2,
         pulseOffset: Math.random() * Math.PI * 2, // 🆕 Pulse-Offset
-        config: typeConfig
+        config: typeConfig,
         organicPath: this.settings.organicCurves ? this.generateOrganicPath(from, to) : null
       };
       this.connections.push(conn);
@@ -975,8 +975,10 @@
         path[lastIdx].y
       );
 
+      this.ctx.stroke();
+    }
 
-    lerpColor(color1, color2, t) {
+      lerpColor(color1, color2, t) {
       return {
         r: Math.round(color1.r + (color2.r - color1.r) * t),
         g: Math.round(color1.g + (color2.g - color1.g) * t),
