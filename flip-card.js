@@ -221,9 +221,7 @@ function initFlipSystem() {
   toolGrid.addEventListener('click', handleCardClick);
   toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
 
-  // Close button handler
-  document.addEventListener('click', handleCloseClick);
-  document.addEventListener('touchend', handleCloseClick, { passive: false });
+
 
   console.log('✅ Flip system initialized!');
   console.log('📊 Cards available:', document.querySelectorAll('.card-square').length);
