@@ -251,7 +251,7 @@
         this.canvas.className = 'connection-canvas';
         this.canvas.style.position = 'absolute';
         this.canvas.style.pointerEvents = 'none';
-        this.canvas.style.zIndex = '1';
+        this.canvas.style.zIndex = '500';
         this.canvas.style.willChange = 'transform';
         this.canvas.style.touchAction = 'none'; // 🆕 Better touch handling
         this.containerElement.insertBefore(this.canvas, this.gridElement);
