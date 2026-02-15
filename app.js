@@ -745,27 +745,11 @@ const ui = {
     return div.innerHTML;
   },
 
-   // 🔄 FLIP CARD V10.0: Ultimate UX Edition
-  renderCard(tool) {
-     const categoryName = tool.category_name || tool.category || 'other';
-     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-     const contextTexts = this.getContextText(tool);
-  
-  // Rating berechnen (falls vorhanden)
-  const rating = tool.rating || 4.5;
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-  
-  // Features (erste 3 aus Badges oder Standard)
-  const features = tool.badges?.slice(0, 3) || [
-    'Lightning-fast generation',
-    'No credit card required',
-    'Commercial use allowed'
-  ];
-  
-  // Tags (erste 4)
-  const tags = (Array.isArray(tool.tags) ? tool.tags : []).slice(0, 4);
+   // 🔄 FLIP CARD V10.0: Render nur Vorderseite (flip-card.js macht Rückseite)
+renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const contextTexts = this.getContextText(tool);
   
   return `
     <div class="card-square" 
@@ -777,121 +761,24 @@ const ui = {
          role="article"
          aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
       
-      <!-- ============================================ -->
-      <!-- FRONT FACE (Vorderseite) -->
-      <!-- ============================================ -->
-      <div class="card-face card-face-front">
-        <div class="square-content-centered">
-          <div class="square-category-badge" aria-hidden="true">
-            ${this.escapeHtml(categoryDisplay)}
-          </div>
-          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-            ${this.escapeHtml(tool.title)}
-          </h3>
-          <div class="context-marquee" aria-hidden="true">
-            <div class="marquee-track" role="presentation">
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            </div>
+      <!-- Vorderseite (flip-card.js wrapped das später) -->
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
+        </div>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
           </div>
         </div>
-      </div>
-      
-      <!-- ============================================ -->
-      <!-- BACK FACE (Rückseite - UX Edition) -->
-      <!-- ============================================ -->
-      <div class="card-face card-face-back">
-        
-        <!-- Top Header Bar -->
-        <div class="card-back-header">
-          <span class="card-back-badge verified">Verified</span>
-          <span class="card-back-category" style="background: ${this.getCategoryColor(categoryName)};">
-            ${this.escapeHtml(categoryDisplay)}
-          </span>
-        </div>
-        
-        <!-- Tool Name -->
-        <h3 class="card-back-title">${this.escapeHtml(tool.title)}</h3>
-        
-        <!-- Rating + Social Proof -->
-        <div class="card-back-rating">
-          <div class="card-back-rating-stars">
-            ${'★'.repeat(fullStars)}${hasHalfStar ? '<span class="star half">★</span>' : ''}${'☆'.repeat(emptyStars)}
-          </div>
-          <span class="card-back-rating-value">${rating.toFixed(1)}</span>
-          <span class="card-back-rating-count">(2.4k)</span>
-        </div>
-        
-        <!-- Tagline (Value Proposition) -->
-        <p class="card-back-tagline">
-          "${tool.description || 'Create stunning AI content in seconds'}"
-        </p>
-        
-        <!-- Key Features -->
-        <div class="card-back-features">
-          ${features.map(feature => `
-            <div class="card-back-feature">${this.escapeHtml(feature)}</div>
-          `).join('')}
-        </div>
-        
-        <!-- Quick Stats -->
-        <div class="card-back-stats">
-          <span class="card-back-stat price">
-            <span class="card-back-stat-icon">💎</span>
-            ${tool.is_free ? 'Free' : 'Paid'}
-          </span>
-          <span class="card-back-stat speed">
-            <span class="card-back-stat-icon">⚡</span>
-            Fast
-          </span>
-          <span class="card-back-stat users">
-            <span class="card-back-stat-icon">👥</span>
-            50k+
-          </span>
-        </div>
-        
-        <!-- Tags -->
-        <div class="card-back-tags">
-          ${tags.map(tag => `
-            <span class="card-back-tag">#${this.escapeHtml(tag)}</span>
-          `).join('')}
-        </div>
-        
-        <!-- Dual CTA Buttons -->
-        <div class="card-back-actions">
-          <a href="${this.escapeHtml(tool.link)}" 
-             class="card-back-button-primary" 
-             target="_blank"
-             rel="noopener noreferrer"
-             onclick="event.stopPropagation()">
-            Try Free
-          </a>
-          <a href="/tool/${tool.id || tool.title.toLowerCase().replace(/\s+/g, '-')}" 
-             class="card-back-button-secondary"
-             onclick="event.stopPropagation()">
-            Learn More
-          </a>
-        </div>
-        
       </div>
     </div>
   `;
 },
-
-    // Category Color Helper
-  getCategoryColor(category) {
-    const colors = {
-       text: 'rgba(59, 130, 246, 0.2)',
-      image: 'rgba(168, 85, 247, 0.2)',
-       code: 'rgba(34, 197, 94, 0.2)',
-      audio: 'rgba(251, 146, 60, 0.2)',
-      video: 'rgba(236, 72, 153, 0.2)',
-       data: 'rgba(14, 165, 233, 0.2)',
-      other: 'rgba(148, 163, 184, 0.2)'
-    };
-    return colors[category] || colors.other;
-  },
-
 
 
 
