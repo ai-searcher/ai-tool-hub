@@ -1647,7 +1647,7 @@ button,
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MARQUEE - FINALE VERSION
+   MARQUEE - FINALE VERSION MIT FADE BEIDSEITIG
    ══════════════════════════════════════════════════════════ */
 
 /* Desktop */
@@ -1660,6 +1660,22 @@ button,
   overflow: hidden;
   border-radius: 12px;
   z-index: 2;
+  
+  /* ← FADE LINKS & RECHTS */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 }
 
 .card-square .context-marquee .marquee-track {
@@ -1681,6 +1697,22 @@ button,
 @media (max-width: 767px) {
   .card-square .context-marquee {
     height: 21px;
+    
+    /* ← FADE für Mobile */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
   }
 
   .card-square .context-marquee .marquee-track {
@@ -1690,7 +1722,7 @@ button,
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
     padding-left: 1rem !important;
-    padding-right: 3rem !important;
+    padding-right: 1rem !important;
     line-height: 21px;
   }
 }
