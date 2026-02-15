@@ -417,3 +417,66 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   CRITICAL FIX - FORCE FACE VISIBILITY
+   ══════════════════════════════════════════════════════════ */
+
+/* Card must have 3D context */
+.card-square {
+  position: relative;
+  transform-style: preserve-3d !important;
+  -webkit-transform-style: preserve-3d !important;
+}
+
+/* Both faces absolute positioned */
+.card-face {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform-style: preserve-3d !important;
+}
+
+/* Front face default rotation */
+.card-face-front {
+  transform: rotateY(0deg) !important;
+  z-index: 2 !important;
+}
+
+/* Back face flipped 180° */
+.card-face-back {
+  transform: rotateY(180deg) !important;
+  z-index: 1 !important;
+}
+
+/* When flipped: rotate entire card */
+.card-square.is-flipped {
+  transform: rotateY(180deg) !important;
+}
+
+/* Force visibility states */
+.card-square:not(.is-flipped) .card-face-front {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.card-square:not(.is-flipped) .card-face-back {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.card-square.is-flipped .card-face-front {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.card-square.is-flipped .card-face-back {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
