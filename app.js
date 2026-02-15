@@ -1128,14 +1128,15 @@ const app = {
       state.filtered = [...state.tools];
       state.loading = false;
 
+      // oder Set global state BEFORE rendering (for flip-card.js)
+      if (!window.appState) window.appState = state;
+      console.log('✅ appState set:', state.tools.length, 'tools');
+
       if (state.tools.length === 0) {
         throw new Error('No valid tools after validation');
       }
 
-      // Set global state BEFORE rendering (for flip-card.js)
-      if (!window.appState) window.appState = state;
-      console.log('✅ appState set:', state.tools.length, 'tools');
-
+      
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
@@ -1145,7 +1146,7 @@ const app = {
       console.log('🔄 Flip Card System active');
 
       try {
-        window.dispatchEvent(new Event('quantum:ready'));
+        window.dispatchEvent(new Event('quantumready'));
       } catch (e) {}
 
 
@@ -1166,7 +1167,7 @@ const app = {
         search.init();
 
         console.log('✅ Emergency recovery successful!');
-        window.dispatchEvent(new Event('quantum:ready'));
+        window.dispatchEvent(new Event('quantumready'));
       } catch (recoveryError) {
         console.error('❌ EMERGENCY RECOVERY FAILED:', recoveryError);
         errorHandler.handle(error, 'Initialization');
