@@ -382,6 +382,32 @@ setupCanvas() {
   console.log(`✅ Canvas: ${this.canvasWidth}x${this.canvasHeight} (${this.canvas.width}x${this.canvas.height} internal)`);
 }
 
+// 🆕 DIESE FUNKTION FEHLT BEI DIR - FÜGE SIE EIN:
+scanTools() {
+  const cardElements = this.gridElement.querySelectorAll('.card-square');
+  this.cards = [];
+
+  cardElements.forEach((el, index) => {
+    const rect = el.getBoundingClientRect();
+    const gridRect = this.gridElement.getBoundingClientRect();
+    const category = el.getAttribute('data-category') || 'other';
+
+    this.cards.push({
+      element: el,
+      category: category,
+      x: rect.left - gridRect.left + rect.width / 2,
+      y: rect.top - gridRect.top + rect.height / 2,
+      width: rect.width,
+      height: rect.height,
+      index: index,
+      cluster: null,
+      degree: 0
+    });
+  });
+  
+  console.log(`✅ Scanned ${this.cards.length} cards`);
+}
+
 
     setupInputDetection() {
       const isTouchDevice = 'ontouchstart' in window;
