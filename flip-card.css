@@ -12,58 +12,7 @@
    
    ══════════════════════════════════════════════════════════ */
 
-   /* ═══════════════════════════════════════════════════════════
-   FRONT FACE LAYOUT - KOMPATIBEL MIT STYLE.CSS
-   ══════════════════════════════════════════════════════════ */
-
-.card-face-front {
-  position: relative;
-  background: linear-gradient(135deg, rgba(26, 30, 55, 0.95) 0%, rgba(15, 18, 42, 0.95) 100%);
-}
-
-/* Tool Name - Linksbündig, 4mm über bestehendem Marquee */
-.square-title-large {
-  font-size: clamp(1rem, 4vw, 1.3rem);
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 4mm 0;  /* 4mm über Marquee */
-  line-height: 1.2;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  text-align: left;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-
-/* Kategorie Badge - Oben links */
-.square-category-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(0, 243, 255, 0.15);
-  color: rgba(0, 243, 255, 1);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border: 1px solid rgba(0, 243, 255, 0.3);
-  backdrop-filter: blur(10px);
-  z-index: 3;
-}
-
-/* Container - Flex für linke Ausrichtung */
-.square-content-centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  width: 90%;
-  height: 90%;
-  padding: 20px 12px 45px 12px;  /* Extra Platz für Marquee */
-}
-
+ 
 /* ═══════════════════════════════════════════════════════════
    CARD CONTAINER
    ══════════════════════════════════════════════════════════ */
