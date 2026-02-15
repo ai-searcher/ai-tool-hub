@@ -4,6 +4,8 @@
 
 'use strict';
 
+console.log('🚀 flip-card.js loading...');
+
 // Helper: Get category name
 function getCategoryName(category) {
   const names = {
@@ -12,7 +14,7 @@ function getCategoryName(category) {
     code: 'Code & Dev',
     audio: 'Audio & Voice',
     video: 'Video & Film',
-     'Daten & Analytics',
+     'Daten & Analytics',  // ← FEHLT ""
     other: 'Sonstiges'
   };
   return names[category] || names.other;
@@ -26,7 +28,7 @@ function getCategoryColor(category) {
     code: '#7C4DFF',
     audio: '#FF6B9D',
     video: '#448AFF',
-     '#1DE9B6',
+     '#1DE9B6',  // ← FEHLT ""
     other: '#B0BEC5'
   };
   return colors[category] || colors.other;
@@ -114,7 +116,8 @@ function createBackFaceHTML(tool) {
       <a href="${escapeHtml(tool.link)}" 
          target="_blank" 
          rel="noopener noreferrer" 
-         class="card-back-button">
+         class="card-back-button"
+         onclick="event.stopPropagation();">
         Tool öffnen →
       </a>
     ` : ''}
@@ -123,10 +126,18 @@ function createBackFaceHTML(tool) {
 
 // Initialize card for flipping
 function initializeFlipCard(card) {
-  if (card.dataset.flipInitialized === 'true') return;
+  if (card.dataset.flipInitialized === 'true') {
+    console.log('⏭️ Card already initialized:', card.dataset.toolName);
+    return;
+  }
   
   const toolId = card.dataset.toolId;
-  if (!toolId) return;
+  if (!toolId) {
+    console.warn('❌ No toolId found');
+    return;
+  }
+
+  console.log('🔧 Initializing card:', card.dataset.toolName, 'ID:', toolId);
 
   // Get tool data
   let tool = null;
@@ -135,11 +146,14 @@ function initializeFlipCard(card) {
       tool = window.appState.tools.find(t => String(t.id) === String(toolId));
     }
   } catch (err) {
-    console.warn('Could not find tool data for flip', toolId);
+    console.error('❌ Error finding tool:', err);
     return;
   }
 
-  if (!tool) return;
+  if (!tool) {
+    console.warn('❌ Tool not found for ID:', toolId);
+    return;
+  }
 
   // Wrap existing content in front face
   const existingContent = card.innerHTML;
@@ -153,12 +167,14 @@ function initializeFlipCard(card) {
   `;
 
   card.dataset.flipInitialized = 'true';
+  console.log('✅ Card initialized:', card.dataset.toolName);
 }
 
 // Handle card click
 function handleCardClick(e) {
   // Ignore if clicking on interactive elements
   if (e.target.closest('.card-back-close, .card-back-button, .vote-btn, .card-voting')) {
+    console.log('🚫 Ignored click on interactive element');
     return;
   }
 
@@ -168,6 +184,8 @@ function handleCardClick(e) {
   e.preventDefault();
   e.stopPropagation();
 
+  console.log('👆 Card clicked:', card.dataset.toolName);
+
   // Initialize if needed
   if (card.dataset.flipInitialized !== 'true') {
     initializeFlipCard(card);
@@ -176,7 +194,7 @@ function handleCardClick(e) {
   // Toggle flip
   card.classList.toggle('is-flipped');
   
-  console.log('🔄 Card flipped:', card.dataset.toolName, card.classList.contains('is-flipped'));
+  console.log('🔄 Card flipped:', card.dataset.toolName, 'Flipped:', card.classList.contains('is-flipped'));
 }
 
 // Handle close button
@@ -198,15 +216,18 @@ function handleCloseClick(e) {
 function initFlipSystem() {
   const toolGrid = document.getElementById('tool-grid');
   if (!toolGrid) {
-    console.warn('Tool grid not found, retrying...');
+    console.warn('⚠️ Tool grid not found, retrying...');
     setTimeout(initFlipSystem, 500);
     return;
   }
+
+  console.log('🎯 Tool grid found, initializing flip system...');
 
   // Remove old listeners
   if (toolGrid._flipClickHandler) {
     toolGrid.removeEventListener('click', toolGrid._flipClickHandler);
     toolGrid.removeEventListener('touchend', toolGrid._flipClickHandler);
+    console.log('🔄 Removed old listeners');
   }
 
   // Add new listeners
@@ -218,21 +239,25 @@ function initFlipSystem() {
   document.addEventListener('click', handleCloseClick);
   document.addEventListener('touchend', handleCloseClick, { passive: false });
 
-  console.log('✅ Flip system initialized');
+  console.log('✅ Flip system initialized!');
+  console.log('📊 Cards available:', document.querySelectorAll('.card-square').length);
 }
 
 // Wait for app to be ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 DOM loaded, waiting 1s...');
     setTimeout(initFlipSystem, 1000);
   });
 } else {
+  console.log('📄 DOM already loaded, waiting 1s...');
   setTimeout(initFlipSystem, 1000);
 }
 
 // Re-initialize on quantum ready
 window.addEventListener('quantumready', () => {
+  console.log('⚡ Quantum ready event fired');
   setTimeout(initFlipSystem, 500);
 });
 
-console.log('📄 flip-card.js loaded');
+console.log('📄 flip-card.js loaded successfully!');
