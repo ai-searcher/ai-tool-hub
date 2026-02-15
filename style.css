@@ -2852,8 +2852,8 @@ a:focus-visible {
 .card-square .context-marquee,
 .card-face-front .context-marquee {
   position: absolute !important;
-  left: 24px !important;              /* 1mm vom linken Rand */
-  right: 24px !important;             /* 1mm vom rechten Rand */
+  left: 14px !important;              /* 1mm vom linken Rand */
+  right: 14px !important;             /* 1mm vom rechten Rand */
   bottom: 11px !important;           /* 3mm vom unteren Rand */
   height: 22px !important;
   width: auto !important;
