@@ -29,11 +29,6 @@
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
-  /* iOS stability */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
-
 /* Front face: keep content as-is */
 .card-square .card-face-front {
   z-index: 2;
