@@ -81,11 +81,12 @@ function createBackFaceHTML(tool) {
 
     <p class="card-back-description">${escapeHtml(shortDescription)}</p>
 
-    <a href="${escapeHtml(tool.link)}" 
-       target="_blank" 
-       rel="noopener noreferrer" 
+    <!-- Platzhalter Button "Mehr Infos" (noch ohne Ziel) -->
+    <a href="#" 
        class="card-back-button-link"
-       onclick="event.stopPropagation();">
+       onclick="event.preventDefault(); event.stopPropagation();"
+       data-tool-id="${escapeHtml(String(tool.id))}"
+       data-tool-link="${escapeHtml(tool.link)}">
       Mehr Infos
     </a>
   `;
@@ -153,9 +154,9 @@ function toggleColorFlow(paused) {
 
 // Handle card click (toggle flip)
 function handleCardClick(e) {
-  // Ignore clicks on "Mehr Infos" link
+  // Ignore clicks on "Mehr Infos" link (Platzhalter)
   if (e.target.closest('.card-back-button-link')) {
-    console.log('🚫 Link click ignored (opens tool)');
+    console.log('🚫 Link click ignored (placeholder)');
     return;
   }
 
@@ -233,7 +234,8 @@ if (document.readyState === 'loading') {
 }
 
 window.addEventListener('quantumready', () => {
-  setTimeout(initFlipSystem, 300);
+  // Sofort initialisieren (kein setTimeout, um Hüpfer zu vermeiden)
+  initFlipSystem();
 });
 
 console.log('✅ flip-card.js v10.0 loaded!');
