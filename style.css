@@ -1631,20 +1631,26 @@ button,
 @media (max-width: 767px) {
   .card-square .context-marquee {
     height: 21px;
+    left: 12px;
+    right: 12px;
     
-    /* SYMMETRISCHER FADE für Mobile */
+    /* STÄRKERER SYMMETRISCHER FADE */
     -webkit-mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 12%,
-      black 88%,
+      rgba(0,0,0,0.3) 8%,
+      black 18%,
+      black 82%,
+      rgba(0,0,0,0.3) 92%,
       transparent 100%
     );
     mask-image: linear-gradient(
       to right,
       transparent 0%,
-      black 12%,
-      black 88%,
+      rgba(0,0,0,0.3) 8%,
+      black 18%,
+      black 82%,
+      rgba(0,0,0,0.3) 92%,
       transparent 100%
     );
   }
@@ -1655,11 +1661,12 @@ button,
 
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
     line-height: 21px;
   }
 }
+
 
 
 
