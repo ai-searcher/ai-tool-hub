@@ -173,9 +173,56 @@
 
 /* Mobile Anpassungen */
 @media (max-width: 767px) {
-  .card-square.is-flipped {
-    transform: perspective(1200px) rotateY(180deg) scale(1.04) !important;
+/* ✅ iOS-safe: kein rotateY (verursacht Spiegel/Flip-Bugs) */
+  .card-square {
+    transform: none !important;           /* stoppt 3D-Stacking auf Mobile */
+    transform-style: flat !important;
+    perspective: none !important;
   }
+
+  /* ✅ wenn geflippt: nur größer werden, Position bleibt */
+  .card-square.is-flipped {
+    transform: scale(1.08) !important;    /* optional 1.06–1.12 */
+    z-index: 150 !important;
+  }
+
+  /* ✅ Front/Back werden per Opacity umgeschaltet */
+  .card-face-front {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 220ms ease, visibility 220ms ease;
+  }
+
+  .card-face-back {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: none !important;           /* kill rotateY */
+    transition: opacity 220ms ease, visibility 220ms ease;
+
+    padding: 32px 12px 12px 12px;
+    gap: 6px;
+  }
+
+  .card-square.is-flipped .card-face-front {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .card-square.is-flipped .card-face-back {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* deine restlichen Mobile-Styles bleiben wie sie sind */
+  .card-back-title { font-size: 0.88rem; }
+  .card-back-rating { font-size: 0.8rem; }
+  .card-back-description { font-size: 0.68rem; }
+  .card-back-button-link { padding: 8px 16px; font-size: 0.72rem; }
+}
 
   .card-face-back {
     padding: 32px 12px 12px 12px;
