@@ -184,7 +184,7 @@
     init() {
       console.log('🚀 GridSynchronizedNetwork v12.1 ULTIMATE ENHANCED');
 
-      window.addEventListener('quantum:ready', () => {
+      window.addEventListener('quantumready', () => {
         setTimeout(() => this.setup(), 50);
       });
 
