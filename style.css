@@ -1663,9 +1663,10 @@ button,
 }
 
 /* ═══════════════════════════════════════════════════════════
-   VOTING SYSTEM - SKELETON STYLE
+   VOTING SYSTEM - NUR AUF RÜCKSEITE
    ══════════════════════════════════════════════════════════ */
 
+/* Voting Container */
 .card-voting {
   position: absolute;
   top: 14px;
@@ -1673,14 +1674,15 @@ button,
   display: flex;
   flex-direction: column;
   gap: 6px;
-  z-index: 3;
+  z-index: 10;
 }
 
+/* Vote Buttons */
 .vote-btn {
   width: 32px;
   height: 32px;
   background: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -1691,11 +1693,11 @@ button,
   position: relative;
 }
 
-/* SVG Arrow Icons - Nur Outlines */
+/* SVG Icons */
 .vote-btn svg {
   width: 14px;
   height: 14px;
-  stroke: rgba(255, 255, 255, 0.5);
+  stroke: rgba(255, 255, 255, 0.6);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1703,14 +1705,14 @@ button,
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Hover States */
+/* Hover */
 .vote-btn:hover {
   border-color: rgba(255, 255, 255, 0.4);
   transform: scale(1.05);
 }
 
 .vote-btn:hover svg {
-  stroke: rgba(255, 255, 255, 0.8);
+  stroke: rgba(255, 255, 255, 0.9);
 }
 
 /* Active Press */
@@ -1718,7 +1720,7 @@ button,
   transform: scale(0.95);
 }
 
-/* Active States - Upvote (Dunkelgrün) */
+/* Upvote Active (Dunkelgrün) */
 .vote-btn-up.active {
   background: transparent;
   border-color: rgba(16, 185, 129, 0.6);
@@ -1730,7 +1732,7 @@ button,
   stroke-width: 2.5;
 }
 
-/* Active States - Downvote (Dunkelrot) */
+/* Downvote Active (Dunkelrot) */
 .vote-btn-down.active {
   background: transparent;
   border-color: rgba(220, 38, 38, 0.6);
@@ -1746,7 +1748,7 @@ button,
 @media (max-width: 767px) {
   .card-voting {
     top: 12px;
-    right: 12px;
+    right: 60px;
     gap: 5px;
   }
 
@@ -1772,6 +1774,7 @@ button,
     transform: none;
   }
 }
+
 
 
 
