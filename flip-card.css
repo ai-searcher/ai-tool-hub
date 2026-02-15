@@ -1,10 +1,9 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V7.1 - MOBILE FULLY FUNCTIONAL
-   - 15% Scale Desktop, 8% Mobile (FUNKTIONIERT)
+   FLIP CARD SYSTEM V7.3 - MOBILE AUCH 20% GRÖSSER
+   - 20% Scale auf ALLEN Geräten
    - Backdrop Dim auf ALLEN Geräten
    - Progressive Reveal auf ALLEN Geräten
    - Touch-optimiert
-   - Flip Indicator (nur Desktop)
    ══════════════════════════════════════════════════════════ */
 
 /* Card Container */
@@ -23,9 +22,9 @@
   }
 }
 
-/* Flipped State - 15% Größer + Bounce */
+/* Flipped State - 20% GRÖSSER auf ALLEN Geräten */
 .card-square.is-flipped {
-  transform: rotateY(180deg) scale(1.15);
+  transform: rotateY(180deg) scale(1.20);
   z-index: 150;
   transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: default;
@@ -473,13 +472,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MOBILE OPTIMIZATION - Scale 8%
+   MOBILE OPTIMIZATION - AUCH 20% SCALE
    ══════════════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
-  /* Flipped State - 8% Scale statt 15% */
+  /* Flipped State - AUCH 20% auf Mobile */
   .card-square.is-flipped {
-    transform: rotateY(180deg) scale(1.08);
+    transform: rotateY(180deg) scale(1.20);
     z-index: 150;
     transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -549,12 +548,12 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TABLET - Scale 12%
+   TABLET - AUCH 20% SCALE
    ══════════════════════════════════════════════════════════ */
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .card-square.is-flipped {
-    transform: rotateY(180deg) scale(1.12);
+    transform: rotateY(180deg) scale(1.20);
   }
 
   .card-face-back {
