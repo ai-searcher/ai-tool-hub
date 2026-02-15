@@ -1,11 +1,14 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.1 - FIXED COLOR FLOW COMPATIBILITY
+   FLIP CARD SYSTEM V10.1 - COLOR FLOW COMPATIBLE
+   - 180° rotateY Animation
+   - Overflow nur beim Flip
+   - Color Flow Linien bleiben sichtbar
    ══════════════════════════════════════════════════════════ */
 
-/* Card Container - 3D Context */
+/* Card Container - 3D Context (KEIN overflow ändern!) */
 .card-square {
   transform-style: preserve-3d !important;
-  /* overflow bleibt wie in style.css (hidden) */
+  /* overflow bleibt wie in style.css (visible) */
 }
 
 /* Flipped State - 180° Rotation */
@@ -13,7 +16,7 @@
   transform: rotateY(180deg) !important;
   z-index: 150 !important;
   animation: none !important;
-  overflow: visible !important; /* ← NUR hier! */
+  overflow: visible !important; /* ← Nur beim Flip */
 }
 
 /* Hover auf geflippten Cards deaktivieren */
@@ -45,7 +48,7 @@
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
-  overflow: hidden; /* ← Erhält overflow für Vorderseite */
+  overflow: inherit; /* ← Erbt von .card-square */
 }
 
 /* Back Face - Rotated 180° */
