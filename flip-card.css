@@ -1,35 +1,44 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V8.0 - KEIN DREH-EFFEKT
-   - Simple Fade statt Rotation
-   - Mobile: Rückseite FIX 20% größer
-   - Desktop: Smooth Scale
+   FLIP CARD SYSTEM V10.0 - ULTIMATE UX EDITION
+   
+   DESIGN PRINZIPIEN:
+   - F-Pattern Information Layout
+   - 3-Second Scanability
+   - Trust Signals (Social Proof, Badges)
+   - Dual CTA (Try vs Learn)
+   - Micro-Interactions everywhere
+   - Smart Status Indicators
+   - Progressive Disclosure
+   
    ══════════════════════════════════════════════════════════ */
 
-/* Card Container */
+/* ═══════════════════════════════════════════════════════════
+   CARD CONTAINER
+   ══════════════════════════════════════════════════════════ */
+
 .card-square {
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
 }
 
-/* Hover Preview - Nur Desktop */
+/* Hover Lift - Desktop */
 @media (hover: hover) and (pointer: fine) {
   .card-square:not(.is-flipped):hover {
-    transform: translateY(-4px);
-    transition: transform 0.3s ease;
+    transform: translateY(-6px);
+    filter: brightness(1.05);
   }
 }
 
-/* Flipped State - Desktop: Scale 20% */
-@media (min-width: 768px) {
-  .card-square.is-flipped {
-    transform: scale(1.20);
-    z-index: 150;
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
+/* Flipped State */
+.card-square.is-flipped {
+  z-index: 150;
 }
 
-/* Card Faces - Base */
+/* ═══════════════════════════════════════════════════════════
+   CARD FACES
+   ══════════════════════════════════════════════════════════ */
+
 .card-face {
   position: absolute;
   inset: 0;
@@ -37,7 +46,8 @@
   height: 100%;
   border-radius: inherit;
   overflow: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              visibility 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Front Face */
@@ -48,62 +58,72 @@
   visibility: visible;
 }
 
-/* FLIP INDICATOR - Nur Desktop mit Hover */
+/* Flip Indicator - Info Badge */
 @media (hover: hover) and (pointer: fine) {
   .card-face-front::after {
-    content: '↻';
+    content: 'ⓘ';
     position: absolute;
     bottom: 8px;
     right: 8px;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 243, 255, 0.12);
-    border: 1px solid rgba(0, 243, 255, 0.3);
+    background: rgba(0, 243, 255, 0.15);
+    border: 1.5px solid rgba(0, 243, 255, 0.4);
     border-radius: 50%;
-    color: rgba(0, 243, 255, 0.85);
-    font-size: 16px;
+    color: rgba(0, 243, 255, 1);
+    font-size: 14px;
     font-weight: 700;
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
     z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 243, 255, 0.25);
   }
 
   .card-square:hover .card-face-front::after {
     opacity: 1;
-    transform: scale(1) rotate(180deg);
+    transform: scale(1);
   }
 }
 
-/* Back Face */
+/* ═══════════════════════════════════════════════════════════
+   BACK FACE - ULTIMATE UX LAYOUT
+   ══════════════════════════════════════════════════════════ */
+
 .card-face-back {
   z-index: 1;
   opacity: 0;
   visibility: hidden;
   
-  /* Premium Background */
-  background: linear-gradient(135deg, 
-    rgba(26, 30, 55, 0.98) 0%, 
-    rgba(15, 18, 37, 0.98) 100%
-  );
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  /* Premium Glassmorphism Background */
+  background: 
+    linear-gradient(135deg, 
+      rgba(26, 30, 55, 0.98) 0%, 
+      rgba(15, 18, 42, 0.98) 50%,
+      rgba(20, 24, 50, 0.98) 100%
+    );
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
   
-  /* Enhanced Border + Shadow */
-  border: 2px solid rgba(0, 243, 255, 0.3);
+  /* Enhanced Border with Gradient */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  
   box-shadow: 
-    0 0 50px rgba(0, 243, 255, 0.18),
-    0 20px 60px rgba(0, 0, 0, 0.85),
-    0 0 0 1px rgba(0, 243, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 0 0 2px rgba(0, 243, 255, 0.2),
+    0 0 60px rgba(0, 243, 255, 0.15),
+    0 20px 50px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5);
   
-  /* Perfect Layout */
-  padding: 52px 22px 22px 22px;
+  /* Optimized Padding for Content Hierarchy */
+  padding: 48px 18px 18px 18px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -112,14 +132,42 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Subtle Pattern */
+/* Animated Gradient Border */
 .card-face-back::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 243, 255, 0.3) 0%,
+    rgba(124, 77, 255, 0.2) 50%,
+    rgba(0, 243, 255, 0.3) 100%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.card-square.is-flipped .card-face-back::before {
+  opacity: 1;
+}
+
+/* Subtle Pattern Overlay */
+.card-face-back::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image: 
-    radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(124, 77, 255, 0.04) 0%, transparent 50%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
+    );
   z-index: 0;
   pointer-events: none;
 }
@@ -129,7 +177,7 @@
   z-index: 1;
 }
 
-/* Visibility Control - Simple Fade */
+/* Visibility States */
 .card-square:not(.is-flipped) .card-face-front {
   opacity: 1;
   visibility: visible;
@@ -155,12 +203,12 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BACKDROP DIM - Funktioniert auf ALLEN Geräten
+   BACKDROP DIM - Enhanced Focus
    ══════════════════════════════════════════════════════════ */
 
 .tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
-  opacity: 0.35;
-  filter: blur(2px);
+  opacity: 0.3;
+  filter: blur(2px) grayscale(30%);
   transition: all 0.4s ease;
   pointer-events: none;
 }
@@ -171,27 +219,39 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SMOOTH CONTENT ANIMATION
+   PROGRESSIVE REVEAL ANIMATIONS
    ══════════════════════════════════════════════════════════ */
 
+.card-square.is-flipped .card-back-header {
+  animation: slideInDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
 .card-square.is-flipped .card-back-title {
-  animation: slideInUp 0.4s ease 0.2s both;
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
 }
 
 .card-square.is-flipped .card-back-rating {
-  animation: slideInUp 0.4s ease 0.3s both;
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
 }
 
-.card-square.is-flipped .card-back-description {
-  animation: slideInUp 0.4s ease 0.4s both;
+.card-square.is-flipped .card-back-tagline {
+  animation: fadeIn 0.4s ease 0.25s both;
+}
+
+.card-square.is-flipped .card-back-features {
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+}
+
+.card-square.is-flipped .card-back-stats {
+  animation: fadeIn 0.4s ease 0.35s both;
 }
 
 .card-square.is-flipped .card-back-tags {
-  animation: slideInUp 0.4s ease 0.5s both;
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
 }
 
-.card-square.is-flipped .card-back-button {
-  animation: slideInUp 0.4s ease 0.6s both;
+.card-square.is-flipped .card-back-actions {
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both;
 }
 
 @keyframes slideInUp {
@@ -205,261 +265,455 @@
   }
 }
 
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════
-   CATEGORY BADGE
+   TOP HEADER BAR - Status Badges
    ══════════════════════════════════════════════════════════ */
 
 .card-back-header {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
   z-index: 5;
-  animation: slideInRight 0.4s ease 0.15s both;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.card-back-category {
-  padding: 5px 11px;
-  border-radius: 14px;
-  font-size: 0.7rem;
+/* Status Badge (Verified, Trending, Popular) */
+.card-back-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  white-space: nowrap;
+  letter-spacing: 0.04em;
   backdrop-filter: blur(10px);
-  opacity: 0.85;
-  transition: opacity 0.2s ease;
+  white-space: nowrap;
 }
 
-.card-back-category:hover {
-  opacity: 1;
+.card-back-badge.verified {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: rgba(34, 197, 94, 1);
 }
 
-.card-back-price {
-  display: none;
+.card-back-badge.trending {
+  background: rgba(251, 146, 60, 0.15);
+  border: 1px solid rgba(251, 146, 60, 0.4);
+  color: rgba(251, 146, 60, 1);
+}
+
+.card-back-badge.popular {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: rgba(168, 85, 247, 1);
+}
+
+.card-back-badge::before {
+  content: '✓';
+  font-size: 0.7rem;
+}
+
+.card-back-badge.trending::before {
+  content: '🔥';
+}
+
+.card-back-badge.popular::before {
+  content: '⭐';
+}
+
+/* Category Badge */
+.card-back-category {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(10px);
+  opacity: 0.9;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TOOL NAME
+   TOOL NAME - Hero Element
    ══════════════════════════════════════════════════════════ */
 
 .card-back-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: rgba(0, 243, 255, 1);
-  margin: 0 0 12px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 1);
+  margin: 0 0 8px 0;
   line-height: 1.2;
-  word-wrap: break-word;
-  text-shadow: 0 0 24px rgba(0, 243, 255, 0.25);
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RATING
+   RATING + SOCIAL PROOF - Trust Signal
    ══════════════════════════════════════════════════════════ */
 
 .card-back-rating {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 0 14px 0;
+  gap: 8px;
   margin-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* Star Rating Visual */
+.card-back-rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  color: rgba(251, 191, 36, 1);
+  font-size: 0.85rem;
+  filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.3));
+}
+
+.star.half {
+  position: relative;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.star.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: rgba(251, 191, 36, 1);
+}
+
+/* Rating Number */
 .card-back-rating-value {
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: rgba(0, 243, 255, 1);
-  min-width: 42px;
-  line-height: 1;
-  text-shadow: 0 0 16px rgba(0, 243, 255, 0.3);
+  color: rgba(251, 191, 36, 1);
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
 }
 
-.rating-bar-container {
-  flex: 1;
+/* Review Count - Social Proof */
+.card-back-rating-count {
+  font-size: 0.7rem;
+  color: rgba(160, 160, 176, 1);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAGLINE - Value Proposition (One-liner)
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-tagline {
+  color: rgba(0, 243, 255, 0.95);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  margin: 0 0 14px 0;
+  font-style: italic;
+  font-weight: 500;
+  padding-left: 12px;
+  border-left: 2px solid rgba(0, 243, 255, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KEY FEATURES - Quick Scan List
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.card-back-feature {
   display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 0.73rem;
+  color: rgba(224, 224, 240, 0.9);
+  line-height: 1.4;
 }
 
-.rating-bar-bg {
-  flex: 1;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+.card-back-feature::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: rgba(0, 243, 255, 0.12);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  color: rgba(0, 243, 255, 1);
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.rating-bar-fill {
-  height: 100%;
-  border-radius: 8px;
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px currentColor;
-  position: relative;
-}
-
-.rating-bar-fill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255,255,255,0.2) 50%, 
-    transparent 100%
-  );
-  animation: shimmer 2.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
-.card-back-rating-text {
-  font-size: 0.75rem;
-  color: rgba(160, 160, 176, 1);
-  font-weight: 600;
-  min-width: 34px;
-  text-align: right;
-  opacity: 0.7;
+/* Max 3 Features */
+.card-back-feature:nth-child(n+4) {
+  display: none;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DESCRIPTION
+   QUICK STATS - Icon Pills
    ══════════════════════════════════════════════════════════ */
 
-.card-back-description {
-  color: rgba(224, 224, 240, 0.92);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  margin: 0 0 14px 0;
-  flex: 1;
-  word-wrap: break-word;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   TAGS
-   ══════════════════════════════════════════════════════════ */
-
-.card-back-tags {
+.card-back-stats {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 14px;
 }
 
+.card-back-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(224, 224, 240, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.card-back-stat-icon {
+  font-size: 0.85rem;
+}
+
+/* Pricing Stat */
+.card-back-stat.price {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: rgba(34, 197, 94, 1);
+}
+
+/* Speed Stat */
+.card-back-stat.speed {
+  background: rgba(251, 146, 60, 0.12);
+  border-color: rgba(251, 146, 60, 0.3);
+  color: rgba(251, 146, 60, 1);
+}
+
+/* Users Stat */
+.card-back-stat.users {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: rgba(168, 85, 247, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAGS - Category Pills
+   ══════════════════════════════════════════════════════════ */
+
+.card-back-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 16px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .card-back-tag {
   padding: 4px 9px;
   background: rgba(0, 243, 255, 0.08);
   border: 1px solid rgba(0, 243, 255, 0.2);
-  border-radius: 8px;
-  font-size: 0.68rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
   color: rgba(0, 243, 255, 0.9);
   font-weight: 600;
   white-space: nowrap;
+  backdrop-filter: blur(6px);
   transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  letter-spacing: 0.02em;
+}
+
+/* Show first 4 tags */
+.card-back-tag:nth-child(n+5) {
+  display: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .card-back-tag:hover {
-    background: rgba(0, 243, 255, 0.12);
-    border-color: rgba(0, 243, 255, 0.35);
+    background: rgba(0, 243, 255, 0.15);
+    border-color: rgba(0, 243, 255, 0.4);
     transform: translateY(-1px);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CTA BUTTON
+   DUAL CTA - Action Buttons
    ══════════════════════════════════════════════════════════ */
 
-.card-back-button {
+.card-back-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* Primary CTA - Try/Visit */
+.card-back-button-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 11px 22px;
+  gap: 6px;
+  padding: 11px 16px;
   background: linear-gradient(135deg, 
     rgba(0, 243, 255, 1) 0%, 
     rgba(0, 212, 224, 1) 100%
   );
   color: #0A0E27;
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 700;
-  font-size: 0.85rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: auto;
-  box-shadow: 0 4px 14px rgba(0, 243, 255, 0.35);
-  letter-spacing: 0.01em;
+  font-size: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 4px 14px rgba(0, 243, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   position: relative;
   overflow: hidden;
+}
+
+.card-back-button-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-back-button-primary::after {
+  content: '→';
+  font-size: 1rem;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card-back-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 20px rgba(0, 243, 255, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  
+  .card-back-button-primary:hover::before {
+    opacity: 1;
+  }
+  
+  .card-back-button-primary:hover::after {
+    transform: translateX(3px);
+  }
+}
+
+.card-back-button-primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary CTA - Learn More */
+.card-back-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(0, 243, 255, 0.3);
+  color: rgba(0, 243, 255, 1);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(8px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
+.card-back-button-secondary::after {
+  content: 'ⓘ';
+  font-size: 0.85rem;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .card-back-button::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.6s ease;
-  }
-
-  .card-back-button:hover::before {
-    opacity: 1;
-    transform: scale(2);
-  }
-
-  .card-back-button:hover {
+  .card-back-button-secondary:hover {
+    background: rgba(0, 243, 255, 0.12);
+    border-color: rgba(0, 243, 255, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 243, 255, 0.5);
-    background: linear-gradient(135deg, 
-      rgba(0, 255, 255, 1) 0%, 
-      rgba(0, 230, 240, 1) 100%
-    );
+    box-shadow: 0 4px 14px rgba(0, 243, 255, 0.25);
+  }
+  
+  .card-back-button-secondary:hover::after {
+    transform: scale(1.15);
   }
 }
 
+.card-back-button-secondary:active {
+  transform: translateY(0);
+}
+
+/* Mobile Touch Feedback */
 @media (hover: none) or (pointer: coarse) {
-  .card-back-button:active {
+  .card-back-button-primary:active {
     transform: scale(0.96);
-    box-shadow: 0 3px 12px rgba(0, 243, 255, 0.4);
+  }
+  
+  .card-back-button-secondary:active {
+    transform: scale(0.96);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCROLLBAR
+   SCROLLBAR - Minimal
    ══════════════════════════════════════════════════════════ */
 
 .card-face-back::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 .card-face-back::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .card-face-back::-webkit-scrollbar-thumb {
   background: rgba(0, 243, 255, 0.25);
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 .card-face-back::-webkit-scrollbar-thumb:hover {
@@ -467,106 +721,129 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MOBILE - FIX 20% GRÖSSER (dauerhaft)
+   MOBILE OPTIMIZATION
    ══════════════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
-  /* Mobile: Geflippte Card ist FIX größer */
-  .card-square.is-flipped {
-    width: 120% !important;
-    height: 120% !important;
-    z-index: 150;
-    position: relative;
-    margin: -10%;
-  }
-  
-  /* Touch Feedback */
-  .card-square:active:not(.is-flipped) {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
-  }
-  
-  /* Mobile Proportions */
   .card-face-back {
-    padding: 46px 18px 18px 18px;
+    padding: 44px 14px 14px 14px;
   }
 
   .card-back-header {
-    top: 14px;
-    right: 14px;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .card-back-badge {
+    font-size: 0.58rem;
+    padding: 3px 7px;
   }
 
   .card-back-category {
-    font-size: 0.68rem;
-    padding: 4px 9px;
-  }
-
-  .card-back-title {
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-
-  .card-back-rating {
-    padding-bottom: 12px;
-    margin-bottom: 10px;
-    gap: 8px;
-  }
-
-  .card-back-rating-value {
-    font-size: 1.3rem;
-    min-width: 38px;
-  }
-
-  .card-back-rating-text {
-    font-size: 0.72rem;
-    min-width: 32px;
-  }
-
-  .card-back-description {
-    font-size: 0.78rem;
-    line-height: 1.55;
-    margin-bottom: 10px;
-  }
-
-  .card-back-tags {
-    gap: 5px;
-    margin-bottom: 10px;
-  }
-
-  .card-back-tag {
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     padding: 3px 8px;
   }
 
-  .card-back-button {
-    padding: 10px 20px;
-    font-size: 0.82rem;
+  .card-back-title {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .card-back-rating {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .card-back-rating-stars {
+    gap: 1px;
+  }
+
+  .star {
+    font-size: 0.8rem;
+  }
+
+  .card-back-rating-value {
+    font-size: 0.92rem;
+  }
+
+  .card-back-rating-count {
+    font-size: 0.66rem;
+  }
+
+  .card-back-tagline {
+    font-size: 0.72rem;
+    margin-bottom: 12px;
+    padding-left: 10px;
+  }
+
+  .card-back-features {
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .card-back-feature {
+    font-size: 0.7rem;
+    gap: 7px;
+  }
+
+  .card-back-feature::before {
+    width: 16px;
+    height: 16px;
+    font-size: 0.65rem;
+  }
+
+  .card-back-stats {
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .card-back-stat {
+    padding: 4px 8px;
+    font-size: 0.64rem;
+    gap: 4px;
+  }
+
+  .card-back-tags {
+    gap: 4px;
+    margin-bottom: 14px;
+    padding-top: 6px;
+  }
+
+  .card-back-tag {
+    font-size: 0.62rem;
+    padding: 3px 8px;
+  }
+
+  .card-back-actions {
+    gap: 6px;
+    padding-top: 10px;
+  }
+
+  .card-back-button-primary,
+  .card-back-button-secondary {
+    padding: 10px 12px;
+    font-size: 0.72rem;
+    gap: 5px;
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TABLET
+   TABLET OPTIMIZATION
    ══════════════════════════════════════════════════════════ */
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .card-square.is-flipped {
-    transform: scale(1.20);
-  }
-
   .card-face-back {
-    padding: 50px 20px 20px 20px;
+    padding: 46px 16px 16px 16px;
   }
 
   .card-back-title {
-    font-size: 1.05rem;
+    font-size: 1rem;
   }
 
-  .card-back-rating-value {
-    font-size: 1.35rem;
-  }
-
-  .card-back-description {
-    font-size: 0.8rem;
+  .card-back-actions {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -578,8 +855,8 @@
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -588,11 +865,15 @@
     border-width: 3px;
   }
   
-  .card-back-category {
+  .card-back-badge,
+  .card-back-category,
+  .card-back-tag,
+  .card-back-stat {
     border-width: 2px;
   }
 }
 
+/* Print Styles */
 @media print {
   .card-square.is-flipped {
     transform: none;
