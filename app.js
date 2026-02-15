@@ -1167,8 +1167,17 @@ const app = {
         search.init();
 
         console.log('✅ Emergency recovery successful!');
-        window.dispatchEvent(new Event('quantumready'));
-      } catch (recoveryError) {
+        setTimeout(() => {
+          window.dispatchEvent(new Event('quantumready'));
+          console.log('⚡ Dispatched quantumready event (emergency)');
+        }, 100);
+
+        try {
+          setTimeout(() => {
+            window.dispatchEvent(new Event('quantumready'));
+            console.log('⚡ Dispatched quantumready event');
+          }, 100);
+        } catch (e) {}
         console.error('❌ EMERGENCY RECOVERY FAILED:', recoveryError);
         errorHandler.handle(error, 'Initialization');
       }
