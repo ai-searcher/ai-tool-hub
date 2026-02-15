@@ -1690,7 +1690,7 @@ button,
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
     padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-right: 3rem !important;
     line-height: 21px;
   }
 }
