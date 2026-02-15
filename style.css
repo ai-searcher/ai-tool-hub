@@ -1004,15 +1004,14 @@ body {
     margin: auto 0 28px 0;
   }
 
+  /* Allgemeine Marquee (nicht card-specific) */
   .context-marquee {
     height: 21px;
-    width: calc(100% + 20px);
-    margin: 0 -10px -10px -10px;
   }
 
   .context-marquee .marquee-seq {
     font-size: 0.66rem;
-    padding-left: 1rem;   /* ← NEU */
+    padding-left: 1rem;
     padding-right: 1rem;
     line-height: 21px;
   }
@@ -1021,6 +1020,7 @@ body {
     animation-duration: 18s;
   }
 }
+
 
 /* ==================== BREATHING ANIMATION ==================== */
 @keyframes breathing {
@@ -1504,7 +1504,7 @@ button,
 
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem;
-    padding-left: 1rem;   /* ← NEU */
+    padding-left: 1rem;
     padding-right: 1rem;
     line-height: 21px;
   }
@@ -1536,6 +1536,7 @@ button,
     min-width: 100px;
   }
 }
+
 
 
 /* ==================== HIDE DEV/DEBUG ELEMENTS ==================== */
