@@ -14,7 +14,7 @@ function getCategoryName(category) {
     code: 'Code',
     audio: 'Audio',
     video: 'Video',
-    data: 'Daten',
+    data: 'Daten',                // ✅ Korrigiert
     other: 'Sonstiges'
   };
   return names[category] || names.other;
@@ -28,7 +28,7 @@ function getCategoryColor(category) {
     code: '#7C4DFF',
     audio: '#FF6B9D',
     video: '#448AFF',
-    data: '#1DE9B6',
+    data: '#1DE9B6',               // ✅ Korrigiert
     other: '#B0BEC5'
   };
   return colors[category] || colors.other;
@@ -49,7 +49,7 @@ function truncateText(text, maxLength) {
   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
 
-// Create COMPACT back face HTML
+// Create COMPACT back face HTML (inkl. Voting-Buttons)
 function createBackFaceHTML(tool) {
   const categoryName = getCategoryName(tool.category);
   const categoryColor = getCategoryColor(tool.category);
@@ -59,6 +59,20 @@ function createBackFaceHTML(tool) {
   return `
     <div class="card-back-category" style="background: ${categoryColor}20; color: ${categoryColor}; border: 1px solid ${categoryColor}40;">
       ${escapeHtml(categoryName)}
+    </div>
+
+    <!-- Voting Buttons -->
+    <div class="card-voting" data-tool-id="${escapeHtml(String(tool.id))}">
+      <button class="vote-btn vote-btn-up" data-vote="up" aria-label="Upvote">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+      </button>
+      <button class="vote-btn vote-btn-down" data-vote="down" aria-label="Downvote">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </button>
     </div>
 
     <h3 class="card-back-title">${escapeHtml(tool.title)}</h3>
@@ -187,6 +201,13 @@ function initFlipSystem() {
   toolGrid._flipClickHandler = handleCardClick;
   toolGrid.addEventListener('click', handleCardClick);
   toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
+
+  // ✅ Alle bereits existierenden Cards sofort initialisieren
+  document.querySelectorAll('.card-square').forEach(card => {
+    if (card.dataset.flipInitialized !== 'true') {
+      initializeFlipCard(card);
+    }
+  });
 
   console.log('✅ Flip system initialized!');
 }
