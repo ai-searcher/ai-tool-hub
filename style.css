@@ -1806,7 +1806,22 @@ button,
   }
 }
 
+/* ════════════════════════════════════════
+   BACKDROP DIM SYSTEM – 3D FLIP MODE
+   Wenn eine Card geflipt ist, dimme alle anderen
+════════════════════════════════════════ */
 
+.tool-grid-squares:has(.card-square.is-flipped) .card-square {
+  opacity: 0.28;
+  filter: blur(1px) saturate(0.9);
+  transition: opacity 240ms ease, filter 240ms ease;
+}
+
+/* Aktive Card bleibt klar */
+.tool-grid-squares:has(.card-square.is-flipped) .card-square.is-flipped {
+  opacity: 1;
+  filter: none;
+}
 
 
 
