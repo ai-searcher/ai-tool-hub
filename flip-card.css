@@ -29,16 +29,22 @@
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
+  /* iOS stability */
+  /* KEIN transform hier! (sonst überschreibt es die Back-Rotation und erzeugt Spiegel-Bugs) */
+}
+
 /* Front face: keep content as-is */
 .card-square .card-face-front {
   z-index: 2;
+  transform: rotateY(0deg) translateZ(0.1px);
+  -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
 /* Back face: rotated */
 .card-square .card-face-back {
   z-index: 1;
-  transform: rotateY(180deg) translateZ(0);
-  -webkit-transform: rotateY(180deg) translateZ(0);
+  transform: rotateY(180deg) translateZ(0.1px);
+  -webkit-transform: rotateY(180deg) translateZ(0.1px);
 
   /* premium glass background */
   background:
@@ -338,8 +344,8 @@
 
 /* iOS Safari: verhindert "Durchscheinen" / Spiegeln */
 .card-face-front {
-  transform: translateZ(0.1px);
-  -webkit-transform: translateZ(0.1px);
+  transform: rotateY(0deg) translateZ(0.1px);
+  -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
 .card-face-back {
@@ -348,8 +354,11 @@
 }
 
 /* Optional: wenn du irgendwo opacity/visibility Regeln hast, NICHT mischen */
+/* (ENTFERNT: diese Overrides können die Front sichtbar lassen und Spiegel-Bugs triggern) */
+/*
 .card-square.is-flipped .card-face-front,
 .card-square.is-flipped .card-face-back {
   opacity: 1 !important;
   visibility: visible !important;
 }
+*/
