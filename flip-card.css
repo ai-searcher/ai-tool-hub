@@ -379,3 +379,41 @@
     transform: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   FORCE BACKFACE HIDING
+   ══════════════════════════════════════════════════════════ */
+
+/* Hide front when flipped */
+.card-square.is-flipped .card-face-front {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Show back when flipped */
+.card-square.is-flipped .card-face-back {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Hide back when NOT flipped */
+.card-square:not(.is-flipped) .card-face-back {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Show front when NOT flipped */
+.card-square:not(.is-flipped) .card-face-front {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Smooth opacity transition */
+.card-face {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
