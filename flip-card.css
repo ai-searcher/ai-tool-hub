@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V6.0 - STEVE JOBS EDITION
-   Simplicity. Focus. Beauty.
+   FLIP CARD SYSTEM V6.0 - PRODUCTION READY
+   Optimized for small squares with perfect proportions
    ══════════════════════════════════════════════════════════ */
 
 /* Card Container */
@@ -10,12 +10,13 @@
   transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Flipped State */
 .card-square.is-flipped {
   transform: rotateY(180deg);
-  z-index: 1000;
+  z-index: 100;
 }
 
-/* Card Faces */
+/* Card Faces - Base */
 .card-face {
   position: absolute;
   inset: 0;
@@ -28,11 +29,13 @@
   transform-style: preserve-3d;
 }
 
+/* Front Face */
 .card-face-front {
   z-index: 2;
   transform: rotateY(0deg);
 }
 
+/* Back Face */
 .card-face-back {
   z-index: 1;
   transform: rotateY(180deg);
@@ -53,7 +56,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   
   /* Perfect Layout */
-  padding: 32px 28px 28px 28px;
+  padding: 52px 22px 22px 22px;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -77,7 +80,7 @@
   z-index: 1;
 }
 
-/* Visibility */
+/* Visibility Control */
 .card-square:not(.is-flipped) .card-face-front {
   visibility: visible;
   opacity: 1;
@@ -139,10 +142,10 @@
    ══════════════════════════════════════════════════════════ */
 
 .card-back-title {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: rgba(0, 243, 255, 1);
-  margin: 0 0 18px 0;
+  margin: 0 0 12px 0;
   line-height: 1.2;
   word-wrap: break-word;
   text-shadow: 0 0 24px rgba(0, 243, 255, 0.25);
@@ -156,17 +159,17 @@
 .card-back-rating {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 0 0 20px 0;
-  margin-bottom: 16px;
+  gap: 10px;
+  padding: 0 0 14px 0;
+  margin-bottom: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .card-back-rating-value {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: rgba(0, 243, 255, 1);
-  min-width: 48px;
+  min-width: 42px;
   line-height: 1;
   text-shadow: 0 0 16px rgba(0, 243, 255, 0.3);
 }
@@ -179,7 +182,7 @@
 
 .rating-bar-bg {
   flex: 1;
-  height: 6px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   overflow: hidden;
@@ -213,10 +216,10 @@
 }
 
 .card-back-rating-text {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: rgba(160, 160, 176, 1);
   font-weight: 600;
-  min-width: 38px;
+  min-width: 34px;
   text-align: right;
   opacity: 0.7;
 }
@@ -227,9 +230,9 @@
 
 .card-back-description {
   color: rgba(224, 224, 240, 0.92);
-  font-size: 0.92rem;
-  line-height: 1.7;
-  margin: 0 0 18px 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0 0 14px 0;
   flex: 1;
   word-wrap: break-word;
   font-weight: 400;
@@ -243,16 +246,16 @@
 .card-back-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin-bottom: 18px;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 
 .card-back-tag {
-  padding: 5px 11px;
+  padding: 4px 9px;
   background: rgba(0, 243, 255, 0.08);
   border: 1px solid rgba(0, 243, 255, 0.2);
-  border-radius: 10px;
-  font-size: 0.72rem;
+  border-radius: 8px;
+  font-size: 0.68rem;
   color: rgba(0, 243, 255, 0.9);
   font-weight: 600;
   white-space: nowrap;
@@ -275,16 +278,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 13px 28px;
+  padding: 11px 22px;
   background: linear-gradient(135deg, 
     rgba(0, 243, 255, 1) 0%, 
     rgba(0, 212, 224, 1) 100%
   );
   color: #0A0E27;
   text-decoration: none;
-  border-radius: 11px;
+  border-radius: 10px;
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: auto;
   box-shadow: 0 4px 14px rgba(0, 243, 255, 0.35);
@@ -332,6 +335,7 @@
    ══════════════════════════════════════════════════════════ */
 
 @media (max-width: 767px) {
+  /* Disable 3D transform on mobile */
   .card-square {
     transform-style: flat;
   }
@@ -340,6 +344,7 @@
     transform: none;
   }
   
+  /* Simple show/hide */
   .card-square:not(.is-flipped) .card-face-front {
     display: block;
   }
@@ -359,7 +364,7 @@
   
   /* Mobile Proportions */
   .card-face-back {
-    padding: 28px 22px 22px 22px;
+    padding: 46px 18px 18px 18px;
     gap: 0;
   }
 
@@ -374,39 +379,45 @@
   }
 
   .card-back-title {
-    font-size: 1.3rem;
-    margin-bottom: 14px;
+    font-size: 1rem;
+    margin-bottom: 10px;
   }
 
   .card-back-rating {
-    padding-bottom: 16px;
-    margin-bottom: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 10px;
+    gap: 8px;
   }
 
   .card-back-rating-value {
-    font-size: 1.6rem;
-    min-width: 44px;
+    font-size: 1.3rem;
+    min-width: 38px;
+  }
+
+  .card-back-rating-text {
+    font-size: 0.72rem;
+    min-width: 32px;
   }
 
   .card-back-description {
-    font-size: 0.88rem;
-    line-height: 1.65;
-    margin-bottom: 14px;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    margin-bottom: 10px;
   }
 
   .card-back-tags {
-    gap: 6px;
-    margin-bottom: 14px;
+    gap: 5px;
+    margin-bottom: 10px;
   }
 
   .card-back-tag {
-    font-size: 0.7rem;
-    padding: 4px 9px;
+    font-size: 0.65rem;
+    padding: 3px 8px;
   }
 
   .card-back-button {
-    padding: 11px 24px;
-    font-size: 0.88rem;
+    padding: 10px 20px;
+    font-size: 0.82rem;
   }
 }
 
@@ -416,15 +427,19 @@
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .card-face-back {
-    padding: 30px 24px 24px 24px;
+    padding: 50px 20px 20px 20px;
   }
 
   .card-back-title {
-    font-size: 1.4rem;
+    font-size: 1.05rem;
   }
 
   .card-back-rating-value {
-    font-size: 1.7rem;
+    font-size: 1.35rem;
+  }
+
+  .card-back-description {
+    font-size: 0.8rem;
   }
 }
 
@@ -445,5 +460,21 @@
 @media (prefers-contrast: high) {
   .card-face-back {
     border-width: 3px;
+  }
+  
+  .card-back-category {
+    border-width: 2px;
+  }
+}
+
+/* Print */
+@media print {
+  .card-square.is-flipped {
+    transform: none;
+  }
+  
+  .card-face-back {
+    position: relative;
+    page-break-inside: avoid;
   }
 }
