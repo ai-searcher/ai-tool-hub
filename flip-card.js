@@ -173,7 +173,7 @@ function initializeFlipCard(card) {
 // Handle card click
 function handleCardClick(e) {
   // Ignore if clicking on interactive elements
-  if (e.target.closest('.card-back-close, .card-back-button, .vote-btn, .card-voting')) {
+  if (e.target.closest('.card-back-button, .vote-btn, .card-voting')) {
     console.log('🚫 Ignored click on interactive element');
     return;
   }
