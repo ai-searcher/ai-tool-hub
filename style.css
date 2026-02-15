@@ -1,6 +1,6 @@
 /* =========================================
-   QUANTUM AI HUB - STYLE.CSS (FINAL)
-    Production Ready
+   QUANTUM AI HUB - STYLE.CSS
+   Production Ready
    ========================================= */
 
 /* ==================== CSS VARIABLES ==================== */
@@ -16,7 +16,7 @@
   --text-primary: #FFFFFF;
   --text-secondary: #E0E0F0;
   --text-dim: #A0A0B0;
-  --text-muted: #8080A0; /* =← FIX: Besserer Kontrast */
+  --text-muted: #8080A0;
 
   /* Colors - Brand */
   --primary: #00F3FF;
@@ -66,8 +66,8 @@
   --z-base: 1;
   --z-dropdown: 10;
   --z-sticky: 100;
+  --z-header: 200;
   --z-overlay: 1000;
-  
 }
 
 /* ==================== RESET & BASE ==================== */
@@ -75,11 +75,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-*::before,
-*::after {
-  box-sizing: inherit;
 }
 
 html {
@@ -114,34 +109,28 @@ body {
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
   position: relative;
-  z-index: 2200; /* Sicherstellen, dass Header über allen Karten/Overlays liegt */
+  z-index: var(--z-header);
 }
 
-/* Subtle Background Pattern */
 .header::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-image:
     radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
   opacity: 0.3;
   pointer-events: none;
-  z-index: var(--z-base);
 }
 
 .header-top {
   text-align: center;
   margin-bottom: var(--spacing-lg);
   position: relative;
-  z-index: calc(var(--z-base) + 1);
+  z-index: 2;
 }
 
 .title {
-  font-size: 2.5rem; /* ← FIX: Fallback für clamp() */
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
@@ -150,22 +139,20 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.02em;
-  animation: fadeInDown 0.6s ease backwards; /* ← FIX: backwards hinzugefügt */
-  /* Fallback für Browser ohne background-clip Support */
-  color: var(--primary);
+  animation: fadeInDown 0.6s ease backwards;
 }
 
-/* Fix für Safari/iOS */
+/* Safari/iOS Fallback */
 @supports not (-webkit-background-clip: text) {
   .title {
     background: none;
+    -webkit-text-fill-color: var(--primary);
     color: var(--primary);
   }
 }
 
 .subtitle {
   color: var(--text-dim);
-  font-size: 1rem; /* ← FIX: Fallback */
   font-size: clamp(0.9rem, 2vw, 1.1rem);
   font-weight: 400;
   animation: fadeInUp 0.6s ease 0.1s backwards;
@@ -176,7 +163,7 @@ body {
   max-width: 600px;
   margin: 0 auto var(--spacing-lg);
   position: relative;
-  z-index: calc(var(--z-base) + 1);
+  z-index: 2;
   animation: fadeInUp 0.6s ease 0.2s backwards;
 }
 
@@ -187,12 +174,12 @@ body {
 }
 
 .search-icon {
-  position: absolute; /* ← FIX: position hinzugefügt */
+  position: absolute;
   left: var(--spacing-md);
   color: var(--text-dim);
   pointer-events: none;
   transition: color var(--transition-fast);
-  z-index: calc(var(--z-base) + 1);
+  z-index: 1;
 }
 
 .search-input {
@@ -217,7 +204,6 @@ body {
   box-shadow: 0 0 0 4px var(--primary-dim), var(--shadow-md);
 }
 
-/* ← FIX: :focus-within statt + */
 .search-box:focus-within .search-icon {
   color: var(--primary);
 }
@@ -235,7 +221,7 @@ body {
   justify-content: center;
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
-  z-index: calc(var(--z-base) + 1);
+  z-index: 1;
 }
 
 .search-clear:hover {
@@ -323,9 +309,7 @@ body {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* Retry Button */
@@ -366,32 +350,19 @@ body {
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   aspect-ratio: 1 / 1;
-  justify-content: space-between;
   display: flex;
   flex-direction: column;
-  transition: transform var(--transition-normal),
-  border-color var(--transition-normal),
-  box-shadow var(--transition-normal),
-  background var(--transition-normal);
+  justify-content: space-between;
+  transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
-  will-change: transform;
-
-  /* iOS Text Selection Fix */
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
 }
 
-/* Subtle Glow Effect */
+/* Top Glow Effect */
 .card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
   opacity: 0;
@@ -409,50 +380,11 @@ body {
   opacity: 1;
 }
 
-.card:not(:hover) {
-  will-change: auto;
-}
-
 .card:active {
   transform: translateY(-2px);
 }
 
-/* iOS Text Selection - Specific Elements */
-.card-title,
-.card-description,
-.card-header {
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
-  cursor: text;
-}
-
-.card-link,
-.card-category {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-
-.card-title,
-.card-description {
-  -webkit-tap-highlight-color: transparent;
-}
-
-@supports (-webkit-touch-callout: none) {
-  .card {
-    -webkit-touch-callout: default;
-  }
-
-  .card-title,
-  .card-description {
-    -webkit-user-select: text;
-    cursor: text;
-  }
-}
-
+/* Card Header */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -495,6 +427,7 @@ body {
   flex: 1;
 }
 
+/* Card Link Button */
 .card-link {
   display: inline-flex;
   align-items: center;
@@ -512,18 +445,17 @@ body {
   overflow: hidden;
 }
 
+/* Ripple Effect */
 .card-link::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
+  inset: 50% auto auto 50%;
   width: 0;
   height: 0;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s, opacity 0.3s;
-  opacity: 1;
 }
 
 .card-link:hover {
@@ -546,13 +478,11 @@ body {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-lg);
+  margin: var(--spacing-lg) auto 0;
   padding: var(--spacing-sm);
   background: var(--bg-card);
   border-radius: var(--radius-md);
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
   animation: fadeInUp 0.6s ease 0.25s backwards;
 }
 
@@ -570,8 +500,6 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
-  position: relative;
-  overflow: hidden;
 }
 
 .toggle-btn svg {
@@ -597,32 +525,26 @@ body {
   font-weight: 600;
 }
 
-.toggle-btn.active svg {
-  transform: scale(1.05);
-}
-
 .toggle-btn:active {
   transform: scale(0.98);
 }
 
 /* ==================== CATEGORY COLORS ==================== */
 :root {
-  /* Elegant Category Colors */
-  --color-text: #00D4FF;      /* Ocean Blue */
-  --color-image: #E040FB;     /* Soft Purple-Pink */
-  --color-code: #7C4DFF;      /* Deep Purple */
-  --color-audio: #FF6B9D;     /* Soft Coral */
-  --color-video: #448AFF;     /* Bright Blue */
-  --color-data: #1DE9B6;      /* Elegant Teal (korrekt) */
-  --color-other: #B0BEC5;     /* Neutral Gray */
+  --color-text: #00D4FF;
+  --color-image: #E040FB;
+  --color-code: #7C4DFF;
+  --color-audio: #FF6B9D;
+  --color-video: #448AFF;
+  --color-data:  #1DE9B6;
+  --color-other: #B0BEC5;
 
-  /* Glow variants */
   --glow-text: rgba(0, 212, 255, 0.25);
   --glow-image: rgba(224, 64, 251, 0.25);
   --glow-code: rgba(124, 77, 255, 0.25);
   --glow-audio: rgba(255, 107, 157, 0.25);
   --glow-video: rgba(68, 138, 255, 0.25);
-  --glow-data: rgba(29, 233, 182, 0.25);
+  --glow-data:  rgba(29, 233, 182, 0.25);
 }
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
@@ -677,42 +599,30 @@ body {
   opacity: 0.9;
 }
 
-/* Category-specific colors */
+/* Category Colors */
 .category-stack[data-category="text"] .stack-title { color: var(--color-text); }
-.category-stack[data-category="text"] .stack-count {
-  background: var(--glow-text);
-  color: var(--color-text);
-}
+.category-stack[data-category="text"] .stack-count { background: var(--glow-text); color: var(--color-text); }
+.category-stack[data-category="text"] .stack-card::before { background: var(--color-text); }
 
 .category-stack[data-category="image"] .stack-title { color: var(--color-image); }
-.category-stack[data-category="image"] .stack-count {
-  background: var(--glow-image);
-  color: var(--color-image);
-}
+.category-stack[data-category="image"] .stack-count { background: var(--glow-image); color: var(--color-image); }
+.category-stack[data-category="image"] .stack-card::before { background: var(--color-image); }
 
 .category-stack[data-category="code"] .stack-title { color: var(--color-code); }
-.category-stack[data-category="code"] .stack-count {
-  background: var(--glow-code);
-  color: var(--color-code);
-}
+.category-stack[data-category="code"] .stack-count { background: var(--glow-code); color: var(--color-code); }
+.category-stack[data-category="code"] .stack-card::before { background: var(--color-code); }
 
 .category-stack[data-category="audio"] .stack-title { color: var(--color-audio); }
-.category-stack[data-category="audio"] .stack-count {
-  background: var(--glow-audio);
-  color: var(--color-audio);
-}
+.category-stack[data-category="audio"] .stack-count { background: var(--glow-audio); color: var(--color-audio); }
+.category-stack[data-category="audio"] .stack-card::before { background: var(--color-audio); }
 
 .category-stack[data-category="video"] .stack-title { color: var(--color-video); }
-.category-stack[data-category="video"] .stack-count {
-  background: var(--glow-video);
-  color: var(--color-video);
-}
+.category-stack[data-category="video"] .stack-count { background: var(--glow-video); color: var(--color-video); }
+.category-stack[data-category="video"] .stack-card::before { background: var(--color-video); }
 
 .category-stack[data-category="data"] .stack-title { color: var(--color-data); }
-.category-stack[data-category="data"] .stack-count {
-  background: var(--glow-data);
-  color: var(--color-data);
-}
+.category-stack[data-category="data"] .stack-count { background: var(--glow-data); color: var(--color-data); }
+.category-stack[data-category="data"] .stack-card::before { background: var(--color-data); }
 
 /* Stack Container */
 .stack-container {
@@ -735,27 +645,28 @@ body {
 
 .stack-card {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
   cursor: pointer;
+}
 
-  /* iOS Text Selection */
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
+/* Top Glow Line */
+.stack-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.8;
 }
 
 /* 3D Stack Effect - Closed State */
 .stack-cards:not(.fanned) .stack-card:nth-child(1) {
-  transform: translateZ(0px) translateY(0px) rotateX(0deg);
+  transform: translateZ(0) translateY(0) rotateX(0);
   z-index: 3;
   opacity: 1;
 }
@@ -778,7 +689,7 @@ body {
   opacity: 0.4;
 }
 
-/* Fanned Out State (Click) */
+/* Fanned Out State */
 .stack-cards.fanned {
   gap: var(--spacing-md);
 }
@@ -786,77 +697,20 @@ body {
 .stack-cards.fanned .stack-card {
   position: relative;
   margin-bottom: var(--spacing-md);
-  transform: none !important;
-  opacity: 1 !important;
-  z-index: auto !important;
+  transform: none;
+  opacity: 1;
+  z-index: auto;
 }
 
-/* Hover Effects on Stack Cards */
+/* Hover Effects */
 .stack-card:hover {
   border-color: var(--primary);
-  transform: translateY(-4px) translateZ(10px) !important;
-  z-index: 100 !important;
-  opacity: 1 !important;
+  transform: translateY(-4px) translateZ(10px);
+  z-index: 100;
+  opacity: 1;
 }
-
-/* Category-specific borders when fanned */
-.category-stack[data-category="text"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-text);
-}
-
-.category-stack[data-category="image"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-image);
-}
-
-.category-stack[data-category="code"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-code);
-}
-
-.category-stack[data-category="audio"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-audio);
-}
-
-.category-stack[data-category="video"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-video);
-}
-
-.category-stack[data-category="data"] .stack-cards.fanned .stack-card {
-  border-color: var(--color-data);
-}
-
-/* Top Glow Line for Stack Cards */
-.stack-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  opacity: 0.8;
-}
-
-.category-stack[data-category="text"] .stack-card::before { background: var(--color-text); }
-.category-stack[data-category="image"] .stack-card::before { background: var(--color-image); }
-.category-stack[data-category="code"] .stack-card::before { background: var(--color-code); }
-.category-stack[data-category="audio"] .stack-card::before { background: var(--color-audio); }
-.category-stack[data-category="video"] .stack-card::before { background: var(--color-video); }
-.category-stack[data-category="data"] .stack-card::before { background: var(--color-data); }
-
-/* Stack Card Content (reuse existing .card styles) */
-.stack-card .card-header,
-.stack-card .card-title,
-.stack-card .card-category,
-.stack-card .card-description,
-.stack-card .card-link {
-  /* Inherit from .card styles */
-}
-
-/* ==================== RESPONSIVE STACKS ==================== */
-
 
 /* ==================== FOOTER ==================== */
-
 .footer {
   padding: var(--spacing-xl) 0;
   border-top: 1px solid var(--border);
@@ -887,18 +741,17 @@ body {
 .footer-link {
   color: var(--text-dim);
   text-decoration: none;
-  cursor: pointer; /* ← FIX: cursor hinzugefügt */
+  cursor: pointer;
   transition: color var(--transition-fast);
+  display: inline-block;
 }
 
 .footer-link:hover {
   color: var(--primary);
 }
 
-/* ← FIX: :active State hinzugefügt */
 .footer-link:active {
   transform: scale(0.98);
-  display: inline-block;
 }
 
 .footer-separator {
@@ -908,277 +761,51 @@ body {
 
 /* ==================== ANIMATIONS ==================== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==================== FLOATING SQUARES GRID (REPLACED) ==================== */
-/* Ziel: Grid-Zellen 15% kleiner + großzügiger Abstand (wie Markierung) */
+@keyframes marqueeLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 
-/* Desktop default: 320px * 0.85 ≈ 272px */
-/* ==================== FLOATING SQUARES GRID (angepasst: -15% + mehr Abstand) ==================== */
-/* Desktop default: 320px * 0.85 ≈ 272px */
+/* ==================== FLOATING SQUARES GRID ==================== */
 .tool-grid-squares {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 60px;
   padding: 80px 60px;
   perspective: 2000px;
-  transform-style: preserve-3d;
-  box-sizing: border-box;
-  display: grid;
 }
 
-/* Card */
+/* Card Base */
 .card-square {
   position: relative;
   background: var(--bg-card);
   border: 2px solid var(--border);
+  border-top: 3px solid transparent;
   border-radius: var(--radius-lg);
   padding: 18px;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
-  will-change: transform;
   overflow: hidden;
-  -webkit-user-select: text;
-  user-select: text;
-  box-sizing: border-box;
-  z-index: 10 !important;
-  /* Animation & Transition werden im SCHWEBEEFFEKT-Block definiert */
+  transition: all var(--transition-normal);
+  z-index: 10;
 }
 
-/* ==================== CENTERED CARD DESIGN ==================== */
-
-/* Zentrierter Content Container — LEFT ALIGN für Kategorie + Titel */
-.square-content-centered {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;   /* ← WICHTIG: space-between statt flex-start */
-  align-items: flex-start;
-  height: 100%;
-  gap: 0;                           /* ← WICHTIG: kein gap, nutze margin */
-  padding: 14px;
-  text-align: left;
-  position: relative;
-  z-index: 2;
-  overflow: visible;                /* ← Marquee braucht visible */
-  box-sizing: border-box;
-}
-
-/* Category Badge - klein und elegant */
-.square-category-badge {
-  font-size: 0.75rem;              /* ← KLEINER als vorher */
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--primary);
-  background: var(--primary-dim);
-  padding: 5px 12px;               /* ← Kompakter */
-  border-radius: 16px;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
-  align-self: flex-start;
-  margin: 0 0 8px 0;               /* ← margin-bottom für Abstand zu Title */
-  flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
-}
-
-/* Tool Name - groß und prominent */
-.square-title-large {
-  font-size: 1.1rem;               /* ← Etwas größer */
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--text-primary);
-  margin: 0 0 auto 0;              /* ← margin-bottom: auto pusht Rest nach unten */
-  padding: 0;
-  transition: color var(--transition-fast);
-  max-width: 100%;
-  word-wrap: break-word;
-  align-self: flex-start;
-  flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
-  display: block;                  /* ← Wichtig für Sichtbarkeit */
-}
-
-/* Overlay Link (gesamte Karte klickbar) */
-/* Default: keine Pointer-Events außerhalb von .card-square (sicherer Fallback) */
-.card-overlay-link {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  cursor: pointer;
-  text-decoration: none;
-  pointer-events: none; /* default neutralisieren: verhindert Abfangen von Klicks, wenn Overlay mal außerhalb der Karte landet */
-}
-
-/* Aktiv: nur wenn direkter Kindknoten von .card-square, dann darf es klicken */
-.card-square > .card-overlay-link {
-  pointer-events: auto;
-  z-index: 2; /* über Inhalt, aber unter globalen FABs/Legends */
-}
-
-/* Hover Effects */
-.card-square:hover .square-title-large {
-  color: white !important;
-  transform: translateX(2px);
-}
-
-.card-square:hover .square-category-badge {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: white !important;
-  transform: translateY(-1px);
-}
-
-/* Marquee leuchtet leicht auf */
-.card-square:hover .context-marquee .marquee-seq {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Category-specific Badge Colors */
-.card-square[data-category="text"] .square-category-badge {
-  background: var(--glow-text);
-  color: var(--color-text);
-}
-
-.card-square[data-category="image"] .square-category-badge {
-  background: var(--glow-image);
-  color: var(--color-image);
-}
-
-.card-square[data-category="code"] .square-category-badge {
-  background: var(--glow-code);
-  color: var(--color-code);
-}
-
-.card-square[data-category="audio"] .square-category-badge {
-  background: var(--glow-audio);
-  color: var(--color-audio);
-}
-
-.card-square[data-category="video"] .square-category-badge {
-  background: var(--glow-video);
-  color: var(--color-video);
-}
-
-.card-square[data-category="data"] .square-category-badge {
-  background: var(--glow-data);
-  color: var(--color-data);
-}
-
-/* Hover: Badge in Kategorie-Farbe */
-.card-square[data-category="text"]:hover .square-category-badge {
-  background: var(--color-text);
-}
-
-.card-square[data-category="image"]:hover .square-category-badge {
-  background: var(--color-image);
-}
-
-.card-square[data-category="code"]:hover .square-category-badge {
-  background: var(--color-code);
-}
-
-.card-square[data-category="audio"]:hover .square-category-badge {
-  background: var(--color-audio);
-}
-
-.card-square[data-category="video"]:hover .square-category-badge {
-  background: var(--color-video);
-}
-
-.card-square[data-category="data"]:hover .square-category-badge {
-  background: var(--color-data);
-}
-
-/* ==================== ENDE EINFÜGEN ==================== */
-
-/* sanfter Hover (nicht zu stark) */
-.card-square:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: var(--primary);
-  box-shadow: 0 12px 30px rgba(0,243,255,0.08);
-  z-index: 100;
-}
-
-/* Mobile / Responsive Anpassung */
-@media (max-width: 1023px) {
-  /* auf Tablets und schmalen Laptops: etwas kleinere Kacheln und Abstand */
-  .tool-grid-squares {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
-    padding: 36px 20px;
-  }
-}
-
-@media (max-width: 767px) {
-  .tool-grid-squares {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    padding: 18px 12px;
-  }
-  .card-square {
-    padding: 12px;
-    transition: none; /* weniger Animation auf Mobile */
-  }
-}
-
-/* subtle top stripe + glow */
-.card-square::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--primary);
-  opacity: 0;
-  transition: opacity 160ms ease;
-}
-.card-square::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: var(--primary);
-  opacity: 0;
-  filter: blur(20px);
-  transition: opacity 200ms ease;
-  z-index: -1;
-}
-
-/* Hover state */
-.card-square:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: var(--primary);
-  box-shadow: 0 12px 30px rgba(0,243,255,0.08);
-  z-index: 100;
-}
-.card-square:hover::before { opacity: 1; }
-.card-square:hover::after  { opacity: 0.28; }
-
-/* Category-specific glows (keine Änderung nötig, nur zur Sicherheit) */
+/* Category-specific Glows */
 .card-square[data-category="text"]:hover::before { background: var(--color-text); }
 .card-square[data-category="image"]:hover::before { background: var(--color-image); }
 .card-square[data-category="code"]:hover::before { background: var(--color-code); }
@@ -1186,199 +813,213 @@ body {
 .card-square[data-category="video"]:hover::before { background: var(--color-video); }
 .card-square[data-category="data"]:hover::before { background: var(--color-data); }
 
-/* Inhalt */
-.square-content { display:flex; flex-direction:column; gap:12px; height:100%; }
-.square-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-.square-title { font-size:1.12rem; font-weight:700; color:var(--primary); line-height:1.25; transition:color 160ms ease; }
-.square-description { color:var(--text-dim); font-size:0.95rem; line-height:1.45; }
+/* Content Container */
+.square-content-centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  gap: 0;
+  padding: 14px;
+  text-align: left;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
 
-/* Verstecke alte "Öffnen"-Buttons **nur** wenn sie explizit als legacy markiert sind.
-   Reason: globale Ausblendung kann funktionale Links/Buttons deaktivieren. */
-.card-link.legacy-hidden,
-.square-link.legacy-hidden { display: none !important; }
+/* Category Badge */
+.square-category-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  background: var(--primary-dim);
+  padding: 5px 12px;
+  border-radius: 16px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  margin: 0 0 8px 0;
+  flex-shrink: 0;
+}
 
-/* Neural canvas niedriger halten */
-.neural-canvas { z-index: 0; opacity: 0.28; }
+/* Tool Name */
+.square-title-large {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0 0 auto 0;
+  max-width: 100%;
+  word-wrap: break-word;
+  transition: color var(--transition-fast);
+  flex-shrink: 0;
+}
 
-/* ===== Responsive Anpassungen für größere Lücken auf kleineren Screens ===== */
+/* Overlay Link */
+.card-overlay-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: pointer;
+  text-decoration: none;
+  pointer-events: none;
+}
 
-/* XXL / Desktop */
+.card-square > .card-overlay-link {
+  pointer-events: auto;
+}
+
+/* Hover Effects */
+.card-square:hover .square-title-large {
+  color: white;
+  transform: translateX(2px);
+}
+
+.card-square:hover .square-category-badge {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.card-square:hover .context-marquee .marquee-seq {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Category Badge Colors */
+.card-square[data-category="text"] .square-category-badge { background: var(--glow-text); color: var(--color-text); }
+.card-square[data-category="image"] .square-category-badge { background: var(--glow-image); color: var(--color-image); }
+.card-square[data-category="code"] .square-category-badge { background: var(--glow-code); color: var(--color-code); }
+.card-square[data-category="audio"] .square-category-badge { background: var(--glow-audio); color: var(--color-audio); }
+.card-square[data-category="video"] .square-category-badge { background: var(--glow-video); color: var(--color-video); }
+.card-square[data-category="data"] .square-category-badge { background: var(--glow-data); color: var(--color-data); }
+
+/* Badge Hover Colors */
+.card-square[data-category="text"]:hover .square-category-badge { background: var(--color-text); }
+.card-square[data-category="image"]:hover .square-category-badge { background: var(--color-image); }
+.card-square[data-category="code"]:hover .square-category-badge { background: var(--color-code); }
+.card-square[data-category="audio"]:hover .square-category-badge { background: var(--color-audio); }
+.card-square[data-category="video"]:hover .square-category-badge { background: var(--color-video); }
+.card-square[data-category="data"]:hover .square-category-badge { background: var(--color-data); }
+
+/* ==================== MARQUEE ==================== */
+.context-marquee {
+  position: relative;
+  width: 100%;
+  height: 22px;
+  overflow: hidden;
+  margin: 0;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.context-marquee .marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeLoop 20s linear infinite;
+}
+
+.context-marquee .marquee-seq {
+  display: inline-block;
+  padding-right: 3.5rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.02em;
+  line-height: 24px;
+}
+
+.card-square:hover .context-marquee .marquee-track {
+  animation-duration: 28s;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* XXL Desktop */
 @media (min-width: 1600px) {
-  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 52px; padding:72px 48px; }
+  .tool-grid-squares {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 52px;
+    padding: 72px 48px;
+  }
 }
 
-/* Desktop / Laptop */
+/* Large Desktop */
 @media (min-width: 1400px) and (max-width: 1599px) {
-  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(272px, 1fr)); gap: 48px; padding:60px 40px; }
+  .tool-grid-squares {
+    grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
+    gap: 48px;
+    padding: 60px 40px;
+  }
 }
 
-/* Narrow laptops */
+/* Desktop */
 @media (min-width: 1024px) and (max-width: 1399px) {
-  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 36px; padding:48px 28px; }
+  .tool-grid-squares {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 36px;
+    padding: 48px 28px;
+  }
 }
 
 /* Tablet */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .tool-grid-squares { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 28px; padding:36px 20px; }
-  .card-square { padding:16px; }
+  .tool-grid-squares {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+    padding: 36px 20px;
+  }
+  .card-square { padding: 16px; }
 }
 
-/* Mobile tweaks are handled in dedicated mobile blocks below */
-
-/* ========= MARQUEE (FULLWIDTH NAHTLOS) ========= */
-.context-marquee {
-  position: relative;
-  width: 100%;
-  height: 22px;                    /* ← Etwas kleiner */
-  overflow: hidden;
-  margin: 0;                       /* ← Kein margin */
-  pointer-events: none;
-  align-self: stretch;
-  flex-shrink: 0;                  /* ← Verhindert Schrumpfen */
-}
-
-/* Track enthält 2x die Sequenz für nahtlosen Loop */
-.context-marquee .marquee-track {
-  display: inline-flex;
-  white-space: nowrap;
-  will-change: transform;
-  animation: marqueeLoop 20s linear infinite;
-}
-
-/* Jede Sequenz (wird dupliziert) */
-.context-marquee .marquee-seq {
-  display: inline-block;
-  padding-right: 3.5rem;        /* Abstand zwischen Wiederholungen */
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.78);
-  letter-spacing: 0.02em;
-  line-height: 24px;
-  pointer-events: none;
-}
-
-/* Animation — verschiebe die komplette Track um 50% (weil doppelt) */
-@keyframes marqueeLoop {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Hover: entspannter / meditativer */
-.card-square:hover .context-marquee .marquee-track { animation-duration: 28s; }
-
-/* Accessibility: Pause bei Fokus */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .context-marquee .marquee-track { animation: none !important; }
-  .context-marquee { -webkit-mask-image: none; mask-image: none; }
-}
-
-/* Mobile (2 Spalten) - Optimiert */
+/* Mobile */
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    row-gap: 25px;
     padding: 16px;
   }
 
   .card-square {
-    aspect-ratio: 1 / 1 !important;
-    max-width: 100%;
-    width: 100%;
-    height: auto;
-    margin: 0 auto;
-    display: flex !important;
-    flex-direction: column !important;
+    padding: 12px;
+    transition: none;
   }
 
-  /* Content Container */
   .square-content-centered {
-    justify-content: space-between !important;
-    align-items: flex-start !important;
-    padding: 10px 10px 0 10px !important;
-    gap: 0 !important;
-    height: 100%;
-    width: 100%;
-    overflow: visible !important;
+    padding: 10px 10px 0 10px;
   }
 
-  /* Kategorie Badge */
   .square-category-badge {
-    font-size: 0.7rem !important;
-    padding: 4px 10px !important;
-    margin: 0 0 6px 0 !important;
-    align-self: flex-start !important;
-    order: 0 !important;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    margin: 0 0 6px 0;
   }
 
-  /* Toolname - 6px höher */
   .square-title-large {
-    font-size: 0.94rem !important;
-    line-height: 1.15 !important;
-    margin: auto 0 9px 0 !important;         /* ← GEÄNDERT: 9px (war 3px) = +6px höher */
-    max-width: 100% !important;
-    display: block !important;
-    word-wrap: break-word !important;
-    align-self: flex-start !important;
-    order: 1 !important;
+    font-size: 0.94rem;
+    line-height: 1.15;
+    margin: auto 0 9px 0;
   }
 
-  /* Marquee - 6px höher */
   .context-marquee {
-    height: 21px !important;
-    width: calc(100% + 20px) !important;
-    margin-left: -10px !important;
-    margin-right: -10px !important;
-    margin-bottom: -10px !important;
-    order: 2 !important;
+    height: 21px;
+    width: calc(100% + 20px);
+    margin: 0 -10px -10px -10px;
   }
 
   .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-right: 2rem !important;
-    line-height: 21px !important;
+    font-size: 0.66rem;
+    padding-right: 2rem;
+    line-height: 21px;
   }
 
   .context-marquee .marquee-track {
-    animation-duration: 18s !important;
-  }
-
-  /* Toolname — linksbündig, direkt unter Badge, sauber einzeilig mit Ellipsis on very small screens */
-  .square-title-large {
-    align-self: flex-start;
-    margin: 6px 0 2px 0;
-    font-size: 1.05rem;
-    line-height: 1.15;
-    color: var(--text-primary);
-    display: block;
-    max-width: calc(100% - 36px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* ⬅️ NEU: Content-Container adjustments for very small screens */
-  .square-content-centered {
-    justify-content: space-between !important;
-    align-items: flex-start !important;
-    padding: 14px 12px !important;
-    gap: 6px !important;
-    height: 100%;
-    width: 100%;
-    text-align: left !important;
+    animation-duration: 18s;
   }
 }
 
-/* ==================== SCHWEBEEFFEKT ==================== */
-
-/* Breathing-Animation - Definition */
+/* ==================== BREATHING ANIMATION ==================== */
 @keyframes breathing {
   0%, 100% {
     transform: scale(1);
@@ -1386,292 +1027,164 @@ body {
   }
   50% {
     transform: scale(1.055);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(99, 102, 241, 0.18);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.18);
   }
 }
 
-/* Breathing auf alle Quadrate - höhere Specificity */
-#tool-grid .card-square,
-.tool-grid-squares .card-square {
-  animation: breathing 8s ease-in-out infinite !important;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.35s ease !important;
+/* Apply breathing to all cards */
+.card-square {
+  animation: breathing 8s ease-in-out infinite;
 }
 
-/* Puls-Effekt: Ungerade Quadrate atmen sanft */
-#tool-grid .card-square:nth-child(odd), 
-.tool-grid-squares .card-square:nth-child(odd) {
-  animation-timing-function: ease-in-out !important;
+/* Odd cards: smooth breathing */
+.card-square:nth-child(odd) {
+  animation-timing-function: ease-in-out;
 }
 
-/* Puls-Effekt: Gerade Quadrate atmen pulsierend (wie Herzschlag) */
-#tool-grid .card-square:nth-child(even), 
-.tool-grid-squares .card-square:nth-child(even) {
-  animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
+/* Even cards: heartbeat rhythm */
+.card-square:nth-child(even) {
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
-/* Chaotische Breathing-Rhythmen - extreme Variation */
-#tool-grid .card-square:nth-child(1), 
-.tool-grid-squares .card-square:nth-child(1)  { 
-  animation-delay: 0s !important; 
-  animation-duration: 9.2s !important; 
+/* Chaotic breathing rhythms (1-20) */
+.card-square:nth-child(1)  { animation-delay: 0s;   animation-duration: 9.2s; }
+.card-square:nth-child(2)  { animation-delay: 1.3s; animation-duration: 5.7s; }
+.card-square:nth-child(3)  { animation-delay: 3.8s; animation-duration: 10.4s; }
+.card-square:nth-child(4)  { animation-delay: 0.6s; animation-duration: 6.3s; }
+.card-square:nth-child(5)  { animation-delay: 5.1s; animation-duration: 8.9s; }
+.card-square:nth-child(6)  { animation-delay: 2.4s; animation-duration: 11.2s; }
+.card-square:nth-child(7)  { animation-delay: 4.7s; animation-duration: 5.1s; }
+.card-square:nth-child(8)  { animation-delay: 1.9s; animation-duration: 9.8s; }
+.card-square:nth-child(9)  { animation-delay: 6.2s; animation-duration: 6.7s; }
+.card-square:nth-child(10) { animation-delay: 3.3s; animation-duration: 10.1s; }
+.card-square:nth-child(11) { animation-delay: 0.8s; animation-duration: 7.4s; }
+.card-square:nth-child(12) { animation-delay: 5.6s; animation-duration: 8.2s; }
+.card-square:nth-child(13) { animation-delay: 2.1s; animation-duration: 11.6s; }
+.card-square:nth-child(14) { animation-delay: 4.4s; animation-duration: 5.9s; }
+.card-square:nth-child(15) { animation-delay: 6.8s; animation-duration: 9.5s; }
+.card-square:nth-child(16) { animation-delay: 1.5s; animation-duration: 7.1s; }
+.card-square:nth-child(17) { animation-delay: 3.6s; animation-duration: 10.8s; }
+.card-square:nth-child(18) { animation-delay: 5.3s; animation-duration: 6.5s; }
+.card-square:nth-child(19) { animation-delay: 0.3s; animation-duration: 8.7s; }
+.card-square:nth-child(20) { animation-delay: 4.1s; animation-duration: 9.3s; }
+
+/* ==================== VISUAL UPGRADE ==================== */
+
+/* Glass effect + gradient border */
+.card-square {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 6px 20px rgba(2, 12, 30, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-#tool-grid .card-square:nth-child(2), 
-.tool-grid-squares .card-square:nth-child(2)  { 
-  animation-delay: 1.3s !important; 
-  animation-duration: 5.7s !important; 
+/* Gradient outline border */
+.card-square::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(0, 243, 255, 0.06), rgba(124, 77, 255, 0.04), rgba(0, 243, 255, 0.06));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-#tool-grid .card-square:nth-child(3), 
-.tool-grid-squares .card-square:nth-child(3)  { 
-  animation-delay: 3.8s !important; 
-  animation-duration: 10.4s !important; 
+/* Content above border */
+.square-content-centered {
+  position: relative;
+  z-index: 2;
 }
 
-#tool-grid .card-square:nth-child(4), 
-.tool-grid-squares .card-square:nth-child(4)  { 
-  animation-delay: 0.6s !important; 
-  animation-duration: 6.3s !important; 
-}
+/* ==================== HOVER & INTERACTION ==================== */
 
-#tool-grid .card-square:nth-child(5), 
-.tool-grid-squares .card-square:nth-child(5)  { 
-  animation-delay: 5.1s !important; 
-  animation-duration: 8.9s !important; 
-}
-
-#tool-grid .card-square:nth-child(6), 
-.tool-grid-squares .card-square:nth-child(6)  { 
-  animation-delay: 2.4s !important; 
-  animation-duration: 11.2s !important; 
-}
-
-#tool-grid .card-square:nth-child(7), 
-.tool-grid-squares .card-square:nth-child(7)  { 
-  animation-delay: 4.7s !important; 
-  animation-duration: 5.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(8), 
-.tool-grid-squares .card-square:nth-child(8)  { 
-  animation-delay: 1.9s !important; 
-  animation-duration: 9.8s !important; 
-}
-
-#tool-grid .card-square:nth-child(9), 
-.tool-grid-squares .card-square:nth-child(9)  { 
-  animation-delay: 6.2s !important; 
-  animation-duration: 6.7s !important; 
-}
-
-#tool-grid .card-square:nth-child(10), 
-.tool-grid-squares .card-square:nth-child(10) { 
-  animation-delay: 3.3s !important; 
-  animation-duration: 10.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(11), 
-.tool-grid-squares .card-square:nth-child(11) { 
-  animation-delay: 0.8s !important; 
-  animation-duration: 7.4s !important; 
-}
-
-#tool-grid .card-square:nth-child(12), 
-.tool-grid-squares .card-square:nth-child(12) { 
-  animation-delay: 5.6s !important; 
-  animation-duration: 8.2s !important; 
-}
-
-#tool-grid .card-square:nth-child(13), 
-.tool-grid-squares .card-square:nth-child(13) { 
-  animation-delay: 2.1s !important; 
-  animation-duration: 11.6s !important; 
-}
-
-#tool-grid .card-square:nth-child(14), 
-.tool-grid-squares .card-square:nth-child(14) { 
-  animation-delay: 4.4s !important; 
-  animation-duration: 5.9s !important; 
-}
-
-#tool-grid .card-square:nth-child(15), 
-.tool-grid-squares .card-square:nth-child(15) { 
-  animation-delay: 6.8s !important; 
-  animation-duration: 9.5s !important; 
-}
-
-#tool-grid .card-square:nth-child(16), 
-.tool-grid-squares .card-square:nth-child(16) { 
-  animation-delay: 1.5s !important; 
-  animation-duration: 7.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(17), 
-.tool-grid-squares .card-square:nth-child(17) { 
-  animation-delay: 3.6s !important; 
-  animation-duration: 10.8s !important; 
-}
-
-#tool-grid .card-square:nth-child(18), 
-.tool-grid-squares .card-square:nth-child(18) { 
-  animation-delay: 5.3s !important; 
-  animation-duration: 6.5s !important; 
-}
-
-#tool-grid .card-square:nth-child(19), 
-.tool-grid-squares .card-square:nth-child(19) { 
-  animation-delay: 0.3s !important; 
-  animation-duration: 8.7s !important; 
-}
-
-#tool-grid .card-square:nth-child(20), 
-.tool-grid-squares .card-square:nth-child(20) { 
-  animation-delay: 4.1s !important; 
-  animation-duration: 9.3s !important; 
-}
-
-/* Desktop: Hover-Effekt */
-@media (min-width: 768px) {
-  #tool-grid .card-square:hover,
-  .tool-grid-squares .card-square:hover {
-    animation: none !important;
-    transform: translateY(-8px) scale(1.03) !important;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
-                0 0 40px rgba(99, 102, 241, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.12) !important;
-    border-color: rgba(99, 102, 241, 0.4) !important;
-  }
-
-  #tool-grid .card-square:hover .context-marquee .marquee-track,
-  .tool-grid-squares .card-square:hover .context-marquee .marquee-track {
-    animation-duration: 15s !important;
-  }
-
-  #tool-grid .card-square:hover .square-category-badge,
-  .tool-grid-squares .card-square:hover .square-category-badge {
-    background: rgba(99, 102, 241, 0.25) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
-    transform: scale(1.05) !important;
-  }
-
-  #tool-grid .card-square:hover .square-title-large,
-  .tool-grid-squares .card-square:hover .square-title-large {
-    color: rgba(255, 255, 255, 1) !important;
-  }
-}
-
-/* Mobile: Touch/Tap-Effekt */
-@media (max-width: 767px) {
-  #tool-grid .card-square:active,
-  .tool-grid-squares .card-square:active {
-    transform: scale(1.08) !important;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(99, 102, 241, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
-  }
-
-  #tool-grid .card-square:active .context-marquee .marquee-track,
-  .tool-grid-squares .card-square:active .context-marquee .marquee-track {
-    animation-duration: 15s !important;
-  }
-
-  #tool-grid .card-square:active .square-category-badge,
-  .tool-grid-squares .card-square:active .square-category-badge {
-    background: rgba(99, 102, 241, 0.25) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
-    transform: scale(1.05) !important;
-  }
-
-  #tool-grid .card-square:active .square-title-large,
-  .tool-grid-squares .card-square:active .square-title-large {
-    color: rgba(255, 255, 255, 1) !important;
-  }
-}
-
-/* Force breathing animation on cards (unless user prefers reduced motion) */
-@media (prefers-reduced-motion: no-preference) {
-  .tool-grid-squares .card-square,
-  #tool-grid .card-square {
-    animation-name: breathing !important;
-    animation-duration: 8s !important;
-    animation-timing-function: ease-in-out !important;
-    animation-iteration-count: infinite !important;
-    animation-play-state: running !important;
-  }
-}
-
-/* Accessibility: prefers-reduced-motion (high priority) */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  /* Disable breathing for reduced-motion users */
-  .tool-grid-squares .card-square,
-  #tool-grid .card-square {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* ==================== END SCHWEBEEFFEKT ==================== */
-
-
-/* =========================================
-   TOUCH FEEDBACK - App.js Button Fix
-   Passt perfekt zum SCHWEBEEFFEKT oben
-   ========================================= */
-
-/* 🆕 Touch Active State für Mobile (JavaScript-triggered) */
-.card-square.card-touch-active,
-.card-touch-active {
-  transform: scale(0.98) !important;
-  transition: transform 0.15s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* 🆕 Optimierte Hover States nur für Geräte mit präzisem Pointer (Desktop) */
+/* Desktop Hover (pointer: fine) */
 @media (hover: hover) and (pointer: fine) {
   .card-square:hover {
-    /* Bereits oben definiert - keine Änderung nötig */
+    animation: none;
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    border-color: rgba(99, 102, 241, 0.4);
+    border-top-color: var(--primary);
+  }
+
+  .card-square:hover .marquee-track {
+    animation-duration: 28s;
+  }
+
+  .card-square:hover .square-category-badge {
+    background: rgba(99, 102, 241, 0.25);
+    transform: scale(1.05);
+  }
+
+  .card-square:hover .square-title-large {
+    color: white;
   }
 }
 
-/* 🆕 Touch Devices: Hover-Styles deaktivieren */
+/* Touch Devices */
 @media (hover: none) {
   .card-square:hover {
-    /* Lässt den Touch-Active State von oben arbeiten */
-    animation: breathing 8s ease-in-out infinite !important;
+    animation: breathing 8s ease-in-out infinite;
     transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 }
 
-/* 🆕 Focus States für Keyboard Navigation */
+/* Mobile Active/Tap State */
+@media (max-width: 767px) {
+  .card-square:active,
+  .card-square.card-touch-active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.15s ease;
+  }
+
+  .card-square:active .marquee-track {
+    animation-duration: 15s;
+  }
+
+  .card-square:active .square-category-badge {
+    background: rgba(99, 102, 241, 0.25);
+    transform: scale(1.05);
+  }
+
+  .card-square:active .square-title-large {
+    color: white;
+  }
+}
+
+/* Armed State (JavaScript triggered) */
+.card-square.card-armed {
+  transform: scale(0.97);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+  transition: transform 0.1s ease;
+}
+
+/* ==================== FOCUS & ACCESSIBILITY ==================== */
+
+/* Focus: Only visible for keyboard navigation */
+.card-square:focus {
+  outline: none;
+}
+
 .card-square:focus-visible {
-  outline: 2px solid rgba(0, 243, 255, 0.5);
-  outline-offset: 4px;
+  outline: 2px solid rgba(0, 243, 255, 0.35);
+  outline-offset: 2px;
   z-index: 101;
 }
 
-/* 🆕 Armed State (wenn JavaScript Card aktiviert) */
-.card-square.card-armed {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
-              0 0 30px rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.3);
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
-/* 🆕 Prevent double-tap zoom on iOS */
+/* Touch action optimization */
 .card-square,
 .card-overlay-link,
 button,
@@ -1681,30 +1194,24 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 🆕 Smooth Transitions für alle Card States */
-.card-square {
-  transition: 
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.35s ease,
-    opacity 0.2s ease;
-  /* Wird vom breathing überschrieben wenn aktiv */
-}
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
 
-/* =========================================
-   END TOUCH FEEDBACK
-   ========================================= */
+  .card-square {
+    animation: none;
+  }
 
-
-/* ==================== ACCESSIBILITY ... */
-
-
-/* Focus Styles */
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  .marquee-track {
+    animation: none;
+    transform: translateX(0);
+  }
 }
 
 /* High Contrast Mode */
@@ -1715,7 +1222,7 @@ a:focus-visible {
   }
 }
 
-/* PRINT */
+/* ==================== PRINT ==================== */
 @media print {
   .header,
   .footer,
@@ -1732,210 +1239,22 @@ a:focus-visible {
     page-break-inside: avoid;
     margin-bottom: 1rem;
   }
-  
 }
-  
-  /* =========================
-   Card Visual Upgrade Pack
-   (Paste at end of style.css)
-   ========================= */
-
-/* Soft gradient border + glass body */
-.card-square {
-  position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius: 20px;
-  padding: 18px;
-  box-shadow:
-    0 6px 20px rgba(2,12,30,0.45),      /* deeper shadow */
-    inset 0 1px 0 rgba(255,255,255,0.02);/* subtle inner */
-  overflow: visible; /* allow glow */
-  transition: transform 260ms cubic-bezier(.22,1,.36,1), box-shadow 220ms ease, border-color 220ms ease;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-
-/* Gradient outline using pseudo-element for visual-upgrade only */
-.card-square.visual-upgrade::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, rgba(0,243,255,0.06), rgba(124,77,255,0.04), rgba(0,243,255,0.06));
-  padding: 1px;
-    -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  /* WebKit expects xor, spec uses 'exclude' - keep both for max compatibility */
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  /* NOTE: If you see missing gradient-outline in Firefox, consider alternative approach or fallback background */
-  pointer-events: none;
-}
-
-/* make content sit above pseudo border */
-.card-square > .square-content-centered { position: relative; z-index: 2; }
-
-/* === FINAL: Kein harter Rahmen beim Tap/Klick === */
-.card-square:active,
-.card-square.card-armed {
-  box-shadow:
-    0 18px 46px rgba(0,20,40,0.45),
-    0 0 26px rgba(0,243,255,0.10) !important; /* weich, kein "Rand-Quadrat" */
-  border-color: rgba(255,255,255,0.10) !important;
-}
-
-
-/* CATEGORY: small, flat, left-aligned badge */
-.square-category-badge {
-  background: transparent; /* keep transparent base */
-  color: currentColor;
-  padding: 8px 18px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  box-shadow: none;
-  align-self: flex-start;
-  transform: translateY(0);
-  transition: transform 180ms ease, opacity 180ms ease;
-  z-index: 3;
-}
-
-/* Tool title sits lower and separated from category */
-.square-title-large {
-  margin: 12px 0 6px 18px;
-  font-size: 1.15rem;
-  line-height: 1.18;
-  color: var(--text-primary);
-  max-width: calc(100% - 36px);
-  word-break: break-word;
-  text-wrap: balance;
-  transition: color 160ms ease, transform 200ms ease;
-}
-
-/* Marquee: ensure it spans the available width and not clipped */
-.context-marquee {
-  width: calc(100% - 36px); /* align with content padding */
-  margin: 8px 18px 0 18px;
-  height: 26px;
-  overflow: hidden;
-  position: relative;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* marquee track sized to content; two copies ensure infinite feel */
-.context-marquee .marquee-track {
-  display: inline-flex;
-  gap: 2.5rem;
-  white-space: nowrap;
-  align-items: center;
-  will-change: transform;
-  animation: elegantMarqueeFlow 18s linear infinite;
-}
-
-/* ensure each sequence is not clipped: min-width helps on short content */
-.context-marquee .marquee-seq {
-  display: inline-block;
-  min-width: 40%;
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.78);
-  letter-spacing: 0.02em;
-  line-height: 26px;
-}
-
-/* side fading (preserve existing mask) */
-.context-marquee::before,
-.context-marquee::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 36px;
-  pointer-events: none;
-  z-index: 3;
-}
-.context-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-card), transparent);
-}
-.context-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-card), transparent);
-}
-
-/* smoother slower on hover */
-.card-square:hover .context-marquee .marquee-track { animation-duration: 28s; }
-
-/* ensure marquee stops for reduced-motion users */
-@media (prefers-reduced-motion: reduce) {
-  .context-marquee .marquee-track { animation: none !important; transform: translateX(0) !important; }
-}
-
-/* marquee keyframes: translateX from 0 to -50% so two copies loop */
-@keyframes elegantMarqueeFlow {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-
-/* focus styles (keyboard) - FIX */
-.card-square:focus {
-  outline: none !important;              /* klickt man → kein großes Viereck */
-}
-
-/* nur Tastatur: Fokus sichtbar, aber klein */
-.card-square:focus-visible {
-  outline: 2px solid rgba(0,243,255,0.35) !important;
-  outline-offset: 2px !important;
-}
-
-
-/* clamp description to avoid pushing the badge/title */
-.square-description {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 767px) {
-  .card-square { padding: 14px; border-radius: 14px; }
-  .square-title-large { margin-left: 12px; font-size: 1rem; }
-  .context-marquee { margin: 0 !important; height: 21px; }  /* ← KEIN margin-left/right! */
-}
-
-
-/* Misc safe rules kept as in original */
-/* End of corrected file */
 
 /* ==================== SMART COLOR FLOW SYSTEM ==================== */
 
-
-
-/* Connection Active State — etwas niedriger als FAB */
+/* Connection Active State */
 .card-square.connection-active {
-  transform: translateY(-6px) scale(1.05) !important;
-  box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5) !important;
-  z-index: 900 !important; /* bleibt hoch, aber unter FAB */
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5);
+  z-index: 900;
   position: relative;
-}
-
-/* ensure toggle button can be clicked */
-.legend-toggle {
-  pointer-events: auto;
 }
 
 /* Connection Labels */
 .connection-labels {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 50;
 }
@@ -1987,12 +1306,12 @@ a:focus-visible {
   font-size: 0.7rem;
 }
 
-/* Floating Legend Button — zwingend oben */
+/* Floating Legend FAB */
 .color-legend-fab {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 2100 !important; /* deutlich über 1000 */
+  z-index: 2100;
   pointer-events: auto;
 }
 
@@ -2000,17 +1319,15 @@ a:focus-visible {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, 
-    rgb(0,243,255) 0%, 
-    rgb(236,72,153) 50%, 
-    rgb(250,204,21) 100%);
+  background: linear-gradient(135deg, rgb(0, 243, 255) 0%, rgb(236, 72, 153) 50%, rgb(250, 204, 21) 100%);
   border: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
+  pointer-events: auto;
 }
 
 .legend-toggle:active {
@@ -2019,7 +1336,7 @@ a:focus-visible {
 
 .legend-icon {
   font-size: 1.8rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* Legend Panel */
@@ -2032,10 +1349,10 @@ a:focus-visible {
   border-radius: 24px 24px 0 0;
   transform: translateY(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2300 !important; /* sits above cards and FAB */
+  z-index: 2300;
   max-height: 70vh;
   overflow-y: auto;
-  box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.6);
 }
 
 .color-legend-panel.active {
@@ -2061,9 +1378,7 @@ a:focus-visible {
 .legend-header h3 {
   font-size: 1.3rem;
   font-weight: 700;
-  background: linear-gradient(90deg, 
-    rgb(0,243,255), 
-    rgb(236,72,153));
+  background: linear-gradient(90deg, rgb(0, 243, 255), rgb(236, 72, 153));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2120,18 +1435,12 @@ a:focus-visible {
 }
 
 .legend-line.dashed {
-  background: linear-gradient(90deg, 
-    currentColor 0%, 
-    currentColor 50%, 
-    transparent 50%, 
-    transparent 100%);
+  background: linear-gradient(90deg, currentColor 0%, currentColor 50%, transparent 50%, transparent 100%);
   background-size: 8px 3px;
 }
 
 .legend-line.dotted {
-  background: radial-gradient(circle, 
-    currentColor 40%, 
-    transparent 40%);
+  background: radial-gradient(circle, currentColor 40%, transparent 40%);
   background-size: 6px 3px;
   background-position: 0 center;
 }
@@ -2142,690 +1451,220 @@ a:focus-visible {
   font-weight: 500;
 }
 
-/* Onboarding Toast */
-.onboarding-toast {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 200;
-  max-width: 90%;
+/* ==================== MARQUEE POSITIONING ==================== */
+
+/* Marquee absolute positioned at card bottom */
+.card-square .context-marquee {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 11px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.onboarding-toast.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
+.card-square .context-marquee .marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeLoop 20s linear infinite;
 }
 
-.toast-content {
-  background: var(--bg-dark);
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  padding: 16px 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.card-square .context-marquee .marquee-seq {
+  display: inline-block;
+  padding-right: 3.5rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.02em;
+  line-height: 22px;
 }
 
-.toast-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
+/* Hover: slower animation */
+.card-square:hover .context-marquee .marquee-track {
+  animation-duration: 28s;
 }
 
-.toast-text {
-  flex: 1;
-}
 
-.toast-text strong {
-  color: var(--primary);
-  font-size: 1rem;
-  display: block;
-  margin-bottom: 4px;
-}
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .card-square .context-marquee {
+    left: 14px;
+    right: 14px;
+    bottom: 11px;
+    height: 21px;
+  }
 
-.toast-text small {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-}
+  .card-square .context-marquee .marquee-seq {
+    font-size: 0.66rem;
+    padding-right: 2rem;
+    line-height: 21px;
+  }
 
-/* Mobile Anpassungen */
-@media (max-width: 768px) {
+  .card-square .context-marquee .marquee-track {
+    animation-duration: 18s;
+  }
+
   .color-legend-fab {
     bottom: 16px;
     right: 16px;
   }
-  
+
   .legend-toggle {
     width: 48px;
     height: 48px;
   }
-  
+
   .legend-icon {
     font-size: 1.5rem;
   }
-  
+
   .connection-label {
     max-width: 140px;
   }
-  
+
   .label-content {
     padding: 6px 10px;
     min-width: 100px;
   }
 }
 
-/* ==================== END SMART COLOR FLOW ==================== */
 
-/* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
+/* ==================== HIDE DEV/DEBUG ELEMENTS ==================== */
 
-/* Container: keine Höhe im Layout, Marken absolut platzieren,
-   pointer-events:none damit sie interaktionen nicht blockieren */
-.marquee-container {
-  position: relative;
-  width: 100%;
-  height: 0;              /* kein Platz im normalen Flow */
-  pointer-events: none;   /* keine Klicks abfangen */
-  z-index: 1000;
-}
-
-/* Jede marquee an exakt derselben Stelle: zentriert, transparent background */
-.marquee {
-  position: absolute;
-  left: 50%;
-  top: 10px; /* anpassen: Abstand vom oberen Rand des Header */
-  transform: translateX(-50%);
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-  color: inherit;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;    /* optisch als Pill, aber transparent bg */
-  opacity: 0.98;
-  pointer-events: none;    /* nicht klickbar */
-  white-space: nowrap;
-  z-index: 1001;
-}
-
-/* Falls JS/toggling mehrere marquees sichtbar macht, erzwinge gleiche Position */
-.marquee-1, .marquee-2, .marquee-3 {
-  top: 10px; /* alle gleich */
-}
-
-/* Inhalte innerhalb marquees transparent halten (falls Markup enthält) */
-.marquee * {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* ===== Hide common dev/notice toasts (top-left "App OK - tools:20") =====
-   Versuch mehrere übliche Klassen/IDs abzudecken; falls dein JS eigene Klasse
-   nutzt, ergänze sie hier oder nutze den Optionalen JS-Remover unten. */
-.app-notice,
-.app-toast,
-.onboarding-toast,
-.site-notice,
-.toast,
-#app-notice,
-.notification-bubble,
-.notice {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* ===========================
-   OVERRIDES: MARQUEE & NOTICES
-   (append this at end of style.css)
-   =========================== */
-
-/* 1) Debug / dev badge vollständig ausblenden (JS erstellt #debug-badge) */
+/* Hide debug badges and dev notices */
 #debug-badge,
 .app-notice,
 .app-toast,
 .onboarding-toast,
 .site-notice,
-.toast,
-#app-notice,
 .notification-bubble,
-.notice {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
+.notice,
+#app-notice {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-/* 2) Falls eine JS-Badge andere ID/Klasse nutzt: sehr breite Sicherung (nicht destruktiv) */
-[id^="debug"], [class*="toast"], [class*="notice"][role="status"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* 3) Entferne / neutralisiere Overlay-Links über dem Header/Titel */
-.header a.card-overlay-link,
-.header a.header-overlay,
+/* Remove overlay links from header */
+.header .card-overlay-link,
 .header .overlay-link,
-.title > a,
-.header a[aria-hidden="true"] {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
+.title > a {
+  display: none;
+  pointer-events: none;
 }
 
-/* 4) Einheitliche, pixelgenaue Position der Marquee innerhalb der Card
-   - nutzt exakt das Card-Innenpadding (18px desktop / 12px mobile)
-   - absolute Position, gleiche top/bottom für alle marquees
-   - kein eigener Hintergrund, keine Ränder, kein Schatten
-*/
-.card-square { position: relative; } /* ensure container is positioned */
+/* ==================== END SMART COLOR FLOW ==================== */
 
-.card-square .context-marquee {
-  position: absolute !important;
-  left: 20px !important;               /* equal to card padding desktop */
-  right: 20px !important;
-  bottom: 0px !important;             /* konstante Y-Offset (feinjustierbar) */
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;     /* nicht klickbar */
-  z-index: 2 !important;
-  -webkit-mask-image: none !important; /* remove previous mask which can cause visible bars */
-  mask-image: none !important;
-}
-
-/* Track & sequence: no background, only text visible; ensure loop still works */
-.card-square .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  will-change: transform;
-  animation: elegantMarqueeFlow 15s linear infinite !important;
-  transform: translateZ(0); /* avoid subpixel weirdness */
-}
-
-.card-square .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-  padding: 0 1.5rem !important; /* spacing between segments */
-  min-width: 40% !important;     /* ensures visible continuous look */
-  pointer-events: none !important;
-}
-
-/* Remove side fade overlays that produce visible background bars */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after,
-.context-marquee::before,
-.context-marquee::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* 5) Mobile tweak: use smaller internal padding so marquee aligns with mobile card padding */
-@media (max-width: 767px) {
-  .card-square .context-marquee {
-    left: 0 !important;
-    right: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    border-bottom-left-radius: inherit !important;
-    border-bottom-right-radius: inherit !important;
-  }
-
-  .card-square .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-left: 0 !important;
-    padding-right: 2rem !important;
-    min-width: 45% !important;
-  }
-}
-
-
-/* 6) Accessibility: pausieren on focus or reduce motion respected */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-square .context-marquee .marquee-track {
-    animation: none !important;
-    transform: translateX(0) !important;
-  }
-}
-
-/* 7) Final safety: ensure no visible border/shadow from any marquee ancestor */
-.card-square,
-.card-square * {
-  background-clip: padding-box !important;
-  outline: none !important;
-}
-
-/* End of overrides */
-
-/* === FINAL: Marquee wirklich rand-bis-rand (2mm extra Overscan) === */
-:root { --marquee-overscan: 20px; } /* ~1mm näher zum Rand als 8px */
-
-
-.card-square .context-marquee {
-  left: 4px !important;      /* ← 1mm vom linken Rand */
-  right: 4px !important;     /* ← 1mm vom rechten Rand */
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-}
-
-
-
-/* Kein "Innenabstand", damit Text bis zur Linie kommt */
-.card-square .context-marquee .marquee-seq {
-  padding-left: 0 !important;
-  padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
-}
-
-/* === Layout: Badge & Titel exakt positionieren === */
-:root {
-  --edge-left: 11px;  /* ~3mm */
-  --edge-top: 15px;   /* ~4mm */
-}
-
-/* Content-Container: definiert die "Innenkante" */
-.card-square > .square-content-centered {
-  padding-left: var(--edge-left) !important;
-  padding-top: var(--edge-top) !important;
-}
-
-/* Sicherheit: falls alte Margins den Titel noch verschieben */
-.card-square .square-category-badge,
-.card-square .square-title-large {
-  margin-left: 0 !important;
-}
-
-/* === FINAL ALIGN: Badge + Titel 3mm vom linken Kartenrand === */
-:root { --card-left-pad: 11px; } /* ~3mm */
-
-/* Der Wrapper definiert die linke Linie für alles */
-.card-square > .square-content-centered {
-  padding-left: var(--card-left-pad) !important;
-}
-
-/* Alte Offsets neutralisieren, damit beide wirklich bündig sind */
-.card-square .square-category-badge,
-.card-square .square-title-large {
-  margin-left: 0 !important;
-}
-
-/* === Ergänzungen für index.html ------------------------------------------------------------------------------------------------- */
-/* Baseline für state containers (loading / error / empty) */
+/* ==================== STATE CONTAINERS ==================== */
 .state-container {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: var(--spacing-sm, 0.5rem);
-  padding: var(--spacing-lg, 1.25rem);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
   width: 100%;
-  box-sizing: border-box;
-  color: var(--text, #E6EEF3);
+  color: var(--text-primary);
 }
 
-/* Spezifische Visuals für Zustände (sichtbar & konsistent) */
-.loading-state { background: transparent; }
-.error-state {
-  background: rgba(239,68,68,0.03);
-  border: 1px solid rgba(239,68,68,0.08);
-  color: var(--error, #ff6b6b);
+.loading-state {
+  background: transparent;
 }
+
+.error-state {
+  background: rgba(239, 68, 68, 0.03);
+  border: 1px solid rgba(239, 68, 68, 0.08);
+  color: var(--error);
+}
+
 .empty-state {
   opacity: 0.95;
-  color: var(--text-dim, #9aa0ab);
+  color: var(--text-dim);
 }
 
-/* Make sure state elements hide/show gracefully */
-.state-container[style*="display: none"], .state-container.hidden { display: none !important; }
-
-
-/* Header / hero offsets: ensure marquee container aligns inside header */
-.marquee-container {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: var(--marquee-height, 40px);
-  pointer-events: none;
-  display: block;
+.state-container.hidden {
+  display: none;
 }
 
-/* Small helper: ensure legend panel overlays correctly */
-.color-legend-panel#legend-panel,
-.color-legend-panel {
-  position: fixed;
-  right: 1rem;
-  bottom: 1.25rem;
-  z-index: 1200;
-  max-width: 340px;
-  box-sizing: border-box;
-}
-
-/* Make sure tool-grid occupies flow-space (fallback) */
-.tool-grid { min-height: 320px; }
-
-/* =========================
-   SMART COLOR FLOW: CANVAS UNIFIED BLOCK
-   (Paste this ONCE at the END of style.css)
-   Ensures canvas covers viewport, is non-interactive, and layers correctly.
-   ========================= */
-
+/* ==================== CANVAS (COLOR FLOW) ==================== */
 .connection-canvas,
-.neural-canvas {
-  /* full-viewport coverage (fixed so it is independent of parent stacking) */
-  position: fixed !important;
-  inset: 0 !important;           /* top:0; right:0; bottom:0; left:0; */
-  width: 100% !important;
-  height: 100% !important;
-
-  /* visual / interaction */
-  pointer-events: none !important; /* canvas must not block UI interactions */
-  opacity: 1 !important;
-
-  /* z-index: below cards but above page background.
-     Cards use z-index >= 2 (and hover raises to 100), header/legend use >1000.
-     Adjust only if you intentionally want lines above cards. */
-  z-index: 0 !important;
-
-  /* ensure positioning anchors are set */
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-}
-
-/* Optional: make connection labels container sit above cards but below FAB/Legend */
-.connection-labels {
-  position: fixed !important;
-  inset: 0 !important;
-  pointer-events: none !important;
-  z-index: 50 !important; /* visible above canvas but below most UI (legend uses ~2300) */
-}
-
-/* Safety: ensure the legend toggle and FAB remain clickable */
-.legend-toggle,
-.color-legend-fab {
-  pointer-events: auto !important;
-}
-
-/* Tiny helper: if you want the neural canvas to be more subtle by default */
-.neural-canvas {
-  opacity: 0.28 !important; /* adjust to taste */
-  filter: blur(0px) !important;
-}
-
-/* =========================================
-   CONNECTION CANVAS - COLOR FLOW SYSTEM
-   ========================================= */
-
-.connection-canvas,
+.neural-canvas,
 #connection-canvas,
 #grid-network-canvas {
-  /* Position */
-  position: absolute;
-  top: 0;
-  left: 0;
-  
-  /* Behavior */
-  pointer-events: none;  /* Klicks gehen durch Canvas zu Karten */
-  z-index: 0 !important; /* Immer unter Karten */
-  
-  /* Size wird per JavaScript gesetzt */
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Optional: Canvas Debug Mode (nur Development) */
+.neural-canvas {
+  opacity: 0.28;
+}
+
+/* Grid Container */
+#tool-grid {
+  position: relative;
+  z-index: 2;
+}
+
+/* Cards above canvas */
+.card-square {
+  position: relative;
+  z-index: 10;
+}
+
+/* Main container base layer */
+.main .container {
+  position: relative;
+}
+
+/* Debug mode (development only) */
 .debug .connection-canvas {
   outline: 2px dashed rgba(255, 0, 0, 0.3);
 }
 
-/* =========================================
-   COLOR FLOW Z-INDEX FIX
-   (Am Ende der Datei hinzugefügt)
-   ========================================= */
 
-/* Canvas - Sichtbar über Container Background */
-.connection-canvas {
-  position: absolute !important;
-  z-index: 1 !important;
-  pointer-events: none !important;
-  top: 0;
-  left: 0;
+/* ==================== UTILITY ==================== */
+.tool-grid {
+  min-height: 320px;
 }
 
-/* Grid - Über Canvas aber unter Squares */
-#tool-grid {
-  position: relative !important;
-  z-index: 2 !important;
+/* Legend Panel positioning helper */
+.color-legend-panel {
+  max-width: 340px;
+  box-sizing: border-box;
 }
 
-/* Squares - Ganz oben */
-.card-square {
-  position: relative !important;
-  z-index: 10 !important;
-}
+/* ==================== ACCESSIBILITY ==================== */
 
-/* Container - Basis-Layer */
-.main .container {
-  position: relative !important;
-  /* Kein z-index - bleibt bei auto/0 */
-}
-
-/* ================================================ */
-/* FIX: Keine Linie auf Cards bei Hover/Klick      */
-/* ================================================ */
-
-.card-square::before {
-  display: none !important;
-  opacity: 0 !important;
-}
-
-.card-square:hover::before {
-  display: none !important;
-}
-
-.card-square:active::before,
-.card-square.card-armed::before {
-  display: none !important;
-}
-
-/* Optional: Auch Glow-Shadow entfernen */
-.card-square::after {
-  display: none !important;
-}
-
-/* ================================================ */
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   VARIABLES
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-:root {
-  --marquee-overscan: 20px;
-}
-
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ORIGINAL MARQUEE - EXAKT WIE IN STYLE.CSS
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* Basis Marquee */
-.context-marquee {
-  position: relative;
-  width: 100%;
-  height: 22px;
-  overflow: hidden;
-  margin: 0;
-  pointer-events: none;
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  align-self: stretch;
-  flex-shrink: 0;
-}
-
-/* Card-Specific Marquee mit Overscan */
-.card-square .context-marquee {
-  position: absolute !important;
-  left: calc(-1 * var(--marquee-overscan)) !important;
-  right: calc(-1 * var(--marquee-overscan)) !important;
-  bottom: 0px !important;
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-}
-
-/* Marquee Track */
-.context-marquee .marquee-track {
-  display: inline-flex;
-  white-space: nowrap;
-  will-change: transform;
-  animation: marqueeLoop 20s linear infinite;
-}
-
-.card-square .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  will-change: transform;
-  animation: elegantMarqueeFlow 15s linear infinite !important;
-  transform: translateZ(0);
-}
-
-/* Marquee Sequence */
-.context-marquee .marquee-seq {
-  display: inline-block;
-  padding-right: 3.5rem;
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.78);
-  letter-spacing: 0.02em;
-  line-height: 24px;
-  pointer-events: none;
-}
-
-.card-square .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-  padding: 0 1.5rem !important;
-  min-width: 40% !important;
-  pointer-events: none !important;
-}
-
-/* Entferne Fade-Overlays */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* Animations */
-@keyframes marqueeLoop {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes elegantMarqueeFlow {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Hover langsamer */
-.card-square:hover .context-marquee .marquee-track {
-  animation-duration: 28s !important;
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   TOUCH & INTERACTION
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-.card-square:focus-visible {
-  outline: 2px solid rgba(0, 243, 255, 0.5);
-  outline-offset: 4px;
-}
-
-.card-square {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MOBILE RESPONSIVE
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-@media (max-width: 767px) {
-  .context-marquee {
-    height: 21px !important;
-  }
-
-  .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-right: 2rem !important;
-    line-height: 21px !important;
-  }
-
-  .context-marquee .marquee-track {
-    animation-duration: 18s !important;
-  }
-
-  .card-square .context-marquee {
-    left: 0 !important;
-    right: 0 !important;
-  }
-}
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ACCESSIBILITY
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-
-/* Pause bei Focus */
+/* Pause on focus */
 .card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused !important;
+.card-square.card-armed .context-marquee .marquee-track,
+.card-face-front:focus-within .context-marquee .marquee-track {
+  animation-play-state: paused;
 }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .context-marquee .marquee-track {
-    animation: none !important;
+  .card-square .context-marquee .marquee-track,
+  .card-face-front .context-marquee .marquee-track {
+    animation: none;
+    transform: translateX(0);
   }
 
   .context-marquee {
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 
-
-/* High Contrast */
+/* High contrast */
 @media (prefers-contrast: high) {
   .card-face-back {
     border-width: 3px;
@@ -2835,120 +1674,3 @@ a:focus-visible {
     border-width: 2px;
   }
 }
-
-/* ═════════════════════════════════════════════════════════
-   END FLIP CARD ADDON
-   ════════════════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════════════════
-   🚨 EMERGENCY OVERRIDE - MARQUEE 1MM VOM RAND + 3MM HÖHER
-   Version 2.0 - Kompatibel mit flip-card.js
-   Überschreibt alle vorherigen 47 Blöcke!
-   Datum: 14.02.2026 - Update: 21:54 Uhr
-   ═══════════════════════════════════════════════════════════ */
-
-/* MARQUEE: 1mm (4px) vom Rand + 3mm (11px) vom Boden */
-/* Beide Selektoren für Kompatibilität mit/ohne flip-card.js */
-.card-square .context-marquee,
-.card-face-front .context-marquee {
-  position: absolute !important;
-  left: 14px !important;              /* 1mm vom linken Rand */
-  right: 14px !important;             /* 1mm vom rechten Rand */
-  bottom: 11px !important;           /* 3mm vom unteren Rand */
-  height: 22px !important;
-  width: auto !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-}
-
-/* Track Animation - FIXED */
-.card-square .context-marquee .marquee-track,
-.card-face-front .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  will-change: transform;
-  animation: marqueeLoop 20s linear infinite !important;
-  transform: translateZ(0);
-}
-
-/* Sequence - FIXED */
-.card-square .context-marquee .marquee-seq,
-.card-face-front .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-  padding: 0 1.5rem !important;
-  min-width: 40% !important;
-  pointer-events: none !important;
-}
-
-/* Entferne Fade-Overlays */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after,
-.card-face-front .context-marquee::before,
-.card-face-front .context-marquee::after {
-  display: none !important;
-  content: none !important;
-  opacity: 0 !important;
-}
-
-/* Hover: Langsamer */
-.card-square:hover .context-marquee .marquee-track,
-.card-square:hover .card-face-front .context-marquee .marquee-track {
-  animation-duration: 28s !important;
-}
-
-/* Mobile: 1mm vom Rand + 3mm höher */
-@media (max-width: 767px) {
-  .card-square .context-marquee,
-  .card-face-front .context-marquee {
-    left: 24px !important;
-    right: 24px !important;
-    bottom: 11px !important;
-    height: 21px !important;
-  }
-
-  .card-square .context-marquee .marquee-seq,
-  .card-face-front .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-right: 2rem !important;
-    line-height: 21px !important;
-  }
-
-  .card-square .context-marquee .marquee-track,
-  .card-face-front .context-marquee .marquee-track {
-    animation-duration: 18s !important;
-  }
-}
-
-/* Accessibility: Pause on Focus */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track,
-.card-face-front:focus-within .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  .card-square .context-marquee .marquee-track,
-  .card-face-front .context-marquee .marquee-track {
-    animation: none !important;
-    transform: translateX(0) !important;
-  }
-}
-
-/* END EMERGENCY OVERRIDE V2.0 */
-
