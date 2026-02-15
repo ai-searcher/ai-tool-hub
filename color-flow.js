@@ -165,7 +165,7 @@
           code: { r: 150, g: 100, b: 255 },    // Helleres Purple
           video: { r: 255, g: 75, b: 75 },     // Helleres Red
           audio: { r: 40, g: 220, b: 110 },    // Helleres Green
-           { r: 255, g: 200, b: 50 },     // Helleres Yellow
+           data: { r: 255, g: 200, b: 50 },     // Helleres Yellow
           other: { r: 160, g: 175, b: 200 }    // Helleres Gray
         };
       } else {
@@ -175,7 +175,7 @@
           code: { r: 139, g: 92, b: 246 },
           video: { r: 239, g: 68, b: 68 },
           audio: { r: 34, g: 197, b: 94 },
-           { r: 251, g: 191, b: 36 },
+           data: { r: 251, g: 191, b: 36 },
           other: { r: 148, g: 163, b: 184 }
         };
       }
