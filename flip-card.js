@@ -14,7 +14,7 @@ function getCategoryName(category) {
     code: 'Code',
     audio: 'Audio',
     video: 'Video',
-    data: 'Daten',                // ✅ Korrigiert
+    data: 'Daten',
     other: 'Sonstiges'
   };
   return names[category] || names.other;
@@ -28,7 +28,7 @@ function getCategoryColor(category) {
     code: '#7C4DFF',
     audio: '#FF6B9D',
     video: '#448AFF',
-    data: '#1DE9B6',               // ✅ Korrigiert
+    data: '#1DE9B6',
     other: '#B0BEC5'
   };
   return colors[category] || colors.other;
@@ -86,7 +86,7 @@ function createBackFaceHTML(tool) {
        rel="noopener noreferrer" 
        class="card-back-button-link"
        onclick="event.stopPropagation();">
-      Tool öffnen
+      Mehr Infos
     </a>
   `;
 }
@@ -153,7 +153,7 @@ function toggleColorFlow(paused) {
 
 // Handle card click (toggle flip)
 function handleCardClick(e) {
-  // Ignore clicks on "Tool öffnen" link
+  // Ignore clicks on "Mehr Infos" link
   if (e.target.closest('.card-back-button-link')) {
     console.log('🚫 Link click ignored (opens tool)');
     return;
@@ -202,7 +202,7 @@ function initFlipSystem() {
   toolGrid.addEventListener('click', handleCardClick);
   toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
 
-  // ✅ Alle bereits existierenden Cards sofort initialisieren
+  // Alle bereits existierenden Cards sofort initialisieren
   document.querySelectorAll('.card-square').forEach(card => {
     if (card.dataset.flipInitialized !== 'true') {
       initializeFlipCard(card);
