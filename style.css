@@ -1827,5 +1827,19 @@ button,
   filter: none;
 }
 
+/* Flip-cards: overlay darf Tap nicht stehlen */
+.card-square .card-face-front .card-overlay-link {
+  pointer-events: none !important;
+}
 
+/* Wenn eine Card flipped ist: keine transform-animation */
+.card-square.is-flipped {
+  animation: none !important;
+}
+
+/* Wenn irgendeine Card flipped ist: am besten breathing ganz aus,
+   sonst kollidiert transform auf den anderen Cards */
+.tool-grid-squares:has(.card-square.is-flipped) .card-square {
+  animation: none !important;
+}
 
