@@ -1794,15 +1794,19 @@ button,
 
 @media (max-width: 767px) {
   .tool-grid-squares {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-    gap: 24px !important;
-    padding: 24px 16px !important;
-    position: relative;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* ✅ immer 2 Spalten */
+    gap: 20px !important;
+    padding: 16px !important;
   }
-  
-  /* Beim Flip: Mehr Platz */
+
+  /* Beim Flip NICHT noch mehr Gap erzwingen (sonst wirkt es wie 1 Spalte) */
   .tool-grid-squares:has(.card-square.is-flipped) {
-    gap: 32px !important;
+    gap: 20px !important;
+  }
+
+  /* Wichtig: Grid-Items dürfen schrumpfen (Safari Fix) */
+  .card-square {
+    min-width: 0 !important;
   }
 }
 
