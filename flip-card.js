@@ -1,112 +1,61 @@
-/**
- * ═══════════════════════════════════════════════════════════
- * FLIP CARD SYSTEM - WITH PROGRESS BAR RATING
- * Version: 3.1 - Waits for quantum:ready event
- * ══════════════════════════════════════════════════════════
- */
+/* ═══════════════════════════════════════════════════════════
+   FLIP CARD SYSTEM - MOBILE FIXED
+   ══════════════════════════════════════════════════════════ */
 
-(function() {
-  'use strict';
+'use strict';
 
-  console.log('🔄 FlipCard v3.1 loading (quantum:ready sync)...');
+// Helper: Get category name
+function getCategoryName(category) {
+  const names = {
+    text: 'Text & Chat',
+    image: 'Bilder & Design',
+    code: 'Code & Dev',
+    audio: 'Audio & Voice',
+    video: 'Video & Film',
+     'Daten & Analytics',
+    other: 'Sonstiges'
+  };
+  return names[category] || names.other;
+}
 
-  let isInitialized = false;
-  let toolsData = [];
+// Helper: Get category color
+function getCategoryColor(category) {
+  const colors = {
+    text: '#00D4FF',
+    image: '#E040FB',
+    code: '#7C4DFF',
+    audio: '#FF6B9D',
+    video: '#448AFF',
+     '#1DE9B6',
+    other: '#B0BEC5'
+  };
+  return colors[category] || colors.other;
+}
 
-  function init() {
-    if (isInitialized) {
-      console.log('⚠️ FlipCard: Already initialized, skipping');
-      return;
-    }
-    
-    const grid = document.querySelector('#tool-grid');
-    if (!grid) {
-      console.warn('⚠️ FlipCard: Grid not found, retrying...');
-      setTimeout(init, 100);
-      return;
-    }
+// Helper: Generate rating bar
+function generateRatingBar(rating) {
+  const percentage = (rating / 5) * 100;
+  const color = rating >= 4 ? '#00FF9D' : rating >= 3 ? '#FFB800' : '#FF4466';
+  
+  return `
+    <div class="rating-bar-container">
+      <div class="rating-bar-bg">
+        <div class="rating-bar-fill" style="width: ${percentage}%; background: ${color};"></div>
+      </div>
+    </div>
+  `;
+}
 
-    // Get tools data from app state
-    if (window.appState && window.appState.tools) {
-      toolsData = window.appState.tools;
-      console.log(`📦 FlipCard: Loaded ${toolsData.length} tools data`);
-    } else {
-      console.warn('⚠️ FlipCard: No appState.tools found!');
-    }
+// Helper: Escape HTML
+function escapeHtml(text) {
+  if (text == null || text === undefined) return '';
+  const div = document.createElement('div');
+  div.textContent = String(text);
+  return div.innerHTML;
+}
 
-    // Prepare all cards
-    prepareAllCards();
-
-    // Event listener
-    grid.addEventListener('click', handleClick, false);
-    document.addEventListener('keydown', handleKeydown);
-
-    isInitialized = true;
-    console.log('✅ FlipCard v3.1 ready');
-  }
-
-  /**
-   * Prepare all cards with rich back faces
-   */
-  function prepareAllCards() {
-    const cards = document.querySelectorAll('.card-square');
-    let prepared = 0;
-
-    console.log(`🔍 FlipCard: Found ${cards.length} cards`);
-
-    cards.forEach(card => {
-      if (!card.dataset.flipReady) {
-        prepareCard(card);
-        prepared++;
-      }
-    });
-
-    console.log(`✅ FlipCard: ${prepared} cards prepared with progress bar rating`);
-  }
-
-  /**
-   * Prepare single card with real data
-   */
-  function prepareCard(card) {
-    card.dataset.flipReady = 'true';
-
-    // Get tool ID
-    const toolId = parseInt(card.dataset.toolId);
-    
-    // Find tool data
-    const toolData = toolsData.find(t => t.id === toolId) || {
-      title: card.dataset.toolName || 'Tool',
-      description: 'Keine Beschreibung verfügbar',
-      category: card.dataset.category || 'other',
-      rating: 0,
-      is_free: true,
-      link: card.dataset.href || '',
-      tags: []
-    };
-
-    console.log(`🔧 FlipCard: Preparing "${toolData.title}"`);
-
-    // Wrap existing content
-    const existingContent = card.innerHTML;
-    const frontFace = document.createElement('div');
-    frontFace.className = 'card-face card-face-front';
-    frontFace.innerHTML = existingContent;
-
-    // Create rich back face
-    const backFace = document.createElement('div');
-    backFace.className = 'card-face card-face-back';
-    backFace.innerHTML = createBackFaceHTML(toolData);
-
-    // Rebuild card
-    card.innerHTML = '';
-    card.appendChild(frontFace);
-    card.appendChild(backFace);
-  }
-
-  /**
-   * Create rich back face HTML
- */
-  createBackFaceHTML(tool) {
+// Create back face HTML
+function createBackFaceHTML(tool) {
   const categoryName = getCategoryName(tool.category);
   const categoryColor = getCategoryColor(tool.category);
   const ratingBar = generateRatingBar(tool.rating || 0);
@@ -117,13 +66,11 @@
   return `
     <button class="card-back-close" aria-label="Schließen" type="button">×</button>
     
-    <!-- VOTING BUTTONS AUF RÜCKSEITE -->
     <div class="card-voting" data-tool-id="${tool.id}">
       <button class="vote-btn vote-btn-up" 
               data-vote="up" 
               aria-label="Upvote"
-              type="button"
-              onclick="event.stopPropagation();">
+              type="button">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 5L12 19M12 5L6 11M12 5L18 11"/>
         </svg>
@@ -131,8 +78,7 @@
       <button class="vote-btn vote-btn-down" 
               data-vote="down" 
               aria-label="Downvote"
-              type="button"
-              onclick="event.stopPropagation();">
+              type="button">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 19L12 5M12 19L18 13M12 19L6 13"/>
         </svg>
@@ -168,185 +114,125 @@
       <a href="${escapeHtml(tool.link)}" 
          target="_blank" 
          rel="noopener noreferrer" 
-         class="card-back-button"
-         onclick="event.stopPropagation();">
+         class="card-back-button">
         Tool öffnen →
       </a>
     ` : ''}
   `;
 }
 
+// Initialize card for flipping
+function initializeFlipCard(card) {
+  if (card.dataset.flipInitialized === 'true') return;
+  
+  const toolId = card.dataset.toolId;
+  if (!toolId) return;
 
-  /**
-   * Generate modern rating bar (Progress Bar)
-   */
-  function generateRatingBar(rating) {
-    const percentage = (rating / 5) * 100;
-    let color = '#00FF9D'; // Green for good
-    
-    if (rating < 3) {
-      color = '#FF6B9D'; // Pink for bad
-    } else if (rating < 4) {
-      color = '#FFB800'; // Yellow for ok
-    }
-    
-    return `
-      <div class="rating-bar-container">
-        <div class="rating-bar-bg">
-          <div class="rating-bar-fill" style="width: ${percentage}%; background: ${color};"></div>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * Get category display name
-   */
-  function getCategoryName(category) {
-    const names = {
-      text: 'Text AI',
-      image: 'Bild AI',
-      code: 'Code',
-      audio: 'Audio',
-      video: 'Video',
-       data: 'Daten',
-      other: 'Andere'
-    };
-    return names[category] || 'Andere';
-  }
-
-  /**
-   * Get category color
-   */
-  function getCategoryColor(category) {
-    const colors = {
-      text: '#00D4FF',
-      image: '#E040FB',
-      code: '#7C4DFF',
-      audio: '#FF6B9D',
-      video: '#448AFF',
-       data: '#1DE9B6',
-      other: '#B0BEC5'
-    };
-    return colors[category] || '#B0BEC5';
-  }
-
-  /**
-   * Handle clicks
-   */
-  function handleClick(e) {
-    // Close button
-    const closeBtn = e.target.closest('.card-back-close');
-    if (closeBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      const card = closeBtn.closest('.card-square');
-      if (card) {
-        card.classList.remove('is-flipped');
-        console.log('🔄 FlipCard: Card closed');
-      }
-      return;
-    }
-
-    // Link in back - let it work
-    if (e.target.closest('.card-back-button')) {
-      return;
-    }
-
-    // Card click
-    const card = e.target.closest('.card-square');
-    if (!card || !card.dataset.flipReady) return;
-
-    if (card.classList.contains('is-flipped')) {
-      return;
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Close others
-    document.querySelectorAll('.card-square.is-flipped').forEach(other => {
-      if (other !== card) other.classList.remove('is-flipped');
-    });
-
-    // Flip
-    card.classList.add('is-flipped');
-    console.log('🔄 FlipCard: Card flipped:', card.dataset.toolName || 'Unknown');
-  }
-
-  /**
-   * Handle keyboard
-   */
-  function handleKeydown(e) {
-    if (e.key === 'Escape') {
-      const flipped = document.querySelectorAll('.card-square.is-flipped');
-      if (flipped.length > 0) {
-        flipped.forEach(card => card.classList.remove('is-flipped'));
-        console.log('🔄 FlipCard: All cards closed (ESC)');
-      }
-    }
-  }
-
-  /**
-   * Escape HTML
-   */
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = String(text || '');
-    return div.innerHTML;
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // INITIALIZATION - Wait for quantum:ready event from app.js
-  // ═══════════════════════════════════════════════════════════
-
-  let readyReceived = false;
-
-  // Listen for app.js ready signal
-  window.addEventListener('quantum:ready', () => {
-    console.log('🎯 FlipCard: Received quantum:ready event');
-    readyReceived = true;
-    setTimeout(init, 300);
-  });
-
-  // Fallback: If event doesn't fire within 3 seconds
-  setTimeout(() => {
-    if (!readyReceived && !isInitialized) {
-      console.warn('⚠️ FlipCard: quantum:ready not received, starting anyway...');
-      init();
-    }
-  }, 3000);
-
-  // ═══════════════════════════════════════════════════════════
-  // MUTATION OBSERVER - Re-prepare cards after grid changes
-  // ═══════════════════════════════════════════════════════════
-
-  const observer = new MutationObserver((mutations) => {
-    console.log('🔄 FlipCard: Grid mutation detected, re-preparing...');
+  // Get tool data
+  let tool = null;
+  try {
     if (window.appState && window.appState.tools) {
-      toolsData = window.appState.tools;
+      tool = window.appState.tools.find(t => String(t.id) === String(toolId));
     }
-    prepareAllCards();
+  } catch (err) {
+    console.warn('Could not find tool data for flip', toolId);
+    return;
+  }
+
+  if (!tool) return;
+
+  // Wrap existing content in front face
+  const existingContent = card.innerHTML;
+  card.innerHTML = `
+    <div class="card-face card-face-front">
+      ${existingContent}
+    </div>
+    <div class="card-face card-face-back">
+      ${createBackFaceHTML(tool)}
+    </div>
+  `;
+
+  card.dataset.flipInitialized = 'true';
+}
+
+// Handle card click
+function handleCardClick(e) {
+  // Ignore if clicking on interactive elements
+  if (e.target.closest('.card-back-close, .card-back-button, .vote-btn, .card-voting')) {
+    return;
+  }
+
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Initialize if needed
+  if (card.dataset.flipInitialized !== 'true') {
+    initializeFlipCard(card);
+  }
+
+  // Toggle flip
+  card.classList.toggle('is-flipped');
+  
+  console.log('🔄 Card flipped:', card.dataset.toolName, card.classList.contains('is-flipped'));
+}
+
+// Handle close button
+function handleCloseClick(e) {
+  const closeBtn = e.target.closest('.card-back-close');
+  if (!closeBtn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const card = closeBtn.closest('.card-square');
+  if (card) {
+    card.classList.remove('is-flipped');
+    console.log('❌ Card closed:', card.dataset.toolName);
+  }
+}
+
+// Initialize flip system
+function initFlipSystem() {
+  const toolGrid = document.getElementById('tool-grid');
+  if (!toolGrid) {
+    console.warn('Tool grid not found, retrying...');
+    setTimeout(initFlipSystem, 500);
+    return;
+  }
+
+  // Remove old listeners
+  if (toolGrid._flipClickHandler) {
+    toolGrid.removeEventListener('click', toolGrid._flipClickHandler);
+    toolGrid.removeEventListener('touchend', toolGrid._flipClickHandler);
+  }
+
+  // Add new listeners
+  toolGrid._flipClickHandler = handleCardClick;
+  toolGrid.addEventListener('click', handleCardClick);
+  toolGrid.addEventListener('touchend', handleCardClick, { passive: false });
+
+  // Close button handler
+  document.addEventListener('click', handleCloseClick);
+  document.addEventListener('touchend', handleCloseClick, { passive: false });
+
+  console.log('✅ Flip system initialized');
+}
+
+// Wait for app to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initFlipSystem, 1000);
   });
+} else {
+  setTimeout(initFlipSystem, 1000);
+}
 
-  // Start observer
-  const startObserver = () => {
-    const grid = document.querySelector('#tool-grid');
-    if (grid) {
-      observer.observe(grid, { childList: true, subtree: true });
-      console.log('✅ FlipCard: Mutation observer started');
-    } else {
-      setTimeout(startObserver, 200);
-    }
-  };
+// Re-initialize on quantum ready
+window.addEventListener('quantumready', () => {
+  setTimeout(initFlipSystem, 500);
+});
 
-  // Start observer after short delay
-  setTimeout(startObserver, 1000);
-
-})();
-
-/**
- * ═══════════════════════════════════════════════════════════
- * END FLIP CARD SYSTEM v3.1
- * ══════════════════════════════════════════════════════════
- */
+console.log('📄 flip-card.js loaded');
