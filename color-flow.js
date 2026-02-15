@@ -328,68 +328,60 @@
       console.log(`🌊 Organic curves: ${this.settings.organicCurves ? 'YES' : 'NO'}`);
     }
 
-    setupCanvas() {
-      if (!this.canvas) {
-        this.canvas = document.createElement('canvas');
-        this.canvas.className = 'connection-canvas';
-        this.canvas.style.position = 'absolute';
-        this.canvas.style.pointerEvents = 'none';
-        this.canvas.style.zIndex = '1';
-        this.canvas.style.willChange = 'transform';
-        this.canvas.style.touchAction = 'none';
-        this.containerElement.insertBefore(this.canvas, this.gridElement);
-      }
+setupCanvas() {
+  if (!this.canvas) {
+    this.canvas = document.createElement('canvas');
+    this.canvas.className = 'connection-canvas';
+    
+    // 🔧 FIX: Explizite Styles für garantierte Sichtbarkeit
+    this.canvas.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform;
+      touch-action: none;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    `;
+    
+    this.containerElement.insertBefore(this.canvas, this.gridElement);
+  }
 
-      const gridRect = this.gridElement.getBoundingClientRect();
-      const parentRect = this.containerElement.getBoundingClientRect();
+  // 🔧 FIX: Verwende Container-Größe für vollständige Abdeckung
+  const containerRect = this.containerElement.getBoundingClientRect();
 
-      this.canvasWidth = gridRect.width;
-      this.canvasHeight = gridRect.height;
+  this.canvasWidth = containerRect.width;
+  this.canvasHeight = containerRect.height;
 
-      this.canvas.style.left = (gridRect.left - parentRect.left) + 'px';
-      this.canvas.style.top = (gridRect.top - parentRect.top) + 'px';
-      this.canvas.style.width = this.canvasWidth + 'px';
-      this.canvas.style.height = this.canvasHeight + 'px';
+  // Canvas DOM-Größe (bereits durch cssText auf 100% gesetzt)
+  this.canvas.style.width = this.canvasWidth + 'px';
+  this.canvas.style.height = this.canvasHeight + 'px';
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const hdRatio = dpr * this.settings.qualityMultiplier;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const hdRatio = dpr * this.settings.qualityMultiplier;
 
-      this.canvas.width = this.canvasWidth * hdRatio;
-      this.canvas.height = this.canvasHeight * hdRatio;
+  // Canvas interne Auflösung (HD)
+  this.canvas.width = this.canvasWidth * hdRatio;
+  this.canvas.height = this.canvasHeight * hdRatio;
 
-      this.ctx = this.canvas.getContext('2d', { 
-        alpha: true,
-        desynchronized: true,
-        willReadFrequently: false
-      });
+  this.ctx = this.canvas.getContext('2d', { 
+    alpha: true,
+    desynchronized: true,
+    willReadFrequently: false
+  });
 
-      this.ctx.scale(hdRatio, hdRatio);
-      this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
-    }
+  this.ctx.scale(hdRatio, hdRatio);
+  this.ctx.imageSmoothingEnabled = true;
+  this.ctx.imageSmoothingQuality = this.isMobile ? 'medium' : 'high';
+  
+  console.log(`✅ Canvas: ${this.canvasWidth}x${this.canvasHeight} (${this.canvas.width}x${this.canvas.height} internal)`);
+}
 
-    scanTools() {
-      const cardElements = this.gridElement.querySelectorAll('.card-square');
-      this.cards = [];
-
-      cardElements.forEach((el, index) => {
-        const rect = el.getBoundingClientRect();
-        const gridRect = this.gridElement.getBoundingClientRect();
-        const category = el.getAttribute('data-category') || 'other';
-
-        this.cards.push({
-          element: el,
-          category: category,
-          x: rect.left - gridRect.left + rect.width / 2,
-          y: rect.top - gridRect.top + rect.height / 2,
-          width: rect.width,
-          height: rect.height,
-          index: index,
-          cluster: null,
-          degree: 0
-        });
-      });
-    }
 
     setupInputDetection() {
       const isTouchDevice = 'ontouchstart' in window;
