@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V10.0 - SIMPLE VERSION
-   - 180° Flip ohne Modal
+   FLIP CARD SYSTEM V10.0 - WITH COLOR FLOW INTEGRATION
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -119,6 +118,25 @@ function initializeFlipCard(card) {
   console.log('✅ Card initialized:', tool.title);
 }
 
+// ═══════════════════════════════════════════════════════════
+// COLOR FLOW INTEGRATION
+// ══════════════════════════════════════════════════════════
+
+function toggleColorFlow(paused) {
+  // Prüfe ob Color Flow System existiert
+  if (window.pauseColorFlow && typeof window.pauseColorFlow === 'function') {
+    window.pauseColorFlow(paused);
+    console.log(paused ? '⏸️ Color Flow paused' : '▶️ Color Flow resumed');
+  }
+  
+  // Alternative: Opacity reduzieren
+  const canvas = document.querySelector('.connection-canvas, #connection-canvas, #grid-network-canvas');
+  if (canvas) {
+    canvas.style.opacity = paused ? '0.15' : '1';
+    canvas.style.transition = 'opacity 0.4s ease';
+  }
+}
+
 // Handle card click (toggle flip)
 function handleCardClick(e) {
   // Ignore clicks on "Tool öffnen" link
@@ -140,6 +158,11 @@ function handleCardClick(e) {
 
   // Toggle flip
   card.classList.toggle('is-flipped');
+  
+  // Pause/Resume Color Flow
+  const anyFlipped = document.querySelector('.card-square.is-flipped');
+  toggleColorFlow(!!anyFlipped);
+  
   console.log('🔄 Card flipped:', card.dataset.toolName);
 }
 
@@ -168,11 +191,14 @@ function initFlipSystem() {
   console.log('✅ Flip system initialized!');
 }
 
-// ESC closes flipped cards
+// ESC closes flipped cards + resumes Color Flow
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    document.querySelectorAll('.card-square.is-flipped')
-      .forEach(card => card.classList.remove('is-flipped'));
+    const flippedCards = document.querySelectorAll('.card-square.is-flipped');
+    if (flippedCards.length > 0) {
+      flippedCards.forEach(card => card.classList.remove('is-flipped'));
+      toggleColorFlow(false); // Resume Color Flow
+    }
   }
 });
 
