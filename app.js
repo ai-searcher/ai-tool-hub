@@ -937,13 +937,14 @@ renderCard(tool) {
       touchend: touchEndHandler
     };
 
-    const passiveOption = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
+    // Use passive for touch events only. Keydown must NOT be passive so preventDefault works.
+    const passiveTouchOpt = CONFIG.ui.usePassiveEvents ? { passive: true } : false;
 
     grid.addEventListener('click', clickHandler, false);
-    grid.addEventListener('keydown', keyHandler, passiveOption);
-    grid.addEventListener('touchstart', touchStartHandler, { passive: true });
-    grid.addEventListener('touchend', touchEndHandler, passiveOption);
-
+    grid.addEventListener('keydown', keyHandler, false); // <- explicitly non-passive
+    grid.addEventListener('touchstart', touchStartHandler, passiveTouchOpt);
+    grid.addEventListener('touchend', touchEndHandler, passiveTouchOpt);
+    
     console.log('✅ Card handlers attached with flip support');
   }
 };
