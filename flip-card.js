@@ -1,9 +1,8 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
-   - keeps FRONT markup (badge/title/marquee) as-is (from style.css)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0 MINIMAL)
+   - keeps FRONT markup (badge/title/marquee) as-is
    - iOS-safe 3D rotateY flip
-   - disables front overlay-link click stealing
-   - one card open at a time + tap outside to close
+   - MINIMAL back content
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -18,12 +17,6 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function clamp(n, min, max) {
-  n = Number(n);
-  if (Number.isNaN(n)) return min;
-  return Math.min(max, Math.max(min, n));
-}
-
 function getCategoryName(cat) {
   const names = {
     text: 'Text',
@@ -31,7 +24,7 @@ function getCategoryName(cat) {
     code: 'Code',
     audio: 'Audio',
     video: 'Video',
-    data: 'Daten',
+     'Daten',
     other: 'Sonstiges'
   };
   return names[cat] || names.other;
@@ -52,29 +45,8 @@ function closeAllFlips(exceptCard = null) {
   });
 }
 
-/* -------------------- back face markup -------------------- */
-function buildRatingMeter(rating) {
-  // rating: 0..5 => percent 0..100
-  const r = clamp(rating || 0, 0, 5);
-  const percent = Math.round((r / 5) * 100);
-  const label = `${r.toFixed(1)} / 5.0`;
-  return `
-    <div class="qc-rating" aria-label="Bewertung ${escapeHtml(label)}">
-      <div class="qc-rating-top">
-        <span class="qc-rating-label">Rating</span>
-        <span class="qc-rating-value">${escapeHtml(r.toFixed(1))}</span>
-      </div>
-      <div class="qc-rating-meter" role="progressbar"
-           aria-valuemin="0" aria-valuemax="5" aria-valuenow="${escapeHtml(r.toFixed(1))}">
-        <div class="qc-rating-fill" style="width:${percent}%"></div>
-        <div class="qc-rating-glow" style="width:${percent}%"></div>
-      </div>
-      <div class="qc-rating-hint">${escapeHtml(label)}</div>
-    </div>
-  `;
-}
-
-function buildBackContent(tool) {
+/* -------------------- MINIMAL back face markup -------------------- */
+function createBackFace(tool) {
   const catName = getCategoryName(tool.category);
   const rating = tool.rating ? `${tool.rating.toFixed(1)}/5` : '—';
   const link = tool.link ? String(tool.link) : '#';
@@ -112,7 +84,6 @@ function buildBackContent(tool) {
   `;
 }
 
-
 /* -------------------- prepare card -------------------- */
 function prepareCard(card) {
   if (!card || card.dataset.flipInitialized === 'true') return;
@@ -123,8 +94,6 @@ function prepareCard(card) {
   const tool = getToolById(toolId);
   if (!tool) return;
 
-  // IMPORTANT:
-  // - Keep the current FRONT markup exactly as produced by app.js (style.css owns positions)
   const frontHtml = card.innerHTML;
 
   card.innerHTML = `
@@ -134,8 +103,6 @@ function prepareCard(card) {
     ${createBackFace(tool)}
   `;
 
-  // Stop front overlay link from hijacking taps/clicks
-  // (style.css has .card-overlay-link pointer-events: auto)
   const overlay = card.querySelector('.card-face-front .card-overlay-link');
   if (overlay) {
     overlay.setAttribute('aria-hidden', 'true');
@@ -181,11 +148,9 @@ function onGridPointerUp(e) {
   const card = e.target.closest('.card-square');
   if (!card) return;
 
-  // If user tapped a real CTA inside back, allow it (don't toggle)
-  if (e.target.closest('.qc-btn-primary')) return;
+  if (e.target.closest('.qc-btn-main')) return;
 
-  // Close buttons / close actions
-  if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
+  if (e.target.closest('.qc-close')) {
     e.preventDefault();
     e.stopPropagation();
     card.classList.remove('is-flipped');
@@ -193,11 +158,8 @@ function onGridPointerUp(e) {
     return;
   }
 
-  // If user tapped interactive elements (links/buttons) in back, do not flip
-  // (except our close handlers handled above)
   if (card.classList.contains('is-flipped') && isInteractiveTarget(e.target)) return;
 
-  // Otherwise toggle flip
   e.preventDefault();
   e.stopPropagation();
   toggleFlip(card);
@@ -218,7 +180,6 @@ function onGridKeyDown(e) {
 }
 
 function onDocumentPointerUp(e) {
-  // Tap outside closes any open card
   const inCard = e.target.closest('.card-square');
   if (!inCard) closeAllFlips();
 }
@@ -231,10 +192,8 @@ function initFlip() {
     return;
   }
 
-  // Prepare all current cards
   grid.querySelectorAll('.card-square').forEach(prepareCard);
 
-  // Remove old handlers if exist
   if (grid._qcFlipBound) {
     grid.removeEventListener('pointerup', grid._qcFlipPointerUp, true);
     grid.removeEventListener('keydown', grid._qcFlipKeyDown, true);
@@ -242,7 +201,6 @@ function initFlip() {
     grid._qcFlipBound = false;
   }
 
-  // Bind in CAPTURE phase (robust against other listeners)
   grid._qcFlipPointerUp = onGridPointerUp;
   grid._qcFlipKeyDown = onGridKeyDown;
   grid._qcDocPointerUp = onDocumentPointerUp;
@@ -253,7 +211,6 @@ function initFlip() {
 
   grid._qcFlipBound = true;
 
-  // MutationObserver: if app.js re-renders cards, we re-prepare new nodes
   if (!grid._qcFlipObserver) {
     grid._qcFlipObserver = new MutationObserver(() => {
       grid.querySelectorAll('.card-square').forEach(prepareCard);
@@ -261,7 +218,7 @@ function initFlip() {
     grid._qcFlipObserver.observe(grid, { childList: true, subtree: true });
   }
 
-  console.log('✅ Flip-System ready (mobile-safe)');
+  console.log('✅ Flip-System ready (mobile-safe minimal)');
 }
 
 /* -------------------- start -------------------- */
