@@ -1,12 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V3.0 - PROFESSIONAL EDITION
-   - Saubere, lesbare Rückseite mit Kurzinfos
-   - Perfekte Flip-Animation
-   - iOS/Safari optimiert
-   - Professionelles Design
+   FLIP CARD SYSTEM V2.2 - MINIMAL EDITION
    ══════════════════════════════════════════════════════════ */
-
-/* ==================== BASE STRUCTURE ==================== */
 
 .card-square[data-qcflip="1"] {
   position: relative;
@@ -14,21 +8,21 @@
   
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
-  transform-origin: center center !important;
+  transform-origin: 50% 50% !important;
   
-  transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+  transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
   
-  perspective: 1500px;
-  -webkit-perspective: 1500px;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
 }
 
-/* Faces Base */
 .card-square[data-qcflip="1"] .qc-face {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  overflow: hidden;
   
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -37,56 +31,40 @@
   -webkit-transform-style: preserve-3d;
 }
 
-/* Front Face */
 .card-square[data-qcflip="1"] .qc-front {
   z-index: 2;
-  transform: rotateY(0deg) translateZ(1px);
-  -webkit-transform: rotateY(0deg) translateZ(1px);
+  transform: rotateY(0deg) translateZ(0.1px);
+  -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
-/* Back Face - PROFESSIONELLES DESIGN */
 .card-square[data-qcflip="1"] .qc-back {
   z-index: 1;
   transform: rotateY(180deg) translateZ(1px);
   -webkit-transform: rotateY(180deg) translateZ(1px);
   
-  /* Premium Gradient Background */
-  background: 
-    linear-gradient(135deg, 
-      rgba(15, 23, 42, 0.98) 0%, 
-      rgba(30, 41, 59, 0.98) 50%,
-      rgba(15, 23, 42, 0.98) 100%
-    );
-  
-  /* Subtle Glow Border */
+  background: linear-gradient(135deg, rgba(26, 30, 55, 0.98), rgba(12, 15, 32, 0.98));
   border: 2px solid rgba(0, 243, 255, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 243, 255, 0.15);
   
-  /* Premium Shadow */
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    0 20px 60px rgba(0, 0, 0, 0.7),
-    0 0 40px rgba(0, 243, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 
-/* ==================== FLIPPED STATE ==================== */
-
+/* FLIPPED STATE */
 .card-square[data-qcflip="1"].qc-flipped {
-  transform: rotateY(180deg) scale(1.05) !important;
-  -webkit-transform: rotateY(180deg) scale(1.05) !important;
-  z-index: 200 !important;
+  transform: rotateY(180deg) scale(1.06) !important;
+  -webkit-transform: rotateY(180deg) scale(1.06) !important;
+  z-index: 150 !important;
 }
 
-/* Hide Front when Flipped */
 .card-square[data-qcflip="1"].qc-flipped .qc-front {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
 
-/* Show Back when Flipped */
 .card-square[data-qcflip="1"].qc-flipped .qc-back {
   visibility: visible !important;
   opacity: 1 !important;
@@ -94,15 +72,12 @@
   z-index: 3 !important;
 }
 
-/* ==================== KRITISCHER FIX: ::before/::after ==================== */
-
+/* FIX: ::before entfernen wenn geflippt */
 .card-square[data-qcflip="1"].qc-flipped::before,
 .card-square[data-qcflip="1"].qc-flipped::after {
   content: none !important;
   display: none !important;
   opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
 }
 
 /* Dim other cards */
@@ -110,279 +85,113 @@
   opacity: 0.3 !important;
   filter: blur(2px) !important;
   pointer-events: none !important;
-  transition: opacity 300ms ease, filter 300ms ease !important;
 }
 
-/* ==================== BACK CONTENT LAYOUT ==================== */
+/* ==================== BACK CONTENT (MINIMAL) ==================== */
 
-.qc-back-inner {
-  position: relative;
+.qc-back-content {
   width: 100%;
-  height: 100%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  z-index: 10;
-  
-  /* Text Color */
+  text-align: center;
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Header mit Close Button */
-.qc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Tool Name */
-.qc-tool-name {
-  font-size: 1.15rem;
+.qc-back-title {
+  font-size: 1.2rem;
   font-weight: 800;
-  line-height: 1.3;
   color: #00F3FF;
-  margin: 0;
-  text-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
-  flex: 1;
+  margin: 0 0 16px 0;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
 }
 
-/* Close Button */
-.qc-close {
-  appearance: none;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1;
-  display: grid;
-  place-items: center;
-  transition: all 200ms ease;
-  flex-shrink: 0;
-}
-
-.qc-close:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: scale(1.08);
-}
-
-.qc-close:active {
-  transform: scale(0.95);
-}
-
-/* Content Area - KURZINFOS */
-.qc-content {
-  flex: 1;
+.qc-back-info {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  overflow-y: auto;
-  padding-right: 4px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-/* Custom Scrollbar */
-.qc-content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.qc-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 2px;
-}
-
-.qc-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 243, 255, 0.3);
-  border-radius: 2px;
-}
-
-.qc-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 243, 255, 0.5);
-}
-
-/* Info Sections */
-.qc-info-section {
+.qc-info-item {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 8px;
 }
 
-.qc-info-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(0, 243, 255, 0.8);
-  margin: 0;
-}
-
-.qc-info-value {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-}
-
-/* Tags/Keywords */
-.qc-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.qc-tag {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 6px 12px;
-  background: rgba(0, 243, 255, 0.12);
-  border: 1px solid rgba(0, 243, 255, 0.25);
-  border-radius: 20px;
-  color: rgba(0, 243, 255, 0.95);
-  white-space: nowrap;
-  transition: all 200ms ease;
-}
-
-.qc-tag:hover {
-  background: rgba(0, 243, 255, 0.2);
-  border-color: rgba(0, 243, 255, 0.4);
-  transform: translateY(-1px);
-}
-
-/* Rating Display */
-.qc-rating {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-}
-
-.qc-rating-stars {
-  display: flex;
-  gap: 3px;
+.qc-info-icon {
   font-size: 1rem;
 }
 
-.qc-rating-value {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #FFB800;
-  margin-left: auto;
-}
-
-/* Action Buttons */
-.qc-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.qc-btn {
-  appearance: none;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  transition: all 200ms ease;
+.qc-back-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-}
-
-.qc-btn-primary {
-  background: linear-gradient(135deg, #00F3FF 0%, #7C4DFF 100%);
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #00F3FF, #7C4DFF);
   color: #0A0E27;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 200ms ease;
+}
+
+.qc-back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.qc-back-btn:active {
+  transform: scale(0.95);
+}
+
+/* Close X */
+.qc-close-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 4px 12px rgba(0, 243, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 200ms ease;
+  z-index: 10;
 }
 
-.qc-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 6px 20px rgba(0, 243, 255, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+.qc-close-x:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
-.qc-btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(0, 243, 255, 0.95);
-  border: 1px solid rgba(0, 243, 255, 0.25);
-}
-
-.qc-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(0, 243, 255, 0.4);
-  transform: translateY(-2px);
-}
-
-.qc-btn:active {
-  transform: scale(0.97);
-}
-
-/* ==================== MOBILE RESPONSIVE ==================== */
-
+/* Mobile */
 @media (max-width: 767px) {
   .card-square[data-qcflip="1"].qc-flipped {
-    transform: rotateY(180deg) scale(1.03) !important;
-    -webkit-transform: rotateY(180deg) scale(1.03) !important;
+    transform: rotateY(180deg) scale(1.04) !important;
+    -webkit-transform: rotateY(180deg) scale(1.04) !important;
   }
 
-  .qc-back-inner {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  .qc-tool-name {
+  .qc-back-title {
     font-size: 1rem;
   }
 
-  .qc-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .qc-close {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
+  .qc-info-item {
+    font-size: 0.75rem;
   }
 }
-
-/* ==================== ACCESSIBILITY ==================== */
 
 @media (prefers-reduced-motion: reduce) {
   .card-square[data-qcflip="1"] {
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Focus States */
-.qc-close:focus-visible,
-.qc-btn:focus-visible {
-  outline: 2px solid rgba(0, 243, 255, 0.6);
-  outline-offset: 2px;
 }
