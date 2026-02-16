@@ -1,8 +1,13 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.1)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
+   - keeps FRONT markup (badge/title/marquee) as-is (from style.css)
+   - iOS-safe 3D rotateY flip
+   - disables front overlay-link click stealing
+   - one card open at a time + tap outside to close
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
+
 console.log('🚀 flip-card.js loading (mobile-safe)...');
 
 /* -------------------- helpers -------------------- */
@@ -26,7 +31,7 @@ function getCategoryName(cat) {
     code: 'Code',
     audio: 'Audio',
     video: 'Video',
-     'Daten',
+    data: 'Daten',
     other: 'Sonstiges'
   };
   return names[cat] || names.other;
@@ -34,9 +39,7 @@ function getCategoryName(cat) {
 
 function getToolById(toolId) {
   const id = String(toolId || '');
-  const tools = window.appState && Array.isArray(window.appState.tools) 
-    ? window.appState.tools 
-    : null;
+  const tools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : null;
   if (!tools) return null;
   return tools.find(t => String(t.id) === id) || null;
 }
@@ -45,277 +48,246 @@ function closeAllFlips(exceptCard = null) {
   document.querySelectorAll('.card-square.is-flipped').forEach(c => {
     if (exceptCard && c === exceptCard) return;
     c.classList.remove('is-flipped');
-    c.classList.remove('qc-details-open');
     c.setAttribute('aria-expanded', 'false');
   });
 }
 
-function getPriceLabel(tool) {
-  if (typeof tool.is_free === 'boolean') 
-    return tool.is_free ? 'Kostenlos' : 'Paid';
-  if (tool.price != null && String(tool.price).trim() !== '') 
-    return String(tool.price);
-  
-  const badges = Array.isArray(tool.badges) ? tool.badges : [];
-  const joined = badges.map(b => String(b).toLowerCase());
-  if (joined.some(x => x.includes('free') || x.includes('kostenlos'))) 
-    return 'Kostenlos';
-  
-  return 'Unbekannt';
-}
-
-function buildBackMarquee(tool) {
-  const tags = Array.isArray(tool.tags) 
-    ? tool.tags.filter(Boolean).slice(0, 4).map(String) 
-    : [];
-  
-  if (tags.length) return tags.join(' • ');
-  
-  const desc = tool.description ? String(tool.description) : '';
-  const clean = desc.replace(/\s+/g, ' ').trim();
-  return clean 
-    ? clean.slice(0, 44) + (clean.length > 44 ? '…' : '') 
-    : 'Mehr entdecken • Quantum Hub';
-}
-
 /* -------------------- back face markup -------------------- */
-function buildRatingPill(rating) {
+function buildRatingMeter(rating) {
+  // rating: 0..5 => percent 0..100
   const r = clamp(rating || 0, 0, 5);
+  const percent = Math.round((r / 5) * 100);
+  const label = `${r.toFixed(1)} / 5.0`;
   return `
-    <div class="qc-pill">
-      <div class="qc-pill-label">Rating</div>
-      <div class="qc-pill-value">${r.toFixed(1)} ★</div>
+    <div class="qc-rating" aria-label="Bewertung ${escapeHtml(label)}">
+      <div class="qc-rating-top">
+        <span class="qc-rating-label">Rating</span>
+        <span class="qc-rating-value">${escapeHtml(r.toFixed(1))}</span>
+      </div>
+      <div class="qc-rating-meter" role="progressbar"
+           aria-valuemin="0" aria-valuemax="5" aria-valuenow="${escapeHtml(r.toFixed(1))}">
+        <div class="qc-rating-fill" style="width:${percent}%"></div>
+        <div class="qc-rating-glow" style="width:${percent}%"></div>
+      </div>
+      <div class="qc-rating-hint">${escapeHtml(label)}</div>
     </div>
   `;
 }
 
-function buildPricePill(priceLabel) {
-  return `
-    <div class="qc-pill">
-      <div class="qc-pill-label">Preis</div>
-      <div class="qc-pill-value">${escapeHtml(priceLabel)}</div>
-    </div>
-  `;
-}
-
-function buildBackFace(tool) {
-  if (!tool) return '';
-
+function createBackFace(tool) {
   const catName = getCategoryName(tool.category);
-  const priceLabel = getPriceLabel(tool);
-  const rating = clamp(tool.rating || 0, 0, 5);
+  const provider = tool.provider ? String(tool.provider) : '';
   const desc = tool.description ? String(tool.description) : '';
-  const provider = tool.provider ? escapeHtml(String(tool.provider)) : '';
+  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 6) : [];
+  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 2) : [];
+
   const link = tool.link ? String(tool.link) : '#';
-
-  const tags = Array.isArray(tool.tags) 
-    ? tool.tags.filter(Boolean).slice(0, 6).map(String) 
-    : [];
-
-  const marqueeText = buildBackMarquee(tool);
+  const safeLink = escapeHtml(link);
 
   return `
-    <div class="card-face card-face-back" data-nosnippet>
-      
-      <!-- Close Button -->
-      <button class="qc-close" data-qc-action="close" aria-label="Schließen">×</button>
+    <div class="card-face card-face-back" role="group" aria-label="Tool Details">
+      <div class="qc-back-top">
+        <!-- Close -->
+        <button class="qc-close" type="button" aria-label="Schließen">×</button>
 
-      <!-- Top Pills -->
-      <div class="qc-top-pills">
-        ${buildRatingPill(rating)}
-        ${buildPricePill(priceLabel)}
-      </div>
-
-      <!-- Category Badge -->
-      <div class="qc-back-badges">
-        <span class="qc-back-category badge badge-${tool.category || 'other'}">
-          ${escapeHtml(catName)}
-        </span>
-      </div>
-
-      <!-- Center Content -->
-      <div class="qc-center">
-        
-        <!-- Title -->
-        <h3 class="qc-back-title">${escapeHtml(tool.title || 'Tool')}</h3>
-
-        <!-- Subtitle/Description -->
-        <p class="qc-back-sub">
-          ${escapeHtml(desc ? desc.replace(/\s+/g, ' ').trim() : 'Details & Bewertung im Quantum Hub')}
-        </p>
-
-        <!-- Main CTA -->
-        <a 
-          href="${escapeHtml(link)}" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          class="qc-hero-btn"
-        >
-          <span class="qc-hero-text">Jetzt öffnen</span>
-          <span class="qc-hero-chev">→</span>
-        </a>
-
-        <!-- Details Section (initially hidden) -->
-        <div class="qc-details">
-          
-          ${provider ? `<div class="qc-provider">Von <strong>${provider}</strong></div>` : ''}
-
-          ${tags.length > 0 ? `
-            <div class="qc-tags">
-              ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
-            </div>
-          ` : ''}
-
-          <!-- Neural Rating -->
-          <div class="qc-rating">
-            <div class="qc-rating-top">
-              <span class="qc-rating-label">AI Score</span>
-              <span class="qc-rating-value">${rating.toFixed(1)}</span>
-            </div>
-            <div class="qc-rating-meter">
-              <div class="qc-rating-fill" style="width: ${(rating / 5) * 100}%"></div>
-              <div class="qc-rating-glow" style="width: ${(rating / 5) * 100}%"></div>
-            </div>
-            <div class="qc-rating-hint">Basierend auf ${Math.floor(rating * 42)} Bewertungen</div>
-          </div>
-
-          <!-- Actions -->
-          <div class="qc-actions">
-            <a 
-              href="${escapeHtml(link)}" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="qc-btn qc-btn-primary"
-            >
-              Tool öffnen
-            </a>
-            <button 
-              class="qc-btn qc-btn-ghost" 
-              data-qc-action="share"
-            >
-              Teilen
-            </button>
-          </div>
-
+        <!-- Category badge (reuse style language close to front) -->
+        <div class="qc-back-badges">
+          <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
+            ${escapeHtml(catName)}
+          </span>
         </div>
-
       </div>
 
-      <!-- Bottom Marquee -->
-      <div class="qc-bottom-pill">${escapeHtml(marqueeText)}</div>
+      <div class="qc-back-body">
+        <!-- Title style aligned with front typography -->
+        <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
 
+        ${buildRatingMeter(tool.rating)}
+
+        ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
+
+        <p class="qc-desc">${escapeHtml(desc)}</p>
+
+        ${badges.length ? `
+          <div class="qc-badges">
+            ${badges.map(b => `<div class="qc-badge-item">${escapeHtml(b)}</div>`).join('')}
+          </div>
+        ` : ''}
+
+        ${tags.length ? `
+          <div class="qc-tags" aria-label="Tags">
+            ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="qc-actions">
+        <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
+          Tool öffnen
+        </a>
+        <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
+          Zurück
+        </button>
+      </div>
     </div>
   `;
 }
 
-/* -------------------- init & events -------------------- */
-function injectBackFaces() {
-  const cards = document.querySelectorAll('.card-square[data-tool-id]');
-  let injected = 0;
+/* -------------------- prepare card -------------------- */
+function prepareCard(card) {
+  if (!card || card.dataset.flipInitialized === 'true') return;
 
-  cards.forEach(card => {
-    if (card.querySelector('.card-face-back')) return;
+  const toolId = card.dataset.toolId;
+  if (!toolId) return;
 
-    const toolId = card.getAttribute('data-tool-id');
-    const tool = getToolById(toolId);
-    if (!tool) return;
+  const tool = getToolById(toolId);
+  if (!tool) return;
 
-    const backHtml = buildBackFace(tool);
-    if (!backHtml) return;
+  // IMPORTANT:
+  // - Keep the current FRONT markup exactly as produced by app.js (style.css owns positions)
+  const frontHtml = card.innerHTML;
 
-    card.insertAdjacentHTML('beforeend', backHtml);
-    card.setAttribute('data-flip-initialized', 'true');
-    injected++;
-  });
+  card.innerHTML = `
+    <div class="card-face card-face-front">
+      ${frontHtml}
+    </div>
+    ${createBackFace(tool)}
+  `;
 
-  console.log(`✅ Injected ${injected} back faces`);
+  // Stop front overlay link from hijacking taps/clicks
+  // (style.css has .card-overlay-link pointer-events: auto)
+  const overlay = card.querySelector('.card-face-front .card-overlay-link');
+  if (overlay) {
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.tabIndex = -1;
+    overlay.style.pointerEvents = 'none';
+  }
+
+  card.dataset.flipInitialized = 'true';
+  card.setAttribute('aria-expanded', 'false');
+  card.setAttribute('role', 'button');
+  card.tabIndex = 0;
 }
 
-function attachFlipListeners() {
-  document.addEventListener('click', e => {
-    const card = e.target.closest('.card-square[data-tool-id]');
-
-    // Close button
-    if (e.target.closest('[data-qc-action="close"]')) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (card) {
-        card.classList.remove('is-flipped');
-        card.classList.remove('qc-details-open');
-      }
-      return;
-    }
-
-    // Share button
-    if (e.target.closest('[data-qc-action="share"]')) {
-      e.preventDefault();
-      e.stopPropagation();
-      const toolId = card?.getAttribute('data-tool-id');
-      const tool = getToolById(toolId);
-      if (tool && navigator.share) {
-        navigator.share({
-          title: tool.title,
-          text: tool.description,
-          url: tool.link
-        }).catch(() => {});
-      }
-      return;
-    }
-
-    // Main CTA (Mehr Infos) - toggles details
-    if (e.target.closest('.qc-hero-btn:not([href])')) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (card) {
-        card.classList.toggle('qc-details-open');
-      }
-      return;
-    }
-
-    // Card click to flip
-    if (card) {
-      const isLink = e.target.closest('a[href], button');
-      if (isLink) return;
-
-      const isFlipped = card.classList.contains('is-flipped');
-      
-      if (!isFlipped) {
-        closeAllFlips();
-        card.classList.add('is-flipped');
-        card.setAttribute('aria-expanded', 'true');
-      } else {
-        card.classList.remove('is-flipped');
-        card.classList.remove('qc-details-open');
-        card.setAttribute('aria-expanded', 'false');
-      }
-      
-      return;
-    }
-
-    // Click outside - close all
-    if (!e.target.closest('.card-square')) {
-      closeAllFlips();
-    }
-  });
+/* -------------------- interactions -------------------- */
+function isInteractiveTarget(el) {
+  if (!el) return false;
+  return Boolean(
+    el.closest('a, button, input, textarea, select, [role="button"]')
+  );
 }
 
-/* -------------------- boot -------------------- */
-function boot() {
-  injectBackFaces();
-  attachFlipListeners();
-  console.log('✅ Flip card system ready!');
+function openFlip(card) {
+  if (!card) return;
+  prepareCard(card);
+  closeAllFlips(card);
+  card.classList.add('is-flipped');
+  card.setAttribute('aria-expanded', 'true');
 }
 
+function toggleFlip(card) {
+  if (!card) return;
+  prepareCard(card);
+
+  const willOpen = !card.classList.contains('is-flipped');
+  if (willOpen) openFlip(card);
+  else {
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function onGridPointerUp(e) {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  // If user tapped a real CTA inside back, allow it (don't toggle)
+  if (e.target.closest('.qc-btn-primary')) return;
+
+  // Close buttons / close actions
+  if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
+    e.preventDefault();
+    e.stopPropagation();
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
+    return;
+  }
+
+  // If user tapped interactive elements (links/buttons) in back, do not flip
+  // (except our close handlers handled above)
+  if (card.classList.contains('is-flipped') && isInteractiveTarget(e.target)) return;
+
+  // Otherwise toggle flip
+  e.preventDefault();
+  e.stopPropagation();
+  toggleFlip(card);
+}
+
+function onGridKeyDown(e) {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleFlip(card);
+  }
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeAllFlips();
+  }
+}
+
+function onDocumentPointerUp(e) {
+  // Tap outside closes any open card
+  const inCard = e.target.closest('.card-square');
+  if (!inCard) closeAllFlips();
+}
+
+/* -------------------- init / re-init -------------------- */
+function initFlip() {
+  const grid = document.getElementById('tool-grid');
+  if (!grid) {
+    setTimeout(initFlip, 250);
+    return;
+  }
+
+  // Prepare all current cards
+  grid.querySelectorAll('.card-square').forEach(prepareCard);
+
+  // Remove old handlers if exist
+  if (grid._qcFlipBound) {
+    grid.removeEventListener('pointerup', grid._qcFlipPointerUp, true);
+    grid.removeEventListener('keydown', grid._qcFlipKeyDown, true);
+    document.removeEventListener('pointerup', grid._qcDocPointerUp, true);
+    grid._qcFlipBound = false;
+  }
+
+  // Bind in CAPTURE phase (robust against other listeners)
+  grid._qcFlipPointerUp = onGridPointerUp;
+  grid._qcFlipKeyDown = onGridKeyDown;
+  grid._qcDocPointerUp = onDocumentPointerUp;
+
+  grid.addEventListener('pointerup', onGridPointerUp, true);
+  grid.addEventListener('keydown', onGridKeyDown, true);
+  document.addEventListener('pointerup', onDocumentPointerUp, true);
+
+  grid._qcFlipBound = true;
+
+  // MutationObserver: if app.js re-renders cards, we re-prepare new nodes
+  if (!grid._qcFlipObserver) {
+    grid._qcFlipObserver = new MutationObserver(() => {
+      grid.querySelectorAll('.card-square').forEach(prepareCard);
+    });
+    grid._qcFlipObserver.observe(grid, { childList: true, subtree: true });
+  }
+
+  console.log('✅ Flip-System ready (mobile-safe)');
+}
+
+/* -------------------- start -------------------- */
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', boot);
+  document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFlip));
 } else {
-  boot();
+  requestAnimationFrame(initFlip);
 }
-
-// Re-inject on tool updates
-if (window.addEventListener) {
-  window.addEventListener('toolsrendered', () => {
-    console.log('🔄 Tools re-rendered, re-injecting back faces...');
-    setTimeout(injectBackFaces, 100);
-  });
-}
+window.addEventListener('quantumready', () => requestAnimationFrame(initFlip));
