@@ -11,7 +11,7 @@
   /* wichtig: absolute Faces brauchen einen Positioning-Context */
   position: relative;
 
-  /* fix: eigener Stacking Context -> verhindert dass Mask/Glow-Layer Content "überdeckt" */
+  /* verhindert, dass ::before Mask/Glow-Layer die Back-Children überdeckt */
   isolation: isolate;
 
   transform-style: preserve-3d !important;
@@ -45,7 +45,6 @@
 }
 
 .card-square[data-qcflip="1"] .qc-back {
-  position: relative; /* wichtig für z-index children */
   z-index: 1;
   transform: rotateY(180deg) translateZ(0.1px);
   -webkit-transform: rotateY(180deg) translateZ(0.1px);
@@ -60,9 +59,25 @@
     0 0 0 2px rgba(0, 243, 255, 0.12),
     0 18px 46px rgba(0, 0, 0, 0.55),
     0 0 60px rgba(0, 243, 255, 0.12);
+}
 
-  /* wichtig: Back hat eigene Textfarbe */
+/* Back muss seine eigene Textfarbe haben, sonst "leer" auf Dark-Glass */
+.card-square[data-qcflip="1"] .qc-back,
+.card-square[data-qcflip="1"] .qc-back * {
   color: rgba(255,255,255,0.92);
+  -webkit-text-fill-color: rgba(255,255,255,0.92);
+}
+
+/* Typo ungefähr wie Front (Front ist meist ~0.9–1.0rem für Titel, ~0.75–0.85rem für Sub) */
+.card-square[data-qcflip="1"] .qc-title {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.card-square[data-qcflip="1"] .qc-desc {
+  font-size: 0.82rem;
+  color: rgba(224,224,240,0.82);
 }
 
 .card-square[data-qcflip="1"].qc-flipped {
@@ -88,11 +103,14 @@
   pointer-events: auto !important;
 }
 
-/* FIX: style.css uses .card-square::before/::after as glowing border layers.
-   In some browsers these layers can sit above transformed back content -> looks "empty". */
+/* FIX: style.css uses .card-square::before as glowing border (mask).
+   In some browsers this layer can sit above transformed back content -> looks "empty".
+   VERSTÄRKT FÜR SAFARI/IOS: visibility + display + opacity */
 .card-square[data-qcflip="1"].qc-flipped::before,
 .card-square[data-qcflip="1"].qc-flipped::after {
   opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
   pointer-events: none !important;
 }
 
@@ -105,28 +123,15 @@
 
 /* -------------------- Back UI -------------------- */
 
-/* Back-Inhalt MUSS garantiert über allen Card-Layern liegen */
-.card-square[data-qcflip="1"] .qc-back-inner {
-  position: absolute;
-  inset: 0;
+.qc-back-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
   padding: 12px;
-
-  /* höher als ::before/::after Layer */
-  z-index: 20;
-
+  z-index: 3; /* FIX: ensure back text renders above card ::before border layer */
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  /* Safety: niemals "unsichtbar" */
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.card-square[data-qcflip="1"] .qc-back-inner,
-.card-square[data-qcflip="1"] .qc-back-inner * {
-  color: rgba(255,255,255,0.92);
-  -webkit-text-fill-color: rgba(255,255,255,0.92);
 }
 
 .qc-x {
