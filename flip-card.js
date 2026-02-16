@@ -1,306 +1,282 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - REBUILD V2.1 (MOBILE-FIRST, iOS-SAFE)
-   - Front markup bleibt exakt wie app.js es liefert
-   - Back wird aus window.appState.tools gebaut
-   - Flip: stable 3D (iOS) + hard hide front when flipped
-   - One open at a time, tap outside closes
-   - "Mehr Infos" toggles Details panel on back (qc-details-open)
+   FLIP CARD SYSTEM V3.0 - PROFESSIONAL EDITION
+   - Saubere Kurzinfos auf Rückseite
+   - Perfekte Performance
+   - iOS/Safari optimiert
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js (V2.1) loading...');
+console.log('🚀 flip-card.js V3.0 loading...');
 
-const QC = {
+const FlipCard = {
   gridId: 'tool-grid',
-  cardSel: '.card-square',
+  cardSelector: '.card-square',
   initAttr: 'data-qcflip',
-  openClass: 'qc-flipped',
-  detailsOpenClass: 'qc-details-open'
+  flippedClass: 'qc-flipped',
+  
+  init() {
+    console.log('⚡ FlipCard.init()');
+    
+    // Warte auf DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.setup());
+    } else {
+      this.setup();
+    }
+  },
+  
+  setup() {
+    const grid = document.getElementById(this.gridId);
+    if (!grid) {
+      console.warn('⚠️ Grid nicht gefunden:', this.gridId);
+      return;
+    }
+    
+    console.log('✅ Grid gefunden, initialisiere Cards...');
+    
+    // Alle Cards finden
+    const cards = grid.querySelectorAll(this.cardSelector);
+    console.log(`📦 ${cards.length} Cards gefunden`);
+    
+    cards.forEach(card => this.initCard(card));
+    
+    // Click outside to close
+    document.addEventListener('click', (e) => this.handleOutsideClick(e));
+    
+    console.log('✅ FlipCard Setup komplett');
+  },
+  
+  initCard(card) {
+    // Bereits initialisiert?
+    if (card.getAttribute(this.initAttr) === '1') return;
+    
+    const toolId = card.dataset.toolId || card.dataset.id;
+    if (!toolId) {
+      console.warn('⚠️ Card ohne ID:', card);
+      return;
+    }
+    
+    // Markiere als initialisiert
+    card.setAttribute(this.initAttr, '1');
+    
+    // Tool-Daten holen
+    const tool = this.getToolById(toolId);
+    if (!tool) {
+      console.warn('⚠️ Tool nicht gefunden:', toolId);
+      return;
+    }
+    
+    // Erstelle Faces
+    this.createFaces(card, tool);
+    
+    console.log('✅ Card initialisiert:', tool.name);
+  },
+  
+  createFaces(card, tool) {
+    // Speichere original Content
+    const originalContent = card.innerHTML;
+    
+    // Erstelle Face-Struktur
+    card.innerHTML = `
+      <div class="qc-face qc-front">
+        ${originalContent}
+      </div>
+      <div class="qc-face qc-back">
+        ${this.buildBackContent(tool)}
+      </div>
+    `;
+    
+    // Event Listeners
+    const backFace = card.querySelector('.qc-back');
+    const closeBtn = backFace.querySelector('.qc-close');
+    
+    // Click auf Card öffnet
+    card.addEventListener('click', (e) => {
+      // Nur wenn NICHT bereits geflippt
+      if (!card.classList.contains(this.flippedClass)) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.flipCard(card);
+      }
+    });
+    
+    // Close Button
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.closeCard(card);
+      });
+    }
+    
+    // Verhindere dass Clicks auf Back die Card schließen
+    backFace.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  },
+  
+  buildBackContent(tool) {
+    const desc = this.escapeHtml(tool.description || 'Keine Beschreibung verfügbar');
+    const category = this.getCategoryName(tool.category);
+    const price = this.getPriceLabel(tool);
+    const rating = tool.rating || 0;
+    const tags = Array.isArray(tool.tags) ? tool.tags : [];
+    const badges = Array.isArray(tool.badges) ? tool.badges : [];
+    const url = this.escapeHtml(tool.url || '#');
+    
+    // Keywords aus Badges + Tags kombinieren
+    const keywords = [...new Set([...badges, ...tags])].slice(0, 6);
+    
+    return `
+      <div class="qc-back-inner">
+        
+        <!-- Header -->
+        <div class="qc-header">
+          <h3 class="qc-tool-name">${this.escapeHtml(tool.name)}</h3>
+          <button class="qc-close" aria-label="Schließen">×</button>
+        </div>
+        
+        <!-- Content -->
+        <div class="qc-content">
+          
+          <!-- Kategorie -->
+          <div class="qc-info-section">
+            <p class="qc-info-label">Kategorie</p>
+            <p class="qc-info-value">${category}</p>
+          </div>
+          
+          <!-- Beschreibung -->
+          <div class="qc-info-section">
+            <p class="qc-info-label">Beschreibung</p>
+            <p class="qc-info-value">${desc}</p>
+          </div>
+          
+          <!-- Preis -->
+          <div class="qc-info-section">
+            <p class="qc-info-label">Preis</p>
+            <p class="qc-info-value">${price}</p>
+          </div>
+          
+          ${rating > 0 ? `
+          <!-- Rating -->
+          <div class="qc-info-section">
+            <p class="qc-info-label">Bewertung</p>
+            <div class="qc-rating">
+              <div class="qc-rating-stars">${this.buildStars(rating)}</div>
+              <span class="qc-rating-value">${rating.toFixed(1)}/5</span>
+            </div>
+          </div>
+          ` : ''}
+          
+          ${keywords.length > 0 ? `
+          <!-- Keywords -->
+          <div class="qc-info-section">
+            <p class="qc-info-label">Keywords</p>
+            <div class="qc-tags">
+              ${keywords.map(kw => `<span class="qc-tag">${this.escapeHtml(kw)}</span>`).join('')}
+            </div>
+          </div>
+          ` : ''}
+          
+        </div>
+        
+        <!-- Actions -->
+        <div class="qc-actions">
+          <a href="${url}" target="_blank" rel="noopener noreferrer" class="qc-btn qc-btn-primary">
+            🔗 Öffnen
+          </a>
+          <button class="qc-btn qc-btn-secondary qc-close">
+            ← Zurück
+          </button>
+        </div>
+        
+      </div>
+    `;
+  },
+  
+  buildStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+    
+    let html = '';
+    html += '★'.repeat(fullStars);
+    if (hasHalf) html += '⯨';
+    html += '☆'.repeat(emptyStars);
+    
+    return html;
+  },
+  
+  flipCard(card) {
+    // Schließe alle anderen
+    this.closeAllCards();
+    
+    // Öffne diese Card
+    card.classList.add(this.flippedClass);
+    card.setAttribute('aria-expanded', 'true');
+    
+    console.log('🔄 Card geflippt');
+  },
+  
+  closeCard(card) {
+    card.classList.remove(this.flippedClass);
+    card.setAttribute('aria-expanded', 'false');
+    
+    console.log('↩️ Card geschlossen');
+  },
+  
+  closeAllCards() {
+    document.querySelectorAll(`${this.cardSelector}.${this.flippedClass}`).forEach(c => {
+      this.closeCard(c);
+    });
+  },
+  
+  handleOutsideClick(e) {
+    const clickedCard = e.target.closest(this.cardSelector);
+    const clickedBack = e.target.closest('.qc-back');
+    
+    // Wenn außerhalb geklickt UND nicht auf eine Back-Seite
+    if (!clickedCard && !clickedBack) {
+      this.closeAllCards();
+    }
+  },
+  
+  // Helper Functions
+  getToolById(id) {
+    const tools = window.appState?.tools;
+    if (!Array.isArray(tools)) return null;
+    return tools.find(t => String(t.id) === String(id)) || null;
+  },
+  
+  getCategoryName(cat) {
+    const names = {
+      text: 'Text',
+      image: 'Bild',
+      code: 'Code',
+      audio: 'Audio',
+      video: 'Video',
+       'Daten',
+      other: 'Sonstiges'
+    };
+    return names[cat] || names.other;
+  },
+  
+  getPriceLabel(tool) {
+    if (typeof tool.is_free === 'boolean') {
+      return tool.is_free ? 'Kostenlos' : 'Kostenpflichtig';
+    }
+    if (tool.price) return String(tool.price);
+    return 'Unbekannt';
+  },
+  
+  escapeHtml(text) {
+    if (text == null) return '';
+    const div = document.createElement('div');
+    div.textContent = String(text);
+    return div.innerHTML;
+  }
 };
 
-/* -------------------- helpers -------------------- */
-function escapeHtml(text) {
-  if (text == null) return '';
-  const div = document.createElement('div');
-  div.textContent = String(text);
-  return div.innerHTML;
-}
-
-function clamp(n, min, max) {
-  n = Number(n);
-  if (Number.isNaN(n)) return min;
-  return Math.min(max, Math.max(min, n));
-}
-
-function getToolsArray() {
-  const tools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : null;
-  return tools || null;
-}
-
-function getToolById(toolId) {
-  const tools = getToolsArray();
-  if (!tools) return null;
-  const id = String(toolId || '');
-  return tools.find(t => String(t.id) === id) || null;
-}
-
-function getCategoryName(cat) {
-  const names = { text:'Text', image:'Bild', code:'Code', audio:'Audio', video:'Video', data:'Daten', other:'Sonstiges' };
-  return names[cat] || names.other;
-}
-
-function getPriceLabel(tool) {
-  if (typeof tool.is_free === 'boolean') return tool.is_free ? 'Kostenlos' : 'Paid';
-  if (tool.price != null && String(tool.price).trim() !== '') return String(tool.price);
-  const badges = Array.isArray(tool.badges) ? tool.badges : [];
-  const joined = badges.map(b => String(b).toLowerCase());
-  if (joined.some(x => x.includes('free') || x.includes('kostenlos'))) return 'Kostenlos';
-  return 'Unbekannt';
-}
-
-function closeAll(except = null) {
-  document.querySelectorAll(`${QC.cardSel}.${QC.openClass}`).forEach(c => {
-    if (except && c === except) return;
-    c.classList.remove(QC.openClass);
-    c.classList.remove(QC.detailsOpenClass);
-    c.setAttribute('aria-expanded', 'false');
-  });
-}
-
-/* -------------------- back markup -------------------- */
-function buildMeter(rating) {
-  const r = clamp(rating || 0, 0, 5);
-  const percent = Math.round((r / 5) * 100);
-  return `
-    <div class="qc-meter" aria-label="Bewertung ${escapeHtml(r.toFixed(1))} von 5">
-      <div class="qc-meter-row">
-        <span class="qc-meter-label">Bewertung</span>
-        <span class="qc-meter-value">${escapeHtml(r.toFixed(1))}</span>
-      </div>
-      <div class="qc-meter-bar" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="${escapeHtml(r.toFixed(1))}">
-        <div class="qc-meter-fill" style="width:${percent}%"></div>
-        <div class="qc-meter-glow" style="width:${percent}%"></div>
-      </div>
-    </div>
-  `;
-}
-
-function backHTML(tool) {
-  const catName = getCategoryName(tool.category);
-  const provider = tool.provider ? String(tool.provider) : '';
-  const desc = tool.description ? String(tool.description).replace(/\s+/g,' ').trim() : '';
-  const link = tool.link ? String(tool.link) : '#';
-  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 10) : [];
-  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 6) : [];
-  const price = getPriceLabel(tool);
-
-  return `
-    <div class="qc-back-inner" role="group" aria-label="Tool Details">
-      <button class="qc-x" type="button" data-qc="close" aria-label="Schließen">×</button>
-
-      <div class="qc-head">
-        <span class="qc-cat square-category-badge" data-cat="${escapeHtml(tool.category || 'other')}">${escapeHtml(catName)}</span>
-        <div class="qc-meta">
-          <span class="qc-meta-item">Preis: <strong>${escapeHtml(price)}</strong></span>
-          ${provider ? `<span class="qc-meta-item">Provider: <strong>${escapeHtml(provider)}</strong></span>` : ''}
-        </div>
-      </div>
-
-      <div class="qc-main">
-        <h3 class="qc-title square-title-large">${escapeHtml(tool.title)}</h3>
-        <p class="qc-desc">${escapeHtml(desc || 'Details & Bewertung im Quantum Hub')}</p>
-
-        <button class="qc-more" type="button" data-qc="more">Mehr Infos</button>
-
-        <div class="qc-details">
-          ${buildMeter(tool.rating)}
-
-          ${badges.length ? `
-            <div class="qc-block">
-              <div class="qc-block-title">Highlights</div>
-              <div class="qc-badges">
-                ${badges.map(b => `<div class="qc-badge">${escapeHtml(b)}</div>`).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-          ${tags.length ? `
-            <div class="qc-block">
-              <div class="qc-block-title">Tags</div>
-              <div class="qc-tags">
-                ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-          <div class="qc-actions">
-            <a class="qc-btn qc-primary" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer nofollow">Tool öffnen</a>
-            <button class="qc-btn qc-ghost" type="button" data-qc="back">Zurück</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/* -------------------- prepare card -------------------- */
-function prepareCard(card) {
-  if (!card) return false;
-  if (card.getAttribute(QC.initAttr) === '1') return true;
-
-  const toolId = card.dataset.toolId;
-  if (!toolId) return false;
-
-  const tool = getToolById(toolId);
-  if (!tool) {
-    setTimeout(() => {
-      if (card && card.getAttribute(QC.initAttr) !== '1') prepareCard(card);
-    }, 200);
-    return false;
-  }
-
-  const front = card.innerHTML;
-
-  card.innerHTML = `
-    <div class="qc-face qc-front">
-      ${front}
-    </div>
-    <div class="qc-face qc-back">
-      ${backHTML(tool)}
-    </div>
-  `;
-
-  // prevent overlay link hijacking taps (front)
-  const overlay = card.querySelector('.qc-front .card-overlay-link');
-  if (overlay) {
-    overlay.setAttribute('aria-hidden', 'true');
-    overlay.tabIndex = -1;
-    overlay.style.pointerEvents = 'none';
-  }
-
-  card.setAttribute(QC.initAttr, '1');
-  card.setAttribute('role', 'button');
-  card.setAttribute('aria-expanded', 'false');
-  card.tabIndex = 0;
-  return true;
-}
-
-/* -------------------- interactions -------------------- */
-function openCard(card) {
-  if (!card) return;
-  if (!prepareCard(card)) return;
-  closeAll(card);
-  card.classList.add(QC.openClass);
-  card.setAttribute('aria-expanded', 'true');
-}
-
-function toggleCard(card) {
-  if (!card) return;
-  if (!prepareCard(card)) return;
-
-  const willOpen = !card.classList.contains(QC.openClass);
-  if (willOpen) openCard(card);
-  else {
-    card.classList.remove(QC.openClass);
-    card.classList.remove(QC.detailsOpenClass);
-    card.setAttribute('aria-expanded', 'false');
-  }
-}
-
-function onGridPointerUp(e) {
-  const card = e.target.closest(QC.cardSel);
-  if (!card) return;
-
-  // back controls
-  const qc = e.target.closest('[data-qc]');
-  if (qc) {
-    const action = qc.getAttribute('data-qc');
-
-    if (action === 'close' || action === 'back') {
-      e.preventDefault(); e.stopPropagation();
-      card.classList.remove(QC.openClass);
-      card.classList.remove(QC.detailsOpenClass);
-      card.setAttribute('aria-expanded', 'false');
-      return;
-    }
-
-    if (action === 'more') {
-      e.preventDefault(); e.stopPropagation();
-      card.classList.toggle(QC.detailsOpenClass);
-      return;
-    }
-  }
-
-  // allow real link click
-  if (e.target.closest('a')) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-  toggleCard(card);
-}
-
-function onGridKeyDown(e) {
-  const card = e.target.closest(QC.cardSel);
-  if (!card) return;
-
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    toggleCard(card);
-  }
-  if (e.key === 'Escape') {
-    e.preventDefault();
-    closeAll();
-  }
-}
-
-function onDocPointerUp(e) {
-  if (!e.target.closest(QC.cardSel)) closeAll();
-}
-
-/* -------------------- init -------------------- */
-function initFlipV2() {
-  const grid = document.getElementById(QC.gridId);
-  if (!grid) {
-    setTimeout(initFlipV2, 250);
-    return;
-  }
-
-  // prepare current cards
-  grid.querySelectorAll(QC.cardSel).forEach(prepareCard);
-
-  // remove old handlers (idempotent)
-  if (grid._qcV2Bound) {
-    grid.removeEventListener('pointerup', grid._qcV2PointerUp, true);
-    grid.removeEventListener('keydown', grid._qcV2KeyDown, true);
-    document.removeEventListener('pointerup', grid._qcV2DocUp, true);
-    grid._qcV2Bound = false;
-  }
-
-  grid._qcV2PointerUp = onGridPointerUp;
-  grid._qcV2KeyDown = onGridKeyDown;
-  grid._qcV2DocUp = onDocPointerUp;
-
-  grid.addEventListener('pointerup', onGridPointerUp, true);
-  grid.addEventListener('keydown', onGridKeyDown, true);
-  document.addEventListener('pointerup', onDocPointerUp, true);
-
-  grid._qcV2Bound = true;
-
-  // observer for rerenders
-  if (!grid._qcV2Obs) {
-    grid._qcV2Obs = new MutationObserver(() => {
-      grid.querySelectorAll(QC.cardSel).forEach(prepareCard);
-    });
-    grid._qcV2Obs.observe(grid, { childList: true, subtree: true });
-  }
-
-  console.log('✅ flip-card V2.1 ready');
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFlipV2));
-} else {
-  requestAnimationFrame(initFlipV2);
-}
-window.addEventListener('quantumready', () => requestAnimationFrame(initFlipV2));
+// Auto-Init
+FlipCard.init();
