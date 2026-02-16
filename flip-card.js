@@ -1,18 +1,16 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM V2.2 - MINIMAL EDITION
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
+   - keeps FRONT markup (badge/title/marquee) as-is (from style.css)
+   - iOS-safe 3D rotateY flip
+   - disables front overlay-link click stealing
+   - one card open at a time + tap outside to close
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js V2.2 loading...');
+console.log('🚀 flip-card.js loading (mobile-safe)...');
 
-const QC = {
-  gridId: 'tool-grid',
-  cardSel: '.card-square',
-  initAttr: 'data-qcflip',
-  openClass: 'qc-flipped'
-};
-
+/* -------------------- helpers -------------------- */
 function escapeHtml(text) {
   if (text == null) return '';
   const div = document.createElement('div');
@@ -20,10 +18,10 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function getToolById(toolId) {
-  const tools = window.appState?.tools;
-  if (!Array.isArray(tools)) return null;
-  return tools.find(t => String(t.id) === String(toolId)) || null;
+function clamp(n, min, max) {
+  n = Number(n);
+  if (Number.isNaN(n)) return min;
+  return Math.min(max, Math.max(min, n));
 }
 
 function getCategoryName(cat) {
@@ -33,125 +31,263 @@ function getCategoryName(cat) {
     code: 'Code',
     audio: 'Audio',
     video: 'Video',
-     'Daten',
+    data: 'Daten',
     other: 'Sonstiges'
   };
   return names[cat] || names.other;
 }
 
-function getPriceLabel(tool) {
-  if (typeof tool.is_free === 'boolean') return tool.is_free ? 'Kostenlos' : 'Paid';
-  if (tool.price) return String(tool.price);
-  return 'Unbekannt';
+function getToolById(toolId) {
+  const id = String(toolId || '');
+  const tools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : null;
+  if (!tools) return null;
+  return tools.find(t => String(t.id) === id) || null;
 }
 
-function closeAll() {
-  document.querySelectorAll(`${QC.cardSel}.${QC.openClass}`).forEach(c => {
-    c.classList.remove(QC.openClass);
+function closeAllFlips(exceptCard = null) {
+  document.querySelectorAll('.card-square.is-flipped').forEach(c => {
+    if (exceptCard && c === exceptCard) return;
+    c.classList.remove('is-flipped');
+    c.setAttribute('aria-expanded', 'false');
   });
 }
 
-function buildBackContent(tool) {
-  const category = getCategoryName(tool.category);
-  const price = getPriceLabel(tool);
-  const rating = tool.rating ? `${tool.rating.toFixed(1)}/5 ⭐` : 'Keine Bewertung';
-  const url = escapeHtml(tool.url || '#');
-  
+/* -------------------- back face markup -------------------- */
+function buildRatingMeter(rating) {
+  // rating: 0..5 => percent 0..100
+  const r = clamp(rating || 0, 0, 5);
+  const percent = Math.round((r / 5) * 100);
+  const label = `${r.toFixed(1)} / 5.0`;
   return `
-    <button class="qc-close-x" aria-label="Schließen">×</button>
-    <div class="qc-back-content">
-      <h3 class="qc-back-title">${escapeHtml(tool.name)}</h3>
-      <div class="qc-back-info">
-        <div class="qc-info-item">
-          <span class="qc-info-icon">📁</span>
-          <span>${category}</span>
-        </div>
-        <div class="qc-info-item">
-          <span class="qc-info-icon">💰</span>
-          <span>${price}</span>
-        </div>
-        <div class="qc-info-item">
-          <span class="qc-info-icon">⭐</span>
-          <span>${rating}</span>
+    <div class="qc-rating" aria-label="Bewertung ${escapeHtml(label)}">
+      <div class="qc-rating-top">
+        <span class="qc-rating-label">Rating</span>
+        <span class="qc-rating-value">${escapeHtml(r.toFixed(1))}</span>
+      </div>
+      <div class="qc-rating-meter" role="progressbar"
+           aria-valuemin="0" aria-valuemax="5" aria-valuenow="${escapeHtml(r.toFixed(1))}">
+        <div class="qc-rating-fill" style="width:${percent}%"></div>
+        <div class="qc-rating-glow" style="width:${percent}%"></div>
+      </div>
+      <div class="qc-rating-hint">${escapeHtml(label)}</div>
+    </div>
+  `;
+}
+
+function createBackFace(tool) {
+  const catName = getCategoryName(tool.category);
+  const provider = tool.provider ? String(tool.provider) : '';
+  const desc = tool.description ? String(tool.description) : '';
+  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 6) : [];
+  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 2) : [];
+
+  const link = tool.link ? String(tool.link) : '#';
+  const safeLink = escapeHtml(link);
+
+  return `
+    <div class="card-face card-face-back" role="group" aria-label="Tool Details">
+      <div class="qc-back-top">
+        <!-- Close -->
+        <button class="qc-close" type="button" aria-label="Schließen">×</button>
+
+        <!-- Category badge (reuse style language close to front) -->
+        <div class="qc-back-badges">
+          <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
+            ${escapeHtml(catName)}
+          </span>
         </div>
       </div>
-      <a href="${url}" target="_blank" rel="noopener noreferrer" class="qc-back-btn">
-        Tool öffnen →
-      </a>
+
+      <div class="qc-back-body">
+        <!-- Title style aligned with front typography -->
+        <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
+
+        ${buildRatingMeter(tool.rating)}
+
+        ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
+
+        <p class="qc-desc">${escapeHtml(desc)}</p>
+
+        ${badges.length ? `
+          <div class="qc-badges">
+            ${badges.map(b => `<div class="qc-badge-item">${escapeHtml(b)}</div>`).join('')}
+          </div>
+        ` : ''}
+
+        ${tags.length ? `
+          <div class="qc-tags" aria-label="Tags">
+            ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="qc-actions">
+        <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
+          Tool öffnen
+        </a>
+        <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
+          Zurück
+        </button>
+      </div>
     </div>
   `;
 }
 
-function initCard(card) {
-  if (card.getAttribute(QC.initAttr) === '1') return;
-  
-  const toolId = card.dataset.toolId || card.dataset.id;
+/* -------------------- prepare card -------------------- */
+function prepareCard(card) {
+  if (!card || card.dataset.flipInitialized === 'true') return;
+
+  const toolId = card.dataset.toolId;
   if (!toolId) return;
-  
+
   const tool = getToolById(toolId);
   if (!tool) return;
-  
-  card.setAttribute(QC.initAttr, '1');
-  
-  const originalContent = card.innerHTML;
-  
+
+  // IMPORTANT:
+  // - Keep the current FRONT markup exactly as produced by app.js (style.css owns positions)
+  const frontHtml = card.innerHTML;
+
   card.innerHTML = `
-    <div class="qc-face qc-front">
-      ${originalContent}
+    <div class="card-face card-face-front">
+      ${frontHtml}
     </div>
-    <div class="qc-face qc-back">
-      ${buildBackContent(tool)}
-    </div>
+    ${createBackFace(tool)}
   `;
-  
-  const closeBtn = card.querySelector('.qc-close-x');
-  
-  card.addEventListener('click', (e) => {
-    if (!card.classList.contains(QC.openClass)) {
-      e.preventDefault();
-      e.stopPropagation();
-      closeAll();
-      card.classList.add(QC.openClass);
-    }
-  });
-  
-  if (closeBtn) {
-    closeBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      card.classList.remove(QC.openClass);
-    });
+
+  // Stop front overlay link from hijacking taps/clicks
+  // (style.css has .card-overlay-link pointer-events: auto)
+  const overlay = card.querySelector('.card-face-front .card-overlay-link');
+  if (overlay) {
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.tabIndex = -1;
+    overlay.style.pointerEvents = 'none';
   }
-  
-  card.querySelector('.qc-back').addEventListener('click', (e) => {
+
+  card.dataset.flipInitialized = 'true';
+  card.setAttribute('aria-expanded', 'false');
+  card.setAttribute('role', 'button');
+  card.tabIndex = 0;
+}
+
+/* -------------------- interactions -------------------- */
+function isInteractiveTarget(el) {
+  if (!el) return false;
+  return Boolean(
+    el.closest('a, button, input, textarea, select, [role="button"]')
+  );
+}
+
+function openFlip(card) {
+  if (!card) return;
+  prepareCard(card);
+  closeAllFlips(card);
+  card.classList.add('is-flipped');
+  card.setAttribute('aria-expanded', 'true');
+}
+
+function toggleFlip(card) {
+  if (!card) return;
+  prepareCard(card);
+
+  const willOpen = !card.classList.contains('is-flipped');
+  if (willOpen) openFlip(card);
+  else {
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function onGridPointerUp(e) {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  // If user tapped a real CTA inside back, allow it (don't toggle)
+  if (e.target.closest('.qc-btn-primary')) return;
+
+  // Close buttons / close actions
+  if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
+    e.preventDefault();
     e.stopPropagation();
-  });
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-expanded', 'false');
+    return;
+  }
+
+  // If user tapped interactive elements (links/buttons) in back, do not flip
+  // (except our close handlers handled above)
+  if (card.classList.contains('is-flipped') && isInteractiveTarget(e.target)) return;
+
+  // Otherwise toggle flip
+  e.preventDefault();
+  e.stopPropagation();
+  toggleFlip(card);
 }
 
-function init() {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
-  } else {
-    setup();
+function onGridKeyDown(e) {
+  const card = e.target.closest('.card-square');
+  if (!card) return;
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleFlip(card);
+  }
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    closeAllFlips();
   }
 }
 
-function setup() {
-  const grid = document.getElementById(QC.gridId);
-  if (!grid) return;
-  
-  const cards = grid.querySelectorAll(QC.cardSel);
-  cards.forEach(card => initCard(card));
-  
-  document.addEventListener('click', (e) => {
-    const clickedCard = e.target.closest(QC.cardSel);
-    const clickedBack = e.target.closest('.qc-back');
-    if (!clickedCard && !clickedBack) {
-      closeAll();
-    }
-  });
-  
-  console.log('✅ FlipCard ready:', cards.length, 'cards');
+function onDocumentPointerUp(e) {
+  // Tap outside closes any open card
+  const inCard = e.target.closest('.card-square');
+  if (!inCard) closeAllFlips();
 }
 
-init();
+/* -------------------- init / re-init -------------------- */
+function initFlip() {
+  const grid = document.getElementById('tool-grid');
+  if (!grid) {
+    setTimeout(initFlip, 250);
+    return;
+  }
+
+  // Prepare all current cards
+  grid.querySelectorAll('.card-square').forEach(prepareCard);
+
+  // Remove old handlers if exist
+  if (grid._qcFlipBound) {
+    grid.removeEventListener('pointerup', grid._qcFlipPointerUp, true);
+    grid.removeEventListener('keydown', grid._qcFlipKeyDown, true);
+    document.removeEventListener('pointerup', grid._qcDocPointerUp, true);
+    grid._qcFlipBound = false;
+  }
+
+  // Bind in CAPTURE phase (robust against other listeners)
+  grid._qcFlipPointerUp = onGridPointerUp;
+  grid._qcFlipKeyDown = onGridKeyDown;
+  grid._qcDocPointerUp = onDocumentPointerUp;
+
+  grid.addEventListener('pointerup', onGridPointerUp, true);
+  grid.addEventListener('keydown', onGridKeyDown, true);
+  document.addEventListener('pointerup', onDocumentPointerUp, true);
+
+  grid._qcFlipBound = true;
+
+  // MutationObserver: if app.js re-renders cards, we re-prepare new nodes
+  if (!grid._qcFlipObserver) {
+    grid._qcFlipObserver = new MutationObserver(() => {
+      grid.querySelectorAll('.card-square').forEach(prepareCard);
+    });
+    grid._qcFlipObserver.observe(grid, { childList: true, subtree: true });
+  }
+
+  console.log('✅ Flip-System ready (mobile-safe)');
+}
+
+/* -------------------- start -------------------- */
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initFlip));
+} else {
+  requestAnimationFrame(initFlip);
+}
+window.addEventListener('quantumready', () => requestAnimationFrame(initFlip));
