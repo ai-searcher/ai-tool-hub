@@ -1267,10 +1267,28 @@ body {
 /* Hover: entspannter / meditativer */
 .card-square:hover .context-marquee .marquee-track { animation-duration: 28s; }
 
-/* Accessibility: Pause bei Fokus */
-.card-square:focus-within .context-marquee .marquee-track,
+/* =========================================
+   QUANTUM AI HUB v1.0 | style.css
+   Zeile 770: Marquee-Pause - FIX: Nur bei Keyboard-Focus (nicht Klick)
+   ========================================= */
+
+/* Marquee läuft IMMER weiter (auch bei Klick) */
+/* Pausiert NUR bei Tastatur-Fokus (Accessibility) */
+.card-square:focus-within .context-marquee .marquee-track {
+  animation-play-state: paused !important;
+}
+
+/* card-armed (Klick-Highlight) pausiert NICHT mehr */
 .card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused;
+  animation-play-state: running !important;
+}
+
+/* Mobile: Klick pausiert nie */
+@media (max-width: 767px) {
+  .card-square.card-armed .context-marquee .marquee-track,
+  .card-square:active .context-marquee .marquee-track {
+    animation-play-state: running !important;
+  }
 }
 
 /* Reduced motion */
