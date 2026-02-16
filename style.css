@@ -2188,7 +2188,242 @@ a:focus-visible {
 }
 
 /* ==================== END SMART COLOR FLOW ==================== */
+/* =========================================
+   QUANTUM AI HUB v1.0 | style.css
+   Zeile ~950: TOOL DETAIL POPUP (flüssig wie Invoice Finder)
+   ========================================= */
 
+/* Detail Overlay (Vollbild-Modal) */
+.tool-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 14, 39, 0.95); /* Dein Dark-BG */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000; /* Über alles (Canvas + Cards) */
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.tool-detail-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.tool-detail-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 720px;
+  max-height: 92vh;
+  overflow-y: auto;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+.tool-detail-overlay.active .tool-detail-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Header (Titel + X) */
+.tool-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  z-index: 10;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.tool-detail-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tool-detail-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.tool-detail-close:hover {
+  background: rgba(255, 68, 102, 0.1);
+  color: var(--error);
+  transform: rotate(90deg);
+}
+
+/* Body */
+.tool-detail-body {
+  padding: 28px;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* Meta-Row (Kategorie, Rating, Preis) */
+.tool-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-detail-badge {
+  background: var(--primary-dim);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tool-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.tool-detail-rating i {
+  color: #ffd700;
+}
+
+/* Beschreibung */
+.tool-detail-description {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+/* Features */
+.tool-detail-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.tool-detail-feature {
+  background: rgba(255,255,255,0.05);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+/* Pros/Cons (wie in deiner Referenz) */
+.tool-detail-pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.tool-detail-pros,
+.tool-detail-cons {
+  padding: 20px;
+  border-radius: var(--radius-md);
+}
+
+.tool-detail-pros {
+  background: rgba(0, 255, 157, 0.05);
+  border: 1px solid rgba(0, 255, 157, 0.2);
+}
+
+.tool-detail-cons {
+  background: rgba(255, 68, 102, 0.05);
+  border: 1px solid rgba(255, 68, 102, 0.2);
+}
+
+.tool-detail-pros h4,
+.tool-detail-cons h4 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: var(--success);
+}
+
+.tool-detail-cons h4 {
+  color: var(--error);
+}
+
+/* Actions */
+.tool-detail-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.tool-detail-link {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary), #00D4E0);
+  color: var(--bg-dark);
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tool-detail-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px var(--primary-glow);
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .tool-detail-content {
+    max-height: 95vh;
+    border-radius: 0;
+    margin: 0;
+  }
+  
+  .tool-detail-header {
+    padding: 20px;
+  }
+  
+  .tool-detail-body {
+    padding: 20px;
+  }
+  
+  .tool-detail-pros-cons {
+    grid-template-columns: 1fr;
+  }
+}
 /* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
 
 /* Container: keine Höhe im Layout, Marken absolut platzieren,
