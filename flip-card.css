@@ -45,9 +45,9 @@
 }
 
 .card-square[data-qcflip="1"] .qc-back {
-  z-index: 1;
-  transform: rotateY(180deg) translateZ(0.1px);
-  -webkit-transform: rotateY(180deg) translateZ(0.1px);
+  z-index: 20 !important; /* STARK ERHÖHT: über alles, inkl. ::before */
+  transform: rotateY(180deg) translateZ(2px) !important; /* SAFARI-FIX: translateZ push */
+  -webkit-transform: rotateY(180deg) translateZ(2px) !important;
 
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
@@ -64,8 +64,8 @@
 /* Back muss seine eigene Textfarbe haben, sonst "leer" auf Dark-Glass */
 .card-square[data-qcflip="1"] .qc-back,
 .card-square[data-qcflip="1"] .qc-back * {
-  color: rgba(255,255,255,0.92);
-  -webkit-text-fill-color: rgba(255,255,255,0.92);
+  color: rgba(255,255,255,0.92) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
 }
 
 /* Typo ungefähr wie Front (Front ist meist ~0.9–1.0rem für Titel, ~0.75–0.85rem für Sub) */
@@ -80,6 +80,12 @@
   color: rgba(224,224,240,0.82);
 }
 
+/* SAFARI/IOS: Backface VISIBLE für die sichtbare Rückseite */
+.card-square[data-qcflip="1"] .qc-back {
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+}
+
 .card-square[data-qcflip="1"].qc-flipped {
   transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
@@ -88,7 +94,7 @@
 }
 
 .card-square[data-qcflip="1"].qc-flipped .qc-front { z-index: 1; }
-.card-square[data-qcflip="1"].qc-flipped .qc-back  { z-index: 2; }
+.card-square[data-qcflip="1"].qc-flipped .qc-back  { z-index: 30 !important; } /* NOCH HÖHER */
 
 /* HARD hide front when flipped (prevents bleed-through) */
 .card-square[data-qcflip="1"].qc-flipped .qc-front {
@@ -105,13 +111,14 @@
 
 /* FIX: style.css uses .card-square::before as glowing border (mask).
    In some browsers this layer can sit above transformed back content -> looks "empty".
-   VERSTÄRKT FÜR SAFARI/IOS: visibility + display + opacity */
+   VERSTÄRKT FÜR SAFARI/IOS: visibility + display + opacity + !important */
 .card-square[data-qcflip="1"].qc-flipped::before,
 .card-square[data-qcflip="1"].qc-flipped::after {
   opacity: 0 !important;
   visibility: hidden !important;
   display: none !important;
   pointer-events: none !important;
+  z-index: -1 !important; /* ZURÜCK IN DEN HINTERGRUND */
 }
 
 .tool-grid-squares:has(.card-square.qc-flipped) .card-square:not(.qc-flipped) {
@@ -128,7 +135,7 @@
   width: 100%;
   height: 100%;
   padding: 12px;
-  z-index: 3; /* FIX: ensure back text renders above card ::before border layer */
+  z-index: 100 !important; /* ULTRA HOCH: über allen Layers */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -388,3 +395,4 @@
     transition-duration: 0.01ms !important;
   }
 }
+```D +
