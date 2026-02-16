@@ -861,7 +861,7 @@ attachCardHandlers() {
     grid.addEventListener('click', grid.clickHandler);
     grid.addEventListener('keydown', grid.keyHandler, { passive: false });
  }
-};
+}
 
 // =========================================
 // SEARCH FUNCTIONALITY
