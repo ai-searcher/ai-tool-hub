@@ -785,29 +785,51 @@ const ui = {
     }
   },
 
-  attachCardHandlers() {
-    const grid = this.elements.toolGrid || getElement('#tool-grid');
-    if (!grid) return;
+attachCardHandlers() {
+  const grid = this.elements.toolGrid || getElement('#tool-grid');
+  if (!grid) return;
 
-    if (grid._clickHandler) {
-      grid.removeEventListener('click', grid._clickHandler);
-      grid.removeEventListener('keydown', grid._keyHandler);
-    }
+  if (grid._clickHandler) {
+    grid.removeEventListener('click', grid._clickHandler);
+    grid.removeEventListener('keydown', grid._keyHandler);
+  }
 
-    grid._clickHandler = (e) => {
-      const overlay = e.target.closest('.card-overlay-link');
-      const card = e.target.closest('.card-square');
+  // ← NEU: Mobile Detection
+  const isMobile = window.innerWidth < 768;
 
-      if (overlay && card) {
-        e.preventDefault();
-        e.stopPropagation();
+  grid._clickHandler = (e) => {
+    const overlay = e.target.closest('.card-overlay-link');
+    const card = e.target.closest('.card-square');
 
-        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
-        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-        const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+    if (overlay && card) {
+      e.preventDefault();
+      e.stopPropagation();
 
-        analytics.trackToolClick(toolName);
+      const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
+      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+      const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
 
+      console.log('🎯 Card clicked:', { toolName, href, isMobile });
+
+      analytics.trackToolClick(toolName);
+
+      // ← NEU: Mobile = Direkter Link, Desktop = Modal
+      if (isMobile) {
+        console.log('📱 Mobile: Opening link directly');
+        if (href && href !== '#') {
+          // Visuelles Feedback vor Navigation
+          card.style.transform = 'scale(0.95)';
+          card.style.opacity = '0.7';
+          
+          setTimeout(() => {
+            window.location.href = href;
+          }, 150);
+        } else {
+          console.error('❌ No valid href found!');
+          alert('Link nicht verfügbar');
+        }
+      } else {
+        // Desktop: Modal öffnen
         if (typeof openToolModal === 'function') {
           try {
             let tool = null;
@@ -834,30 +856,33 @@ const ui = {
             }
           }
         } else {
-          card.classList.toggle('card-armed');
-          console.log(`Detail requested for: ${toolName}`, href);
-        }
-
-        return;
-      }
-    };
-
-    grid._keyHandler = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const card = e.target.closest('.card-square');
-        if (!card) return;
-        const overlay = card.querySelector('.card-overlay-link');
-        if (overlay) {
-          overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-          e.preventDefault();
+          // Fallback: Direkter Link
+          if (href) {
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
         }
       }
-    };
 
-    grid.addEventListener('click', grid._clickHandler);
-    grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-  }
-};
+      return;
+    }
+  };
+
+  grid._keyHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const card = e.target.closest('.card-square');
+      if (!card) return;
+      const overlay = card.querySelector('.card-overlay-link');
+      if (overlay) {
+        overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        e.preventDefault();
+      }
+    }
+  };
+
+  grid.addEventListener('click', grid._clickHandler);
+  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
+}
+
 
 // =========================================
 // SEARCH FUNCTIONALITY
