@@ -4,7 +4,7 @@
    - iOS-safe 3D rotateY flip
    - disables front overlay-link click stealing
    - one card open at a time + tap outside to close
-   - NEW: "Mehr Infos" toggles premium back details (no flip break)
+   - "Mehr Infos" toggles premium back details (no flip break)
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -57,7 +57,6 @@ function closeAllFlips(exceptCard = null) {
 function getPriceLabel(tool) {
   if (typeof tool.is_free === 'boolean') return tool.is_free ? 'Kostenlos' : 'Paid';
   if (tool.price != null && String(tool.price).trim() !== '') return String(tool.price);
-
   const badges = Array.isArray(tool.badges) ? tool.badges : [];
   const joined = badges.map(b => String(b).toLowerCase());
   if (joined.some(x => x.includes('free') || x.includes('kostenlos'))) return 'Kostenlos';
@@ -67,7 +66,6 @@ function getPriceLabel(tool) {
 function buildBackMarquee(tool) {
   const tags = Array.isArray(tool.tags) ? tool.tags.filter(Boolean).slice(0, 4).map(String) : [];
   if (tags.length) return tags.join(' • ');
-
   const desc = tool.description ? String(tool.description) : '';
   const clean = desc.replace(/\s+/g, ' ').trim();
   return clean ? clean.slice(0, 44) + (clean.length > 44 ? '…' : '') : 'Mehr entdecken • Quantum Hub';
@@ -156,6 +154,7 @@ function createBackFace(tool) {
 
         <div class="qc-details" aria-label="Detailbereich">
           ${buildRatingMeter(tool.rating)}
+
           ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
 
           ${badges.length ? `
@@ -190,6 +189,7 @@ function createBackFace(tool) {
 
 /* -------------------- prepare card -------------------- */
 function prepareCard(card) {
+  // true = ist/war vorbereitet, false = konnte nicht vorbereitet werden
   if (!card) return false;
   if (card.dataset.flipInitialized === 'true') return true;
 
@@ -198,6 +198,7 @@ function prepareCard(card) {
 
   const tool = getToolById(toolId);
 
+  // Wenn Tools noch nicht geladen sind: kurz retry, aber NICHT flippen
   if (!tool) {
     setTimeout(() => {
       if (card && card.dataset.flipInitialized !== 'true') prepareCard(card);
@@ -221,7 +222,7 @@ function prepareCard(card) {
     overlay.style.pointerEvents = 'none';
   }
 
-  card.dataset.flipInitialized = 'true';
+  card.dataset.flipInitialized = 'true';  // -> data-flip-initialized="true" (wichtig fürs CSS)
   card.setAttribute('aria-expanded', 'false');
   card.setAttribute('role', 'button');
   card.tabIndex = 0;
@@ -237,8 +238,7 @@ function isInteractiveTarget(el) {
 
 function openFlip(card) {
   if (!card) return;
-  if (!prepareCard(card)) return;
-
+  if (!prepareCard(card)) return; // ✅ nur flippen wenn Back existiert
   closeAllFlips(card);
   card.classList.add('is-flipped');
   card.setAttribute('aria-expanded', 'true');
@@ -246,7 +246,7 @@ function openFlip(card) {
 
 function toggleFlip(card) {
   if (!card) return;
-  if (!prepareCard(card)) return;
+  if (!prepareCard(card)) return; // ✅ nur flippen wenn Back existiert
 
   const willOpen = !card.classList.contains('is-flipped');
   if (willOpen) openFlip(card);
