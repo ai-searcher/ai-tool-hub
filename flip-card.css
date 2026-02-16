@@ -3,7 +3,6 @@
    - Front bleibt wie in style.css (Badge/Title/Marquee)
    - Back: Quantum UI + Detailansicht über "Mehr Infos"
    - iOS/Safari stable 3D rotateY (no mirrored bug)
-   - FIX: Back-Inhalt kann NICHT mehr "weggeclippt" werden auf kleinen Cards
    ══════════════════════════════════════════════════════════ */
 
 /* 3D container (do NOT change your visual card skin from style.css) */
@@ -17,6 +16,16 @@
   /* ✅ iOS/Safari: perspective as PROPERTY (not in transform) */
   perspective: 1200px;
   -webkit-perspective: 1200px;
+}
+
+/* ============================================================
+   CRITICAL FIX (style.css padding squeeze)
+   - style.css gibt .card-square padding (z.B. 18px)
+   - absolute Faces mit inset:0 werden dadurch "kleiner" => Back wirkt leer
+   - Lösung: sobald Flip initialisiert ist, padding auf 0 und Front-Face bekommt padding zurück
+   ============================================================ */
+.card-square[data-flip-initialized="true"] {
+  padding: 0 !important;
 }
 
 /* Faces */
@@ -42,6 +51,10 @@
   z-index: 2;
   transform: rotateY(0deg) translateZ(0.1px);
   -webkit-transform: rotateY(0deg) translateZ(0.1px);
+
+  /* padding zurückgeben (ersetzt style.css padding auf .card-square) */
+  padding: 18px;
+  box-sizing: border-box;
 }
 
 /* Back face: rotated */
@@ -52,7 +65,12 @@
 
   border-radius: inherit; /* ✅ exakt wie Front */
   overflow: hidden;
+  box-sizing: border-box;
 
+  /* Text sichtbar erzwingen */
+  color: rgba(255,255,255,0.92);
+
+  /* premium glass background */
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.08) 0%, transparent 45%),
@@ -66,9 +84,6 @@
 
   display: flex;
   flex-direction: column;
-
-  /* ✅ WICHTIG: kein großes padding, sonst wird content auf kleinen Cards weggeclippt */
-  padding: 0;
 }
 
 /* Flip state */
@@ -138,7 +153,7 @@
   }
 }
 
-/* Top pills */
+/* Top pills (kompakt) */
 .card-face-back .qc-top-pills {
   position: absolute;
   top: 12px;
@@ -152,7 +167,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  padding: 7px 10px;
+  padding: 6px 9px;            /* ✅ kleiner */
   border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.10);
@@ -160,14 +175,14 @@
   -webkit-backdrop-filter: blur(10px);
 }
 .card-face-back .qc-pill-label {
-  font-size: 0.70rem;
+  font-size: 0.66rem;          /* ✅ kleiner */
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(224,224,240,0.75);
 }
 .card-face-back .qc-pill-value {
-  font-size: 0.90rem;
+  font-size: 0.84rem;          /* ✅ kleiner */
   font-weight: 900;
   color: rgba(0,243,255,0.95);
   text-shadow: 0 0 14px rgba(0,243,255,0.16);
@@ -193,24 +208,19 @@
   text-transform: uppercase !important;
 }
 
-/* ✅ FIX: Center bekommt einen echten "Viewport" innerhalb der Card (immer sichtbar) */
+/* Center layout (RESPONSIVE, verhindert 0px-Höhe) */
 .card-face-back .qc-center {
-  position: absolute;
-  top: 56px;     /* Platz für Close + Pills */
-  bottom: 54px;  /* Platz für Bottom-Pill */
-  left: 12px;
-  right: 12px;
-
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
+  /* ✅ clamp: nie zu groß, nie zu klein */
+  padding: clamp(40px, 18%, 54px) 10px clamp(40px, 18%, 52px) 10px;
   gap: 10px;
 
-  overflow: auto;                 /* ✅ verhindert "leer" durch clipping */
-  -webkit-overflow-scrolling: touch;
-  padding: 6px 6px;               /* ✅ klein, passt auch auf mini-squares */
+  min-height: 0; /* wichtig für iOS flex overflow */
 }
 
 .card-face-back .qc-back-title {
@@ -220,14 +230,14 @@
 
 .card-face-back .qc-back-sub {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 0.76rem;          /* ✅ kleiner */
   line-height: 1.35;
   color: rgba(224,224,240,0.78);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  max-width: 96%;
+  max-width: 95%;
 }
 
 /* "Mehr Infos" Button */
@@ -235,13 +245,13 @@
   appearance: none;
   border: 0;
   cursor: pointer;
-  padding: 10px 14px;
+  padding: 9px 12px;           /* ✅ kleiner */
   border-radius: 14px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(0,243,255,0.20);
   color: rgba(255,255,255,0.92);
   font-weight: 900;
-  font-size: 0.82rem;
+  font-size: 0.78rem;          /* ✅ kleiner */
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -251,17 +261,14 @@
   transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
 }
 .card-face-back .qc-hero-btn:active { transform: scale(0.98); }
-.card-face-back .qc-hero-chev {
-  color: rgba(0,243,255,0.95);
-  font-weight: 1000;
-}
+.card-face-back .qc-hero-chev { color: rgba(0,243,255,0.95); font-weight: 1000; }
 .card-face-back .qc-hero-text { letter-spacing: 0.02em; }
 
-/* Details Panel */
+/* Details Panel (standard: zu) */
 .card-face-back .qc-details {
   width: 100%;
-  max-width: 100%;
-  margin-top: 8px;
+  max-width: 92%;
+  margin-top: 6px;
   display: none;
 }
 .card-square.qc-details-open .card-face-back .qc-details {
@@ -274,13 +281,13 @@
   left: 12px;
   right: 12px;
   bottom: 12px;
-  padding: 9px 12px;
+  padding: 8px 11px;           /* ✅ kleiner */
   border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.10);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  font-size: 0.72rem;
+  font-size: 0.70rem;          /* ✅ kleiner */
   line-height: 1.2;
   color: rgba(224,224,240,0.80);
   text-align: center;
@@ -295,7 +302,7 @@
 /* ---------- Neural rating (no ⭐) ---------- */
 .card-face-back .qc-rating {
   margin-top: 2px;
-  padding: 10px 10px 9px 10px;
+  padding: 9px 9px 8px 9px;    /* ✅ kleiner */
   border-radius: 14px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.08);
@@ -311,14 +318,14 @@
 }
 
 .card-face-back .qc-rating-label {
-  font-size: 0.70rem;
+  font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(160,160,176,0.9);
 }
 
 .card-face-back .qc-rating-value {
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 900;
   color: rgba(0, 243, 255, 0.95);
   text-shadow: 0 0 14px rgba(0,243,255,0.18);
@@ -326,7 +333,7 @@
 
 .card-face-back .qc-rating-meter {
   position: relative;
-  height: 10px;
+  height: 9px;                 /* ✅ kleiner */
   border-radius: 999px;
   overflow: hidden;
   background:
@@ -359,19 +366,17 @@
 
 .card-face-back .qc-rating-hint {
   margin-top: 7px;
-  font-size: 0.70rem;
+  font-size: 0.68rem;
   color: rgba(160,160,176,0.9);
 }
 
 /* provider */
 .card-face-back .qc-provider {
   margin-top: 8px;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: rgba(224,224,240,0.75);
 }
-.card-face-back .qc-provider strong {
-  color: rgba(255,255,255,0.92);
-}
+.card-face-back .qc-provider strong { color: rgba(255,255,255,0.92); }
 
 /* badges */
 .card-face-back .qc-badges {
@@ -381,10 +386,10 @@
   margin-top: 10px;
 }
 .card-face-back .qc-badge-item {
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   line-height: 1.35;
   color: rgba(224,224,240,0.82);
-  padding: 10px 10px;
+  padding: 9px 9px;
   border-radius: 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -398,7 +403,7 @@
   margin-top: 10px;
 }
 .card-face-back .qc-tag {
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   padding: 4px 9px;
   border-radius: 10px;
   background: rgba(0, 243, 255, 0.08);
@@ -419,9 +424,9 @@
   appearance: none;
   border: 0;
   border-radius: 12px;
-  padding: 11px 12px;
+  padding: 10px 11px;
   font-weight: 900;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -458,23 +463,7 @@
 
   .card-face-back .qc-back-sub {
     -webkit-line-clamp: 2;
-    font-size: 0.76rem;
-  }
-
-  .card-face-back .qc-pill {
-    padding: 6px 9px;
-  }
-  .card-face-back .qc-pill-value {
-    font-size: 0.86rem;
-  }
-
-  /* ✅ extra kompakt auf sehr kleinen Karten */
-  .card-face-back .qc-center {
-    top: 54px;
-    bottom: 52px;
-    left: 10px;
-    right: 10px;
-    padding: 4px 4px;
+    font-size: 0.74rem;
   }
 }
 
