@@ -813,22 +813,27 @@ attachCardHandlers() {
 
       analytics.trackToolClick(toolName);
 
-      // ← NEU: Mobile = Direkter Link, Desktop = Modal
-      if (isMobile) {
-        console.log('📱 Mobile: Opening link directly');
-        if (href && href !== '#') {
-          // Visuelles Feedback vor Navigation
-          card.style.transform = 'scale(0.95)';
-          card.style.opacity = '0.7';
-          
-          setTimeout(() => {
-            window.location.href = href;
-          }, 150);
-        } else {
-          console.error('❌ No valid href found!');
-          alert('Link nicht verfügbar');
-        }
-      } else {
+      // ✅ BESSER (ÖFFNET NEUEN TAB):
+if (isMobile) {
+  console.log('📱 Mobile: Opening link directly');
+  if (href && href !== '#') {
+    // Visuelles Feedback
+    card.style.transform = 'scale(0.95)';
+    card.style.opacity = '0.7';
+    
+    setTimeout(() => {
+      // Öffnet in neuem Tab, behält Quantum AI Hub offen
+      window.open(href, '_blank', 'noopener,noreferrer');
+      
+      // Visuelles Feedback zurücksetzen
+      card.style.transform = '';
+      card.style.opacity = '';
+    }, 150);
+  } else {
+    console.error('❌ No valid href found!');
+    alert('Link nicht verfügbar');
+   }
+  } else {
         // Desktop: Modal öffnen
         if (typeof openToolModal === 'function') {
           try {
@@ -881,7 +886,8 @@ attachCardHandlers() {
 
   grid.addEventListener('click', grid._clickHandler);
   grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-},
+}
+};
 
 
 // =========================================
