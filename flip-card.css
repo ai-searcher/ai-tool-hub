@@ -91,23 +91,19 @@
   transition: opacity 240ms ease, filter 240ms ease !important;
 }
 
-/* ---------- back layout ---------- */
-.card-face-back .qc-back-top {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 12px 0 12px;
-}
+/* ---------- MINIMAL BACK LAYOUT ---------- */
 
-/* close button */
+/* Close Button */
 .card-face-back .qc-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
   appearance: none;
   border: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   cursor: pointer;
   color: rgba(255,255,255,0.92);
   background: rgba(255,255,255,0.06);
@@ -118,9 +114,13 @@
   line-height: 1;
   display: grid;
   place-items: center;
-  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+  transition: transform 140ms ease, background 140ms ease;
 }
-.card-face-back .qc-close:active { transform: scale(0.96); }
+
+.card-face-back .qc-close:active { 
+  transform: scale(0.96); 
+}
+
 @media (hover:hover) and (pointer:fine) {
   .card-face-back .qc-close:hover {
     background: rgba(0,243,255,0.10);
@@ -128,212 +128,125 @@
   }
 }
 
-/* reuse front badge class look, but ensure it sits well on back */
-.card-face-back .qc-back-category {
-  margin: 0 !important;
-  opacity: 0.95;
-}
-
-/* body */
-.card-face-back .qc-back-body {
-  padding: 10px 16px 0 16px;
+/* Center Content */
+.card-face-back .qc-back-center {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px;
+  height: 100%;
+  text-align: center;
 }
 
-/* title: reuse square-title-large from style.css, only minor back tuning */
+/* Title */
 .card-face-back .qc-back-title {
-  margin: 6px 0 0 0 !important;
-  line-height: 1.15;
-}
-
-/* provider */
-.card-face-back .qc-provider {
-  font-size: 0.78rem;
-  color: rgba(224,224,240,0.75);
-}
-.card-face-back .qc-provider strong {
-  color: rgba(255,255,255,0.92);
-}
-
-/* description */
-.card-face-back .qc-desc {
-  font-size: 0.80rem;
-  line-height: 1.45;
-  color: rgba(224,224,240,0.84);
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #00F3FF;
+  text-shadow: 0 0 20px rgba(0,243,255,0.3);
   margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
-/* badges text blocks */
-.card-face-back .qc-badges {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* Badge */
+.card-face-back .qc-back-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: rgba(0, 243, 255, 0.12);
+  border: 1px solid rgba(0, 243, 255, 0.25);
+  color: rgba(0, 243, 255, 0.95);
 }
-.card-face-back .qc-badge-item {
-  font-size: 0.74rem;
-  line-height: 1.35;
-  color: rgba(224,224,240,0.82);
-  padding: 10px 10px;
-  border-radius: 12px;
+
+/* Rating */
+.card-face-back .qc-back-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  padding: 8px 16px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
 }
 
-/* tags */
-.card-face-back .qc-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.card-face-back .qc-tag {
-  font-size: 0.66rem;
-  padding: 4px 9px;
-  border-radius: 10px;
-  background: rgba(0, 243, 255, 0.08);
-  border: 1px solid rgba(0, 243, 255, 0.18);
-  color: rgba(0, 243, 255, 0.92);
-  white-space: nowrap;
+.card-face-back .qc-rating-icon {
+  font-size: 1.1rem;
 }
 
-/* ---------- Neural rating (no ⭐) ---------- */
-.card-face-back .qc-rating {
-  margin-top: 2px;
-  padding: 10px 10px 9px 10px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.035);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.card-face-back .qc-rating-top {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.card-face-back .qc-rating-label {
-  font-size: 0.70rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(160,160,176,0.9);
-}
-
-.card-face-back .qc-rating-value {
-  font-size: 1.02rem;
-  font-weight: 800;
+.card-face-back .qc-rating-text {
+  font-weight: 700;
   color: rgba(0, 243, 255, 0.95);
-  text-shadow: 0 0 14px rgba(0,243,255,0.18);
 }
 
-.card-face-back .qc-rating-meter {
-  position: relative;
-  height: 10px;
-  border-radius: 999px;
-  overflow: hidden;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.12) 0px,
-      rgba(255,255,255,0.12) 10px,
-      rgba(255,255,255,0.04) 10px,
-      rgba(255,255,255,0.04) 16px
-    );
-  border: 1px solid rgba(255,255,255,0.10);
-}
-
-.card-face-back .qc-rating-fill {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0,243,255,1), rgba(124,77,255,0.95));
-}
-
-.card-face-back .qc-rating-glow {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0%;
-  border-radius: 999px;
-  box-shadow: 0 0 24px rgba(0,243,255,0.35);
-  pointer-events: none;
-}
-
-.card-face-back .qc-rating-hint {
-  margin-top: 7px;
-  font-size: 0.70rem;
-  color: rgba(160,160,176,0.9);
-}
-
-/* ---------- actions ---------- */
-.card-face-back .qc-actions {
-  margin-top: auto;
-  padding: 12px 16px 16px 16px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.card-face-back .qc-btn {
+/* Main Button */
+.card-face-back .qc-btn-main {
   appearance: none;
   border: 0;
+  padding: 12px 24px;
   border-radius: 12px;
-  padding: 11px 12px;
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   cursor: pointer;
-  text-align: center;
   text-decoration: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
-}
-
-.card-face-back .qc-btn:active { transform: scale(0.98); }
-
-.card-face-back .qc-btn-primary {
+  text-align: center;
   color: #0A0E27;
   background: linear-gradient(135deg, rgba(0,243,255,1), rgba(0,212,224,1));
-  box-shadow: 0 10px 24px rgba(0,243,255,0.18), inset 0 1px 0 rgba(255,255,255,0.35);
+  box-shadow: 
+    0 10px 24px rgba(0,243,255,0.18), 
+    inset 0 1px 0 rgba(255,255,255,0.35);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
 }
 
-.card-face-back .qc-btn-ghost {
-  color: rgba(0,243,255,0.95);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(0,243,255,0.22);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.card-face-back .qc-btn-main:active { 
+  transform: scale(0.98); 
 }
 
-/* Mobile tuning */
+/* Mobile */
 @media (max-width: 767px) {
   .card-square.is-flipped {
     transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
     -webkit-transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
   }
 
-  .card-face-back .qc-desc {
-    -webkit-line-clamp: 3;
-    font-size: 0.78rem;
+  .card-face-back .qc-back-title {
+    font-size: 1rem;
   }
 
-  .card-face-back .qc-actions {
-    grid-template-columns: 1fr;
+  .card-face-back .qc-back-center {
+    gap: 12px;
+    padding: 16px;
   }
 }
 
-/* Reduced motion */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .card-square {
     transition-duration: 0.01ms !important;
   }
+}
+
+/* iOS HARD FIX */
+.card-square.is-flipped .card-face-front {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.card-square.is-flipped .card-face-back {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 /* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
