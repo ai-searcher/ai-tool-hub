@@ -104,10 +104,13 @@
 }
 
 /* FIX: style.css uses .card-square::before as glowing border (mask).
-   In some browsers this layer can sit above transformed back content -> looks "empty". */
+   In some browsers this layer can sit above transformed back content -> looks "empty".
+   VERSTÄRKT FÜR SAFARI/IOS: visibility + display + opacity */
 .card-square[data-qcflip="1"].qc-flipped::before,
 .card-square[data-qcflip="1"].qc-flipped::after {
   opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
   pointer-events: none !important;
 }
 
