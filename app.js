@@ -1158,14 +1158,24 @@ function openToolModal(tool) {
     setTimeout(() => modal.classList.add('open'), 10);
 }
 
+// =========================================
+// QUANTUM AI HUB v1.0 | app.js
+// Zeile 650: closeToolModal() - FIX: Cleanup aller armed-Cards
+// =========================================
 function closeToolModal() {
     const modal = document.getElementById('tool-modal');
     if (!modal) return;
+
+    // FIX: Entferne armed-State von ALLEN Cards (falls Klick hängen bleibt)
+    $$('.card-square.card-armed').forEach(card => {
+        card.classList.remove('card-armed');
+    });
 
     modal.classList.remove('open');
     modal.style.display = 'none';
 }
 
+// Event-Listener für Close-Button bleibt gleich (wird nur aufgerufen)
 document.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'tool-modal-close') {
         closeToolModal();
