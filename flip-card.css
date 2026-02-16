@@ -113,16 +113,32 @@
 }
 
 /* FIX: style.css uses .card-square::before as glowing border (mask).
-   In some browsers this layer can sit above transformed back content -> looks "empty".
-   VERSTÄRKT FÜR SAFARI/IOS: visibility + display + opacity + !important */
+   ULTRA-VERSTÄRKT: content: none entfernt das Element komplett */
 .card-square[data-qcflip="1"].qc-flipped::before,
 .card-square[data-qcflip="1"].qc-flipped::after {
+  content: none !important; /* NEU: Element komplett entfernen */
   opacity: 0 !important;
   visibility: hidden !important;
   display: none !important;
   pointer-events: none !important;
-  z-index: -1 !important; /* ZURÜCK IN DEN HINTERGRUND */
+  z-index: -9999 !important; /* Tiefer als vorher */
 }
+
+/* ZUSÄTZLICH: Back-Seite noch stärker nach vorne bringen */
+.card-square[data-qcflip="1"].qc-flipped .qc-back {
+  isolation: isolate !important;
+  z-index: 999 !important;
+  transform: rotateY(180deg) translateZ(10px) !important; 
+  -webkit-transform: rotateY(180deg) translateZ(10px) !important;
+}
+
+/* Back-Content explizit sichtbar */
+.card-square[data-qcflip="1"].qc-flipped .qc-back * {
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: inherit;
+}
+
 
 .tool-grid-squares:has(.card-square.qc-flipped) .card-square:not(.qc-flipped) {
   opacity: 0.35 !important;
