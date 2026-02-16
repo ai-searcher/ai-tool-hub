@@ -704,38 +704,41 @@ const ui = {
 
         if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
 
-        return `
-            <div class="card-square" 
-                 data-tool-id="${this.escapeHtml(String(tool.id))}"
-                 data-category="${this.escapeHtml(categoryName)}"
-                 data-tool-name="${this.escapeHtml(tool.title)}"
-                 data-href="${this.escapeHtml(tool.link)}"
-                 data-depth="10"
-                 tabindex="0"
-                 role="article"
-                 aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
-                <div class="square-content-centered">
-                    <div class="square-category-badge" aria-hidden="true">
-                        ${this.escapeHtml(categoryDisplay)}
-                    </div>
-                    <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-                        ${this.escapeHtml(tool.title)}
-                    </h3>
-                    <div class="context-marquee" aria-hidden="true">
-                        <div class="marquee-track" role="presentation">
-                            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-                            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-                        </div>
-                    </div>
-                    <a class="card-overlay-link" 
-                       role="button" 
-                       tabindex="-1" 
-                       data-href="${this.escapeHtml(tool.link)}"
-                       aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
-                </div>
-            </div>
-        `;
-    },
+        renderCard(tool) {
+  const categoryName = tool.category_name || tool.category || 'other';
+  const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+  const contextTexts = this.getContextText(tool);
+  
+  return `
+    <div class="card-square" data-tool-id="${this.escapeHtml(String(tool.id))}"
+         data-category="${this.escapeHtml(categoryName)}"
+         data-tool-name="${this.escapeHtml(tool.title)}"
+         data-href="${this.escapeHtml(tool.link)}"
+         data-depth="10"
+         tabindex="0"
+         role="article"
+         aria-label="${this.escapeHtml(tool.title)} - ${this.escapeHtml(categoryDisplay)}">
+      <div class="square-content-centered">
+        <div class="square-category-badge" aria-hidden="true">
+          ${this.escapeHtml(categoryDisplay)}
+        </div>
+        <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
+          ${this.escapeHtml(tool.title)}
+        </h3>
+        <div class="context-marquee" aria-hidden="true">
+          <div class="marquee-track" role="presentation">
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+            <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
+          </div>
+        </div>
+        <a href="${this.escapeHtml(tool.link)}" class="card-overlay-link" 
+           target="_blank" rel="noopener noreferrer" 
+           onclick="event.stopImmediatePropagation(); openToolDetail(${JSON.stringify(tool)}); return false;"
+           aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
+      </div>
+    </div>
+  `;
+},
 
     render() {
         if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
@@ -1087,54 +1090,100 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
 // MODAL SYSTEM
 // =========================================
 
-function createToolModal() {
-    if (document.getElementById('tool-modal')) return;
+// =========================================
+// QUANTUM AI HUB v1.0 | app.js
+// Zeile 650: DETAIL-TAB (flüssig, mit X-Schließen)
+// =========================================
 
-    const modal = document.createElement('div');
-    modal.id = 'tool-modal';
-    modal.style.display = 'none';
-    modal.style.position = 'fixed';
-    modal.style.inset = '0';
-    modal.style.zIndex = '9999';
-    modal.style.background = 'rgba(0,0,0,0.7)';
-    modal.style.alignItems = 'center';
-    modal.style.justifyContent = 'center';
-
-    modal.innerHTML = `
-        <div class="modal-box" role="dialog" aria-modal="true" 
-             style="background:#0f1224;border-radius:14px;padding:24px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-            <h3 id="tool-modal-title" style="color:var(--primary);margin-bottom:8px;">Tool</h3>
-            <p id="tool-modal-desc" style="color:var(--text-dim);margin-bottom:12px;"></p>
-            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-                <a id="tool-modal-open" class="card-link" 
-                   style="display:inline-flex;padding:8px 12px;border-radius:8px;background:var(--primary);color:var(--bg-dark);text-decoration:none;">
-                   Öffnen
-                </a>
-                <button id="tool-modal-close" 
-                        style="background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:var(--text-secondary);">
-                    Schließen
-                </button>
-            </div>
+// Detail-Tab öffnen (bei Klick auf Card)
+function openToolDetail(tool) {
+  // Hole oder erstelle Overlay
+  let overlay = document.getElementById('tool-detail-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'tool-detail-overlay';
+    overlay.className = 'tool-detail-overlay';
+    overlay.innerHTML = `
+      <div class="tool-detail-content">
+        <div class="tool-detail-header">
+          <h2 id="detail-title" class="tool-detail-title"></h2>
+          <button id="detail-close" class="tool-detail-close" aria-label="Schließen">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
+        <div class="tool-detail-body" id="detail-body"></div>
+      </div>
     `;
+    document.body.appendChild(overlay);
+  }
 
-    document.body.appendChild(modal);
+  // Fülle Inhalt
+  const titleEl = document.getElementById('detail-title');
+  const bodyEl = document.getElementById('detail-body');
+  
+  titleEl.textContent = tool.title;
+  
+  // Dynamischer Body aus data.json
+  const categoryDisplay = tool.category.charAt(0).toUpperCase() + tool.category.slice(1);
+  const isFreeText = tool.is_free ? 'Kostenlos' : 'Bezahlt';
+  const badgesHtml = tool.badges ? tool.badges.map(b => 
+    `<div class="tool-detail-feature">${b.split(':')[0].trim()}</div>`
+  ).join('') : '';
+  
+  bodyEl.innerHTML = `
+    <div class="tool-detail-meta">
+      <span class="tool-detail-badge">${categoryDisplay}</span>
+      <span class="tool-detail-rating">
+        <i class="fas fa-star"></i> ${tool.rating}/5
+      </span>
+      <span class="tool-detail-badge">${isFreeText}</span>
+    </div>
+    
+    <div class="tool-detail-description">
+      ${tool.description || 'Keine weitere Beschreibung verfügbar.'}
+    </div>
+    
+    ${badgesHtml ? `
+    <div class="tool-detail-features">
+      ${badgesHtml}
+    </div>
+    ` : ''}
+    
+    <div class="tool-detail-actions">
+      <a href="${tool.link}" class="tool-detail-link" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-external-link-alt"></i> Öffnen
+      </a>
+    </div>
+  `;
 
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeToolModal();
-        }
-    });
-
-    if (!document.toolModalEscapeHandlerAttached) {
-        const toolModalEscapeHandler = (e) => {
-            if (e.key === 'Escape') {
-                closeToolModal();
-            }
-        };
-        document.addEventListener('keydown', toolModalEscapeHandler);
-        document.toolModalEscapeHandlerAttached = true;
+  // Öffnen mit Animation
+  overlay.style.display = 'flex';
+  setTimeout(() => overlay.classList.add('active'), 10);
+  
+  // Close-Handler
+  document.getElementById('detail-close').onclick = closeToolDetail;
+  
+  // ESC-Taste
+  document.addEventListener('keydown', function escHandler(e) {
+    if (e.key === 'Escape') {
+      closeToolDetail();
+      document.removeEventListener('keydown', escHandler);
     }
+  });
+}
+
+// Schließen
+function closeToolDetail() {
+  const overlay = document.getElementById('tool-detail-overlay');
+  if (!overlay) return;
+  
+  overlay.classList.remove('active');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+  }, 250);
+  
+  // Cleanup armed-Cards
+  $$('.card-square.card-armed').forEach(card => card.classList.remove('card-armed'));
 }
 
 function openToolModal(tool) {
