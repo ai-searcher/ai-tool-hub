@@ -1223,3 +1223,8 @@ document.addEventListener('click', (e) => {
         closeToolModal();
     }
 });
+
+// =========================================
+// GLOBAL EXPORT FÜR DETAIL-TAB (wichtig für onclick in renderCard)
+// =========================================
+window.openToolDetail = openToolDetail;
