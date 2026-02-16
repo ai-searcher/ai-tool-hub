@@ -105,8 +105,8 @@
 
 /* FIX: style.css uses .card-square::before as glowing border (mask).
    In some browsers this layer can sit above transformed back content -> looks "empty". */
-.card-square.qc-flipped::before,
-.card-square.qc-flipped::after {
+.card-square[data-qcflip="1"].qc-flipped::before,
+.card-square[data-qcflip="1"].qc-flipped::after {
   opacity: 0 !important;
   pointer-events: none !important;
 }
