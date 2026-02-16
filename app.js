@@ -1255,3 +1255,4 @@ if (document.readyState === 'loading') {
 } else {
   initVotingSystem();
 }
+ 
