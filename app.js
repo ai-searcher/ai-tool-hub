@@ -896,32 +896,54 @@ if (isMobile) {
 const search = {
   init() {
     if (!ui.elements.search) return;
-    
+
+    // Cleanup: alte Handler entfernen, falls init mehrfach läuft
+    if (ui.handlers && ui.handlers.search) {
+      ui.elements.search.removeEventListener('input', ui.handlers.search);
+    }
+    if (ui.elements.searchClear && ui.handlers && ui.handlers.searchClear) {
+      ui.elements.searchClear.removeEventListener('click', ui.handlers.searchClear);
+    }
+
     const handleInput = debounce((e) => {
-      const value = sanitizeInput(e.target.value);
+      const raw = e && e.target ? e.target.value : '';
+      const value = sanitizeInput(raw);
       state.searchQuery = value;
-      
+
       if (ui.elements.searchClear) {
         ui.elements.searchClear.style.display = value ? 'flex' : 'none';
       }
-      
+
       if (value) {
-        analytics.trackSearch(value);
+        try {
+          if (typeof analytics !== 'undefined' && analytics.trackSearch) {
+            analytics.trackSearch(value);
+          }
+        } catch (err) {
+          // optional: console.warn('Analytics search tracking failed', err);
+        }
       }
-      
+
       ui.render();
     }, CONFIG.search.debounceMs);
-    
+
+    // merken, damit wir später sauber entfernen können
+    if (!ui.handlers) ui.handlers = {};
+    ui.handlers.search = handleInput;
+
     ui.elements.search.addEventListener('input', handleInput);
-    
+
     if (ui.elements.searchClear) {
-      ui.elements.searchClear.addEventListener('click', () => {
+      const clearHandler = () => {
         ui.elements.search.value = '';
         state.searchQuery = '';
         ui.elements.searchClear.style.display = 'none';
         ui.render();
         ui.elements.search.focus();
-      });
+      };
+
+      ui.handlers.searchClear = clearHandler;
+      ui.elements.searchClear.addEventListener('click', clearHandler);
     }
   }
 };
