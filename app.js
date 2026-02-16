@@ -777,76 +777,87 @@ const ui = {
         }
     },
 
-    attachCardHandlers() {
-        const grid = this.elements.toolGrid || getElement('#tool-grid');
-        if (!grid) return;
+// =========================================
+// QUANTUM AI HUB v1.0 | app.js
+// Zeile 420: attachCardHandlers() - FIX: Temporärer armed-State (300ms)
+// =========================================
+attachCardHandlers() {
+    const grid = this.elements.toolGrid || getElement('#tool-grid');
+    if (!grid) return;
 
-        if (grid.clickHandler) {
-            grid.removeEventListener('click', grid.clickHandler);
-            grid.removeEventListener('keydown', grid.keyHandler);
+    if (grid.clickHandler) {
+        grid.removeEventListener('click', grid.clickHandler);
+        grid.removeEventListener('keydown', grid.keyHandler);
+    }
+
+    grid.clickHandler = (e) => {
+        const overlay = e.target.closest('.card-overlay-link');
+        const card = e.target.closest('.card-square');
+
+        if (overlay && card) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+            const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+
+            try {
+                analytics.trackToolClick(toolName);
+            } catch (err) {
+                console.warn('Analytics tracking failed', err);
+            }
+
+            // FIX: Temporärer armed-State (Highlight 300ms)
+            card.classList.add('card-armed');
+            setTimeout(() => card.classList.remove('card-armed'), 300);
+
+            if (typeof openToolModal === 'function') {
+                try {
+                    openToolModal({
+                        title: toolName,
+                        href: href,
+                        description: card.getAttribute('aria-label') || '',
+                        cardElement: card
+                    });
+                } catch (err) {
+                    console.error('openToolModal error', err);
+                }
+            } else {
+                // Fallback: Direkt öffnen
+                window.open(href, '_blank');
+            }
+            return;
         }
 
-        grid.clickHandler = (e) => {
-            const overlay = e.target.closest('.card-overlay-link');
+        if (card && !overlay) {
+            e.preventDefault();
+            // FIX: Temporärer armed-State (Highlight 300ms)
+            card.classList.add('card-armed');
+            setTimeout(() => card.classList.remove('card-armed'), 300);
+
+            const toolName = card.dataset.toolName || 'Unknown';
+            try {
+                analytics.trackToolClick(toolName);
+            } catch (err) {}
+        }
+    };
+
+    grid.keyHandler = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
             const card = e.target.closest('.card-square');
+            if (!card) return;
 
-            if (overlay && card) {
+            const overlay = card.querySelector('.card-overlay-link');
+            if (overlay) {
+                overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
                 e.preventDefault();
-                e.stopPropagation();
-
-                const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-                const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
-
-                try {
-                    analytics.trackToolClick(toolName);
-                } catch (err) {
-                    console.warn('Analytics tracking failed', err);
-                }
-
-                if (typeof openToolModal === 'function') {
-                    try {
-                        openToolModal({
-                            title: toolName,
-                            href: href,
-                            description: card.getAttribute('aria-label') || '',
-                            cardElement: card
-                        });
-                    } catch (err) {
-                        console.error('openToolModal error', err);
-                        card.classList.toggle('card-armed');
-                    }
-                } else {
-                    card.classList.toggle('card-armed');
-                }
-                return;
             }
+        }
+    };
 
-            if (card && !overlay) {
-                e.preventDefault();
-                card.classList.toggle('card-armed');
-                const toolName = card.dataset.toolName || 'Unknown';
-                try {
-                    analytics.trackToolClick(toolName);
-                } catch (err) {}
-            }
-        };
-
-        grid.keyHandler = (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                const card = e.target.closest('.card-square');
-                if (!card) return;
-
-                const overlay = card.querySelector('.card-overlay-link');
-                if (overlay) {
-                    overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-                    e.preventDefault();
-                }
-            }
-        };
-
-        grid.addEventListener('click', grid.clickHandler);
-        grid.addEventListener('keydown', grid.keyHandler, { passive: false });
-    }
+    grid.addEventListener('click', grid.clickHandler);
+    grid.addEventListener('keydown', grid.keyHandler, { passive: false });
+ }
 };
 
 // =========================================
