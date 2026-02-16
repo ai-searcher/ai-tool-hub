@@ -199,13 +199,23 @@ function createBackFace(tool) {
 
 /* -------------------- prepare card -------------------- */
 function prepareCard(card) {
-  if (!card || card.dataset.flipInitialized === 'true') return;
+  // true = ist/war vorbereitet, false = konnte nicht vorbereitet werden
+  if (!card) return false;
+  if (card.dataset.flipInitialized === 'true') return true;
 
   const toolId = card.dataset.toolId;
-  if (!toolId) return;
+  if (!toolId) return false;
 
   const tool = getToolById(toolId);
-  if (!tool) return;
+
+  // Wenn Tools noch nicht geladen sind: kurz retry, aber NICHT flippen
+  if (!tool) {
+    setTimeout(() => {
+      // nur nochmal versuchen, wenn noch nicht initialisiert
+      if (card && card.dataset.flipInitialized !== 'true') prepareCard(card);
+    }, 200);
+    return false;
+  }
 
   // IMPORTANT: keep FRONT markup exactly as produced by app.js
   const frontHtml = card.innerHTML;
@@ -229,6 +239,8 @@ function prepareCard(card) {
   card.setAttribute('aria-expanded', 'false');
   card.setAttribute('role', 'button');
   card.tabIndex = 0;
+
+  return true;
 }
 
 /* -------------------- interactions -------------------- */
@@ -239,15 +251,19 @@ function isInteractiveTarget(el) {
 
 function openFlip(card) {
   if (!card) return;
-  prepareCard(card);
+
+  // ✅ nur flippen, wenn Rückseite wirklich gebaut wurde
+  if (!prepareCard(card)) return;
+
   closeAllFlips(card);
   card.classList.add('is-flipped');
   card.setAttribute('aria-expanded', 'true');
 }
-
 function toggleFlip(card) {
   if (!card) return;
-  prepareCard(card);
+
+  // ✅ WICHTIG: nur flippen, wenn Back wirklich injiziert wurde
+  if (!prepareCard(card)) return;
 
   const willOpen = !card.classList.contains('is-flipped');
   if (willOpen) openFlip(card);
