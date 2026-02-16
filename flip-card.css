@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.1)
    - Front bleibt wie in style.css (Badge/Title/Marquee)
-   - Back: Quantum UI, Rating als Neural-Bar
+   - Back: Quantum UI + Detailansicht über "Mehr Infos"
    - iOS/Safari stable 3D rotateY (no mirrored bug)
    ══════════════════════════════════════════════════════════ */
 
@@ -33,7 +33,6 @@
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
-  /* iOS stability */
   /* KEIN transform hier! (sonst überschreibt es die Back-Rotation und erzeugt Spiegel-Bugs) */
 }
 
@@ -50,6 +49,9 @@
   transform: rotateY(180deg) translateZ(0.1px);
   -webkit-transform: rotateY(180deg) translateZ(0.1px);
 
+  border-radius: inherit; /* ✅ exakt wie Front */
+  overflow: hidden;
+
   /* premium glass background */
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
@@ -64,22 +66,25 @@
 
   display: flex;
   flex-direction: column;
+
+  /* ✅ kompaktere Innenabstände */
+  padding: 14px;
 }
 
 /* Flip state */
 .card-square.is-flipped {
-  /* ✅ iOS/Safari: NO perspective() here (prevents mirrored front bleed-through) */
+  /* ✅ iOS/Safari: NO perspective() here */
   transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   z-index: 150 !important;
   overflow: visible !important;
 }
 
-/* ✅ Ensure back face is on top when flipped (prevents mirrored front showing) */
+/* ✅ Ensure back face is on top when flipped */
 .card-square.is-flipped .card-face-front { z-index: 1; }
 .card-square.is-flipped .card-face-back  { z-index: 2; }
 
-/* Dim others (Safari supports :has on modern iOS; safe fallback if not supported: nothing breaks) */
+/* Dim others */
 .tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
   opacity: 0.35 !important;
   filter: blur(2px) saturate(0.9) !important;
@@ -87,18 +92,29 @@
   transition: opacity 240ms ease, filter 240ms ease !important;
 }
 
-/* ===================== BACK CONTENT (V1.1 UI) ===================== */
+/* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
+.card-square.is-flipped .card-face-front {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.card-square.is-flipped .card-face-back {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* ============================================================
+   BACK UI (V1.1) — fehlte vorher -> deshalb "leer"
+   ============================================================ */
 
 /* Close button */
 .card-face-back .qc-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   appearance: none;
   border: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
   cursor: pointer;
   color: rgba(255,255,255,0.92);
   background: rgba(255,255,255,0.06);
@@ -109,8 +125,11 @@
   line-height: 1;
   display: grid;
   place-items: center;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
   transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
-  z-index: 4;
 }
 .card-face-back .qc-close:active { transform: scale(0.96); }
 @media (hover:hover) and (pointer:fine) {
@@ -120,158 +139,155 @@
   }
 }
 
-/* Top pills (optional) */
-.card-face-back .qc-top-pills{
+/* Top pills (kompakt, nicht wuchtig) */
+.card-face-back .qc-top-pills {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
   display: flex;
   gap: 8px;
-  z-index: 3;
+  z-index: 5;
 }
 
-.card-face-back .qc-pill{
+.card-face-back .qc-pill {
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 7px 10px;
   border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.10);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-.card-face-back .qc-pill-label{
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
+.card-face-back .qc-pill-label {
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(180,180,200,0.85);
+  color: rgba(224,224,240,0.75);
 }
-.card-face-back .qc-pill-value{
-  font-size: 0.78rem;
-  font-weight: 800;
+.card-face-back .qc-pill-value {
+  font-size: 0.90rem;
+  font-weight: 900;
   color: rgba(0,243,255,0.95);
+  text-shadow: 0 0 14px rgba(0,243,255,0.16);
 }
 
-/* Category badge row */
-.card-face-back .qc-back-badges{
+/* Category badge area (oben, mittig – bleibt im Stil der Seite) */
+.card-face-back .qc-back-badges {
   position: absolute;
-  top: 58px;
-  left: 12px;
-  right: 12px;
+  top: 12px;
+  left: 58px;
+  right: 140px;
   display: flex;
-  justify-content: flex-start;
-  z-index: 3;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
 }
-.card-face-back .qc-back-category { opacity: 0.95; }
+.card-face-back .qc-back-category {
+  opacity: 0.95;
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.70rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
 
-/* Center */
-.card-face-back .qc-center{
-  padding: 12px 14px 10px 14px;
-  margin-top: 92px;
+/* Center layout */
+.card-face-back .qc-center {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* Platz für top controls + bottom pill */
+  padding: 54px 10px 52px 10px;
   gap: 10px;
 }
 
-.card-face-back .qc-back-title{
+.card-face-back .qc-back-title {
   margin: 0 !important;
-  line-height: 1.12;
+  line-height: 1.10;
 }
 
-.card-face-back .qc-back-sub{
+.card-face-back .qc-back-sub {
   margin: 0;
   font-size: 0.78rem;
-  line-height: 1.45;
-  color: rgba(224,224,240,0.84);
+  line-height: 1.35;
+  color: rgba(224,224,240,0.78);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  max-width: 95%;
 }
 
-.card-face-back .qc-hero-btn{
+/* "Mehr Infos" Button — sauber, passend, klein */
+.card-face-back .qc-hero-btn {
   appearance: none;
-  border: 1px solid rgba(0,243,255,0.22);
-  background: rgba(255,255,255,0.04);
-  color: rgba(0,243,255,0.95);
-  border-radius: 14px;
-  padding: 10px 12px;
-  font-weight: 900;
-  font-size: 0.78rem;
+  border: 0;
   cursor: pointer;
-  display: flex;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,243,255,0.20);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  font-size: 0.82rem;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  gap: 8px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
 }
-.card-face-back .qc-hero-btn:active{ transform: scale(0.98); }
-.card-face-back .qc-hero-chev{ opacity: 0.65; }
+.card-face-back .qc-hero-btn:active { transform: scale(0.98); }
+.card-face-back .qc-hero-chev {
+  color: rgba(0,243,255,0.95);
+  font-weight: 1000;
+}
+.card-face-back .qc-hero-text { letter-spacing: 0.02em; }
 
-/* Details panel (collapsible) */
-.card-face-back .qc-details{
-  margin-top: 10px;
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(6px);
-  pointer-events: none;
+/* Details Panel (standard: zu, über qc-details-open auf der CARD auf) */
+.card-face-back .qc-details {
+  width: 100%;
+  max-width: 92%;
+  margin-top: 8px;
+  display: none;
+}
+.card-square.qc-details-open .card-face-back .qc-details {
+  display: block;
+}
+
+/* Bottom pill: nur wenn Details zu sind (sonst Platz freimachen) */
+.card-face-back .qc-bottom-pill {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: rgba(224,224,240,0.80);
+  text-align: center;
   overflow: hidden;
-  transition: max-height 320ms ease, opacity 220ms ease, transform 220ms ease;
-}
-
-.card-square.qc-details-open .card-face-back .qc-details{
-  max-height: 1000px;
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* provider */
-.card-face-back .qc-provider {
-  font-size: 0.78rem;
-  color: rgba(224,224,240,0.75);
-}
-.card-face-back .qc-provider strong {
-  color: rgba(255,255,255,0.92);
-}
-
-/* badges */
-.card-face-back .qc-badges{
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.card-face-back .qc-badge-item{
-  font-size: 0.74rem;
-  line-height: 1.35;
-  color: rgba(224,224,240,0.82);
-  padding: 10px 10px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-/* tags */
-.card-face-back .qc-tags{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.card-face-back .qc-tag{
-  font-size: 0.66rem;
-  padding: 4px 9px;
-  border-radius: 10px;
-  background: rgba(0, 243, 255, 0.08);
-  border: 1px solid rgba(0, 243, 255, 0.18);
-  color: rgba(0, 243, 255, 0.92);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
+.card-square.qc-details-open .card-face-back .qc-bottom-pill {
+  display: none;
+}
 
-/* Neural rating (no ⭐) */
-.card-face-back .qc-rating{
+/* ---------- Neural rating (no ⭐) ---------- */
+.card-face-back .qc-rating {
   margin-top: 2px;
   padding: 10px 10px 9px 10px;
   border-radius: 14px;
@@ -279,28 +295,32 @@
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
-.card-face-back .qc-rating-top{
+
+.card-face-back .qc-rating-top {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 8px;
 }
-.card-face-back .qc-rating-label{
+
+.card-face-back .qc-rating-label {
   font-size: 0.70rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(160,160,176,0.9);
 }
-.card-face-back .qc-rating-value{
-  font-size: 1.02rem;
-  font-weight: 800;
+
+.card-face-back .qc-rating-value {
+  font-size: 0.98rem;
+  font-weight: 900;
   color: rgba(0, 243, 255, 0.95);
   text-shadow: 0 0 14px rgba(0,243,255,0.18);
 }
-.card-face-back .qc-rating-meter{
+
+.card-face-back .qc-rating-meter {
   position: relative;
-  height: 8px;
+  height: 10px;
   border-radius: 999px;
   overflow: hidden;
   background:
@@ -313,14 +333,16 @@
     );
   border: 1px solid rgba(255,255,255,0.10);
 }
-.card-face-back .qc-rating-fill{
+
+.card-face-back .qc-rating-fill {
   position: absolute;
   inset: 0 auto 0 0;
   width: 0%;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(0,243,255,1), rgba(124,77,255,0.95));
 }
-.card-face-back .qc-rating-glow{
+
+.card-face-back .qc-rating-glow {
   position: absolute;
   inset: 0 auto 0 0;
   width: 0%;
@@ -328,26 +350,72 @@
   box-shadow: 0 0 24px rgba(0,243,255,0.35);
   pointer-events: none;
 }
-.card-face-back .qc-rating-hint{
+
+.card-face-back .qc-rating-hint {
   margin-top: 7px;
   font-size: 0.70rem;
   color: rgba(160,160,176,0.9);
 }
 
+/* provider */
+.card-face-back .qc-provider {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  color: rgba(224,224,240,0.75);
+}
+.card-face-back .qc-provider strong {
+  color: rgba(255,255,255,0.92);
+}
+
+/* badges */
+.card-face-back .qc-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.card-face-back .qc-badge-item {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: rgba(224,224,240,0.82);
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* tags */
+.card-face-back .qc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.card-face-back .qc-tag {
+  font-size: 0.66rem;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid rgba(0, 243, 255, 0.18);
+  color: rgba(0, 243, 255, 0.92);
+  white-space: nowrap;
+}
+
 /* actions */
-.card-face-back .qc-actions{
+.card-face-back .qc-actions {
   margin-top: 12px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.card-face-back .qc-btn{
+
+.card-face-back .qc-btn {
   appearance: none;
   border: 0;
   border-radius: 12px;
   padding: 11px 12px;
-  font-weight: 800;
-  font-size: 0.78rem;
+  font-weight: 900;
+  font-size: 0.76rem;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
@@ -355,30 +423,20 @@
   -webkit-tap-highlight-color: transparent;
   transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
 }
-.card-face-back .qc-btn:active{ transform: scale(0.98); }
-.card-face-back .qc-btn-primary{
+.card-face-back .qc-btn:active { transform: scale(0.98); }
+
+.card-face-back .qc-btn-primary {
   color: #0A0E27;
   background: linear-gradient(135deg, rgba(0,243,255,1), rgba(0,212,224,1));
   box-shadow: 0 10px 24px rgba(0,243,255,0.18), inset 0 1px 0 rgba(255,255,255,0.35);
 }
-.card-face-back .qc-btn-ghost{
+
+.card-face-back .qc-btn-ghost {
   color: rgba(0,243,255,0.95);
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(0,243,255,0.22);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-}
-
-/* bottom pill */
-.card-face-back .qc-bottom-pill{
-  margin-top: auto;
-  padding: 10px 14px 14px 14px;
-  font-size: 0.70rem;
-  color: rgba(180,180,200,0.88);
-  opacity: 0.9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Mobile tuning */
@@ -391,6 +449,18 @@
   .card-face-back .qc-actions {
     grid-template-columns: 1fr;
   }
+
+  .card-face-back .qc-back-sub {
+    -webkit-line-clamp: 2;
+    font-size: 0.76rem;
+  }
+
+  .card-face-back .qc-pill {
+    padding: 6px 9px;
+  }
+  .card-face-back .qc-pill-value {
+    font-size: 0.86rem;
+  }
 }
 
 /* Reduced motion */
@@ -398,22 +468,6 @@
   .card-square {
     transition-duration: 0.01ms !important;
   }
-}
-
-/* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
-/* Safari zeigt manchmal die Front trotz backface-visibility -> daher hart verstecken
-   WICHTIG: nur wenn Back wirklich existiert (qc-has-back), sonst wird es "leer".
-*/
-.card-square.qc-has-back.is-flipped .card-face-front {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.card-square.qc-has-back.is-flipped .card-face-back {
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
 }
 
 /* ============================================================
