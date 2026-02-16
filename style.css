@@ -608,13 +608,13 @@ body {
 /* ==================== CATEGORY COLORS ==================== */
 :root {
   /* Elegant Category Colors */
-  --color-text: #00D4FF;      /* Ocean Blue */
-  --color-image: #E040FB;     /* Soft Purple-Pink */
-  --color-code: #7C4DFF;      /* Deep Purple */
-  --color-audio: #FF6B9D;     /* Soft Coral */
-  --color-video: #448AFF;     /* Bright Blue */
-  --color-data: #1DE9B6;      /* Elegant Teal (korrekt) */
-  --color-other: #B0BEC5;     /* Neutral Gray */
+  --color-text: #00D4FF;
+  --color-image: #E040FB;
+  --color-code: #7C4DFF;
+  --color-audio: #FF6B9D;
+  --color-video: #448AFF;
+  --color- #1DE9B6;
+  --color-other: #B0BEC5;
 
   /* Glow variants */
   --glow-text: rgba(0, 212, 255, 0.25);
@@ -622,21 +622,24 @@ body {
   --glow-code: rgba(124, 77, 255, 0.25);
   --glow-audio: rgba(255, 107, 157, 0.25);
   --glow-video: rgba(68, 138, 255, 0.25);
-  --glow-data: rgba(29, 233, 182, 0.25);
+  --glow- rgba(29, 233, 182, 0.25);
 }
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
+/* MOBILE FIX: Hover-Effekte deaktiviert + Touch-optimiert */
 .tool-stacks {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--spacing-xl);
   animation: fadeIn 0.5s ease;
-  perspective: 1500px;
+  /* REMOVED: perspective + transform-style (Safari Touch Bug) */
 }
 
 .category-stack {
   position: relative;
   animation: fadeInUp 0.6s ease backwards;
+  touch-action: manipulation; /* ✅ MOBILE FIX */
+  -webkit-tap-highlight-color: transparent; /* ✅ MOBILE FIX */
 }
 
 .category-stack:nth-child(1) { animation-delay: 0.1s; }
@@ -650,7 +653,8 @@ body {
 .stack-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
   padding: 0 var(--spacing-sm);
 }
@@ -714,22 +718,22 @@ body {
   color: var(--color-data);
 }
 
-/* Stack Container */
+/* Stack Container - MOBILE FIX */
 .stack-container {
   position: relative;
   min-height: 300px;
   cursor: pointer;
   transition: transform var(--transition-normal);
+  touch-action: manipulation; /* ✅ MOBILE FIX */
+  -webkit-tap-highlight-color: transparent; /* ✅ MOBILE FIX */
 }
 
-.stack-container:hover {
-  transform: translateY(-8px);
-}
+/* REMOVED: :hover - Blockiert Mobile Clicks! */
 
-/* Stack Cards (3D Effect) */
+/* Stack Cards (3D Effect) - MOBILE OPTIMIZED */
 .stack-cards {
   position: relative;
-  transform-style: preserve-3d;
+  /* REMOVED: transform-style: preserve-3d (Safari Bug) */
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -743,42 +747,40 @@ body {
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  transform-style: preserve-3d;
+  /* REMOVED: 3D Properties (Safari Touch Bug) */
   backface-visibility: hidden;
   cursor: pointer;
-
-  /* iOS Text Selection */
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
+  touch-action: manipulation; /* ✅ MOBILE FIX */
+  -webkit-tap-highlight-color: transparent; /* ✅ MOBILE FIX */
+  pointer-events: auto !important; /* ✅ KRITISCH! */
 }
 
-/* 3D Stack Effect - Closed State */
+/* 3D Stack Effect - Closed State (vereinfacht für Mobile) */
 .stack-cards:not(.fanned) .stack-card:nth-child(1) {
-  transform: translateZ(0px) translateY(0px) rotateX(0deg);
+  transform: translateZ(0px) translateY(0px);
   z-index: 3;
   opacity: 1;
 }
 
 .stack-cards:not(.fanned) .stack-card:nth-child(2) {
-  transform: translateZ(-20px) translateY(8px) rotateX(-2deg);
+  transform: translateZ(-20px) translateY(8px);
   z-index: 2;
   opacity: 0.8;
 }
 
 .stack-cards:not(.fanned) .stack-card:nth-child(3) {
-  transform: translateZ(-40px) translateY(16px) rotateX(-4deg);
+  transform: translateZ(-40px) translateY(16px);
   z-index: 1;
   opacity: 0.6;
 }
 
 .stack-cards:not(.fanned) .stack-card:nth-child(n+4) {
-  transform: translateZ(-60px) translateY(24px) rotateX(-6deg);
+  transform: translateZ(-60px) translateY(24px);
   z-index: 0;
   opacity: 0.4;
 }
 
-/* Fanned Out State (Click) */
+/* Fanned Out State */
 .stack-cards.fanned {
   gap: var(--spacing-md);
 }
@@ -789,15 +791,10 @@ body {
   transform: none !important;
   opacity: 1 !important;
   z-index: auto !important;
+  pointer-events: auto !important; /* ✅ MOBILE FIX */
 }
 
-/* Hover Effects on Stack Cards */
-.stack-card:hover {
-  border-color: var(--primary);
-  transform: translateY(-4px) translateZ(10px) !important;
-  z-index: 100 !important;
-  opacity: 1 !important;
-}
+/* REMOVED: :hover komplett - Ursache für Mobile Click-Probleme! */
 
 /* Category-specific borders when fanned */
 .category-stack[data-category="text"] .stack-cards.fanned .stack-card {
@@ -843,7 +840,7 @@ body {
 .category-stack[data-category="video"] .stack-card::before { background: var(--color-video); }
 .category-stack[data-category="data"] .stack-card::before { background: var(--color-data); }
 
-/* Stack Card Content (reuse existing .card styles) */
+/* Stack Card Content */
 .stack-card .card-header,
 .stack-card .card-title,
 .stack-card .card-category,
@@ -854,9 +851,7 @@ body {
 
 /* ==================== RESPONSIVE STACKS ==================== */
 
-
 /* ==================== FOOTER ==================== */
-
 .footer {
   padding: var(--spacing-xl) 0;
   border-top: 1px solid var(--border);
@@ -887,7 +882,7 @@ body {
 .footer-link {
   color: var(--text-dim);
   text-decoration: none;
-  cursor: pointer; /* ← FIX: cursor hinzugefügt */
+  cursor: pointer;
   transition: color var(--transition-fast);
 }
 
@@ -895,7 +890,6 @@ body {
   color: var(--primary);
 }
 
-/* ← FIX: :active State hinzugefügt */
 .footer-link:active {
   transform: scale(0.98);
   display: inline-block;
