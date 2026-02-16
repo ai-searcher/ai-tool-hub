@@ -74,64 +74,44 @@ function buildRatingMeter(rating) {
   `;
 }
 
-function createBackFace(tool) {
+function buildBackContent(tool) {
   const catName = getCategoryName(tool.category);
-  const provider = tool.provider ? String(tool.provider) : '';
-  const desc = tool.description ? String(tool.description) : '';
-  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 6) : [];
-  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 2) : [];
-
+  const rating = tool.rating ? `${tool.rating.toFixed(1)}/5` : '—';
   const link = tool.link ? String(tool.link) : '#';
   const safeLink = escapeHtml(link);
 
   return `
     <div class="card-face card-face-back" role="group" aria-label="Tool Details">
-      <div class="qc-back-top">
-        <!-- Close -->
-        <button class="qc-close" type="button" aria-label="Schließen">×</button>
-
-        <!-- Category badge (reuse style language close to front) -->
-        <div class="qc-back-badges">
-          <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
-            ${escapeHtml(catName)}
-          </span>
+      
+      <!-- Close Button -->
+      <button class="qc-close" type="button" aria-label="Schließen">×</button>
+      
+      <!-- Content -->
+      <div class="qc-back-center">
+        
+        <!-- Title -->
+        <h3 class="qc-back-title">${escapeHtml(tool.title)}</h3>
+        
+        <!-- Kategorie Badge -->
+        <span class="qc-back-badge">${escapeHtml(catName)}</span>
+        
+        <!-- Rating -->
+        <div class="qc-back-rating">
+          <span class="qc-rating-icon">⭐</span>
+          <span class="qc-rating-text">${rating}</span>
         </div>
-      </div>
-
-      <div class="qc-back-body">
-        <!-- Title style aligned with front typography -->
-        <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
-
-        ${buildRatingMeter(tool.rating)}
-
-        ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
-
-        <p class="qc-desc">${escapeHtml(desc)}</p>
-
-        ${badges.length ? `
-          <div class="qc-badges">
-            ${badges.map(b => `<div class="qc-badge-item">${escapeHtml(b)}</div>`).join('')}
-          </div>
-        ` : ''}
-
-        ${tags.length ? `
-          <div class="qc-tags" aria-label="Tags">
-            ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
-          </div>
-        ` : ''}
-      </div>
-
-      <div class="qc-actions">
-        <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
-          Tool öffnen
+        
+        <!-- Button -->
+        <a class="qc-btn-main" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
+          Tool öffnen →
         </a>
-        <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
-          Zurück
-        </button>
+        
       </div>
+      
     </div>
   `;
 }
+
 
 /* -------------------- prepare card -------------------- */
 function prepareCard(card) {
