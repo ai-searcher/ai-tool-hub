@@ -488,3 +488,55 @@
 .card-square.is-flipped:active {
   animation: none !important;
 }
+
+/* ===== OPTION A: Neural-Line Header statt Pills ===== */
+
+/* Pills komplett ausblenden */
+.card-face-back .qc-top-pills { display: none !important; }
+
+/* neue kleine Kopfzeile (nutzt vorhandene Badge-Zeile) */
+.card-face-back .qc-back-badges{
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  right: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  z-index: 3 !important;
+}
+
+/* Category Badge kleiner/clean */
+.card-face-back .qc-back-category{
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.70rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* Rating-Bar (wir nutzen die qc-rating-meter, aber als Mini-Bar oben) */
+.card-face-back .qc-details .qc-rating{ 
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Mini-Bar Look */
+.card-face-back .qc-details .qc-rating-top,
+.card-face-back .qc-details .qc-rating-hint{
+  display: none !important;
+}
+.card-face-back .qc-details .qc-rating-meter{
+  height: 6px !important;
+  border-radius: 999px !important;
+  opacity: 0.95 !important;
+}
+
+/* Bar direkt unter dem Titel statt riesig */
+.card-face-back .qc-details{
+  margin-top: 10px !important;
+}
