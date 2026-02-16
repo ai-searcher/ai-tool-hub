@@ -1,11 +1,8 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
-   - Front bleibt wie in style.css (Badge/Title/Marquee)
-   - Back: Quantum UI, Rating als Neural-Bar
-   - iOS/Safari stable 3D rotateY (no mirrored bug)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0 MINIMAL)
    ══════════════════════════════════════════════════════════ */
 
-/* 3D container (do NOT change your visual card skin from style.css) */
+/* 3D container */
 .card-square {
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
@@ -13,7 +10,6 @@
   will-change: transform;
   transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
 
-  /* ✅ iOS/Safari: perspective as PROPERTY (not in transform) */
   perspective: 1200px;
   -webkit-perspective: 1200px;
 }
@@ -32,25 +28,21 @@
 
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
-
-  /* iOS stability */
-  /* KEIN transform hier! (sonst überschreibt es die Back-Rotation und erzeugt Spiegel-Bugs) */
 }
 
-/* Front face: keep content as-is */
+/* Front face */
 .card-square .card-face-front {
   z-index: 2;
   transform: rotateY(0deg) translateZ(0.1px);
   -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
-/* Back face: rotated */
+/* Back face */
 .card-square .card-face-back {
   z-index: 1;
   transform: rotateY(180deg) translateZ(0.1px);
   -webkit-transform: rotateY(180deg) translateZ(0.1px);
 
-  /* premium glass background */
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.08) 0%, transparent 45%),
@@ -68,14 +60,12 @@
 
 /* Flip state */
 .card-square.is-flipped {
-  /* ✅ iOS/Safari: NO perspective() here (prevents mirrored front bleed-through) */
   transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   z-index: 150 !important;
   overflow: visible !important;
 }
 
-/* ✅ Ensure back face is on top when flipped (prevents mirrored front showing) */
 .card-square.is-flipped .card-face-front {
   z-index: 1;
 }
@@ -83,7 +73,7 @@
   z-index: 2;
 }
 
-/* Dim others (Safari supports :has on modern iOS; safe fallback if not supported: nothing breaks) */
+/* Dim others */
 .tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
   opacity: 0.35 !important;
   filter: blur(2px) saturate(0.9) !important;
@@ -91,7 +81,7 @@
   transition: opacity 240ms ease, filter 240ms ease !important;
 }
 
-/* ---------- MINIMAL BACK LAYOUT ---------- */
+/* ==================== MINIMAL BACK LAYOUT ==================== */
 
 /* Close Button */
 .card-face-back .qc-close {
@@ -148,6 +138,8 @@
   color: #00F3FF;
   text-shadow: 0 0 20px rgba(0,243,255,0.3);
   margin: 0;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 /* Badge */
@@ -212,6 +204,13 @@
   transform: scale(0.98); 
 }
 
+@media (hover:hover) and (pointer:fine) {
+  .card-face-back .qc-btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,243,255,0.25);
+  }
+}
+
 /* Mobile */
 @media (max-width: 767px) {
   .card-square.is-flipped {
@@ -237,21 +236,6 @@
 }
 
 /* iOS HARD FIX */
-.card-square.is-flipped .card-face-front {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.card-square.is-flipped .card-face-back {
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
-/* Safari zeigt manchmal die Front trotz backface-visibility -> daher hart verstecken */
-
 .card-square.is-flipped .card-face-front {
   visibility: hidden !important;
   opacity: 0 !important;
