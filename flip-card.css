@@ -1,75 +1,84 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - REBUILD V2.0 (MOBILE-FIRST, iOS-SAFE)
-   - does NOT modify your front styling (style.css keeps skin)
-   - fixes iOS mirrored/bleed and "empty back" squeeze
-   - details panel toggled by .card-square.qc-details
+   FLIP CARD SYSTEM - REBUILD V2.1 (MOBILE-FIRST, iOS-SAFE)
+   - Markup: .qc-face .qc-front / .qc-back (aus flip-card.js)
+   - Details open state: .qc-details-open auf .card-square
+   - Ziel: NIE "leere" Rückseite durch Klassen-Kollisionen
    ══════════════════════════════════════════════════════════ */
 
-/* When initialized, remove padding squeeze on the CARD itself.
-   Front face gets its padding back. */
-.card-square[data-qcflip="1"] {
-  padding: 0 !important;
+.card-square {
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
   transform-origin: 50% 50% !important;
-  transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
-  will-change: transform;
   perspective: 1200px;
   -webkit-perspective: 1200px;
 }
 
+/* Wenn vorbereitet: Padding vom Base-Card-Layout entfernen,
+   damit Faces exakt die Card füllen (Front bleibt optisch gleich) */
+.card-square[data-qcflip="1"] {
+  padding: 0 !important;
+  overflow: hidden !important; /* stabiler Clip */
+}
+
 /* Faces */
-.card-square[data-qcflip="1"] .qc-face {
+.card-square .qc-face {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  overflow: hidden;
   backface-visibility: hidden !important;
   -webkit-backface-visibility: hidden !important;
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 }
 
-/* Front: keep your original markup layout (padding returned here) */
-.card-square[data-qcflip="1"] .qc-front {
+/* Front keeps your existing markup */
+.card-square .qc-front {
   z-index: 2;
   transform: rotateY(0deg) translateZ(0.1px);
   -webkit-transform: rotateY(0deg) translateZ(0.1px);
+
+  /* Optik wie vorher (dein Style kommt aus style.css auf inneren Elementen) */
   padding: 18px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Back */
-.card-square[data-qcflip="1"] .qc-back {
+.card-square .qc-back {
   z-index: 1;
   transform: rotateY(180deg) translateZ(0.1px);
   -webkit-transform: rotateY(180deg) translateZ(0.1px);
+
   border-radius: inherit;
-  box-sizing: border-box;
+  overflow: hidden;
 
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.08) 0%, transparent 45%),
     linear-gradient(135deg, rgba(26, 30, 55, 0.98), rgba(12, 15, 32, 0.98));
+
   border: 2px solid rgba(0, 243, 255, 0.22);
   box-shadow:
     0 0 0 2px rgba(0, 243, 255, 0.12),
     0 18px 46px rgba(0, 0, 0, 0.55),
     0 0 60px rgba(0, 243, 255, 0.12);
-  color: rgba(255,255,255,0.92);
 }
 
-/* Flip */
+/* Flip state (class on card) */
 .card-square.qc-flipped {
-  transform: rotateY(180deg) scale(1.05) translateZ(0) !important;
-  -webkit-transform: rotateY(180deg) scale(1.05) translateZ(0) !important;
-  z-index: 200 !important;
+  transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
+  -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
+  z-index: 150 !important;
   overflow: visible !important;
 }
 
-/* Hard iOS fix: hide front completely when flipped */
+/* Ensure back above front when flipped */
+.card-square.qc-flipped .qc-front { z-index: 1; }
+.card-square.qc-flipped .qc-back  { z-index: 2; }
+
+/* HARD iOS: front wirklich weg */
 .card-square.qc-flipped .qc-front {
   visibility: hidden !important;
   opacity: 0 !important;
@@ -81,151 +90,164 @@
   pointer-events: auto !important;
 }
 
-/* Dim others (optional) */
+/* Dim others (optional, iOS :has support) */
 .tool-grid-squares:has(.card-square.qc-flipped) .card-square:not(.qc-flipped) {
   opacity: 0.35 !important;
   filter: blur(2px) saturate(0.9) !important;
   pointer-events: none !important;
+  transition: opacity 240ms ease, filter 240ms ease !important;
 }
 
-/* ===================== Back UI ===================== */
-.card-square[data-qcflip="1"] .qc-back-inner {
-  position: relative;
-  width: 100%;
+/* ===================== BACK UI ===================== */
+
+.card-square .qc-back-inner {
   height: 100%;
+  width: 100%;
   padding: 14px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 2; /* sicher über Card-Pseudo-Layern */
 }
 
-/* close */
-.card-square[data-qcflip="1"] .qc-x {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+/* Close */
+.card-square .qc-x {
+  appearance: none;
+  border: 0;
   width: 36px;
   height: 36px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
+  cursor: pointer;
   color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   font-size: 22px;
   line-height: 1;
   display: grid;
   place-items: center;
-  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
 }
+.card-square .qc-x:active { transform: scale(0.96); }
 
-/* header */
-.card-square[data-qcflip="1"] .qc-head {
-  padding-top: 44px; /* space for close */
-  display: grid;
+/* Header */
+.card-square .qc-head {
+  padding-top: 44px; /* Platz für X */
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
-.card-square[data-qcflip="1"] .qc-cat {
-  justify-self: center;
-  padding: 6px 10px !important;
-  border-radius: 999px !important;
-  font-size: 0.70rem !important;
-  letter-spacing: 0.08em !important;
-  text-transform: uppercase !important;
-}
-.card-square[data-qcflip="1"] .qc-meta {
+
+.card-square .qc-meta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 8px 12px;
+  justify-content: center;
+  text-align: center;
+}
+
+.card-square .qc-meta-item {
   font-size: 0.74rem;
   color: rgba(224,224,240,0.78);
 }
-.card-square[data-qcflip="1"] .qc-meta strong { color: rgba(0,243,255,0.95); }
+.card-square .qc-meta-item strong {
+  color: rgba(255,255,255,0.92);
+}
 
-/* main */
-.card-square[data-qcflip="1"] .qc-main {
+/* Main */
+.card-square .qc-main {
   flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
   text-align: center;
-  gap: 10px;
-  padding-top: 6px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
 }
 
-.card-square[data-qcflip="1"] .qc-title {
+.card-square .qc-title {
   margin: 0 !important;
-  line-height: 1.10;
+  line-height: 1.12;
 }
 
-.card-square[data-qcflip="1"] .qc-desc {
+.card-square .qc-desc {
   margin: 0;
-  font-size: 0.76rem;
+  font-size: 0.80rem; /* ähnlich Front-Feeling */
   line-height: 1.35;
   color: rgba(224,224,240,0.80);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  max-width: 95%;
+  max-width: 96%;
 }
 
 /* More button */
-.card-square[data-qcflip="1"] .qc-more {
-  border: 1px solid rgba(0,243,255,0.20);
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.92);
-  padding: 9px 12px;
-  border-radius: 14px;
-  font-weight: 900;
-  font-size: 0.78rem;
+.card-square .qc-more {
+  appearance: none;
+  border: 0;
   cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,243,255,0.20);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  font-size: 0.82rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
 }
+.card-square .qc-more:active { transform: scale(0.98); }
 
-/* Details panel */
-.card-square[data-qcflip="1"] .qc-details {
-  display: none;
+/* Details default hidden */
+.card-square .qc-details {
   width: 100%;
   max-width: 92%;
+  display: none;
   margin-top: 6px;
-  text-align: left;
 }
-.card-square.qc-details .qc-details {
+.card-square.qc-details-open .qc-details {
   display: block;
 }
 
-/* meter */
-.card-square[data-qcflip="1"] .qc-meter {
-  padding: 9px;
+/* Meter */
+.card-square .qc-meter {
+  padding: 10px 10px 9px 10px;
   border-radius: 14px;
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
-.card-square[data-qcflip="1"] .qc-meter-row {
+.card-square .qc-meter-row {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 8px;
 }
-.card-square[data-qcflip="1"] .qc-meter-label {
-  font-size: 0.68rem;
+.card-square .qc-meter-label {
+  font-size: 0.70rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(160,160,176,0.9);
 }
-.card-square[data-qcflip="1"] .qc-meter-value {
-  font-size: 0.92rem;
+.card-square .qc-meter-value {
+  font-size: 0.98rem;
   font-weight: 900;
-  color: rgba(0,243,255,0.95);
+  color: rgba(0, 243, 255, 0.95);
+  text-shadow: 0 0 14px rgba(0,243,255,0.18);
 }
-.card-square[data-qcflip="1"] .qc-meter-bar {
+.card-square .qc-meter-bar {
   position: relative;
-  height: 9px;
+  height: 10px;
   border-radius: 999px;
   overflow: hidden;
   background:
@@ -238,42 +260,59 @@
     );
   border: 1px solid rgba(255,255,255,0.10);
 }
-.card-square[data-qcflip="1"] .qc-meter-fill {
+.card-square .qc-meter-fill {
   position: absolute;
   inset: 0 auto 0 0;
+  width: 0%;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(0,243,255,1), rgba(124,77,255,0.95));
 }
-.card-square[data-qcflip="1"] .qc-meter-glow {
+.card-square .qc-meter-glow {
   position: absolute;
   inset: 0 auto 0 0;
+  width: 0%;
   border-radius: 999px;
   box-shadow: 0 0 24px rgba(0,243,255,0.35);
   pointer-events: none;
 }
 
-/* blocks */
-.card-square[data-qcflip="1"] .qc-block { margin-top: 10px; }
-.card-square[data-qcflip="1"] .qc-block-title {
-  font-size: 0.70rem;
+/* Blocks */
+.card-square .qc-block {
+  margin-top: 10px;
+  text-align: left;
+}
+.card-square .qc-block-title {
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(160,160,176,0.9);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
-.card-square[data-qcflip="1"] .qc-badges { display: grid; gap: 8px; }
-.card-square[data-qcflip="1"] .qc-badge {
-  font-size: 0.70rem;
+
+/* Badges */
+.card-square .qc-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.card-square .qc-badge {
+  font-size: 0.72rem;
   line-height: 1.35;
   color: rgba(224,224,240,0.82);
-  padding: 9px;
+  padding: 10px 10px;
   border-radius: 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
 }
-.card-square[data-qcflip="1"] .qc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.card-square[data-qcflip="1"] .qc-tag {
-  font-size: 0.64rem;
+
+/* Tags */
+.card-square .qc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.card-square .qc-tag {
+  font-size: 0.66rem;
   padding: 4px 9px;
   border-radius: 10px;
   background: rgba(0, 243, 255, 0.08);
@@ -282,43 +321,66 @@
   white-space: nowrap;
 }
 
-/* actions */
-.card-square[data-qcflip="1"] .qc-actions {
+/* Actions */
+.card-square .qc-actions {
   margin-top: 12px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.card-square[data-qcflip="1"] .qc-btn {
+.card-square .qc-btn {
+  appearance: none;
   border: 0;
   border-radius: 12px;
-  padding: 10px 11px;
+  padding: 11px 12px;
   font-weight: 900;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
+  cursor: pointer;
   text-align: center;
   text-decoration: none;
-  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.card-square[data-qcflip="1"] .qc-primary {
+.card-square .qc-btn:active { transform: scale(0.98); }
+
+.card-square .qc-primary {
   color: #0A0E27;
   background: linear-gradient(135deg, rgba(0,243,255,1), rgba(0,212,224,1));
+  box-shadow: 0 10px 24px rgba(0,243,255,0.18), inset 0 1px 0 rgba(255,255,255,0.35);
 }
-.card-square[data-qcflip="1"] .qc-ghost {
+.card-square .qc-ghost {
   color: rgba(0,243,255,0.95);
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(0,243,255,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-/* mobile */
+/* Mobile */
 @media (max-width: 767px) {
   .card-square.qc-flipped {
-    transform: rotateY(180deg) scale(1.03) translateZ(0) !important;
-    -webkit-transform: rotateY(180deg) scale(1.03) translateZ(0) !important;
+    transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
+    -webkit-transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
   }
-  .card-square[data-qcflip="1"] .qc-actions { grid-template-columns: 1fr; }
+  .card-square .qc-actions {
+    grid-template-columns: 1fr;
+  }
+  .card-square .qc-desc {
+    -webkit-line-clamp: 3;
+    font-size: 0.78rem;
+  }
 }
 
-/* reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .card-square[data-qcflip="1"] { transition-duration: 0.01ms !important; }
+  .card-square { transition-duration: 0.01ms !important; }
+}
+
+/* Style.css transform-conflicts (breathing/armed/active) */
+.card-square.qc-flipped,
+.card-square.qc-flipped.card-armed,
+.card-square.qc-flipped.card-touch-active,
+.card-square.qc-flipped.connection-active,
+.card-square.qc-flipped:active {
+  animation: none !important;
 }
