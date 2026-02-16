@@ -1,21 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.2)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.0)
    - Front bleibt wie in style.css (Badge/Title/Marquee)
    - Back: Quantum UI, Rating als Neural-Bar
-   - iOS/Safari: fixes mirrored-front-on-back bug
+   - iOS/Safari stable 3D rotateY (no mirrored bug)
    ══════════════════════════════════════════════════════════ */
 
 /* 3D container (do NOT change your visual card skin from style.css) */
 .card-square {
-  position: relative; /* IMPORTANT for absolute faces */
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
   transform-origin: 50% 50% !important;
-
-  /* IMPORTANT: perspective as PROPERTY (NOT inside transform) */
-  perspective: 1200px;
-  -webkit-perspective: 1200px;
-
   will-change: transform;
   transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
 }
@@ -29,38 +23,28 @@
   border-radius: inherit;
   overflow: hidden;
 
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
-  /* GPU layer without overwriting rotations */
-  transform: translate3d(0,0,0);
-  -webkit-transform: translate3d(0,0,0);
-}
-
-/* EXTRA iOS: enforce on children too (prevents “front bleeding through”) */
-.card-square .card-face-front,
-.card-square .card-face-back,
-.card-square .card-face-front * ,
-.card-square .card-face-back * {
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
+  /* iOS stability */
+  /* KEIN transform hier! (sonst überschreibt es die Back-Rotation und erzeugt Spiegel-Bugs) */
 }
 
 /* Front face: keep content as-is */
 .card-square .card-face-front {
   z-index: 2;
-  transform: rotateY(0deg) translate3d(0,0,0.1px);
-  -webkit-transform: rotateY(0deg) translate3d(0,0,0.1px);
+  transform: rotateY(0deg) translateZ(0.1px);
+  -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
 /* Back face: rotated */
 .card-square .card-face-back {
   z-index: 1;
-  transform: rotateY(180deg) translate3d(0,0,0.1px);
-  -webkit-transform: rotateY(180deg) translate3d(0,0,0.1px);
+  transform: rotateY(180deg) translateZ(0.1px);
+  -webkit-transform: rotateY(180deg) translateZ(0.1px);
 
   /* premium glass background */
   background:
@@ -78,11 +62,10 @@
   flex-direction: column;
 }
 
-/* Flip state
-   IMPORTANT: no perspective() here (Safari mirror-bug trigger) */
+/* Flip state */
 .card-square.is-flipped {
-  transform: rotateY(180deg) scale(1.06) !important;
-  -webkit-transform: rotateY(180deg) scale(1.06) !important;
+  transform: perspective(1200px) rotateY(180deg) scale(1.06) translateZ(0) !important;
+  -webkit-transform: perspective(1200px) rotateY(180deg) scale(1.06) translateZ(0) !important;
   z-index: 150 !important;
   overflow: visible !important;
 }
@@ -319,8 +302,8 @@
 /* Mobile tuning */
 @media (max-width: 767px) {
   .card-square.is-flipped {
-    transform: rotateY(180deg) scale(1.04) !important;
-    -webkit-transform: rotateY(180deg) scale(1.04) !important;
+    transform: perspective(1200px) rotateY(180deg) scale(1.04) translateZ(0) !important;
+    -webkit-transform: perspective(1200px) rotateY(180deg) scale(1.04) translateZ(0) !important;
   }
 
   .card-face-back .qc-desc {
@@ -337,5 +320,31 @@
 @media (prefers-reduced-motion: reduce) {
   .card-square {
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   HARD CONFLICT FIX (style.css transforms / animations)
+   - verhindert, dass breathing/armed/active/connection-active
+     den Flip-Transform überschreibt (iOS Mirror Bug Trigger)
+   ============================================================ */
+.card-square.is-flipped,
+.card-square.is-flipped.card-armed,
+.card-square.is-flipped.card-touch-active,
+.card-square.is-flipped.connection-active,
+.card-square.is-flipped:active {
+  transform: perspective(1200px) rotateY(180deg) scale(1.06) translateZ(0) !important;
+  -webkit-transform: perspective(1200px) rotateY(180deg) scale(1.06) translateZ(0) !important;
+}
+
+/* Mobile: gleiche Priorität auch mit Kombi-Klassen */
+@media (max-width: 767px) {
+  .card-square.is-flipped,
+  .card-square.is-flipped.card-armed,
+  .card-square.is-flipped.card-touch-active,
+  .card-square.is-flipped.connection-active,
+  .card-square.is-flipped:active {
+    transform: perspective(1200px) rotateY(180deg) scale(1.04) translateZ(0) !important;
+    -webkit-transform: perspective(1200px) rotateY(180deg) scale(1.04) translateZ(0) !important;
   }
 }
