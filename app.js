@@ -782,7 +782,7 @@ const ui = {
 
 // =========================================
 // QUANTUM AI HUB v1.0 | app.js
-// Zeile 420: attachCardHandlers() - FIX: Temporärer armed-State (300ms)
+// Zeile 420: attachCardHandlers() - FIX: openToolDetail statt openToolModal
 // =========================================
 attachCardHandlers() {
     const grid = this.elements.toolGrid || getElement('#tool-grid');
@@ -814,17 +814,11 @@ attachCardHandlers() {
             card.classList.add('card-armed');
             setTimeout(() => card.classList.remove('card-armed'), 300);
 
-            if (typeof openToolModal === 'function') {
-                try {
-                    openToolModal({
-                        title: toolName,
-                        href: href,
-                        description: card.getAttribute('aria-label') || '',
-                        cardElement: card
-                    });
-                } catch (err) {
-                    console.error('openToolModal error', err);
-                }
+            // FIX: Rufe den neuen Detail-Tab auf
+            const toolId = parseInt(card.dataset.toolId);
+            const tool = state.tools.find(t => t.id === toolId) || { title: toolName, link: href, description: card.getAttribute('aria-label') || '' };
+            if (typeof openToolDetail === 'function') {
+                openToolDetail(tool);
             } else {
                 // Fallback: Direkt öffnen
                 window.open(href, '_blank');
@@ -860,7 +854,6 @@ attachCardHandlers() {
 
     grid.addEventListener('click', grid.clickHandler);
     grid.addEventListener('keydown', grid.keyHandler, { passive: false });
- }
 }
 
 // =========================================
