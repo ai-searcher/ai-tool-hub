@@ -55,10 +55,9 @@ function closeAllFlips(exceptCard = null) {
 }
 
 function getPriceLabel(tool) {
-  // supports: is_free boolean OR price string/number
   if (typeof tool.is_free === 'boolean') return tool.is_free ? 'Kostenlos' : 'Paid';
   if (tool.price != null && String(tool.price).trim() !== '') return String(tool.price);
-  // fallback: badges might contain "free" etc.
+
   const badges = Array.isArray(tool.badges) ? tool.badges : [];
   const joined = badges.map(b => String(b).toLowerCase());
   if (joined.some(x => x.includes('free') || x.includes('kostenlos'))) return 'Kostenlos';
@@ -66,9 +65,9 @@ function getPriceLabel(tool) {
 }
 
 function buildBackMarquee(tool) {
-  // bottom pill text: tags or compact context
   const tags = Array.isArray(tool.tags) ? tool.tags.filter(Boolean).slice(0, 4).map(String) : [];
   if (tags.length) return tags.join(' • ');
+
   const desc = tool.description ? String(tool.description) : '';
   const clean = desc.replace(/\s+/g, ' ').trim();
   return clean ? clean.slice(0, 44) + (clean.length > 44 ? '…' : '') : 'Mehr entdecken • Quantum Hub';
@@ -95,7 +94,6 @@ function buildPricePill(priceLabel) {
 }
 
 function buildRatingMeter(rating) {
-  // rating: 0..5 => percent 0..100 (keine ⭐)
   const r = clamp(rating || 0, 0, 5);
   const percent = Math.round((r / 5) * 100);
   const label = `${r.toFixed(1)} / 5.0`;
@@ -130,23 +128,19 @@ function createBackFace(tool) {
 
   return `
     <div class="card-face card-face-back" role="group" aria-label="Tool Details">
-      <!-- Close -->
       <button class="qc-close" type="button" aria-label="Schließen">×</button>
 
-      <!-- top pills -->
       <div class="qc-top-pills">
         ${buildRatingPill(tool.rating)}
         ${buildPricePill(priceLabel)}
       </div>
 
-      <!-- category badge (stylistic reuse) -->
       <div class="qc-back-badges">
         <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
           ${escapeHtml(catName)}
         </span>
       </div>
 
-      <!-- center -->
       <div class="qc-center">
         <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
 
@@ -160,10 +154,8 @@ function createBackFace(tool) {
           <span class="qc-hero-chev">‹‹‹</span>
         </button>
 
-        <!-- details (hidden until qc-details-open on card) -->
         <div class="qc-details" aria-label="Detailbereich">
           ${buildRatingMeter(tool.rating)}
-
           ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
 
           ${badges.length ? `
@@ -189,7 +181,6 @@ function createBackFace(tool) {
         </div>
       </div>
 
-      <!-- bottom marquee pill -->
       <div class="qc-bottom-pill" aria-label="Kurzinfo">
         ${escapeHtml(bottomMarquee)}
       </div>
@@ -199,7 +190,6 @@ function createBackFace(tool) {
 
 /* -------------------- prepare card -------------------- */
 function prepareCard(card) {
-  // true = ist/war vorbereitet, false = konnte nicht vorbereitet werden
   if (!card) return false;
   if (card.dataset.flipInitialized === 'true') return true;
 
@@ -208,16 +198,13 @@ function prepareCard(card) {
 
   const tool = getToolById(toolId);
 
-  // Wenn Tools noch nicht geladen sind: kurz retry, aber NICHT flippen
   if (!tool) {
     setTimeout(() => {
-      // nur nochmal versuchen, wenn noch nicht initialisiert
       if (card && card.dataset.flipInitialized !== 'true') prepareCard(card);
     }, 200);
     return false;
   }
 
-  // IMPORTANT: keep FRONT markup exactly as produced by app.js
   const frontHtml = card.innerHTML;
 
   card.innerHTML = `
@@ -227,7 +214,6 @@ function prepareCard(card) {
     ${createBackFace(tool)}
   `;
 
-  // Stop front overlay link from hijacking taps/clicks
   const overlay = card.querySelector('.card-face-front .card-overlay-link');
   if (overlay) {
     overlay.setAttribute('aria-hidden', 'true');
@@ -251,18 +237,15 @@ function isInteractiveTarget(el) {
 
 function openFlip(card) {
   if (!card) return;
-
-  // ✅ nur flippen, wenn Rückseite wirklich gebaut wurde
   if (!prepareCard(card)) return;
 
   closeAllFlips(card);
   card.classList.add('is-flipped');
   card.setAttribute('aria-expanded', 'true');
 }
+
 function toggleFlip(card) {
   if (!card) return;
-
-  // ✅ WICHTIG: nur flippen, wenn Back wirklich injiziert wurde
   if (!prepareCard(card)) return;
 
   const willOpen = !card.classList.contains('is-flipped');
@@ -278,10 +261,8 @@ function onGridPointerUp(e) {
   const card = e.target.closest('.card-square');
   if (!card) return;
 
-  // PRIMARY CTA inside details: allow navigation
   if (e.target.closest('.qc-btn-primary')) return;
 
-  // Close actions
   if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
     e.preventDefault();
     e.stopPropagation();
@@ -291,7 +272,6 @@ function onGridPointerUp(e) {
     return;
   }
 
-  // Details toggle (does NOT flip)
   if (e.target.closest('[data-action="details-toggle"]')) {
     e.preventDefault();
     e.stopPropagation();
@@ -299,10 +279,8 @@ function onGridPointerUp(e) {
     return;
   }
 
-  // If user tapped interactive elements in back, do not flip
   if (card.classList.contains('is-flipped') && isInteractiveTarget(e.target)) return;
 
-  // Otherwise toggle flip
   e.preventDefault();
   e.stopPropagation();
   toggleFlip(card);
@@ -323,7 +301,6 @@ function onGridKeyDown(e) {
 }
 
 function onDocumentPointerUp(e) {
-  // Tap outside closes any open card
   const inCard = e.target.closest('.card-square');
   if (!inCard) closeAllFlips();
 }
@@ -336,10 +313,8 @@ function initFlip() {
     return;
   }
 
-  // Prepare all current cards
   grid.querySelectorAll('.card-square').forEach(prepareCard);
 
-  // Remove old handlers if exist
   if (grid._qcFlipBound) {
     grid.removeEventListener('pointerup', grid._qcFlipPointerUp, true);
     grid.removeEventListener('keydown', grid._qcFlipKeyDown, true);
@@ -347,7 +322,6 @@ function initFlip() {
     grid._qcFlipBound = false;
   }
 
-  // Bind in CAPTURE phase (robust against other listeners)
   grid._qcFlipPointerUp = onGridPointerUp;
   grid._qcFlipKeyDown = onGridKeyDown;
   grid._qcDocPointerUp = onDocumentPointerUp;
@@ -358,7 +332,6 @@ function initFlip() {
 
   grid._qcFlipBound = true;
 
-  // MutationObserver: if app.js re-renders cards, we re-prepare new nodes
   if (!grid._qcFlipObserver) {
     grid._qcFlipObserver = new MutationObserver(() => {
       grid.querySelectorAll('.card-square').forEach(prepareCard);
