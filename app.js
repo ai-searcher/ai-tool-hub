@@ -881,7 +881,7 @@ attachCardHandlers() {
 
   grid.addEventListener('click', grid._clickHandler);
   grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-}
+},
 
 
 // =========================================
