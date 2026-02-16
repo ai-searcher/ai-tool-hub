@@ -1,15 +1,15 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - MOBILE SAFE (V1.2)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.1)
    - keeps FRONT markup (badge/title/marquee) as-is (from style.css)
    - iOS-safe 3D rotateY flip
    - disables front overlay-link click stealing
    - one card open at a time + tap outside to close
-   - "Mehr Infos" opens a premium detail panel (overlay) on back
+   - NEW: "Mehr Infos" toggles premium back details (no flip break)
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js loading (mobile-safe V1.2)...');
+console.log('🚀 flip-card.js loading (mobile-safe)...');
 
 /* -------------------- helpers -------------------- */
 function escapeHtml(text) {
@@ -55,8 +55,10 @@ function closeAllFlips(exceptCard = null) {
 }
 
 function getPriceLabel(tool) {
+  // supports: is_free boolean OR price string/number
   if (typeof tool.is_free === 'boolean') return tool.is_free ? 'Kostenlos' : 'Paid';
   if (tool.price != null && String(tool.price).trim() !== '') return String(tool.price);
+  // fallback: badges might contain "free" etc.
   const badges = Array.isArray(tool.badges) ? tool.badges : [];
   const joined = badges.map(b => String(b).toLowerCase());
   if (joined.some(x => x.includes('free') || x.includes('kostenlos'))) return 'Kostenlos';
@@ -64,6 +66,7 @@ function getPriceLabel(tool) {
 }
 
 function buildBackMarquee(tool) {
+  // bottom pill text: tags or compact context
   const tags = Array.isArray(tool.tags) ? tool.tags.filter(Boolean).slice(0, 4).map(String) : [];
   if (tags.length) return tags.join(' • ');
   const desc = tool.description ? String(tool.description) : '';
@@ -72,7 +75,27 @@ function buildBackMarquee(tool) {
 }
 
 /* -------------------- back face markup -------------------- */
+function buildRatingPill(rating) {
+  const r = clamp(rating || 0, 0, 5);
+  return `
+    <div class="qc-pill qc-pill-rating" aria-label="Bewertung ${escapeHtml(r.toFixed(1))}">
+      <span class="qc-pill-label">bewertung</span>
+      <span class="qc-pill-value">${escapeHtml(r.toFixed(1))}</span>
+    </div>
+  `;
+}
+
+function buildPricePill(priceLabel) {
+  return `
+    <div class="qc-pill qc-pill-price" aria-label="Preis ${escapeHtml(priceLabel)}">
+      <span class="qc-pill-label">preis</span>
+      <span class="qc-pill-value">${escapeHtml(priceLabel)}</span>
+    </div>
+  `;
+}
+
 function buildRatingMeter(rating) {
+  // rating: 0..5 => percent 0..100 (keine ⭐)
   const r = clamp(rating || 0, 0, 5);
   const percent = Math.round((r / 5) * 100);
   const label = `${r.toFixed(1)} / 5.0`;
@@ -96,8 +119,8 @@ function createBackFace(tool) {
   const catName = getCategoryName(tool.category);
   const provider = tool.provider ? String(tool.provider) : '';
   const desc = tool.description ? String(tool.description) : '';
-  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 10) : [];
-  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 6) : [];
+  const tags = Array.isArray(tool.tags) ? tool.tags.slice(0, 8) : [];
+  const badges = Array.isArray(tool.badges) ? tool.badges.slice(0, 4) : [];
 
   const link = tool.link ? String(tool.link) : '#';
   const safeLink = escapeHtml(link);
@@ -110,33 +133,35 @@ function createBackFace(tool) {
       <!-- Close -->
       <button class="qc-close" type="button" aria-label="Schließen">×</button>
 
-      <!-- Header (Option A): Category + mini bar container -->
+      <!-- top pills -->
+      <div class="qc-top-pills">
+        ${buildRatingPill(tool.rating)}
+        ${buildPricePill(priceLabel)}
+      </div>
+
+      <!-- category badge (stylistic reuse) -->
       <div class="qc-back-badges">
         <span class="square-category-badge qc-back-category" data-cat="${escapeHtml(tool.category || 'other')}">
           ${escapeHtml(catName)}
         </span>
-        <span class="qc-mini-meta" aria-label="Preis ${escapeHtml(priceLabel)}">${escapeHtml(priceLabel)}</span>
       </div>
 
-      <!-- Center basic -->
+      <!-- center -->
       <div class="qc-center">
         <h3 class="square-title-large qc-back-title">${escapeHtml(tool.title)}</h3>
-        <p class="qc-back-sub">${escapeHtml(desc ? desc.replace(/\s+/g, ' ').trim() : 'Details im Quantum Hub')}</p>
+
+        <p class="qc-back-sub">
+          ${escapeHtml(desc ? desc.replace(/\s+/g, ' ').trim() : 'Details & Bewertung im Quantum Hub')}
+        </p>
 
         <button class="qc-hero-btn" type="button" data-action="details-toggle" aria-label="Mehr Infos anzeigen">
-          Mehr Infos
+          <span class="qc-hero-chev">›››</span>
+          <span class="qc-hero-text">Mehr Infos</span>
+          <span class="qc-hero-chev">‹‹‹</span>
         </button>
-      </div>
 
-      <!-- Detail Panel (Overlay) -->
-      <div class="qc-details" aria-label="Detailansicht">
-        <div class="qc-details-head">
-          <div class="qc-details-title">Details</div>
-          <button class="qc-details-close" type="button" data-action="details-toggle" aria-label="Detailansicht schließen">×</button>
-        </div>
-
-        <div class="qc-details-body">
-          <!-- Mini Neural bar (uses qc-rating-meter, styled smaller via CSS) -->
+        <!-- details (hidden until qc-details-open on card) -->
+        <div class="qc-details" aria-label="Detailbereich">
           ${buildRatingMeter(tool.rating)}
 
           ${provider ? `<div class="qc-provider">Provider: <strong>${escapeHtml(provider)}</strong></div>` : ''}
@@ -152,15 +177,15 @@ function createBackFace(tool) {
               ${tags.map(t => `<span class="qc-tag">${escapeHtml(t)}</span>`).join('')}
             </div>
           ` : ''}
-        </div>
 
-        <div class="qc-actions">
-          <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
-            Tool öffnen
-          </a>
-          <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
-            Zurück
-          </button>
+          <div class="qc-actions">
+            <a class="qc-btn qc-btn-primary" href="${safeLink}" target="_blank" rel="noopener noreferrer nofollow">
+              Tool öffnen
+            </a>
+            <button class="qc-btn qc-btn-ghost" type="button" data-action="flip-close">
+              Zurück
+            </button>
+          </div>
         </div>
       </div>
 
@@ -186,6 +211,7 @@ function prepareCard(card) {
   // Wenn Tools noch nicht geladen sind: kurz retry, aber NICHT flippen
   if (!tool) {
     setTimeout(() => {
+      // nur nochmal versuchen, wenn noch nicht initialisiert
       if (card && card.dataset.flipInitialized !== 'true') prepareCard(card);
     }, 200);
     return false;
@@ -209,6 +235,9 @@ function prepareCard(card) {
     overlay.style.pointerEvents = 'none';
   }
 
+  // Marker: back face exists (used by CSS hard-hide selectors)
+  card.classList.add('qc-has-back');
+
   card.dataset.flipInitialized = 'true';
   card.setAttribute('aria-expanded', 'false');
   card.setAttribute('role', 'button');
@@ -225,15 +254,21 @@ function isInteractiveTarget(el) {
 
 function openFlip(card) {
   if (!card) return;
+
+  // ✅ nur flippen, wenn Rückseite wirklich gebaut wurde
   if (!prepareCard(card)) return;
 
   closeAllFlips(card);
   card.classList.add('is-flipped');
   card.setAttribute('aria-expanded', 'true');
+  // Show details by default so the back is never 'empty'
+  card.classList.add('qc-details-open');
 }
 
 function toggleFlip(card) {
   if (!card) return;
+
+  // ✅ WICHTIG: nur flippen, wenn Back wirklich injiziert wurde
   if (!prepareCard(card)) return;
 
   const willOpen = !card.classList.contains('is-flipped');
@@ -249,10 +284,10 @@ function onGridPointerUp(e) {
   const card = e.target.closest('.card-square');
   if (!card) return;
 
-  // Primary CTA inside details: allow navigation
+  // PRIMARY CTA inside details: allow navigation
   if (e.target.closest('.qc-btn-primary')) return;
 
-  // Close flip
+  // Close actions
   if (e.target.closest('.qc-close') || e.target.closest('[data-action="flip-close"]')) {
     e.preventDefault();
     e.stopPropagation();
@@ -337,7 +372,7 @@ function initFlip() {
     grid._qcFlipObserver.observe(grid, { childList: true, subtree: true });
   }
 
-  console.log('✅ Flip-System ready (mobile-safe V1.2)');
+  console.log('✅ Flip-System ready (mobile-safe)');
 }
 
 /* -------------------- start -------------------- */
