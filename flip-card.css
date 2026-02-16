@@ -3,6 +3,7 @@
    - Front bleibt wie in style.css (Badge/Title/Marquee)
    - Back: Quantum UI + Detailansicht über "Mehr Infos"
    - iOS/Safari stable 3D rotateY (no mirrored bug)
+   - FIX: Back-Inhalt kann NICHT mehr "weggeclippt" werden auf kleinen Cards
    ══════════════════════════════════════════════════════════ */
 
 /* 3D container (do NOT change your visual card skin from style.css) */
@@ -33,7 +34,7 @@
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
 
-  /* KEIN transform hier! (sonst überschreibt es die Back-Rotation und erzeugt Spiegel-Bugs) */
+  /* KEIN transform hier! */
 }
 
 /* Front face: keep content as-is */
@@ -52,7 +53,6 @@
   border-radius: inherit; /* ✅ exakt wie Front */
   overflow: hidden;
 
-  /* premium glass background */
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.08) 0%, transparent 45%),
@@ -67,20 +67,19 @@
   display: flex;
   flex-direction: column;
 
-  /* ✅ kompaktere Innenabstände */
-  padding: 14px;
+  /* ✅ WICHTIG: kein großes padding, sonst wird content auf kleinen Cards weggeclippt */
+  padding: 0;
 }
 
 /* Flip state */
 .card-square.is-flipped {
-  /* ✅ iOS/Safari: NO perspective() here */
   transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   z-index: 150 !important;
   overflow: visible !important;
 }
 
-/* ✅ Ensure back face is on top when flipped */
+/* Ensure back face is on top when flipped */
 .card-square.is-flipped .card-face-front { z-index: 1; }
 .card-square.is-flipped .card-face-back  { z-index: 2; }
 
@@ -105,7 +104,7 @@
 }
 
 /* ============================================================
-   BACK UI (V1.1) — fehlte vorher -> deshalb "leer"
+   BACK UI (V1.1)
    ============================================================ */
 
 /* Close button */
@@ -139,7 +138,7 @@
   }
 }
 
-/* Top pills (kompakt, nicht wuchtig) */
+/* Top pills */
 .card-face-back .qc-top-pills {
   position: absolute;
   top: 12px;
@@ -174,7 +173,7 @@
   text-shadow: 0 0 14px rgba(0,243,255,0.16);
 }
 
-/* Category badge area (oben, mittig – bleibt im Stil der Seite) */
+/* Category badge area */
 .card-face-back .qc-back-badges {
   position: absolute;
   top: 12px;
@@ -194,17 +193,24 @@
   text-transform: uppercase !important;
 }
 
-/* Center layout */
+/* ✅ FIX: Center bekommt einen echten "Viewport" innerhalb der Card (immer sichtbar) */
 .card-face-back .qc-center {
-  flex: 1;
+  position: absolute;
+  top: 56px;     /* Platz für Close + Pills */
+  bottom: 54px;  /* Platz für Bottom-Pill */
+  left: 12px;
+  right: 12px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
-  /* Platz für top controls + bottom pill */
-  padding: 54px 10px 52px 10px;
   gap: 10px;
+
+  overflow: auto;                 /* ✅ verhindert "leer" durch clipping */
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 6px;               /* ✅ klein, passt auch auf mini-squares */
 }
 
 .card-face-back .qc-back-title {
@@ -221,10 +227,10 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  max-width: 95%;
+  max-width: 96%;
 }
 
-/* "Mehr Infos" Button — sauber, passend, klein */
+/* "Mehr Infos" Button */
 .card-face-back .qc-hero-btn {
   appearance: none;
   border: 0;
@@ -251,10 +257,10 @@
 }
 .card-face-back .qc-hero-text { letter-spacing: 0.02em; }
 
-/* Details Panel (standard: zu, über qc-details-open auf der CARD auf) */
+/* Details Panel */
 .card-face-back .qc-details {
   width: 100%;
-  max-width: 92%;
+  max-width: 100%;
   margin-top: 8px;
   display: none;
 }
@@ -262,7 +268,7 @@
   display: block;
 }
 
-/* Bottom pill: nur wenn Details zu sind (sonst Platz freimachen) */
+/* Bottom pill */
 .card-face-back .qc-bottom-pill {
   position: absolute;
   left: 12px;
@@ -460,6 +466,15 @@
   }
   .card-face-back .qc-pill-value {
     font-size: 0.86rem;
+  }
+
+  /* ✅ extra kompakt auf sehr kleinen Karten */
+  .card-face-back .qc-center {
+    top: 54px;
+    bottom: 52px;
+    left: 10px;
+    right: 10px;
+    padding: 4px 4px;
   }
 }
 
