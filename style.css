@@ -2950,3 +2950,32 @@ a:focus-visible {
   }
 }
 
+/* ========================================
+   TOOL MODAL - GUARANTEED VISIBLE
+   ======================================== */
+
+#tool-modal {
+  display: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#tool-modal.open {
+  display: flex !important;
+}
+
+#tool-modal .modal-box {
+  background: #0f1224 !important;
+  border-radius: 14px !important;
+  padding: 24px !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+  position: relative !important;
+  z-index: 10000 !important;
+}
