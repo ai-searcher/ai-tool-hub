@@ -1078,126 +1078,214 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   console.log('💡 Debug mode: window.appState and window.appConfig available');
 }
 
+// =========================================
+// MODAL SYSTEM - FIXED VERSION
+// =========================================
+
 function createToolModal() {
   if (document.getElementById('tool-modal')) return;
+  
   const modal = document.createElement('div');
   modal.id = 'tool-modal';
-  modal.style.display = 'none';
-  modal.style.position = 'fixed';
-  modal.style.inset = '0';
-  modal.style.zIndex = '9999';
-  modal.style.background = 'rgba(0,0,0,0.7)';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
+  modal.className = 'tool-modal-overlay';
+  
+  // Wichtig: Alle Styles gleichzeitig setzen
+  Object.assign(modal.style, {
+    display: 'none',
+    position: 'fixed',
+    inset: '0',
+    zIndex: '9999',
+    background: 'rgba(0, 0, 0, 0.7)',
+    backdropFilter: 'blur(4px)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: '0',
+    transition: 'opacity 0.2s ease'
+  });
+  
   modal.innerHTML = `
-    <div class="modal-box" role="dialog" aria-modal="true" style="background:#0f1224;border-radius:14px;padding:24px;width:90%;max-width:500px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-      <h3 id="tool-modal-title" style="color:var(--primary);margin-bottom:8px;">Tool</h3>
-      <p id="tool-modal-desc" style="color:var(--text-dim);margin-bottom:12px;"></p>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
-        <a id="tool-modal-open" class="card-link" style="display:inline-flex;padding:8px 12px;border-radius:8px;background:var(--primary);color:var(--bg-dark);text-decoration:none;">Öffnen</a>
-        <button id="tool-modal-close" style="background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:var(--text-secondary);">Schließen</button>
+    <div class="modal-box" role="dialog" aria-modal="true" 
+         style="background:#0f1224;
+                border-radius:14px;
+                padding:24px;
+                width:90%;
+                max-width:500px;
+                box-shadow:0 20px 60px rgba(0,0,0,0.8);
+                transform:scale(0.9);
+                transition:transform 0.2s ease;">
+      <h3 id="tool-modal-title" 
+          style="color:var(--primary);
+                 margin-bottom:8px;
+                 font-size:1.5rem;">Tool</h3>
+      <p id="tool-modal-desc" 
+         style="color:var(--text-dim);
+                margin-bottom:12px;
+                line-height:1.5;">Beschreibung lädt...</p>
+      <div style="display:flex;
+                  gap:8px;
+                  justify-content:flex-end;
+                  margin-top:16px;">
+        <a id="tool-modal-open" 
+           class="card-link" 
+           style="display:inline-flex;
+                  padding:10px 20px;
+                  border-radius:8px;
+                  background:var(--primary);
+                  color:var(--bg-dark);
+                  text-decoration:none;
+                  font-weight:600;
+                  transition:transform 0.2s ease;">
+          Tool öffnen ➜
+        </a>
+        <button id="tool-modal-close" 
+                style="background:transparent;
+                       border:1px solid rgba(255,255,255,0.1);
+                       padding:10px 20px;
+                       border-radius:8px;
+                       color:var(--text-secondary);
+                       cursor:pointer;
+                       transition:all 0.2s ease;">
+          Schließen
+        </button>
       </div>
     </div>
   `;
+  
   document.body.appendChild(modal);
-
+  
+  // Click außerhalb schließt Modal
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeToolModal();
+    if (e.target === modal) {
+      closeToolModal();
+    }
   });
-
-  // Attach global Escape handler once (idempotent)
+  
+  // ESC-Key Handler (nur einmal)
   if (!document._toolModalEscapeHandlerAttached) {
-    const _toolModalEscapeHandler = (e) => {
-      if (e.key === 'Escape') closeToolModal();
-    };
-    document.addEventListener('keydown', _toolModalEscapeHandler);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeToolModal();
+      }
+    });
     document._toolModalEscapeHandlerAttached = true;
   }
+  
+  // Close-Button Handler
+  const closeBtn = modal.querySelector('#tool-modal-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeToolModal);
+  }
+  
+  console.log('✅ Modal created and initialized');
+}
 
-} // <-- WICHTIG: Funktion createToolModal wird hier sauber geschlossen
-
-function openToolModal(tool) {
-  createToolModal();
-  const modal = document.getElementById('tool-modal');
-  if (!modal) return;
-  modal.querySelector('#tool-modal-title').textContent = tool.title || 'Tool';
-  modal.querySelector('#tool-modal-desc').textContent = tool.description || '';
-  const openLink = modal.querySelector('#tool-modal-open');
-  openLink.href = tool.link || '#';
-  openLink.target = '_blank';
-  modal.style.display = 'flex';
-  setTimeout(() => modal.classList.add('open'), 10);
+function openToolModal(toolData) {
+  try {
+    console.log('🎯 Opening modal with:', toolData);
+    
+    // Modal erstellen falls nicht vorhanden
+    createToolModal();
+    
+    const modal = document.getElementById('tool-modal');
+    if (!modal) {
+      console.error('❌ Modal not found after creation!');
+      return;
+    }
+    
+    // Elemente finden
+    const titleEl = modal.querySelector('#tool-modal-title');
+    const descEl = modal.querySelector('#tool-modal-desc');
+    const openLink = modal.querySelector('#tool-modal-open');
+    
+    if (!titleEl || !descEl || !openLink) {
+      console.error('❌ Modal elements missing!');
+      return;
+    }
+    
+    // FIX: Beide Property-Namen akzeptieren
+    const toolLink = toolData.link || toolData.href || '#';
+    const toolTitle = toolData.title || 'AI Tool';
+    const toolDesc = toolData.description || 'Klicke auf "Tool öffnen" um fortzufahren.';
+    
+    // Content setzen
+    titleEl.textContent = toolTitle;
+    descEl.textContent = toolDesc;
+    openLink.href = toolLink;
+    openLink.target = '_blank';
+    openLink.rel = 'noopener noreferrer';
+    
+    // Modal anzeigen mit Animation
+    modal.style.display = 'flex';
+    
+    // Force reflow für Animation
+    modal.offsetHeight;
+    
+    modal.style.opacity = '1';
+    const modalBox = modal.querySelector('.modal-box');
+    if (modalBox) {
+      modalBox.style.transform = 'scale(1)';
+    }
+    
+    // Body scroll blockieren
+    document.body.style.overflow = 'hidden';
+    
+    console.log('✅ Modal opened:', toolTitle);
+    
+  } catch (error) {
+    console.error('❌ Error opening modal:', error);
+    console.error('Stack:', error.stack);
+    
+    // Fallback: Direkter Link
+    const link = toolData.link || toolData.href;
+    if (link) {
+      console.log('🔗 Fallback: Opening link directly');
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
+  }
 }
 
 function closeToolModal() {
   const modal = document.getElementById('tool-modal');
   if (!modal) return;
-  modal.classList.remove('open');
-  modal.style.display = 'none';
+  
+  // Animation rückwärts
+  modal.style.opacity = '0';
+  const modalBox = modal.querySelector('.modal-box');
+  if (modalBox) {
+    modalBox.style.transform = 'scale(0.9)';
+  }
+  
+  // Nach Animation verstecken
+  setTimeout(() => {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 200);
+  
+  console.log('✅ Modal closed');
 }
 
-function attachDoubleClickHandlers() {
+// =========================================
+// MODAL INITIALIZATION - MUST RUN ON LOAD
+// =========================================
+
+// Initialisiere Modal beim App-Start
+function initializeModalSystem() {
+  console.log('🚀 Initializing modal system...');
+  
+  // Modal erstellen
   createToolModal();
-
-    const grid = document.getElementById('tool-grid') || document.querySelector('.tool-grid') || document.body;
-
-  // ensure we don't attach duplicate handler
-  if (grid._doubleClickHandlerAttached) return;
-  grid._doubleClickHandlerAttached = true;
-
-  grid.addEventListener('dblclick', (e) => {
-    if (e.target.closest('a') || e.target.closest('button')) return;
-    const card = e.target.closest('.card, .card-square, .stack-card');
-    if (!card) return;
-
-    const idAttr = card.getAttribute('data-tool-id') || card.dataset.toolId || '';
-    if (!card.classList.contains('card-armed')) {
-      document.querySelectorAll('.card-armed').forEach(c => c.classList.remove('card-armed'));
-      card.classList.add('card-armed');
-      setTimeout(() => { if (card.classList.contains('card-armed')) card.classList.remove('card-armed'); }, 3000);
-      return;
-    }
-
-    card.classList.remove('card-armed');
-
-    let tool = null;
-
-    // Prefer numeric id lookups when available
-    if (idAttr) {
-      const appTools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : state.tools;
-      if (appTools) {
-        tool = appTools.find(t => String(t.id) === String(idAttr));
-      }
-    }
-
-    // Fallback: match by normalized title
-    if (!tool) {
-      const titleEl = card.querySelector('.card-title, .square-title, .square-title-large, .card-title-large');
-      const title = titleEl?.textContent?.trim();
-      if (title) {
-        const titleNorm = title.toLowerCase();
-        const appTools = window.appState && Array.isArray(window.appState.tools) ? window.appState.tools : state.tools;
-        if (appTools) {
-          tool = appTools.find(t => ((t.title || '').trim().toLowerCase()) === titleNorm);
-        }
-      }
-    }
-
-    if (tool) {
-      try {
-        openToolModal(tool);
-      } catch (err) {
-        console.error('openToolModal error', err);
-        // fallback visual feedback
-        card.classList.toggle('card-armed');
-      }
-    } else {
-      const link = card.querySelector('a.card-link, a.square-link, a.card-overlay-link, a');
-      if (link && link.href) window.open(link.href, '_blank');
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (e.target && e.target.id === 'tool-modal-close') closeToolModal();
-  });
+  
+  // Global verfügbar machen
+  window.openToolModal = openToolModal;
+  window.closeToolModal = closeToolModal;
+  
+  console.log('✅ Modal system ready');
 }
+
+// Auto-Init wenn DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeModalSystem);
+} else {
+  initializeModalSystem();
+}
+
