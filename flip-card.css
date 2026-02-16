@@ -516,3 +516,49 @@
     -webkit-transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
   }
 }
+
+/* ============================================================
+   TEXT-ONLY BACK (keine Pills) — Override Add-on
+   -> ans ENDE der flip-card.css setzen
+   ============================================================ */
+
+/* Pills komplett aus */
+.card-face-back .qc-top-pills { 
+  display: none !important; 
+}
+
+/* Badge-Zone mittig oben, mehr Platz weil Pills weg */
+.card-face-back .qc-back-badges {
+  left: 56px !important;     /* Platz für Close */
+  right: 12px !important;    /* kein Platz für Pills nötig */
+  justify-content: flex-start !important;
+  pointer-events: none !important;
+}
+
+/* Center bekommt oben weniger "Reserve", weil Pills weg */
+.card-face-back .qc-center {
+  top: 52px !important;      /* vorher 56px */
+  bottom: 48px !important;   /* minimal kompakter */
+}
+
+/* Optional: Bottom-Pill wird zu “Text-Footer” (cleaner) */
+.card-face-back .qc-bottom-pill {
+  border-radius: 14px !important;        /* weniger “pill”, mehr panel */
+  white-space: normal !important;         /* Text darf umbrechen */
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;       /* 2 Zeilen */
+  -webkit-box-orient: vertical !important;
+  text-overflow: ellipsis !important;
+  padding: 10px 12px !important;
+  font-size: 0.72rem !important;
+  line-height: 1.25 !important;
+}
+
+/* Mobile noch kompakter */
+@media (max-width: 767px) {
+  .card-face-back .qc-center {
+    top: 50px !important;
+    bottom: 46px !important;
+  }
+}
