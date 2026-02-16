@@ -1,170 +1,518 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - NUR RÜCKSEITE (keine Front-Änderungen!)
+   FLIP CARD SYSTEM - MOBILE SAFE (V1.1)
+   - Front bleibt wie in style.css (Badge/Title/Marquee)
+   - Back: Quantum UI + Detailansicht über "Mehr Infos"
+   - iOS/Safari stable 3D rotateY (no mirrored bug)
+   - FIX: Back-Inhalt kann NICHT mehr "weggeclippt" werden auf kleinen Cards
    ══════════════════════════════════════════════════════════ */
 
-/* 3D Flip ermöglichen */
+/* 3D container (do NOT change your visual card skin from style.css) */
 .card-square {
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
+  transform-origin: 50% 50% !important;
+  will-change: transform;
+  transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
+
+  /* ✅ iOS/Safari: perspective as PROPERTY (not in transform) */
   perspective: 1200px;
   -webkit-perspective: 1200px;
 }
 
-/* Beide Seiten */
+/* Faces */
 .card-square .card-face {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  overflow: hidden;
+
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
+
+  /* KEIN transform hier! */
 }
 
-/* Front: normal */
+/* Front face: keep content as-is */
 .card-square .card-face-front {
   z-index: 2;
   transform: rotateY(0deg) translateZ(0.1px);
   -webkit-transform: rotateY(0deg) translateZ(0.1px);
 }
 
-/* Back: gedreht */
+/* Back face: rotated */
 .card-square .card-face-back {
   z-index: 1;
   transform: rotateY(180deg) translateZ(0.1px);
   -webkit-transform: rotateY(180deg) translateZ(0.1px);
-  
+
+  border-radius: inherit; /* ✅ exakt wie Front */
+  overflow: hidden;
+
   background:
     radial-gradient(circle at 20% 20%, rgba(0, 243, 255, 0.08) 0%, transparent 45%),
     radial-gradient(circle at 80% 70%, rgba(124, 77, 255, 0.08) 0%, transparent 45%),
     linear-gradient(135deg, rgba(26, 30, 55, 0.98), rgba(12, 15, 32, 0.98));
-  
+
   border: 2px solid rgba(0, 243, 255, 0.22);
   box-shadow:
     0 0 0 2px rgba(0, 243, 255, 0.12),
-    0 18px 46px rgba(0, 0, 0, 0.55);
-  
+    0 18px 46px rgba(0, 0, 0, 0.55),
+    0 0 60px rgba(0, 243, 255, 0.12);
+
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  overflow: auto;
+
+  /* ✅ WICHTIG: kein großes padding, sonst wird content auf kleinen Cards weggeclippt */
+  padding: 0;
 }
 
-/* Flip-Zustand */
+/* Flip state */
 .card-square.is-flipped {
-  transform: rotateY(180deg) !important;
-  -webkit-transform: rotateY(180deg) !important;
+  transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
+  -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   z-index: 150 !important;
+  overflow: visible !important;
 }
 
-.card-square.is-flipped .card-face-front { 
-  z-index: 1;
-  visibility: hidden;
-  opacity: 0;
-}
+/* Ensure back face is on top when flipped */
+.card-square.is-flipped .card-face-front { z-index: 1; }
+.card-square.is-flipped .card-face-back  { z-index: 2; }
 
-.card-square.is-flipped .card-face-back { 
-  z-index: 2;
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Andere Karten dimmen */
+/* Dim others */
 .tool-grid-squares:has(.card-square.is-flipped) .card-square:not(.is-flipped) {
   opacity: 0.35 !important;
-  filter: blur(2px) !important;
+  filter: blur(2px) saturate(0.9) !important;
   pointer-events: none !important;
+  transition: opacity 240ms ease, filter 240ms ease !important;
 }
 
-/* ==================== RÜCKSEITEN-INHALT ==================== */
+/* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
+.card-square.is-flipped .card-face-front {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.card-square.is-flipped .card-face-back {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
 
-/* Close Button */
+/* ============================================================
+   BACK UI (V1.1)
+   ============================================================ */
+
+/* Close button */
 .card-face-back .qc-close {
+  appearance: none;
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 22px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
   position: absolute;
   top: 12px;
   left: 12px;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  z-index: 10;
+  z-index: 5;
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+.card-face-back .qc-close:active { transform: scale(0.96); }
+@media (hover:hover) and (pointer:fine) {
+  .card-face-back .qc-close:hover {
+    background: rgba(0,243,255,0.10);
+    border-color: rgba(0,243,255,0.25);
+  }
 }
 
-.card-face-back .qc-close:active {
-  transform: scale(0.95);
+/* Top pills */
+.card-face-back .qc-top-pills {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
 }
 
-/* Inhalt zentriert */
+.card-face-back .qc-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.card-face-back .qc-pill-label {
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(224,224,240,0.75);
+}
+.card-face-back .qc-pill-value {
+  font-size: 0.90rem;
+  font-weight: 900;
+  color: rgba(0,243,255,0.95);
+  text-shadow: 0 0 14px rgba(0,243,255,0.16);
+}
+
+/* Category badge area */
+.card-face-back .qc-back-badges {
+  position: absolute;
+  top: 12px;
+  left: 58px;
+  right: 140px;
+  display: flex;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+}
+.card-face-back .qc-back-category {
+  opacity: 0.95;
+  padding: 6px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.70rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* ✅ FIX: Center bekommt einen echten "Viewport" innerhalb der Card (immer sichtbar) */
 .card-face-back .qc-center {
-  flex: 1;
+  position: absolute;
+  top: 56px;     /* Platz für Close + Pills */
+  bottom: 54px;  /* Platz für Bottom-Pill */
+  left: 12px;
+  right: 12px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
   text-align: center;
-  margin-top: 20px;
+
+  gap: 10px;
+
+  overflow: auto;                 /* ✅ verhindert "leer" durch clipping */
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 6px;               /* ✅ klein, passt auch auf mini-squares */
 }
 
 .card-face-back .qc-back-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 800;
-  line-height: 1.2;
-  color: rgba(255,255,255,0.95);
+  margin: 0 !important;
+  line-height: 1.10;
 }
 
 .card-face-back .qc-back-sub {
   margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.4;
-  color: rgba(224,224,240,0.8);
-  max-width: 90%;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: rgba(224,224,240,0.78);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 96%;
 }
 
+/* "Mehr Infos" Button */
 .card-face-back .qc-hero-btn {
-  padding: 12px 20px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(0,243,255,0.9), rgba(0,212,224,0.9));
-  color: #0A0E27;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,243,255,0.20);
+  color: rgba(255,255,255,0.92);
   font-weight: 900;
-  font-size: 0.85rem;
-  text-decoration: none;
+  font-size: 0.82rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 0;
-  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.card-face-back .qc-hero-btn:active { transform: scale(0.98); }
+.card-face-back .qc-hero-chev {
+  color: rgba(0,243,255,0.95);
+  font-weight: 1000;
+}
+.card-face-back .qc-hero-text { letter-spacing: 0.02em; }
+
+/* Details Panel */
+.card-face-back .qc-details {
+  width: 100%;
+  max-width: 100%;
   margin-top: 8px;
+  display: none;
+}
+.card-square.qc-details-open .card-face-back .qc-details {
+  display: block;
 }
 
-.card-face-back .qc-hero-btn:active {
-  transform: scale(0.98);
-}
-
-.card-face-back .qc-back-category {
-  display: inline-block;
-  padding: 6px 12px;
+/* Bottom pill */
+.card-face-back .qc-bottom-pill {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 9px 12px;
   border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  opacity: 0.9;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: rgba(224,224,240,0.80);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-square.qc-details-open .card-face-back .qc-bottom-pill {
+  display: none;
 }
 
-/* Animations stoppen beim Flip */
-.card-square.is-flipped {
+/* ---------- Neural rating (no ⭐) ---------- */
+.card-face-back .qc-rating {
+  margin-top: 2px;
+  padding: 10px 10px 9px 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.card-face-back .qc-rating-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.card-face-back .qc-rating-label {
+  font-size: 0.70rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160,160,176,0.9);
+}
+
+.card-face-back .qc-rating-value {
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: rgba(0, 243, 255, 0.95);
+  text-shadow: 0 0 14px rgba(0,243,255,0.18);
+}
+
+.card-face-back .qc-rating-meter {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.12) 0px,
+      rgba(255,255,255,0.12) 10px,
+      rgba(255,255,255,0.04) 10px,
+      rgba(255,255,255,0.04) 16px
+    );
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.card-face-back .qc-rating-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0,243,255,1), rgba(124,77,255,0.95));
+}
+
+.card-face-back .qc-rating-glow {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(0,243,255,0.35);
+  pointer-events: none;
+}
+
+.card-face-back .qc-rating-hint {
+  margin-top: 7px;
+  font-size: 0.70rem;
+  color: rgba(160,160,176,0.9);
+}
+
+/* provider */
+.card-face-back .qc-provider {
+  margin-top: 8px;
+  font-size: 0.76rem;
+  color: rgba(224,224,240,0.75);
+}
+.card-face-back .qc-provider strong {
+  color: rgba(255,255,255,0.92);
+}
+
+/* badges */
+.card-face-back .qc-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.card-face-back .qc-badge-item {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: rgba(224,224,240,0.82);
+  padding: 10px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* tags */
+.card-face-back .qc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.card-face-back .qc-tag {
+  font-size: 0.66rem;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid rgba(0, 243, 255, 0.18);
+  color: rgba(0, 243, 255, 0.92);
+  white-space: nowrap;
+}
+
+/* actions */
+.card-face-back .qc-actions {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.card-face-back .qc-btn {
+  appearance: none;
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-weight: 900;
+  font-size: 0.76rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+.card-face-back .qc-btn:active { transform: scale(0.98); }
+
+.card-face-back .qc-btn-primary {
+  color: #0A0E27;
+  background: linear-gradient(135deg, rgba(0,243,255,1), rgba(0,212,224,1));
+  box-shadow: 0 10px 24px rgba(0,243,255,0.18), inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.card-face-back .qc-btn-ghost {
+  color: rgba(0,243,255,0.95);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,243,255,0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Mobile tuning */
+@media (max-width: 767px) {
+  .card-square.is-flipped {
+    transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
+    -webkit-transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
+  }
+
+  .card-face-back .qc-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .card-face-back .qc-back-sub {
+    -webkit-line-clamp: 2;
+    font-size: 0.76rem;
+  }
+
+  .card-face-back .qc-pill {
+    padding: 6px 9px;
+  }
+  .card-face-back .qc-pill-value {
+    font-size: 0.86rem;
+  }
+
+  /* ✅ extra kompakt auf sehr kleinen Karten */
+  .card-face-back .qc-center {
+    top: 54px;
+    bottom: 52px;
+    left: 10px;
+    right: 10px;
+    padding: 4px 4px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .card-square {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   MINIMAL ADDON (style.css conflicts)
+   - verhindert breathing/armed/active/connection-active transforms
+   ============================================================ */
+.card-square.is-flipped,
+.card-square.is-flipped.card-armed,
+.card-square.is-flipped.card-touch-active,
+.card-square.is-flipped.connection-active,
+.card-square.is-flipped:active {
   animation: none !important;
-  transition: transform 520ms cubic-bezier(.2,.9,.2,1) !important;
+}
+
+.card-square.is-flipped,
+.card-square.is-flipped.card-armed,
+.card-square.is-flipped.card-touch-active,
+.card-square.is-flipped.connection-active,
+.card-square.is-flipped:active {
+  transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
+  -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
+}
+
+@media (max-width: 767px) {
+  .card-square.is-flipped,
+  .card-square.is-flipped.card-armed,
+  .card-square.is-flipped.card-touch-active,
+  .card-square.is-flipped.connection-active,
+  .card-square.is-flipped:active {
+    transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
+    -webkit-transform: rotateY(180deg) scale(1.04) translateZ(0) !important;
+  }
 }
