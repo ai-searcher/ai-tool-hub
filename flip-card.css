@@ -8,6 +8,12 @@
    ══════════════════════════════════════════════════════════ */
 
 .card-square[data-qcflip="1"] {
+  /* wichtig: absolute Faces brauchen einen Positioning-Context */
+  position: relative;
+
+  /* verhindert, dass ::before Mask/Glow-Layer die Back-Children überdeckt */
+  isolation: isolate;
+
   transform-style: preserve-3d !important;
   -webkit-transform-style: preserve-3d !important;
   transform-origin: 50% 50% !important;
@@ -55,6 +61,25 @@
     0 0 60px rgba(0, 243, 255, 0.12);
 }
 
+/* Back muss seine eigene Textfarbe haben, sonst "leer" auf Dark-Glass */
+.card-square[data-qcflip="1"] .qc-back,
+.card-square[data-qcflip="1"] .qc-back * {
+  color: rgba(255,255,255,0.92);
+  -webkit-text-fill-color: rgba(255,255,255,0.92);
+}
+
+/* Typo ungefähr wie Front (Front ist meist ~0.9–1.0rem für Titel, ~0.75–0.85rem für Sub) */
+.card-square[data-qcflip="1"] .qc-title {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.card-square[data-qcflip="1"] .qc-desc {
+  font-size: 0.82rem;
+  color: rgba(224,224,240,0.82);
+}
+
 .card-square[data-qcflip="1"].qc-flipped {
   transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
   -webkit-transform: rotateY(180deg) scale(1.06) translateZ(0) !important;
@@ -80,7 +105,8 @@
 
 /* FIX: style.css uses .card-square::before as glowing border (mask).
    In some browsers this layer can sit above transformed back content -> looks "empty". */
-.card-square.qc-flipped::before {
+.card-square.qc-flipped::before,
+.card-square.qc-flipped::after {
   opacity: 0 !important;
   pointer-events: none !important;
 }
