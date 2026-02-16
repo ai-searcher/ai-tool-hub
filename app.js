@@ -18,8 +18,6 @@ window.addEventListener('error', (e) => {
   } catch (err) { console.error('error listener failed', err); }
 });
 
-// duplicate unhandledrejection listener removed here — consolidated handler is declared later in the file
-
 // Wrap fetch to log failing requests
 (function() {
   if (!window.fetch) return;
@@ -40,7 +38,7 @@ window.addEventListener('error', (e) => {
   };
 })();
 
-// GLOBAL DEBUG: make unhandled promise rejections visible (helps locate "Unhandled Promise: TypeError" errors)
+// GLOBAL DEBUG: make unhandled promise rejections visible
 window.addEventListener('unhandledrejection', (ev) => {
   try {
     console.group('%cUnhandled Promise Rejection (global)', 'color:#fff;background:#d9534f;padding:3px;border-radius:4px;');
@@ -49,10 +47,10 @@ window.addEventListener('unhandledrejection', (ev) => {
     console.trace();
     console.groupEnd();
   } catch (e) {
-    // swallow to avoid breaking page if console restricted
     console.error('unhandledrejection logging failed', e);
   }
 });
+
 // =========================================
 // CONFIGURATION
 // =========================================
@@ -162,7 +160,7 @@ const getElement = (selector) => {
 const sanitizeInput = (input) => {
   if (typeof input !== 'string') return '';
   return input
-    .replace(/[<>'"]/g, '') // Remove dangerous chars
+    .replace(/[<>'"]/g, '')
     .trim()
     .substring(0, CONFIG.search.maxLength);
 };
@@ -595,7 +593,6 @@ const ui = {
   showState(stateName) {
     const states = ['loading', 'error', 'empty'];
 
-    // Debug log
     try {
       console.log(`[ui.showState] -> requested state: "${stateName}"`);
     } catch (e) {}
@@ -607,21 +604,16 @@ const ui = {
       }
     });
 
-    // Tool grid visibility handling with extra logging & safety
     if (this.elements.toolGrid) {
       const prevInline = this.elements.toolGrid.getAttribute('style') || '';
       try {
         console.log(`[ui.showState] toolGrid previous inline style: "${prevInline}"`);
       } catch (e) {}
 
-      // set display explicitly for grid state
       if (stateName === 'grid') {
-        // force visible
         this.elements.toolGrid.style.display = 'grid';
-        // remove possible visibility properties that hide it
         this.elements.toolGrid.style.removeProperty('visibility');
         this.elements.toolGrid.style.removeProperty('opacity');
-        // extra log after change
         try {
           console.log('[ui.showState] toolGrid set to display: grid');
         } catch (e) {}
@@ -691,7 +683,6 @@ const ui = {
     });
   },
 
-  // ---------- Render Tool Card (NEU: prevent immediate navigation; keep data-href) ----------
   renderCard(tool) {
     const categoryName = tool.category_name || tool.category || 'other';
     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
@@ -733,7 +724,6 @@ const ui = {
             </div>
           </div>
 
-          <!-- overlay kept for click area, but href removed; data-href used for later navigation -->
           <a class="card-overlay-link"
              role="button"
              tabindex="-1"
@@ -745,7 +735,6 @@ const ui = {
     `;
   },
 
-  // EscapeHtml function must exist exactly once in ui (keine Duplikate)
   escapeHtml(text) {
     if (text === null || text === undefined) return '';
     const div = document.createElement('div');
@@ -753,9 +742,7 @@ const ui = {
     return div.innerHTML;
   },
 
-  // ---------- Render all (stays in ui) - ensure trailing commas/commas between methods are correct ----------
   render() {
-
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
       const query = state.searchQuery.toLowerCase();
       state.filtered = state.tools.filter(tool =>
@@ -798,7 +785,6 @@ const ui = {
     }
   },
 
-  // ---------- Attach handlers (event delegation, keyboard-accessible) ----------
   attachCardHandlers() {
     const grid = this.elements.toolGrid || getElement('#tool-grid');
     if (!grid) return;
@@ -813,10 +799,10 @@ const ui = {
       const card = e.target.closest('.card-square');
 
       if (overlay && card) {
-        // don't navigate immediately; track and open modal later
         e.preventDefault();
         e.stopPropagation();
 
+        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
         const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
         const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
 
@@ -824,10 +810,28 @@ const ui = {
 
         if (typeof openToolModal === 'function') {
           try {
-            openToolModal({ title: toolName, href, cardElement: card });
+            let tool = null;
+            
+            if (toolId && state.tools) {
+              tool = state.tools.find(t => String(t.id) === String(toolId));
+            }
+            
+            if (tool) {
+              openToolModal(tool);
+            } else {
+              openToolModal({
+                title: toolName,
+                link: href,
+                description: `${toolName} - AI Tool`
+              });
+            }
           } catch (err) {
             console.error('openToolModal error', err);
-            card.classList.toggle('card-armed');
+            if (href) {
+              window.open(href, '_blank', 'noopener,noreferrer');
+            } else {
+              card.classList.toggle('card-armed');
+            }
           }
         } else {
           card.classList.toggle('card-armed');
@@ -835,13 +839,6 @@ const ui = {
         }
 
         return;
-      }
-
-      if (card && !overlay) {
-        e.preventDefault();
-        card.classList.toggle('card-armed');
-        const toolName = card.dataset.toolName || 'Unknown';
-        analytics.trackToolClick(toolName);
       }
     };
 
@@ -851,7 +848,6 @@ const ui = {
         if (!card) return;
         const overlay = card.querySelector('.card-overlay-link');
         if (overlay) {
-          // trigger delegated handler via programmatic click
           overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
           e.preventDefault();
         }
@@ -975,9 +971,7 @@ const app = {
       console.log('Config:', CONFIG);
       
       ui.cacheElements();
-      
       errorHandler.setupRetry();
-      
       ui.showState('loading');
       
       const rawTools = await dataLoader.load();
@@ -1004,20 +998,24 @@ const app = {
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
-      
       search.init();
 
       console.log('✅ App initialized successfully!');
 
-      // --- Expose minimal global state + plugin-ready event (safe) ---
       try {
         if (!window.appState) window.appState = state;
         window.dispatchEvent(new Event('quantum:ready'));
       } catch (e) {
-        // Failsafe: mögliche CSP/readonly globales Objekt
         console.debug('app: could not expose global state or dispatch event', e);
       }
-            
+
+      try {
+        if (typeof initializeModalSystem === 'function') {
+          initializeModalSystem();
+        }
+      } catch (modalError) {
+        console.warn('Modal system init failed:', modalError);
+      }
       
     } catch (error) {
       console.error('❌ CRITICAL ERROR in init:', error);
@@ -1089,7 +1087,6 @@ function createToolModal() {
   modal.id = 'tool-modal';
   modal.className = 'tool-modal-overlay';
   
-  // Wichtig: Alle Styles gleichzeitig setzen
   Object.assign(modal.style, {
     display: 'none',
     position: 'fixed',
@@ -1153,14 +1150,12 @@ function createToolModal() {
   
   document.body.appendChild(modal);
   
-  // Click außerhalb schließt Modal
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       closeToolModal();
     }
   });
   
-  // ESC-Key Handler (nur einmal)
   if (!document._toolModalEscapeHandlerAttached) {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -1170,7 +1165,6 @@ function createToolModal() {
     document._toolModalEscapeHandlerAttached = true;
   }
   
-  // Close-Button Handler
   const closeBtn = modal.querySelector('#tool-modal-close');
   if (closeBtn) {
     closeBtn.addEventListener('click', closeToolModal);
@@ -1183,7 +1177,6 @@ function openToolModal(toolData) {
   try {
     console.log('🎯 Opening modal with:', toolData);
     
-    // Modal erstellen falls nicht vorhanden
     createToolModal();
     
     const modal = document.getElementById('tool-modal');
@@ -1192,7 +1185,6 @@ function openToolModal(toolData) {
       return;
     }
     
-    // Elemente finden
     const titleEl = modal.querySelector('#tool-modal-title');
     const descEl = modal.querySelector('#tool-modal-desc');
     const openLink = modal.querySelector('#tool-modal-open');
@@ -1202,31 +1194,25 @@ function openToolModal(toolData) {
       return;
     }
     
-    // FIX: Beide Property-Namen akzeptieren
     const toolLink = toolData.link || toolData.href || '#';
     const toolTitle = toolData.title || 'AI Tool';
     const toolDesc = toolData.description || 'Klicke auf "Tool öffnen" um fortzufahren.';
     
-    // Content setzen
     titleEl.textContent = toolTitle;
     descEl.textContent = toolDesc;
     openLink.href = toolLink;
     openLink.target = '_blank';
     openLink.rel = 'noopener noreferrer';
     
-    // Modal anzeigen mit Animation
     modal.style.display = 'flex';
-    
-    // Force reflow für Animation
     modal.offsetHeight;
-    
     modal.style.opacity = '1';
+    
     const modalBox = modal.querySelector('.modal-box');
     if (modalBox) {
       modalBox.style.transform = 'scale(1)';
     }
     
-    // Body scroll blockieren
     document.body.style.overflow = 'hidden';
     
     console.log('✅ Modal opened:', toolTitle);
@@ -1235,7 +1221,6 @@ function openToolModal(toolData) {
     console.error('❌ Error opening modal:', error);
     console.error('Stack:', error.stack);
     
-    // Fallback: Direkter Link
     const link = toolData.link || toolData.href;
     if (link) {
       console.log('🔗 Fallback: Opening link directly');
@@ -1248,14 +1233,12 @@ function closeToolModal() {
   const modal = document.getElementById('tool-modal');
   if (!modal) return;
   
-  // Animation rückwärts
   modal.style.opacity = '0';
   const modalBox = modal.querySelector('.modal-box');
   if (modalBox) {
     modalBox.style.transform = 'scale(0.9)';
   }
   
-  // Nach Animation verstecken
   setTimeout(() => {
     modal.style.display = 'none';
     document.body.style.overflow = '';
@@ -1264,28 +1247,10 @@ function closeToolModal() {
   console.log('✅ Modal closed');
 }
 
-// =========================================
-// MODAL INITIALIZATION - MUST RUN ON LOAD
-// =========================================
-
-// Initialisiere Modal beim App-Start
 function initializeModalSystem() {
   console.log('🚀 Initializing modal system...');
-  
-  // Modal erstellen
   createToolModal();
-  
-  // Global verfügbar machen
   window.openToolModal = openToolModal;
   window.closeToolModal = closeToolModal;
-  
   console.log('✅ Modal system ready');
 }
-
-// Auto-Init wenn DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeModalSystem);
-} else {
-  initializeModalSystem();
-}
-
