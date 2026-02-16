@@ -1,22 +1,22 @@
 /* ═══════════════════════════════════════════════════════════
-   FLIP CARD SYSTEM - REBUILD V2.0 (MOBILE-FIRST, iOS-SAFE)
+   FLIP CARD SYSTEM - REBUILD V2.1 (MOBILE-FIRST, iOS-SAFE)
    - Front markup bleibt exakt wie app.js es liefert
    - Back wird aus window.appState.tools gebaut
    - Flip: stable 3D (iOS) + hard hide front when flipped
    - One open at a time, tap outside closes
-   - "Mehr Infos" toggles Details panel on back
+   - "Mehr Infos" toggles Details panel on back (qc-details-open)
    ══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-console.log('🚀 flip-card.js (V2) loading...');
+console.log('🚀 flip-card.js (V2.1) loading...');
 
 const QC = {
   gridId: 'tool-grid',
   cardSel: '.card-square',
   initAttr: 'data-qcflip',
   openClass: 'qc-flipped',
-  detailsClass: 'qc-details'
+  detailsOpenClass: 'qc-details-open'
 };
 
 /* -------------------- helpers -------------------- */
@@ -63,7 +63,7 @@ function closeAll(except = null) {
   document.querySelectorAll(`${QC.cardSel}.${QC.openClass}`).forEach(c => {
     if (except && c === except) return;
     c.classList.remove(QC.openClass);
-    c.classList.remove(QC.detailsClass);
+    c.classList.remove(QC.detailsOpenClass);
     c.setAttribute('aria-expanded', 'false');
   });
 }
@@ -111,9 +111,7 @@ function backHTML(tool) {
         <h3 class="qc-title square-title-large">${escapeHtml(tool.title)}</h3>
         <p class="qc-desc">${escapeHtml(desc || 'Details & Bewertung im Quantum Hub')}</p>
 
-        <button class="qc-more" type="button" data-qc="more">
-          Mehr Infos
-        </button>
+        <button class="qc-more" type="button" data-qc="more">Mehr Infos</button>
 
         <div class="qc-details">
           ${buildMeter(tool.rating)}
@@ -156,7 +154,6 @@ function prepareCard(card) {
 
   const tool = getToolById(toolId);
   if (!tool) {
-    // tools not ready yet -> retry once shortly
     setTimeout(() => {
       if (card && card.getAttribute(QC.initAttr) !== '1') prepareCard(card);
     }, 200);
@@ -206,7 +203,7 @@ function toggleCard(card) {
   if (willOpen) openCard(card);
   else {
     card.classList.remove(QC.openClass);
-    card.classList.remove(QC.detailsClass);
+    card.classList.remove(QC.detailsOpenClass);
     card.setAttribute('aria-expanded', 'false');
   }
 }
@@ -223,14 +220,14 @@ function onGridPointerUp(e) {
     if (action === 'close' || action === 'back') {
       e.preventDefault(); e.stopPropagation();
       card.classList.remove(QC.openClass);
-      card.classList.remove(QC.detailsClass);
+      card.classList.remove(QC.detailsOpenClass);
       card.setAttribute('aria-expanded', 'false');
       return;
     }
 
     if (action === 'more') {
       e.preventDefault(); e.stopPropagation();
-      card.classList.toggle(QC.detailsClass);
+      card.classList.toggle(QC.detailsOpenClass);
       return;
     }
   }
@@ -298,7 +295,7 @@ function initFlipV2() {
     grid._qcV2Obs.observe(grid, { childList: true, subtree: true });
   }
 
-  console.log('✅ flip-card V2 ready');
+  console.log('✅ flip-card V2.1 ready');
 }
 
 if (document.readyState === 'loading') {
