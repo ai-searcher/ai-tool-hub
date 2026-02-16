@@ -78,15 +78,22 @@ function buildBackMarquee(tool) {
 function buildRatingPill(rating) {
   const r = clamp(rating || 0, 0, 5);
   return `
-    <div class="qc-pill qc-pill-rating" aria-label="Bewertung ${escapeHtml(r.toFixed(1))}">
-      <span class="qc-pill-label">bewertung</span>
-      <span class="qc-pill-value">${escapeHtml(r.toFixed(1))}</span>
+    <div class="qc-pill">
+      <span class="qc-pill-label">Rating</span>
+      <span class="qc-pill-value">${r.toFixed(1)}</span>
     </div>
   `;
 }
 
 function buildPricePill(priceLabel) {
   return `
+    <div class="qc-pill">
+      <span class="qc-pill-label">Preis</span>
+      <span class="qc-pill-value">${escapeHtml(priceLabel)}</span>
+    </div>
+  `;
+}
+
     <div class="qc-pill qc-pill-price" aria-label="Preis ${escapeHtml(priceLabel)}">
       <span class="qc-pill-label">preis</span>
       <span class="qc-pill-value">${escapeHtml(priceLabel)}</span>
