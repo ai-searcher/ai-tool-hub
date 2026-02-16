@@ -400,17 +400,15 @@
   }
 }
 
-/* ==================== iOS HARD FIX: FRONT BLEED-THROUGH ==================== */
-/* ✅ WICHTIG: Nur anwenden, wenn die Karte wirklich vorbereitet ist!
-   Sonst: Front wird versteckt, obwohl Back noch nicht existiert => "leere Rückseite" */
-
-.card-square.is-flipped[data-flip-initialized="true"] .card-face-front {
+/* ==================== iOS HARD FIX (ohne data-Attribut) ==================== */
+/* Front bei flipped-Karte unsichtbar machen – Back sichtbar */
+.card-square.is-flipped .card-face-front {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
 
-.card-square.is-flipped[data-flip-initialized="true"] .card-face-back {
+.card-square.is-flipped .card-face-back {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
