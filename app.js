@@ -5,6 +5,7 @@
 // =========================================
 
 'use strict';
+
 // ======= DEBUG: globaler Error- und Fetch-Logger (temporär) =======
 window.addEventListener('error', (e) => {
   try {
@@ -945,7 +946,8 @@ const ui = {
         this.attachCardHandlers();
       }
     } else {
-      // Stack-Ansicht
+     
+       // Stack-Ansicht
       this.showState('grid');
       if (!this.stackView) {
         this.stackView = new StackViewController(this.elements.toolGrid, state, this);
@@ -960,7 +962,7 @@ const ui = {
     const viewToggle = document.querySelector('.view-toggle');
     const activeTab = viewToggle?.querySelector('.toggle-btn.active');
     return activeTab ? activeTab.dataset.view : 'grid';
-  }
+  },
 
   attachCardHandlers() {
     const grid = this.elements.toolGrid || getElement('#tool-grid');
