@@ -754,8 +754,9 @@ body {
   transform: none !important;
   opacity: 1 !important;
   margin-bottom: 0.5rem;
-  aspect-ratio: auto; /* im aufgeklappten Zustand Höhe nach Inhalt */
-  min-height: 100px; /* Mindesthöhe, damit sie nicht zu klein werden */
+  aspect-ratio: 1/1; /* wieder quadratisch */
+  width: 100%; /* volle Breite im Stack */
+  min-height: auto; /* keine Mindesthöhe nötig, da aspect-ratio greift */
 }
 
 /* Kategoriespezifische Rahmenfarbe im fanned-Zustand */
