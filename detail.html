@@ -8,245 +8,270 @@
   <!-- Gleiches Stylesheet wie Hauptseite – für konsistente Farben und Grundstile -->
   <link rel="stylesheet" href="style.css?v=1.2">
   
-  <style>
-    /* ===== Detail-spezifische Styles ===== */
+ <style>
+  /* ===== Detail-spezifische Styles ===== */
+  
+  /* Hintergrund der Seite – dunkel, damit das Panel hervorsticht */
+  body {
+    background: var(--bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    /* Verhindert, dass die Seite selbst scrollt, wenn Panel höher wird */
+    overflow: hidden;
+  }
+  
+  /* Das milchig-glasige Panel – jetzt mit fester max. Höhe und eigenem Scroll */
+  .detail-panel {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;                 /* 📌 maximale Höhe: 85% des Viewports */
+    overflow-y: auto;                  /* 📌 Scrollen nur im Panel */
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 28px 20px;
+    box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+    box-sizing: border-box;
     
-    /* Hintergrund der Seite – dunkel, damit das Panel hervorsticht */
-    body {
-      background: var(--bg-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 16px;
-      box-sizing: border-box;
-    }
+    /* Breathing-Animation mit Kategoriefarbe */
+    animation: breathing-glow 8s ease-in-out infinite;
     
-    /* Das milchig-glasige Panel – exakt wie die Tool-Quadrate */
-    .detail-panel {
-      position: relative;
-      width: 100%;
-      max-width: 480px;      /* angenehme Breite für Mobil */
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 24px;   /* etwas stärker abgerundet */
-      padding: 28px 20px;
-      box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
-      box-sizing: border-box;
-      
-      /* Breathing-Animation mit Kategoriefarbe – wird später per data-category aktiviert */
-      animation: breathing-glow 8s ease-in-out infinite;
-      
-      /* Innenlayout */
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+    /* Innenlayout */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     
-    /* Kopfzeile mit Titel und Schließen-Button */
-    .detail-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    
-    .detail-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-primary);
-      margin: 0;
-      flex: 1;
-      word-break: break-word;
-    }
-    
-    /* Eleganter Schließen-Button */
-    .close-button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-dim);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 28px;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      padding: 0;
-      box-shadow: none;
-      flex-shrink: 0;
-    }
-    
-    .close-button:hover,
-    .close-button:active {
-      background: rgba(255,255,255,0.1);
-      color: var(--text-primary);
-      border-color: var(--primary);
-      transform: scale(1.05);
-    }
-    
-    /* Metadaten (Kategorie, Provider, Rating) */
-    .detail-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 16px;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding: 16px 0;
-    }
-    
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .meta-label {
-      color: var(--text-dim);
-      font-weight: 400;
-    }
-    
-    .meta-value {
-      color: var(--primary);
-      font-weight: 600;
-    }
-    
-    .category-badge {
-      background: var(--glow-text);  /* wird später dynamisch überschrieben */
-      color: var(--color-text);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    /* Beschreibung */
-    .detail-description {
-      color: var(--text-dim);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin: 0;
-    }
-    
-    /* Badges / Context-Info */
-    .detail-badges {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: rgba(0,0,0,0.2);
-      border-radius: 16px;
-      padding: 16px;
-    }
-    
-    .badge-item {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      padding-left: 12px;
-      border-left: 2px solid var(--primary);
-    }
-    
-    /* Link-Button */
-    .detail-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--primary);
-      color: var(--bg-dark);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      padding: 16px 24px;
-      border-radius: 50px;
-      transition: all 0.2s ease;
-      margin-top: 8px;
-      border: none;
-      cursor: pointer;
-    }
-    
-    .detail-link:hover,
-    .detail-link:active {
-      background: var(--primary-hover);
-      transform: scale(1.02);
-      box-shadow: 0 0 20px var(--primary-glow);
-    }
-    
-    /* Lade- und Fehlerzustand */
-    .loading-state,
-    .error-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-dim);
-    }
-    
-    /* Kategoriespezifische Farben für Badge und Badge-Container */
-    .detail-panel[data-category="text"] .category-badge {
-      background: var(--glow-text);
-      color: var(--color-text);
-    }
-    .detail-panel[data-category="text"] .badge-item {
-      border-left-color: var(--color-text);
-    }
-    
-    .detail-panel[data-category="image"] .category-badge {
-      background: var(--glow-image);
-      color: var(--color-image);
-    }
-    .detail-panel[data-category="image"] .badge-item {
-      border-left-color: var(--color-image);
-    }
-    
-    .detail-panel[data-category="code"] .category-badge {
-      background: var(--glow-code);
-      color: var(--color-code);
-    }
-    .detail-panel[data-category="code"] .badge-item {
-      border-left-color: var(--color-code);
-    }
-    
-    .detail-panel[data-category="audio"] .category-badge {
-      background: var(--glow-audio);
-      color: var(--color-audio);
-    }
-    .detail-panel[data-category="audio"] .badge-item {
-      border-left-color: var(--color-audio);
-    }
-    
-    .detail-panel[data-category="video"] .category-badge {
-      background: var(--glow-video);
-      color: var(--color-video);
-    }
-    .detail-panel[data-category="video"] .badge-item {
-      border-left-color: var(--color-video);
-    }
-    
-    .detail-panel[data-category="data"] .category-badge {
-      background: var(--glow-data);
-      color: var(--color-data);
-    }
-    .detail-panel[data-category="data"] .badge-item {
-      border-left-color: var(--color-data);
-    }
-    
-    .detail-panel[data-category="other"] .category-badge {
-      background: var(--glow-other, rgba(176,190,197,0.25));
-      color: var(--color-other);
-    }
-    .detail-panel[data-category="other"] .badge-item {
-      border-left-color: var(--color-other);
-    }
-  </style>
+    /* Sanfter Scrollbalken (optional) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+  }
+  
+  /* Webkit-Scrollbar Styling (Chrome, Safari) */
+  .detail-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+  .detail-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .detail-panel::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+  }
+  
+  /* Kopfzeile mit Titel und Schließen-Button */
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-shrink: 0;                    /* 📌 Kopfzeile nicht stauchen */
+  }
+  
+  .detail-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin: 0;
+    flex: 1;
+    word-break: break-word;
+  }
+  
+  /* Eleganter Schließen-Button */
+  .close-button {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-dim);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 28px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: none;
+    flex-shrink: 0;
+  }
+  
+  .close-button:hover,
+  .close-button:active {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+  
+  /* Metadaten (Kategorie, Provider, Rating) */
+  .detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 16px 0;
+    flex-shrink: 0;                    /* 📌 nicht stauchen */
+  }
+  
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .meta-label {
+    color: var(--text-dim);
+    font-weight: 400;
+  }
+  
+  .meta-value {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  
+  .category-badge {
+    background: var(--glow-text);  /* wird später dynamisch überschrieben */
+    color: var(--color-text);
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Beschreibung */
+  .detail-description {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    flex-shrink: 0;                    /* 📌 nicht stauchen */
+  }
+  
+  /* Badges / Context-Info – dieser Bereich wird scrollbar, wenn nötig */
+  .detail-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 16px;
+    padding: 16px;
+    /* Kein flex-shrink, darf sich ausdehnen und scrollen */
+  }
+  
+  .badge-item {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding-left: 12px;
+    border-left: 2px solid var(--primary);
+  }
+  
+  /* Link-Button */
+  .detail-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary);
+    color: var(--bg-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 16px 24px;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;                    /* 📌 nicht stauchen */
+  }
+  
+  .detail-link:hover,
+  .detail-link:active {
+    background: var(--primary-hover);
+    transform: scale(1.02);
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+  
+  /* Lade- und Fehlerzustand */
+  .loading-state,
+  .error-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+  }
+  
+  /* Kategoriespezifische Farben für Badge und Badge-Container */
+  .detail-panel[data-category="text"] .category-badge {
+    background: var(--glow-text);
+    color: var(--color-text);
+  }
+  .detail-panel[data-category="text"] .badge-item {
+    border-left-color: var(--color-text);
+  }
+  
+  .detail-panel[data-category="image"] .category-badge {
+    background: var(--glow-image);
+    color: var(--color-image);
+  }
+  .detail-panel[data-category="image"] .badge-item {
+    border-left-color: var(--color-image);
+  }
+  
+  .detail-panel[data-category="code"] .category-badge {
+    background: var(--glow-code);
+    color: var(--color-code);
+  }
+  .detail-panel[data-category="code"] .badge-item {
+    border-left-color: var(--color-code);
+  }
+  
+  .detail-panel[data-category="audio"] .category-badge {
+    background: var(--glow-audio);
+    color: var(--color-audio);
+  }
+  .detail-panel[data-category="audio"] .badge-item {
+    border-left-color: var(--color-audio);
+  }
+  
+  .detail-panel[data-category="video"] .category-badge {
+    background: var(--glow-video);
+    color: var(--color-video);
+  }
+  .detail-panel[data-category="video"] .badge-item {
+    border-left-color: var(--color-video);
+  }
+  
+  .detail-panel[data-category="data"] .category-badge {
+    background: var(--glow-data);
+    color: var(--color-data);
+  }
+  .detail-panel[data-category="data"] .badge-item {
+    border-left-color: var(--color-data);
+  }
+  
+  .detail-panel[data-category="other"] .category-badge {
+    background: var(--glow-other, rgba(176,190,197,0.25));
+    color: var(--color-other);
+  }
+  .detail-panel[data-category="other"] .badge-item {
+    border-left-color: var(--color-other);
+  }
+</style>
 </head>
 <body>
   <div class="detail-panel" id="detailPanel" data-category="">
