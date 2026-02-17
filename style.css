@@ -2175,68 +2175,7 @@ a:focus-visible {
 
 /* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
 
-/* Container: keine Höhe im Layout, Marken absolut platzieren,
-   pointer-events:none damit sie interaktionen nicht blockieren */
-.marquee-container {
-  position: relative;
-  width: 100%;
-  height: 0;              /* kein Platz im normalen Flow */
-  pointer-events: none;   /* keine Klicks abfangen */
-  z-index: 1000;
-}
-
-/* Jede marquee an exakt derselben Stelle: zentriert, transparent background */
-.marquee {
-  position: absolute;
-  left: 50%;
-  top: 10px; /* anpassen: Abstand vom oberen Rand des Header */
-  transform: translateX(-50%);
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-  color: inherit;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;    /* optisch als Pill, aber transparent bg */
-  opacity: 0.98;
-  pointer-events: none;    /* nicht klickbar */
-  white-space: nowrap;
-  z-index: 1001;
-}
-
-/* Falls JS/toggling mehrere marquees sichtbar macht, erzwinge gleiche Position */
-.marquee-1, .marquee-2, .marquee-3 {
-  top: 10px; /* alle gleich */
-}
-
-/* Inhalte innerhalb marquees transparent halten (falls Markup enthält) */
-.marquee * {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* ===== Hide common dev/notice toasts (top-left "App OK - tools:20") =====
-   Versuch mehrere übliche Klassen/IDs abzudecken; falls dein JS eigene Klasse
-   nutzt, ergänze sie hier oder nutze den Optionalen JS-Remover unten. */
-.app-notice,
-.app-toast,
-.onboarding-toast,
-.site-notice,
-.toast,
-#app-notice,
-.notification-bubble,
-.notice {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-/* ===========================
-   OVERRIDES: MARQUEE & NOTICES
-   (append this at end of style.css)
-   =========================== */
-
-/* 1) Debug / dev badge vollständig ausblenden (JS erstellt #debug-badge) */
+/* ===== 1) NOTICES / DEBUG BADGES AUSBLENDEN ===== */
 #debug-badge,
 .app-notice,
 .app-toast,
@@ -2245,65 +2184,48 @@ a:focus-visible {
 .toast,
 #app-notice,
 .notification-bubble,
-.notice {
+.notice,
+[class*="toast"],
+[class*="notice"][role="status"],
+[id^="debug"] {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
   opacity: 0 !important;
 }
 
-/* 2) Falls eine JS-Badge andere ID/Klasse nutzt: sehr breite Sicherung (nicht destruktiv) */
-[id^="debug"], [class*="toast"], [class*="notice"][role="status"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
+/* ===== 2) MARQUEE IN DER CARD: IMMER GLEICHE POSITION, KEIN CONTAINER ===== */
+/* WICHTIG: wir stylen NUR .context-marquee in der Card – kein extra .marquee-container nötig */
 
-/* 3) Entferne / neutralisiere Overlay-Links über dem Header/Titel */
-.header a.card-overlay-link,
-.header a.header-overlay,
-.header .overlay-link,
-.title > a,
-.header a[aria-hidden="true"] {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* 4) Einheitliche, pixelgenaue Position der Marquee innerhalb der Card
-   - nutzt exakt das Card-Innenpadding (18px desktop / 12px mobile)
-   - absolute Position, gleiche top/bottom für alle marquees
-   - kein eigener Hintergrund, keine Ränder, kein Schatten
-*/
-.card-square { position: relative; } /* ensure container is positioned */
+/* Grundlayout (Desktop/Default) */
+.card-square { position: relative; } /* safe, falls nicht schon gesetzt */
 
 .card-square .context-marquee {
   position: absolute !important;
-  left: 20px !important;               /* equal to card padding desktop */
-  right: 20px !important;
-  bottom: 0px !important;             /* konstante Y-Offset (feinjustierbar) */
+  left: 4px !important;     /* nahezu rand-bis-rand */
+  right: 4px !important;
+  bottom: 4px !important;   /* konstante Position */
   height: 22px !important;
+
   margin: 0 !important;
   padding: 0 !important;
-  width: auto !important;
+
   overflow: hidden !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-  pointer-events: none !important;     /* nicht klickbar */
+  pointer-events: none !important;
   z-index: 2 !important;
-  -webkit-mask-image: none !important; /* remove previous mask which can cause visible bars */
-  mask-image: none !important;
 }
 
-/* Track & sequence: no background, only text visible; ensure loop still works */
+/* Track & Text: transparent, nur Text sichtbar */
 .card-square .context-marquee .marquee-track {
   display: inline-flex !important;
   white-space: nowrap !important;
-  will-change: transform;
+  align-items: center !important;
+  will-change: transform !important;
   animation: elegantMarqueeFlow 15s linear infinite !important;
-  transform: translateZ(0); /* avoid subpixel weirdness */
+  transform: translateZ(0) !important;
 }
 
 .card-square .context-marquee .marquee-seq {
@@ -2313,47 +2235,36 @@ a:focus-visible {
   color: rgba(255,255,255,0.78) !important;
   font-size: 0.72rem !important;
   line-height: 22px !important;
-  padding: 0 1.5rem !important; /* spacing between segments */
-  min-width: 40% !important;     /* ensures visible continuous look */
+
+  padding-left: 0 !important;
+  padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
+  min-width: 40% !important;
   pointer-events: none !important;
 }
 
-/* Remove side fade overlays that produce visible background bars */
+/* Side-fade Overlays AUS (die erzeugen oft sichtbare Balken) */
 .card-square .context-marquee::before,
-.card-square .context-marquee::after,
-.context-marquee::before,
-.context-marquee::after {
+.card-square .context-marquee::after {
   display: none !important;
   content: none !important;
 }
 
-/* 5) Mobile tweak: use smaller internal padding so marquee aligns with mobile card padding */
+/* ===== 3) MOBILE TWEAKS ===== */
 @media (max-width: 767px) {
   .card-square .context-marquee {
     left: 0 !important;
     right: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    border-bottom-left-radius: inherit !important;
-    border-bottom-right-radius: inherit !important;
+    bottom: 0 !important;
+    height: 21px !important;
   }
 
   .card-square .context-marquee .marquee-seq {
     font-size: 0.66rem !important;
-    padding-left: 0 !important;
-    padding-right: 2rem !important;
     min-width: 45% !important;
   }
 }
 
-
-/* 6) Accessibility: pausieren on focus or reduce motion respected */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
+/* ===== 4) ACCESSIBILITY: reduce-motion respektieren ===== */
 @media (prefers-reduced-motion: reduce) {
   .card-square .context-marquee .marquee-track {
     animation: none !important;
@@ -2361,195 +2272,13 @@ a:focus-visible {
   }
 }
 
-/* 7) Final safety: ensure no visible border/shadow from any marquee ancestor */
-.card-square,
-.card-square * {
-  background-clip: padding-box !important;
-  outline: none !important;
-}
-
-/* End of overrides */
-
-/* === FINAL: Marquee wirklich rand-bis-rand (2mm extra Overscan) === */
-:root { --marquee-overscan: 20px; } /* ~1mm näher zum Rand als 8px */
-
-
-.card-square .context-marquee {
-  left: 4px !important;      /* ← 1mm vom linken Rand */
-  right: 4px !important;     /* ← 1mm vom rechten Rand */
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-}
-
-
-
-/* Kein "Innenabstand", damit Text bis zur Linie kommt */
-.card-square .context-marquee .marquee-seq {
-  padding-left: 0 !important;
-  padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
-}
-
-/* === Layout: Badge & Titel exakt positionieren === */
-:root {
-  --edge-left: 11px;  /* ~3mm */
-  --edge-top: 15px;   /* ~4mm */
-}
-
-/* Content-Container: definiert die "Innenkante" */
-.card-square > .square-content-centered {
-  padding-left: var(--edge-left) !important;
-  padding-top: var(--edge-top) !important;
-}
-
-/* Sicherheit: falls alte Margins den Titel noch verschieben */
-.card-square .square-category-badge,
-.card-square .square-title-large {
-  margin-left: 0 !important;
-}
-
-/* === FINAL ALIGN: Badge + Titel 3mm vom linken Kartenrand === */
-:root { --card-left-pad: 11px; } /* ~3mm */
-
-/* Der Wrapper definiert die linke Linie für alles */
-.card-square > .square-content-centered {
-  padding-left: var(--card-left-pad) !important;
-}
-
-/* Alte Offsets neutralisieren, damit beide wirklich bündig sind */
-.card-square .square-category-badge,
-.card-square .square-title-large {
-  margin-left: 0 !important;
-}
-
-/* === Ergänzungen für index.html ------------------------------------------------------------------------------------------------- */
-/* Baseline für state containers (loading / error / empty) */
-.state-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: var(--spacing-sm, 0.5rem);
-  padding: var(--spacing-lg, 1.25rem);
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--text, #E6EEF3);
-}
-
-/* Spezifische Visuals für Zustände (sichtbar & konsistent) */
-.loading-state { background: transparent; }
-.error-state {
-  background: rgba(239,68,68,0.03);
-  border: 1px solid rgba(239,68,68,0.08);
-  color: var(--error, #ff6b6b);
-}
-.empty-state {
-  opacity: 0.95;
-  color: var(--text-dim, #9aa0ab);
-}
-
-/* Make sure state elements hide/show gracefully */
-.state-container[style*="display: none"], .state-container.hidden { display: none !important; }
-
-
-/* Header / hero offsets: ensure marquee container aligns inside header */
-.marquee-container {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: var(--marquee-height, 40px);
-  pointer-events: none;
-  display: block;
-}
-
-/* Small helper: ensure legend panel overlays correctly */
-.color-legend-panel#legend-panel,
-.color-legend-panel {
-  position: fixed;
-  right: 1rem;
-  bottom: 1.25rem;
-  z-index: 1200;
-  max-width: 340px;
-  box-sizing: border-box;
-}
-
-/* Make sure tool-grid occupies flow-space (fallback) */
-.tool-grid { min-height: 320px; }
-
-/* =========================
-   SMART COLOR FLOW: CANVAS UNIFIED BLOCK
-   (Paste this ONCE at the END of style.css)
-   Ensures canvas covers viewport, is non-interactive, and layers correctly.
-   ========================= */
-
-.connection-canvas,
-.neural-canvas {
-  /* full-viewport coverage (fixed so it is independent of parent stacking) */
-  position: fixed !important;
-  inset: 0 !important;           /* top:0; right:0; bottom:0; left:0; */
-  width: 100% !important;
-  height: 100% !important;
-
-  /* visual / interaction */
-  pointer-events: none !important; /* canvas must not block UI interactions */
-  opacity: 1 !important;
-
-  /* z-index: below cards but above page background.
-     Cards use z-index >= 2 (and hover raises to 100), header/legend use >1000.
-     Adjust only if you intentionally want lines above cards. */
-  z-index: 0 !important;
-
-  /* ensure positioning anchors are set */
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-}
-
-/* Optional: make connection labels container sit above cards but below FAB/Legend */
-.connection-labels {
-  position: fixed !important;
-  inset: 0 !important;
+/* ===== 5) HEADER OVERLAY LINKS NEUTRALISIEREN (nur wenn du wirklich so ein Overlay hast) ===== */
+.header a.card-overlay-link,
+.header a.header-overlay,
+.header .overlay-link {
+  display: none !important;
   pointer-events: none !important;
-  z-index: 50 !important; /* visible above canvas but below most UI (legend uses ~2300) */
-}
-
-/* Safety: ensure the legend toggle and FAB remain clickable */
-.legend-toggle,
-.color-legend-fab {
-  pointer-events: auto !important;
-}
-
-/* Tiny helper: if you want the neural canvas to be more subtle by default */
-.neural-canvas {
-  opacity: 0.28 !important; /* adjust to taste */
-  filter: blur(0px) !important;
-}
-
-/* =========================================
-   CONNECTION CANVAS - COLOR FLOW SYSTEM
-   ========================================= */
-
-.connection-canvas,
-#connection-canvas,
-#grid-network-canvas {
-  /* Position */
-  position: absolute;
-  top: 0;
-  left: 0;
-  
-  /* Behavior */
-  pointer-events: none;  /* Klicks gehen durch Canvas zu Karten */
-  z-index: 0 !important; /* Immer unter Karten */
-  
-  /* Size wird per JavaScript gesetzt */
-}
-
-/* Optional: Canvas Debug Mode (nur Development) */
-.debug .connection-canvas {
-  outline: 2px dashed rgba(255, 0, 0, 0.3);
+  opacity: 0 !important;
 }
 
 /* =========================================
