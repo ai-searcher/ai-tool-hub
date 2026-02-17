@@ -813,7 +813,7 @@ body {
 }
 
 /* ==================== CARD-SQUARE - MODERN ==================== */
-..card-square {
+.card-square {
   position: relative;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-radius: 20px;
@@ -833,9 +833,6 @@ body {
   box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-
-  /* Neuer, eleganter Rand */
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Entfernt störende Pseudo-Elemente (Glow-Linien) */
