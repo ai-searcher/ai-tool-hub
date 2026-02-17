@@ -1302,17 +1302,6 @@ body {
     order: 0 !important;
   }
 
-  .square-title-large {
-    font-size: 0.94rem !important;
-    line-height: 1.15 !important;
-    margin: auto 0 9px 0 !important;
-    max-width: 100% !important;
-    display: block !important;
-    word-wrap: break-word !important;
-    align-self: flex-start !important;
-    order: 1 !important;
-  }
-
   .context-marquee {
     height: 21px !important;
     width: calc(100% + 20px) !important;
@@ -1526,17 +1515,6 @@ button,
   z-index: 3;
 }
 
-/* Tool title: 2mm höher + 3mm nach links */
-.card-square .square-title-large {
-  position: relative;
-  margin: 0;
-  margin-top: 6px;     /* 2mm höher */
-  margin-left: 8px;    /* 3mm weiter links */
-  font-size: 1.15rem;  /* Originalgröße */
-  line-height: 1.18;
-  color: var(--text-primary);
-  word-break: break-word;
-}
 
 /* Mobile sizing */
 @media (max-width: 767px) {
@@ -1973,4 +1951,16 @@ a:focus-visible {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
   position: relative !important;
   z-index: 10000 !important;
+}
+
+/* Tool title: 2mm höher + 3mm nach links */
+.card-square .square-title-large {
+  position: relative;
+  margin: 0;
+  margin-top: 6px;     /* 2mm höher */
+  margin-left: 8px;    /* 3mm weiter links */
+  font-size: 1.15rem;  /* Originalgröße */
+  line-height: 1.18;
+  color: var(--text-primary);
+  word-break: break-word;
 }
