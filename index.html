@@ -150,22 +150,7 @@
       </div>
     </div>
     
-<!-- View Toggle mit Sortier-Dropdown -->
-<div class="view-toggle">
-  <button class="toggle-btn active" data-view="grid">Raster</button>
-  <button class="toggle-btn" data-view="stacks">Kategorien</button>
-  <div class="sort-dropdown">
-    <button class="toggle-btn sort-trigger">Sortieren ▾</button>
-    <div class="sort-menu">
-      <button data-sort="name" data-dir="asc">Name (A-Z)</button>
-      <button data-sort="name" data-dir="desc">Name (Z-A)</button>
-      <button data-sort="rating" data-dir="desc">Bewertung (absteigend)</button>
-      <button data-sort="rating" data-dir="asc">Bewertung (aufsteigend)</button>
-      <button data-sort="date" data-dir="desc">Neueste zuerst</button>
-      <button data-sort="date" data-dir="asc">Älteste zuerst</button>
-    </div>
-  </div>
-</div>
+
 
     <!-- Stats Marquee (kompakt, mit Lauftext) -->
 <div class="stats-marquee" id="stats-marquee" style="display: none;" role="status" aria-live="polite">
@@ -202,6 +187,23 @@
         <p class="state-text">Keine Tools gefunden</p>
         <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff</p>
       </div>
+      
+      <!-- View Toggle mit Sortier-Dropdown -->
+       <div class="view-toggle">
+  <button class="toggle-btn active" data-view="grid">Raster</button>
+  <button class="toggle-btn" data-view="stacks">Kategorien</button>
+  <div class="sort-dropdown">
+    <button class="toggle-btn sort-trigger">Sortieren ▾</button>
+    <div class="sort-menu">
+      <button data-sort="name" data-dir="asc">Name (A-Z)</button>
+      <button data-sort="name" data-dir="desc">Name (Z-A)</button>
+      <button data-sort="rating" data-dir="desc">Bewertung (absteigend)</button>
+      <button data-sort="rating" data-dir="asc">Bewertung (aufsteigend)</button>
+      <button data-sort="date" data-dir="desc">Neueste zuerst</button>
+      <button data-sort="date" data-dir="asc">Älteste zuerst</button>
+    </div>
+  </div>
+</div>
 
       <!-- Tool Grid (Floating Squares View) -->
       <div id="tool-grid" class="tool-grid tool-grid-squares" style="display: none;">
