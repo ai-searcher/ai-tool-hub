@@ -1336,13 +1336,11 @@ body {
 /* ==================== SCHWEBEEFFEKT ==================== */
 
 /* Breathing-Animation - Definition */
-@keyframes breathing {
+@@keyframes breathing {
   0%, 100% {
-    transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
-    transform: scale(1.055);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4),
                 0 0 20px rgba(99, 102, 241, 0.18);
   }
@@ -1615,8 +1613,7 @@ body {
 /* 🆕 Focus States für Keyboard Navigation */
 .card-square:focus-visible {
   outline: 2px solid rgba(0, 243, 255, 0.5);
-  outline-offset: 4px;
-  z-index: 101;
+  outline-offset: 2px;
 }
 
 /* 🆕 Armed State (wenn JavaScript Card aktiviert) */
