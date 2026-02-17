@@ -84,12 +84,12 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s ease; /* sanfteres Ein- und Ausblenden */
+      transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       font-size: 20px;
       line-height: 1;
       padding: 0;
-      outline: none; /* Entfernt den Standard-Fokusring */
+      outline: none;
     }
     
     .scroll-btn:focus {
@@ -104,9 +104,9 @@
     .scroll-btn:hover,
     .scroll-btn:active {
       background: rgba(50, 55, 80, 0.9);
-      border-color: var(--primary);
+      border-color: var(--full-color);          /* Kategorienfarbe */
       transform: scale(1.05);
-      box-shadow: 0 0 15px var(--primary-glow);
+      box-shadow: 0 0 15px var(--glow-intense); /* Leuchten in Kategorienfarbe */
     }
     
     /* Nur auf mobilen Geräten anzeigen (unter 768px) */
@@ -129,7 +129,7 @@
       font-size: 1.8rem;
       font-weight: 700;
       line-height: 1.2;
-      color: var(--text-primary);
+      color: var(--full-color);                 /* Jetzt in Kategorienfarbe */
       margin: 0;
       flex: 1;
       word-break: break-word;
