@@ -38,7 +38,7 @@
       box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
       box-sizing: border-box;
       
-      /* Eigene Panel-Animation – pulsierender Rand mit intensiver Farbe */
+      /* Eigene Panel-Animation – pulsierender Rand */
       animation: panel-pulse 8s ease-in-out infinite;
       
       display: flex;
@@ -58,6 +58,54 @@
     .detail-panel::-webkit-scrollbar-thumb {
       background: rgba(255,255,255,0.2);
       border-radius: 10px;
+    }
+    
+    /* Container für die Scroll-Buttons (nur auf mobil sichtbar) */
+    .scroll-buttons {
+      position: sticky; /* oder fixed? Wir verwenden absolute im Panel */
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+    
+    /* Individuelle Scroll-Buttons */
+    .scroll-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(30, 35, 55, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-size: 24px;
+      line-height: 1;
+      padding: 0;
+    }
+    
+    .scroll-btn:hover,
+    .scroll-btn:active {
+      background: rgba(50, 55, 80, 0.9);
+      border-color: var(--primary);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+    
+    /* Nur auf mobilen Geräten anzeigen (unter 768px) */
+    @media (min-width: 768px) {
+      .scroll-buttons {
+        display: none;
+      }
     }
     
     /* Kopfzeile */
@@ -191,7 +239,7 @@
       flex-shrink: 0;
     }
     
-    /* Abschnitte (Stärken, Anwendungen, Prompts, Tipps) */
+    /* Abschnitte (Kernfunktionen, Einsatzbereiche, etc.) */
     .detail-section {
       margin-top: 8px;
       flex-shrink: 0;
@@ -424,25 +472,25 @@
       
       <p class="detail-description" id="toolDescription"></p>
       
-      <!-- Stärken -->
+      <!-- Kernfunktionen -->
       <div id="strengthsContainer" class="detail-section" style="display: none;">
         <h3 class="detail-section-title">Kernfunktionen</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
-      <!-- Anwendungsbeispiele -->
+      <!-- Einsatzbereiche -->
       <div id="useCasesContainer" class="detail-section" style="display: none;">
         <h3 class="detail-section-title">Einsatzbereiche</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
-      <!-- Prompt-Beispiele -->
+      <!-- Beispiel-Prompts -->
       <div id="promptExamplesContainer" class="detail-section" style="display: none;">
         <h3 class="detail-section-title">Beispiel-Prompts</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
-      <!-- Prompt-Tipps -->
+      <!-- Prompt-Richtlinien -->
       <div id="promptTipsContainer" class="detail-section" style="display: none;">
         <h3 class="detail-section-title">Prompt-Richtlinien</h3>
         <div class="detail-list" id="promptTipsList"></div>
@@ -452,6 +500,12 @@
         <span>Tool öffnen</span>
         <span>➜</span>
       </a>
+    </div>
+    
+    <!-- Scroll-Buttons (nur mobil sichtbar) -->
+    <div class="scroll-buttons">
+      <button class="scroll-btn" id="scrollTopBtn" aria-label="Zum Anfang">↑</button>
+      <button class="scroll-btn" id="scrollBottomBtn" aria-label="Zum Ende">↓</button>
     </div>
   </div>
 
@@ -590,13 +644,34 @@
         errorMsg.textContent = '❌ ' + err.message;
       });
       
+      // Schließen-Button
       const closeBtn = document.getElementById('closeButton');
       if (closeBtn) {
         closeBtn.addEventListener('click', function() {
           window.history.back();
         });
-      } else {
-        console.warn('Schließen-Button nicht gefunden');
+      }
+      
+      // Scroll-Buttons
+      const scrollTopBtn = document.getElementById('scrollTopBtn');
+      const scrollBottomBtn = document.getElementById('scrollBottomBtn');
+      
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', function() {
+          panel.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+      
+      if (scrollBottomBtn) {
+        scrollBottomBtn.addEventListener('click', function() {
+          panel.scrollTo({
+            top: panel.scrollHeight,
+            behavior: 'smooth'
+          });
+        });
       }
       
     })();
