@@ -1820,3 +1820,66 @@ a:focus-visible {
     padding-right: 1.8rem; /* Platz für den Pfeil */
   }
 }
+
+/* ==================== SORTIER-DROPDOWN – GLASIG WIE TOOL-QUADRATE ==================== */
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: rgba(26, 30, 55, 0.7);        /* --bg-card mit Transparenz */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);          /* großzügige Abrundung */
+  padding: 8px 0;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.02);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+}
+
+.sort-dropdown.active .sort-menu {
+  display: flex;
+}
+
+.sort-menu button {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  font-family: var(--font-family);
+  position: relative;
+}
+
+.sort-menu button:hover {
+  background: rgba(255, 255, 255, 0.05);   /* dezentes Hover */
+  color: var(--text-primary);
+}
+
+.sort-menu button.active {
+  background: var(--primary-dim);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Kleiner Pfeil (optional – bereits im Trigger vorhanden) */
+
+/* Mobile Anpassung */
+@media (max-width: 767px) {
+  .sort-menu {
+    left: auto;
+    right: 0;
+    min-width: 180px;
+  }
+  .sort-menu button {
+    white-space: normal;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+  }
+}
