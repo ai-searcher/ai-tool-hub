@@ -1,4 +1,4 @@
-{
+
   "meta": {
     "version": "1.0.0",
     "last_updated": "2026-02-11",
@@ -21,6 +21,26 @@
       "badges": [
         "Stärke: Breites Sprachverständnis und robuste Prompt-Verarbeitung; geeignet für Ideenfindung, Textproduktion und interaktive Workflows. Freemium-Modell mit erweiterten Optionen für Power-User.",
         "Kontext: Ideal für Research-Drafts, Prototyping und Support-Automatisierung. Ähnlich zu: Claude, Gemini — empfohlen, wenn Vielseitigkeit wichtiger ist als spezialisierte Multimodalität."
+      ],
+      "strengths": [
+        "Versteht komplexe Anfragen und führt natürliche Gespräche",
+        "Hilft beim Schreiben, Brainstorming und Übersetzen",
+        "Kann Code erklären und einfache Programme schreiben"
+      ],
+      "useCases": [
+        "Texte verfassen und überarbeiten (E-Mails, Blogartikel, Berichte)",
+        "Ideen sammeln und strukturieren",
+        "Fragen zu verschiedensten Themen beantworten"
+      ],
+      "promptExamples": [
+        "Schreibe eine freundliche E-Mail an einen Kunden, der sich über eine Lieferverzögerung beschwert hat.",
+        "Erkläre mir die Funktionsweise von Quantencomputern so, als wäre ich 12 Jahre alt.",
+        "Gib mir 10 kreative Namen für einen neuen Smoothie-Laden."
+      ],
+      "promptTips": [
+        "Sei so konkret wie möglich – je mehr Kontext, desto besser die Antwort.",
+        "Gib eine Rolle vor: ‚Du bist ein erfahrener Marketingexperte…‘",
+        "Frage nach Alternativen oder verschiedenen Stilen, um mehrere Optionen zu erhalten."
       ]
     },
     {
@@ -38,6 +58,26 @@
       "badges": [
         "Stärke: Fokus auf Sicherheit, lange Kontextfenster und präzise, sachliche Antworten — gut bei längeren Dokumenten und iterativem Arbeiten.",
         "Kontext: Sehr geeignet für vertrauliche Drafts und strukturierte Aufgaben. Ähnlich zu: ChatGPT, besonders wenn Verlässlichkeit und längere Kontexte wichtig sind."
+      ],
+      "strengths": [
+        "Besonders gute Detailgenauigkeit bei langen Texten",
+        "Hilft beim Analysieren und Zusammenfassen von Dokumenten",
+        "Antwortet sachlich und ausführlich"
+      ],
+      "useCases": [
+        "Zusammenfassung langer Artikel oder Berichte",
+        "Hilfe beim Verfassen von wissenschaftlichen Arbeiten",
+        "Vertrauliches Brainstorming für Geschäftsideen"
+      ],
+      "promptExamples": [
+        "Fasse diesen Artikel in drei Sätzen zusammen: [Text einfügen]",
+        "Schreibe eine professionelle Antwort auf eine Kündigung eines Mitarbeiters.",
+        "Erstelle eine detaillierte Gliederung für eine Präsentation über erneuerbare Energien."
+      ],
+      "promptTips": [
+        "Nutze Claude besonders für Aufgaben, die ein tiefes Verständnis langer Texte erfordern.",
+        "Formuliere deine Anfragen klar und strukturiert – Claude liebt Ordnung.",
+        "Bitte um Quellenangaben oder Begründungen, wenn du nachvollziehen möchtest, wie die Antwort zustande kam."
       ]
     },
     {
@@ -55,6 +95,26 @@
       "badges": [
         "Stärke: Schnelle, zitierbare Antworten — kombiniert Sprachmodell-Antworten mit Quellenverweisen zur Überprüfbarkeit.",
         "Kontext: Optimal für rasche Recherchen und fact-checking. Ähnlich zu: Elicit, Kagi Answers — nutze es, wenn Quellenangabe wichtig ist."
+      ],
+      "strengths": [
+        "Liefert Antworten mit echten Quellenangaben",
+        "Ideal für schnelle Recherchen und Faktenchecks",
+        "Versteht Folgefragen und behält den Kontext"
+      ],
+      "useCases": [
+        "Hintergrundinformationen zu aktuellen Themen suchen",
+        "Fakten für Artikel oder Präsentationen überprüfen",
+        "Wissenschaftliche Fragen stellen und zitierfähige Antworten erhalten"
+      ],
+      "promptExamples": [
+        "Was sind die neuesten Erkenntnisse zur Klimaerwärmung?",
+        "Wer hat die Relativitätstheorie entdeckt? Bitte mit Quellen.",
+        "Erkläre den Unterschied zwischen KI und maschinellem Lernen."
+      ],
+      "promptTips": [
+        "Stelle konkrete Fragen, um präzise Antworten mit guten Quellen zu bekommen.",
+        "Nutze die weiterführenden Fragen, um tiefer in ein Thema einzusteigen.",
+        "Klicke auf die Quellen, um die Originalinformationen zu prüfen."
       ]
     },
     {
@@ -72,6 +132,26 @@
       "badges": [
         "Stärke: Charakteristische, künstlerische Bildstile und starke Stil-Konsistenz bei kreativen Prompts; Community-zentriert über Discord.",
         "Kontext: Besonders geeignet für konzeptionelle Artworks und Moodboards. Ähnlich zu: Leonardo AI (kreative Assets), DALL-E (direktere Promptgenauigkeit)."
+      ],
+      "strengths": [
+        "Erzeugt künstlerisch anspruchsvolle Bilder mit einzigartigem Stil",
+        "Sehr gute Umsetzung von Stimmungen und Atmosphäre",
+        "Aktive Community zum Austausch von Ideen und Prompts"
+      ],
+      "useCases": [
+        "Konzeptkunst für Filme, Spiele oder Bücher",
+        "Visuelle Inspiration für Designprojekte",
+        "Erstellung von Social-Media-Grafiken und Postern"
+      ],
+      "promptExamples": [
+        "ein mystischer Wald im Nebel, beleuchtet von Feenlichtern, Ölgemälde-Stil",
+        "eine futuristische Stadt bei Nacht mit fliegenden Autos, Neonlichter, Cyberpunk-Ästhetik",
+        "ein freundlicher Roboter, der Blumen gießt, in einem sonnigen Garten, im Stil von Studio Ghibli"
+      ],
+      "promptTips": [
+        "Verwende beschreibende Adjektive und Stilangaben (z.B. ‚Ölgemälde‘, ‚fotorealistisch‘).",
+        "Experimentiere mit verschiedenen Aspektverhältnissen (z.B. --ar 16:9).",
+        "Lass dich von der Community inspirieren – teile deine Prompts und schau, was andere machen."
       ]
     },
     {
@@ -89,6 +169,26 @@
       "badges": [
         "Stärke: Hohe Prompt-Treue und sauberes Rendering bei komplexen Beschreibungen; gut für detailgetreue Illustrationen.",
         "Kontext: Nutze DALL-E 3, wenn exakte Umsetzung der Textvorgabe wichtig ist. Ähnlich zu: Midjourney (kreative Stile) und Stable Diffusion (mehr Kontrolle bei lokalem Hosting)."
+      ],
+      "strengths": [
+        "Setzt detaillierte Beschreibungen sehr genau um",
+        "Versteht komplexe Szenen mit mehreren Objekten",
+        "Integriert Text (z.B. Schilder) besser als viele andere"
+      ],
+      "useCases": [
+        "Produktvisualisierungen für E-Commerce",
+        "Illustrationen für Kinderbücher",
+        "Erstellung von Social-Media-Bildern mit bestimmten Anforderungen"
+      ],
+      "promptExamples": [
+        "Ein roter Panda, der auf einem Ast sitzt und einen Bambuszweig isst, im Hintergrund ein Wasserfall, Cartoon-Stil",
+        "Eine gemütliche Leseecke mit einem Sessel, einer Stehlampe und einem Bücherregal, natürliches Licht, Fotorealismus",
+        "Ein Schild mit der Aufschrift ‚Willkommen‘, umgeben von Blumen, an einer Holzwand"
+      ],
+      "promptTips": [
+        "Beschreibe, was du sehen möchtest, so genau wie möglich – inklusive Farben, Positionen und Stil.",
+        "Vermeide zu viele widersprüchliche Elemente auf einmal.",
+        "Nutze ‚/imagine‘ oder ähnliche Befehle, um direkt loszulegen."
       ]
     },
     {
@@ -106,6 +206,26 @@
       "badges": [
         "Stärke: Open-Source-Ökosystem und hohe Anpassbarkeit — ideal für lokale Workflows, Fine-Tuning und Pipelines.",
         "Kontext: Best for developers and studios who need model control and offline workflows. Ähnlich zu: Runway (cloud workflows) und lokale SD-Setups."
+      ],
+      "strengths": [
+        "Kostenlos und quelloffen – kann lokal installiert werden",
+        "Unzählige社区-Modelle für verschiedene Stile",
+        "Volle Kontrolle über Parameter wie Schritte, Sampler, etc."
+      ],
+      "useCases": [
+        "Künstlerische Experimente ohne Einschränkungen",
+        "Generieren von Bildern für private Projekte",
+        "Training eigener Modelle mit persönlichen Bildern"
+      ],
+      "promptExamples": [
+        "ein märchenhaftes Schloss auf einer Wolke, umgeben von Regenbögen, Aquarell-Stil",
+        "ein Porträt einer Astronautin im Retro-Stil, auf dem Mond, vintage Poster",
+        "eine abstrakte Darstellung von Zeit, mit Uhren und fließenden Formen"
+      ],
+      "promptTips": [
+        "Wenn du lokal arbeitest, probiere verschiedene Sampler und Schritte aus.",
+        "Nutze negative Prompts, um unerwünschte Elemente zu vermeiden.",
+        "Die Community teilt viele spezialisierte Modelle – schau dich um!"
       ]
     },
     {
@@ -123,6 +243,26 @@
       "badges": [
         "Stärke: Kontextsensitive Code-Vervollständigung direkt im Editor; unterstützt schnellere Prototypen und Routineaufgaben.",
         "Kontext: Ideal als Pair-Programmer für gängige Patterns und API-Aufrufe. Ähnlich zu: Codeium, Tabnine — besonders integriert in GitHub/VSCode."
+      ],
+      "strengths": [
+        "Schlägt während des Tippens ganzen Code vor",
+        "Versteht den Kontext deiner Dateien und Projekte",
+        "Hilft beim Erlernen neuer Programmiersprachen"
+      ],
+      "useCases": [
+        "Schnelles Erstellen von Code-Gerüsten",
+        "Automatisches Generieren von Testfällen",
+        "Unterstützung bei der Fehlersuche"
+      ],
+      "promptExamples": [
+        "Schreibe eine Funktion in Python, die die Fibonacci-Zahlen berechnet.",
+        "Erstelle eine React-Komponente für eine Navigationsleiste.",
+        "Gib mir ein Beispiel für eine SQL-Abfrage, die alle Kunden mit Bestellungen der letzten 30 Tage anzeigt."
+      ],
+      "promptTips": [
+        "Schreibe einen klaren Kommentar oder Funktionsnamen – Copilot versteht, was du brauchst.",
+        "Akzeptiere Vorschläge mit Tab und passe sie bei Bedarf an.",
+        "Nutze es als Lernhilfe: Lass dir Code erklären, indem du nach Kommentaren fragst."
       ]
     },
     {
@@ -140,6 +280,26 @@
       "badges": [
         "Stärke: Editor-zentrierte AI-Workflows — schnelle Iteration, In-editor-exploration und kollaborative Features.",
         "Kontext: Gut für Entwickler, die AI-Unterstützung eng in die Entwicklungsumgebung integrieren möchten. Ähnlich zu: GitHub Copilot, Replit."
+      ],
+      "strengths": [
+        "Integriert AI direkt in den Editor (Chat, Code-Generierung)",
+        "Kann ganze Dateien oder Projekte auf einmal bearbeiten",
+        "Bietet Vorschläge und Erklärungen im Chat"
+      ],
+      "useCases": [
+        "Schnelles Prototyping neuer Ideen",
+        "Refactoring von bestehendem Code mit KI-Hilfe",
+        "Beantwortung von Fragen zum Code direkt im Editor"
+      ],
+      "promptExamples": [
+        "Erstelle eine einfache To-Do-App mit HTML, CSS und JavaScript.",
+        "Erkläre mir diesen Codeabschnitt: [Code einfügen]",
+        "Schreibe eine Python-Funktion, die eine CSV-Datei liest und die Daten sortiert."
+      ],
+      "promptTips": [
+        "Nutze die Chat-Funktion, wenn du nicht weiterweißt – frag einfach.",
+        "Cursor kann auch Änderungen vorschlagen, die du direkt übernehmen kannst.",
+        "Gib Kontext an, z.B. welche Technologie du verwendest, um bessere Vorschläge zu erhalten."
       ]
     },
     {
@@ -157,6 +317,26 @@
       "badges": [
         "Stärke: Kostenfreie, schnelle Code-Completion mit guter IDE-Unterstützung; niedrige Einstiegshürde.",
         "Kontext: Empfehlenswert für Individualentwickler und Teams mit Budget-Beschränkungen. Ähnlich zu: GitHub Copilot (funktional), besonders attraktiv wegen kostenloser Stufe."
+      ],
+      "strengths": [
+        "Vollständig kostenlos für Einzelpersonen",
+        "Unterstützt viele Editoren (VS Code, IntelliJ, etc.)",
+        "Schnelle Autovervollständigung auch bei großen Projekten"
+      ],
+      "useCases": [
+        "Tägliche Code-Arbeit ohne Budget für teure Tools",
+        "Lernen von Programmiersprachen mit KI-Unterstützung",
+        "Beschleunigung von Routineaufgaben"
+      ],
+      "promptExamples": [
+        "Erstelle eine Klasse in Java für ein einfaches Bankkonto mit Ein- und Auszahlungsmethoden.",
+        "Schreibe ein Bash-Skript, das alle .txt-Dateien in einem Verzeichnis zählt.",
+        "Gib mir ein Beispiel für eine React-Hook-Implementierung eines Zählers."
+      ],
+      "promptTips": [
+        "Beginne mit einem Kommentar, der genau beschreibt, was du brauchst.",
+        "Codeium lernt aus deinem Code – je mehr du schreibst, desto besser die Vorschläge.",
+        "Nutze die Inline-Chat-Funktion (falls verfügbar) für komplexere Fragen."
       ]
     },
     {
@@ -174,6 +354,26 @@
       "badges": [
         "Stärke: Natürlich klingende Stimmen und feine Kontrolle über Prosodie und Stimmeigness — stark bei Voice-over & Prototyping.",
         "Kontext: Optimal für Podcaster, E-Learning und Prototypen mit hoher Stimmqualität. Ähnlich zu: Replica Studios, Google TTS."
+      ],
+      "strengths": [
+        "Sehr natürlich klingende Sprachausgabe mit Emotionen",
+        "Große Auswahl an Stimmen und Sprachen",
+        "Feine Kontrolle über Betonung und Sprechgeschwindigkeit"
+      ],
+      "useCases": [
+        "Vertonung von Erklärvideos und Tutorials",
+        "Hörbücher und Podcasts erstellen",
+        "Sprachausgabe für Apps oder Spiele"
+      ],
+      "promptExamples": [
+        "Text: ‚Willkommen zu unserem Podcast über künstliche Intelligenz. Heute sprechen wir über Sprachmodelle.‘ (Stimme: Adam)",
+        "Erstelle eine freundliche Ansage für ein Ladengeschäft.",
+        "Lies einen Abschnitt aus einem Kinderbuch vor – mit lebendiger Betonung."
+      ],
+      "promptTips": [
+        "Probiere verschiedene Stimmen aus – jede hat ihren eigenen Charakter.",
+        "Nutze SSML-Tags, wenn du die Betonung noch feiner steuern möchtest.",
+        "Für längere Projekte lohnt sich die API-Anbindung."
       ]
     },
     {
@@ -191,6 +391,26 @@
       "badges": [
         "Stärke: End-to-end Musikproduktion mit AI-gestützter Song-Generierung und Arrangements.",
         "Kontext: Besonders nützlich für kreative Prototypen und schnelle Jingles. Ähnlich zu: AIVA, Amper Music — gut für Ideen und Demos."
+      ],
+      "strengths": [
+        "Generiert komplette Songs inklusive Melodie, Gesang und Texten",
+        "Kann nach Stilrichtungen und Stimmungen generieren",
+        "Schnelle Ergebnisse für kreative Ideen"
+      ],
+      "useCases": [
+        "Erstellung von Hintergrundmusik für Videos",
+        "Songwriting-Hilfe – lass dir einen Song zu deinen Texten schreiben",
+        "Jingles und Werbemusik schnell produzieren"
+      ],
+      "promptExamples": [
+        "Ein fröhlicher Popsong über das Wochenende, mit männlichem Gesang.",
+        "Instrumentaler Chillstep-Track für ein Entspannungsvideo.",
+        "Erstelle einen Kinderlied-Song über Tiere im Wald."
+      ],
+      "promptTips": [
+        "Gib so viele Details wie möglich an: Genre, Stimmung, Instrumente, Tempo.",
+        "Probiere verschiedene Versionen aus – manchmal überrascht das Ergebnis.",
+        "Nutze die generierten Songs als Ausgangspunkt und bearbeite sie weiter."
       ]
     },
     {
@@ -208,6 +428,26 @@
       "badges": [
         "Stärke: Leistungsfähige Generative Video-Tools und cloudbasierte Editier-Workflows; schnell für Prototyping von Clips.",
         "Kontext: Nutze Runway für visuelle Experimente und schnelle Iterationen. Ähnlich zu: Pika Labs (Text-to-Video) mit stärkerem Editierungs-Toolkit."
+      ],
+      "strengths": [
+        "Text-zu-Video-Generierung mit beeindruckenden Ergebnissen",
+        "Umfangreiche Videobearbeitungswerkzeuge (Entfernen von Objekten, Greenscreen, etc.)",
+        "Browserbasiert – keine leistungsstarke Hardware nötig"
+      ],
+      "useCases": [
+        "Erstellen von Social-Media-Clips aus Textbeschreibungen",
+        "Nachbearbeitung von Videos mit KI-Tools (z.B. Hintergrund entfernen)",
+        "Prototyping von Filmideen"
+      ],
+      "promptExamples": [
+        "Ein Hund, der Skateboard fährt, in einem Park, sonniger Tag",
+        "Verwandle dieses Video in einen Ölgemälde-Stil.",
+        "Entferne den Hintergrund aus diesem Clip und ersetze ihn durch einen Strand."
+      ],
+      "promptTips": [
+        "Nutze die Gen-2-Funktion für Text-zu-Video – je genauer der Prompt, desto besser.",
+        "Probiere die verschiedenen Bearbeitungswerkzeuge aus – viele sind mit einem Klick erledigt.",
+        "Speichere deine Projekte in der Cloud, um später weiterzuarbeiten."
       ]
     },
     {
@@ -225,6 +465,26 @@
       "badges": [
         "Stärke: Multimodale Fähigkeiten kombiniert mit Googles Such- und Knowledge-Infrastruktur — stark bei faktenbasierten Recherchen.",
         "Kontext: Ideal für Nutzer, die multimodale Recherche und tiefe Quellenintegration wünschen. Ähnlich zu: Perplexity (Quellen) und ChatGPT (Konversation)."
+      ],
+      "strengths": [
+        "Kann Text, Bilder, Audio und Video verstehen",
+        "Greift auf aktuelle Informationen aus dem Internet zu",
+        "Tiefe Integration mit Google-Diensten (Suche, Maps, etc.)"
+      ],
+      "useCases": [
+        "Recherche zu aktuellen Themen mit Bildern und Quellen",
+        "Planung von Reisen (z.B. mit Google Maps-Integration)",
+        "Hilfe beim Verstehen komplexer Diagramme oder Grafiken"
+      ],
+      "promptExamples": [
+        "Zeig mir Bilder von Sehenswürdigkeiten in Paris und erzähl mir etwas über ihre Geschichte.",
+        "Vergleiche die Vor- und Nachteile von Elektroautos und Hybridautos – mit aktuellen Daten.",
+        "Erstelle einen Reiseplan für drei Tage in Berlin mit Sehenswürdigkeiten und Restaurants."
+      ],
+      "promptTips": [
+        "Nutze die Multimodalität: Lade Bilder hoch und stelle Fragen dazu.",
+        "Frage nach Quellen, wenn du die Informationen überprüfen möchtest.",
+        "Gemini kann auch Dateien wie PDFs lesen – probier es aus."
       ]
     },
     {
@@ -242,6 +502,26 @@
       "badges": [
         "Stärke: Nahtlose Integration in Workspace-Dokumente und Templates — produktivitätsorientierte Textfunktionen.",
         "Kontext: Perfekt für Teams und persönliche Organisation; weniger geeignet für hochkomplexe LLM-Forschung. Ähnlich zu: Coda AI, Microsoft Copilot for Microsoft 365."
+      ],
+      "strengths": [
+        "Hilft beim Schreiben und Überarbeiten von Notizen direkt in Notion",
+        "Kann Inhalte aus Datenbanken zusammenfassen",
+        "Ideal für Brainstorming und Strukturierung von Ideen"
+      ],
+      "useCases": [
+        "Meeting-Notizen automatisch zusammenfassen",
+        "Aufgabenlisten aus Brainstorming-Sessions generieren",
+        "Texte in Notion-Seiten verbessern oder übersetzen"
+      ],
+      "promptExamples": [
+        "Fasse diese Notizen in fünf Bullet Points zusammen: [Notizen]",
+        "Schreibe eine professionelle E-Mail auf Basis dieser Stichpunkte.",
+        "Erstelle eine Tabelle aus dieser Liste von Ideen."
+      ],
+      "promptTips": [
+        "Nutze die KI direkt in der Seitenleiste von Notion – einfach markieren und ‚Ask AI‘.",
+        "Probiere verschiedene Befehle aus: ‚Make longer‘, ‚Change tone‘, ‚Translate‘.",
+        "Verwende es, um aus vorhandenen Inhalten neue Strukturen zu erstellen."
       ]
     },
     {
@@ -259,6 +539,26 @@
       "badges": [
         "Stärke: Spezialisierung auf Asset-Erstellung für Spiele und Konzeptkunst; gute Tools für Variationen und Iteration.",
         "Kontext: Empfohlen für Game-Designer und Concept-Artists. Ähnlich zu: Midjourney (Artistic) mit stärkerem Fokus auf Asset-Pipelines."
+      ],
+      "strengths": [
+        "Spezialisiert auf die Erstellung von Spiel-Assets (Charaktere, Gegenstände, Umgebungen)",
+        "Bietet viele Vorlagen und Stile speziell für Games",
+        "Einfache Bedienung auch für Nicht-Designer"
+      ],
+      "useCases": [
+        "Konzeptzeichnungen für Videospielfiguren",
+        "Erstellung von Inventargegenständen (Waffen, Tränke, etc.)",
+        "Hintergrundbilder für Leveldesigns"
+      ],
+      "promptExamples": [
+        "Ein heldenhafter Ritter in glänzender Rüstung, mit Schwert und Schild, Fantasy-Stil",
+        "Eine gemütliche Taverne im Mittelalter, mit Fackeln und Holztischen, isometrische Perspektive",
+        "Ein mystischer Kristall, der in verschiedenen Farben leuchtet, als 3D-Asset"
+      ],
+      "promptTips": [
+        "Nutze die ‚Presets‘ für bestimmte Asset-Typen (z.B. ‚Character Design‘).",
+        "Erstelle Variationen eines Bildes, um mehrere Optionen zu erhalten.",
+        "Die Bilder können direkt in Spiel-Engines wie Unity importiert werden."
       ]
     },
     {
@@ -276,6 +576,26 @@
       "badges": [
         "Stärke: Schnelle Exploration und Visualisierung von Datensätzen mit AI-gestützten Insights.",
         "Kontext: Gut für Product Analysts und BI-Teams zur schnellen Hypothesenprüfung. Ähnlich zu: Tableau + AI-Features, ebenso wie Merlin-style data assistants."
+      ],
+      "strengths": [
+        "Lädt Excel/CSV-Dateien und erstellt automatisch Grafiken",
+        "Versteht natürliche Sprachbefehle zur Datenanalyse",
+        "Kann Zusammenhänge und Muster in Daten erkennen"
+      ],
+      "useCases": [
+        "Umsatzdaten visualisieren und Trends erkennen",
+        "Umfrageergebnisse analysieren",
+        "Vorhersagen auf Basis historischer Daten erstellen"
+      ],
+      "promptExamples": [
+        "Lade diese CSV-Datei und zeige mir die monatlichen Verkaufszahlen als Liniendiagramm.",
+        "Welche Faktoren korrelieren am stärksten mit der Kundenzufriedenheit in dieser Tabelle?",
+        "Erstelle eine Prognose für die nächsten drei Monate basierend auf diesen Daten."
+      ],
+      "promptTips": [
+        "Stelle konkrete Fragen wie ‚Zeige mir den Umsatz nach Region‘.",
+        "Du kannst auch komplexe Analysen anfordern, z.B. ‚Führe eine Regressionsanalyse durch‘.",
+        "Die Ergebnisse lassen sich als Bilder exportieren."
       ]
     },
     {
@@ -293,6 +613,26 @@
       "badges": [
         "Stärke: Schnelle Text-zu-Video Prototypen mit einfacher Prompt-Syntax; ideal für Social Clips und Ideenvisualisierung.",
         "Kontext: Gut für schnelle Storyboards und kurze Clips. Ähnlich zu: Runway (umfangreicher Editor) und Synthesia (Avatar-Videos)."
+      ],
+      "strengths": [
+        "Schnelle Generierung von kurzen Videos aus Text",
+        "Sehr einfache Bedienung – ideal für Einsteiger",
+        "Kostenlose Nutzung mit ausreichendem Kontingent"
+      ],
+      "useCases": [
+        "Erstellung von Social-Media-Clips (z.B. für TikTok, Instagram)",
+        "Schnelle Visualisierung von Ideen für Videos",
+        "Animierte Werbebanner"
+      ],
+      "promptExamples": [
+        "Ein niedlicher Hund, der durch ein Feld rennt, Sonnenuntergang",
+        "Ein sich drehender Kristall auf einem schwarzen Hintergrund",
+        "Eine Zeitraffer-Aufnahme einer blühenden Blume"
+      ],
+      "promptTips": [
+        "Halte die Prompts einfach – Pika versteht kurze, klare Beschreibungen am besten.",
+        "Experimentiere mit verschiedenen Stilen (z.B. ‚Cinematic‘, ‚Anime‘).",
+        "Die Videos lassen sich herunterladen und weiterverarbeiten."
       ]
     },
     {
@@ -310,6 +650,26 @@
       "badges": [
         "Stärke: Templates und Workflow-Tools für Marketing-Texte; schnell brauchbare Output-Formate für Social & Ads.",
         "Kontext: Nutze Jasper für skalierte Content-Workflows und A/B-Textvarianten. Ähnlich zu: Copy.ai und Writesonic."
+      ],
+      "strengths": [
+        "Zahlreiche Vorlagen für verschiedene Textarten (Blogposts, Anzeigen, E-Mails)",
+        "Integrierte SEO-Optimierung",
+        "Unterstützt mehrere Sprachen"
+      ],
+      "useCases": [
+        "Verfassen von Blogartikeln zu bestimmten Themen",
+        "Erstellung von Werbetexten für Google Ads oder Social Media",
+        "Generierung von Produktbeschreibungen für Onlineshops"
+      ],
+      "promptExamples": [
+        "Schreibe einen Blogartikel über die Vorteile von erneuerbaren Energien. Zielgruppe: Privathaushalte.",
+        "Erstelle 5 verschiedene Facebook-Anzeigentexte für einen neuen veganen Burger.",
+        "Verfasse eine Produktbeschreibung für eine umweltfreundliche Kaffeetasse."
+      ],
+      "promptTips": [
+        "Wähle die passende Vorlage aus – das spart Zeit und liefert bessere Ergebnisse.",
+        "Gib Stichpunkte oder eine grobe Struktur vor, die Jasper ausbauen soll.",
+        "Überarbeite die Texte bei Bedarf – Jasper liefert oft gute Rohfassungen."
       ]
     },
     {
@@ -327,6 +687,26 @@
       "badges": [
         "Stärke: Professionelle Avatar-Videos ohne Kamera-Setup; skalierbar für Lerninhalte und Corporate-Kommunikation.",
         "Kontext: Besonders nützlich für Trainings, Onboarding und localized voiceovers. Ähnlich zu: Rephrase.ai, Elai.io."
+      ],
+      "strengths": [
+        "Erstellt Videos mit realistischen KI-Avataren, die Text vorlesen",
+        "Unterstützt viele Sprachen und Akzente",
+        "Keine aufwändige Videoproduktion nötig"
+      ],
+      "useCases": [
+        "Schulungsvideos für Mitarbeiter",
+        "Erklärvideos für Produkte oder Dienstleistungen",
+        "Personalisierte Videobotschaften"
+      ],
+      "promptExamples": [
+        "Erstelle ein Video mit einem weiblichen Avatar auf Deutsch, der erklärt, wie man die neue Software installiert.",
+        "Ein männlicher Avatar spricht über die Firmenwerte auf Englisch.",
+        "Produktvideo für einen Staubsauger – mit einem Avatar, der die Funktionen vorstellt."
+      ],
+      "promptTips": [
+        "Wähle einen Avatar, der zum Thema und zur Zielgruppe passt.",
+        "Schreibe den Text so, wie du ihn gesprochen haben möchtest – inklusive Pausen und Betonungen.",
+        "Nutze die Möglichkeit, Hintergrundbilder oder -videos einzufügen."
       ]
     },
     {
@@ -344,6 +724,26 @@
       "badges": [
         "Stärke: Schnelle Erzeugung von wiederverwendbaren UI-Komponenten und Boilerplate für React/Next.js.",
         "Kontext: Ideal für Frontend-Entwickler, die Prototypen und Komponenten aus Textbeschreibungen generieren wollen. Ähnlich zu: Uizard, TeleportHQ (UI generation tools)."
+      ],
+      "strengths": [
+        "Generiert komplette React/Next.js-Komponenten aus Text",
+        "Liefert sofort live-vorschau im Browser",
+        "Code kann direkt in Projekte übernommen werden"
+      ],
+      "useCases": [
+        "Schneller Aufbau von UI-Prototypen",
+        "Erstellung von wiederverwendbaren Komponenten für Webseiten",
+        "Lernen von React anhand generierter Beispiele"
+      ],
+      "promptExamples": [
+        "Erstelle eine responsive Navigationsleiste mit Logo und drei Menüpunkten.",
+        "Generiere eine Karte für ein Produkt mit Bild, Titel, Preis und Kaufen-Button.",
+                        "Baue ein einfaches Login-Formular mit E-Mail- und Passwortfeld."
+      ],
+      "promptTips": [
+        "Beschreibe, was die Komponente können soll – inklusive Styling (z.B. ‚mit Schatten‘, ‚abgerundete Ecken‘).",
+        "Schau dir den generierten Code an, um zu lernen, wie bestimmte UI-Elemente in React umgesetzt werden.",
+        "Du kannst die Komponente direkt in V0 bearbeiten und weiter anpassen."
       ]
     }
   ]
