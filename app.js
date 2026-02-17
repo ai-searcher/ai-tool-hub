@@ -956,10 +956,11 @@ const ui = {
     }
   },
 
-  getActiveView() {
-    const activeTab = this.elements.viewToggle?.querySelector('.toggle-btn.active');
-    return activeTab ? activeTab.dataset.view : 'grid';
-  },
+getActiveView() {
+  const viewToggle = document.querySelector('.view-toggle');
+  const activeTab = viewToggle?.querySelector('.toggle-btn.active');
+  return activeTab ? activeTab.dataset.view : 'grid';
+}
 
   attachCardHandlers() {
     const grid = this.elements.toolGrid || getElement('#tool-grid');
