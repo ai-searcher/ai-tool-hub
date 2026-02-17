@@ -519,15 +519,25 @@ body {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: -23px;  /* angepasst */
-  margin-bottom: var(--spacing-lg); /* Abstand zum Grid */
+  margin-top: -23px;        /* dein aktueller Wert */
+  margin-bottom: var(--spacing-lg);
   padding: var(--spacing-sm);
-  background: var(--bg-card);
+  background: transparent;   /* kein Hintergrund mehr */
   border-radius: var(--radius-md);
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  animation: fadeInUp 0.6s ease 0.25s backwards;
+  animation: fadeInUp 0.6s ease 0.25s backwards, toggle-glow 8s ease-in-out infinite;
+}
+
+/* Pulsierender Rand – wie bei den Tool‑Quadrate, nur farbig */
+@keyframes toggle-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 1px transparent;
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--primary);
+  }
 }
 
 .toggle-btn {
