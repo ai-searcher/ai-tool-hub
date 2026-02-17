@@ -1322,11 +1322,11 @@ body {
     order: 2 !important;
   }
 
-  .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    padding-right: 2rem !important;
-    line-height: 21px !important;
-  }
+.context-marquee .marquee-seq {
+  font-size: 0.72rem;
+  line-height: 22px;
+  padding-right: 2.5rem;
+}
 
   .context-marquee .marquee-track {
     animation-duration: 18s !important;
