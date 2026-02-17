@@ -1603,3 +1603,65 @@ a:focus-visible {
   position: relative !important;
   z-index: 10000 !important;
 }
+
+/* ==================== STATS MARQUEE ==================== */
+.stats-marquee {
+  width: 100%;
+  max-width: 400px;        /* schmaler als die vorherige Breite */
+  height: 36px;            /* kompakte Höhe */
+  margin: 0 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  background: rgba(255,255,255,0.03);
+  border-radius: 30px;      /* weiche, abgerundete Form */
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.stats-marquee .marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: statsMarquee 20s linear infinite;
+  transform: translateZ(0);
+}
+
+.stats-marquee .marquee-track span {
+  display: inline-block;
+  padding-right: 3rem;      /* Abstand zwischen den Blöcken */
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+  letter-spacing: 0.03em;
+}
+
+.stats-marquee .marquee-track span strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 0.2rem;
+}
+
+/* Pause bei Hover (optional) */
+.stats-marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes statsMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Für mobile noch schmaler */
+@media (max-width: 767px) {
+  .stats-marquee {
+    max-width: 90%;
+    height: 32px;
+  }
+  .stats-marquee .marquee-track span {
+    font-size: 0.8rem;
+    padding-right: 2rem;
+  }
+}
