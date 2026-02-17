@@ -646,21 +646,21 @@ const ui = {
 
   // Array mit allen Informationen, die im Marquee erscheinen sollen
   const marqueeItems = [
-    `⚡ <strong>${state.stats.total}</strong> TOOLS`,
-    `📂 <strong>${state.stats.categories}</strong> KATEGORIEN`,
-    `⭐ <strong>${state.stats.featured}</strong> FEATURED`,
+    ` <strong>${state.stats.total}</strong> TOOLS`,
+    ` <strong>${state.stats.categories}</strong> KATEGORIEN`,
+    ` <strong>${state.stats.featured}</strong> FEATURED`,
   ];
 
   // Zusätzliche dynamische Infos
   if (state.tools.length > 0) {
     // Bestbewertetes Tool
     const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-    marqueeItems.push(`🏆 BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
+    marqueeItems.push(` BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
 
     // Neuestes Tool (nach added-Datum)
     const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
     const newest = sortedByDate[0];
-    marqueeItems.push(`🆕 NEU: ${newest.title}`);
+    marqueeItems.push(` NEU: ${newest.title}`);
   }
 
   // Marquee-Track leeren und neu befüllen
