@@ -1612,17 +1612,9 @@ a:focus-visible {
   margin: 0 auto;
   overflow: hidden;
   white-space: nowrap;
-  background: rgba(255,255,255,0.03);
-  border-radius: 30px;
-  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
-  padding: 0 8px;
-  box-sizing: border-box;
-
-  /* Weiche Kanten links und rechts */
-  -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
-  mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
+  /* Kein Hintergrund, kein Blur, keine abgerundeten Ecken, keine Maske */
 }
 
 .stats-marquee .marquee-track {
