@@ -1342,7 +1342,7 @@ body {
   /* ✅ MARQUEE – angepasst: absolute Positionierung bleibt, nur Höhe und linke Position */
   .card-square .context-marquee {
     height: 21px !important;
-    left: 4px !important;        /* gleicher Abstand wie Desktop */
+    left: 3px !important;        /* gleicher Abstand wie Desktop */
     right: 12px !important;      /* rechter Abstand bleibt */
     bottom: 12px !important;
     order: 2 !important;
