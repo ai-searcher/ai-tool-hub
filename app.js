@@ -226,59 +226,60 @@ class StackViewController {
     }
   }
 
-  attachStackListeners() {
-    const stacks = this.container.querySelectorAll('.category-stack');
-    stacks.forEach(stack => {
-      // Klick auf den Header toggelt den Stapel
-      const header = stack.querySelector('.category-header-card');
-      if (header) {
-        header.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const cardsContainer = stack.querySelector('.stack-cards');
-          if (cardsContainer) {
-            cardsContainer.classList.toggle('fanned');
-          }
-        });
-      }
 
-      // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt ebenfalls
-      const cardsContainer = stack.querySelector('.stack-cards');
-      if (cardsContainer) {
-        cardsContainer.addEventListener('click', (e) => {
-          // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
-          if (e.target.closest('.stack-card')) return;
-          cardsContainer.classList.toggle('fanned');
-        });
-      }
-    });
-
-    // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
-    const stackCards = this.container.querySelectorAll('.stack-card');
-    stackCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        e.preventDefault();
+attachStackListeners() {
+  const stacks = this.container.querySelectorAll('.category-stack');
+  stacks.forEach(stack => {
+    // Klick auf den Header toggelt den Stapel
+    const header = stack.querySelector('.category-header-card');
+    if (header) {
+      header.addEventListener('click', (e) => {
         e.stopPropagation();
-        const toolId = card.dataset.toolId;
-        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
-        if (!tool) return;
-
-        if (window.innerWidth < 768) {
-          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-        } else {
-          if (typeof openToolModal === 'function') {
-            openToolModal(tool);
-          } else {
-            window.open(tool.link, '_blank', 'noopener,noreferrer');
-          }
+        const cardsContainer = stack.querySelector('.stack-cards');
+        if (cardsContainer) {
+          cardsContainer.classList.toggle('fanned');
         }
       });
-    });
-  }
+    }
 
-  destroy() {
-    this.container.innerHTML = '';
-    this.container.classList.remove('tool-stacks');
-  }
+    // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt ebenfalls
+    const cardsContainer = stack.querySelector('.stack-cards');
+    if (cardsContainer) {
+      cardsContainer.addEventListener('click', (e) => {
+        // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
+        if (e.target.closest('.stack-card')) return;
+        cardsContainer.classList.toggle('fanned');
+      });
+    }
+  });
+
+  // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
+  const stackCards = this.container.querySelectorAll('.stack-card');
+  stackCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const toolId = card.dataset.toolId;
+      const tool = this.state.tools.find(t => String(t.id) === String(toolId));
+      if (!tool) return;
+
+      if (window.innerWidth < 768) {
+        window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+      } else {
+        if (typeof openToolModal === 'function') {
+          openToolModal(tool);
+        } else {
+          window.open(tool.link, '_blank', 'noopener,noreferrer');
+        }
+      }
+    });
+  });
+}
+
+destroy() {
+  this.container.innerHTML = '';
+  this.container.classList.remove('tool-stacks');
+}
 }
 
 // =========================================
@@ -368,8 +369,33 @@ const state = {
     total: 0,
     categories: 0,
     featured: 0
-  }
+  },
+  sortBy: 'name',      // NEU: Sortierkriterium
+  sortDirection: 'asc' // NEU: Sortierrichtung
 };
+
+// =========================================
+// HILFSFUNKTION SORTIERUNG (NEU)
+// =========================================
+function sortTools(tools) {
+  const { sortBy, sortDirection } = state;
+  const dir = sortDirection === 'asc' ? 1 : -1;
+
+  return [...tools].sort((a, b) => {
+    if (sortBy === 'name') {
+      return dir * a.title.localeCompare(b.title);
+    } else if (sortBy === 'rating') {
+      const aRating = a.rating || 0;
+      const bRating = b.rating || 0;
+      return dir * (aRating - bRating);
+    } else if (sortBy === 'date') {
+      const aDate = new Date(a.added || 0);
+      const bDate = new Date(b.added || 0);
+      return dir * (aDate - bDate);
+    }
+    return 0;
+  });
+}
 
 // =========================================
 // SUPABASE CLIENT (No Library)
@@ -747,7 +773,8 @@ const dataLoader = {
 // =========================================
 const ui = {
   elements: {},
-  stackView: null, // wird später initialisiert
+  stackView: null,
+  sortMenuActive: false, // NEU: Zustand des Dropdowns
 
   cacheElements() {
     this.elements = {
@@ -765,7 +792,7 @@ const ui = {
       statCategories: getElement('#stat-categories'),
       statFeatured: getElement('#stat-featured'),
       dataSource: getElement('#data-source'),
-      viewToggle: document.querySelector('.view-toggle') // NEU
+      viewToggle: document.querySelector('.view-toggle')
     };
   },
 
@@ -911,6 +938,7 @@ const ui = {
   },
 
   render() {
+    // Filterung
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
       const query = state.searchQuery.toLowerCase();
       state.filtered = state.tools.filter(tool =>
@@ -920,6 +948,9 @@ const ui = {
     } else {
       state.filtered = [...state.tools];
     }
+
+    // Sortierung (NEU)
+    state.filtered = sortTools(state.filtered);
 
     if (state.loading) {
       this.showState('loading');
@@ -939,7 +970,7 @@ const ui = {
       return;
     }
 
-    const activeView = this.getActiveView(); // NEU
+    const activeView = this.getActiveView();
     if (activeView === 'grid') {
       this.showState('grid');
       if (this.elements.toolGrid) {
@@ -950,13 +981,15 @@ const ui = {
         this.attachCardHandlers();
       }
     } else {
-     
-       // Stack-Ansicht
+      // Stack-Ansicht
       this.showState('grid');
       if (!this.stackView) {
         this.stackView = new StackViewController(this.elements.toolGrid, state, this);
       } else {
         this.stackView.state = state;
+        // Sortierkriterien an StackViewController übergeben
+        this.stackView.activeSort = state.sortBy;
+        this.stackView.sortDirection = state.sortDirection;
       }
       this.stackView.render();
     }
@@ -1070,9 +1103,49 @@ const ui = {
     } else if (view === 'stacks') {
       this.render();
     }
+  },
+
+  // NEUE METHODEN FÜR SORTIER-DROPDOWN
+  toggleSortMenu(show) {
+    const dropdown = document.querySelector('.sort-dropdown');
+    if (!dropdown) return;
+    
+    if (show === undefined) {
+      this.sortMenuActive = !this.sortMenuActive;
+    } else {
+      this.sortMenuActive = show;
+    }
+    
+    dropdown.classList.toggle('active', this.sortMenuActive);
+    
+    if (this.sortMenuActive) {
+      setTimeout(() => {
+        const closeHandler = (e) => {
+          if (!e.target.closest('.sort-dropdown')) {
+            this.toggleSortMenu(false);
+            document.removeEventListener('click', closeHandler);
+          }
+        };
+        document.addEventListener('click', closeHandler);
+      }, 0);
+    }
+  },
+
+  setSort(sortBy, sortDir) {
+    state.sortBy = sortBy;
+    state.sortDirection = sortDir;
+    
+    // Aktiven Button im Menü markieren
+    document.querySelectorAll('.sort-menu button').forEach(btn => {
+      const btnSort = btn.dataset.sort;
+      const btnDir = btn.dataset.dir;
+      btn.classList.toggle('active', btnSort === sortBy && btnDir === sortDir);
+    });
+    
+    this.render();
+    this.toggleSortMenu(false);
   }
 };
-
 
 // =========================================
 // SEARCH FUNCTIONALITY
@@ -1238,29 +1311,49 @@ const app = {
       search.init();
 
       // Tabs initialisieren (robust)
-const viewToggle = document.querySelector('.view-toggle');
-if (viewToggle) {
-  // Entferne alte Listener (falls vorhanden)
-  const newToggle = viewToggle.cloneNode(true);
-  viewToggle.parentNode.replaceChild(newToggle, viewToggle);
-  
-  // WICHTIG: Referenz im ui-Objekt aktualisieren
-  ui.elements.viewToggle = newToggle;
-  
-  newToggle.addEventListener('click', (e) => {
-    const btn = e.target.closest('.toggle-btn');
-    if (!btn) return;
-    const view = btn.dataset.view;
-    if (!view) return;
-    
-    // Aktiven Button markieren
-    newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    // Ansicht umschalten
-    ui.switchView(view);
-  });
-}
+      const viewToggle = document.querySelector('.view-toggle');
+      if (viewToggle) {
+        const newToggle = viewToggle.cloneNode(true);
+        viewToggle.parentNode.replaceChild(newToggle, viewToggle);
+        ui.elements.viewToggle = newToggle;
+        
+        newToggle.addEventListener('click', (e) => {
+          const btn = e.target.closest('.toggle-btn');
+          if (!btn) return;
+          const view = btn.dataset.view;
+          if (!view) return;
+          
+          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          ui.switchView(view);
+        });
+      }
+
+      // Sortier-Dropdown initialisieren (NEU)
+      const sortTrigger = document.querySelector('.sort-trigger');
+      if (sortTrigger) {
+        sortTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          ui.toggleSortMenu();
+        });
+      }
+
+      // Sortier-Optionen initialisieren (NEU)
+      document.querySelectorAll('.sort-menu button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const sortBy = btn.dataset.sort;
+          const sortDir = btn.dataset.dir;
+          if (sortBy && sortDir) {
+            ui.setSort(sortBy, sortDir);
+          }
+        });
+      });
+
+      // Aktiven Sortiermodus initial markieren (NEU)
+      const activeSortBtn = document.querySelector(`.sort-menu button[data-sort="${state.sortBy}"][data-dir="${state.sortDirection}"]`);
+      if (activeSortBtn) activeSortBtn.classList.add('active');
 
       console.log('✅ App initialized successfully!');
 
