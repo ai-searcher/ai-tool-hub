@@ -5,288 +5,326 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⚡ Tool-Details · Quantum AI Hub</title>
   
-  <!-- Gleiches Stylesheet wie Hauptseite – für konsistente Farben und Grundstile -->
+  <!-- Gleiches Stylesheet wie Hauptseite -->
   <link rel="stylesheet" href="style.css?v=1.2">
   
- <style>
-  /* ===== Detail-spezifische Styles ===== */
-  
-  /* Hintergrund der Seite – dunkel, damit das Panel hervorsticht */
-  body {
-    background: var(--bg-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 16px;
-    box-sizing: border-box;
-    /* Verhindert, dass die Seite selbst scrollt, wenn Panel höher wird */
-    overflow: hidden;
-  }
-  
-  /* Das milchig-glasige Panel – jetzt mit fester max. Höhe und eigenem Scroll */
-  .detail-panel {
-    position: relative;
-    width: 100%;
-    max-width: 480px;
-    max-height: 85vh;                 /* 📌 maximale Höhe: 85% des Viewports */
-    overflow-y: auto;                  /* 📌 Scrollen nur im Panel */
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 24px;
-    padding: 28px 20px;
-    box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
-    box-sizing: border-box;
+  <style>
+    /* ===== Detail-spezifische Styles ===== */
     
-    /* Breathing-Animation mit Kategoriefarbe */
-    animation: breathing-glow 8s ease-in-out infinite;
+    body {
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+      box-sizing: border-box;
+      overflow: hidden; /* Seite scrollt nicht, nur Panel scrollt */
+    }
     
-    /* Innenlayout */
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    /* Das milchig-glasige Panel – scrollbar im Panel */
+    .detail-panel {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 28px 20px;
+      box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+      box-sizing: border-box;
+      
+      /* Breathing-Animation mit Kategoriefarbe */
+      animation: breathing-glow 8s ease-in-out infinite;
+      
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      
+      /* Dezente Scrollleiste */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
+    }
     
-    /* Sanfter Scrollbalken (optional) */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.2) transparent;
-  }
-  
-  /* Webkit-Scrollbar Styling (Chrome, Safari) */
-  .detail-panel::-webkit-scrollbar {
-    width: 6px;
-  }
-  .detail-panel::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .detail-panel::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-  }
-  
-  /* Kopfzeile mit Titel und Schließen-Button */
-  .detail-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    flex-shrink: 0;                    /* 📌 Kopfzeile nicht stauchen */
-  }
-  
-  .detail-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text-primary);
-    margin: 0;
-    flex: 1;
-    word-break: break-word;
-  }
-  
-  /* Eleganter Schließen-Button */
-  .close-button {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--text-dim);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    font-size: 28px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 0;
-    box-shadow: none;
-    flex-shrink: 0;
-  }
-  
-  .close-button:hover,
-  .close-button:active {
-    background: rgba(255,255,255,0.1);
-    color: var(--text-primary);
-    border-color: var(--primary);
-    transform: scale(1.05);
-  }
-  
-  /* Metadaten (Kategorie, Provider, Rating) */
-.detail-meta {
-  display: flex;
-  flex-direction: column;  /* untereinander */
-  gap: 12px;               /* vertikaler Abstand */
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  padding: 16px 0;
-  flex-shrink: 0;
-}
-  
-  .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  
-  .meta-label {
-    color: var(--text-dim);
-    font-weight: 400;
-  }
-  
-  .meta-value {
-    color: var(--primary);
-    font-weight: 600;
-  }
-  
-  .category-badge {
-    background: var(--glow-text);  /* wird später dynamisch überschrieben */
-    color: var(--color-text);
-    padding: 4px 12px;
-    border-radius: 30px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  /* Beschreibung */
-  .detail-description {
-    color: var(--text-dim);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin: 0;
-    flex-shrink: 0;                    /* 📌 nicht stauchen */
-  }
-  
-  /* Badges / Context-Info – dieser Bereich wird scrollbar, wenn nötig */
-  .detail-badges {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 16px;
-    padding: 16px;
-    /* Kein flex-shrink, darf sich ausdehnen und scrollen */
-  }
-  
-  .badge-item {
-    color: rgba(255,255,255,0.7);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    padding-left: 12px;
-    border-left: 2px solid var(--primary);
-  }
-  
-  /* Link-Button */
-  .detail-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: var(--primary);
-    color: var(--bg-dark);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.1rem;
-    padding: 16px 24px;
-    border-radius: 50px;
-    transition: all 0.2s ease;
-    margin-top: 8px;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;                    /* 📌 nicht stauchen */
-  }
-  
-  .detail-link:hover,
-  .detail-link:active {
-    background: var(--primary-hover);
-    transform: scale(1.02);
-    box-shadow: 0 0 20px var(--primary-glow);
-  }
-  
-  /* Lade- und Fehlerzustand */
-  .loading-state,
-  .error-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-dim);
-  }
-  
-  /* Kategoriespezifische Farben für Badge und Badge-Container */
-  .detail-panel[data-category="text"] .category-badge {
-    background: var(--glow-text);
-    color: var(--color-text);
-  }
-  .detail-panel[data-category="text"] .badge-item {
-    border-left-color: var(--color-text);
-  }
-  
-  .detail-panel[data-category="image"] .category-badge {
-    background: var(--glow-image);
-    color: var(--color-image);
-  }
-  .detail-panel[data-category="image"] .badge-item {
-    border-left-color: var(--color-image);
-  }
-  
-  .detail-panel[data-category="code"] .category-badge {
-    background: var(--glow-code);
-    color: var(--color-code);
-  }
-  .detail-panel[data-category="code"] .badge-item {
-    border-left-color: var(--color-code);
-  }
-  
-  .detail-panel[data-category="audio"] .category-badge {
-    background: var(--glow-audio);
-    color: var(--color-audio);
-  }
-  .detail-panel[data-category="audio"] .badge-item {
-    border-left-color: var(--color-audio);
-  }
-  
-  .detail-panel[data-category="video"] .category-badge {
-    background: var(--glow-video);
-    color: var(--color-video);
-  }
-  .detail-panel[data-category="video"] .badge-item {
-    border-left-color: var(--color-video);
-  }
-  
-  .detail-panel[data-category="data"] .category-badge {
-    background: var(--glow-data);
-    color: var(--color-data);
-  }
-  .detail-panel[data-category="data"] .badge-item {
-    border-left-color: var(--color-data);
-  }
-  
-  .detail-panel[data-category="other"] .category-badge {
-    background: var(--glow-other, rgba(176,190,197,0.25));
-    color: var(--color-other);
-  }
-  .detail-panel[data-category="other"] .badge-item {
-    border-left-color: var(--color-other);
-  }
-</style>
+    .detail-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+    .detail-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .detail-panel::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+    }
+    
+    /* Kopfzeile */
+    .detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    
+    .detail-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin: 0;
+      flex: 1;
+      word-break: break-word;
+    }
+    
+    /* Schließen-Button */
+    .close-button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-dim);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 28px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 0;
+      box-shadow: none;
+      flex-shrink: 0;
+    }
+    
+    .close-button:hover,
+    .close-button:active {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-primary);
+      border-color: var(--primary);
+      transform: scale(1.05);
+    }
+    
+    /* Metadaten – untereinander */
+    .detail-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 16px 0;
+      flex-shrink: 0;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .meta-label {
+      color: var(--text-dim);
+      font-weight: 400;
+      min-width: 80px; /* für Ausrichtung */
+    }
+    
+    .meta-value {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .category-badge {
+      background: var(--glow-text);
+      color: var(--color-text);
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* Beschreibung */
+    .detail-description {
+      color: var(--text-dim);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    
+    /* Neue Abschnitte (Stärken, Anwendungen, Prompts, Tipps) */
+    .detail-section {
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    
+    .detail-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0 0 12px 0;
+      letter-spacing: 0.02em;
+    }
+    
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    
+    .detail-list-item {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding-left: 20px;
+      position: relative;
+    }
+    
+    .detail-list-item::before {
+      content: "•";
+      color: var(--primary);
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    
+    /* Badge-Container (optional) */
+    .detail-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 16px;
+      padding: 16px;
+      flex-shrink: 0;
+    }
+    
+    .badge-item {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      padding-left: 12px;
+      border-left: 2px solid var(--primary);
+    }
+    
+    /* Link-Button */
+    .detail-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: var(--bg-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 16px 24px;
+      border-radius: 50px;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    
+    .detail-link:hover,
+    .detail-link:active {
+      background: var(--primary-hover);
+      transform: scale(1.02);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    
+    /* Lade- und Fehlerzustand */
+    .loading-state,
+    .error-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+    }
+    
+    /* Kategoriespezifische Farben für Badge und Listenpunkte */
+    .detail-panel[data-category="text"] .category-badge {
+      background: var(--glow-text);
+      color: var(--color-text);
+    }
+    .detail-panel[data-category="text"] .detail-list-item::before {
+      color: var(--color-text);
+    }
+    
+    .detail-panel[data-category="image"] .category-badge {
+      background: var(--glow-image);
+      color: var(--color-image);
+    }
+    .detail-panel[data-category="image"] .detail-list-item::before {
+      color: var(--color-image);
+    }
+    
+    .detail-panel[data-category="code"] .category-badge {
+      background: var(--glow-code);
+      color: var(--color-code);
+    }
+    .detail-panel[data-category="code"] .detail-list-item::before {
+      color: var(--color-code);
+    }
+    
+    .detail-panel[data-category="audio"] .category-badge {
+      background: var(--glow-audio);
+      color: var(--color-audio);
+    }
+    .detail-panel[data-category="audio"] .detail-list-item::before {
+      color: var(--color-audio);
+    }
+    
+    .detail-panel[data-category="video"] .category-badge {
+      background: var(--glow-video);
+      color: var(--color-video);
+    }
+    .detail-panel[data-category="video"] .detail-list-item::before {
+      color: var(--color-video);
+    }
+    
+    .detail-panel[data-category="data"] .category-badge {
+      background: var(--glow-data);
+      color: var(--color-data);
+    }
+    .detail-panel[data-category="data"] .detail-list-item::before {
+      color: var(--color-data);
+    }
+    
+    .detail-panel[data-category="other"] .category-badge {
+      background: var(--glow-other, rgba(176,190,197,0.25));
+      color: var(--color-other);
+    }
+    .detail-panel[data-category="other"] .detail-list-item::before {
+      color: var(--color-other);
+    }
+  </style>
 </head>
 <body>
   <div class="detail-panel" id="detailPanel" data-category="">
-    <!-- Inhalt wird per JavaScript befüllt -->
+    <!-- Ladezustand -->
     <div class="loading-state" id="loadingState">
       <div class="spinner" style="margin: 0 auto 16px;"></div>
       <p>Lade Details...</p>
     </div>
     
+    <!-- Fehlerzustand -->
     <div class="error-state" id="errorState" style="display: none;">
       <p>❌ Tool nicht gefunden.</p>
       <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;">Zurück</button>
     </div>
     
-    <!-- Dynamisch befüllter Inhalt (initial versteckt) -->
+    <!-- Dynamisch befüllter Inhalt -->
     <div id="detailContent" style="display: none;">
       <div class="detail-header">
         <h2 class="detail-title" id="toolTitle"></h2>
@@ -310,7 +348,32 @@
       
       <p class="detail-description" id="toolDescription"></p>
       
-      <div class="detail-badges" id="badgesContainer"></div>
+      <!-- Stärken -->
+      <div id="strengthsContainer" class="detail-section" style="display: none;">
+        <h3 class="detail-section-title">💪 Stärken</h3>
+        <div class="detail-list" id="strengthsList"></div>
+      </div>
+      
+      <!-- Anwendungsbeispiele -->
+      <div id="useCasesContainer" class="detail-section" style="display: none;">
+        <h3 class="detail-section-title">🎯 Wofür ist es gut?</h3>
+        <div class="detail-list" id="useCasesList"></div>
+      </div>
+      
+      <!-- Prompt-Beispiele -->
+      <div id="promptExamplesContainer" class="detail-section" style="display: none;">
+        <h3 class="detail-section-title">✍️ Beispiel-Prompts</h3>
+        <div class="detail-list" id="promptExamplesList"></div>
+      </div>
+      
+      <!-- Prompt-Tipps -->
+      <div id="promptTipsContainer" class="detail-section" style="display: none;">
+        <h3 class="detail-section-title">💡 Tipps für gute Prompts</h3>
+        <div class="detail-list" id="promptTipsList"></div>
+      </div>
+      
+      <!-- Bisherige Badges (optional) -->
+      <div class="detail-badges" id="badgesContainer" style="display: none;"></div>
       
       <a class="detail-link" id="toolLink" target="_blank" rel="noopener noreferrer">
         <span>Tool öffnen</span>
@@ -329,7 +392,7 @@
           const response = await fetch('data.json');
           if (!response.ok) throw new Error('Netzwerkfehler');
           const json = await response.json();
-          return json.tools || json; // akzeptiert sowohl {tools: [...]} als auch direktes Array
+          return json.tools || json; // akzeptiert beide Formate
         } catch (err) {
           console.error('Fehler beim Laden von data.json:', err);
           return null;
@@ -352,6 +415,26 @@
         return;
       }
       
+      // Hilfsfunktion für Listen
+      function fillList(containerId, listId, items) {
+        const container = document.getElementById(containerId);
+        const listEl = document.getElementById(listId);
+        if (!container || !listEl) return;
+        
+        if (items && Array.isArray(items) && items.length > 0) {
+          listEl.innerHTML = '';
+          items.forEach(item => {
+            const li = document.createElement('div');
+            li.className = 'detail-list-item';
+            li.textContent = item;
+            listEl.appendChild(li);
+          });
+          container.style.display = 'block';
+        } else {
+          container.style.display = 'none';
+        }
+      }
+      
       // Daten laden und anzeigen
       loadToolData().then(tools => {
         if (!tools || !Array.isArray(tools)) {
@@ -369,7 +452,7 @@
         const category = tool.category || 'other';
         panel.setAttribute('data-category', category);
         
-        // Felder befüllen
+        // Basisfelder befüllen
         document.getElementById('toolTitle').textContent = tool.title || 'Unbekannt';
         document.getElementById('toolDescription').textContent = tool.description || 'Keine Beschreibung verfügbar.';
         document.getElementById('toolCategory').textContent = (category.charAt(0).toUpperCase() + category.slice(1));
@@ -379,7 +462,7 @@
         const linkEl = document.getElementById('toolLink');
         linkEl.href = tool.link || '#';
         
-        // Provider nur anzeigen, wenn vorhanden
+        // Provider und Rating nur anzeigen, wenn vorhanden
         if (!tool.provider) {
           document.getElementById('providerContainer').style.display = 'none';
         }
@@ -387,25 +470,23 @@
           document.getElementById('ratingContainer').style.display = 'none';
         }
         
-        // Badges befüllen
-        const badgesContainer = document.getElementById('badgesContainer');
-        badgesContainer.innerHTML = '';
+        // Neue Felder befüllen
+        fillList('strengthsContainer', 'strengthsList', tool.strengths);
+        fillList('useCasesContainer', 'useCasesList', tool.useCases);
+        fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
+        fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
         
+        // Badges (alte Struktur) – optional anzeigen
+        const badgesContainer = document.getElementById('badgesContainer');
         if (tool.badges && Array.isArray(tool.badges) && tool.badges.length > 0) {
+          badgesContainer.innerHTML = '';
           tool.badges.forEach(badge => {
             const badgeEl = document.createElement('div');
             badgeEl.className = 'badge-item';
             badgeEl.textContent = badge;
             badgesContainer.appendChild(badgeEl);
           });
-        } else if (tool.tags && Array.isArray(tool.tags)) {
-          // Fallback: Tags als Badges anzeigen
-          tool.tags.forEach(tag => {
-            const badgeEl = document.createElement('div');
-            badgeEl.className = 'badge-item';
-            badgeEl.textContent = `#${tag}`;
-            badgesContainer.appendChild(badgeEl);
-          });
+          badgesContainer.style.display = 'flex';
         } else {
           badgesContainer.style.display = 'none';
         }
@@ -421,9 +502,9 @@
         errorEl.querySelector('p').textContent = '❌ ' + err.message;
       });
       
-      // Schließen-Button Funktion
+      // Schließen-Button: zurück zur vorherigen Seite
       document.getElementById('closeButton').addEventListener('click', function() {
-        window.history.back(); // Zurück zur vorherigen Seite (index.html)
+        window.history.back();
       });
       
     })();
