@@ -38,7 +38,7 @@
       box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
       box-sizing: border-box;
       
-      /* Eigene Panel-Animation – nur Farbpuls, keine Skalierung */
+      /* Eigene Panel-Animation – pulsierender Rand mit intensiver Farbe */
       animation: panel-pulse 8s ease-in-out infinite;
       
       display: flex;
@@ -149,7 +149,7 @@
       letter-spacing: 0.05em;
     }
     
-    /* NEU: Bewertung als Powerbar */
+    /* Bewertung als Powerbar */
     .rating-container {
       display: flex;
       align-items: center;
@@ -158,11 +158,11 @@
     }
     
     .rating-value {
-      color: var(--glow-color);
       font-weight: 700;
       font-size: 1.2rem;
       min-width: 45px;
       text-align: right;
+      color: var(--full-color);
     }
     
     .rating-bar {
@@ -176,9 +176,9 @@
     .rating-fill {
       height: 100%;
       width: 0%; /* wird per JS gesetzt */
-      background: var(--glow-color);
+      background: var(--full-color);
       border-radius: 20px;
-      box-shadow: 0 0 8px var(--glow-color);
+      box-shadow: 0 0 8px var(--glow-intense);
       animation: rating-pulse 8s ease-in-out infinite;
     }
     
@@ -200,7 +200,7 @@
     .detail-section-title {
       font-size: 1.1rem;
       font-weight: 600;
-      color: var(--primary);
+      color: var(--full-color);
       margin: 0 0 12px 0;
       letter-spacing: 0.02em;
       animation: title-glow 8s ease-in-out infinite;
@@ -225,7 +225,7 @@
     
     .detail-list-item::before {
       content: "•";
-      color: var(--primary);
+      color: var(--full-color);
       font-size: 1.2rem;
       position: absolute;
       left: 4px;
@@ -279,22 +279,25 @@
         box-shadow:
           0 6px 20px rgba(2,12,30,0.45),
           inset 0 1px 0 rgba(255,255,255,0.02),
-          0 0 0 1px var(--glow-color);
+          0 0 0 1px var(--glow-intense);
       }
     }
     
     @keyframes title-glow {
       0%, 100% { text-shadow: 0 0 0 transparent; }
-      50% { text-shadow: 0 0 8px var(--glow-color); }
+      50% { text-shadow: 0 0 12px var(--glow-intense); }
     }
     
     @keyframes rating-pulse {
-      0%, 100% { box-shadow: 0 0 8px var(--glow-color); }
-      50% { box-shadow: 0 0 16px var(--glow-color); }
+      0%, 100% { box-shadow: 0 0 8px var(--glow-intense); }
+      50% { box-shadow: 0 0 20px var(--glow-intense); }
     }
     
-    /* Kategoriespezifische Farben für Badge, Listenpunkte und Powerbar */
-    .detail-panel[data-category="text"] { --glow-color: var(--glow-text); }
+    /* Kategoriespezifische Farben */
+    .detail-panel[data-category="text"] {
+      --full-color: var(--color-text);
+      --glow-intense: rgba(0, 212, 255, 0.8);
+    }
     .detail-panel[data-category="text"] .category-badge {
       background: var(--glow-text);
       color: var(--color-text);
@@ -303,7 +306,10 @@
       color: var(--color-text);
     }
     
-    .detail-panel[data-category="image"] { --glow-color: var(--glow-image); }
+    .detail-panel[data-category="image"] {
+      --full-color: var(--color-image);
+      --glow-intense: rgba(236, 72, 153, 0.8);
+    }
     .detail-panel[data-category="image"] .category-badge {
       background: var(--glow-image);
       color: var(--color-image);
@@ -312,7 +318,10 @@
       color: var(--color-image);
     }
     
-    .detail-panel[data-category="code"] { --glow-color: var(--glow-code); }
+    .detail-panel[data-category="code"] {
+      --full-color: var(--color-code);
+      --glow-intense: rgba(124, 77, 255, 0.8);
+    }
     .detail-panel[data-category="code"] .category-badge {
       background: var(--glow-code);
       color: var(--color-code);
@@ -321,7 +330,10 @@
       color: var(--color-code);
     }
     
-    .detail-panel[data-category="audio"] { --glow-color: var(--glow-audio); }
+    .detail-panel[data-category="audio"] {
+      --full-color: var(--color-audio);
+      --glow-intense: rgba(255, 107, 157, 0.8);
+    }
     .detail-panel[data-category="audio"] .category-badge {
       background: var(--glow-audio);
       color: var(--color-audio);
@@ -330,7 +342,10 @@
       color: var(--color-audio);
     }
     
-    .detail-panel[data-category="video"] { --glow-color: var(--glow-video); }
+    .detail-panel[data-category="video"] {
+      --full-color: var(--color-video);
+      --glow-intense: rgba(68, 138, 255, 0.8);
+    }
     .detail-panel[data-category="video"] .category-badge {
       background: var(--glow-video);
       color: var(--color-video);
@@ -339,7 +354,10 @@
       color: var(--color-video);
     }
     
-    .detail-panel[data-category="data"] { --glow-color: var(--glow-data); }
+    .detail-panel[data-category="data"] {
+      --full-color: var(--color-data);
+      --glow-intense: rgba(29, 233, 182, 0.8);
+    }
     .detail-panel[data-category="data"] .category-badge {
       background: var(--glow-data);
       color: var(--color-data);
@@ -348,7 +366,10 @@
       color: var(--color-data);
     }
     
-    .detail-panel[data-category="other"] { --glow-color: var(--glow-other); }
+    .detail-panel[data-category="other"] {
+      --full-color: var(--color-other);
+      --glow-intense: rgba(176, 190, 197, 0.8);
+    }
     .detail-panel[data-category="other"] .category-badge {
       background: var(--glow-other, rgba(176,190,197,0.25));
       color: var(--color-other);
@@ -389,7 +410,7 @@
           <span class="meta-value" id="toolProvider"></span>
         </div>
         
-        <!-- NEU: Bewertung als Powerbar -->
+        <!-- Bewertung als Powerbar -->
         <div class="meta-item" id="ratingContainer">
           <span class="meta-label">Bewertung</span>
           <div class="rating-container">
@@ -405,25 +426,25 @@
       
       <!-- Stärken -->
       <div id="strengthsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">✨ Highlights – was dieses Tool besonders macht</h3>
+        <h3 class="detail-section-title">Kernfunktionen</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
       <!-- Anwendungsbeispiele -->
       <div id="useCasesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">🎯 Ideal für …</h3>
+        <h3 class="detail-section-title">Einsatzbereiche</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
       <!-- Prompt-Beispiele -->
       <div id="promptExamplesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">✍️ So könntest du es nutzen</h3>
+        <h3 class="detail-section-title">Beispiel-Prompts</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
       <!-- Prompt-Tipps -->
       <div id="promptTipsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">💡 Clever prompter – so gelingen bessere Ergebnisse</h3>
+        <h3 class="detail-section-title">Prompt-Richtlinien</h3>
         <div class="detail-list" id="promptTipsList"></div>
       </div>
       
@@ -541,7 +562,6 @@
         catEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
         
-        // Bewertung als Powerbar
         if (tool.rating) {
           ratingEl.textContent = tool.rating.toFixed(1);
           const percent = (tool.rating / 5) * 100;
