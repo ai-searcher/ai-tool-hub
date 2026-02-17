@@ -1583,12 +1583,11 @@ button,
 }
 
 /* Card-Specific: fixierte Position (transparent) */
-.card-square .context-marquee {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 8px;
+.context-marquee {
+  position: relative;
+  width: 100%;
   height: 22px;
+  margin-top: 6px;
   overflow: hidden;
   pointer-events: none;
   background: transparent;
