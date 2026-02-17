@@ -613,7 +613,7 @@ body {
   --color-code: #7C4DFF;
   --color-audio: #FF6B9D;
   --color-video: #448AFF;
-  --color- #1DE9B6;
+  --color-data: #1DE9B6;
   --color-other: #B0BEC5;
 
   /* Glow variants */
@@ -622,7 +622,7 @@ body {
   --glow-code: rgba(124, 77, 255, 0.25);
   --glow-audio: rgba(255, 107, 157, 0.25);
   --glow-video: rgba(68, 138, 255, 0.25);
-  --glow- rgba(29, 233, 182, 0.25);
+  --glow-data: rgba(29, 233, 182, 0.25);
 }
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
@@ -973,6 +973,7 @@ body {
   height: 100%;
   gap: 0;
   padding: 14px;
+  padding-left: 8px; /* ~3mm nach links */
   text-align: left;
   position: relative;
   z-index: 2;
@@ -1001,7 +1002,7 @@ body {
 
 /* Tool Name */
 .square-title-large {
-  font-size: 0.83rem;
+  font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
@@ -1014,6 +1015,7 @@ body {
   flex-shrink: 0;
   display: block;
   pointer-events: none; /* ✅ Title nicht klickbar */
+  transform: translateY(-3px); /* ~2mm höher */
 }
 
 /* ==================== OVERLAY LINK - KOMPLETT NEU! ==================== */
@@ -1221,6 +1223,29 @@ body {
   flex-shrink: 0;
 }
 
+/* Card-internal marquee: fixed position & no visible container */
+.card-square .context-marquee {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 11px;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  z-index: 2;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+
 .context-marquee .marquee-track {
   display: inline-flex;
   white-space: nowrap;
@@ -1231,11 +1256,11 @@ body {
 .context-marquee .marquee-seq {
   display: inline-block;
   padding-right: 3.5rem;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: rgba(255,255,255,0.78);
   letter-spacing: 0.02em;
-  line-height: 18px;
+  line-height: 24px;
   pointer-events: none;
 }
 
@@ -1295,7 +1320,7 @@ body {
   }
 
   .square-category-badge {
-    font-size: 0.62rem !important;
+    font-size: 0.7rem !important;
     padding: 4px 10px !important;
     margin: 0 0 6px 0 !important;
     align-self: flex-start !important;
@@ -1303,7 +1328,7 @@ body {
   }
 
   .context-marquee {
-    height: 18px !important;
+    height: 21px !important;
     width: calc(100% + 20px) !important;
     margin-left: -10px !important;
     margin-right: -10px !important;
@@ -1312,8 +1337,8 @@ body {
   }
 
 .context-marquee .marquee-seq {
-  font-size: 0.58rem;
-  line-height: 18px;
+  font-size: 0.72rem;
+  line-height: 22px;
   padding-right: 2.5rem;
 }
 
@@ -1584,11 +1609,11 @@ button,
 .context-marquee .marquee-seq {
   display: inline-block;
   padding-right: 3.5rem;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: rgba(255,255,255,0.78);
   letter-spacing: 0.02em;
-  line-height: 18px;
+  line-height: 22px;
   pointer-events: none;
   background: transparent !important;
   box-shadow: none !important;
@@ -1620,8 +1645,7 @@ button,
 
 @media (max-width: 767px) {
   .context-marquee { height: 21px !important; }
-  .context-marquee .marquee-seq { font-size: 0.58rem !important; padding-right: 2rem !important; line-height: 18px !important; }
-  .card-square .context-marquee { left: 24px !important; right: 24px !important; bottom: 11px !important; }
+  .context-marquee .marquee-seq { font-size: 0.66rem !important; padding-right: 2rem !important; line-height: 21px !important; }
   .context-marquee .marquee-track { animation-duration: 18s !important; }
 }
 
@@ -1959,13 +1983,9 @@ a:focus-visible {
   margin: 0;
   margin-top: 6px;     /* 2mm höher */
   margin-left: 8px;    /* 3mm weiter links */
-  font-size: 0.83rem;  /* Originalgröße */
+  font-size: 1.15rem;  /* Originalgröße */
   line-height: 1.18;
   color: var(--text-primary);
   word-break: break-word;
 }
 
-/* GLOBAL LEFT SHIFT */
-.card-square > .square-content-centered {
-  padding-left: 8px !important;  /* ← weniger Abstand */
-}
