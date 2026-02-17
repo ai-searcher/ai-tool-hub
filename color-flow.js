@@ -1,9 +1,10 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.1 ORGANIC
-// Verbesserte, organische Linienführung
+// GRID SYNCHRONIZED NETWORK V13.2 ORGANIC
+// Volle Funktionalität + organische Linien
 // - Wellen mit variabler Frequenz & Rauschen
 // - Sanfte Übergänge an den Enden
 // - Zufällige Variation pro Linie
+// - Sterne, Glitch, Ripples, etc.
 // - Optimiert für Mobile/Desktop
 // =========================================
 
@@ -112,7 +113,7 @@
           useSimplifiedRendering: true,
           minClusterSize: 2,
           maxDistance: 400,
-          // Organische Linien auf Mobil deaktiviert (Performance)
+          // Neue Effekte – auf mobil reduziert oder deaktiviert
           enableWaves: false,
           enableGlitch: false,
           enableStars: true,
@@ -146,9 +147,9 @@
           enableVariableWidth: true,
           starCount: 100,
           glitchProbability: 0.01,
-          // Neue organische Parameter
-          waveComplexity: 2,       // Anzahl überlagerter Wellen
-          organicNoise: 0.3        // Stärke des zufälligen Rauschens
+          // Organische Parameter
+          waveComplexity: 2,
+          organicNoise: 0.3
         };
       } else {
         this.settings = {
@@ -215,7 +216,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.1 ORGANIC');
+      console.log('🚀 GridSynchronizedNetwork v13.2 ORGANIC');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -377,7 +378,7 @@
       });
     }
 
-    // Intelligente Verbindungen (unverändert)
+    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -395,30 +396,343 @@
       }
     }
 
+    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
-      // ... (unverändert, aus Platzgründen hier nicht wiederholt, aber in der endgültigen Datei vorhanden)
-      // (Ich werde den vollständigen Code mit allen Methoden liefern, hier nur Auszug)
+      const categoryGroups = {};
+
+      this.cards.forEach(card => {
+        if (!categoryGroups[card.category]) {
+          categoryGroups[card.category] = [];
+        }
+        categoryGroups[card.category].push(card);
+      });
+
+      // Primary: Connect within categories
+      Object.values(categoryGroups).forEach(group => {
+        if (group.length > 1) {
+          group.sort((a, b) => {
+            if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+            return a.y - b.y;
+          });
+
+          const max = Math.min(group.length - 1, this.settings.maxPrimaryConnections);
+          for (let i = 0; i < max; i++) {
+            this.addConnection(group[i], group[i + 1], 'primary', 1.0);
+          }
+        }
+      });
+
+      // Secondary: Skip connections within larger groups
+      Object.values(categoryGroups).forEach(group => {
+        if (group.length > 3) {
+          group.sort((a, b) => {
+            if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+            return a.y - b.y;
+          });
+
+          const max = Math.min(Math.floor(group.length / 2), this.settings.maxSecondaryConnections);
+          for (let i = 0; i < max; i++) {
+            const from = group[i * 2];
+            const to = group[Math.min(i * 2 + 2, group.length - 1)];
+            if (from !== to && !this.connectionExists(from, to)) {
+              this.addConnection(from, to, 'secondary', 0.7);
+            }
+          }
+        }
+      });
+
+      // Bridge: Connect different categories
+      const categories = Object.keys(categoryGroups);
+      const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
+
+      for (let i = 0; i < maxBridges; i++) {
+        const groupA = categoryGroups[categories[i]];
+        const groupB = categoryGroups[categories[i + 1]];
+
+        if (groupA && groupB && groupA.length > 0 && groupB.length > 0) {
+          let minDist = Infinity;
+          let closestPair = null;
+
+          groupA.forEach(cardA => {
+            groupB.forEach(cardB => {
+              const dist = this.getDistance(cardA, cardB);
+              if (dist < minDist && dist < 600) {
+                minDist = dist;
+                closestPair = [cardA, cardB];
+              }
+            });
+          });
+
+          if (closestPair && !this.connectionExists(closestPair[0], closestPair[1])) {
+            this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.6);
+          }
+        }
+      }
+
+      // Cluster: Curved connections for visual variety
+      if (this.settings.enableCurves) {
+        Object.values(categoryGroups).forEach(group => {
+          if (group.length > 3) {
+            group.sort((a, b) => {
+              if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+              return a.y - b.y;
+            });
+
+            const start = group[0];
+            const end = group[group.length - 1];
+
+            if (!this.connectionExists(start, end) && this.getDistance(start, end) < 600) {
+              this.addConnection(start, end, 'cluster', 0.5);
+            }
+          }
+        });
+      }
     }
 
-    // ... weitere Methoden (detectClusters, getClusterCenter, etc.) sind identisch zur Vorgängerversion
-    // Aus Platzgründen hier nicht wiederholt, aber in der finalen Datei enthalten.
+    detectClusters() {
+      const categoryGroups = {};
 
-    // ==================== ORGANISCHE ZEICHENMETHODEN ====================
+      this.cards.forEach(card => {
+        if (!categoryGroups[card.category]) {
+          categoryGroups[card.category] = [];
+        }
+        categoryGroups[card.category].push(card);
+      });
 
-    // Verbesserte, organische Welle mit mehreren Frequenzen und Rauschen
+      const clusters = [];
+
+      Object.entries(categoryGroups).forEach(([category, cards]) => {
+        if (cards.length < this.settings.minClusterSize) return;
+
+        cards.sort((a, b) => {
+          if (Math.abs(a.y - b.y) < 100) return a.x - b.x;
+          return a.y - b.y;
+        });
+
+        const spatialClusters = [];
+        let currentCluster = [cards[0]];
+
+        for (let i = 1; i < cards.length; i++) {
+          const dist = this.getDistance(cards[i-1], cards[i]);
+          if (dist < this.settings.maxDistance) {
+            currentCluster.push(cards[i]);
+          } else {
+            if (currentCluster.length >= this.settings.minClusterSize) {
+              spatialClusters.push(currentCluster);
+            }
+            currentCluster = [cards[i]];
+          }
+        }
+        if (currentCluster.length >= this.settings.minClusterSize) {
+          spatialClusters.push(currentCluster);
+        }
+
+        spatialClusters.forEach(cluster => {
+          clusters.push({
+            category: category,
+            cards: cluster,
+            center: this.getClusterCenter(cluster)
+          });
+          cluster.forEach(card => card.cluster = clusters.length - 1);
+        });
+      });
+
+      return clusters;
+    }
+
+    getClusterCenter(cards) {
+      const sumX = cards.reduce((sum, card) => sum + card.x, 0);
+      const sumY = cards.reduce((sum, card) => sum + card.y, 0);
+      return { x: sumX / cards.length, y: sumY / cards.length };
+    }
+
+    generatePrimaryConnections(clusters) {
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        const max = Math.min(cards.length - 1, this.settings.maxPrimaryConnections);
+
+        for (let i = 0; i < max; i++) {
+          this.addConnection(cards[i], cards[i + 1], 'primary', 1.0);
+        }
+
+        if (cards.length > 4 && !this.isMobile) {
+          this.addConnection(cards[0], cards[cards.length - 1], 'primary', 0.6);
+        }
+      });
+    }
+
+    generateSecondaryConnections(clusters) {
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        if (cards.length > 3) {
+          const max = Math.min(
+            Math.floor(cards.length / 2),
+            this.settings.maxSecondaryConnections
+          );
+
+          for (let i = 0; i < max; i++) {
+            const from = cards[i * 2];
+            const to = cards[Math.min(i * 2 + 2, cards.length - 1)];
+
+            if (from !== to && !this.connectionExists(from, to)) {
+              this.addConnection(from, to, 'secondary', 0.7);
+            }
+          }
+        }
+      });
+    }
+
+    generateBridgeConnections(clusters) {
+      const maxBridges = Math.min(
+        Math.floor(clusters.length * 1.5),
+        this.settings.maxBridgeConnections
+      );
+
+      let bridgesCreated = 0;
+
+      for (let i = 0; i < clusters.length && bridgesCreated < maxBridges; i++) {
+        for (let j = i + 1; j < clusters.length && bridgesCreated < maxBridges; j++) {
+          const clusterA = clusters[i];
+          const clusterB = clusters[j];
+
+          let minDist = Infinity;
+          let closestPair = null;
+
+          clusterA.cards.forEach(cardA => {
+            clusterB.cards.forEach(cardB => {
+              const dist = this.getDistance(cardA, cardB);
+              if (dist < minDist) {
+                minDist = dist;
+                closestPair = [cardA, cardB];
+              }
+            });
+          });
+
+          if (closestPair && minDist < this.settings.maxDistance && !this.connectionExists(closestPair[0], closestPair[1])) {
+            this.addConnection(closestPair[0], closestPair[1], 'bridge', 0.5);
+            bridgesCreated++;
+          }
+        }
+      }
+    }
+
+    generateClusterConnections(clusters) {
+      clusters.forEach(cluster => {
+        const cards = cluster.cards;
+        if (cards.length > 3) {
+          const start = cards[0];
+          const end = cards[cards.length - 1];
+
+          if (!this.connectionExists(start, end)) {
+            this.addConnection(start, end, 'cluster', 0.6);
+          }
+        }
+      });
+    }
+
+    optimizeConnections() {
+      this.cards.forEach(card => card.degree = 0);
+
+      this.connections.forEach(conn => {
+        conn.from.degree++;
+        conn.to.degree++;
+      });
+
+      this.connections = this.connections.filter(conn => {
+        const maxDegree = this.isMobile ? 4 : 6;
+        return conn.from.degree <= maxDegree && conn.to.degree <= maxDegree;
+      });
+
+      this.connections.sort((a, b) => {
+        const scoreA = (this.connectionTypes[a.type]?.priority || 1) * a.weight;
+        const scoreB = (this.connectionTypes[b.type]?.priority || 1) * b.weight;
+        return scoreB - scoreA;
+      });
+    }
+
+    getDistance(card1, card2) {
+      const dx = card2.x - card1.x;
+      const dy = card2.y - card1.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    connectionExists(card1, card2) {
+      return this.connections.some(c => 
+        (c.from === card1 && c.to === card2) ||
+        (c.from === card2 && c.to === card1)
+      );
+    }
+
+    addConnection(from, to, type, weight = 1.0) {
+      const typeConfig = this.connectionTypes[type];
+
+      const conn = {
+        from: from,
+        to: to,
+        type: type,
+        category: from.category,
+        weight: weight,
+        activeState: 1,
+        glowOffset: Math.random() * Math.PI * 2,
+        config: typeConfig
+      };
+      this.connections.push(conn);
+      this.activeConnections.set(conn, 1);
+    }
+
+    isConnectionActive(connection) {
+      if (!this.hoveredCard) return true;
+      return connection.from === this.hoveredCard || connection.to === this.hoveredCard;
+    }
+
+    lerp(start, end, t) {
+      return start + (end - start) * t;
+    }
+
+    updateActiveStates() {
+      this.connections.forEach(conn => {
+        const isActive = this.isConnectionActive(conn);
+        const targetState = isActive ? 1 : 0.25;
+        const currentState = this.activeConnections.get(conn) || 1;
+
+        const newState = this.lerp(currentState, targetState, this.settings.hoverSpeed);
+        this.activeConnections.set(conn, newState);
+      });
+    }
+
+    getGradient(from, to, fromColor, toColor, baseOpacity) {
+      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity.toFixed(2)}`;
+
+      if (this.gradientCache.has(key)) {
+        return this.gradientCache.get(key);
+      }
+
+      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+      gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
+      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
+      gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
+
+      if (this.gradientCache.size > 100) {
+        const firstKey = this.gradientCache.keys().next().value;
+        this.gradientCache.delete(firstKey);
+      }
+
+      this.gradientCache.set(key, gradient);
+      return gradient;
+    }
+
+    // Organische wellenförmige Linie
     drawWavyLine(from, to, lineWidth, strokeStyle) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const steps = Math.max(30, Math.floor(dist / 5)); // Mehr Punkte für weichere Kurven
+      const steps = Math.max(30, Math.floor(dist / 5));
       
-      // Basisvektor und Senkrechte
       const dirX = dx / dist;
       const dirY = dy / dist;
-      const perpX = -dirY * 8; // Basis-Amplitude
+      const perpX = -dirY * 8;
       const perpY = dirX * 8;
 
-      // Zufällige Phasen für jede Linie (damit sie nicht alle gleich aussehen)
       const phase1 = Math.random() * Math.PI * 2;
       const phase2 = Math.random() * Math.PI * 2;
       const phase3 = Math.random() * Math.PI * 2;
@@ -428,17 +742,14 @@
 
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
-        // Ease-in/out für die Amplitude: weicher Ein- und Auslauf
-        const ease = Math.sin(t * Math.PI); // 0 bei t=0, 1 bei t=0.5, 0 bei t=1
-        const amp = ease * 8; // maximale Amplitude in der Mitte
+        const ease = Math.sin(t * Math.PI);
+        const amp = ease * 8;
 
-        // Mehrere überlagerte Frequenzen für organischeren Schwung
         const w1 = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1) * 0.7;
         const w2 = Math.sin(t * Math.PI * 2.3 + this.glowTime * 0.003 + phase2) * 0.5;
         const w3 = Math.sin(t * Math.PI * 7 + this.glowTime * 0.0015 + phase3) * 0.3;
-        let wave = (w1 + w2 + w3) / 1.5; // Durchschnitt, Amplitude normalisiert
+        let wave = (w1 + w2 + w3) / 1.5;
 
-        // Kleines Rauschen für zusätzliche Unregelmäßigkeit
         if (this.settings.organicNoise > 0) {
           const noise = (Math.random() * 2 - 1) * this.settings.organicNoise;
           wave += noise;
@@ -457,27 +768,22 @@
       this.ctx.stroke();
     }
 
-    // Verbesserte Kurve mit zufälligem Kontrollpunkt
+    // Organische Kurve mit zufälligem Kontrollpunkt
     drawCurvedLine(from, to, strokeStyle, lineWidth) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Basis-Offset (wie vorher 20% der Distanz)
       const baseOffset = dist * 0.2;
-      
-      // Zufällige Variation des Offsets und der Richtung
-      const offsetVar = baseOffset * (0.8 + Math.random() * 0.4); // 80% bis 120%
-      const angleVar = (Math.random() - 0.5) * 0.5; // -0.25 bis +0.25 rad (~ -15° bis +15°)
+      const offsetVar = baseOffset * (0.8 + Math.random() * 0.4);
+      const angleVar = (Math.random() - 0.5) * 0.5;
 
       const midX = (from.x + to.x) / 2;
       const midY = (from.y + to.y) / 2;
 
-      // Senkrechter Vektor (wie vorher)
       const perpX = -dy / dist;
       const perpY = dx / dist;
 
-      // Kontrollpunkt mit zufälliger Drehung
       const cos = Math.cos(angleVar);
       const sin = Math.sin(angleVar);
       const rotatedX = perpX * cos - perpY * sin;
@@ -494,7 +800,6 @@
       this.ctx.stroke();
     }
 
-    // Vorhandene drawConnection anpassen, um die neuen Methoden zu nutzen
     drawConnection(from, to, connection, activeState, time) {
       const config = connection.config;
       let fromColor = this.categoryColors[from.category] || this.categoryColors.other;
@@ -531,17 +836,15 @@
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
+      // Basislinie zeichnen
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
       if (config.curve && !this.settings.useSimplifiedRendering) {
-        // Kurve mit der verbesserten, organischen Methode
         this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight);
       } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
-        // Organische Welle
         this.drawWavyLine(from, to, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, gradient);
       } else {
-        // Gerade Linie (Fallback)
         this.ctx.beginPath();
         this.ctx.moveTo(from.x, from.y);
         this.ctx.lineTo(to.x, to.y);
@@ -552,15 +855,210 @@
 
       this.ctx.setLineDash([]);
 
-      // Flowing glow (unverändert) – hier nur der Vollständigkeit halber, aber aus Platzgründen gekürzt
-      // (Wird im endgültigen Code enthalten sein)
+      // Flowing glow
+      if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
+        const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
+        const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
+        const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
+        const glowEnd = Math.min(1, glowProgress + this.settings.glowLength / 2);
+
+        if (glowEnd > 0 && glowStart < 1) {
+          const glowGradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+          const glowOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+
+          if (glowStart > 0) {
+            glowGradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
+            glowGradient.addColorStop(glowStart, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, 0)`);
+          }
+
+          const glowCenter = (glowStart + glowEnd) / 2;
+          const centerColor = this.lerpColor(fromColor, toColor, glowCenter);
+
+          glowGradient.addColorStop(glowCenter, `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`);
+
+          if (glowEnd < 1) {
+            glowGradient.addColorStop(glowEnd, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
+            glowGradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, 0)`);
+          }
+
+          this.ctx.strokeStyle = glowGradient;
+          this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * 3 * weight;
+          this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
+          this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
+
+          if (config.curve && !this.settings.useSimplifiedRendering) {
+            this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth);
+          } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
+            this.drawWavyLine(from, to, this.ctx.lineWidth, glowGradient);
+          } else {
+            this.ctx.beginPath();
+            this.ctx.moveTo(from.x, from.y);
+            this.ctx.lineTo(to.x, to.y);
+            this.ctx.stroke();
+          }
+
+          this.ctx.shadowBlur = 0;
+        }
+      }
     }
 
-    // Weitere Hilfsfunktionen (getGradient, lerpColor, etc.) bleiben unverändert
-    // Sternenhimmel, Ripples, Animation etc. ebenfalls unverändert
+    lerpColor(color1, color2, t) {
+      return {
+        r: Math.round(color1.r + (color2.r - color1.r) * t),
+        g: Math.round(color1.g + (color2.g - color1.g) * t),
+        b: Math.round(color1.b + (color2.b - color1.b) * t)
+      };
+    }
 
-    // ... (hier folgen alle weiteren Methoden aus der vorherigen Version)
+    // Sternenhimmel zeichnen
+    drawStars() {
+      if (!this.settings.enableStars) return;
+      this.ctx.save();
+      this.ctx.fillStyle = 'white';
+      for (let star of this.stars) {
+        const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+        this.ctx.globalAlpha = Math.max(0.2, brightness);
+        this.ctx.beginPath();
+        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+    }
+
+    // Ripples zeichnen
+    drawRipples() {
+      if (!this.settings.enableRipples) return;
+      this.ctx.save();
+      this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+      this.ctx.lineWidth = 2;
+      for (let i = this.ripples.length - 1; i >= 0; i--) {
+        const r = this.ripples[i];
+        r.radius += r.growth;
+        r.alpha *= 0.98;
+        if (r.radius > r.maxRadius || r.alpha < 0.05) {
+          this.ripples.splice(i, 1);
+          continue;
+        }
+        this.ctx.globalAlpha = r.alpha;
+        this.ctx.beginPath();
+        this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+      this.ctx.restore();
+    }
+
+    animate(now) {
+      if (!this.ctx || !this.canvas) return;
+
+      this.animationFrame = requestAnimationFrame((t) => this.animate(t));
+
+      const elapsed = now - this.then;
+      if (elapsed < this.frameInterval) return;
+
+      this.then = now - (elapsed % this.frameInterval);
+
+      this.glowTime = now;
+      this.updateActiveStates();
+
+      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+      this.drawStars();
+
+      this.connections.forEach(conn => {
+        const activeState = this.activeConnections.get(conn) || 1;
+        this.drawConnection(conn.from, conn.to, conn, activeState, now);
+      });
+
+      this.drawRipples();
+    }
+
+    startAnimation() {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      this.then = performance.now();
+      this.animate(this.then);
+    }
+
+    handleResize() {
+      this.isMobile = window.innerWidth < 768;
+      this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      this.setupAdaptiveSettings();
+      this.gradientCache.clear();
+      this.setupCanvas();
+      this.scanTools();
+      this.generateStars();
+      this.generateIntelligentConnections();
+      if (this.connections.length === 0) {
+        this.generateFallbackConnections();
+      }
+      this.setupInputDetection();
+    }
+
+    setupResizeObserver() {
+      if (!this.gridElement) return;
+
+      this.resizeObserver = new ResizeObserver(() => {
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          this.setupCanvas();
+          this.scanTools();
+          this.generateStars();
+          this.generateIntelligentConnections();
+          if (this.connections.length === 0) {
+            this.generateFallbackConnections();
+          }
+        }, 250);
+      });
+
+      this.resizeObserver.observe(this.gridElement);
+    }
+
+    countTypes() {
+      const stats = { primary: 0, secondary: 0, bridge: 0, cluster: 0 };
+      this.connections.forEach(conn => stats[conn.type]++);
+      return Object.entries(stats)
+        .filter(([_, count]) => count > 0)
+        .map(([type, count]) => `${count} ${type}`);
+    }
+
+    destroy() {
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+      if (this.canvas && this.canvas.parentNode) {
+        this.canvas.parentNode.removeChild(this.canvas);
+      }
+      this.gradientCache.clear();
+    }
   }
 
-  // Initialisierung und Debug-Funktion (unverändert)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.colorFlowNetwork = new GridSynchronizedNetworkUltimate();
+    });
+  } else {
+    window.colorFlowNetwork = new GridSynchronizedNetworkUltimate();
+  }
+
+  window.debugColorFlow = function() {
+    const net = window.colorFlowNetwork;
+    if (!net) {
+      console.log('❌ Network not initialized');
+      return;
+    }
+    console.group('🚀 Color Flow v13.2 ORGANIC');
+    console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
+    console.log('Cards:', net.cards.length);
+    console.log('Connections:', net.connections.length);
+    console.log('Types:', net.countTypes().join(', '));
+    console.log('Stars:', net.stars.length);
+    console.log('Ripples:', net.ripples.length);
+    console.log('Settings:', net.settings);
+    console.groupEnd();
+  };
+
 })();
