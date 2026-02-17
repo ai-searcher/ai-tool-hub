@@ -113,17 +113,17 @@
   }
   
   /* Metadaten (Kategorie, Provider, Rating) */
-  .detail-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 16px;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    padding: 16px 0;
-    flex-shrink: 0;                    /* 📌 nicht stauchen */
-  }
+.detail-meta {
+  display: flex;
+  flex-direction: column;  /* untereinander */
+  gap: 12px;               /* vertikaler Abstand */
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 16px 0;
+  flex-shrink: 0;
+}
   
   .meta-item {
     display: flex;
