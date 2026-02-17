@@ -1,505 +1,133 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>⚡ Tool-Details · Quantum AI Hub</title>
-  
-  <!-- Gleiches Stylesheet wie Hauptseite -->
-  <link rel="stylesheet" href="style.css?v=1.2">
-  
-  <style>
-    /* ===== Detail-spezifische Styles ===== */
+<script>
+  (function() {
+    'use strict';
     
-    body {
-      background: var(--bg-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 16px;
-      box-sizing: border-box;
-      overflow: hidden; /* Seite scrollt nicht, nur Panel scrollt */
-    }
-    
-    /* Das milchig-glasige Panel – scrollbar im Panel */
-    .detail-panel {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      max-height: 85vh;
-      overflow-y: auto;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 24px;
-      padding: 28px 20px;
-      box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
-      box-sizing: border-box;
-      
-      /* Breathing-Animation mit Kategoriefarbe */
-      animation: breathing-glow 8s ease-in-out infinite;
-      
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      
-      /* Dezente Scrollleiste */
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.2) transparent;
-    }
-    
-    .detail-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-    .detail-panel::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .detail-panel::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.2);
-      border-radius: 10px;
-    }
-    
-    /* Kopfzeile */
-    .detail-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-    
-    .detail-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-primary);
-      margin: 0;
-      flex: 1;
-      word-break: break-word;
-    }
-    
-    /* Schließen-Button */
-    .close-button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-dim);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 28px;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      padding: 0;
-      box-shadow: none;
-      flex-shrink: 0;
-    }
-    
-    .close-button:hover,
-    .close-button:active {
-      background: rgba(255,255,255,0.1);
-      color: var(--text-primary);
-      border-color: var(--primary);
-      transform: scale(1.05);
-    }
-    
-    /* Metadaten – untereinander */
-    .detail-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding: 16px 0;
-      flex-shrink: 0;
-    }
-    
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .meta-label {
-      color: var(--text-dim);
-      font-weight: 400;
-      min-width: 80px; /* für Ausrichtung */
-    }
-    
-    .meta-value {
-      color: var(--primary);
-      font-weight: 600;
-    }
-    
-    .category-badge {
-      background: var(--glow-text);
-      color: var(--color-text);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    /* Beschreibung */
-    .detail-description {
-      color: var(--text-dim);
-      font-size: 1rem;
-      line-height: 1.6;
-      margin: 0;
-      flex-shrink: 0;
-    }
-    
-    /* Neue Abschnitte (Stärken, Anwendungen, Prompts, Tipps) */
-    .detail-section {
-      margin-top: 8px;
-      flex-shrink: 0;
-    }
-    
-    .detail-section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin: 0 0 12px 0;
-      letter-spacing: 0.02em;
-    }
-    
-    .detail-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: rgba(0,0,0,0.15);
-      border-radius: 14px;
-      padding: 16px;
-    }
-    
-    .detail-list-item {
-      color: rgba(255,255,255,0.85);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      padding-left: 20px;
-      position: relative;
-    }
-    
-    .detail-list-item::before {
-      content: "•";
-      color: var(--primary);
-      font-size: 1.2rem;
-      position: absolute;
-      left: 4px;
-      top: -2px;
-    }
-    
-    /* Badge-Container (optional) */
-    .detail-badges {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: rgba(0,0,0,0.2);
-      border-radius: 16px;
-      padding: 16px;
-      flex-shrink: 0;
-    }
-    
-    .badge-item {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.9rem;
-      line-height: 1.5;
-      padding-left: 12px;
-      border-left: 2px solid var(--primary);
-    }
-    
-    /* Link-Button */
-    .detail-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--primary);
-      color: var(--bg-dark);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      padding: 16px 24px;
-      border-radius: 50px;
-      transition: all 0.2s ease;
-      margin-top: 8px;
-      border: none;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    
-    .detail-link:hover,
-    .detail-link:active {
-      background: var(--primary-hover);
-      transform: scale(1.02);
-      box-shadow: 0 0 20px var(--primary-glow);
-    }
-    
-    /* Lade- und Fehlerzustand */
-    .loading-state,
-    .error-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-dim);
-    }
-    
-    /* Kategoriespezifische Farben für Badge und Listenpunkte */
-    .detail-panel[data-category="text"] .category-badge {
-      background: var(--glow-text);
-      color: var(--color-text);
-    }
-    .detail-panel[data-category="text"] .detail-list-item::before {
-      color: var(--color-text);
-    }
-    
-    .detail-panel[data-category="image"] .category-badge {
-      background: var(--glow-image);
-      color: var(--color-image);
-    }
-    .detail-panel[data-category="image"] .detail-list-item::before {
-      color: var(--color-image);
-    }
-    
-    .detail-panel[data-category="code"] .category-badge {
-      background: var(--glow-code);
-      color: var(--color-code);
-    }
-    .detail-panel[data-category="code"] .detail-list-item::before {
-      color: var(--color-code);
-    }
-    
-    .detail-panel[data-category="audio"] .category-badge {
-      background: var(--glow-audio);
-      color: var(--color-audio);
-    }
-    .detail-panel[data-category="audio"] .detail-list-item::before {
-      color: var(--color-audio);
-    }
-    
-    .detail-panel[data-category="video"] .category-badge {
-      background: var(--glow-video);
-      color: var(--color-video);
-    }
-    .detail-panel[data-category="video"] .detail-list-item::before {
-      color: var(--color-video);
-    }
-    
-    .detail-panel[data-category="data"] .category-badge {
-      background: var(--glow-data);
-      color: var(--color-data);
-    }
-    .detail-panel[data-category="data"] .detail-list-item::before {
-      color: var(--color-data);
-    }
-    
-    .detail-panel[data-category="other"] .category-badge {
-      background: var(--glow-other, rgba(176,190,197,0.25));
-      color: var(--color-other);
-    }
-    .detail-panel[data-category="other"] .detail-list-item::before {
-      color: var(--color-other);
-    }
-  </style>
-</head>
-<body>
-  <div class="detail-panel" id="detailPanel" data-category="">
-    <!-- Ladezustand -->
-    <div class="loading-state" id="loadingState">
-      <div class="spinner" style="margin: 0 auto 16px;"></div>
-      <p>Lade Details...</p>
-    </div>
-    
-    <!-- Fehlerzustand -->
-    <div class="error-state" id="errorState" style="display: none;">
-      <p>❌ Tool nicht gefunden.</p>
-      <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;">Zurück</button>
-    </div>
-    
-    <!-- Dynamisch befüllter Inhalt -->
-    <div id="detailContent" style="display: none;">
-      <div class="detail-header">
-        <h2 class="detail-title" id="toolTitle"></h2>
-        <button class="close-button" id="closeButton" aria-label="Schließen">×</button>
-      </div>
-      
-      <div class="detail-meta">
-        <div class="meta-item">
-          <span class="meta-label">Kategorie</span>
-          <span class="category-badge" id="toolCategory"></span>
-        </div>
-        <div class="meta-item" id="providerContainer">
-          <span class="meta-label">Anbieter</span>
-          <span class="meta-value" id="toolProvider"></span>
-        </div>
-        <div class="meta-item" id="ratingContainer">
-          <span class="meta-label">Bewertung</span>
-          <span class="meta-value" id="toolRating"></span>
-        </div>
-      </div>
-      
-      <p class="detail-description" id="toolDescription"></p>
-      
-      <!-- Stärken -->
-      <div id="strengthsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">💪 Stärken</h3>
-        <div class="detail-list" id="strengthsList"></div>
-      </div>
-      
-      <!-- Anwendungsbeispiele -->
-      <div id="useCasesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">🎯 Wofür ist es gut?</h3>
-        <div class="detail-list" id="useCasesList"></div>
-      </div>
-      
-      <!-- Prompt-Beispiele -->
-      <div id="promptExamplesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">✍️ Beispiel-Prompts</h3>
-        <div class="detail-list" id="promptExamplesList"></div>
-      </div>
-      
-      <!-- Prompt-Tipps -->
-      <div id="promptTipsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title">💡 Tipps für gute Prompts</h3>
-        <div class="detail-list" id="promptTipsList"></div>
-      </div>
-      
-    
-
-  <script>
-    (function() {
-      'use strict';
-      
-      // Hilfsfunktion zum Laden der data.json
-      async function loadToolData() {
-        try {
-          const response = await fetch('data.json');
-          if (!response.ok) throw new Error('Netzwerkfehler');
-          const json = await response.json();
-          return json.tools || json; // akzeptiert beide Formate
-        } catch (err) {
-          console.error('Fehler beim Laden von data.json:', err);
-          return null;
-        }
+    // Hilfsfunktion zum Laden der data.json
+    async function loadToolData() {
+      try {
+        const response = await fetch('data.json');
+        if (!response.ok) throw new Error('Netzwerkfehler');
+        const json = await response.json();
+        return json.tools || json; // akzeptiert beide Formate
+      } catch (err) {
+        console.error('Fehler beim Laden von data.json:', err);
+        return null;
       }
-      
-      // URL-Parameter auslesen
-      const urlParams = new URLSearchParams(window.location.search);
-      const toolId = urlParams.get('id');
-      
-      const loadingEl = document.getElementById('loadingState');
-      const errorEl = document.getElementById('errorState');
-      const contentEl = document.getElementById('detailContent');
-      const panel = document.getElementById('detailPanel');
-      
-      if (!toolId) {
-        loadingEl.style.display = 'none';
-        errorEl.style.display = 'block';
-        errorEl.querySelector('p').textContent = '❌ Keine Tool-ID angegeben.';
+    }
+    
+    // URL-Parameter auslesen
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolId = urlParams.get('id');
+    
+    const loadingEl = document.getElementById('loadingState');
+    const errorEl = document.getElementById('errorState');
+    const contentEl = document.getElementById('detailContent');
+    const panel = document.getElementById('detailPanel');
+    
+    if (!loadingEl || !errorEl || !contentEl || !panel) {
+      console.error('Kritische Elemente fehlen im DOM');
+      return;
+    }
+    
+    if (!toolId) {
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      errorEl.querySelector('p').textContent = '❌ Keine Tool-ID angegeben.';
+      return;
+    }
+    
+    // Hilfsfunktion für Listen
+    function fillList(containerId, listId, items) {
+      const container = document.getElementById(containerId);
+      const listEl = document.getElementById(listId);
+      if (!container || !listEl) {
+        console.warn(`Container oder Liste nicht gefunden: ${containerId} / ${listId}`);
         return;
       }
       
-      // Hilfsfunktion für Listen
-      function fillList(containerId, listId, items) {
-        const container = document.getElementById(containerId);
-        const listEl = document.getElementById(listId);
-        if (!container || !listEl) return;
-        
-        if (items && Array.isArray(items) && items.length > 0) {
-          listEl.innerHTML = '';
-          items.forEach(item => {
-            const li = document.createElement('div');
-            li.className = 'detail-list-item';
-            li.textContent = item;
-            listEl.appendChild(li);
-          });
-          container.style.display = 'block';
-        } else {
-          container.style.display = 'none';
-        }
+      if (items && Array.isArray(items) && items.length > 0) {
+        listEl.innerHTML = '';
+        items.forEach(item => {
+          const li = document.createElement('div');
+          li.className = 'detail-list-item';
+          li.textContent = item;
+          listEl.appendChild(li);
+        });
+        container.style.display = 'block';
+      } else {
+        container.style.display = 'none';
+      }
+    }
+    
+    // Daten laden und anzeigen
+    loadToolData().then(tools => {
+      if (!tools || !Array.isArray(tools)) {
+        throw new Error('Daten konnten nicht geladen werden');
       }
       
-      // Daten laden und anzeigen
-      loadToolData().then(tools => {
-        if (!tools || !Array.isArray(tools)) {
-          throw new Error('Daten konnten nicht geladen werden');
-        }
-        
-        // Tool mit passender ID suchen (als String oder Number vergleichen)
-        const tool = tools.find(t => String(t.id) === String(toolId));
-        
-        if (!tool) {
-          throw new Error(`Tool mit ID ${toolId} nicht gefunden`);
-        }
-        
-        // Kategorie setzen (für Farbanimation)
-        const category = tool.category || 'other';
-        panel.setAttribute('data-category', category);
-        
-        // Basisfelder befüllen
-        document.getElementById('toolTitle').textContent = tool.title || 'Unbekannt';
-        document.getElementById('toolDescription').textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        document.getElementById('toolCategory').textContent = (category.charAt(0).toUpperCase() + category.slice(1));
-        document.getElementById('toolProvider').textContent = tool.provider || 'Unbekannt';
-        document.getElementById('toolRating').textContent = tool.rating ? `★ ${tool.rating.toFixed(1)}` : '–';
-        
-        const linkEl = document.getElementById('toolLink');
-        linkEl.href = tool.link || '#';
-        
-        // Provider und Rating nur anzeigen, wenn vorhanden
-        if (!tool.provider) {
-          document.getElementById('providerContainer').style.display = 'none';
-        }
-        if (!tool.rating) {
-          document.getElementById('ratingContainer').style.display = 'none';
-        }
-        
-        // Neue Felder befüllen
-        fillList('strengthsContainer', 'strengthsList', tool.strengths);
-        fillList('useCasesContainer', 'useCasesList', tool.useCases);
-        fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
-        fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
-        
-        // Badges (alte Struktur) – optional anzeigen
-        const badgesContainer = document.getElementById('badgesContainer');
-        if (tool.badges && Array.isArray(tool.badges) && tool.badges.length > 0) {
-          badgesContainer.innerHTML = '';
-          tool.badges.forEach(badge => {
-            const badgeEl = document.createElement('div');
-            badgeEl.className = 'badge-item';
-            badgeEl.textContent = badge;
-            badgesContainer.appendChild(badgeEl);
-          });
-          badgesContainer.style.display = 'flex';
-        } else {
-          badgesContainer.style.display = 'none';
-        }
-        
-        // Ladezustand ausblenden, Inhalt anzeigen
-        loadingEl.style.display = 'none';
-        contentEl.style.display = 'block';
-        
-      }).catch(err => {
-        console.error(err);
-        loadingEl.style.display = 'none';
-        errorEl.style.display = 'block';
-        errorEl.querySelector('p').textContent = '❌ ' + err.message;
-      });
+      // Tool mit passender ID suchen
+      const tool = tools.find(t => String(t.id) === String(toolId));
       
-      // Schließen-Button: zurück zur vorherigen Seite
-      document.getElementById('closeButton').addEventListener('click', function() {
+      if (!tool) {
+        throw new Error(`Tool mit ID ${toolId} nicht gefunden`);
+      }
+      
+      // Kategorie setzen (für Farbanimation)
+      const category = tool.category || 'other';
+      panel.setAttribute('data-category', category);
+      
+      // Basisfelder befüllen – mit Prüfung auf Existenz
+      const titleEl = document.getElementById('toolTitle');
+      const descEl = document.getElementById('toolDescription');
+      const catEl = document.getElementById('toolCategory');
+      const providerEl = document.getElementById('toolProvider');
+      const ratingEl = document.getElementById('toolRating');
+      const linkEl = document.getElementById('toolLink');
+      const providerContainer = document.getElementById('providerContainer');
+      const ratingContainer = document.getElementById('ratingContainer');
+      
+      if (!titleEl || !descEl || !catEl || !providerEl || !ratingEl || !linkEl || !providerContainer || !ratingContainer) {
+        console.error('Wichtige Elemente für die Anzeige fehlen');
+        return;
+      }
+      
+      titleEl.textContent = tool.title || 'Unbekannt';
+      descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
+      catEl.textContent = (category.charAt(0).toUpperCase() + category.slice(1));
+      providerEl.textContent = tool.provider || 'Unbekannt';
+      ratingEl.textContent = tool.rating ? `★ ${tool.rating.toFixed(1)}` : '–';
+      linkEl.href = tool.link || '#';
+      
+      // Provider und Rating nur anzeigen, wenn vorhanden
+      providerContainer.style.display = tool.provider ? 'flex' : 'none';
+      ratingContainer.style.display = tool.rating ? 'flex' : 'none';
+      
+      // Neue Felder befüllen
+      fillList('strengthsContainer', 'strengthsList', tool.strengths);
+      fillList('useCasesContainer', 'useCasesList', tool.useCases);
+      fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
+      fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
+      
+      // Ladezustand ausblenden, Inhalt anzeigen
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+      
+    }).catch(err => {
+      console.error(err);
+      loadingEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      errorEl.querySelector('p').textContent = '❌ ' + err.message;
+    });
+    
+    // Schließen-Button: zurück zur vorherigen Seite
+    const closeBtn = document.getElementById('closeButton');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
         window.history.back();
       });
-      
-    })();
-  </script>
-</body>
-</html>
+    } else {
+      console.warn('Schließen-Button nicht gefunden');
+    }
+    
+  })();
+</script>
