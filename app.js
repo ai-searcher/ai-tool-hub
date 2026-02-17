@@ -629,31 +629,62 @@ const ui = {
   },
 
   updateStats() {
-    if (!this.elements.statsBar) return;
+  // Stelle sicher, dass das Marquee-Element gecached ist
+  if (!this.elements.statsMarquee) {
+    this.elements.statsMarquee = getElement('#stats-marquee');
+  }
+  if (!this.elements.statsMarquee) return;
 
-    const categories = new Set(state.tools.map(t => t.category)).size;
-    const featured = state.tools.filter(t => t.featured).length;
+  const categories = new Set(state.tools.map(t => t.category)).size;
+  const featured = state.tools.filter(t => t.featured).length;
 
-    state.stats = {
-      total: state.tools.length,
-      categories,
-      featured
-    };
+  state.stats = {
+    total: state.tools.length,
+    categories,
+    featured
+  };
 
-    if (this.elements.statTotal) {
-      this.elements.statTotal.textContent = state.stats.total;
-    }
-    if (this.elements.statCategories) {
-      this.elements.statCategories.textContent = state.stats.categories;
-    }
-    if (this.elements.statFeatured) {
-      this.elements.statFeatured.textContent = state.stats.featured;
-    }
+  // Array mit allen Informationen, die im Marquee erscheinen sollen
+  const marqueeItems = [
+    `⚡ <strong>${state.stats.total}</strong> TOOLS`,
+    `📂 <strong>${state.stats.categories}</strong> KATEGORIEN`,
+    `⭐ <strong>${state.stats.featured}</strong> FEATURED`,
+  ];
 
-    if (this.elements.statsBar) {
-      this.elements.statsBar.style.display = 'flex';
+  // Zusätzliche dynamische Infos
+  if (state.tools.length > 0) {
+    // Bestbewertetes Tool
+    const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
+    marqueeItems.push(`🏆 BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
+
+    // Neuestes Tool (nach added-Datum)
+    const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
+    const newest = sortedByDate[0];
+    marqueeItems.push(`🆕 NEU: ${newest.title}`);
+  }
+
+  // Marquee-Track leeren und neu befüllen
+  const track = this.elements.statsMarquee.querySelector('.marquee-track');
+  if (track) {
+    track.innerHTML = '';
+    // Inhalt zweimal anhängen, damit die Animation nahtlos wirkt
+    for (let i = 0; i < 2; i++) {
+      marqueeItems.forEach(text => {
+        const span = document.createElement('span');
+        span.innerHTML = text; // erlaubt HTML wie <strong>
+        track.appendChild(span);
+      });
     }
-  },
+  }
+
+  // Marquee anzeigen
+  this.elements.statsMarquee.style.display = 'flex';
+
+  // Alte stats-Bar ausblenden
+  if (this.elements.statsBar) {
+    this.elements.statsBar.style.display = 'none';
+  }
+},
 
   updateDataSource() {
     if (!this.elements.dataSource) return;
