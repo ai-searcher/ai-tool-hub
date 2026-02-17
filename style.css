@@ -519,7 +519,7 @@ body {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: 0;  /* angepasst */
+  margin-top: -15px;  /* angepasst */
   margin-bottom: var(--spacing-lg); /* Abstand zum Grid */
   padding: var(--spacing-sm);
   background: var(--bg-card);
