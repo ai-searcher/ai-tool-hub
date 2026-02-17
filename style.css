@@ -2447,3 +2447,10 @@ a:focus-visible {
     transform: translateX(0) !important;
   }
 }
+
+/* === FINAL OVERRIDE: Tool-Titel exakt positionieren === */
+#tool-grid .card-square .square-title-large,
+.tool-grid-squares .card-square .square-title-large,
+.card-square .square-title-large {
+  transform: translate(-11px, -8px) !important; /* 3mm links, 2mm höher */
+}
