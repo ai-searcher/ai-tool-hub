@@ -1002,20 +1002,21 @@ body {
 
 /* Tool Name */
 .square-title-large {
+  position: absolute;
+  left: 12px;            /* 3mm vom linken Rand */
+  bottom: 38px;          /* 4mm über Marquee */
+
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
-  margin: 0 0 auto 0;
-  padding: 0;
-  transition: color var(--transition-fast);
-  max-width: 100%;
-  word-wrap: break-word;
-  align-self: flex-start;
-  flex-shrink: 0;
-  display: block;
-  pointer-events: none; /* ✅ Title nicht klickbar */
-  transform: translateY(-3px); /* ~2mm höher */
+
+  white-space: nowrap;   /* NIE zweizeilig */
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  pointer-events: none;
+  z-index: 3;
 }
 
 /* ==================== OVERLAY LINK - KOMPLETT NEU! ==================== */
@@ -1226,23 +1227,36 @@ body {
 /* Card-internal marquee: fixed position & no visible container */
 .card-square .context-marquee {
   position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 11px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   height: 22px;
-  margin: 0;
-  padding: 0;
-  width: auto;
+
   overflow: hidden;
   pointer-events: none;
   background: transparent;
-  border: 0;
-  box-shadow: none;
   z-index: 2;
-  border-bottom-left-radius: inherit;
-  border-bottom-right-radius: inherit;
-  -webkit-mask-image: none;
-  mask-image: none;
+}
+
+.card-square .context-marquee::before,
+.card-square .context-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 28px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.card-square .context-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(10,15,35,1), rgba(10,15,35,0));
+}
+
+.card-square .context-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(10,15,35,1), rgba(10,15,35,0));
 }
 
 
@@ -1528,15 +1542,16 @@ button,
 
 /* CATEGORY badge */
 .square-category-badge {
-  background: transparent;
-  color: currentColor;
-  padding: 8px 18px;
+  position: absolute;
+  top: 8px;            /* 2mm höher */
+  left: 12px;          /* 3mm vom linken Rand */
+
+  padding: 6px 14px;
   border-radius: 999px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  box-shadow: none;
-  align-self: flex-start;
+
   z-index: 3;
 }
 
