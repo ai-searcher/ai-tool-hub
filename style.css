@@ -1000,181 +1000,104 @@ body {
 
 /* ==================== SCHWEBEEFFEKT (BREATHING) ==================== */
 
-/* Basis-Animation (wird nicht direkt verwendet) */
-@keyframes breathing-base {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18);
-  }
+/* Definition der Kategorie-Glow-Farben (dezente 25% Opazität) */
+:root {
+  --glow-text: rgba(0, 212, 255, 0.25);
+  --glow-image: rgba(236, 72, 153, 0.25);
+  --glow-code: rgba(124, 77, 255, 0.25);
+  --glow-audio: rgba(255, 107, 157, 0.25);
+  --glow-video: rgba(68, 138, 255, 0.25);
+  --glow-data: rgba(29, 233, 182, 0.25);
+  --glow-other: rgba(176, 190, 197, 0.25);
 }
 
-/* Kategoriespezifische Animationen mit farbigem Randpuls */
-@keyframes breathing-text {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(0, 212, 255, 0);    /* --color-text mit 0% Opazität */
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(0, 212, 255, 0.5);  /* halbtransparenter Rand */
-  }
-}
-
-@keyframes breathing-image {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(236, 72, 153, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(236, 72, 153, 0.5);
-  }
-}
-
-@keyframes breathing-code {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(124, 77, 255, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(124, 77, 255, 0.5);
-  }
-}
-
-@keyframes breathing-audio {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(255, 107, 157, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(255, 107, 157, 0.5);
-  }
-}
-
-@keyframes breathing-video {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(68, 138, 255, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(68, 138, 255, 0.5);
-  }
-}
-
-@keyframes breathing-data {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(29, 233, 182, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(29, 233, 182, 0.5);
-  }
-}
-
-@keyframes breathing-other {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px rgba(176, 190, 197, 0);
-  }
-  50% {
-    transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px rgba(176, 190, 197, 0.5);
-  }
-}
-
-/* Zuweisung der Animation anhand der data-category */
+/* Zuweisung der Glow-Farbe pro Kategorie (wird von der Animation verwendet) */
 #tool-grid .card-square[data-category="text"],
 .tool-grid-squares .card-square[data-category="text"] {
-  animation: breathing-text 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-text);
 }
-
 #tool-grid .card-square[data-category="image"],
 .tool-grid-squares .card-square[data-category="image"] {
-  animation: breathing-image 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-image);
 }
-
 #tool-grid .card-square[data-category="code"],
 .tool-grid-squares .card-square[data-category="code"] {
-  animation: breathing-code 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-code);
 }
-
 #tool-grid .card-square[data-category="audio"],
 .tool-grid-squares .card-square[data-category="audio"] {
-  animation: breathing-audio 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-audio);
 }
-
 #tool-grid .card-square[data-category="video"],
 .tool-grid-squares .card-square[data-category="video"] {
-  animation: breathing-video 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-video);
 }
-
 #tool-grid .card-square[data-category="data"],
 .tool-grid-squares .card-square[data-category="data"] {
-  animation: breathing-data 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-data);
 }
-
 #tool-grid .card-square[data-category="other"],
 .tool-grid-squares .card-square[data-category="other"] {
-  animation: breathing-other 8s ease-in-out infinite !important;
+  --glow-color: var(--glow-other);
 }
 
-/* Variationen für gerade/ungerade Karten (optional) */
+/* Universelle Breathing-Animation mit variablem Farbrand */
+@keyframes breathing-glow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px transparent;               /* Rand unsichtbar */
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px var(--glow-color);         /* Farbrand erscheint */
+  }
+}
+
+/* Allen Karten die Animation zuweisen (gleiche Dauer, gleiche Kurve) */
+#tool-grid .card-square,
+.tool-grid-squares .card-square {
+  animation: breathing-glow 8s ease-in-out infinite;
+}
+
+/* Zeitversetzte Starts – organischer Gesamteindruck */
+#tool-grid .card-square:nth-child(1),
+.tool-grid-squares .card-square:nth-child(1) { animation-delay: 0s; }
+#tool-grid .card-square:nth-child(2),
+.tool-grid-squares .card-square:nth-child(2) { animation-delay: 0.4s; }
+#tool-grid .card-square:nth-child(3),
+.tool-grid-squares .card-square:nth-child(3) { animation-delay: 0.8s; }
+#tool-grid .card-square:nth-child(4),
+.tool-grid-squares .card-square:nth-child(4) { animation-delay: 1.2s; }
+#tool-grid .card-square:nth-child(5),
+.tool-grid-squares .card-square:nth-child(5) { animation-delay: 1.6s; }
+#tool-grid .card-square:nth-child(6),
+.tool-grid-squares .card-square:nth-child(6) { animation-delay: 2.0s; }
+#tool-grid .card-square:nth-child(7),
+.tool-grid-squares .card-square:nth-child(7) { animation-delay: 2.4s; }
+#tool-grid .card-square:nth-child(8),
+.tool-grid-squares .card-square:nth-child(8) { animation-delay: 2.8s; }
+#tool-grid .card-square:nth-child(9),
+.tool-grid-squares .card-square:nth-child(9) { animation-delay: 3.2s; }
+#tool-grid .card-square:nth-child(10),
+.tool-grid-squares .card-square:nth-child(10) { animation-delay: 3.6s; }
+/* weitere Delays für mehr Karten – einfach das Muster fortsetzen, falls nötig */
+
+/* Variationen für gerade/ungerade – leicht unterschiedliche Kurven (optional) */
 #tool-grid .card-square:nth-child(odd),
 .tool-grid-squares .card-square:nth-child(odd) {
-  animation-timing-function: ease-in-out !important;
+  animation-timing-function: ease-in-out;
 }
-
 #tool-grid .card-square:nth-child(even),
 .tool-grid-squares .card-square:nth-child(even) {
-  animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
-/* Desktop: Hover-Effekt – überschreibt Animation */
+/* ========== HOVER (DESKTOP) – überschreibt die Animation ========== */
 @media (min-width: 768px) {
   #tool-grid .card-square:hover,
   .tool-grid-squares .card-square:hover {
@@ -1205,7 +1128,7 @@ body {
   }
 }
 
-/* Mobile: Tap-Effekt */
+/* ========== MOBILE TAP-EFFEKT ========== */
 @media (max-width: 767px) {
   #tool-grid .card-square:active,
   .tool-grid-squares .card-square:active {
@@ -1223,7 +1146,7 @@ body {
   }
 }
 
-/* prefers-reduced-motion: reduce (high priority) */
+/* ========== REDUCED MOTION ========== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
