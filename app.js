@@ -815,27 +815,79 @@ attachCardHandlers() {
 
       // ✅ BESSER (ÖFFNET NEUEN TAB):
 if (isMobile) {
-  console.log('📱 Mobile: Opening detail page');
-  if (toolId) {
+  console.log('📱 Mobile: Opening link directly');
+  if (href && href !== '#') {
     // Visuelles Feedback
     card.style.transform = 'scale(0.95)';
     card.style.opacity = '0.7';
     
     setTimeout(() => {
-      // Detailseite im gleichen Tab öffnen
-      window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+      // Öffnet in neuem Tab, behält Quantum AI Hub offen
+      window.open(href, '_blank', 'noopener,noreferrer');
       
-      // Hinweis: Das Zurücksetzen der Styles ist nicht mehr nötig,
-      // da die Seite verlassen wird.
+      // Visuelles Feedback zurücksetzen
+      card.style.transform = '';
+      card.style.opacity = '';
     }, 150);
   } else {
-    console.error('❌ No tool ID found!');
-    // Fallback: trotzdem direkt öffnen?
-    if (href) {
-      window.open(href, '_blank', 'noopener,noreferrer');
+    console.error('❌ No valid href found!');
+    alert('Link nicht verfügbar');
+   }
+  } else {
+        // Desktop: Modal öffnen
+        if (typeof openToolModal === 'function') {
+          try {
+            let tool = null;
+            
+            if (toolId && state.tools) {
+              tool = state.tools.find(t => String(t.id) === String(toolId));
+            }
+            
+            if (tool) {
+              openToolModal(tool);
+            } else {
+              openToolModal({
+                title: toolName,
+                link: href,
+                description: `${toolName} - AI Tool`
+              });
+            }
+          } catch (err) {
+            console.error('openToolModal error', err);
+            if (href) {
+              window.open(href, '_blank', 'noopener,noreferrer');
+            } else {
+              card.classList.toggle('card-armed');
+            }
+          }
+        } else {
+          // Fallback: Direkter Link
+          if (href) {
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
+        }
+      }
+
+      return;
     }
-  }
+  };
+
+  grid._keyHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      const card = e.target.closest('.card-square');
+      if (!card) return;
+      const overlay = card.querySelector('.card-overlay-link');
+      if (overlay) {
+        overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        e.preventDefault();
+      }
+    }
+  };
+
+  grid.addEventListener('click', grid._clickHandler);
+  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
 }
+};
 
 
 // =========================================
