@@ -1784,3 +1784,27 @@ a:focus-visible {
     padding: 12px 16px;
   }
 }
+
+@media (max-width: 767px) {
+  .view-toggle {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .view-toggle .toggle-btn {
+    flex: 0 1 auto;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .sort-dropdown {
+    flex: 0 1 auto;
+  }
+
+  .sort-trigger {
+    padding-right: 1.8rem; /* Platz für den Pfeil */
+  }
+}
