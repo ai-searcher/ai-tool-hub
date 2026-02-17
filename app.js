@@ -76,6 +76,195 @@ const CONFIG = {
   }
 };
 
+  // =========================================
+// STACK VIEW CONTROLLER (KATEGORIE-STACKS)
+// =========================================
+class StackViewController {
+  constructor(container, state, ui) {
+    this.container = container;      // das DOM-Element, in das gerendert wird (tool-grid)
+    this.state = state;              // globaler state (mit tools)
+    this.ui = ui;                    // Referenz auf ui-Objekt (für attachCardHandlers)
+    this.stacks = [];                // gespeicherte Stack-Elemente
+    this.activeSort = 'name';        // Standardsortierung
+    this.sortDirection = 'asc';      // aufsteigend
+  }
+
+  // Haupt-Render-Methode
+  render() {
+    if (!this.state.tools || this.state.tools.length === 0) return;
+
+    // Tools nach Kategorie gruppieren
+    const grouped = this.groupByCategory(this.state.tools);
+    
+    // Container vorbereiten
+    this.container.innerHTML = '';
+    this.container.classList.add('tool-stacks');
+    
+    // Für jede Kategorie einen Stack erzeugen
+    for (const [category, tools] of Object.entries(grouped)) {
+      const stackElement = this.createStack(category, tools);
+      this.container.appendChild(stackElement);
+    }
+
+    // Event-Listener für die Stacks hinzufügen (Auf- und Zuklappen)
+    this.attachStackListeners();
+  }
+
+  // Tools nach Kategorie gruppieren
+  groupByCategory(tools) {
+    const groups = {};
+    tools.forEach(tool => {
+      const cat = tool.category || 'other';
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(tool);
+    });
+    return groups;
+  }
+
+  // Einen kompletten Stack (Kopf + Karten) erzeugen
+  createStack(category, tools) {
+    const stackDiv = document.createElement('div');
+    stackDiv.className = 'category-stack';
+    stackDiv.dataset.category = category;
+
+    // Kopf-Quadrat
+    const header = this.createCategoryHeader(category, tools);
+    stackDiv.appendChild(header);
+
+    // Container für die gestapelten Karten
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'stack-cards';
+    
+    // Tools sortieren (nach aktivem Kriterium)
+    const sortedTools = this.sortTools(tools);
+    
+    // Karten als .stack-card erzeugen
+    sortedTools.forEach(tool => {
+      const card = this.createStackCard(tool);
+      cardsContainer.appendChild(card);
+    });
+
+    stackDiv.appendChild(cardsContainer);
+    return stackDiv;
+  }
+
+  // Kopf-Quadrat für eine Kategorie erstellen
+  createCategoryHeader(category, tools) {
+    const header = document.createElement('div');
+    header.className = 'category-header-card';
+
+    const title = document.createElement('h3');
+    title.className = 'category-header-title';
+    title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+
+    const desc = document.createElement('p');
+    desc.className = 'category-header-description';
+    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''} in dieser Kategorie`;
+
+    header.appendChild(title);
+    header.appendChild(desc);
+    return header;
+  }
+
+  // Eine einzelne Tool-Karte für den Stapel erstellen
+  createStackCard(tool) {
+    const card = document.createElement('div');
+    card.className = 'stack-card';
+    card.dataset.toolId = tool.id;
+    card.dataset.category = tool.category || 'other';
+    card.dataset.toolName = tool.title;
+    card.dataset.href = tool.link;
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'article');
+    card.setAttribute('aria-label', tool.title);
+
+    // Inhalt: nur Titel (oder mehr – kann angepasst werden)
+    const title = document.createElement('div');
+    title.className = 'stack-card-title';
+    title.textContent = tool.title;
+    card.appendChild(title);
+
+    // Optional: kleines Kategorie-Badge
+    const badge = document.createElement('span');
+    badge.className = 'stack-card-category';
+    badge.textContent = (tool.category || 'other').charAt(0).toUpperCase();
+    card.appendChild(badge);
+
+    return card;
+  }
+
+  // Tools nach aktivem Sortierkriterium sortieren
+  sortTools(tools) {
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    switch (this.activeSort) {
+      case 'name':
+        return [...tools].sort((a, b) => dir * a.title.localeCompare(b.title));
+      case 'rating':
+        return [...tools].sort((a, b) => dir * ((a.rating || 0) - (b.rating || 0)));
+      case 'date':
+        return [...tools].sort((a, b) => dir * (new Date(b.added) - new Date(a.added)));
+      default:
+        return tools;
+    }
+  }
+
+  // Event-Listener für Auf-/Zuklappen der Stacks
+  attachStackListeners() {
+    const stacks = this.container.querySelectorAll('.category-stack');
+    stacks.forEach(stack => {
+      // Klick auf den Kopf (optional) – könnte Detailansicht der Kategorie öffnen
+      const header = stack.querySelector('.category-header-card');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // z.B. Tools dieser Kategorie filtern? (später erweiterbar)
+          console.log('Kategorie-Header geklickt:', stack.dataset.category);
+        });
+      }
+
+      // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt .fanned
+      const cardsContainer = stack.querySelector('.stack-cards');
+      if (cardsContainer) {
+        cardsContainer.addEventListener('click', (e) => {
+          // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
+          if (e.target.closest('.stack-card')) return;
+          cardsContainer.classList.toggle('fanned');
+        });
+      }
+    });
+
+    // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
+    const stackCards = this.container.querySelectorAll('.stack-card');
+    stackCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const toolId = card.dataset.toolId;
+        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
+        if (!tool) return;
+
+        // Mobile/Desktop unterscheiden
+        if (window.innerWidth < 768) {
+          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+        } else {
+          if (typeof openToolModal === 'function') {
+            openToolModal(tool);
+          } else {
+            window.open(tool.link, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+    });
+  }
+
+  // Ansicht zerstören (Container leeren, Klasse entfernen)
+  destroy() {
+    this.container.innerHTML = '';
+    this.container.classList.remove('tool-stacks');
+  }
+}
+
+
 // =========================================
 // DEFAULT TOOLS (Always Available)
 // =========================================
