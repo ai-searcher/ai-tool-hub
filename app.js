@@ -1241,91 +1241,105 @@ const errorHandler = {
 // =========================================
 const app = {
   async init() {
+  try {
+    console.log('🚀 Initializing Quantum AI Hub...');
+    console.log('Config:', CONFIG);
+    
+    ui.cacheElements();
+    errorHandler.setupRetry();
+    ui.showState('loading');
+    
+    const rawTools = await dataLoader.load();
+    
+    if (!rawTools || rawTools.length === 0) {
+      throw new Error('No data available from any source');
+    }
+    
+    console.log('📥 Raw tools loaded:', rawTools.length);
+    
+    const validation = validator.validateAll(rawTools);
+    validator.displayReport(validation);
+    
+    state.tools = validation.validTools;
+    state.filtered = [...state.tools];
+    state.loading = false;
+    
+    if (state.tools.length === 0) {
+      throw new Error('No valid tools after validation');
+    }
+    
+    console.log('✅ Valid tools ready:', state.tools.length);
+    
+    ui.updateStats();
+    ui.updateDataSource();
+    ui.render();
+    search.init();
+
+    // Tabs initialisieren (normaler Pfad)
+    if (ui.elements.viewToggle) {
+      ui.elements.viewToggle.addEventListener('click', (e) => {
+        const btn = e.target.closest('.toggle-btn');
+        if (!btn) return;
+        const view = btn.dataset.view;
+        if (!view) return;
+        ui.switchView(view);
+      });
+    }
+
+    console.log('✅ App initialized successfully!');
+
     try {
-      console.log('🚀 Initializing Quantum AI Hub...');
-      console.log('Config:', CONFIG);
-      
-      ui.cacheElements();
-      errorHandler.setupRetry();
-      ui.showState('loading');
-      
-      const rawTools = await dataLoader.load();
-      
-      if (!rawTools || rawTools.length === 0) {
-        throw new Error('No data available from any source');
-      }
-      
-      console.log('📥 Raw tools loaded:', rawTools.length);
-      
-      const validation = validator.validateAll(rawTools);
-      validator.displayReport(validation);
-      
-      state.tools = validation.validTools;
+      if (!window.appState) window.appState = state;
+      window.dispatchEvent(new Event('quantum:ready'));
+    } catch (e) {
+      console.debug('app: could not expose global state or dispatch event', e);
+    }
+
+  } catch (error) {
+    console.error('❌ CRITICAL ERROR in init:', error);
+    console.error('❌ Error type:', error.constructor.name);
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error stack:', error.stack);
+    
+    console.log('🚨 EMERGENCY: Activating fallback to defaults...');
+    
+    try {
+      state.tools = DEFAULT_TOOLS;
       state.filtered = [...state.tools];
       state.loading = false;
+      state.error = null;
+      state.dataSource = 'emergency';
       
-      if (state.tools.length === 0) {
-        throw new Error('No valid tools after validation');
-      }
-      
-      console.log('✅ Valid tools ready:', state.tools.length);
-      
+      console.log('🔧 Emergency: Updating UI...');
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
+      
+      console.log('🔧 Emergency: Initializing search...');
       search.init();
-
-      console.log('✅ App initialized successfully!');
-
-      try {
-        if (!window.appState) window.appState = state;
-        window.dispatchEvent(new Event('quantum:ready'));
-      } catch (e) {
-        console.debug('app: could not expose global state or dispatch event', e);
-      }
-
-      try {
-        if (typeof initializeModalSystem === 'function') {
-          initializeModalSystem();
-        }
-      } catch (modalError) {
-        console.warn('Modal system init failed:', modalError);
+      
+      // Tabs initialisieren (Emergency-Pfad)
+      if (ui.elements.viewToggle) {
+        ui.elements.viewToggle.addEventListener('click', (e) => {
+          const btn = e.target.closest('.toggle-btn');
+          if (!btn) return;
+          const view = btn.dataset.view;
+          if (!view) return;
+          ui.switchView(view);
+        });
       }
       
-    } catch (error) {
-      console.error('❌ CRITICAL ERROR in init:', error);
-      console.error('❌ Error type:', error.constructor.name);
-      console.error('❌ Error message:', error.message);
-      console.error('❌ Error stack:', error.stack);
+      console.log('✅ Emergency recovery successful! App running with defaults.');
+      console.log('💡 Check console errors above to debug the original issue.');
       
-      console.log('🚨 EMERGENCY: Activating fallback to defaults...');
+    } catch (recoveryError) {
+      console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
+      console.error('💥 This should never happen. Something is very wrong.');
       
-      try {
-        state.tools = DEFAULT_TOOLS;
-        state.filtered = [...state.tools];
-        state.loading = false;
-        state.error = null;
-        state.dataSource = 'emergency';
-        
-        console.log('🔧 Emergency: Updating UI...');
-        ui.updateStats();
-        ui.updateDataSource();
-        ui.render();
-        
-        console.log('🔧 Emergency: Initializing search...');
-        search.init();
-        
-        console.log('✅ Emergency recovery successful! App running with defaults.');
-        console.log('💡 Check console errors above to debug the original issue.');
-        
-      } catch (recoveryError) {
-        console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
-        console.error('💥 This should never happen. Something is very wrong.');
-        
-        errorHandler.handle(error, 'Initialization');
-      }
+      errorHandler.handle(error, 'Initialization');
     }
   }
+}
 };
 
 // =========================================
