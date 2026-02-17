@@ -68,11 +68,11 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      z-index: 1000; /* Über dem Panel */
+      z-index: 1000;
     }
     
     .scroll-btn {
-      width: 38px;        /* 15% kleiner als 44px */
+      width: 38px;
       height: 38px;
       border-radius: 50%;
       background: rgba(30, 35, 55, 0.7);
@@ -84,11 +84,21 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease; /* sanfteres Ein- und Ausblenden */
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-size: 20px;    /* angepasst */
+      font-size: 20px;
       line-height: 1;
       padding: 0;
+      outline: none; /* Entfernt den Standard-Fokusring */
+    }
+    
+    .scroll-btn:focus {
+      outline: none;
+    }
+    
+    .scroll-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
     }
     
     .scroll-btn:hover,
@@ -650,7 +660,7 @@
         });
       }
       
-      // Scroll-Buttons (jetzt außerhalb des Panels)
+      // Scroll-Buttons
       const scrollTopBtn = document.getElementById('scrollTopBtn');
       const scrollBottomBtn = document.getElementById('scrollBottomBtn');
       
