@@ -60,22 +60,20 @@
       border-radius: 10px;
     }
     
-    /* Container für die Scroll-Buttons (nur auf mobil sichtbar) */
+    /* Schwebende Scroll-Buttons (fixed, nur auf mobil) */
     .scroll-buttons {
-      position: sticky; /* oder fixed? Wir verwenden absolute im Panel */
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10;
+      z-index: 1000; /* Über dem Panel */
     }
     
-    /* Individuelle Scroll-Buttons */
     .scroll-btn {
-      width: 44px;
-      height: 44px;
+      width: 38px;        /* 15% kleiner als 44px */
+      height: 38px;
       border-radius: 50%;
       background: rgba(30, 35, 55, 0.7);
       backdrop-filter: blur(8px);
@@ -88,7 +86,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-size: 24px;
+      font-size: 20px;    /* angepasst */
       line-height: 1;
       padding: 0;
     }
@@ -501,12 +499,12 @@
         <span>➜</span>
       </a>
     </div>
-    
-    <!-- Scroll-Buttons (nur mobil sichtbar) -->
-    <div class="scroll-buttons">
-      <button class="scroll-btn" id="scrollTopBtn" aria-label="Zum Anfang">↑</button>
-      <button class="scroll-btn" id="scrollBottomBtn" aria-label="Zum Ende">↓</button>
-    </div>
+  </div>
+  
+  <!-- Schwebende Scroll-Buttons (außerhalb des Panels, fixed) -->
+  <div class="scroll-buttons">
+    <button class="scroll-btn" id="scrollTopBtn" aria-label="Zum Anfang">↑</button>
+    <button class="scroll-btn" id="scrollBottomBtn" aria-label="Zum Ende">↓</button>
   </div>
 
   <script>
@@ -652,7 +650,7 @@
         });
       }
       
-      // Scroll-Buttons
+      // Scroll-Buttons (jetzt außerhalb des Panels)
       const scrollTopBtn = document.getElementById('scrollTopBtn');
       const scrollBottomBtn = document.getElementById('scrollBottomBtn');
       
