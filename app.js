@@ -571,6 +571,7 @@ const dataLoader = {
 // =========================================
 const ui = {
   elements: {},
+  stackView: null, // wird später initialisiert
 
   cacheElements() {
     this.elements = {
@@ -583,19 +584,17 @@ const ui = {
       searchClear: getElement('#search-clear'),
       retryButton: getElement('#retry-button'),
       statsBar: getElement('#stats-bar'),
+      statsMarquee: getElement('#stats-marquee'),
       statTotal: getElement('#stat-total'),
       statCategories: getElement('#stat-categories'),
       statFeatured: getElement('#stat-featured'),
-      dataSource: getElement('#data-source')
+      dataSource: getElement('#data-source'),
+      viewToggle: document.querySelector('.view-toggle') // NEU
     };
   },
 
   showState(stateName) {
     const states = ['loading', 'error', 'empty'];
-
-    try {
-      console.log(`[ui.showState] -> requested state: "${stateName}"`);
-    } catch (e) {}
 
     states.forEach(s => {
       const el = this.elements[s];
@@ -605,97 +604,72 @@ const ui = {
     });
 
     if (this.elements.toolGrid) {
-      const prevInline = this.elements.toolGrid.getAttribute('style') || '';
-      try {
-        console.log(`[ui.showState] toolGrid previous inline style: "${prevInline}"`);
-      } catch (e) {}
-
       if (stateName === 'grid') {
         this.elements.toolGrid.style.display = 'grid';
         this.elements.toolGrid.style.removeProperty('visibility');
         this.elements.toolGrid.style.removeProperty('opacity');
-        try {
-          console.log('[ui.showState] toolGrid set to display: grid');
-        } catch (e) {}
       } else {
         this.elements.toolGrid.style.display = 'none';
-        try {
-          console.log(`[ui.showState] toolGrid hidden for state "${stateName}"`);
-        } catch (e) {}
       }
-    } else {
-      console.warn('[ui.showState] toolGrid element NOT found in cached elements');
     }
   },
 
   updateStats() {
-  // Stelle sicher, dass das Marquee-Element gecached ist
-  if (!this.elements.statsMarquee) {
-    this.elements.statsMarquee = getElement('#stats-marquee');
-  }
-  if (!this.elements.statsMarquee) return;
-
-  const categories = new Set(state.tools.map(t => t.category)).size;
-  const featured = state.tools.filter(t => t.featured).length;
-
-  state.stats = {
-    total: state.tools.length,
-    categories,
-    featured
-  };
-
-  // Array mit allen Informationen, die im Marquee erscheinen sollen
-  const marqueeItems = [
-    ` <strong>${state.stats.total}</strong> TOOLS`,
-    ` <strong>${state.stats.categories}</strong> KATEGORIEN`,
-    ` <strong>${state.stats.featured}</strong> FEATURED`,
-  ];
-
-  // Zusätzliche dynamische Infos
-  if (state.tools.length > 0) {
-    // Bestbewertetes Tool
-    const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-    marqueeItems.push(` BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
-
-    // Neuestes Tool (nach added-Datum)
-    const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
-    const newest = sortedByDate[0];
-    marqueeItems.push(` NEU: ${newest.title}`);
-  }
-
-  // Marquee-Track leeren und neu befüllen
-  const track = this.elements.statsMarquee.querySelector('.marquee-track');
-  if (track) {
-    track.innerHTML = '';
-    // Inhalt zweimal anhängen, damit die Animation nahtlos wirkt
-    for (let i = 0; i < 2; i++) {
-      marqueeItems.forEach(text => {
-        const span = document.createElement('span');
-        span.innerHTML = text; // erlaubt HTML wie <strong>
-        track.appendChild(span);
-      });
+    if (!this.elements.statsMarquee) {
+      this.elements.statsMarquee = getElement('#stats-marquee');
     }
-  }
+    if (!this.elements.statsMarquee) return;
 
-  // Marquee anzeigen
-  this.elements.statsMarquee.style.display = 'flex';
+    const categories = new Set(state.tools.map(t => t.category)).size;
+    const featured = state.tools.filter(t => t.featured).length;
 
-  // Alte stats-Bar ausblenden
-  if (this.elements.statsBar) {
-    this.elements.statsBar.style.display = 'none';
-  }
-},
+    state.stats = {
+      total: state.tools.length,
+      categories,
+      featured
+    };
+
+    const marqueeItems = [
+      `<strong>${state.stats.total}</strong> TOOLS`,
+      `<strong>${state.stats.categories}</strong> KATEGORIEN`,
+      `<strong>${state.stats.featured}</strong> FEATURED`,
+    ];
+
+    if (state.tools.length > 0) {
+      const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
+      marqueeItems.push(`BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
+
+      const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
+      const newest = sortedByDate[0];
+      marqueeItems.push(`NEU: ${newest.title}`);
+    }
+
+    const track = this.elements.statsMarquee.querySelector('.marquee-track');
+    if (track) {
+      track.innerHTML = '';
+      for (let i = 0; i < 2; i++) {
+        marqueeItems.forEach(text => {
+          const span = document.createElement('span');
+          span.innerHTML = text;
+          track.appendChild(span);
+        });
+      }
+    }
+
+    this.elements.statsMarquee.style.display = 'flex';
+    if (this.elements.statsBar) {
+      this.elements.statsBar.style.display = 'none';
+    }
+  },
 
   updateDataSource() {
     if (!this.elements.dataSource) return;
-
     const sources = {
       supabase: 'D: SB',
       json: 'D: LJ',
       defaults: 'D: DEF',
       loading: '...'
     };
-
     this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
   },
 
@@ -707,7 +681,6 @@ const ui = {
       ].filter(Boolean);
       return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
     }
-
     return tool.badges.slice(0, 3).map(badge => {
       const text = String(badge).split('.')[0].trim();
       return text.length > 28 ? text.slice(0, 28) + '…' : text;
@@ -718,14 +691,7 @@ const ui = {
     const categoryName = tool.category_name || tool.category || 'other';
     const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-    const contextTexts = (typeof this.getContextText === 'function')
-      ? this.getContextText(tool)
-      : ([
-          tool.description || '',
-          ...(Array.isArray(tool.tags) ? tool.tags.slice(0,3) : [])
-        ].filter(Boolean));
-
-    if (!contextTexts.length) contextTexts.push(tool.description || tool.title || 'Mehr Informationen');
+    const contextTexts = this.getContextText(tool);
 
     return `
       <div class="card-square"
@@ -739,28 +705,23 @@ const ui = {
            aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
 
         <div class="square-content-centered">
-
           <div class="square-category-badge" aria-hidden="true">
             ${this.escapeHtml(categoryDisplay)}
           </div>
-
           <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
             ${this.escapeHtml(tool.title)}
           </h3>
-
           <div class="context-marquee" aria-hidden="true">
             <div class="marquee-track" role="presentation">
               <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
               <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
             </div>
           </div>
-
           <a class="card-overlay-link"
              role="button"
              tabindex="-1"
              data-href="${this.escapeHtml(tool.link)}"
              aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
-
         </div>
       </div>
     `;
@@ -802,124 +763,136 @@ const ui = {
       return;
     }
 
-    this.showState('grid');
-
-    if (this.elements.toolGrid) {
-      if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-        this.elements.toolGrid.classList.add('tool-grid-squares');
+    const activeView = this.getActiveView(); // NEU
+    if (activeView === 'grid') {
+      this.showState('grid');
+      if (this.elements.toolGrid) {
+        if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+          this.elements.toolGrid.classList.add('tool-grid-squares');
+        }
+        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+        this.attachCardHandlers();
       }
-
-      this.elements.toolGrid.innerHTML =
-        state.filtered.map(tool => this.renderCard(tool)).join('');
-
-      this.attachCardHandlers();
+    } else {
+      // Stack-Ansicht
+      this.showState('grid');
+      if (!this.stackView) {
+        this.stackView = new StackViewController(this.elements.toolGrid, state, this);
+      } else {
+        this.stackView.state = state;
+      }
+      this.stackView.render();
     }
   },
 
-attachCardHandlers() {
-  const grid = this.elements.toolGrid || getElement('#tool-grid');
-  if (!grid) return;
+  getActiveView() {
+    const activeTab = this.elements.viewToggle?.querySelector('.toggle-btn.active');
+    return activeTab ? activeTab.dataset.view : 'grid';
+  },
 
-  if (grid._clickHandler) {
-    grid.removeEventListener('click', grid._clickHandler);
-    grid.removeEventListener('keydown', grid._keyHandler);
-  }
+  attachCardHandlers() {
+    const grid = this.elements.toolGrid || getElement('#tool-grid');
+    if (!grid) return;
 
-  // ← NEU: Mobile Detection
-  const isMobile = window.innerWidth < 768;
-
-  grid._clickHandler = (e) => {
-    const overlay = e.target.closest('.card-overlay-link');
-    const card = e.target.closest('.card-square');
-
-    if (overlay && card) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
-      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-      const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
-
-      console.log('🎯 Card clicked:', { toolName, href, isMobile });
-
-      analytics.trackToolClick(toolName);
-
-      // ✅ BESSER (ÖFFNET NEUEN TAB):
-if (isMobile) {
-  console.log('📱 Mobile: Opening detail page');
-  if (toolId) {
-    // Visuelles Feedback
-    card.style.transform = 'scale(0.95)';
-    card.style.opacity = '0.7';
-    
-    setTimeout(() => {
-      // Detailseite im gleichen Tab öffnen
-      window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-      
-      // Hinweis: Das Zurücksetzen der Styles ist nicht mehr nötig,
-      // da die Seite verlassen wird.
-    }, 150);
-  } else {
-    console.error('❌ No tool ID found!');
-    // Fallback: trotzdem direkt öffnen?
-    if (href) {
-      window.open(href, '_blank', 'noopener,noreferrer');
+    if (grid._clickHandler) {
+      grid.removeEventListener('click', grid._clickHandler);
+      grid.removeEventListener('keydown', grid._keyHandler);
     }
-  }
-} else {
-        // Desktop: Modal öffnen
-        if (typeof openToolModal === 'function') {
-          try {
-            let tool = null;
-            
-            if (toolId && state.tools) {
-              tool = state.tools.find(t => String(t.id) === String(toolId));
-            }
-            
-            if (tool) {
-              openToolModal(tool);
-            } else {
-              openToolModal({
-                title: toolName,
-                link: href,
-                description: `${toolName} - AI Tool`
-              });
-            }
-          } catch (err) {
-            console.error('openToolModal error', err);
-            if (href) {
-              window.open(href, '_blank', 'noopener,noreferrer');
-            } else {
-              card.classList.toggle('card-armed');
-            }
+
+    const isMobile = window.innerWidth < 768;
+
+    grid._clickHandler = (e) => {
+      const overlay = e.target.closest('.card-overlay-link');
+      const card = e.target.closest('.card-square');
+
+      if (overlay && card) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
+        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+        const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+
+        analytics.trackToolClick(toolName);
+
+        if (isMobile) {
+          if (toolId) {
+            card.style.transform = 'scale(0.95)';
+            card.style.opacity = '0.7';
+            setTimeout(() => {
+              window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+            }, 150);
+          } else if (href && href !== '#') {
+            window.open(href, '_blank', 'noopener,noreferrer');
+          } else {
+            alert('Link nicht verfügbar');
           }
         } else {
-          // Fallback: Direkter Link
-          if (href) {
-            window.open(href, '_blank', 'noopener,noreferrer');
+          if (typeof openToolModal === 'function') {
+            try {
+              let tool = null;
+              if (toolId && state.tools) {
+                tool = state.tools.find(t => String(t.id) === String(toolId));
+              }
+              if (tool) {
+                openToolModal(tool);
+              } else {
+                openToolModal({
+                  title: toolName,
+                  link: href,
+                  description: `${toolName} - AI Tool`
+                });
+              }
+            } catch (err) {
+              console.error('openToolModal error', err);
+              if (href) {
+                window.open(href, '_blank', 'noopener,noreferrer');
+              } else {
+                card.classList.toggle('card-armed');
+              }
+            }
+          } else {
+            if (href) {
+              window.open(href, '_blank', 'noopener,noreferrer');
+            }
           }
         }
+        return;
       }
+    };
 
-      return;
-    }
-  };
-
-  grid._keyHandler = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      const card = e.target.closest('.card-square');
-      if (!card) return;
-      const overlay = card.querySelector('.card-overlay-link');
-      if (overlay) {
-        overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        e.preventDefault();
+    grid._keyHandler = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const card = e.target.closest('.card-square');
+        if (!card) return;
+        const overlay = card.querySelector('.card-overlay-link');
+        if (overlay) {
+          overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          e.preventDefault();
+        }
       }
-    }
-  };
+    };
 
-  grid.addEventListener('click', grid._clickHandler);
-  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-}
+    grid.addEventListener('click', grid._clickHandler);
+    grid.addEventListener('keydown', grid._keyHandler, { passive: false });
+  },
+
+  switchView(view) {
+    const buttons = this.elements.viewToggle?.querySelectorAll('.toggle-btn');
+    buttons?.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+    
+    if (view === 'grid') {
+      if (this.stackView) {
+        this.stackView.destroy();
+        this.stackView = null;
+      }
+      this.render();
+    } else if (view === 'stacks') {
+      this.render();
+    }
+  }
 };
 
 
