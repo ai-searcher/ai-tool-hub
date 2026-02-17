@@ -1964,3 +1964,8 @@ a:focus-visible {
   color: var(--text-primary);
   word-break: break-word;
 }
+
+/* GLOBAL LEFT SHIFT */
+.card-square > .square-content-centered {
+  padding-left: 8px !important;  /* ← weniger Abstand */
+}
