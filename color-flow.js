@@ -1,11 +1,10 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.2 ORGANIC
-// Volle Funktionalität + organische Linien
-// - Wellen mit variabler Frequenz & Rauschen
-// - Sanfte Übergänge an den Enden
-// - Zufällige Variation pro Linie
-// - Sterne, Glitch, Ripples, etc.
-// - Optimiert für Mobile/Desktop
+// GRID SYNCHRONIZED NETWORK V13.3 MOBILE-OPTIMIZED
+// Organische Linien jetzt auch auf mobil sichtbar
+// - Wellen aktiv (reduzierte Komplexität)
+// - Höhere Deckkraft für bessere Sichtbarkeit
+// - Sterne, Ripples, etc. weiterhin aktiv
+// - Flüssige Performance auf allen Geräten
 // =========================================
 
 (function() {
@@ -108,19 +107,21 @@
           maxSecondaryConnections: 1,
           maxBridgeConnections: 2,
           hoverSpeed: 0.30,
-          baseOpacity: 0.35,
+          baseOpacity: 0.45, // erhöht für bessere Sichtbarkeit
           glowOpacity: 0.50,
-          useSimplifiedRendering: true,
+          useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 400,
-          // Neue Effekte – auf mobil reduziert oder deaktiviert
-          enableWaves: false,
+          // Mobile-schonende organische Wellen
+          enableWaves: true,           // Wellen aktiv!
           enableGlitch: false,
           enableStars: true,
           enableRipples: true,
           enableCategoryStyles: true,
           enableVariableWidth: false,
-          starCount: 50
+          starCount: 50,
+          waveComplexity: 1,            // nur eine Grundwelle
+          organicNoise: 0               // kein Rauschen für Performance
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -147,7 +148,6 @@
           enableVariableWidth: true,
           starCount: 100,
           glitchProbability: 0.01,
-          // Organische Parameter
           waveComplexity: 2,
           organicNoise: 0.3
         };
@@ -216,7 +216,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.2 ORGANIC');
+      console.log('🚀 GridSynchronizedNetwork v13.3 MOBILE-OPTIMIZED');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -721,7 +721,7 @@
       return gradient;
     }
 
-    // Organische wellenförmige Linie
+    // Organische wellenförmige Linie (für mobile mit reduzierter Komplexität)
     drawWavyLine(from, to, lineWidth, strokeStyle) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
@@ -733,9 +733,9 @@
       const perpX = -dirY * 8;
       const perpY = dirX * 8;
 
+      // Je nach Komplexität unterschiedlich viele Frequenzen
       const phase1 = Math.random() * Math.PI * 2;
-      const phase2 = Math.random() * Math.PI * 2;
-      const phase3 = Math.random() * Math.PI * 2;
+      let wave;
 
       this.ctx.beginPath();
       this.ctx.moveTo(from.x, from.y);
@@ -745,10 +745,15 @@
         const ease = Math.sin(t * Math.PI);
         const amp = ease * 8;
 
-        const w1 = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1) * 0.7;
-        const w2 = Math.sin(t * Math.PI * 2.3 + this.glowTime * 0.003 + phase2) * 0.5;
-        const w3 = Math.sin(t * Math.PI * 7 + this.glowTime * 0.0015 + phase3) * 0.3;
-        let wave = (w1 + w2 + w3) / 1.5;
+        if (this.settings.waveComplexity >= 2) {
+          const phase2 = Math.random() * Math.PI * 2;
+          const w1 = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1) * 0.7;
+          const w2 = Math.sin(t * Math.PI * 2.3 + this.glowTime * 0.003 + phase2) * 0.5;
+          wave = (w1 + w2) / 1.2;
+        } else {
+          // Einfache Welle (für mobile)
+          wave = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1);
+        }
 
         if (this.settings.organicNoise > 0) {
           const noise = (Math.random() * 2 - 1) * this.settings.organicNoise;
@@ -1050,7 +1055,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v13.2 ORGANIC');
+    console.group('🚀 Color Flow v13.3 MOBILE-OPTIMIZED');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
