@@ -1,14 +1,13 @@
-
 // =========================================
-// GRID SYNCHRONIZED NETWORK V12.0 ULTIMATE
-// All Features + Guaranteed Working
-// - 4 Connection Types (solid/dashed/dotted/curved)
-// - Intelligent Cluster Detection
-// - Robust Fallback System
-// - Performance Optimized
-// - Mobile Friendly
-// - Thin Thread Lines
-// - Flowing Glow Effect
+// GRID SYNCHRONIZED NETWORK V13.0 FUTURISTIC
+// Erweiterte Effekte:
+// - Wellenlinien (5)
+// - Holografischer Glitch (7)
+// - Sternenhimmel (8)
+// - Datenwellen bei Klick (9)
+// - Kategorie-Leuchtspuren (10)
+// - Variable Linienstärke (11)
+// Alle Effekte sind für mobile optimiert/deaktivierbar
 // =========================================
 
 (function() {
@@ -28,6 +27,17 @@
       this.canvasWidth = 0;
       this.canvasHeight = 0;
       this.glowTime = 0;
+
+      // Sterne
+      this.stars = [];
+      this.starFieldActive = true;
+
+      // Glitch
+      this.glitchFrame = 0;
+      this.glitchIntensity = 0;
+
+      // Ripples (Datenwellen)
+      this.ripples = [];
 
       // Performance optimization
       this.targetFPS = 60;
@@ -81,6 +91,9 @@
       this.setupAdaptiveSettings();
       this.activeConnections = new Map();
 
+      // Klick-Listener für Ripples
+      this.setupRippleListener();
+
       this.init();
     }
 
@@ -101,7 +114,15 @@
           glowOpacity: 0.50,
           useSimplifiedRendering: true,
           minClusterSize: 2,
-          maxDistance: 400
+          maxDistance: 400,
+          // Neue Effekte – auf mobil reduziert oder deaktiviert
+          enableWaves: false,           // Wellen sind zu rechenintensiv
+          enableGlitch: false,          // Glitch deaktiviert
+          enableStars: true,             // Sterne sind leicht
+          enableRipples: true,           // Ripples erwünscht
+          enableCategoryStyles: true,    // Kategorie-Stile
+          enableVariableWidth: false,    // Variable Breite deaktiviert (Performance)
+          starCount: 50                  // Weniger Sterne
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -119,7 +140,15 @@
           glowOpacity: 0.45,
           useSimplifiedRendering: false,
           minClusterSize: 2,
-          maxDistance: 450
+          maxDistance: 450,
+          enableWaves: true,
+          enableGlitch: true,
+          enableStars: true,
+          enableRipples: true,
+          enableCategoryStyles: true,
+          enableVariableWidth: true,
+          starCount: 100,
+          glitchProbability: 0.01
         };
       } else {
         this.settings = {
@@ -137,7 +166,15 @@
           glowOpacity: 0.40,
           useSimplifiedRendering: false,
           minClusterSize: 2,
-          maxDistance: 500
+          maxDistance: 500,
+          enableWaves: true,
+          enableGlitch: true,
+          enableStars: true,
+          enableRipples: true,
+          enableCategoryStyles: true,
+          enableVariableWidth: true,
+          starCount: 200,
+          glitchProbability: 0.02
         };
       }
 
@@ -152,8 +189,33 @@
       };
     }
 
+    // Klick-Listener für Ripples (Datenwellen)
+    setupRippleListener() {
+      document.addEventListener('click', (e) => {
+        const card = e.target.closest('.card-square');
+        if (!card) return;
+        // Position der Karte ermitteln
+        const gridRect = this.gridElement?.getBoundingClientRect();
+        if (!gridRect) return;
+        const cardRect = card.getBoundingClientRect();
+        const x = cardRect.left + cardRect.width/2 - gridRect.left;
+        const y = cardRect.top + cardRect.height/2 - gridRect.top;
+        // Ripple hinzufügen
+        if (this.settings.enableRipples) {
+          this.ripples.push({
+            x, y,
+            radius: 10,
+            maxRadius: Math.max(this.canvasWidth, this.canvasHeight) * 0.8,
+            alpha: 0.8,
+            growth: 2,
+            active: true
+          });
+        }
+      });
+    }
+
     init() {
-      console.log('🚀 GridSynchronizedNetwork v12.0 ULTIMATE');
+      console.log('🚀 GridSynchronizedNetwork v13.0 FUTURISTIC');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -187,16 +249,15 @@
 
       this.setupCanvas();
       this.scanTools();
+      this.generateStars(); // Sterne erzeugen
 
       if (this.cards.length === 0) {
         console.warn('⚠️ No cards found');
         return;
       }
 
-      // Try intelligent algorithm first
       this.generateIntelligentConnections();
 
-      // Fallback if no connections generated
       if (this.connections.length === 0) {
         console.log('📋 Using fallback connection generation');
         this.generateFallbackConnections();
@@ -206,7 +267,7 @@
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Ultimate Network initialized!');
+      console.log('✅ Futuristic Network initialized!');
       console.log(`🕸️ ${this.connections.length} connections (${this.countTypes().join(', ')})`);
     }
 
@@ -247,6 +308,21 @@
       this.ctx.scale(hdRatio, hdRatio);
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'high';
+    }
+
+    // Sterne generieren
+    generateStars() {
+      this.stars = [];
+      for (let i = 0; i < this.settings.starCount; i++) {
+        this.stars.push({
+          x: Math.random() * this.canvasWidth,
+          y: Math.random() * this.canvasHeight,
+          radius: Math.random() * 1.5 + 0.5,
+          brightness: Math.random() * 0.5 + 0.3,
+          speed: Math.random() * 0.05 + 0.02,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
     }
 
     scanTools() {
@@ -320,7 +396,6 @@
       }
     }
 
-    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
       const categoryGroups = {};
 
@@ -331,7 +406,6 @@
         categoryGroups[card.category].push(card);
       });
 
-      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
           group.sort((a, b) => {
@@ -346,7 +420,6 @@
         }
       });
 
-      // Secondary: Skip connections within larger groups
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 3) {
           group.sort((a, b) => {
@@ -365,7 +438,6 @@
         }
       });
 
-      // Bridge: Connect different categories
       const categories = Object.keys(categoryGroups);
       const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
 
@@ -393,7 +465,6 @@
         }
       }
 
-      // Cluster: Curved connections for visual variety
       if (this.settings.enableCurves) {
         Object.values(categoryGroups).forEach(group => {
           if (group.length > 3) {
@@ -645,34 +716,97 @@
       return gradient;
     }
 
+    // Zeichnet eine wellenförmige Linie
+    drawWavyLine(from, to, lineWidth, strokeStyle) {
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const steps = Math.max(20, Math.floor(dist / 10)); // Anzahl der Segmente
+      const stepX = dx / steps;
+      const stepY = dy / steps;
+      const perpX = -dy / dist * 6; // Wellenamplitude
+      const perpY = dx / dist * 6;
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(from.x, from.y);
+
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        const baseX = from.x + stepX * i;
+        const baseY = from.y + stepY * i;
+        // Sinuswelle mit Phasenverschiebung über die Zeit
+        const wave = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002) * 6;
+        const x = baseX + perpX * wave / 6;
+        const y = baseY + perpY * wave / 6;
+        this.ctx.lineTo(x, y);
+      }
+
+      this.ctx.strokeStyle = strokeStyle;
+      this.ctx.lineWidth = lineWidth;
+      this.ctx.stroke();
+    }
+
     drawConnection(from, to, connection, activeState, time) {
       const config = connection.config;
-      const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
-      const toColor = this.categoryColors[to.category] || this.categoryColors.other;
+      let fromColor = this.categoryColors[from.category] || this.categoryColors.other;
+      let toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
-      const weight = connection.weight || 1;
+      // Kategorie-Leuchtspuren: unterschiedliche Stricharten pro Kategorie (10)
+      let dashPattern = config.dashPattern;
+      if (this.settings.enableCategoryStyles) {
+        // Leicht unterschiedliche Muster pro Kategorie (zusätzlich zu den connectionTypes)
+        const cat = from.category;
+        if (cat === 'text') dashPattern = [6, 3];
+        else if (cat === 'image') dashPattern = [2, 4];
+        else if (cat === 'code') dashPattern = [8, 2];
+        else if (cat === 'audio') dashPattern = [4, 4];
+        else if (cat === 'video') dashPattern = [12, 4];
+        else if (cat === 'data') dashPattern = [1, 3];
+        else dashPattern = config.dashPattern;
+      }
+
+      // Variable Linienstärke basierend auf degree (11)
+      let weight = connection.weight || 1;
+      if (this.settings.enableVariableWidth) {
+        const degree = (from.degree + to.degree) / 2;
+        weight *= (0.8 + degree * 0.1); // leicht skalieren
+      }
+
       const baseOpacity = this.settings.baseOpacity * activeState * weight;
+
+      // Glitch-Effekt (7) – zufällige Farbverschiebung
+      if (this.settings.enableGlitch && Math.random() < this.settings.glitchProbability) {
+        // kurzzeitig Farben vertauschen oder invertieren
+        const tmp = fromColor;
+        fromColor = toColor;
+        toColor = tmp;
+      }
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
-      // Base line
-      this.ctx.strokeStyle = gradient;
-      this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
+      // Basislinie zeichnen (ggf. wellig)
       this.ctx.lineCap = 'round';
-      this.ctx.setLineDash(config.dashPattern);
+      this.ctx.setLineDash(dashPattern);
 
       if (config.curve && !this.settings.useSimplifiedRendering) {
-        this.drawCurvedLine(from, to);
+        // Kurvenlinie (original)
+        this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight);
+      } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
+        // Welle (5)
+        this.drawWavyLine(from, to, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, gradient);
       } else {
+        // Gerade Linie
         this.ctx.beginPath();
         this.ctx.moveTo(from.x, from.y);
         this.ctx.lineTo(to.x, to.y);
+        this.ctx.strokeStyle = gradient;
+        this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
         this.ctx.stroke();
       }
 
       this.ctx.setLineDash([]);
 
-      // Flowing glow
+      // Flowing glow (unverändert)
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
@@ -704,7 +838,9 @@
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
           if (config.curve && !this.settings.useSimplifiedRendering) {
-            this.drawCurvedLine(from, to);
+            this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth);
+          } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
+            this.drawWavyLine(from, to, this.ctx.lineWidth, glowGradient);
           } else {
             this.ctx.beginPath();
             this.ctx.moveTo(from.x, from.y);
@@ -717,7 +853,7 @@
       }
     }
 
-    drawCurvedLine(from, to) {
+    drawCurvedLine(from, to, strokeStyle, lineWidth) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -735,6 +871,8 @@
       this.ctx.beginPath();
       this.ctx.moveTo(from.x, from.y);
       this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
+      this.ctx.strokeStyle = strokeStyle;
+      this.ctx.lineWidth = lineWidth;
       this.ctx.stroke();
     }
 
@@ -744,6 +882,44 @@
         g: Math.round(color1.g + (color2.g - color1.g) * t),
         b: Math.round(color1.b + (color2.b - color1.b) * t)
       };
+    }
+
+    // Sternenhimmel zeichnen (8)
+    drawStars() {
+      if (!this.settings.enableStars) return;
+      this.ctx.save();
+      this.ctx.fillStyle = 'white';
+      for (let star of this.stars) {
+        // Sanftes Pulsieren
+        const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+        this.ctx.globalAlpha = Math.max(0.2, brightness);
+        this.ctx.beginPath();
+        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+    }
+
+    // Ripples zeichnen (9)
+    drawRipples() {
+      if (!this.settings.enableRipples) return;
+      this.ctx.save();
+      this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+      this.ctx.lineWidth = 2;
+      for (let i = this.ripples.length - 1; i >= 0; i--) {
+        const r = this.ripples[i];
+        r.radius += r.growth;
+        r.alpha *= 0.98; // langsam ausblenden
+        if (r.radius > r.maxRadius || r.alpha < 0.05) {
+          this.ripples.splice(i, 1);
+          continue;
+        }
+        this.ctx.globalAlpha = r.alpha;
+        this.ctx.beginPath();
+        this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+      this.ctx.restore();
     }
 
     animate(now) {
@@ -761,10 +937,17 @@
 
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
+      // Sternenhimmel zuerst
+      this.drawStars();
+
+      // Linien
       this.connections.forEach(conn => {
         const activeState = this.activeConnections.get(conn) || 1;
         this.drawConnection(conn.from, conn.to, conn, activeState, now);
       });
+
+      // Ripples (Datenwellen) über den Linien
+      this.drawRipples();
     }
 
     startAnimation() {
@@ -782,6 +965,7 @@
       this.gradientCache.clear();
       this.setupCanvas();
       this.scanTools();
+      this.generateStars(); // Sterne neu generieren
       this.generateIntelligentConnections();
       if (this.connections.length === 0) {
         this.generateFallbackConnections();
@@ -797,6 +981,7 @@
         this.resizeTimeout = setTimeout(() => {
           this.setupCanvas();
           this.scanTools();
+          this.generateStars();
           this.generateIntelligentConnections();
           if (this.connections.length === 0) {
             this.generateFallbackConnections();
@@ -843,16 +1028,15 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v12.0 ULTIMATE');
+    console.group('🚀 Color Flow v13.0 FUTURISTIC');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
     console.log('Types:', net.countTypes().join(', '));
-    console.log('Gradient Cache:', net.gradientCache.size);
-    console.log('Curves:', net.settings.enableCurves);
-    console.log('FPS:', net.targetFPS);
+    console.log('Stars:', net.stars.length);
+    console.log('Ripples:', net.ripples.length);
+    console.log('Settings:', net.settings);
     console.groupEnd();
   };
 
 })();
-
