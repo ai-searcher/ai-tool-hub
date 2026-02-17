@@ -220,7 +220,7 @@
       color: var(--text-dim);
     }
     
-    /* Kategoriespezifische Farben */
+/* Kategoriespezifische Farben für Badge und Listenelemente */
     .detail-panel[data-category="text"] .category-badge {
       background: var(--glow-text);
       color: var(--color-text);
@@ -270,6 +270,37 @@
     .detail-panel[data-category="other"] .detail-list-item::before {
       color: var(--color-other);
     }
+    
+    /* Glow-Farbe für das Panel pro Kategorie (für den Randpuls) */
+    .detail-panel[data-category="text"] { --glow-color: var(--glow-text); }
+    .detail-panel[data-category="image"] { --glow-color: var(--glow-image); }
+    .detail-panel[data-category="code"] { --glow-color: var(--glow-code); }
+    .detail-panel[data-category="audio"] { --glow-color: var(--glow-audio); }
+    .detail-panel[data-category="video"] { --glow-color: var(--glow-video); }
+    .detail-panel[data-category="data"] { --glow-color: var(--glow-data); }
+    .detail-panel[data-category="other"] { --glow-color: var(--glow-other); }
+    
+    /* Eigene Animation für das Panel – nur Farbpuls, keine Skalierung */
+    @keyframes panel-pulse {
+      0%, 100% {
+        box-shadow:
+          0 6px 20px rgba(2,12,30,0.45),
+          inset 0 1px 0 rgba(255,255,255,0.02),
+          0 0 0 1px transparent;
+      }
+      50% {
+        box-shadow:
+          0 6px 20px rgba(2,12,30,0.45),
+          inset 0 1px 0 rgba(255,255,255,0.02),
+          0 0 0 1px var(--glow-color);
+      }
+    }
+    
+    .detail-panel {
+      animation: panel-pulse 8s ease-in-out infinite !important;
+      transform: none !important; /* Keine Skalierung */
+    }
+    
   </style>
 </head>
 <body>
