@@ -999,25 +999,171 @@ body {
 }
 
 /* ==================== SCHWEBEEFFEKT (BREATHING) ==================== */
-@keyframes breathing {
+
+/* Basis-Animation (wird nicht direkt verwendet) */
+@keyframes breathing-base {
   0%, 100% {
     transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
     transform: scale(1.055);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.18);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18);
   }
 }
 
-#tool-grid .card-square,
-.tool-grid-squares .card-square {
-  animation: breathing 8s ease-in-out infinite !important;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.35s ease !important;
+/* Kategoriespezifische Animationen mit farbigem Randpuls */
+@keyframes breathing-text {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(0, 212, 255, 0);    /* --color-text mit 0% Opazität */
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(0, 212, 255, 0.5);  /* halbtransparenter Rand */
+  }
 }
 
+@keyframes breathing-image {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(236, 72, 153, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(236, 72, 153, 0.5);
+  }
+}
+
+@keyframes breathing-code {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(124, 77, 255, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(124, 77, 255, 0.5);
+  }
+}
+
+@keyframes breathing-audio {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 107, 157, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(255, 107, 157, 0.5);
+  }
+}
+
+@keyframes breathing-video {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(68, 138, 255, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(68, 138, 255, 0.5);
+  }
+}
+
+@keyframes breathing-data {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(29, 233, 182, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(29, 233, 182, 0.5);
+  }
+}
+
+@keyframes breathing-other {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(176, 190, 197, 0);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18),
+      0 0 0 1px rgba(176, 190, 197, 0.5);
+  }
+}
+
+/* Zuweisung der Animation anhand der data-category */
+#tool-grid .card-square[data-category="text"],
+.tool-grid-squares .card-square[data-category="text"] {
+  animation: breathing-text 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="image"],
+.tool-grid-squares .card-square[data-category="image"] {
+  animation: breathing-image 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="code"],
+.tool-grid-squares .card-square[data-category="code"] {
+  animation: breathing-code 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="audio"],
+.tool-grid-squares .card-square[data-category="audio"] {
+  animation: breathing-audio 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="video"],
+.tool-grid-squares .card-square[data-category="video"] {
+  animation: breathing-video 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="data"],
+.tool-grid-squares .card-square[data-category="data"] {
+  animation: breathing-data 8s ease-in-out infinite !important;
+}
+
+#tool-grid .card-square[data-category="other"],
+.tool-grid-squares .card-square[data-category="other"] {
+  animation: breathing-other 8s ease-in-out infinite !important;
+}
+
+/* Variationen für gerade/ungerade Karten (optional) */
 #tool-grid .card-square:nth-child(odd),
 .tool-grid-squares .card-square:nth-child(odd) {
   animation-timing-function: ease-in-out !important;
@@ -1028,15 +1174,16 @@ body {
   animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
 }
 
-/* Desktop Hover – überschreibt Breathing kurz */
+/* Desktop: Hover-Effekt – überschreibt Animation */
 @media (min-width: 768px) {
   #tool-grid .card-square:hover,
   .tool-grid-squares .card-square:hover {
     animation: none !important;
     transform: translateY(-8px) scale(1.03) !important;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
-                0 0 40px rgba(99, 102, 241, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    box-shadow:
+      0 16px 32px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(99, 102, 241, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.12) !important;
     border-color: rgba(99, 102, 241, 0.4) !important;
   }
 
@@ -1058,14 +1205,15 @@ body {
   }
 }
 
-/* Mobile Tap-Effekt */
+/* Mobile: Tap-Effekt */
 @media (max-width: 767px) {
   #tool-grid .card-square:active,
   .tool-grid-squares .card-square:active {
     transform: scale(1.08) !important;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(99, 102, 241, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    box-shadow:
+      0 12px 24px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(99, 102, 241, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
     border-color: rgba(99, 102, 241, 0.3) !important;
   }
 
@@ -1075,7 +1223,7 @@ body {
   }
 }
 
-/* prefers-reduced-motion */
+/* prefers-reduced-motion: reduce (high priority) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1084,6 +1232,7 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
   #tool-grid .card-square,
   .tool-grid-squares .card-square {
     animation: none !important;
