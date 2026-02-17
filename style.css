@@ -1699,3 +1699,88 @@ a:focus-visible {
 
  /* ==================== KATEGORIE-STACKS (bereits oben integriert) ==================== */
 /* Alles für Stacks wurde bereits im entsprechenden Abschnitt definiert */
+
+/* ==================== SORTIER-DROPDOWN ==================== */
+.sort-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.sort-trigger {
+  padding-right: 30px; /* Platz für den Pfeil */
+  position: relative;
+}
+
+.sort-trigger::after {
+  content: "▾";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.sort-dropdown.active .sort-trigger::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 0;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+}
+
+.sort-dropdown.active .sort-menu {
+  display: flex;
+}
+
+.sort-menu button {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-menu button:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.sort-menu button.active {
+  background: var(--primary-dim);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Mobile Anpassung */
+@media (max-width: 767px) {
+  .sort-menu {
+    left: auto;
+    right: 0;
+    min-width: 180px;
+  }
+  
+  .sort-menu button {
+    white-space: normal;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+  }
+}
