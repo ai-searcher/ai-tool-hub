@@ -1231,26 +1231,29 @@ const app = {
       search.init();
 
       // Tabs initialisieren (robust)
-      const viewToggle = document.querySelector('.view-toggle');
-      if (viewToggle) {
-        // Entferne alte Listener (falls vorhanden)
-        const newToggle = viewToggle.cloneNode(true);
-        viewToggle.parentNode.replaceChild(newToggle, viewToggle);
-        
-        newToggle.addEventListener('click', (e) => {
-          const btn = e.target.closest('.toggle-btn');
-          if (!btn) return;
-          const view = btn.dataset.view;
-          if (!view) return;
-          
-          // Aktiven Button markieren
-          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          
-          // Ansicht umschalten
-          ui.switchView(view);
-        });
-      }
+const viewToggle = document.querySelector('.view-toggle');
+if (viewToggle) {
+  // Entferne alte Listener (falls vorhanden)
+  const newToggle = viewToggle.cloneNode(true);
+  viewToggle.parentNode.replaceChild(newToggle, viewToggle);
+  
+  // WICHTIG: Referenz im ui-Objekt aktualisieren
+  ui.elements.viewToggle = newToggle;
+  
+  newToggle.addEventListener('click', (e) => {
+    const btn = e.target.closest('.toggle-btn');
+    if (!btn) return;
+    const view = btn.dataset.view;
+    if (!view) return;
+    
+    // Aktiven Button markieren
+    newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Ansicht umschalten
+    ui.switchView(view);
+  });
+}
 
       console.log('✅ App initialized successfully!');
 
