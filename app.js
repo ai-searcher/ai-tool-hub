@@ -110,6 +110,170 @@ const DEFAULT_TOOLS = [
 ];
 
 // =========================================
+// STACK VIEW CONTROLLER (KATEGORIE-STACKS)
+// =========================================
+class StackViewController {
+  constructor(container, state, ui) {
+    this.container = container;
+    this.state = state;
+    this.ui = ui;
+    this.stacks = [];
+    this.activeSort = 'name';
+    this.sortDirection = 'asc';
+  }
+
+  render() {
+    if (!this.state.tools || this.state.tools.length === 0) return;
+
+    const grouped = this.groupByCategory(this.state.tools);
+    
+    this.container.innerHTML = '';
+    this.container.classList.add('tool-stacks');
+    
+    for (const [category, tools] of Object.entries(grouped)) {
+      const stackElement = this.createStack(category, tools);
+      this.container.appendChild(stackElement);
+    }
+
+    this.attachStackListeners();
+  }
+
+  groupByCategory(tools) {
+    const groups = {};
+    tools.forEach(tool => {
+      const cat = tool.category || 'other';
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(tool);
+    });
+    return groups;
+  }
+
+  createStack(category, tools) {
+    const stackDiv = document.createElement('div');
+    stackDiv.className = 'category-stack';
+    stackDiv.dataset.category = category;
+
+    const header = this.createCategoryHeader(category, tools);
+    stackDiv.appendChild(header);
+
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'stack-cards';
+    
+    const sortedTools = this.sortTools(tools);
+    
+    sortedTools.forEach(tool => {
+      const card = this.createStackCard(tool);
+      cardsContainer.appendChild(card);
+    });
+
+    stackDiv.appendChild(cardsContainer);
+    return stackDiv;
+  }
+
+  createCategoryHeader(category, tools) {
+    const header = document.createElement('div');
+    header.className = 'category-header-card';
+
+    const title = document.createElement('h3');
+    title.className = 'category-header-title';
+    title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+
+    const desc = document.createElement('p');
+    desc.className = 'category-header-description';
+    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''} in dieser Kategorie`;
+
+    header.appendChild(title);
+    header.appendChild(desc);
+    return header;
+  }
+
+  createStackCard(tool) {
+    const card = document.createElement('div');
+    card.className = 'stack-card';
+    card.dataset.toolId = tool.id;
+    card.dataset.category = tool.category || 'other';
+    card.dataset.toolName = tool.title;
+    card.dataset.href = tool.link;
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'article');
+    card.setAttribute('aria-label', tool.title);
+
+    const title = document.createElement('div');
+    title.className = 'stack-card-title';
+    title.textContent = tool.title;
+    card.appendChild(title);
+
+    const badge = document.createElement('span');
+    badge.className = 'stack-card-category';
+    badge.textContent = (tool.category || 'other').charAt(0).toUpperCase();
+    card.appendChild(badge);
+
+    return card;
+  }
+
+  sortTools(tools) {
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+    switch (this.activeSort) {
+      case 'name':
+        return [...tools].sort((a, b) => dir * a.title.localeCompare(b.title));
+      case 'rating':
+        return [...tools].sort((a, b) => dir * ((a.rating || 0) - (b.rating || 0)));
+      case 'date':
+        return [...tools].sort((a, b) => dir * (new Date(b.added) - new Date(a.added)));
+      default:
+        return tools;
+    }
+  }
+
+  attachStackListeners() {
+    const stacks = this.container.querySelectorAll('.category-stack');
+    stacks.forEach(stack => {
+      const header = stack.querySelector('.category-header-card');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          e.stopPropagation();
+          console.log('Kategorie-Header geklickt:', stack.dataset.category);
+        });
+      }
+
+      const cardsContainer = stack.querySelector('.stack-cards');
+      if (cardsContainer) {
+        cardsContainer.addEventListener('click', (e) => {
+          if (e.target.closest('.stack-card')) return;
+          cardsContainer.classList.toggle('fanned');
+        });
+      }
+    });
+
+    const stackCards = this.container.querySelectorAll('.stack-card');
+    stackCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const toolId = card.dataset.toolId;
+        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
+        if (!tool) return;
+
+        if (window.innerWidth < 768) {
+          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+        } else {
+          if (typeof openToolModal === 'function') {
+            openToolModal(tool);
+          } else {
+            window.open(tool.link, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+    });
+  }
+
+  destroy() {
+    this.container.innerHTML = '';
+    this.container.classList.remove('tool-stacks');
+  }
+}
+
+// =========================================
 // VALIDATION RULES
 // =========================================
 const VALIDATION_RULES = {
@@ -1058,6 +1222,28 @@ const app = {
       ui.updateDataSource();
       ui.render();
       search.init();
+
+      // Tabs initialisieren (robust)
+      const viewToggle = document.querySelector('.view-toggle');
+      if (viewToggle) {
+        // Entferne alte Listener (falls vorhanden)
+        const newToggle = viewToggle.cloneNode(true);
+        viewToggle.parentNode.replaceChild(newToggle, viewToggle);
+        
+        newToggle.addEventListener('click', (e) => {
+          const btn = e.target.closest('.toggle-btn');
+          if (!btn) return;
+          const view = btn.dataset.view;
+          if (!view) return;
+          
+          // Aktiven Button markieren
+          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Ansicht umschalten
+          ui.switchView(view);
+        });
+      }
 
       console.log('✅ App initialized successfully!');
 
