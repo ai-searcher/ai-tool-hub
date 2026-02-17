@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Tool-Details · Quantum AI Hub</title>
+  <title>⚡ Tool-Details · Quantum AI Hub</title>
   
   <!-- Gleiches Stylesheet wie Hauptseite -->
   <link rel="stylesheet" href="style.css?v=1.2">
@@ -23,6 +23,7 @@
       overflow: hidden;
     }
     
+    /* Das milchig-glasige Panel – scrollbar im Panel */
     .detail-panel {
       position: relative;
       width: 100%;
@@ -36,10 +37,14 @@
       padding: 28px 20px;
       box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
       box-sizing: border-box;
-      animation: breathing-glow 8s ease-in-out infinite;
+      
+      /* Eigene Panel-Animation – nur Farbpuls, keine Skalierung */
+      animation: panel-pulse 8s ease-in-out infinite;
+      
       display: flex;
       flex-direction: column;
       gap: 20px;
+      
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.2) transparent;
     }
@@ -55,6 +60,7 @@
       border-radius: 10px;
     }
     
+    /* Kopfzeile */
     .detail-header {
       display: flex;
       align-items: flex-start;
@@ -71,8 +77,10 @@
       margin: 0;
       flex: 1;
       word-break: break-word;
+      animation: title-glow 8s ease-in-out infinite;
     }
     
+    /* Schließen-Button */
     .close-button {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -100,10 +108,11 @@
       transform: scale(1.05);
     }
     
+    /* Metadaten – untereinander */
     .detail-meta {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
       font-size: 0.95rem;
       color: var(--text-secondary);
       border-top: 1px solid rgba(255,255,255,0.05);
@@ -140,6 +149,40 @@
       letter-spacing: 0.05em;
     }
     
+    /* NEU: Bewertung als Powerbar */
+    .rating-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    
+    .rating-value {
+      color: var(--glow-color);
+      font-weight: 700;
+      font-size: 1.2rem;
+      min-width: 45px;
+      text-align: right;
+    }
+    
+    .rating-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .rating-fill {
+      height: 100%;
+      width: 0%; /* wird per JS gesetzt */
+      background: var(--glow-color);
+      border-radius: 20px;
+      box-shadow: 0 0 8px var(--glow-color);
+      animation: rating-pulse 8s ease-in-out infinite;
+    }
+    
+    /* Beschreibung */
     .detail-description {
       color: var(--text-dim);
       font-size: 1rem;
@@ -148,6 +191,7 @@
       flex-shrink: 0;
     }
     
+    /* Abschnitte (Stärken, Anwendungen, Prompts, Tipps) */
     .detail-section {
       margin-top: 8px;
       flex-shrink: 0;
@@ -159,6 +203,7 @@
       color: var(--primary);
       margin: 0 0 12px 0;
       letter-spacing: 0.02em;
+      animation: title-glow 8s ease-in-out infinite;
     }
     
     .detail-list {
@@ -187,6 +232,7 @@
       top: -2px;
     }
     
+    /* Link-Button */
     .detail-link {
       display: inline-flex;
       align-items: center;
@@ -213,6 +259,7 @@
       box-shadow: 0 0 20px var(--primary-glow);
     }
     
+    /* Lade- und Fehlerzustand */
     .loading-state,
     .error-state {
       text-align: center;
@@ -220,67 +267,7 @@
       color: var(--text-dim);
     }
     
-/* Kategoriespezifische Farben für Badge und Listenelemente */
-    .detail-panel[data-category="text"] .category-badge {
-      background: var(--glow-text);
-      color: var(--color-text);
-    }
-    .detail-panel[data-category="text"] .detail-list-item::before {
-      color: var(--color-text);
-    }
-    .detail-panel[data-category="image"] .category-badge {
-      background: var(--glow-image);
-      color: var(--color-image);
-    }
-    .detail-panel[data-category="image"] .detail-list-item::before {
-      color: var(--color-image);
-    }
-    .detail-panel[data-category="code"] .category-badge {
-      background: var(--glow-code);
-      color: var(--color-code);
-    }
-    .detail-panel[data-category="code"] .detail-list-item::before {
-      color: var(--color-code);
-    }
-    .detail-panel[data-category="audio"] .category-badge {
-      background: var(--glow-audio);
-      color: var(--color-audio);
-    }
-    .detail-panel[data-category="audio"] .detail-list-item::before {
-      color: var(--color-audio);
-    }
-    .detail-panel[data-category="video"] .category-badge {
-      background: var(--glow-video);
-      color: var(--color-video);
-    }
-    .detail-panel[data-category="video"] .detail-list-item::before {
-      color: var(--color-video);
-    }
-    .detail-panel[data-category="data"] .category-badge {
-      background: var(--glow-data);
-      color: var(--color-data);
-    }
-    .detail-panel[data-category="data"] .detail-list-item::before {
-      color: var(--color-data);
-    }
-    .detail-panel[data-category="other"] .category-badge {
-      background: var(--glow-other, rgba(176,190,197,0.25));
-      color: var(--color-other);
-    }
-    .detail-panel[data-category="other"] .detail-list-item::before {
-      color: var(--color-other);
-    }
-    
-    /* Glow-Farbe für das Panel pro Kategorie (für den Randpuls) */
-    .detail-panel[data-category="text"] { --glow-color: var(--glow-text); }
-    .detail-panel[data-category="image"] { --glow-color: var(--glow-image); }
-    .detail-panel[data-category="code"] { --glow-color: var(--glow-code); }
-    .detail-panel[data-category="audio"] { --glow-color: var(--glow-audio); }
-    .detail-panel[data-category="video"] { --glow-color: var(--glow-video); }
-    .detail-panel[data-category="data"] { --glow-color: var(--glow-data); }
-    .detail-panel[data-category="other"] { --glow-color: var(--glow-other); }
-    
-    /* Eigene Animation für das Panel – nur Farbpuls, keine Skalierung */
+    /* Animationen */
     @keyframes panel-pulse {
       0%, 100% {
         box-shadow:
@@ -296,11 +283,79 @@
       }
     }
     
-    .detail-panel {
-      animation: panel-pulse 8s ease-in-out infinite !important;
-      transform: none !important; /* Keine Skalierung */
+    @keyframes title-glow {
+      0%, 100% { text-shadow: 0 0 0 transparent; }
+      50% { text-shadow: 0 0 8px var(--glow-color); }
     }
     
+    @keyframes rating-pulse {
+      0%, 100% { box-shadow: 0 0 8px var(--glow-color); }
+      50% { box-shadow: 0 0 16px var(--glow-color); }
+    }
+    
+    /* Kategoriespezifische Farben für Badge, Listenpunkte und Powerbar */
+    .detail-panel[data-category="text"] { --glow-color: var(--glow-text); }
+    .detail-panel[data-category="text"] .category-badge {
+      background: var(--glow-text);
+      color: var(--color-text);
+    }
+    .detail-panel[data-category="text"] .detail-list-item::before {
+      color: var(--color-text);
+    }
+    
+    .detail-panel[data-category="image"] { --glow-color: var(--glow-image); }
+    .detail-panel[data-category="image"] .category-badge {
+      background: var(--glow-image);
+      color: var(--color-image);
+    }
+    .detail-panel[data-category="image"] .detail-list-item::before {
+      color: var(--color-image);
+    }
+    
+    .detail-panel[data-category="code"] { --glow-color: var(--glow-code); }
+    .detail-panel[data-category="code"] .category-badge {
+      background: var(--glow-code);
+      color: var(--color-code);
+    }
+    .detail-panel[data-category="code"] .detail-list-item::before {
+      color: var(--color-code);
+    }
+    
+    .detail-panel[data-category="audio"] { --glow-color: var(--glow-audio); }
+    .detail-panel[data-category="audio"] .category-badge {
+      background: var(--glow-audio);
+      color: var(--color-audio);
+    }
+    .detail-panel[data-category="audio"] .detail-list-item::before {
+      color: var(--color-audio);
+    }
+    
+    .detail-panel[data-category="video"] { --glow-color: var(--glow-video); }
+    .detail-panel[data-category="video"] .category-badge {
+      background: var(--glow-video);
+      color: var(--color-video);
+    }
+    .detail-panel[data-category="video"] .detail-list-item::before {
+      color: var(--color-video);
+    }
+    
+    .detail-panel[data-category="data"] { --glow-color: var(--glow-data); }
+    .detail-panel[data-category="data"] .category-badge {
+      background: var(--glow-data);
+      color: var(--color-data);
+    }
+    .detail-panel[data-category="data"] .detail-list-item::before {
+      color: var(--color-data);
+    }
+    
+    .detail-panel[data-category="other"] { --glow-color: var(--glow-other); }
+    .detail-panel[data-category="other"] .category-badge {
+      background: var(--glow-other, rgba(176,190,197,0.25));
+      color: var(--color-other);
+    }
+    .detail-panel[data-category="other"] .detail-list-item::before {
+      color: var(--color-other);
+    }
   </style>
 </head>
 <body>
@@ -333,9 +388,16 @@
           <span class="meta-label">Anbieter</span>
           <span class="meta-value" id="toolProvider"></span>
         </div>
+        
+        <!-- NEU: Bewertung als Powerbar -->
         <div class="meta-item" id="ratingContainer">
           <span class="meta-label">Bewertung</span>
-          <span class="meta-value" id="toolRating"></span>
+          <div class="rating-container">
+            <span class="rating-value" id="toolRating"></span>
+            <div class="rating-bar">
+              <div class="rating-fill" id="ratingFill"></div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -343,25 +405,25 @@
       
       <!-- Stärken -->
       <div id="strengthsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title"> Stärken</h3>
+        <h3 class="detail-section-title">✨ Highlights – was dieses Tool besonders macht</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
       <!-- Anwendungsbeispiele -->
       <div id="useCasesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title"> Wofür ist es gut?</h3>
+        <h3 class="detail-section-title">🎯 Ideal für …</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
       <!-- Prompt-Beispiele -->
       <div id="promptExamplesContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title"> Beispiel-Prompts</h3>
+        <h3 class="detail-section-title">✍️ So könntest du es nutzen</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
       <!-- Prompt-Tipps -->
       <div id="promptTipsContainer" class="detail-section" style="display: none;">
-        <h3 class="detail-section-title"> Tipps für gute Prompts</h3>
+        <h3 class="detail-section-title">💡 Clever prompter – so gelingen bessere Ergebnisse</h3>
         <div class="detail-list" id="promptTipsList"></div>
       </div>
       
@@ -376,7 +438,6 @@
     (function() {
       'use strict';
       
-      // Hilfsfunktion zum Laden der data.json
       async function loadToolData() {
         try {
           const response = await fetch('data.json');
@@ -389,25 +450,21 @@
         }
       }
       
-      // URL-Parameter auslesen
       const urlParams = new URLSearchParams(window.location.search);
       const toolId = urlParams.get('id');
       
-      // Elemente referenzieren
       const loadingEl = document.getElementById('loadingState');
       const errorEl = document.getElementById('errorState');
       const errorMsg = document.getElementById('errorMessage');
       const contentEl = document.getElementById('detailContent');
       const panel = document.getElementById('detailPanel');
       
-      // Prüfen, ob die wichtigsten Container existieren
       if (!loadingEl || !errorEl || !errorMsg || !contentEl || !panel) {
         console.error('Kritische Container fehlen im DOM');
         document.body.innerHTML = '<div style="color:white; padding:20px;">Ein interner Fehler ist aufgetreten (fehlende Container).</div>';
         return;
       }
       
-      // Wenn keine ID übergeben wurde
       if (!toolId) {
         loadingEl.style.display = 'none';
         errorEl.style.display = 'block';
@@ -415,7 +472,6 @@
         return;
       }
       
-      // Hilfsfunktion für Listen
       function fillList(containerId, listId, items) {
         const container = document.getElementById(containerId);
         const listEl = document.getElementById(listId);
@@ -438,7 +494,6 @@
         }
       }
       
-      // Daten laden und anzeigen
       loadToolData().then(tools => {
         if (!tools || !Array.isArray(tools)) {
           throw new Error('Daten konnten nicht geladen werden');
@@ -449,27 +504,26 @@
           throw new Error(`Tool mit ID ${toolId} nicht gefunden`);
         }
         
-        // Kategorie setzen
         const category = tool.category || 'other';
         panel.setAttribute('data-category', category);
         
-        // Einzelne Elemente holen und prüfen
         const titleEl = document.getElementById('toolTitle');
         const descEl = document.getElementById('toolDescription');
         const catEl = document.getElementById('toolCategory');
         const providerEl = document.getElementById('toolProvider');
         const ratingEl = document.getElementById('toolRating');
+        const ratingFill = document.getElementById('ratingFill');
         const linkEl = document.getElementById('toolLink');
         const providerContainer = document.getElementById('providerContainer');
         const ratingContainer = document.getElementById('ratingContainer');
         
-        // Fehlende Elemente erkennen und sichtbaren Fehler anzeigen
         const missing = [];
         if (!titleEl) missing.push('toolTitle');
         if (!descEl) missing.push('toolDescription');
         if (!catEl) missing.push('toolCategory');
         if (!providerEl) missing.push('toolProvider');
         if (!ratingEl) missing.push('toolRating');
+        if (!ratingFill) missing.push('ratingFill');
         if (!linkEl) missing.push('toolLink');
         if (!providerContainer) missing.push('providerContainer');
         if (!ratingContainer) missing.push('ratingContainer');
@@ -482,24 +536,30 @@
           return;
         }
         
-        // Daten zuweisen
         titleEl.textContent = tool.title || 'Unbekannt';
         descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
         catEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
-        ratingEl.textContent = tool.rating ? `★ ${tool.rating.toFixed(1)}` : '–';
+        
+        // Bewertung als Powerbar
+        if (tool.rating) {
+          ratingEl.textContent = tool.rating.toFixed(1);
+          const percent = (tool.rating / 5) * 100;
+          ratingFill.style.width = percent + '%';
+          ratingContainer.style.display = 'flex';
+        } else {
+          ratingContainer.style.display = 'none';
+        }
+        
         linkEl.href = tool.link || '#';
         
         providerContainer.style.display = tool.provider ? 'flex' : 'none';
-        ratingContainer.style.display = tool.rating ? 'flex' : 'none';
         
-        // Neue Felder befüllen
         fillList('strengthsContainer', 'strengthsList', tool.strengths);
         fillList('useCasesContainer', 'useCasesList', tool.useCases);
         fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
         fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
         
-        // Ladezustand ausblenden, Inhalt anzeigen
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
         
@@ -510,7 +570,6 @@
         errorMsg.textContent = '❌ ' + err.message;
       });
       
-      // Schließen-Button
       const closeBtn = document.getElementById('closeButton');
       if (closeBtn) {
         closeBtn.addEventListener('click', function() {
