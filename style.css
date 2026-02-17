@@ -1227,7 +1227,7 @@ body {
 /* Card-internal marquee: fixed position & no visible container */
 .card-square .context-marquee {
   position: absolute;
-  left: 4px;
+  left: 3px;
   right: 12px;
   bottom: 12px;
   height: 22px;
@@ -1597,7 +1597,7 @@ button,
 /* Card-Specific: fixierte Position am unteren Rand */
 .card-square .context-marquee {
   position: absolute;
-  left: 4px;            /* 4mm vom linken Rand */
+  left: 3px;            /* 4mm vom linken Rand */
   right: 12px;
   bottom: 12px;
   height: 22px;
