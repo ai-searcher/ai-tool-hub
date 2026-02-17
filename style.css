@@ -1594,10 +1594,10 @@ button,
   flex-shrink: 0;
 }
 
-/* Card-Specific: fixierte Position am unteren Rand mit Fade */
+/* Card-Specific: fixierte Position am unteren Rand */
 .card-square .context-marquee {
   position: absolute;
-  left: 4px;
+  left: 4px;            /* ← 4mm vom linken Rand (Wunsch) */
   right: 12px;
   bottom: 12px;
   height: 22px;
@@ -1605,28 +1605,10 @@ button,
   pointer-events: none;
   background: transparent;
   z-index: 2;
-}
 
-/* Linker und rechter Fade – gleichmäßig */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 30px;          /* Breite des Fade */
-  height: 100%;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.card-square .context-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, #1A1E37, rgba(26,30,55,0));
-}
-
-.card-square .context-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, #1A1E37, rgba(26,30,55,0));
+  /* Fade links + rechts via Maskierung – unsichtbarer Container */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
 }
 
 /* Track */
