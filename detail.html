@@ -20,10 +20,9 @@
       margin: 0;
       padding: 16px;
       box-sizing: border-box;
-      overflow: hidden; /* Seite scrollt nicht, nur Panel scrollt */
+      overflow: hidden;
     }
     
-    /* Das milchig-glasige Panel – scrollbar im Panel */
     .detail-panel {
       position: relative;
       width: 100%;
@@ -37,15 +36,10 @@
       padding: 28px 20px;
       box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
       box-sizing: border-box;
-      
-      /* Breathing-Animation mit Kategoriefarbe */
       animation: breathing-glow 8s ease-in-out infinite;
-      
       display: flex;
       flex-direction: column;
       gap: 20px;
-      
-      /* Dezente Scrollleiste */
       scrollbar-width: thin;
       scrollbar-color: rgba(255,255,255,0.2) transparent;
     }
@@ -61,7 +55,6 @@
       border-radius: 10px;
     }
     
-    /* Kopfzeile */
     .detail-header {
       display: flex;
       align-items: flex-start;
@@ -80,7 +73,6 @@
       word-break: break-word;
     }
     
-    /* Schließen-Button */
     .close-button {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -108,7 +100,6 @@
       transform: scale(1.05);
     }
     
-    /* Metadaten – untereinander */
     .detail-meta {
       display: flex;
       flex-direction: column;
@@ -130,7 +121,7 @@
     .meta-label {
       color: var(--text-dim);
       font-weight: 400;
-      min-width: 80px; /* für Ausrichtung */
+      min-width: 80px;
     }
     
     .meta-value {
@@ -149,7 +140,6 @@
       letter-spacing: 0.05em;
     }
     
-    /* Beschreibung */
     .detail-description {
       color: var(--text-dim);
       font-size: 1rem;
@@ -158,7 +148,6 @@
       flex-shrink: 0;
     }
     
-    /* Neue Abschnitte (Stärken, Anwendungen, Prompts, Tipps) */
     .detail-section {
       margin-top: 8px;
       flex-shrink: 0;
@@ -198,7 +187,6 @@
       top: -2px;
     }
     
-    /* Link-Button */
     .detail-link {
       display: inline-flex;
       align-items: center;
@@ -225,7 +213,6 @@
       box-shadow: 0 0 20px var(--primary-glow);
     }
     
-    /* Lade- und Fehlerzustand */
     .loading-state,
     .error-state {
       text-align: center;
@@ -233,7 +220,7 @@
       color: var(--text-dim);
     }
     
-    /* Kategoriespezifische Farben für Badge und Listenpunkte */
+    /* Kategoriespezifische Farben */
     .detail-panel[data-category="text"] .category-badge {
       background: var(--glow-text);
       color: var(--color-text);
@@ -241,7 +228,6 @@
     .detail-panel[data-category="text"] .detail-list-item::before {
       color: var(--color-text);
     }
-    
     .detail-panel[data-category="image"] .category-badge {
       background: var(--glow-image);
       color: var(--color-image);
@@ -249,7 +235,6 @@
     .detail-panel[data-category="image"] .detail-list-item::before {
       color: var(--color-image);
     }
-    
     .detail-panel[data-category="code"] .category-badge {
       background: var(--glow-code);
       color: var(--color-code);
@@ -257,7 +242,6 @@
     .detail-panel[data-category="code"] .detail-list-item::before {
       color: var(--color-code);
     }
-    
     .detail-panel[data-category="audio"] .category-badge {
       background: var(--glow-audio);
       color: var(--color-audio);
@@ -265,7 +249,6 @@
     .detail-panel[data-category="audio"] .detail-list-item::before {
       color: var(--color-audio);
     }
-    
     .detail-panel[data-category="video"] .category-badge {
       background: var(--glow-video);
       color: var(--color-video);
@@ -273,7 +256,6 @@
     .detail-panel[data-category="video"] .detail-list-item::before {
       color: var(--color-video);
     }
-    
     .detail-panel[data-category="data"] .category-badge {
       background: var(--glow-data);
       color: var(--color-data);
@@ -281,7 +263,6 @@
     .detail-panel[data-category="data"] .detail-list-item::before {
       color: var(--color-data);
     }
-    
     .detail-panel[data-category="other"] .category-badge {
       background: var(--glow-other, rgba(176,190,197,0.25));
       color: var(--color-other);
@@ -301,7 +282,7 @@
     
     <!-- Fehlerzustand -->
     <div class="error-state" id="errorState" style="display: none;">
-      <p>❌ Tool nicht gefunden.</p>
+      <p id="errorMessage">❌ Tool nicht gefunden.</p>
       <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;">Zurück</button>
     </div>
     
@@ -370,7 +351,7 @@
           const response = await fetch('data.json');
           if (!response.ok) throw new Error('Netzwerkfehler');
           const json = await response.json();
-          return json.tools || json; // akzeptiert beide Formate
+          return json.tools || json;
         } catch (err) {
           console.error('Fehler beim Laden von data.json:', err);
           return null;
@@ -381,20 +362,25 @@
       const urlParams = new URLSearchParams(window.location.search);
       const toolId = urlParams.get('id');
       
+      // Elemente referenzieren
       const loadingEl = document.getElementById('loadingState');
       const errorEl = document.getElementById('errorState');
+      const errorMsg = document.getElementById('errorMessage');
       const contentEl = document.getElementById('detailContent');
       const panel = document.getElementById('detailPanel');
       
-      if (!loadingEl || !errorEl || !contentEl || !panel) {
-        console.error('Kritische Elemente fehlen im DOM');
+      // Prüfen, ob die wichtigsten Container existieren
+      if (!loadingEl || !errorEl || !errorMsg || !contentEl || !panel) {
+        console.error('Kritische Container fehlen im DOM');
+        document.body.innerHTML = '<div style="color:white; padding:20px;">Ein interner Fehler ist aufgetreten (fehlende Container).</div>';
         return;
       }
       
+      // Wenn keine ID übergeben wurde
       if (!toolId) {
         loadingEl.style.display = 'none';
         errorEl.style.display = 'block';
-        errorEl.querySelector('p').textContent = '❌ Keine Tool-ID angegeben.';
+        errorMsg.textContent = '❌ Keine Tool-ID angegeben.';
         return;
       }
       
@@ -427,18 +413,16 @@
           throw new Error('Daten konnten nicht geladen werden');
         }
         
-        // Tool mit passender ID suchen
         const tool = tools.find(t => String(t.id) === String(toolId));
-        
         if (!tool) {
           throw new Error(`Tool mit ID ${toolId} nicht gefunden`);
         }
         
-        // Kategorie setzen (für Farbanimation)
+        // Kategorie setzen
         const category = tool.category || 'other';
         panel.setAttribute('data-category', category);
         
-        // Basisfelder befüllen – mit Prüfung auf Existenz
+        // Einzelne Elemente holen und prüfen
         const titleEl = document.getElementById('toolTitle');
         const descEl = document.getElementById('toolDescription');
         const catEl = document.getElementById('toolCategory');
@@ -448,19 +432,33 @@
         const providerContainer = document.getElementById('providerContainer');
         const ratingContainer = document.getElementById('ratingContainer');
         
-        if (!titleEl || !descEl || !catEl || !providerEl || !ratingEl || !linkEl || !providerContainer || !ratingContainer) {
-          console.error('Wichtige Elemente für die Anzeige fehlen');
+        // Fehlende Elemente erkennen und sichtbaren Fehler anzeigen
+        const missing = [];
+        if (!titleEl) missing.push('toolTitle');
+        if (!descEl) missing.push('toolDescription');
+        if (!catEl) missing.push('toolCategory');
+        if (!providerEl) missing.push('toolProvider');
+        if (!ratingEl) missing.push('toolRating');
+        if (!linkEl) missing.push('toolLink');
+        if (!providerContainer) missing.push('providerContainer');
+        if (!ratingContainer) missing.push('ratingContainer');
+        
+        if (missing.length > 0) {
+          console.error('Folgende Elemente fehlen:', missing);
+          loadingEl.style.display = 'none';
+          errorEl.style.display = 'block';
+          errorMsg.textContent = `❌ Technischer Fehler: Fehlende Elemente (${missing.join(', ')}).`;
           return;
         }
         
+        // Daten zuweisen
         titleEl.textContent = tool.title || 'Unbekannt';
         descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        catEl.textContent = (category.charAt(0).toUpperCase() + category.slice(1));
+        catEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
         ratingEl.textContent = tool.rating ? `★ ${tool.rating.toFixed(1)}` : '–';
         linkEl.href = tool.link || '#';
         
-        // Provider und Rating nur anzeigen, wenn vorhanden
         providerContainer.style.display = tool.provider ? 'flex' : 'none';
         ratingContainer.style.display = tool.rating ? 'flex' : 'none';
         
@@ -478,10 +476,10 @@
         console.error(err);
         loadingEl.style.display = 'none';
         errorEl.style.display = 'block';
-        errorEl.querySelector('p').textContent = '❌ ' + err.message;
+        errorMsg.textContent = '❌ ' + err.message;
       });
       
-      // Schließen-Button: zurück zur vorherigen Seite
+      // Schließen-Button
       const closeBtn = document.getElementById('closeButton');
       if (closeBtn) {
         closeBtn.addEventListener('click', function() {
