@@ -1,10 +1,9 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.3 MOBILE-OPTIMIZED
-// Organische Linien jetzt auch auf mobil sichtbar
-// - Wellen aktiv (reduzierte Komplexität)
-// - Höhere Deckkraft für bessere Sichtbarkeit
-// - Sterne, Ripples, etc. weiterhin aktiv
-// - Flüssige Performance auf allen Geräten
+// GRID SYNCHRONIZED NETWORK V13.4 MOBILE-OPTIMIZED
+// Ruhige, organische Linien – reduziertes Zappeln
+// - Wellenamplitude auf mobil halbiert (4 statt 8)
+// - Langsamere zeitliche Bewegung
+// - Sanftere Übergänge, weniger hektisch
 // =========================================
 
 (function() {
@@ -107,13 +106,13 @@
           maxSecondaryConnections: 1,
           maxBridgeConnections: 2,
           hoverSpeed: 0.30,
-          baseOpacity: 0.45, // erhöht für bessere Sichtbarkeit
+          baseOpacity: 0.45,
           glowOpacity: 0.50,
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 400,
-          // Mobile-schonende organische Wellen
-          enableWaves: true,           // Wellen aktiv!
+          // Mobile-schonende organische Wellen – ruhiger!
+          enableWaves: true,
           enableGlitch: false,
           enableStars: true,
           enableRipples: true,
@@ -121,7 +120,9 @@
           enableVariableWidth: false,
           starCount: 50,
           waveComplexity: 1,            // nur eine Grundwelle
-          organicNoise: 0               // kein Rauschen für Performance
+          organicNoise: 0,               // kein Rauschen
+          waveAmplitude: 4,              // halbe Amplitude = ruhiger
+          waveSpeed: 0.001                // langsamere Bewegung
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -149,7 +150,9 @@
           starCount: 100,
           glitchProbability: 0.01,
           waveComplexity: 2,
-          organicNoise: 0.3
+          organicNoise: 0.3,
+          waveAmplitude: 6,
+          waveSpeed: 0.0015
         };
       } else {
         this.settings = {
@@ -177,7 +180,9 @@
           starCount: 200,
           glitchProbability: 0.02,
           waveComplexity: 3,
-          organicNoise: 0.4
+          organicNoise: 0.4,
+          waveAmplitude: 8,
+          waveSpeed: 0.002
         };
       }
 
@@ -216,7 +221,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.3 MOBILE-OPTIMIZED');
+      console.log('🚀 GridSynchronizedNetwork v13.4 MOBILE-OPTIMIZED (ruhige Wellen)');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -721,7 +726,7 @@
       return gradient;
     }
 
-    // Organische wellenförmige Linie (für mobile mit reduzierter Komplexität)
+    // Organische wellenförmige Linie – ruhigere Version
     drawWavyLine(from, to, lineWidth, strokeStyle) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
@@ -730,34 +735,31 @@
       
       const dirX = dx / dist;
       const dirY = dy / dist;
-      const perpX = -dirY * 8;
-      const perpY = dirX * 8;
+      const amplitude = this.settings.waveAmplitude || 4;
+      const perpX = -dirY * amplitude;
+      const perpY = dirX * amplitude;
 
-      // Je nach Komplexität unterschiedlich viele Frequenzen
-      const phase1 = Math.random() * Math.PI * 2;
-      let wave;
+      // Feste Phasen für jede Linie (damit sie nicht alle gleich aussehen, aber nicht zu zufällig)
+      const phase = Math.random() * Math.PI * 2;
+      // Zeitfaktor für langsame Bewegung
+      const timeFactor = this.settings.waveSpeed || 0.001;
 
       this.ctx.beginPath();
       this.ctx.moveTo(from.x, from.y);
 
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
-        const ease = Math.sin(t * Math.PI);
-        const amp = ease * 8;
+        const ease = Math.sin(t * Math.PI); // weicher Ein-/Auslauf
+        const amp = ease * amplitude;
 
+        // Einfache Sinuswelle (bei Komplexität 1) oder gemischt
+        let wave;
         if (this.settings.waveComplexity >= 2) {
-          const phase2 = Math.random() * Math.PI * 2;
-          const w1 = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1) * 0.7;
-          const w2 = Math.sin(t * Math.PI * 2.3 + this.glowTime * 0.003 + phase2) * 0.5;
+          const w1 = Math.sin(t * Math.PI * 3 + this.glowTime * timeFactor + phase) * 0.7;
+          const w2 = Math.sin(t * Math.PI * 1.8 + this.glowTime * timeFactor * 1.2 + phase * 1.3) * 0.5;
           wave = (w1 + w2) / 1.2;
         } else {
-          // Einfache Welle (für mobile)
-          wave = Math.sin(t * Math.PI * 4 + this.glowTime * 0.002 + phase1);
-        }
-
-        if (this.settings.organicNoise > 0) {
-          const noise = (Math.random() * 2 - 1) * this.settings.organicNoise;
-          wave += noise;
+          wave = Math.sin(t * Math.PI * 3 + this.glowTime * timeFactor + phase);
         }
 
         const offsetX = perpX * wave;
@@ -1055,7 +1057,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v13.3 MOBILE-OPTIMIZED');
+    console.group('🚀 Color Flow v13.4 MOBILE-OPTIMIZED (ruhige Wellen)');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
