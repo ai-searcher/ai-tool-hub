@@ -1333,159 +1333,42 @@ body {
   }
 }
 
+
 /* ==================== SCHWEBEEFFEKT ==================== */
 
 /* Breathing-Animation - Definition */
-@@keyframes breathing {
+@keyframes breathing {
   0%, 100% {
+    transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(99, 102, 241, 0.18);
+    transform: scale(1.055);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.18);
   }
 }
 
-/* Breathing auf alle Quadrate - höhere Specificity */
+/* Breathing auf alle Quadrate */
 #tool-grid .card-square,
 .tool-grid-squares .card-square {
   animation: breathing 8s ease-in-out infinite !important;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.35s ease !important;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.35s ease !important;
 }
 
-/* Puls-Effekt: Ungerade Quadrate atmen sanft */
-#tool-grid .card-square:nth-child(odd), 
+/* Variationen */
+#tool-grid .card-square:nth-child(odd),
 .tool-grid-squares .card-square:nth-child(odd) {
   animation-timing-function: ease-in-out !important;
 }
 
-/* Puls-Effekt: Gerade Quadrate atmen pulsierend (wie Herzschlag) */
-#tool-grid .card-square:nth-child(even), 
+#tool-grid .card-square:nth-child(even),
 .tool-grid-squares .card-square:nth-child(even) {
   animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
-}
-
-/* Chaotische Breathing-Rhythmen - extreme Variation */
-#tool-grid .card-square:nth-child(1), 
-.tool-grid-squares .card-square:nth-child(1)  { 
-  animation-delay: 0s !important; 
-  animation-duration: 9.2s !important; 
-}
-
-#tool-grid .card-square:nth-child(2), 
-.tool-grid-squares .card-square:nth-child(2)  { 
-  animation-delay: 1.3s !important; 
-  animation-duration: 5.7s !important; 
-}
-
-#tool-grid .card-square:nth-child(3), 
-.tool-grid-squares .card-square:nth-child(3)  { 
-  animation-delay: 3.8s !important; 
-  animation-duration: 10.4s !important; 
-}
-
-#tool-grid .card-square:nth-child(4), 
-.tool-grid-squares .card-square:nth-child(4)  { 
-  animation-delay: 0.6s !important; 
-  animation-duration: 6.3s !important; 
-}
-
-#tool-grid .card-square:nth-child(5), 
-.tool-grid-squares .card-square:nth-child(5)  { 
-  animation-delay: 5.1s !important; 
-  animation-duration: 8.9s !important; 
-}
-
-#tool-grid .card-square:nth-child(6), 
-.tool-grid-squares .card-square:nth-child(6)  { 
-  animation-delay: 2.4s !important; 
-  animation-duration: 11.2s !important; 
-}
-
-#tool-grid .card-square:nth-child(7), 
-.tool-grid-squares .card-square:nth-child(7)  { 
-  animation-delay: 4.7s !important; 
-  animation-duration: 5.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(8), 
-.tool-grid-squares .card-square:nth-child(8)  { 
-  animation-delay: 1.9s !important; 
-  animation-duration: 9.8s !important; 
-}
-
-#tool-grid .card-square:nth-child(9), 
-.tool-grid-squares .card-square:nth-child(9)  { 
-  animation-delay: 6.2s !important; 
-  animation-duration: 6.7s !important; 
-}
-
-#tool-grid .card-square:nth-child(10), 
-.tool-grid-squares .card-square:nth-child(10) { 
-  animation-delay: 3.3s !important; 
-  animation-duration: 10.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(11), 
-.tool-grid-squares .card-square:nth-child(11) { 
-  animation-delay: 0.8s !important; 
-  animation-duration: 7.4s !important; 
-}
-
-#tool-grid .card-square:nth-child(12), 
-.tool-grid-squares .card-square:nth-child(12) { 
-  animation-delay: 5.6s !important; 
-  animation-duration: 8.2s !important; 
-}
-
-#tool-grid .card-square:nth-child(13), 
-.tool-grid-squares .card-square:nth-child(13) { 
-  animation-delay: 2.1s !important; 
-  animation-duration: 11.6s !important; 
-}
-
-#tool-grid .card-square:nth-child(14), 
-.tool-grid-squares .card-square:nth-child(14) { 
-  animation-delay: 4.4s !important; 
-  animation-duration: 5.9s !important; 
-}
-
-#tool-grid .card-square:nth-child(15), 
-.tool-grid-squares .card-square:nth-child(15) { 
-  animation-delay: 6.8s !important; 
-  animation-duration: 9.5s !important; 
-}
-
-#tool-grid .card-square:nth-child(16), 
-.tool-grid-squares .card-square:nth-child(16) { 
-  animation-delay: 1.5s !important; 
-  animation-duration: 7.1s !important; 
-}
-
-#tool-grid .card-square:nth-child(17), 
-.tool-grid-squares .card-square:nth-child(17) { 
-  animation-delay: 3.6s !important; 
-  animation-duration: 10.8s !important; 
-}
-
-#tool-grid .card-square:nth-child(18), 
-.tool-grid-squares .card-square:nth-child(18) { 
-  animation-delay: 5.3s !important; 
-  animation-duration: 6.5s !important; 
-}
-
-#tool-grid .card-square:nth-child(19), 
-.tool-grid-squares .card-square:nth-child(19) { 
-  animation-delay: 0.3s !important; 
-  animation-duration: 8.7s !important; 
-}
-
-#tool-grid .card-square:nth-child(20), 
-.tool-grid-squares .card-square:nth-child(20) { 
-  animation-delay: 4.1s !important; 
-  animation-duration: 9.3s !important; 
 }
 
 /* Desktop: Hover-Effekt */
@@ -1494,15 +1377,16 @@ body {
   .tool-grid-squares .card-square:hover {
     animation: none !important;
     transform: translateY(-8px) scale(1.03) !important;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5),
-                0 0 40px rgba(99, 102, 241, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.12) !important;
+    box-shadow:
+      0 16px 32px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(99, 102, 241, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.12) !important;
     border-color: rgba(99, 102, 241, 0.4) !important;
   }
 
   #tool-grid .card-square:hover .context-marquee .marquee-track,
   .tool-grid-squares .card-square:hover .context-marquee .marquee-track {
-    animation-duration: 15s !important;
+    animation-duration: 28s !important;
   }
 
   #tool-grid .card-square:hover .square-category-badge,
@@ -1518,48 +1402,25 @@ body {
   }
 }
 
-/* Mobile: Touch/Tap-Effekt */
+/* Mobile: Tap-Effekt */
 @media (max-width: 767px) {
   #tool-grid .card-square:active,
   .tool-grid-squares .card-square:active {
     transform: scale(1.08) !important;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(99, 102, 241, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+    box-shadow:
+      0 12px 24px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(99, 102, 241, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
     border-color: rgba(99, 102, 241, 0.3) !important;
   }
 
   #tool-grid .card-square:active .context-marquee .marquee-track,
   .tool-grid-squares .card-square:active .context-marquee .marquee-track {
-    animation-duration: 15s !important;
-  }
-
-  #tool-grid .card-square:active .square-category-badge,
-  .tool-grid-squares .card-square:active .square-category-badge {
-    background: rgba(99, 102, 241, 0.25) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
-    transform: scale(1.05) !important;
-  }
-
-  #tool-grid .card-square:active .square-title-large,
-  .tool-grid-squares .card-square:active .square-title-large {
-    color: rgba(255, 255, 255, 1) !important;
+    animation-duration: 18s !important;
   }
 }
 
-/* Force breathing animation on cards (unless user prefers reduced motion) */
-@media (prefers-reduced-motion: no-preference) {
-  .tool-grid-squares .card-square,
-  #tool-grid .card-square {
-    animation-name: breathing !important;
-    animation-duration: 8s !important;
-    animation-timing-function: ease-in-out !important;
-    animation-iteration-count: infinite !important;
-    animation-play-state: running !important;
-  }
-}
-
-/* Accessibility: prefers-reduced-motion (high priority) */
+/* prefers-reduced-motion: reduce (high priority) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1569,9 +1430,8 @@ body {
     transition-duration: 0.01ms !important;
   }
 
-  /* Disable breathing for reduced-motion users */
-  .tool-grid-squares .card-square,
-  #tool-grid .card-square {
+  #tool-grid .card-square,
+  .tool-grid-squares .card-square {
     animation: none !important;
     transition: none !important;
   }
@@ -1582,10 +1442,8 @@ body {
 
 /* =========================================
    TOUCH FEEDBACK - App.js Button Fix
-   Passt perfekt zum SCHWEBEEFFEKT oben
    ========================================= */
 
-/* 🆕 Touch Active State für Mobile (JavaScript-triggered) */
 .card-square.card-touch-active,
 .card-touch-active {
   transform: scale(0.98) !important;
@@ -1593,39 +1451,23 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* 🆕 Optimierte Hover States nur für Geräte mit präzisem Pointer (Desktop) */
-@media (hover: hover) and (pointer: fine) {
-  .card-square:hover {
-    /* Bereits oben definiert - keine Änderung nötig */
-  }
-}
-
-/* 🆕 Touch Devices: Hover-Styles deaktivieren */
+/* Touch Devices: Hover-Styles sauber halten */
 @media (hover: none) {
   .card-square:hover {
-    /* Lässt den Touch-Active State von oben arbeiten */
     animation: breathing 8s ease-in-out infinite !important;
     transform: scale(1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 }
 
-/* 🆕 Focus States für Keyboard Navigation */
+/* Focus States */
 .card-square:focus-visible {
   outline: 2px solid rgba(0, 243, 255, 0.5);
   outline-offset: 2px;
+  z-index: 101;
 }
 
-/* 🆕 Armed State (wenn JavaScript Card aktiviert) */
-.card-square.card-armed {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4),
-              0 0 30px rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.3);
-}
-
-/* 🆕 Prevent double-tap zoom on iOS */
+/* Prevent double-tap zoom on iOS */
 .card-square,
 .card-overlay-link,
 button,
@@ -1635,63 +1477,9 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 🆕 Smooth Transitions für alle Card States */
-.card-square {
-  transition: 
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.35s ease,
-    opacity 0.2s ease;
-  /* Wird vom breathing überschrieben wenn aktiv */
-}
 
-/* =========================================
-   END TOUCH FEEDBACK
-   ========================================= */
-
-
-/* ==================== ACCESSIBILITY ... */
-
-
-/* Focus Styles */
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  :root {
-    --border: #4A4E67;
-    --text-dim: #C0C0D0;
-  }
-}
-
-/* PRINT */
-@media print {
-  .header,
-  .footer,
-  .search-wrapper,
-  .stats-bar {
-    display: none;
-  }
-
-  .tool-grid {
-    display: block;
-  }
-
-  .card {
-    page-break-inside: avoid;
-    margin-bottom: 1rem;
-  }
-  
-}
-  
-  /* =========================
+/* =========================
    Card Visual Upgrade Pack
-   (Paste at end of style.css)
    ========================= */
 
 /* Soft gradient border + glass body */
@@ -1701,49 +1489,32 @@ a:focus-visible {
   border-radius: 20px;
   padding: 18px;
   box-shadow:
-    0 6px 20px rgba(2,12,30,0.45),      /* deeper shadow */
-    inset 0 1px 0 rgba(255,255,255,0.02);/* subtle inner */
-  overflow: visible; /* allow glow */
-  transition: transform 260ms cubic-bezier(.22,1,.36,1), box-shadow 220ms ease, border-color 220ms ease;
+    0 6px 20px rgba(2,12,30,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.02);
+  overflow: visible;
+  transition:
+    transform 260ms cubic-bezier(.22,1,.36,1),
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    opacity 0.2s ease;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
-/* Gradient outline using pseudo-element for visual-upgrade only */
-.card-square.visual-upgrade::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, rgba(0,243,255,0.06), rgba(124,77,255,0.04), rgba(0,243,255,0.06));
-  padding: 1px;
-    -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  /* WebKit expects xor, spec uses 'exclude' - keep both for max compatibility */
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  /* NOTE: If you see missing gradient-outline in Firefox, consider alternative approach or fallback background */
-  pointer-events: none;
+/* Optional: disable pseudo borders if they created "lines" on cards */
+.card-square::before,
+.card-square::after {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
-/* make content sit above pseudo border */
+/* Content sits above */
 .card-square > .square-content-centered { position: relative; z-index: 2; }
 
-/* === FINAL: Kein harter Rahmen beim Tap/Klick === */
-.card-square:active,
-.card-square.card-armed {
-  box-shadow:
-    0 18px 46px rgba(0,20,40,0.45),
-    0 0 26px rgba(0,243,255,0.10) !important; /* weich, kein "Rand-Quadrat" */
-  border-color: rgba(255,255,255,0.10) !important;
-}
-
-
-/* CATEGORY: small, flat, left-aligned badge */
+/* CATEGORY badge */
 .square-category-badge {
-  background: transparent; /* keep transparent base */
+  background: transparent;
   color: currentColor;
   padding: 8px 18px;
   border-radius: 999px;
@@ -1752,142 +1523,185 @@ a:focus-visible {
   letter-spacing: 0.08em;
   box-shadow: none;
   align-self: flex-start;
-  transform: translateY(0);
-  transition: transform 180ms ease, opacity 180ms ease;
   z-index: 3;
 }
 
-/* Tool title sits lower and separated from category */
-.square-title-large {
-  margin: 4px 0 6px 7px;   /* 2mm höher (12→4) + 3mm weiter links (18→7) */
+/* Tool title: 2mm höher + 3mm nach links */
+.card-square .square-title-large {
+  margin: 12px 0 6px 18px;
   font-size: 1.15rem;
   line-height: 1.18;
   color: var(--text-primary);
   max-width: calc(100% - 36px);
   word-break: break-word;
   text-wrap: balance;
+  transform: translate(-11px, -8px) !important;
   transition: color 160ms ease, transform 200ms ease;
 }
 
-/* Marquee: ensure it spans the available width and not clipped */
-.context-marquee {
-  width: calc(100% - 36px); /* align with content padding */
-  margin: 8px 18px 0 18px;
-  height: 26px;
-  overflow: hidden;
-  position: relative;
-  pointer-events: none;
-  z-index: 2;
+/* Mobile sizing */
+@media (max-width: 767px) {
+  .card-square { padding: 14px; border-radius: 14px; }
+  .card-square .square-title-large { font-size: 1rem; }
 }
 
-/* marquee track sized to content; two copies ensure infinite feel */
+
+
+/* ====================
+   NOTIFICATIONS (HIDE DEV BADGES)
+   ==================== */
+#debug-badge,
+.app-notice,
+.app-toast,
+.site-notice,
+.toast,
+.notice,
+.notification-bubble {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* =========================
+   MARQUEE (ONE CLEAN BLOCK)
+   ========================= */
+
+:root { --marquee-overscan: 20px; }
+
+/* Basis Marquee */
+.context-marquee {
+  position: relative;
+  width: 100%;
+  height: 22px;
+  overflow: hidden;
+  margin: 0;
+  pointer-events: none;
+  align-self: stretch;
+  flex-shrink: 0;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+/* Card-Specific: fixierte Position (transparent) */
+.card-square .context-marquee {
+  position: absolute !important;
+  left: 14px !important;
+  right: 14px !important;
+  bottom: 11px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  border-bottom-left-radius: inherit !important;
+  border-bottom-right-radius: inherit !important;
+}
+
+/* Track */
 .context-marquee .marquee-track {
   display: inline-flex;
-  gap: 2.5rem;
   white-space: nowrap;
-  align-items: center;
   will-change: transform;
-  animation: elegantMarqueeFlow 18s linear infinite;
+  animation: marqueeLoop 20s linear infinite;
+  transform: translateZ(0);
 }
 
-/* ensure each sequence is not clipped: min-width helps on short content */
+/* Sequence */
 .context-marquee .marquee-seq {
   display: inline-block;
-  min-width: 40%;
-  font-size: 0.72rem;
+  padding-right: 3.5rem;
+  font-size: 0.68rem;
+  font-weight: 500;
   color: rgba(255,255,255,0.78);
   letter-spacing: 0.02em;
-  line-height: 26px;
+  line-height: 22px;
+  pointer-events: none;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-/* side fading (preserve existing mask) */
+/* Entferne Fade-Overlays (falls vorhanden) */
 .context-marquee::before,
 .context-marquee::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 36px;
-  pointer-events: none;
-  z-index: 3;
-}
-.context-marquee::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-card), transparent);
-}
-.context-marquee::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-card), transparent);
+  display: none !important;
+  content: none !important;
 }
 
-/* smoother slower on hover */
-.card-square:hover .context-marquee .marquee-track { animation-duration: 28s; }
-
-/* ensure marquee stops for reduced-motion users */
-@media (prefers-reduced-motion: reduce) {
-  .context-marquee .marquee-track { animation: none !important; transform: translateX(0) !important; }
-}
-
-/* marquee keyframes: translateX from 0 to -50% so two copies loop */
-@keyframes elegantMarqueeFlow {
+/* Animation */
+@keyframes marqueeLoop {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-
-/* focus styles (keyboard) - FIX */
-.card-square:focus {
-  outline: none !important;              /* klickt man → kein großes Viereck */
+/* Pause bei Focus */
+.card-square:focus-within .context-marquee .marquee-track,
+.card-square.card-armed .context-marquee .marquee-track {
+  animation-play-state: paused !important;
 }
 
-/* nur Tastatur: Fokus sichtbar, aber klein */
-.card-square:focus-visible {
-  outline: 2px solid rgba(0,243,255,0.35) !important;
-  outline-offset: 2px !important;
-}
-
-
-/* clamp description to avoid pushing the badge/title */
-.square-description {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .context-marquee .marquee-track { animation: none !important; transform: translateX(0) !important; }
 }
 
 @media (max-width: 767px) {
-  .card-square { padding: 14px; border-radius: 14px; }
-  .square-title-large { margin-left: 12px; font-size: 1rem; }
-  .context-marquee { margin: 0 !important; height: 21px; }  /* ← KEIN margin-left/right! */
+  .context-marquee { height: 21px !important; }
+  .context-marquee .marquee-seq { font-size: 0.66rem !important; padding-right: 2rem !important; line-height: 21px !important; }
+  .card-square .context-marquee { left: 24px !important; right: 24px !important; bottom: 11px !important; }
+  .context-marquee .marquee-track { animation-duration: 18s !important; }
 }
 
 
-/* Misc safe rules kept as in original */
-/* End of corrected file */
+/* ====================
+   ACCESSIBILITY & PRINT
+   ==================== */
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --border: #4A4E67;
+    --text-dim: #C0C0D0;
+  }
+}
+
+@media print {
+  .header,
+  .footer,
+  .search-wrapper,
+  .stats-bar { display: none; }
+
+  .tool-grid { display: block; }
+
+  .card { page-break-inside: avoid; margin-bottom: 1rem; }
+}
+
 
 /* ==================== SMART COLOR FLOW SYSTEM ==================== */
 
-
-
-/* Connection Active State — etwas niedriger als FAB */
 .card-square.connection-active {
   transform: translateY(-6px) scale(1.05) !important;
   box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5) !important;
-  z-index: 900 !important; /* bleibt hoch, aber unter FAB */
+  z-index: 900 !important;
   position: relative;
 }
 
-/* ensure toggle button can be clicked */
-.legend-toggle {
-  pointer-events: auto;
-}
+.legend-toggle { pointer-events: auto; }
 
-/* Connection Labels */
 .connection-labels {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -1941,12 +1755,12 @@ a:focus-visible {
   font-size: 0.7rem;
 }
 
-/* Floating Legend Button — zwingend oben */
+/* Floating Legend Button */
 .color-legend-fab {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  z-index: 2100 !important; /* deutlich über 1000 */
+  z-index: 2100 !important;
   pointer-events: auto;
 }
 
@@ -1954,9 +1768,9 @@ a:focus-visible {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, 
-    rgb(0,243,255) 0%, 
-    rgb(236,72,153) 50%, 
+  background: linear-gradient(135deg,
+    rgb(0,243,255) 0%,
+    rgb(236,72,153) 50%,
     rgb(250,204,21) 100%);
   border: none;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
@@ -1966,10 +1780,7 @@ a:focus-visible {
   justify-content: center;
   transition: transform 0.3s ease;
 }
-
-.legend-toggle:active {
-  transform: scale(0.95);
-}
+.legend-toggle:active { transform: scale(0.95); }
 
 .legend-icon {
   font-size: 1.8rem;
@@ -1986,19 +1797,13 @@ a:focus-visible {
   border-radius: 24px 24px 0 0;
   transform: translateY(100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2300 !important; /* sits above cards and FAB */
+  z-index: 2300 !important;
   max-height: 70vh;
   overflow-y: auto;
   box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
 }
 
-.color-legend-panel.active {
-  transform: translateY(0);
-}
-
-.legend-content {
-  padding: 0;
-}
+.color-legend-panel.active { transform: translateY(0); }
 
 .legend-header {
   display: flex;
@@ -2015,9 +1820,7 @@ a:focus-visible {
 .legend-header h3 {
   font-size: 1.3rem;
   font-weight: 700;
-  background: linear-gradient(90deg, 
-    rgb(0,243,255), 
-    rgb(236,72,153));
+  background: linear-gradient(90deg, rgb(0,243,255), rgb(236,72,153));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2038,13 +1841,9 @@ a:focus-visible {
   line-height: 1;
 }
 
-.legend-body {
-  padding: 20px;
-}
+.legend-body { padding: 20px; }
 
-.legend-section {
-  margin-bottom: 24px;
-}
+.legend-section { margin-bottom: 24px; }
 
 .legend-section h4 {
   font-size: 0.9rem;
@@ -2069,23 +1868,15 @@ a:focus-visible {
   position: relative;
 }
 
-.legend-line.solid {
-  background: currentColor;
-}
+.legend-line.solid { background: currentColor; }
 
 .legend-line.dashed {
-  background: linear-gradient(90deg, 
-    currentColor 0%, 
-    currentColor 50%, 
-    transparent 50%, 
-    transparent 100%);
+  background: linear-gradient(90deg, currentColor 0%, currentColor 50%, transparent 50%, transparent 100%);
   background-size: 8px 3px;
 }
 
 .legend-line.dotted {
-  background: radial-gradient(circle, 
-    currentColor 40%, 
-    transparent 40%);
+  background: radial-gradient(circle, currentColor 40%, transparent 40%);
   background-size: 6px 3px;
   background-position: 0 center;
 }
@@ -2096,7 +1887,7 @@ a:focus-visible {
   font-weight: 500;
 }
 
-/* Onboarding Toast */
+/* Onboarding Toast (used by JS) */
 .onboarding-toast {
   position: fixed;
   top: 80px;
@@ -2107,7 +1898,6 @@ a:focus-visible {
   z-index: 200;
   max-width: 90%;
 }
-
 .onboarding-toast.visible {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
@@ -2124,333 +1914,73 @@ a:focus-visible {
   gap: 12px;
 }
 
-.toast-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-}
+.toast-icon { font-size: 1.8rem; flex-shrink: 0; }
 
-.toast-text {
-  flex: 1;
-}
-
+.toast-text { flex: 1; }
 .toast-text strong {
   color: var(--primary);
   font-size: 1rem;
   display: block;
   margin-bottom: 4px;
 }
-
-.toast-text small {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-}
+.toast-text small { color: var(--text-secondary); font-size: 0.85rem; }
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
-  .color-legend-fab {
-    bottom: 16px;
-    right: 16px;
-  }
-  
-  .legend-toggle {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .legend-icon {
-    font-size: 1.5rem;
-  }
-  
-  .connection-label {
-    max-width: 140px;
-  }
-  
-  .label-content {
-    padding: 6px 10px;
-    min-width: 100px;
-  }
+  .color-legend-fab { bottom: 16px; right: 16px; }
+  .legend-toggle { width: 48px; height: 48px; }
+  .legend-icon { font-size: 1.5rem; }
+  .connection-label { max-width: 140px; }
+  .label-content { padding: 6px 10px; min-width: 100px; }
 }
 
-/* ==================== END SMART COLOR FLOW ==================== */
-
-/* ================= MARQUEE & NOTIFICATION TWEAKS ================= */
-
-/* ===== 1) NOTICES / DEBUG BADGES AUSBLENDEN ===== */
-#debug-badge,
-.app-notice,
-.app-toast,
-.onboarding-toast,
-.site-notice,
-.toast,
-#app-notice,
-.notification-bubble,
-.notice,
-[class*="toast"],
-[class*="notice"][role="status"],
-[id^="debug"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-
-/* ===== 2) MARQUEE IN DER CARD: IMMER GLEICHE POSITION, KEIN CONTAINER ===== */
-/* WICHTIG: wir stylen NUR .context-marquee in der Card – kein extra .marquee-container nötig */
-
-/* Grundlayout (Desktop/Default) */
-.card-square { position: relative; } /* safe, falls nicht schon gesetzt */
-
-.card-square .context-marquee {
-  position: absolute !important;
-  left: 4px !important;     /* nahezu rand-bis-rand */
-  right: 4px !important;
-  bottom: 4px !important;   /* konstante Position */
-  height: 22px !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-}
-
-/* Track & Text: transparent, nur Text sichtbar */
-.card-square .context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  align-items: center !important;
-  will-change: transform !important;
-  animation: elegantMarqueeFlow 15s linear infinite !important;
-  transform: translateZ(0) !important;
-}
-
-.card-square .context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-
-  padding-left: 0 !important;
-  padding-right: 2rem !important; /* Abstand nur zur Wiederholung */
-  min-width: 40% !important;
-  pointer-events: none !important;
-}
-
-/* Side-fade Overlays AUS (die erzeugen oft sichtbare Balken) */
-.card-square .context-marquee::before,
-.card-square .context-marquee::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* ===== 3) MOBILE TWEAKS ===== */
-@media (max-width: 767px) {
-  .card-square .context-marquee {
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    height: 21px !important;
-  }
-
-  .card-square .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    min-width: 45% !important;
-  }
-}
-
-/* ===== 4) ACCESSIBILITY: reduce-motion respektieren ===== */
-@media (prefers-reduced-motion: reduce) {
-  .card-square .context-marquee .marquee-track {
-    animation: none !important;
-    transform: translateX(0) !important;
-  }
-}
-
-/* ===== 5) HEADER OVERLAY LINKS NEUTRALISIEREN (nur wenn du wirklich so ein Overlay hast) ===== */
-.header a.card-overlay-link,
-.header a.header-overlay,
-.header .overlay-link {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
 
 /* =========================================
-   COLOR FLOW Z-INDEX FIX (CLEAN)
-   - Canvas unter Grid, Cards darüber
+   COLOR FLOW Z-INDEX FIX
    ========================================= */
 
-/* Canvas sitzt im Container unter dem Grid */
-.main .container {
-  position: relative !important; /* nötig für absolute canvas */
-}
-
-/* Canvas: immer unter Cards, blockiert keine Klicks */
 .connection-canvas {
   position: absolute !important;
-  inset: 0 !important;            /* top/right/bottom/left:0 */
-  width: 100% !important;
-  height: 100% !important;
-  pointer-events: none !important;
   z-index: 1 !important;
+  pointer-events: none !important;
+  top: 0;
+  left: 0;
 }
 
-/* Grid über Canvas */
 #tool-grid {
   position: relative !important;
   z-index: 2 !important;
 }
 
-/* Cards über Grid (für Hover/Active/Focus) */
-.card-square {
-  position: relative !important;
-  z-index: 10 !important;
-}
+.card-square { z-index: 10 !important; }
 
-/* ================================================
-   FIX: Keine "Linie" / Pseudo-Layer bei Hover/Klick
-   (nur auf Interaktion, nicht dauerhaft)
-   ================================================ */
+.main .container { position: relative !important; }
 
-.card-square:hover::before,
-.card-square:active::before,
-.card-square.card-armed::before {
-  opacity: 0 !important;
-  filter: none !important;
-  box-shadow: none !important;
-}
 
-.card-square:hover::after,
-.card-square:active::after,
-.card-square.card-armed::after {
-  opacity: 0 !important;
-  filter: none !important;
-  box-shadow: none !important;
-}
+/* ========================================
+   TOOL MODAL - GUARANTEED VISIBLE
+   ======================================== */
 
-/* =========================================
-   MARQUEE (SINGLE SOURCE OF TRUTH)
-   - gleiche Position auf allen Cards
-   - transparent, kein Container sichtbar
-   ========================================= */
-
-.context-marquee {
-  position: absolute !important;
-  left: 14px !important;
-  right: 14px !important;
-  bottom: 11px !important;
-  height: 22px !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-
-  pointer-events: none !important;
-  z-index: 2 !important;
-
-  /* verhindert sichtbare "Mask Bars" */
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
-}
-
-/* Track */
-.context-marquee .marquee-track {
-  display: inline-flex !important;
-  white-space: nowrap !important;
-  align-items: center !important;
-  will-change: transform !important;
-  animation: marqueeLoop 20s linear infinite !important;
-  transform: translateZ(0) !important;
-}
-
-/* Text */
-.context-marquee .marquee-seq {
-  display: inline-block !important;
-  background: transparent !important;
-  box-shadow: none !important;
-
-  color: rgba(255,255,255,0.78) !important;
-  font-size: 0.72rem !important;
-  line-height: 22px !important;
-
-  padding: 0 1.5rem !important;
-  min-width: 40% !important;
-
-  pointer-events: none !important;
-}
-
-/* Keine Fade Overlays */
-.context-marquee::before,
-.context-marquee::after {
+#tool-modal {
   display: none !important;
-  content: none !important;
-  opacity: 0 !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* Animation */
-@keyframes marqueeLoop {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+#tool-modal.open { display: flex !important; }
 
-/* Hover langsamer */
-@media (hover:hover) and (pointer:fine) {
-  .card-square:hover .context-marquee .marquee-track {
-    animation-duration: 28s !important;
-  }
-}
-
-/* Mobile tuning */
-@media (max-width: 767px) {
-  .context-marquee {
-    left: 12px !important;
-    right: 12px !important;
-    bottom: 11px !important;
-    height: 21px !important;
-  }
-
-  .context-marquee .marquee-seq {
-    font-size: 0.66rem !important;
-    line-height: 21px !important;
-    padding: 0 2rem 0 0 !important; /* Abstand zur Wiederholung */
-    min-width: 45% !important;
-  }
-
-  .context-marquee .marquee-track {
-    animation-duration: 18s !important;
-  }
-}
-
-/* Accessibility */
-.card-square:focus-within .context-marquee .marquee-track,
-.card-square.card-armed .context-marquee .marquee-track {
-  animation-play-state: paused !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .context-marquee .marquee-track {
-    animation: none !important;
-    transform: translateX(0) !important;
-  }
-}
-
-/* === FINAL OVERRIDE: Tool-Titel exakt positionieren === */
-#tool-grid .card-square .square-title-large,
-.tool-grid-squares .card-square .square-title-large,
-.card-square .square-title-large {
-  transform: translate(-11px, -8px) !important; /* 3mm links, 2mm höher */
+#tool-modal .modal-box {
+  background: #0f1224 !important;
+  border-radius: 14px !important;
+  padding: 24px !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+  position: relative !important;
+  z-index: 10000 !important;
 }
