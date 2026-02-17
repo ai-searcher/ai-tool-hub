@@ -23,24 +23,24 @@
         "Kontext: Ideal für Research-Drafts, Prototyping und Support-Automatisierung. Ähnlich zu: Claude, Gemini — empfohlen, wenn Vielseitigkeit wichtiger ist als spezialisierte Multimodalität."
       ],
       "strengths": [
-        "Versteht komplexe Anfragen und führt natürliche Gespräche",
-        "Hilft beim Schreiben, Brainstorming und Übersetzen",
-        "Kann Code erklären und einfache Programme schreiben"
+        "Brauchte nur 5 Tage, um die erste Million Nutzer zu erreichen – heute nutzen es über 400 Millionen Menschen pro Woche.",
+        "Beherrscht über 95 Sprachen, inklusive Schweizerdeutsch und Platt – du kannst also auf Deutsch, Englisch oder sogar im Dialekt chatten.",
+        "Der Plus-Abo-Umsatz lag 2024 bei 2,7 Milliarden Dollar – zeigt, wie stark das Tool in Unternehmen verankert ist."
       ],
       "useCases": [
-        "Texte verfassen und überarbeiten (E-Mails, Blogartikel, Berichte)",
-        "Ideen sammeln und strukturieren",
-        "Fragen zu verschiedensten Themen beantworten"
+        "Texte verfassen und überarbeiten (E-Mails, Blogartikel, Bewerbungen) – ChatGPT hilft dir, den richtigen Ton zu treffen.",
+        "Ideenfindung: Lass dir 10 Namensvorschläge für dein neues Projekt geben oder skizziere einen Businessplan.",
+        "Programmierhilfe: Verständliche Erklärungen zu Code-Fehlern oder das Schreiben von kleinen Skripten – ideal zum Lernen."
       ],
       "promptExamples": [
         "Schreibe eine freundliche E-Mail an einen Kunden, der sich über eine Lieferverzögerung beschwert hat.",
-        "Erkläre mir die Funktionsweise von Quantencomputern so, als wäre ich 12 Jahre alt.",
-        "Gib mir 10 kreative Namen für einen neuen Smoothie-Laden."
+        "Erkläre mir die Quantenphysik so, als wäre ich 12 Jahre alt – mit einfachen Worten und Alltagsbeispielen.",
+        "Gib mir fünf kreative Namen für einen veganen Burger-Laden und entwirf dazu einen kurzen Slogan."
       ],
       "promptTips": [
-        "Sei so konkret wie möglich – je mehr Kontext, desto besser die Antwort.",
-        "Gib eine Rolle vor: ‚Du bist ein erfahrener Marketingexperte…‘",
-        "Frage nach Alternativen oder verschiedenen Stilen, um mehrere Optionen zu erhalten."
+        "Sei konkret: Statt „Schreib etwas über Hunde“ besser „Erkläre einem Kind die drei beliebtesten Hunderassen in je zwei Sätzen“.",
+        "Gib eine Rolle vor: „Du bist ein erfahrener Marketingleiter und sollst eine Produktankündigung verfassen.“",
+        "Nutze den „Code-Interpreter“ in der Plus-Version, um Datenanalysen zu machen – ChatGPT kann dann direkt mit deinen Excel-Dateien arbeiten."
       ]
     },
     {
@@ -60,24 +60,24 @@
         "Kontext: Sehr geeignet für vertrauliche Drafts und strukturierte Aufgaben. Ähnlich zu: ChatGPT, besonders wenn Verlässlichkeit und längere Kontexte wichtig sind."
       ],
       "strengths": [
-        "Besonders gute Detailgenauigkeit bei langen Texten",
-        "Hilft beim Analysieren und Zusammenfassen von Dokumenten",
-        "Antwortet sachlich und ausführlich"
+        "Claude bietet für Power-User einen „Max“-Plan mit bis zu 200 $/Monat – mit 20-facher Nutzung und exklusivem Zugang zu Tools wie „Imagine with Claude“ für Software-Prototyping.",
+        "Ein erweiterter Denkmodus lässt Claude mehrstufige Logik durchspielen, bevor er antwortet – ideal für komplexe Programmieraufgaben.",
+        "In Codier-Benchmarks liegt Claude 4.5 mit 77,2 % knapp vor GPT-5.2 – ein Geheimtipp für Entwickler, die Wert auf korrekte Logik legen."
       ],
       "useCases": [
-        "Zusammenfassung langer Artikel oder Berichte",
-        "Hilfe beim Verfassen von wissenschaftlichen Arbeiten",
-        "Vertrauliches Brainstorming für Geschäftsideen"
+        "Vertrauliche Geschäftsdokumente analysieren: Claude kann lange Verträge oder Berichte zusammenfassen, ohne sensible Daten preiszugeben.",
+        "Debugging-Hilfe: Bei komplexen Programmfehlern den Denkmodus aktivieren und Schritt für Schritt die Ursache finden.",
+        "Brainstorming für kreative Projekte – Claude antwortet sachlich, aber mit Tiefgang."
       ],
       "promptExamples": [
-        "Fasse diesen Artikel in drei Sätzen zusammen: [Text einfügen]",
-        "Schreibe eine professionelle Antwort auf eine Kündigung eines Mitarbeiters.",
-        "Erstelle eine detaillierte Gliederung für eine Präsentation über erneuerbare Energien."
+        "Fasse diesen 50-seitigen Jahresbericht in fünf Kernaussagen zusammen und nenne mir die drei wichtigsten Risiken.",
+        "Ich habe einen Python-Fehler: 'IndexError: list index out of range'. Erkläre mir mögliche Ursachen und zeige einen Fix.",
+        "Entwickle ein Konzept für eine nachhaltige Kaffeemarke – inklusive Zielgruppe, Marketingideen und Verpackungsdesign."
       ],
       "promptTips": [
-        "Nutze Claude besonders für Aufgaben, die ein tiefes Verständnis langer Texte erfordern.",
-        "Formuliere deine Anfragen klar und strukturiert – Claude liebt Ordnung.",
-        "Bitte um Quellenangaben oder Begründungen, wenn du nachvollziehen möchtest, wie die Antwort zustande kam."
+        "Aktiviere den erweiterten Denkmodus für knifflige Fragen – Claude arbeitet dann gründlicher.",
+        "Nutze Claude für lange Dokumente, weil sein Kontextfenster riesig ist (ganze Bücher passen rein).",
+        "Frage nach Quellen oder Begründungen, wenn du nachvollziehen willst, wie Claude zu seiner Antwort kam."
       ]
     },
     {
@@ -97,24 +97,24 @@
         "Kontext: Optimal für rasche Recherchen und fact-checking. Ähnlich zu: Elicit, Kagi Answers — nutze es, wenn Quellenangabe wichtig ist."
       ],
       "strengths": [
-        "Liefert Antworten mit echten Quellenangaben",
-        "Ideal für schnelle Recherchen und Faktenchecks",
-        "Versteht Folgefragen und behält den Kontext"
+        "In der kostenlosen Version sind bereits 5 Pro-Suchen alle 4 Stunden inklusive – du kannst also tiefgründig recherchieren, ohne zu bezahlen.",
+        "Perplexity nutzt mehrere KI-Modelle gleichzeitig (GPT-4, Claude, eigene) und wählt die beste Antwort aus.",
+        "Für Lehrer und Schüler ist der Pro-Plan (20$/Monat) bei Nachweis komplett kostenlos – ideal für die Schule."
       ],
       "useCases": [
-        "Hintergrundinformationen zu aktuellen Themen suchen",
-        "Fakten für Artikel oder Präsentationen überprüfen",
-        "Wissenschaftliche Fragen stellen und zitierfähige Antworten erhalten"
+        "Recherche für Referate oder Artikel: Perplexity liefert zitierfähige Antworten mit echten Quellen.",
+        "Produktvergleiche: Frage nach „Beste Noise-Cancelling-Kopfhörer unter 200€“ und erhalte eine Tabelle mit aktuellen Tests.",
+        "Faktenchecks: Überprüfe Behauptungen aus sozialen Medien in Sekundenschnelle."
       ],
       "promptExamples": [
-        "Was sind die neuesten Erkenntnisse zur Klimaerwärmung?",
-        "Wer hat die Relativitätstheorie entdeckt? Bitte mit Quellen.",
-        "Erkläre den Unterschied zwischen KI und maschinellem Lernen."
+        "Was sind die neuesten wissenschaftlichen Erkenntnisse zur Wirksamkeit von pflanzenbasierter Ernährung?",
+        "Vergleiche die Tesla Model 3 und Hyundai Ioniq 6 – mit Verbrauch, Reichweite und aktuellen Testberichten.",
+        "Wer hat die Relativitätstheorie entdeckt? Bitte mit Quellenangabe aus seriösen Publikationen."
       ],
       "promptTips": [
-        "Stelle konkrete Fragen, um präzise Antworten mit guten Quellen zu bekommen.",
-        "Nutze die weiterführenden Fragen, um tiefer in ein Thema einzusteigen.",
-        "Klicke auf die Quellen, um die Originalinformationen zu prüfen."
+        "Nutze den „Suchfokus“, um deine Suche auf Reddit, arXiv oder Scholar einzuschränken – perfekt für spezifische Quellen.",
+        "Stelle konkrete Fragen – je präziser, desto besser die Antwort.",
+        "Klicke auf die Quellenangaben, um die Originalseiten zu lesen und die Informationen zu verifizieren."
       ]
     },
     {
@@ -134,24 +134,24 @@
         "Kontext: Besonders geeignet für konzeptionelle Artworks und Moodboards. Ähnlich zu: Leonardo AI (kreative Assets), DALL-E (direktere Promptgenauigkeit)."
       ],
       "strengths": [
-        "Erzeugt künstlerisch anspruchsvolle Bilder mit einzigartigem Stil",
-        "Sehr gute Umsetzung von Stimmungen und Atmosphäre",
-        "Aktive Community zum Austausch von Ideen und Prompts"
+        "Seit 2024 gibt es eine eigene, benutzerfreundliche Weboberfläche – du musst nicht mehr über Discord gehen.",
+        "Mit dem Parameter `--cref` kannst du denselben Charakter in verschiedenen Szenen konsistent darstellen – perfekt für Storyboards.",
+        "Der `--stylize`-Wert (0-1000) bestimmt, wie künstlerisch das Bild wird: niedrig für klare Produktbilder, hoch für expressive Kunst."
       ],
       "useCases": [
-        "Konzeptkunst für Filme, Spiele oder Bücher",
-        "Visuelle Inspiration für Designprojekte",
-        "Erstellung von Social-Media-Grafiken und Postern"
+        "Moodboards und Konzeptkunst für kreative Projekte (Filme, Spiele, Mode).",
+        "Produktvisualisierungen für Marketing – zeige dein neues Design, bevor es produziert ist.",
+        "Storyboards für Videoproduktionen – lass dir Szenen skizzieren und passe sie mit `--cref` an."
       ],
       "promptExamples": [
-        "ein mystischer Wald im Nebel, beleuchtet von Feenlichtern, Ölgemälde-Stil",
-        "eine futuristische Stadt bei Nacht mit fliegenden Autos, Neonlichter, Cyberpunk-Ästhetik",
-        "ein freundlicher Roboter, der Blumen gießt, in einem sonnigen Garten, im Stil von Studio Ghibli"
+        "Ein mystischer Wald im Nebel, beleuchtet von Feenlichtern, Ölgemälde-Stil --ar 16:9",
+        "Eine futuristische Stadt bei Nacht mit fliegenden Autos, Neonlichter, Cyberpunk-Ästhetik --stylize 600",
+        "Ein freundlicher Roboter, der Blumen gießt, in einem sonnigen Garten, im Stil von Studio Ghibli --cref @robotercharakter"
       ],
       "promptTips": [
-        "Verwende beschreibende Adjektive und Stilangaben (z.B. ‚Ölgemälde‘, ‚fotorealistisch‘).",
-        "Experimentiere mit verschiedenen Aspektverhältnissen (z.B. --ar 16:9).",
-        "Lass dich von der Community inspirieren – teile deine Prompts und schau, was andere machen."
+        "Schau im Explore-Reiter der Webseite nach Bildern anderer – ein Klick kopiert den Prompt.",
+        "Experimentiere mit `--chaos` (0-100): je höher, desto überraschender die vier Varianten.",
+        "Für reproduzierbare Ergebnisse nutze `--seed` – so bekommst du mit gleichem Prompt immer ähnliche Bilder."
       ]
     },
     {
@@ -171,24 +171,24 @@
         "Kontext: Nutze DALL-E 3, wenn exakte Umsetzung der Textvorgabe wichtig ist. Ähnlich zu: Midjourney (kreative Stile) und Stable Diffusion (mehr Kontrolle bei lokalem Hosting)."
       ],
       "strengths": [
-        "Setzt detaillierte Beschreibungen sehr genau um",
-        "Versteht komplexe Szenen mit mehreren Objekten",
-        "Integriert Text (z.B. Schilder) besser als viele andere"
+        "DALL-E 3 ist tief in ChatGPT integriert – du kannst Bilder direkt im Chat beschreiben und generieren lassen, ohne die Plattform zu wechseln.",
+        "Im Gegensatz zu vielen anderen kann DALL-E 3 relativ zuverlässig Text in Bildern darstellen – z.B. auf Schildern oder Buchcovern.",
+        "Die Prompt-Treue ist extrem hoch: komplizierte Szenen mit mehreren Objekten werden fast genau so umgesetzt, wie beschrieben."
       ],
       "useCases": [
-        "Produktvisualisierungen für E-Commerce",
-        "Illustrationen für Kinderbücher",
-        "Erstellung von Social-Media-Bildern mit bestimmten Anforderungen"
+        "Produktvisualisierungen mit genau deinen Vorgaben (Farben, Position, Perspektive).",
+        "Illustrationen für Kinderbücher oder Magazine, bei denen es auf Details ankommt.",
+        "Social-Media-Grafiken mit Schriftzügen – das spart Grafikdesign-Zeit."
       ],
       "promptExamples": [
-        "Ein roter Panda, der auf einem Ast sitzt und einen Bambuszweig isst, im Hintergrund ein Wasserfall, Cartoon-Stil",
+        "Ein roter Panda, der auf einem Ast sitzt und einen Bambuszweig isst, im Hintergrund ein Wasserfall, Cartoon-Stil, 4K",
         "Eine gemütliche Leseecke mit einem Sessel, einer Stehlampe und einem Bücherregal, natürliches Licht, Fotorealismus",
-        "Ein Schild mit der Aufschrift ‚Willkommen‘, umgeben von Blumen, an einer Holzwand"
+        "Ein Schild mit der Aufschrift ‚Willkommen‘, umgeben von Blumen, an einer Holzwand, im Stil einer Aquarellmalerei"
       ],
       "promptTips": [
-        "Beschreibe, was du sehen möchtest, so genau wie möglich – inklusive Farben, Positionen und Stil.",
-        "Vermeide zu viele widersprüchliche Elemente auf einmal.",
-        "Nutze ‚/imagine‘ oder ähnliche Befehle, um direkt loszulegen."
+        "Nutze ChatGPT, um deinen Prompt zu verfeinern: „Schreibe einen detaillierten Prompt für DALL-E 3, der …“",
+        "Vermeide zu viele widersprüchliche Elemente – DALL-E 3 versucht alles unterzubringen, das kann chaotisch wirken.",
+        "Gib explizit an, wenn du Text im Bild haben willst, z.B. „Ein Schild mit der Aufschrift ‚Coffee‘“."
       ]
     },
     {
@@ -208,24 +208,24 @@
         "Kontext: Best for developers and studios who need model control and offline workflows. Ähnlich zu: Runway (cloud workflows) und lokale SD-Setups."
       ],
       "strengths": [
-        "Kostenlos und quelloffen – kann lokal installiert werden",
-        "Unzählige社区-Modelle für verschiedene Stile",
-        "Volle Kontrolle über Parameter wie Schritte, Sampler, etc."
+        "Kann komplett lokal auf dem eigenen Rechner ausgeführt werden – datenschutzfreundlich und unabhängig von Cloud-Diensten.",
+        "Tausende Community-Modelle (z.B. auf Civitai) für jeden erdenklichen Stil – von Anime bis Fotorealismus.",
+        "Erweiterungen wie ControlNet geben dir die ultimative Kontrolle: Du kannst Posen, Kanten oder Komposition exakt vorgeben."
       ],
       "useCases": [
-        "Künstlerische Experimente ohne Einschränkungen",
-        "Generieren von Bildern für private Projekte",
-        "Training eigener Modelle mit persönlichen Bildern"
+        "Private Kunstprojekte ohne Einschränkungen und ohne dass deine Bilder in der Cloud landen.",
+        "Fine-Tuning mit eigenen Bildern (Dreambooth/LoRA) – trainiere das Modell auf deinen Stil oder dein Gesicht.",
+        "Batch-Verarbeitung für große Mengen an Bildern – perfekt für Designstudios."
       ],
       "promptExamples": [
-        "ein märchenhaftes Schloss auf einer Wolke, umgeben von Regenbögen, Aquarell-Stil",
-        "ein Porträt einer Astronautin im Retro-Stil, auf dem Mond, vintage Poster",
-        "eine abstrakte Darstellung von Zeit, mit Uhren und fließenden Formen"
+        "Ein märchenhaftes Schloss auf einer Wolke, umgeben von Regenbögen, Aquarell-Stil --ar 16:9",
+        "Ein Porträt einer Astronautin im Retro-Stil, auf dem Mond, vintage Poster, --seed 12345",
+        "Abstrakte Darstellung von Zeit, mit Uhren und fließenden Formen, psychedelisch"
       ],
       "promptTips": [
-        "Wenn du lokal arbeitest, probiere verschiedene Sampler und Schritte aus.",
-        "Nutze negative Prompts, um unerwünschte Elemente zu vermeiden.",
-        "Die Community teilt viele spezialisierte Modelle – schau dich um!"
+        "Startparameter wie `--medvram` helfen, wenn deine Grafikkarte wenig Speicher hat.",
+        "Installiere Xformers – das beschleunigt die Generierung enorm.",
+        "Mit ControlNet kannst du eine Skizze hochladen und die KI erstellt daraus ein detailliertes Bild."
       ]
     },
     {
@@ -245,24 +245,24 @@
         "Kontext: Ideal als Pair-Programmer für gängige Patterns und API-Aufrufe. Ähnlich zu: Codeium, Tabnine — besonders integriert in GitHub/VSCode."
       ],
       "strengths": [
-        "Schlägt während des Tippens ganzen Code vor",
-        "Versteht den Kontext deiner Dateien und Projekte",
-        "Hilft beim Erlernen neuer Programmiersprachen"
+        "Für verifizierte Studierende, Lehrer und Maintainer von Open-Source-Projekten ist Copilot kostenlos.",
+        "Entwickler, die Copilot nutzen, berichten über eine bis zu 75 % höhere Job-Zufriedenheit – sie können sich aufs Problemlösen konzentrieren.",
+        "Copilot trifft eine „probabilistische Entscheidung“: Es analysiert deinen Code und Kontext, um den wahrscheinlich nächsten Codeblock vorzuschlagen."
       ],
       "useCases": [
-        "Schnelles Erstellen von Code-Gerüsten",
-        "Automatisches Generieren von Testfällen",
-        "Unterstützung bei der Fehlersuche"
+        "Schnelles Erstellen von Boilerplate-Code (z.B. eine React-Komponente, eine Flask-Route).",
+        "Automatisches Generieren von Testfällen für deine Funktionen.",
+        "Hilfe beim Lernen einer neuen Programmiersprache – lass dir Code-Beispiele zeigen und erklären."
       ],
       "promptExamples": [
-        "Schreibe eine Funktion in Python, die die Fibonacci-Zahlen berechnet.",
-        "Erstelle eine React-Komponente für eine Navigationsleiste.",
+        "Schreibe eine Funktion in Python, die die Fibonacci-Zahlen rekursiv berechnet.",
+        "Erstelle eine React-Komponente für eine Navigationsleiste mit Logo und drei Links.",
         "Gib mir ein Beispiel für eine SQL-Abfrage, die alle Kunden mit Bestellungen der letzten 30 Tage anzeigt."
       ],
       "promptTips": [
         "Schreibe einen klaren Kommentar oder Funktionsnamen – Copilot versteht, was du brauchst.",
         "Akzeptiere Vorschläge mit Tab und passe sie bei Bedarf an.",
-        "Nutze es als Lernhilfe: Lass dir Code erklären, indem du nach Kommentaren fragst."
+        "Nutze es als Lernhilfe: Lass dir zu einem Codeblock erklären, was er tut – oft generiert Copilot hilfreiche Kommentare."
       ]
     },
     {
@@ -282,24 +282,24 @@
         "Kontext: Gut für Entwickler, die AI-Unterstützung eng in die Entwicklungsumgebung integrieren möchten. Ähnlich zu: GitHub Copilot, Replit."
       ],
       "strengths": [
-        "Integriert AI direkt in den Editor (Chat, Code-Generierung)",
-        "Kann ganze Dateien oder Projekte auf einmal bearbeiten",
-        "Bietet Vorschläge und Erklärungen im Chat"
+        "Cursor wird bereits von über der Hälfte der Fortune-500-Unternehmen genutzt, um Entwicklung sicher und skalierbar zu beschleunigen.",
+        "Es gibt ein spezialisiertes „Tab“-Modell, das deine nächsten Aktionen mit verblüffender Geschwindigkeit vorhersagt.",
+        "Du kannst Aufgaben direkt an einen Agenten delegieren, der im Hintergrund Code schreibt, Pull-Requests erstellt und auf Feedback reagiert."
       ],
       "useCases": [
-        "Schnelles Prototyping neuer Ideen",
-        "Refactoring von bestehendem Code mit KI-Hilfe",
-        "Beantwortung von Fragen zum Code direkt im Editor"
+        "Schnelles Prototyping neuer Ideen – schreibe eine Beschreibung und Cursor generiert das Grundgerüst.",
+        "Refactoring von bestehendem Code mit KI-Hilfe (z.B. „Extrahiere diese Logik in eine separate Funktion“).",
+        "Code-Erklärungen für unverständliche Abschnitte – einfach markieren und nachfragen."
       ],
       "promptExamples": [
-        "Erstelle eine einfache To-Do-App mit HTML, CSS und JavaScript.",
-        "Erkläre mir diesen Codeabschnitt: [Code einfügen]",
-        "Schreibe eine Python-Funktion, die eine CSV-Datei liest und die Daten sortiert."
+        "Erstelle eine einfache To-Do-App mit HTML, CSS und JavaScript – in einer Datei.",
+        "Erkläre mir diesen Codeabschnitt: function factorial(n) { return n <= 1 ? 1 : n * factorial(n-1); }",
+        "Schreibe eine Python-Funktion, die eine CSV-Datei einliest und die Daten nach einer Spalte sortiert."
       ],
       "promptTips": [
-        "Nutze die Chat-Funktion, wenn du nicht weiterweißt – frag einfach.",
-        "Cursor kann auch Änderungen vorschlagen, die du direkt übernehmen kannst.",
-        "Gib Kontext an, z.B. welche Technologie du verwendest, um bessere Vorschläge zu erhalten."
+        "Nutze `Cmd+K` (Mac) oder `Ctrl+K` (Windows), um direkt mit der KI zu chatten, ohne den Editor zu verlassen.",
+        "Cursor kann auch Änderungen vorschlagen, die du direkt übernehmen kannst – wie ein Pair-Programmer.",
+        "Gib Kontext an, z.B. welche Technologie du verwendest (React, Node, Python), um bessere Vorschläge zu erhalten."
       ]
     },
     {
@@ -319,24 +319,24 @@
         "Kontext: Empfehlenswert für Individualentwickler und Teams mit Budget-Beschränkungen. Ähnlich zu: GitHub Copilot (funktional), besonders attraktiv wegen kostenloser Stufe."
       ],
       "strengths": [
-        "Vollständig kostenlos für Einzelpersonen",
-        "Unterstützt viele Editoren (VS Code, IntelliJ, etc.)",
-        "Schnelle Autovervollständigung auch bei großen Projekten"
+        "Codeium bietet einen extrem großzügigen „Forever Free“-Tarif für Einzelpersonen – ideal für Studenten und Hobbyentwickler.",
+        "Die eigene „Cortex“-Reasoning-Engine ist spezialisiert auf das Verständnis großer Codebasen.",
+        "Für Unternehmen gibt es eine Enterprise-Version, die „air-gapped“ (komplett isoliert) betrieben werden kann – perfekt für Banken oder Geheimdienste."
       ],
       "useCases": [
-        "Tägliche Code-Arbeit ohne Budget für teure Tools",
-        "Lernen von Programmiersprachen mit KI-Unterstützung",
-        "Beschleunigung von Routineaufgaben"
+        "Tägliche Code-Arbeit ohne Budget für teure Tools – Codeium ist voll funktionsfähig kostenlos.",
+        "Lernen von Programmiersprachen mit KI-Unterstützung – lass dir Code-Beispiele generieren und erklären.",
+        "Beschleunigung von Routineaufgaben wie das Schreiben von Tests oder Boilerplate-Code."
       ],
       "promptExamples": [
         "Erstelle eine Klasse in Java für ein einfaches Bankkonto mit Ein- und Auszahlungsmethoden.",
         "Schreibe ein Bash-Skript, das alle .txt-Dateien in einem Verzeichnis zählt.",
-        "Gib mir ein Beispiel für eine React-Hook-Implementierung eines Zählers."
+        "Gib mir ein Beispiel für eine React-Hook-Implementierung eines Zählers mit useState und useEffect."
       ],
       "promptTips": [
-        "Beginne mit einem Kommentar, der genau beschreibt, was du brauchst.",
+        "Beginne mit einem Kommentar, der genau beschreibt, was du brauchst – Codeium versteht natürliche Sprache.",
         "Codeium lernt aus deinem Code – je mehr du schreibst, desto besser die Vorschläge.",
-        "Nutze die Inline-Chat-Funktion (falls verfügbar) für komplexere Fragen."
+        "Nutze die Inline-Chat-Funktion (falls in deiner IDE verfügbar) für komplexere Fragen."
       ]
     },
     {
@@ -356,24 +356,24 @@
         "Kontext: Optimal für Podcaster, E-Learning und Prototypen mit hoher Stimmqualität. Ähnlich zu: Replica Studios, Google TTS."
       ],
       "strengths": [
-        "Sehr natürlich klingende Sprachausgabe mit Emotionen",
-        "Große Auswahl an Stimmen und Sprachen",
-        "Feine Kontrolle über Betonung und Sprechgeschwindigkeit"
+        "ElevenLabs kann Emotionen und Betonungen unglaublich natürlich setzen – die Sprachausgabe klingt lebendig, nicht roboterhaft.",
+        "Mit der Voice-Cloning-Funktion kannst du deine eigene Stimme digital nachbilden und für beliebige Texte nutzen.",
+        "60 % Zeitersparnis bei der Synchronisation gegenüber traditionellen Methoden – was früher 5 Tage dauerte, ist jetzt in 2 Tagen möglich."
       ],
       "useCases": [
-        "Vertonung von Erklärvideos und Tutorials",
-        "Hörbücher und Podcasts erstellen",
-        "Sprachausgabe für Apps oder Spiele"
+        "Hörbuch-Produktion in mehreren Sprachen mit verschiedenen Stimmen.",
+        "Voiceover für Erklärvideos und E-Learning-Kurse – schnell und kostengünstig.",
+        "Avatar-Videos mit Synthesia kombinieren: lifelike Avatare mit ElevenLabs-Stimmen synchronisieren."
       ],
       "promptExamples": [
-        "Text: ‚Willkommen zu unserem Podcast über künstliche Intelligenz. Heute sprechen wir über Sprachmodelle.‘ (Stimme: Adam)",
-        "Erstelle eine freundliche Ansage für ein Ladengeschäft.",
-        "Lies einen Abschnitt aus einem Kinderbuch vor – mit lebendiger Betonung."
+        "Erstelle eine Sprachausgabe für einen englischen Erklärtext mit freundlicher, professioneller Stimme (weiblich).",
+        "Lies diesen deutschen Text mit einer ruhigen, vertrauenswürdigen Männerstimme: [Text einfügen]",
+        "Generiere eine Ansage für ein Ladengeschäft auf Spanisch, mit klarer Aussprache."
       ],
       "promptTips": [
-        "Probiere verschiedene Stimmen aus – jede hat ihren eigenen Charakter.",
-        "Nutze SSML-Tags, wenn du die Betonung noch feiner steuern möchtest.",
-        "Für längere Projekte lohnt sich die API-Anbindung."
+        "Probiere verschiedene Stimmen aus – jede hat ihren eigenen Charakter (jung, alt, fröhlich, seriös).",
+        "Für längere Projekte lohnt sich die API-Anbindung – viele Firmen nutzen das für skalierbare Produktion.",
+        "Mit der Studio-Funktion kannst du Betonung und Sprechpausen feinjustieren."
       ]
     },
     {
@@ -393,24 +393,24 @@
         "Kontext: Besonders nützlich für kreative Prototypen und schnelle Jingles. Ähnlich zu: AIVA, Amper Music — gut für Ideen und Demos."
       ],
       "strengths": [
-        "Generiert komplette Songs inklusive Melodie, Gesang und Texten",
-        "Kann nach Stilrichtungen und Stimmungen generieren",
-        "Schnelle Ergebnisse für kreative Ideen"
+        "Suno generiert komplette Songs inklusive Melodie, Gesang und Texten – du gibst nur eine Beschreibung vor.",
+        "Es unterstützt verschiedenste Genres und Stimmungen, von Pop über Rock bis zu elektronischer Musik.",
+        "Die Ergebnisse können als Ausgangspunkt für eigene Produktionen dienen – spart viel Zeit beim Songwriting."
       ],
       "useCases": [
-        "Erstellung von Hintergrundmusik für Videos",
-        "Songwriting-Hilfe – lass dir einen Song zu deinen Texten schreiben",
-        "Jingles und Werbemusik schnell produzieren"
+        "Hintergrundmusik für YouTube-Videos oder Podcasts schnell und günstig erstellen.",
+        "Jingles und Werbemusik für Marketing-Kampagnen produzieren.",
+        "Songwriting-Hilfe: Lass dir zu deinen eigenen Texten eine Melodie komponieren."
       ],
       "promptExamples": [
-        "Ein fröhlicher Popsong über das Wochenende, mit männlichem Gesang.",
-        "Instrumentaler Chillstep-Track für ein Entspannungsvideo.",
-        "Erstelle einen Kinderlied-Song über Tiere im Wald."
+        "Ein fröhlicher Popsong über das Wochenende, mit männlichem Gesang und Gitarrenbegleitung.",
+        "Instrumentaler Chillstep-Track für ein Entspannungsvideo, langsam, verträumt.",
+        "Ein energiegeladener Rock-Song für einen Sport-Werbespot, mit treibenden Drums."
       ],
       "promptTips": [
-        "Gib so viele Details wie möglich an: Genre, Stimmung, Instrumente, Tempo.",
-        "Probiere verschiedene Versionen aus – manchmal überrascht das Ergebnis.",
-        "Nutze die generierten Songs als Ausgangspunkt und bearbeite sie weiter."
+        "Gib so viele Details wie möglich an: Genre, Stimmung, Instrumente, Tempo (z.B. BPM 120).",
+        "Probiere verschiedene Versionen aus – manchmal überrascht das Ergebnis positiv.",
+        "Die generierten Songs kannst du herunterladen und in einer DAW (Digital Audio Workstation) weiterverarbeiten."
       ]
     },
     {
@@ -430,22 +430,22 @@
         "Kontext: Nutze Runway für visuelle Experimente und schnelle Iterationen. Ähnlich zu: Pika Labs (Text-to-Video) mit stärkerem Editierungs-Toolkit."
       ],
       "strengths": [
-        "Text-zu-Video-Generierung mit beeindruckenden Ergebnissen",
-        "Umfangreiche Videobearbeitungswerkzeuge (Entfernen von Objekten, Greenscreen, etc.)",
-        "Browserbasiert – keine leistungsstarke Hardware nötig"
+        "Mit der Gen-2-Technologie kannst du aus Textbeschreibungen direkt Videos generieren – in Sekunden.",
+        "Runway bietet umfangreiche Bearbeitungswerkzeuge: Objekte aus Videos entfernen (Inpainting), Greenscreen ohne Greenscreen, Zeitlupen-Effekte.",
+        "Alles läuft im Browser – du brauchst keine teure Hardware."
       ],
       "useCases": [
-        "Erstellen von Social-Media-Clips aus Textbeschreibungen",
-        "Nachbearbeitung von Videos mit KI-Tools (z.B. Hintergrund entfernen)",
-        "Prototyping von Filmideen"
+        "Social-Media-Clips aus Textideen erstellen (z.B. für TikTok, Instagram Reels).",
+        "Nachbearbeitung von Videos mit KI-Tools: Hintergrund entfernen, Objekte unkenntlich machen.",
+        "Prototyping von Filmideen – lass dir Szenen skizzieren, bevor du sie real drehst."
       ],
       "promptExamples": [
-        "Ein Hund, der Skateboard fährt, in einem Park, sonniger Tag",
-        "Verwandle dieses Video in einen Ölgemälde-Stil.",
-        "Entferne den Hintergrund aus diesem Clip und ersetze ihn durch einen Strand."
+        "Ein Hund, der Skateboard fährt, in einem Park, sonniger Tag – als 5-Sekunden-Clip.",
+        "Entferne den Hintergrund aus diesem Video und ersetze ihn durch einen Strand.",
+        "Erstelle eine Zeitlupe aus diesem 3-Sekunden-Clip und füge sanfte Überblendungen hinzu."
       ],
       "promptTips": [
-        "Nutze die Gen-2-Funktion für Text-zu-Video – je genauer der Prompt, desto besser.",
+        "Nutze die Gen-2-Funktion für Text-zu-Video – je genauer der Prompt, desto besser das Ergebnis.",
         "Probiere die verschiedenen Bearbeitungswerkzeuge aus – viele sind mit einem Klick erledigt.",
         "Speichere deine Projekte in der Cloud, um später weiterzuarbeiten."
       ]
@@ -467,24 +467,24 @@
         "Kontext: Ideal für Nutzer, die multimodale Recherche und tiefe Quellenintegration wünschen. Ähnlich zu: Perplexity (Quellen) und ChatGPT (Konversation)."
       ],
       "strengths": [
-        "Kann Text, Bilder, Audio und Video verstehen",
-        "Greift auf aktuelle Informationen aus dem Internet zu",
-        "Tiefe Integration mit Google-Diensten (Suche, Maps, etc.)"
+        "Gemini kann nicht nur Text, sondern auch Bilder, Audio und Video verstehen – du kannst z.B. ein Bild hochladen und Fragen dazu stellen.",
+        "Dank der Integration mit Google-Diensten (Search, Maps, YouTube) liefert Gemini aktuelle Informationen mit Quellen.",
+        "Deep Research Capabilities: Gemini durchsucht das Internet und fasst Ergebnisse aus mehreren Quellen zusammen."
       ],
       "useCases": [
-        "Recherche zu aktuellen Themen mit Bildern und Quellen",
-        "Planung von Reisen (z.B. mit Google Maps-Integration)",
-        "Hilfe beim Verstehen komplexer Diagramme oder Grafiken"
+        "Recherche zu aktuellen Themen mit Bildern und Karten – z.B. Sehenswürdigkeiten in Paris.",
+        "Planung von Reisen: Gemini kann Routen vorschlagen, Restaurants empfehlen und Öffnungszeiten nennen.",
+        "Hilfe beim Verstehen von Diagrammen oder Grafiken – einfach hochladen und erklären lassen."
       ],
       "promptExamples": [
-        "Zeig mir Bilder von Sehenswürdigkeiten in Paris und erzähl mir etwas über ihre Geschichte.",
-        "Vergleiche die Vor- und Nachteile von Elektroautos und Hybridautos – mit aktuellen Daten.",
-        "Erstelle einen Reiseplan für drei Tage in Berlin mit Sehenswürdigkeiten und Restaurants."
+        "Zeig mir Bilder von Sehenswürdigkeiten in Rom und erzähl mir etwas über ihre Geschichte.",
+        "Vergleiche die Vor- und Nachteile von Elektroautos und Hybridautos – mit aktuellen Daten und Quellen.",
+        "Erstelle einen dreitägigen Reiseplan für Berlin mit Sehenswürdigkeiten, Restaurants und Anfahrtszeiten."
       ],
       "promptTips": [
-        "Nutze die Multimodalität: Lade Bilder hoch und stelle Fragen dazu.",
-        "Frage nach Quellen, wenn du die Informationen überprüfen möchtest.",
-        "Gemini kann auch Dateien wie PDFs lesen – probier es aus."
+        "Nutze die Multimodalität: Lade Bilder, PDFs oder Tabellen hoch und stelle Fragen dazu.",
+        "Frage nach Quellen, wenn du die Informationen überprüfen möchtest – Gemini zeigt oft Links an.",
+        "Gemini kann auch YouTube-Videos analysieren – frag nach Zusammenfassungen von langen Inhalten."
       ]
     },
     {
@@ -504,24 +504,24 @@
         "Kontext: Perfekt für Teams und persönliche Organisation; weniger geeignet für hochkomplexe LLM-Forschung. Ähnlich zu: Coda AI, Microsoft Copilot for Microsoft 365."
       ],
       "strengths": [
-        "Hilft beim Schreiben und Überarbeiten von Notizen direkt in Notion",
-        "Kann Inhalte aus Datenbanken zusammenfassen",
-        "Ideal für Brainstorming und Strukturierung von Ideen"
+        "Notion AI ist direkt in deine Notizen, Datenbanken und Dokumente integriert – du musst die App nicht verlassen.",
+        "Es kann Meeting-Notes automatisch zusammenfassen, To-do-Listen aus Brainstormings generieren und Texte in verschiedenen Stilen umschreiben.",
+        "Besonders praktisch: Du kannst KI-Befehle in der Seitenleiste nutzen, ohne deinen Workflow zu unterbrechen."
       ],
       "useCases": [
-        "Meeting-Notizen automatisch zusammenfassen",
-        "Aufgabenlisten aus Brainstorming-Sessions generieren",
-        "Texte in Notion-Seiten verbessern oder übersetzen"
+        "Meeting-Notizen schnell in strukturierte Zusammenfassungen verwandeln.",
+        "Aus einer Liste von Stichpunkten eine professionelle E-Mail oder einen Blogartikel generieren.",
+        "Datenbankeinträge automatisch mit KI-generierten Zusammenfassungen anreichern."
       ],
       "promptExamples": [
-        "Fasse diese Notizen in fünf Bullet Points zusammen: [Notizen]",
-        "Schreibe eine professionelle E-Mail auf Basis dieser Stichpunkte.",
-        "Erstelle eine Tabelle aus dieser Liste von Ideen."
+        "Fasse diese Notizen in fünf Bullet Points zusammen: [Notizen einfügen]",
+        "Schreibe eine professionelle E-Mail an einen Kunden auf Basis dieser Stichpunkte.",
+        "Erstelle aus dieser Ideensammlung eine Tabelle mit Prioritäten und Fälligkeitsdaten."
       ],
       "promptTips": [
-        "Nutze die KI direkt in der Seitenleiste von Notion – einfach markieren und ‚Ask AI‘.",
-        "Probiere verschiedene Befehle aus: ‚Make longer‘, ‚Change tone‘, ‚Translate‘.",
-        "Verwende es, um aus vorhandenen Inhalten neue Strukturen zu erstellen."
+        "Nutze die KI direkt in der Seitenleiste von Notion – markiere Text und wähle ‚Ask AI‘.",
+        "Probiere verschiedene Befehle aus: ‚Make longer‘, ‚Change tone‘, ‚Translate‘ – perfekt für Textüberarbeitung.",
+        "Verwende es, um aus vorhandenen Inhalten neue Strukturen zu erstellen, z.B. eine Gliederung aus einem Brainstorming."
       ]
     },
     {
@@ -541,24 +541,24 @@
         "Kontext: Empfohlen für Game-Designer und Concept-Artists. Ähnlich zu: Midjourney (Artistic) mit stärkerem Fokus auf Asset-Pipelines."
       ],
       "strengths": [
-        "Spezialisiert auf die Erstellung von Spiel-Assets (Charaktere, Gegenstände, Umgebungen)",
-        "Bietet viele Vorlagen und Stile speziell für Games",
-        "Einfache Bedienung auch für Nicht-Designer"
+        "Leonardo ist spezialisiert auf die Erstellung von Game-Assets: Charaktere, Gegenstände, Umgebungen, Icons.",
+        "Es bietet viele vorgefertigte Presets für verschiedene Stile (z.B. Fantasy, Sci-Fi, Pixel Art).",
+        "Mit einem Klick kannst du Variationen eines Bildes erstellen – perfekt, um mehrere Optionen zu vergleichen."
       ],
       "useCases": [
-        "Konzeptzeichnungen für Videospielfiguren",
-        "Erstellung von Inventargegenständen (Waffen, Tränke, etc.)",
-        "Hintergrundbilder für Leveldesigns"
+        "Konzeptzeichnungen für Videospielfiguren – von Helden bis zu NPCs.",
+        "Erstellung von Inventargegenständen (Waffen, Tränke, Schlüssel) für Spiele.",
+        "Hintergrundbilder für Leveldesigns oder Concept Art für Filme."
       ],
       "promptExamples": [
-        "Ein heldenhafter Ritter in glänzender Rüstung, mit Schwert und Schild, Fantasy-Stil",
-        "Eine gemütliche Taverne im Mittelalter, mit Fackeln und Holztischen, isometrische Perspektive",
-        "Ein mystischer Kristall, der in verschiedenen Farben leuchtet, als 3D-Asset"
+        "Ein heldenhafter Ritter in glänzender Rüstung, mit Schwert und Schild, Fantasy-Stil, isometrische Perspektive.",
+        "Eine gemütliche Taverne im Mittelalter, mit Fackeln, Holztischen und einem Wirt, als Game-Asset.",
+        "Ein mystischer Kristall, der in verschiedenen Farben leuchtet – als 3D-Render für ein Spielinventar."
       ],
       "promptTips": [
-        "Nutze die ‚Presets‘ für bestimmte Asset-Typen (z.B. ‚Character Design‘).",
-        "Erstelle Variationen eines Bildes, um mehrere Optionen zu erhalten.",
-        "Die Bilder können direkt in Spiel-Engines wie Unity importiert werden."
+        "Nutze die ‚Presets‘ für bestimmte Asset-Typen (z.B. ‚Character Design‘, ‚Environment‘).",
+        "Erstelle Variationen eines Bildes, um schnell mehrere Optionen zu erhalten.",
+        "Die Bilder können direkt in Spiel-Engines wie Unity oder Unreal importiert werden."
       ]
     },
     {
@@ -578,24 +578,24 @@
         "Kontext: Gut für Product Analysts und BI-Teams zur schnellen Hypothesenprüfung. Ähnlich zu: Tableau + AI-Features, ebenso wie Merlin-style data assistants."
       ],
       "strengths": [
-        "Lädt Excel/CSV-Dateien und erstellt automatisch Grafiken",
-        "Versteht natürliche Sprachbefehle zur Datenanalyse",
-        "Kann Zusammenhänge und Muster in Daten erkennen"
+        "Du kannst Excel- oder CSV-Dateien hochladen und Julius in natürlicher Sprache Fragen stellen – z.B. „Zeig mir die Umsätze nach Region als Balkendiagramm“.",
+        "Julius erkennt automatisch Zusammenhänge und Muster und schlägt interessante Visualisierungen vor.",
+        "Es kann auch Vorhersagen auf Basis historischer Daten erstellen – nützlich für Trends und Prognosen."
       ],
       "useCases": [
-        "Umsatzdaten visualisieren und Trends erkennen",
-        "Umfrageergebnisse analysieren",
-        "Vorhersagen auf Basis historischer Daten erstellen"
+        "Umsatzdaten visualisieren und Trends erkennen – ohne komplizierte Excel-Formeln.",
+        "Umfrageergebnisse analysieren: Welche Altersgruppe antwortet wie?",
+        "Vorhersagen für die nächsten Monate basierend auf Verkaufszahlen erstellen."
       ],
       "promptExamples": [
         "Lade diese CSV-Datei und zeige mir die monatlichen Verkaufszahlen als Liniendiagramm.",
         "Welche Faktoren korrelieren am stärksten mit der Kundenzufriedenheit in dieser Tabelle?",
-        "Erstelle eine Prognose für die nächsten drei Monate basierend auf diesen Daten."
+        "Erstelle eine Prognose für die nächsten drei Monate basierend auf diesen Daten und zeige sie als Grafik."
       ],
       "promptTips": [
-        "Stelle konkrete Fragen wie ‚Zeige mir den Umsatz nach Region‘.",
-        "Du kannst auch komplexe Analysen anfordern, z.B. ‚Führe eine Regressionsanalyse durch‘.",
-        "Die Ergebnisse lassen sich als Bilder exportieren."
+        "Stelle konkrete Fragen wie ‚Zeige mir den Umsatz nach Produktkategorien als Tortendiagramm‘.",
+        "Du kannst auch komplexe Analysen anfordern, z.B. ‚Führe eine lineare Regressionsanalyse durch‘.",
+        "Die Ergebnisse lassen sich als Bilder exportieren – perfekt für Präsentationen."
       ]
     },
     {
@@ -615,24 +615,24 @@
         "Kontext: Gut für schnelle Storyboards und kurze Clips. Ähnlich zu: Runway (umfangreicher Editor) und Synthesia (Avatar-Videos)."
       ],
       "strengths": [
-        "Schnelle Generierung von kurzen Videos aus Text",
-        "Sehr einfache Bedienung – ideal für Einsteiger",
-        "Kostenlose Nutzung mit ausreichendem Kontingent"
+        "Pika generiert aus kurzen Textbeschreibungen in Sekunden kurze Videoclips – perfekt für Social Media.",
+        "Die Bedienung ist extrem einfach – ideal für Einsteiger ohne Vorkenntnisse.",
+        "Die kostenlose Version bietet ein großzügiges Kontingent, um viele Clips auszuprobieren."
       ],
       "useCases": [
-        "Erstellung von Social-Media-Clips (z.B. für TikTok, Instagram)",
-        "Schnelle Visualisierung von Ideen für Videos",
-        "Animierte Werbebanner"
+        "Erstellung von Social-Media-Clips für TikTok, Instagram oder YouTube Shorts.",
+        "Schnelle Visualisierung von Ideen für Videos oder Werbespots.",
+        "Animierte Banner für Webseiten oder Newsletter."
       ],
       "promptExamples": [
-        "Ein niedlicher Hund, der durch ein Feld rennt, Sonnenuntergang",
-        "Ein sich drehender Kristall auf einem schwarzen Hintergrund",
-        "Eine Zeitraffer-Aufnahme einer blühenden Blume"
+        "Ein niedlicher Hund, der durch ein Feld rennt, Sonnenuntergang – als 3-Sekunden-Clip.",
+        "Ein sich drehender Kristall auf schwarzem Hintergrund, mit Lichteffekten.",
+        "Eine Zeitraffer-Aufnahme einer blühenden Blume, sanfte Farben."
       ],
       "promptTips": [
         "Halte die Prompts einfach – Pika versteht kurze, klare Beschreibungen am besten.",
-        "Experimentiere mit verschiedenen Stilen (z.B. ‚Cinematic‘, ‚Anime‘).",
-        "Die Videos lassen sich herunterladen und weiterverarbeiten."
+        "Experimentiere mit verschiedenen Stilen, indem du Wörter wie ‚Cinematic‘, ‚Anime‘ oder ‚Retro‘ hinzufügst.",
+        "Die Videos lassen sich herunterladen und in gängigen Videobearbeitungsprogrammen weiterverarbeiten."
       ]
     },
     {
@@ -652,24 +652,24 @@
         "Kontext: Nutze Jasper für skalierte Content-Workflows und A/B-Textvarianten. Ähnlich zu: Copy.ai und Writesonic."
       ],
       "strengths": [
-        "Zahlreiche Vorlagen für verschiedene Textarten (Blogposts, Anzeigen, E-Mails)",
-        "Integrierte SEO-Optimierung",
-        "Unterstützt mehrere Sprachen"
+        "Jasper bietet Dutzende von Vorlagen für verschiedene Textarten: Blogposts, Anzeigen, E-Mails, Social-Media-Posts, SEO-Texte.",
+        "Es unterstützt mehrere Sprachen und kann sogar Tone of Voice anpassen (professionell, freundlich, witzig).",
+        "Die integrierte SEO-Optimierung hilft, Texte suchmaschinenfreundlich zu gestalten."
       ],
       "useCases": [
-        "Verfassen von Blogartikeln zu bestimmten Themen",
-        "Erstellung von Werbetexten für Google Ads oder Social Media",
-        "Generierung von Produktbeschreibungen für Onlineshops"
+        "Schnelles Verfassen von Blogartikeln zu bestimmten Themen mit vorgegebener Struktur.",
+        "Erstellung von Werbetexten für Google Ads oder Facebook – in verschiedenen Variationen zum Testen.",
+        "Generierung von Produktbeschreibungen für Onlineshops – einheitlich und überzeugend."
       ],
       "promptExamples": [
-        "Schreibe einen Blogartikel über die Vorteile von erneuerbaren Energien. Zielgruppe: Privathaushalte.",
-        "Erstelle 5 verschiedene Facebook-Anzeigentexte für einen neuen veganen Burger.",
-        "Verfasse eine Produktbeschreibung für eine umweltfreundliche Kaffeetasse."
+        "Schreibe einen Blogartikel über die Vorteile von erneuerbaren Energien für Privathaushalte – mit Einleitung, 3 Argumenten und Fazit.",
+        "Erstelle 5 verschiedene Facebook-Anzeigentexte für einen neuen veganen Burger, jeweils mit Headline und Call-to-Action.",
+        "Verfasse eine Produktbeschreibung für eine umweltfreundliche Kaffeetasse – 150 Wörter, mit den Keywords ‚nachhaltig‘, ‚Edelstahl‘, ‚thermobecher‘."
       ],
       "promptTips": [
         "Wähle die passende Vorlage aus – das spart Zeit und liefert bessere Ergebnisse.",
         "Gib Stichpunkte oder eine grobe Struktur vor, die Jasper ausbauen soll.",
-        "Überarbeite die Texte bei Bedarf – Jasper liefert oft gute Rohfassungen."
+        "Überarbeite die Texte bei Bedarf – Jasper liefert oft gute Rohfassungen, die du verfeinern kannst."
       ]
     },
     {
@@ -689,24 +689,24 @@
         "Kontext: Besonders nützlich für Trainings, Onboarding und localized voiceovers. Ähnlich zu: Rephrase.ai, Elai.io."
       ],
       "strengths": [
-        "Erstellt Videos mit realistischen KI-Avataren, die Text vorlesen",
-        "Unterstützt viele Sprachen und Akzente",
-        "Keine aufwändige Videoproduktion nötig"
+        "Synthesia erstellt Videos mit realistischen KI-Avataren, die deinen Text in über 120 Sprachen vorlesen – ganz ohne Studioaufnahmen.",
+        "Du kannst aus vielen Avataren wählen (verschiedene Ethnien, Alter, Stile) oder sogar einen eigenen Avatar erstellen lassen.",
+        "Kombiniert mit ElevenLabs für besonders natürliche Sprachausgabe – die Stimmen wirken dann extrem lebensecht."
       ],
       "useCases": [
-        "Schulungsvideos für Mitarbeiter",
-        "Erklärvideos für Produkte oder Dienstleistungen",
-        "Personalisierte Videobotschaften"
+        "Schulungsvideos für Mitarbeiter – schnell produziert und einfach aktualisierbar.",
+        "Produkt-Erklärvideos in verschiedenen Sprachen für internationale Kunden.",
+        "Personalisierte Videobotschaften für Marketing oder interne Kommunikation."
       ],
       "promptExamples": [
         "Erstelle ein Video mit einem weiblichen Avatar auf Deutsch, der erklärt, wie man die neue Software installiert.",
-        "Ein männlicher Avatar spricht über die Firmenwerte auf Englisch.",
-        "Produktvideo für einen Staubsauger – mit einem Avatar, der die Funktionen vorstellt."
+        "Ein männlicher Avatar spricht über die Firmenwerte auf Englisch – mit Hintergrundbild unseres Büros.",
+        "Produktvideo für einen Staubsauger – Avatar vor weißem Hintergrund, der die Funktionen vorstellt."
       ],
       "promptTips": [
-        "Wähle einen Avatar, der zum Thema und zur Zielgruppe passt.",
-        "Schreibe den Text so, wie du ihn gesprochen haben möchtest – inklusive Pausen und Betonungen.",
-        "Nutze die Möglichkeit, Hintergrundbilder oder -videos einzufügen."
+        "Wähle einen Avatar, der zur Zielgruppe und zum Thema passt.",
+        "Schreibe den Text so, wie du ihn gesprochen haben möchtest – inklusive Pausen und Betonungen (durch Satzzeichen).",
+        "Nutze die Möglichkeit, Hintergrundbilder oder -videos einzufügen, um das Video ansprechender zu gestalten."
       ]
     },
     {
@@ -726,24 +726,24 @@
         "Kontext: Ideal für Frontend-Entwickler, die Prototypen und Komponenten aus Textbeschreibungen generieren wollen. Ähnlich zu: Uizard, TeleportHQ (UI generation tools)."
       ],
       "strengths": [
-        "Generiert komplette React/Next.js-Komponenten aus Text",
-        "Liefert sofort live-vorschau im Browser",
-        "Code kann direkt in Projekte übernommen werden"
+        "V0 generiert aus einfacher Textbeschreibung komplette React/Next.js-Komponenten mit Tailwind CSS – inklusive Live-Vorschau.",
+        "Der generierte Code ist produktionsreif und kann direkt in eigene Projekte übernommen werden.",
+        "Besonders praktisch für Hackathons oder schnelle Prototypen, wenn du in Minuten eine UI brauchst."
       ],
       "useCases": [
-        "Schneller Aufbau von UI-Prototypen",
-        "Erstellung von wiederverwendbaren Komponenten für Webseiten",
-        "Lernen von React anhand generierter Beispiele"
+        "Schneller Aufbau von UI-Prototypen für Kundenpräsentationen.",
+        "Erstellung von wiederverwendbaren Komponenten (z.B. Navbar, Karten, Formulare) für eigene Projekte.",
+        "Lernen von React und Tailwind anhand generierter Beispiele – ideal zum Nachvollziehen."
       ],
       "promptExamples": [
-        "Erstelle eine responsive Navigationsleiste mit Logo und drei Menüpunkten.",
-        "Generiere eine Karte für ein Produkt mit Bild, Titel, Preis und Kaufen-Button.",
-                        "Baue ein einfaches Login-Formular mit E-Mail- und Passwortfeld."
+        "Erstelle eine responsive Navigationsleiste mit Logo auf der linken Seite und drei Menüpunkten (Start, Über uns, Kontakt) – mit Tailwind CSS.",
+        "Generiere eine Produktkarte mit Bild, Titel, Preis, Bewertung (Sterne) und einem ‚Kaufen‘-Button.",
+        "Baue ein einfaches Login-Formular mit E-Mail- und Passwortfeld, plus ‚Anmelden‘-Button und einem Link ‚Passwort vergessen?‘."
       ],
       "promptTips": [
-        "Beschreibe, was die Komponente können soll – inklusive Styling (z.B. ‚mit Schatten‘, ‚abgerundete Ecken‘).",
+        "Beschreibe genau, was die Komponente können soll – inklusive Styling-Wünsche (z.B. ‚mit Schatten‘, ‚abgerundete Ecken‘, ‚dunkles Farbschema‘).",
         "Schau dir den generierten Code an, um zu lernen, wie bestimmte UI-Elemente in React umgesetzt werden.",
-        "Du kannst die Komponente direkt in V0 bearbeiten und weiter anpassen."
+        "Du kannst die Komponente direkt in V0 bearbeiten und weiter anpassen – der Code wird live aktualisiert."
       ]
     }
   ]
