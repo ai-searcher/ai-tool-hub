@@ -226,56 +226,60 @@ class StackViewController {
     }
   }
 
+  attachStackListeners() {
+    const stacks = this.container.querySelectorAll('.category-stack');
+    stacks.forEach(stack => {
+      // Klick auf den Header toggelt den Stapel
+      const header = stack.querySelector('.category-header-card');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cardsContainer = stack.querySelector('.stack-cards');
+          if (cardsContainer) {
+            cardsContainer.classList.toggle('fanned');
+          }
+        });
+      }
 
-attachStackListeners() {
-  const stacks = this.container.querySelectorAll('.category-stack');
-  stacks.forEach(stack => {
-    // Klick auf den Header toggelt den Stapel
-    const header = stack.querySelector('.category-header-card');
-    if (header) {
-      header.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const cardsContainer = stack.querySelector('.stack-cards');
-        if (cardsContainer) {
+      // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt ebenfalls
+      const cardsContainer = stack.querySelector('.stack-cards');
+      if (cardsContainer) {
+        cardsContainer.addEventListener('click', (e) => {
+          // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
+          if (e.target.closest('.stack-card')) return;
           cardsContainer.classList.toggle('fanned');
-        }
-      });
-    }
-
-    // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt ebenfalls
-    const cardsContainer = stack.querySelector('.stack-cards');
-    if (cardsContainer) {
-      cardsContainer.addEventListener('click', (e) => {
-        // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
-        if (e.target.closest('.stack-card')) return;
-        cardsContainer.classList.toggle('fanned');
-      });
-    }
-  });
-
-  // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
-  const stackCards = this.container.querySelectorAll('.stack-card');
-  stackCards.forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const toolId = card.dataset.toolId;
-      const tool = this.state.tools.find(t => String(t.id) === String(toolId));
-      if (!tool) return;
-
-      if (window.innerWidth < 768) {
-        window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-      } else {
-        if (typeof openToolModal === 'function') {
-          openToolModal(tool);
-        } else {
-          window.open(tool.link, '_blank', 'noopener,noreferrer');
-        }
+        });
       }
     });
-  });
+
+    // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
+    const stackCards = this.container.querySelectorAll('.stack-card');
+    stackCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const toolId = card.dataset.toolId;
+        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
+        if (!tool) return;
+
+        if (window.innerWidth < 768) {
+          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+        } else {
+          if (typeof openToolModal === 'function') {
+            openToolModal(tool);
+          } else {
+            window.open(tool.link, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+    });
+  }
+
+  destroy() {
+    this.container.innerHTML = '';
+    this.container.classList.remove('tool-stacks');
+  }
 }
-} // <-- DIESE KLAMMER FEHLT!
 
 // =========================================
 // VALIDATION RULES
