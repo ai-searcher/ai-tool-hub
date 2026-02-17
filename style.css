@@ -582,6 +582,10 @@ body {
 
 .category-stack {
   position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  padding: 1.5rem 1rem;
+  transition: all 0.3s ease;
   animation: fadeInUp 0.6s ease backwards;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -594,153 +598,185 @@ body {
 .category-stack:nth-child(5) { animation-delay: 0.5s; }
 .category-stack:nth-child(6) { animation-delay: 0.6s; }
 
-.stack-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-  padding: 0 var(--spacing-sm);
-}
-
-.stack-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.stack-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  padding: 0 8px;
-  border-radius: 50%;
-  font-size: 0.85rem;
-  font-weight: 700;
-  opacity: 0.9;
-}
-
-.category-stack[data-category="text"] .stack-title { color: var(--color-text); }
-.category-stack[data-category="text"] .stack-count {
-  background: var(--glow-text);
-  color: var(--color-text);
-}
-.category-stack[data-category="image"] .stack-title { color: var(--color-image); }
-.category-stack[data-category="image"] .stack-count {
-  background: var(--glow-image);
-  color: var(--color-image);
-}
-.category-stack[data-category="code"] .stack-title { color: var(--color-code); }
-.category-stack[data-category="code"] .stack-count {
-  background: var(--glow-code);
-  color: var(--color-code);
-}
-.category-stack[data-category="audio"] .stack-title { color: var(--color-audio); }
-.category-stack[data-category="audio"] .stack-count {
-  background: var(--glow-audio);
-  color: var(--color-audio);
-}
-.category-stack[data-category="video"] .stack-title { color: var(--color-video); }
-.category-stack[data-category="video"] .stack-count {
-  background: var(--glow-video);
-  color: var(--color-video);
-}
-.category-stack[data-category="data"] .stack-title { color: var(--color-data); }
-.category-stack[data-category="data"] .stack-count {
-  background: var(--glow-data);
-  color: var(--color-data);
-}
-
-.stack-container {
-  position: relative;
-  min-height: 300px;
+/* Kategorie-Header – jetzt im Design der Tool-Quadrate */
+.category-header-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
   cursor: pointer;
-  transition: transform var(--transition-normal);
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  /* Gleiche Optik wie .card-square, aber ohne aspect-ratio */
 }
 
+.category-header-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px var(--primary-glow), 0 6px 20px rgba(2,12,30,0.45);
+}
+
+.category-header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.category-header-description {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* Stack-Container für die Karten */
 .stack-cards {
   position: relative;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  min-height: 120px; /* Platz für mindestens eine Karte */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Einzelne Karte im Stapel – jetzt mit vollem Quadrat-Design */
 .stack-card {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  background: var(--bg-card);
+  aspect-ratio: 1 / 1; /* quadratisch wie die normalen Karten */
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 1rem;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  backface-visibility: hidden;
+  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease,
+              box-shadow 0.4s ease;
+  pointer-events: auto;
   cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  pointer-events: auto !important;
+  transform-origin: top left;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
+/* Innerer Inhalt der Stack-Karte – angelehnt an .square-content-centered */
+.stack-card .stack-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.stack-card .stack-card-category {
+  display: inline-block;
+  background: var(--primary-dim);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+/* Kategoriespezifische Farben für den Badge in der Stack-Karte */
+.category-stack[data-category="text"] .stack-card .stack-card-category {
+  background: var(--glow-text);
+  color: var(--color-text);
+}
+.category-stack[data-category="image"] .stack-card .stack-card-category {
+  background: var(--glow-image);
+  color: var(--color-image);
+}
+.category-stack[data-category="code"] .stack-card .stack-card-category {
+  background: var(--glow-code);
+  color: var(--color-code);
+}
+.category-stack[data-category="audio"] .stack-card .stack-card-category {
+  background: var(--glow-audio);
+  color: var(--color-audio);
+}
+.category-stack[data-category="video"] .stack-card .stack-card-category {
+  background: var(--glow-video);
+  color: var(--color-video);
+}
+.category-stack[data-category="data"] .stack-card .stack-card-category {
+  background: var(--glow-data);
+  color: var(--color-data);
+}
+
+/* Geschlossener Zustand: gestapelt mit Versatz */
 .stack-cards:not(.fanned) .stack-card:nth-child(1) {
-  transform: translateZ(0px) translateY(0px);
-  z-index: 3;
+  transform: translate(0, 0) scale(1);
+  z-index: 5;
   opacity: 1;
 }
 .stack-cards:not(.fanned) .stack-card:nth-child(2) {
-  transform: translateZ(-20px) translateY(8px);
-  z-index: 2;
-  opacity: 0.8;
+  transform: translate(4px, 4px) scale(0.98);
+  z-index: 4;
+  opacity: 0.9;
 }
 .stack-cards:not(.fanned) .stack-card:nth-child(3) {
-  transform: translateZ(-40px) translateY(16px);
+  transform: translate(8px, 8px) scale(0.96);
+  z-index: 3;
+  opacity: 0.8;
+}
+.stack-cards:not(.fanned) .stack-card:nth-child(4) {
+  transform: translate(12px, 12px) scale(0.94);
+  z-index: 2;
+  opacity: 0.7;
+}
+.stack-cards:not(.fanned) .stack-card:nth-child(n+5) {
+  transform: translate(16px, 16px) scale(0.92);
   z-index: 1;
   opacity: 0.6;
 }
-.stack-cards:not(.fanned) .stack-card:nth-child(n+4) {
-  transform: translateZ(-60px) translateY(24px);
-  z-index: 0;
-  opacity: 0.4;
+
+/* Aufgeklappter Zustand (fanned) – alle Karten untereinander */
+.stack-cards.fanned {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  min-height: auto;
 }
 
-.stack-cards.fanned { gap: var(--spacing-md); }
 .stack-cards.fanned .stack-card {
   position: relative;
-  margin-bottom: var(--spacing-md);
   transform: none !important;
   opacity: 1 !important;
-  z-index: auto !important;
-  pointer-events: auto !important;
+  margin-bottom: 0.5rem;
+  aspect-ratio: auto; /* im aufgeklappten Zustand Höhe nach Inhalt */
+  min-height: 100px; /* Mindesthöhe, damit sie nicht zu klein werden */
 }
 
-.category-stack[data-category="text"] .stack-cards.fanned .stack-card { border-color: var(--color-text); }
-.category-stack[data-category="image"] .stack-cards.fanned .stack-card { border-color: var(--color-image); }
-.category-stack[data-category="code"] .stack-cards.fanned .stack-card { border-color: var(--color-code); }
-.category-stack[data-category="audio"] .stack-cards.fanned .stack-card { border-color: var(--color-audio); }
-.category-stack[data-category="video"] .stack-cards.fanned .stack-card { border-color: var(--color-video); }
-.category-stack[data-category="data"] .stack-cards.fanned .stack-card { border-color: var(--color-data); }
-
-.stack-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  opacity: 0.8;
+/* Kategoriespezifische Rahmenfarbe im fanned-Zustand */
+.category-stack[data-category="text"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-text);
 }
-.category-stack[data-category="text"] .stack-card::before { background: var(--color-text); }
-.category-stack[data-category="image"] .stack-card::before { background: var(--color-image); }
-.category-stack[data-category="code"] .stack-card::before { background: var(--color-code); }
-.category-stack[data-category="audio"] .stack-card::before { background: var(--color-audio); }
-.category-stack[data-category="video"] .stack-card::before { background: var(--color-video); }
-.category-stack[data-category="data"] .stack-card::before { background: var(--color-data); }
+.category-stack[data-category="image"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-image);
+}
+.category-stack[data-category="code"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-code);
+}
+.category-stack[data-category="audio"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-audio);
+}
+.category-stack[data-category="video"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-video);
+}
+.category-stack[data-category="data"] .stack-cards.fanned .stack-card {
+  border-color: var(--color-data);
+}
 
 /* ==================== FOOTER ==================== */
 .footer {
@@ -851,7 +887,7 @@ body {
   height: 100%;
   gap: 0;
   padding: 14px;
-  padding-left: 8px;   /* zusätzlicher Innenabstand */
+  padding-left: 8px;
   text-align: left;
   position: relative;
   z-index: 2;
@@ -880,7 +916,7 @@ body {
 .card-square .square-title-large {
   position: absolute;
   left: 12px;
-  bottom: 49px;         /* 12px (Marquee bottom) + 22px (Marquee height) + 15px (4mm) */
+  bottom: 49px;
   font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.2;
@@ -1047,14 +1083,14 @@ body {
     transform: scale(1);
     box-shadow:
       0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px transparent;               /* Rand unsichtbar */
+      0 0 0 1px transparent;
   }
   50% {
     transform: scale(1.055);
     box-shadow:
       0 14px 28px rgba(0, 0, 0, 0.4),
       0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px var(--glow-color);         /* Farbrand erscheint */
+      0 0 0 1px var(--glow-color);
   }
 }
 
@@ -1221,7 +1257,7 @@ button,
 
   .card-square .square-title-large {
     font-size: 1rem;
-    bottom: 49px; /* gleich wie Desktop, da Marquee-Höhe gleich */
+    bottom: 49px;
   }
 
   .square-content-centered {
@@ -1231,7 +1267,7 @@ button,
   .square-category-badge {
     font-size: 0.7rem !important;
     padding: 4px 10px !important;
-    top: 8px;          /* beibehalten */
+    top: 8px;
     left: 12px !important;
   }
 
@@ -1660,146 +1696,5 @@ a:focus-visible {
   }
 }
 
- /* ==================== KATEGORIE-STACKS ==================== */
-
-/* Container für die Stack-Ansicht (wird per JS befüllt) */
-.tool-grid.tool-stacks {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem 1rem;
-}
-
-/* Einzelner Kategorie-Stack */
-.category-stack {
-  background: rgba(255,255,255,0.02);
-  border-radius: 24px;
-  padding: 1.5rem 1rem;
-  transition: all 0.3s ease;
-}
-
-/* Kopf-Quadrat einer Kategorie */
-.category-header-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-  backdrop-filter: blur(8px);
-  border-radius: 20px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.category-header-card:hover {
-  border-color: var(--primary);
-  box-shadow: 0 0 20px var(--primary-glow);
-}
-
-.category-header-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin: 0 0 0.5rem 0;
-}
-
-.category-header-description {
-  font-size: 0.9rem;
-  color: var(--text-dim);
-  margin: 0;
-}
-
-/* Stack-Container für die Karten */
-.stack-cards {
-  position: relative;
-  min-height: 80px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Einzelne Karte im Stapel */
-.stack-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.4s ease,
-              box-shadow 0.4s ease;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  pointer-events: auto;
-  cursor: pointer;
-  transform-origin: top left;
-}
-
-/* Geschlossener Zustand: gestapelt mit Versatz */
-.stack-cards:not(.fanned) .stack-card:nth-child(1) {
-  transform: translate(0, 0) scale(1);
-  z-index: 5;
-  opacity: 1;
-}
-.stack-cards:not(.fanned) .stack-card:nth-child(2) {
-  transform: translate(4px, 4px) scale(0.98);
-  z-index: 4;
-  opacity: 0.9;
-}
-.stack-cards:not(.fanned) .stack-card:nth-child(3) {
-  transform: translate(8px, 8px) scale(0.96);
-  z-index: 3;
-  opacity: 0.8;
-}
-.stack-cards:not(.fanned) .stack-card:nth-child(4) {
-  transform: translate(12px, 12px) scale(0.94);
-  z-index: 2;
-  opacity: 0.7;
-}
-.stack-cards:not(.fanned) .stack-card:nth-child(n+5) {
-  transform: translate(16px, 16px) scale(0.92);
-  z-index: 1;
-  opacity: 0.6;
-}
-
-/* Aufgeklappter Zustand (fanned) – alle Karten untereinander */
-.stack-cards.fanned {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: relative;
-  min-height: auto;
-}
-
-.stack-cards.fanned .stack-card {
-  position: relative;
-  transform: none !important;
-  opacity: 1 !important;
-  margin-bottom: 0.5rem;
-}
-
-/* Sortier-Leiste (optional, später erweiterbar) */
-.sort-bar {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-
-.sort-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 0.4rem 1rem;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sort-btn:hover,
-.sort-btn.active {
-  background: var(--primary-dim);
-  color: var(--primary);
-  border-color: var(--primary);
-}
+ /* ==================== KATEGORIE-STACKS (bereits oben integriert) ==================== */
+/* Alles für Stacks wurde bereits im entsprechenden Abschnitt definiert */
