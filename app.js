@@ -815,25 +815,27 @@ attachCardHandlers() {
 
       // ✅ BESSER (ÖFFNET NEUEN TAB):
 if (isMobile) {
-  console.log('📱 Mobile: Opening link directly');
-  if (href && href !== '#') {
+  console.log('📱 Mobile: Opening detail page');
+  if (toolId) {
     // Visuelles Feedback
     card.style.transform = 'scale(0.95)';
     card.style.opacity = '0.7';
     
     setTimeout(() => {
-      // Öffnet in neuem Tab, behält Quantum AI Hub offen
-      window.open(href, '_blank', 'noopener,noreferrer');
+      // Detailseite im gleichen Tab öffnen
+      window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
       
-      // Visuelles Feedback zurücksetzen
-      card.style.transform = '';
-      card.style.opacity = '';
+      // Hinweis: Das Zurücksetzen der Styles ist nicht mehr nötig,
+      // da die Seite verlassen wird.
     }, 150);
   } else {
-    console.error('❌ No valid href found!');
-    alert('Link nicht verfügbar');
-   }
-  } else {
+    console.error('❌ No tool ID found!');
+    // Fallback: trotzdem direkt öffnen?
+    if (href) {
+      window.open(href, '_blank', 'noopener,noreferrer');
+    }
+  }
+} else {
         // Desktop: Modal öffnen
         if (typeof openToolModal === 'function') {
           try {
