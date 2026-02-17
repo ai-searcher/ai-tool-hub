@@ -1528,15 +1528,14 @@ button,
 
 /* Tool title: 2mm höher + 3mm nach links */
 .card-square .square-title-large {
-  margin: 12px 0 6px 18px;
-  font-size: 1.15rem;
+  position: relative;
+  margin: 0;
+  margin-top: 6px;     /* 2mm höher */
+  margin-left: 8px;    /* 3mm weiter links */
+  font-size: 1.15rem;  /* Originalgröße */
   line-height: 1.18;
   color: var(--text-primary);
-  max-width: calc(100% - 36px);
   word-break: break-word;
-  text-wrap: balance;
-  transform: translate(-11px, -8px) !important;
-  transition: color 160ms ease, transform 200ms ease;
 }
 
 /* Mobile sizing */
@@ -1585,22 +1584,14 @@ button,
 
 /* Card-Specific: fixierte Position (transparent) */
 .card-square .context-marquee {
-  position: absolute !important;
-  left: 14px !important;
-  right: 14px !important;
-  bottom: 11px !important;
-  height: 22px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
-  overflow: hidden !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: none !important;
-  z-index: 2 !important;
-  border-bottom-left-radius: inherit !important;
-  border-bottom-right-radius: inherit !important;
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 8px;
+  height: 22px;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
 }
 
 /* Track */
