@@ -1580,9 +1580,7 @@ button,
   opacity: 0 !important;
 }
 
-/* =========================
-   MARQUEE (ONE CLEAN BLOCK)
-   ========================= */
+/* ========================= MARQUEE (ONE CLEAN BLOCK) ========================= */
 
 :root { --marquee-overscan: 20px; }
 
@@ -1596,19 +1594,41 @@ button,
   pointer-events: none;
   align-self: stretch;
   flex-shrink: 0;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
 }
 
-/* Card-Specific: fixierte Position (transparent) */
-.context-marquee {
-  position: relative;
-  width: 100%;
+/* Card-Specific: fixierte Position am unteren Rand mit Fade */
+.card-square .context-marquee {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   height: 22px;
-  margin-top: 6px;
   overflow: hidden;
   pointer-events: none;
   background: transparent;
+  z-index: 2;
+}
+
+/* Linker und rechter Fade – gleichmäßig */
+.card-square .context-marquee::before,
+.card-square .context-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 30px;          /* Breite des Fade */
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.card-square .context-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #1A1E37, rgba(26,30,55,0));
+}
+
+.card-square .context-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #1A1E37, rgba(26,30,55,0));
 }
 
 /* Track */
@@ -1632,13 +1652,6 @@ button,
   pointer-events: none;
   background: transparent !important;
   box-shadow: none !important;
-}
-
-/* Entferne Fade-Overlays (falls vorhanden) */
-.context-marquee::before,
-.context-marquee::after {
-  display: none !important;
-  content: none !important;
 }
 
 /* Animation */
@@ -1992,15 +2005,20 @@ a:focus-visible {
   z-index: 10000 !important;
 }
 
-/* Tool title: 2mm höher + 3mm nach links */
+/* Tool title: exakte Positionierung 3mm links, 4mm über Marquee */
 .card-square .square-title-large {
-  position: relative;
-  margin: 0;
-  margin-top: 6px;     /* 2mm höher */
-  margin-left: 8px;    /* 3mm weiter links */
-  font-size: 1.15rem;  /* Originalgröße */
-  line-height: 1.18;
+  position: absolute;
+  left: 12px;           /* 3mm vom linken Rand */
+  bottom: 49px;         /* 12px (Marquee bottom) + 22px (Marquee height) + 15px (4mm) */
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
   color: var(--text-primary);
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 24px); /* Platz für links/rechts Abstand */
+  pointer-events: none;
+  z-index: 3;
 }
 
