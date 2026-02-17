@@ -1607,18 +1607,22 @@ a:focus-visible {
 /* ==================== STATS MARQUEE ==================== */
 .stats-marquee {
   width: 100%;
-  max-width: 400px;        /* schmaler als die vorherige Breite */
-  height: 36px;            /* kompakte Höhe */
+  max-width: 400px;
+  height: 36px;
   margin: 0 auto;
   overflow: hidden;
   white-space: nowrap;
   background: rgba(255,255,255,0.03);
-  border-radius: 30px;      /* weiche, abgerundete Form */
+  border-radius: 30px;
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   padding: 0 8px;
   box-sizing: border-box;
+
+  /* Weiche Kanten links und rechts */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
 }
 
 .stats-marquee .marquee-track {
@@ -1631,7 +1635,7 @@ a:focus-visible {
 
 .stats-marquee .marquee-track span {
   display: inline-block;
-  padding-right: 3rem;      /* Abstand zwischen den Blöcken */
+  padding-right: 3rem;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--primary);
@@ -1644,7 +1648,6 @@ a:focus-visible {
   margin-right: 0.2rem;
 }
 
-/* Pause bei Hover (optional) */
 .stats-marquee:hover .marquee-track {
   animation-play-state: paused;
 }
@@ -1654,7 +1657,6 @@ a:focus-visible {
   100% { transform: translateX(-50%); }
 }
 
-/* Für mobile noch schmaler */
 @media (max-width: 767px) {
   .stats-marquee {
     max-width: 90%;
