@@ -2098,3 +2098,55 @@ body.custom-color-scheme .detail-description,
 body.custom-color-scheme .detail-list-item {
   color: var(--text-primary);
 }
+
+/* ==================== INTELLIGENTE SUCHE – DROPDOWN ==================== */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.02);
+  z-index: 1100;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+}
+
+.search-suggestions .suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: var(--text-primary);
+}
+
+.search-suggestions .suggestion-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.search-suggestions .suggestion-item .suggestion-icon {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.search-suggestions .suggestion-item .suggestion-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Mobile Anpassung */
+@media (max-width: 767px) {
+  .search-suggestions {
+    max-height: 250px;
+  }
+  .search-suggestions .suggestion-item {
+    padding: 10px 12px;
+  }
+}
