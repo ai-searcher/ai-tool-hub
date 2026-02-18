@@ -1317,17 +1317,21 @@ const app = {
         viewToggle.parentNode.replaceChild(newToggle, viewToggle);
         ui.elements.viewToggle = newToggle;
         
-        newToggle.addEventListener('click', (e) => {
-          const btn = e.target.closest('.toggle-btn');
-          if (!btn) return;
-          const view = btn.dataset.view;
-          if (!view) return;
-          
-          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          
-          ui.switchView(view);
-        });
+newToggle.addEventListener('click', (e) => {
+  const btn = e.target.closest('.toggle-btn');
+  if (!btn) return;
+  
+  // Sortier-Button ignorieren
+  if (btn.classList.contains('sort-trigger')) return;
+  
+  const view = btn.dataset.view;
+  if (!view) return;
+  
+  newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  ui.switchView(view);
+});
       }
       
       // Globale Scroll-Buttons
