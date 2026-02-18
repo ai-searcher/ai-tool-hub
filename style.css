@@ -87,6 +87,56 @@
 
   /* Marquee */
   --marquee-overscan: 20px;
+
+  /* ===== NEUE VARIABLEN FÜR FARBSCHEMA-FLEXIBILITÄT ===== */
+  /* Header */
+  --header-glow-color: var(--primary-dim);
+
+  /* Titel-Gradient */
+  --title-gradient-to: #FFFFFF;
+
+  /* Karten-Hintergründe */
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --card-shadow: 0 6px 20px rgba(2,12,30,0.45);
+  --card-inset-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  --card-hover-transform: translateY(-8px) scale(1.03);
+  --card-hover-shadow: 0 16px 32px rgba(0,0,0,0.5), 0 0 40px var(--primary-glow), 0 0 0 1px rgba(255,255,255,0.12);
+  --card-hover-border: rgba(255,255,255,0.12);
+  --card-active-transform: scale(1.08);
+  --card-active-shadow: 0 12px 24px rgba(0,0,0,0.4), 0 0 30px var(--primary-glow), 0 0 0 1px rgba(255,255,255,0.1);
+
+  /* Marquee-Text */
+  --marquee-text-color: rgba(255,255,255,0.78);
+
+  /* Scroll-Buttons (rechts & links) */
+  --scroll-btn-bg: rgba(30,35,55,0.7);
+  --scroll-btn-border: rgba(255,255,255,0.15);
+  --scroll-btn-color: rgba(255,255,255,0.9);
+  --scroll-btn-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  --scroll-btn-hover-bg: rgba(50,55,80,0.9);
+  --scroll-btn-hover-border: var(--primary);
+  --scroll-btn-hover-shadow: 0 0 15px var(--primary-glow);
+
+  /* Sortier-Dropdown */
+  --sort-menu-bg: rgba(26,30,55,0.7);
+  --sort-menu-border: rgba(255,255,255,0.1);
+  --sort-menu-hover-bg: rgba(255,255,255,0.05);
+
+  /* Card-Link Glow */
+  --card-link-glow: rgba(255,255,255,0.2);
+
+  /* Breathing-Animation */
+  --breathing-shadow-start: 0 4px 8px rgba(0,0,0,0.2);
+  --breathing-shadow-mid: 0 14px 28px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
+  --breathing-glow-border: 1px var(--glow-color); /* wird von der Kategorie überschrieben */
+
+  /* Sticky-Bar */
+  --sticky-bg: rgba(26,30,55,0.7);
+  --sticky-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+  /* Kategorie-Kopf Glow */
+  --category-header-glow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+  --category-header-glow-mid: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
 }
 
 /* ==================== RESET & BASE ==================== */
@@ -117,6 +167,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease; /* optional für sanften Wechsel */
 }
 
 /* ==================== CONTAINER ==================== */
@@ -144,8 +195,8 @@ body {
   right: 0;
   bottom: 0;
   background-image:
-    radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
+    radial-gradient(circle at 20% 50%, var(--header-glow-color) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--header-glow-color) 0%, transparent 50%);
   opacity: 0.3;
   pointer-events: none;
   z-index: var(--z-base);
@@ -163,7 +214,7 @@ body {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--primary) 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--title-gradient-to) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -495,7 +546,7 @@ body {
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--card-link-glow);
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s, opacity 0.3s;
   opacity: 1;
@@ -522,7 +573,7 @@ body {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: 0;                 /* negativen Wert entfernt */
+  margin-top: 0;
   margin-bottom: var(--spacing-lg);
   padding: var(--spacing-sm);
   background: transparent;
@@ -586,7 +637,6 @@ body {
 
 .toggle-btn:active { transform: scale(0.98); }
 
-
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
 .tool-stacks {
   display: grid;
@@ -615,22 +665,25 @@ body {
 
 /* Kategorie-Header – jetzt im Design der Tool-Quadrate */
 .category-header-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  box-shadow: var(--card-shadow), var(--card-inset-shadow);
   transition: all 0.3s ease;
   cursor: pointer;
   /* Gleiche Optik wie .card-square, aber ohne aspect-ratio */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .category-header-card:hover {
   border-color: var(--primary);
-  box-shadow: 0 0 20px var(--primary-glow), 0 6px 20px rgba(2,12,30,0.45);
+  box-shadow: 0 0 20px var(--primary-glow), var(--card-shadow);
 }
 
 .category-header-title {
@@ -644,6 +697,20 @@ body {
   font-size: 0.9rem;
   color: var(--text-dim);
   margin: 0;
+}
+
+.category-header-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.category-header-card .context-marquee {
+  margin-top: auto;
+  width: 100%;
+  height: 22px;
 }
 
 /* Stack-Container für die Karten */
@@ -660,13 +727,13 @@ body {
   left: 0;
   right: 0;
   aspect-ratio: 1 / 1; /* quadratisch wie die normalen Karten */
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   padding: 1rem;
   border: 1px solid var(--border);
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  box-shadow: var(--card-shadow), var(--card-inset-shadow);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.4s ease,
               box-shadow 0.4s ease;
@@ -867,7 +934,7 @@ body {
 /* ==================== CARD-SQUARE - MODERN ==================== */
 .card-square {
   position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: var(--card-bg);
   border-radius: 20px;
   padding: 18px;
   aspect-ratio: 1/1;
@@ -882,7 +949,7 @@ body {
   user-select: none;
   cursor: pointer;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  box-shadow: var(--card-shadow), var(--card-inset-shadow);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -1026,7 +1093,7 @@ body {
   padding-right: 3.5rem;
   font-size: 0.68rem;
   font-weight: 500;
-  color: rgba(255,255,255,0.78);
+  color: var(--marquee-text-color);
   letter-spacing: 0.02em;
   line-height: 22px;
   pointer-events: none;
@@ -1097,16 +1164,11 @@ body {
 @keyframes breathing-glow {
   0%, 100% {
     transform: scale(1);
-    box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 0 0 1px transparent;
+    box-shadow: var(--breathing-shadow-start), 0 0 0 1px transparent;
   }
   50% {
     transform: scale(1.055);
-    box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
-      0 0 0 1px var(--glow-color);
+    box-shadow: var(--breathing-shadow-mid), 0 0 0 1px var(--glow-color);
   }
 }
 
@@ -1154,12 +1216,9 @@ body {
   #tool-grid .card-square:hover,
   .tool-grid-squares .card-square:hover {
     animation: none !important;
-    transform: translateY(-8px) scale(1.03) !important;
-    box-shadow:
-      0 16px 32px rgba(0, 0, 0, 0.5),
-      0 0 40px rgba(99, 102, 241, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.12) !important;
-    border-color: rgba(99, 102, 241, 0.4) !important;
+    transform: var(--card-hover-transform) !important;
+    box-shadow: var(--card-hover-shadow) !important;
+    border-color: var(--primary) !important;
   }
 
   #tool-grid .card-square:hover .context-marquee .marquee-track,
@@ -1169,14 +1228,14 @@ body {
 
   #tool-grid .card-square:hover .square-category-badge,
   .tool-grid-squares .card-square:hover .square-category-badge {
-    background: rgba(99, 102, 241, 0.25) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
+    background: var(--primary-dim) !important;
+    border-color: var(--primary) !important;
     transform: scale(1.05) !important;
   }
 
   #tool-grid .card-square:hover .square-title-large,
   .tool-grid-squares .card-square:hover .square-title-large {
-    color: rgba(255, 255, 255, 1) !important;
+    color: var(--text-primary) !important;
   }
 }
 
@@ -1184,12 +1243,9 @@ body {
 @media (max-width: 767px) {
   #tool-grid .card-square:active,
   .tool-grid-squares .card-square:active {
-    transform: scale(1.08) !important;
-    box-shadow:
-      0 12px 24px rgba(0, 0, 0, 0.4),
-      0 0 30px rgba(99, 102, 241, 0.2),
-      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
+    transform: var(--card-active-transform) !important;
+    box-shadow: var(--card-active-shadow) !important;
+    border-color: var(--primary) !important;
   }
 
   #tool-grid .card-square:active .context-marquee .marquee-track,
@@ -1225,9 +1281,9 @@ body {
 
 @media (hover: none) {
   .card-square:hover {
-    animation: breathing 8s ease-in-out infinite !important;
+    animation: breathing-glow 8s ease-in-out infinite !important;
     transform: scale(1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--breathing-shadow-start);
   }
 }
 
@@ -1746,97 +1802,13 @@ a:focus-visible {
   top: calc(100% + 8px);
   left: 0;
   min-width: 200px;
-  background: var(--bg-card);
+  background: var(--sort-menu-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--sort-menu-border);
+  border-radius: var(--radius-lg);
   padding: 8px 0;
-  box-shadow: var(--shadow-lg);
-  z-index: 1000;
-  display: none;
-  flex-direction: column;
-}
-
-.sort-dropdown.active .sort-menu {
-  display: flex;
-}
-
-.sort-menu button {
-  background: transparent;
-  border: none;
-  color: var(--text-dim);
-  padding: 10px 16px;
-  text-align: left;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.sort-menu button:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-}
-
-.sort-menu button.active {
-  background: var(--primary-dim);
-  color: var(--primary);
-  font-weight: 500;
-}
-
-/* Mobile Anpassung */
-@media (max-width: 767px) {
-  .sort-menu {
-    left: auto;
-    right: 0;
-    min-width: 180px;
-  }
-  
-  .sort-menu button {
-    white-space: normal;
-    font-size: 0.85rem;
-    padding: 12px 16px;
-  }
-}
-
-@media (max-width: 767px) {
-  .view-toggle {
-    width: 100%;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.25rem;          /* leicht reduziert (ca. 4px) */
-  }
-
-  .view-toggle .toggle-btn {   /* Korrektur: Leerzeichen zwischen .view-toggle und .toggle-btn */
-    flex: 0 1 auto;
-    padding: 6px 12px;         /* ursprünglich 10px 20px, für Mobil etwas kleiner */
-    font-size: 0.85rem;        /* ursprünglich 0.95rem, leicht reduziert */
-    white-space: nowrap;
-  }
-
-  .sort-dropdown {
-    flex: 0 1 auto;
-  }
-
-  .sort-trigger {
-    padding-right: 1.8rem;     /* Platz für Pfeil */
-  }
-}
-
-/* ==================== SORTIER-DROPDOWN – GLASIG WIE TOOL-QUADRATE ==================== */
-.sort-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  min-width: 200px;
-  background: rgba(26, 30, 55, 0.7);        /* --bg-card mit Transparenz */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);          /* großzügige Abrundung */
-  padding: 8px 0;
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.02);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.02);
   z-index: 1000;
   display: none;
   flex-direction: column;
@@ -1861,7 +1833,7 @@ a:focus-visible {
 }
 
 .sort-menu button:hover {
-  background: rgba(255, 255, 255, 0.05);   /* dezentes Hover */
+  background: var(--sort-menu-hover-bg);
   color: var(--text-primary);
 }
 
@@ -1870,8 +1842,6 @@ a:focus-visible {
   color: var(--primary);
   font-weight: 500;
 }
-
-/* Kleiner Pfeil (optional – bereits im Trigger vorhanden) */
 
 /* Mobile Anpassung */
 @media (max-width: 767px) {
@@ -1892,18 +1862,18 @@ a:focus-visible {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(30, 35, 55, 0.7);
+  background: var(--scroll-btn-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.9);
+  border: 1px solid var(--scroll-btn-border);
+  color: var(--scroll-btn-color);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-size: 20px; /* Standard für Pfeile */
+  box-shadow: var(--scroll-btn-shadow);
+  font-size: 20px;
   line-height: 1;
   padding: 0;
   outline: none;
@@ -1920,10 +1890,10 @@ a:focus-visible {
 
 .scroll-btn:hover,
 .scroll-btn:active {
-  background: rgba(50, 55, 80, 0.9);
-  border-color: var(--primary);
+  background: var(--scroll-btn-hover-bg);
+  border-color: var(--scroll-btn-hover-border);
   transform: scale(1.05);
-  box-shadow: 0 0 15px var(--primary-glow);
+  box-shadow: var(--scroll-btn-hover-shadow);
 }
 
 /* ==================== GLOBALE SCROLL-BUTTONS (rechts) ==================== */
@@ -1978,10 +1948,10 @@ a:focus-visible {
 
 /* Glasiger Hintergrund für die sticky Bar */
 .view-toggle.sticky-active {
-  background: rgba(26, 30, 55, 0.7) !important;
+  background: var(--sticky-bg) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: var(--sticky-shadow) !important;
 }
 
 /* ==================== HEADER SUBLINE ==================== */
@@ -2015,41 +1985,34 @@ a:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Inhalt oben, Marquee unten */
-  /* Bestehende Eigenschaften bleiben erhalten, nur ergänzen */
+  animation: category-glow 4s ease-in-out infinite;
 }
 
 .category-header-content {
-  flex: 1; /* Nimmt den verfügbaren Platz ein */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Titel und Beschreibung vertikal zentrieren (optional) */
+  justify-content: center;
   text-align: center;
 }
 
 .category-header-card .context-marquee {
-  margin-top: auto; /* Schiebt den Marquee nach unten */
+  margin-top: auto;
   width: 100%;
-  height: 22px; /* Gleiche Höhe wie bei Tool-Karten */
-  /* Maskierung etc. wird von .context-marquee geerbt */
+  height: 22px;
 }
-
-/* Falls die Tool-Karten-Marquee bereits definiert ist, wird sie automatisch übernommen */
 
 /* Pulsierender Glow für Kategorie-Köpfe (signalisiert Klickbarkeit) */
 @keyframes category-glow {
   0%, 100% {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: var(--category-header-glow);
   }
   50% {
-    box-shadow: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
+    box-shadow: var(--category-header-glow-mid);
   }
 }
 
-.category-header-card {
-  animation: category-glow 4s ease-in-out infinite;
-}
-
-/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & PETROL) ==================== */
+/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & ROT) ==================== */
 body.custom-color-scheme {
   /* Hintergründe */
   --bg-dark: #F0F2F5;
@@ -2064,43 +2027,80 @@ body.custom-color-scheme {
   --text-dim: #4A5060;
   --text-muted: #5A6070;
 
-  /* Akzentfarben (Petrol) */
-  --primary: #006D77;
-  --primary-hover: #00535C;
-  --primary-glow: rgba(0, 109, 119, 0.2);
-  --primary-dim: rgba(0, 109, 119, 0.1);
+  /* Akzentfarben (rot) */
+  --primary: #D32F2F;
+  --primary-hover: #B71C1C;
+  --primary-glow: rgba(211, 47, 47, 0.2);
+  --primary-dim: rgba(211, 47, 47, 0.1);
 
   /* Schatten */
   --shadow-glow: 0 0 20px var(--primary-glow);
+
+  /* Header-Glow */
+  --header-glow-color: var(--primary-dim);
+
+  /* Titel-Gradient (zweite Farbe heller) */
+  --title-gradient-to: #FFFFFF; /* bleibt weiß, da Hintergrund hell */
+
+  /* Karten-Hintergründe */
+  --card-bg: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+  --card-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  --card-inset-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  --card-hover-shadow: 0 16px 32px rgba(0,0,0,0.3), 0 0 40px var(--primary-glow), 0 0 0 1px rgba(0,0,0,0.1);
+  --card-active-shadow: 0 12px 24px rgba(0,0,0,0.25), 0 0 30px var(--primary-glow), 0 0 0 1px rgba(0,0,0,0.1);
+
+  /* Marquee-Text */
+  --marquee-text-color: #2E3440;
+
+  /* Scroll-Buttons */
+  --scroll-btn-bg: rgba(255,255,255,0.7);
+  --scroll-btn-border: rgba(0,0,0,0.15);
+  --scroll-btn-color: #2E3440;
+  --scroll-btn-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  --scroll-btn-hover-bg: rgba(255,255,255,0.9);
+  --scroll-btn-hover-border: var(--primary);
+  --scroll-btn-hover-shadow: 0 0 15px var(--primary-glow);
+
+  /* Sortier-Dropdown */
+  --sort-menu-bg: rgba(255,255,255,0.7);
+  --sort-menu-border: rgba(0,0,0,0.1);
+  --sort-menu-hover-bg: rgba(0,0,0,0.05);
+
+  /* Card-Link Glow */
+  --card-link-glow: rgba(0,0,0,0.1);
+
+  /* Breathing-Animation */
+  --breathing-shadow-start: 0 4px 8px rgba(0,0,0,0.1);
+  --breathing-shadow-mid: 0 14px 28px rgba(0,0,0,0.2), 0 0 20px var(--primary-glow);
+
+  /* Sticky-Bar */
+  --sticky-bg: rgba(255,255,255,0.7);
+  --sticky-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  /* Kategorie-Kopf Glow */
+  --category-header-glow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
+  --category-header-glow-mid: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
 }
 
-/* Header-Verlauf (dunkler Fade) heller machen */
-body.custom-color-scheme .header::before {
-  background-image:
-    radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
-  opacity: 0.2;
-}
+/* Header-Verlauf (dunkler Fade) heller machen – wird bereits über Variable gesteuert */
 
-/* Marquee-Texte in den Karten auf dunkle Farbe setzen */
+/* Spezifische Anpassungen für Elemente, die nicht über Variablen abgedeckt sind */
 body.custom-color-scheme .context-marquee .marquee-seq {
-  color: #2E3440;
+  color: var(--marquee-text-color); /* bereits durch Variable */
 }
 
-/* Stats-Marquee (Lauftext im Header) */
 body.custom-color-scheme .stats-marquee .marquee-track span {
-  color: #2E3440;
+  color: var(--primary);
 }
 body.custom-color-scheme .stats-marquee .marquee-track span strong {
-  color: #2E3440;
+  color: var(--text-primary);
 }
 
-/* Subline unter dem Header */
 body.custom-color-scheme .header-subline {
-  color: #006D77; /* Akzentfarbe */
+  color: var(--primary);
 }
 
-/* Detail-Panel – heller Hintergrund und dunkle Schrift */
+/* Detail-Panel – falls in index.html nicht vorhanden, aber für detail.html relevant */
 body.custom-color-scheme .detail-panel {
   background: var(--bg-card);
   backdrop-filter: blur(8px);
@@ -2117,10 +2117,7 @@ body.custom-color-scheme .detail-list-item {
   color: var(--text-primary);
 }
 
-/* ==================== THEME-TOGGLE (FARBSCHEMA) – WIRD NICHT MEHR BENÖTIGT, STATT .LEFT-FLOATING-BUTTONS ==================== */
-/* .theme-toggle wurde durch .left-floating-buttons ersetzt */
-
-/* Farbschema-Button vorübergehend ausblenden  
+/* Farbschema-Button vorübergehend ausblenden – bleibt wie gewünscht */
 #colorSchemeToggle {
   display: none;
-}*/
+}
