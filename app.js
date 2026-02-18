@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.6.0 (Optimiert mit Performance-Engine)
+// Version: 1.0.0 (mehrsprachig, fix für Dropdown nach Sprachwechsel)
 // =========================================
 
 'use strict';
@@ -65,8 +65,7 @@ const CONFIG = {
   search: {
     minLength: 1,
     maxLength: 100,
-    debounceMs: 300,
-    maxSuggestions: 8
+    debounceMs: 300
   },
   validation: {
     autoFix: true,
@@ -127,45 +126,6 @@ const DEFAULT_TOOLS = [
     rating: 4.6
   }
 ];
-
-// =========================================
-// PERFORMANCE-OPTIMIERTE SUCHFUNKTIONEN (mit SearchIndex)
-// =========================================
-let searchIndex = null; // wird nach dem Laden der Tools initialisiert
-let domBatcher = null;  // für gebündelte DOM-Updates
-
-// Filter-Funktion, die den Suchindex nutzt
-function filterTools(query) {
-  if (!query || query.length < 2) return state.tools;
-  if (!searchIndex) return state.tools; // Fallback, falls Index nicht bereit
-  const ids = searchIndex.search(query);
-  return ids.map(id => searchIndex.getTool(id)).filter(Boolean);
-}
-
-// Vorschläge basierend auf dem Suchindex
-function generateToolSuggestions(query) {
-  if (!query || query.length < 2) return [];
-  if (!searchIndex) return [];
-  const ids = searchIndex.search(query).slice(0, CONFIG.search.maxSuggestions);
-  return ids.map(id => {
-    const tool = searchIndex.getTool(id);
-    if (!tool) return null;
-    let domain = '';
-    try {
-      if (tool.link) {
-        const url = new URL(tool.link);
-        domain = url.hostname;
-      }
-    } catch (e) {}
-    return {
-      type: 'tool',
-      text: getLocalizedToolField(tool, 'title'),
-      toolId: tool.id,
-      domain: domain,
-      category: tool.category
-    };
-  }).filter(Boolean);
-}
 
 // =========================================
 // STACK VIEW CONTROLLER (KATEGORIE-STACKS)
@@ -761,26 +721,15 @@ const validator = {
 // DATA LOADING (Triple Fallback)
 // =========================================
 const dataLoader = {
-  // Cache für Supabase-Daten (optional)
-  toolCache: window.Performance ? new window.Performance.Cache(5 * 60 * 1000) : null,
-
   async loadFromSupabase() {
     if (!CONFIG.fallback.useSupabase) return null;
     
     try {
       console.log('🔄 Trying Supabase...');
-      
-      // Mit Cache
-      if (this.toolCache && this.toolCache.has('supabase-tools')) {
-        console.log('📦 Using cached Supabase tools');
-        return this.toolCache.get('supabase-tools');
-      }
-
       const tools = await supabase.getTools();
       
       if (tools && tools.length > 0) {
         state.dataSource = 'supabase';
-        if (this.toolCache) this.toolCache.set('supabase-tools', tools);
         return tools;
       }
       
@@ -1048,9 +997,12 @@ const ui = {
   },
 
   render() {
-    // Intelligente Suche mit SearchIndex
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      state.filtered = filterTools(state.searchQuery);
+      const query = state.searchQuery.toLowerCase();
+      state.filtered = state.tools.filter(tool =>
+        (tool.title || '').toLowerCase().includes(query) ||
+        (tool.description && tool.description.toLowerCase().includes(query))
+      );
     } else {
       state.filtered = [...state.tools];
     }
@@ -1083,18 +1035,8 @@ const ui = {
         if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
           this.elements.toolGrid.classList.add('tool-grid-squares');
         }
-
-        // DOM-Update über Batcher
-        if (domBatcher) {
-          domBatcher.add(() => {
-            this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-            this.attachCardHandlers();
-          });
-        } else {
-          this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-          this.attachCardHandlers();
-        }
-
+        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+        this.attachCardHandlers();
         if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
           window.colorFlowNetwork.refresh();
         }
@@ -1108,13 +1050,7 @@ const ui = {
         this.stackView.activeSort = state.sortBy;
         this.stackView.sortDirection = state.sortDirection;
       }
-
-      if (domBatcher) {
-        domBatcher.add(() => this.stackView.render());
-      } else {
-        this.stackView.render();
-      }
-
+      this.stackView.render();
       if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
         window.colorFlowNetwork.refresh();
       }
@@ -1218,6 +1154,7 @@ const ui = {
     grid.addEventListener('keydown', grid._keyHandler, { passive: false });
   },
 
+  // NEUE METHODE: Setzt alle UI-Event-Listener neu (wichtig nach Sprachwechsel)
   setupUIListeners() {
     // Tabs-Listener
     const viewToggle = document.querySelector('.view-toggle');
@@ -1231,6 +1168,7 @@ const ui = {
         if (btn.classList.contains('sort-trigger')) return;
         const view = btn.dataset.view;
         if (!view) return;
+        // Aktiven Zustand setzen
         viewToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.switchView(view);
@@ -1280,7 +1218,19 @@ const ui = {
       languageToggle.addEventListener('click', languageToggle._clickHandler);
     }
 
-    // Farbschema-Button (entfernt)
+    // Farbschema-Button
+    const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+    if (colorSchemeToggle) {
+      if (colorSchemeToggle._clickHandler) {
+        colorSchemeToggle.removeEventListener('click', colorSchemeToggle._clickHandler);
+      }
+      colorSchemeToggle._clickHandler = () => {
+        document.body.classList.toggle('custom-color-scheme');
+        const isCustom = document.body.classList.contains('custom-color-scheme');
+        localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+      };
+      colorSchemeToggle.addEventListener('click', colorSchemeToggle._clickHandler);
+    }
   },
 
   switchView(view) {
@@ -1339,127 +1289,8 @@ const ui = {
     this.toggleSortMenu(false);
   }
 };
-
 // =========================================
-// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS + DIREKTÖFFNUNG
-// =========================================
-const smartSearch = {
-  dropdown: null,
-  visible: false,
-
-  init() {
-    if (!this.dropdown) {
-      this.dropdown = document.createElement('div');
-      this.dropdown.className = 'search-suggestions';
-      this.dropdown.style.display = 'none';
-      const searchWrapper = document.querySelector('.search-wrapper');
-      if (searchWrapper) {
-        searchWrapper.appendChild(this.dropdown);
-      }
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-wrapper')) {
-        this.hide();
-      }
-    });
-  },
-
-  show() {
-    if (this.dropdown && this.visible) {
-      this.dropdown.style.display = 'block';
-    }
-  },
-
-  hide() {
-    if (this.dropdown) {
-      this.dropdown.style.display = 'none';
-      this.visible = false;
-    }
-  },
-
-  updateSuggestions(query) {
-    if (!query || query.length < 2) {
-      this.hide();
-      return;
-    }
-
-    const suggestions = generateToolSuggestions(query);
-    if (suggestions.length === 0) {
-      this.hide();
-      return;
-    }
-
-    this.dropdown.innerHTML = '';
-    suggestions.forEach(sug => {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-
-      // Favicon oder Emoji
-      let iconHtml = '';
-      if (sug.domain) {
-        iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
-      } else {
-        const icons = {
-          text: '📝', image: '🖼️', code: '👨‍💻', audio: '🎵', video: '🎬', data: '📊', other: '🔧'
-        };
-        iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
-      }
-
-      item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
-      
-      item.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.handleSuggestionClick(sug);
-      });
-
-      this.dropdown.appendChild(item);
-    });
-
-    this.visible = true;
-    this.show();
-  },
-
-  handleSuggestionClick(sug) {
-    if (sug.type === 'tool') {
-      // Tool direkt öffnen (wie Klick auf Karte)
-      const tool = state.tools.find(t => t.id === sug.toolId);
-      if (!tool) return;
-
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        window.location.href = 'detail.html?id=' + encodeURIComponent(tool.id);
-      } else {
-        if (typeof openToolModal === 'function') {
-          openToolModal(tool);
-        } else {
-          window.open(tool.link, '_blank', 'noopener,noreferrer');
-        }
-      }
-      this.hide();
-    } else {
-      // Fallback (z.B. für zukünftige Kategorie-Vorschläge)
-      const searchInput = ui.elements.search;
-      if (searchInput) {
-        searchInput.value = sug.text;
-        state.searchQuery = sug.text;
-        ui.render();
-      }
-      this.hide();
-      if (searchInput) searchInput.focus();
-    }
-  },
-
-  escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-};
-
-// =========================================
-// SEARCH FUNCTIONALITY (erweitert)
+// SEARCH FUNCTIONALITY
 // =========================================
 const search = {
   init() {
@@ -1472,14 +1303,10 @@ const search = {
       ui.elements.searchClear.removeEventListener('click', ui.handlers.searchClear);
     }
 
-    smartSearch.init();
-
     const handleInput = debounce((e) => {
       const raw = e && e.target ? e.target.value : '';
       const value = sanitizeInput(raw);
       state.searchQuery = value;
-
-      smartSearch.updateSuggestions(value);
 
       if (ui.elements.searchClear) {
         ui.elements.searchClear.style.display = value ? 'flex' : 'none';
@@ -1501,18 +1328,11 @@ const search = {
 
     ui.elements.search.addEventListener('input', handleInput);
 
-    ui.elements.search.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        smartSearch.hide();
-      }
-    });
-
     if (ui.elements.searchClear) {
       const clearHandler = () => {
         ui.elements.search.value = '';
         state.searchQuery = '';
         ui.elements.searchClear.style.display = 'none';
-        smartSearch.hide();
         ui.render();
         ui.elements.search.focus();
       };
@@ -1520,12 +1340,6 @@ const search = {
       ui.handlers.searchClear = clearHandler;
       ui.elements.searchClear.addEventListener('click', clearHandler);
     }
-
-    ui.elements.search.addEventListener('focus', () => {
-      if (state.searchQuery && state.searchQuery.length >= 2) {
-        smartSearch.updateSuggestions(state.searchQuery);
-      }
-    });
   }
 };
 
@@ -1628,22 +1442,6 @@ const app = {
       }
       
       console.log('✅ Valid tools ready:', state.tools.length);
-
-      // Suchindex initialisieren (falls Performance verfügbar)
-      if (window.Performance && window.Performance.SearchIndex) {
-        searchIndex = new window.Performance.SearchIndex();
-        searchIndex.addTools(state.tools);
-        console.log('🔍 SearchIndex initialized');
-      } else {
-        console.warn('Performance.SearchIndex not available, using fallback search');
-        // Fallback: alte toolMatchesSearch bleibt erhalten (wird aber nicht mehr verwendet)
-      }
-
-      // DOMBatcher initialisieren
-      if (window.Performance && window.Performance.DOMBatcher) {
-        domBatcher = new window.Performance.DOMBatcher();
-        console.log('📦 DOMBatcher initialized');
-      }
       
       ui.updateStats();
       ui.updateDataSource();
@@ -1670,18 +1468,23 @@ const app = {
             toggleElement.classList.remove('sticky-active');
           }
         };
-
-        // Throttle für Scroll-Ereignis
-        if (window.Performance && window.Performance.throttle) {
-          const throttledToggle = window.Performance.throttle(toggleStickyClass, 100);
-          window.addEventListener('scroll', throttledToggle, { passive: true });
-        } else {
-          window.addEventListener('scroll', toggleStickyClass, { passive: true });
-        }
+        window.addEventListener('scroll', toggleStickyClass, { passive: true });
         toggleStickyClass();
       }
       
-      // Keine Farbschema-Initialisierung
+      // ==================== FARBSCHEMA-UMSCHALTER ====================
+      const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+      if (colorSchemeToggle) {
+        const savedScheme = localStorage.getItem('colorScheme');
+        if (savedScheme === 'custom') {
+          document.body.classList.add('custom-color-scheme');
+        }
+        colorSchemeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('custom-color-scheme');
+          const isCustom = document.body.classList.contains('custom-color-scheme');
+          localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+        });
+      }
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
