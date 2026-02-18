@@ -2001,3 +2001,17 @@ a:focus-visible {
 }
 
 /* Falls die Tool-Karten-Marquee bereits definiert ist, wird sie automatisch übernommen */
+
+/* Pulsierender Glow für Kategorie-Köpfe (signalisiert Klickbarkeit) */
+@keyframes category-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+  }
+  50% {
+    box-shadow: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
+  }
+}
+
+.category-header-card {
+  animation: category-glow 4s ease-in-out infinite;
+}
