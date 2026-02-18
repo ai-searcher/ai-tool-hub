@@ -1811,7 +1811,7 @@ a:focus-visible {
  .view-toggle.toggle-btn {
   flex: 0 1 auto;
   padding: 0.5rem 0.8rem; 
-  font-size: 0.7rem; 
+  font-size: 0.5rem; 
   white-space: nowrap;
  }
 
