@@ -1429,8 +1429,9 @@ const app = {
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
-        ui.render();
-      });
+  ui.updateStats(); // Stats-Marquee sofort aktualisieren
+  ui.render();      // Ansicht neu rendern (für Kategorienamen etc.)
+});
 
       console.log('✅ App initialized successfully!');
 
