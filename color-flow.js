@@ -898,6 +898,9 @@
     // Die animate-Methode wird jetzt sowohl vom alten als auch vom neuen Scheduler verwendet.
     // Bei Nutzung des Schedulers entfällt die manuelle FPS-Steuerung.
     animate(now) {
+      // Falls kein Parameter übergeben (z.B. vom Scheduler), verwende aktuelle Zeit
+      if (now === undefined) now = performance.now();
+
       if (!this.ctx || !this.canvas) return;
 
       // Falls der Scheduler verwendet wird, wird die Zeitsteuerung vom Scheduler übernommen.
@@ -946,8 +949,11 @@
       }
 
       if (this.useScheduler && this.animScheduler) {
-        // Scheduler verwenden
-        this.animScheduler.add(() => this.animate(performance.now()));
+        // Scheduler verwenden – füge die animate-Methode als dauerhafte Aufgabe hinzu
+        // Wir müssen sicherstellen, dass die Funktion ohne Argument aufgerufen werden kann,
+        // daher übergeben wir einen Wrapper, der this.animate() aufruft (ohne Parameter).
+        // In animate() wird dann now = performance.now() gesetzt.
+        this.animScheduler.add(() => this.animate());
         // Der Scheduler startet automatisch, wenn Aufgaben vorhanden sind.
       } else {
         // Alte Methode
