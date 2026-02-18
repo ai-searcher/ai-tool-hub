@@ -5,6 +5,7 @@
 // - Unregelmäßigerer Puls durch variierende Geschwindigkeit
 // - scanTools erfasst .stack-card für Kategorien-Ansicht
 // - Optimiert für alle Geräte
+// - Integriert Performance.AnimationScheduler für optimierte Framerate
 // =========================================
 
 (function() {
@@ -79,6 +80,17 @@
       this.setupAdaptiveSettings();
       this.activeConnections = new Map();
       this.setupRippleListener();
+
+      // Performance-Optimierung: AnimationScheduler nutzen falls verfügbar
+      this.useScheduler = window.Performance && window.Performance.AnimationScheduler;
+      if (this.useScheduler) {
+        // Ziel-FPS leicht reduzieren für bessere Performance (kann angepasst werden)
+        const schedulerFPS = Math.min(this.targetFPS, 30);
+        this.animScheduler = new window.Performance.AnimationScheduler(schedulerFPS);
+      } else {
+        this.animScheduler = null;
+      }
+
       this.init();
     }
 
@@ -883,11 +895,31 @@
       this.ctx.restore();
     }
 
+    // Die animate-Methode wird jetzt sowohl vom alten als auch vom neuen Scheduler verwendet.
+    // Bei Nutzung des Schedulers entfällt die manuelle FPS-Steuerung.
     animate(now) {
       if (!this.ctx || !this.canvas) return;
 
-      this.animationFrame = requestAnimationFrame((t) => this.animate(t));
+      // Falls der Scheduler verwendet wird, wird die Zeitsteuerung vom Scheduler übernommen.
+      // Wir zeichnen einfach jedes Mal, wenn der Scheduler uns aufruft.
+      // Die alte FPS-Begrenzung entfällt in diesem Zweig.
+      if (this.useScheduler) {
+        this.glowTime = now;
+        this.updateActiveStates();
 
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.drawStars();
+
+        this.connections.forEach(conn => {
+          const activeState = this.activeConnections.get(conn) || 1;
+          this.drawConnection(conn.from, conn.to, conn, activeState, now);
+        });
+
+        this.drawRipples();
+        return;
+      }
+
+      // Alter Pfad: FPS-Begrenzung via requestAnimationFrame und frameInterval
       const elapsed = now - this.then;
       if (elapsed < this.frameInterval) return;
 
@@ -897,7 +929,6 @@
       this.updateActiveStates();
 
       this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
       this.drawStars();
 
       this.connections.forEach(conn => {
@@ -911,9 +942,18 @@
     startAnimation() {
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
+        this.animationFrame = null;
       }
-      this.then = performance.now();
-      this.animate(this.then);
+
+      if (this.useScheduler && this.animScheduler) {
+        // Scheduler verwenden
+        this.animScheduler.add(() => this.animate(performance.now()));
+        // Der Scheduler startet automatisch, wenn Aufgaben vorhanden sind.
+      } else {
+        // Alte Methode
+        this.then = performance.now();
+        this.animate(this.then);
+      }
     }
 
     handleResize() {
@@ -966,6 +1006,11 @@
     destroy() {
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.animScheduler) {
+        // Entferne die animate-Aufgabe und stoppe den Scheduler
+        this.animScheduler.remove(() => this.animate);
+        this.animScheduler.stop();
       }
       if (this.resizeObserver) {
         this.resizeObserver.disconnect();
