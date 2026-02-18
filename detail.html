@@ -216,14 +216,14 @@
     
     .rating-bar {
       flex: 1;
-      height: 4px;
+      height: 4px; /* reduziert von 8px */
       background: rgba(255,255,255,0.1);
       border-radius: 20px;
       overflow: hidden;
     }
     
     .rating-fill {
-      height: 4px;
+      height: 4px; /* reduziert von 8px */
       width: 0%;
       background: var(--full-color);
       border-radius: 20px;
@@ -239,7 +239,7 @@
       flex-shrink: 0;
     }
     
-    /* ===== Ausklappbare Sektionen mit Pfeilen ===== */
+    /* ===== Ausklappbare Sektionen ===== */
     .collapsible-section {
       margin-top: 8px;
       flex-shrink: 0;
@@ -247,7 +247,7 @@
     }
     
     .collapsible-section.collapsed {
-      margin-top: 4px;
+      margin-top: 4px;  /* reduzierter Abstand */
       margin-bottom: 4px;
     }
     
@@ -260,7 +260,7 @@
       animation: title-glow 8s ease-in-out infinite;
       cursor: pointer;
       position: relative;
-      padding-left: 24px; /* etwas mehr Platz für den Pfeil */
+      padding-left: 20px;
       transition: color 0.2s ease;
     }
     
@@ -268,23 +268,23 @@
       color: var(--primary);
     }
     
-    /* Pfeil nach unten für geöffnete Sektion */
     .detail-section-title::before {
-      content: '▼';
+      content: '';
       position: absolute;
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 1rem;
-      line-height: 1;
-      color: var(--full-color);
-      text-shadow: 0 0 8px var(--full-color);
-      transition: color 0.3s ease, text-shadow 0.3s ease;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #4caf50;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 8px #4caf50;
     }
     
-    /* Pfeil nach rechts für geschlossene Sektion */
     .collapsible-section.collapsed .detail-section-title::before {
-      content: '▶';
+      background-color: #888;
+      box-shadow: none;
     }
     
     .collapsible-section .detail-list {
@@ -380,10 +380,10 @@
       50% { text-shadow: 0 0 12px var(--glow-intense); }
     }
     
-    @keyframes rating-pulse {
-      0%, 100% { box-shadow: 0 0 10px var(--glow-intense); }
-      50% { box-shadow: 0 0 30px var(--glow-intense); }
-    }
+   @keyframes rating-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--glow-intense); }
+  50% { box-shadow: 0 0 30px var(--glow-intense); }
+}
     
     .detail-panel[data-category="text"] {
       --full-color: var(--color-text);
@@ -647,16 +647,17 @@
         
         titleEl.textContent = tool.title || 'Unbekannt';
         descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        const categoryNames = {
-          'text': 'Text',
-          'image': 'Bilder',
-          'code': 'Code',
-          'audio': 'Audio',
-          'video': 'Video',
-          'data': 'Daten',
-          'other': 'Sonstige'
-        };
-        catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+        // Kategorie-Namen Mapping
+const categoryNames = {
+  'text': 'Text',
+  'image': 'Bilder',
+  'code': 'Code',
+  'audio': 'Audio',
+  'video': 'Video',
+  'data': 'Daten',
+  'other': 'Sonstige'
+};
+catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
         
         if (tool.rating) {
@@ -716,8 +717,5 @@
       
     })();
   </script>
-  <div class="language-toggle">
-  <button class="scroll-btn" id="languageToggle" aria-label="Sprache wechseln">DE/EN</button>
-</div>
 </body>
 </html>
