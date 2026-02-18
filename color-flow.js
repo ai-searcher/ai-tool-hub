@@ -1,10 +1,9 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.5 – RUHIG & PRÄSENT
-// - Wellen deaktiviert (kein Zittern)
-// - Dickere Linien für mehr Präsenz
-// - Verstärkter Glow, aber nicht störend
+// GRID SYNCHRONIZED NETWORK V13.6 – ORGANIC CURVES
+// - Alle Linien als Bézier-Kurven (keine 90° Winkel)
+// - Fließende, natürliche Krümmung
+// - Unregelmäßigerer Puls durch variierende Geschwindigkeit
 // - scanTools erfasst .stack-card für Kategorien-Ansicht
-// - Neue refresh() Methode für Ansichtswechsel
 // - Optimiert für alle Geräte
 // =========================================
 
@@ -87,21 +86,20 @@
       if (this.isMobile) {
         this.settings = {
           qualityMultiplier: 1.0,
-          baseLineWidth: 2.0,                // erhöht von 1.5
-          glowWidth: 12,                      // leicht erhöht
+          baseLineWidth: 2.0,
+          glowWidth: 12,
           glowSpeed: 0.0015,
           glowLength: 0.3,
-          enableCurves: false,
+          enableCurves: true,
           maxPrimaryConnections: 2,
           maxSecondaryConnections: 1,
           maxBridgeConnections: 2,
           hoverSpeed: 0.30,
           baseOpacity: 0.45,
-          glowOpacity: 0.55,                  // erhöht
+          glowOpacity: 0.55,
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 400,
-          // Wellen deaktiviert – kein Zittern
           enableWaves: false,
           enableGlitch: false,
           enableStars: true,
@@ -109,15 +107,13 @@
           enableCategoryStyles: true,
           enableVariableWidth: false,
           starCount: 50,
-          waveComplexity: 1,
-          organicNoise: 0,
-          waveAmplitude: 0,                    // deaktiviert
-          waveSpeed: 0
+          curveOffsetFactor: 0.2,
+          curveRandomness: 0.3
         };
       } else if (this.isTablet) {
         this.settings = {
           qualityMultiplier: 1.2,
-          baseLineWidth: 2.5,                  // erhöht von 2.0
+          baseLineWidth: 2.5,
           glowWidth: 14,
           glowSpeed: 0.0015,
           glowLength: 0.3,
@@ -127,11 +123,11 @@
           maxBridgeConnections: 3,
           hoverSpeed: 0.25,
           baseOpacity: 0.40,
-          glowOpacity: 0.50,                    // erhöht
+          glowOpacity: 0.50,
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 450,
-          enableWaves: false,                   // deaktiviert
+          enableWaves: false,
           enableGlitch: true,
           enableStars: true,
           enableRipples: true,
@@ -139,15 +135,13 @@
           enableVariableWidth: true,
           starCount: 100,
           glitchProbability: 0.01,
-          waveComplexity: 2,
-          organicNoise: 0.3,
-          waveAmplitude: 0,
-          waveSpeed: 0
+          curveOffsetFactor: 0.25,
+          curveRandomness: 0.4
         };
       } else {
         this.settings = {
           qualityMultiplier: 1.5,
-          baseLineWidth: 3.0,                  // erhöht von 2.5
+          baseLineWidth: 3.0,
           glowWidth: 18,
           glowSpeed: 0.0015,
           glowLength: 0.3,
@@ -157,11 +151,11 @@
           maxBridgeConnections: 4,
           hoverSpeed: 0.25,
           baseOpacity: 0.45,
-          glowOpacity: 0.50,                    // erhöht
+          glowOpacity: 0.50,
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 500,
-          enableWaves: false,                   // deaktiviert
+          enableWaves: false,
           enableGlitch: true,
           enableStars: true,
           enableRipples: true,
@@ -169,10 +163,8 @@
           enableVariableWidth: true,
           starCount: 200,
           glitchProbability: 0.02,
-          waveComplexity: 3,
-          organicNoise: 0.4,
-          waveAmplitude: 0,
-          waveSpeed: 0
+          curveOffsetFactor: 0.3,
+          curveRandomness: 0.5
         };
       }
 
@@ -210,7 +202,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.5 – Ruhig & Präsent');
+      console.log('🚀 GridSynchronizedNetwork v13.6 – Organic Curves');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -262,7 +254,7 @@
       this.startAnimation();
       this.setupResizeObserver();
 
-      console.log('✅ Organic Network initialized!');
+      console.log('✅ Organic Curves initialized!');
       console.log(`🕸️ ${this.connections.length} connections (${this.countTypes().join(', ')})`);
     }
 
@@ -325,7 +317,6 @@
 
     scanTools() {
       if (!this.gridElement) return;
-      // Erfasse sowohl Grid-Karten als auch Stack-Karten
       const cardElements = this.gridElement.querySelectorAll('.card-square, .stack-card');
       this.cards = [];
 
@@ -378,7 +369,6 @@
       });
     }
 
-    // NEUE METHODE: Netzwerk aktualisieren (z.B. nach Ansichtswechsel)
     refresh() {
       if (!this.gridElement) return;
       this.scanTools();
@@ -386,10 +376,8 @@
       if (this.connections.length === 0) {
         this.generateFallbackConnections();
       }
-      // Kein Neustart der Animation nötig, da sie weiterläuft und die neuen Verbindungen im nächsten Frame zeichnet
     }
 
-    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -407,7 +395,6 @@
       }
     }
 
-    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
       const categoryGroups = {};
 
@@ -418,7 +405,6 @@
         categoryGroups[card.category].push(card);
       });
 
-      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
           group.sort((a, b) => {
@@ -433,7 +419,6 @@
         }
       });
 
-      // Secondary: Skip connections within larger groups
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 3) {
           group.sort((a, b) => {
@@ -452,7 +437,6 @@
         }
       });
 
-      // Bridge: Connect different categories
       const categories = Object.keys(categoryGroups);
       const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
 
@@ -480,7 +464,6 @@
         }
       }
 
-      // Cluster: Curved connections for visual variety
       if (this.settings.enableCurves) {
         Object.values(categoryGroups).forEach(group => {
           if (group.length > 3) {
@@ -732,40 +715,40 @@
       return gradient;
     }
 
-    // Wellenlinie wird nicht mehr verwendet (enableWaves = false), aber wir lassen die Methode zur Sicherheit drin
-    drawWavyLine(from, to, lineWidth, strokeStyle) {
-      // Diese Methode wird nicht aufgerufen, da Wellen deaktiviert sind.
-      // Falls doch, zeichnen wir einfach eine gerade Linie als Fallback.
-      this.ctx.beginPath();
-      this.ctx.moveTo(from.x, from.y);
-      this.ctx.lineTo(to.x, to.y);
-      this.ctx.strokeStyle = strokeStyle;
-      this.ctx.lineWidth = lineWidth;
-      this.ctx.stroke();
-    }
-
-    drawCurvedLine(from, to, strokeStyle, lineWidth) {
+    // Neue Methode: Zeichnet eine quadratische Bézier-Kurve mit organischer Krümmung
+    drawCurvedLine(from, to, strokeStyle, lineWidth, connection) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const baseOffset = dist * 0.2;
-      const offsetVar = baseOffset * (0.8 + Math.random() * 0.4);
-      const angleVar = (Math.random() - 0.5) * 0.5;
+      // Basis-Offset: Prozentsatz der Distanz
+      const baseOffset = dist * this.settings.curveOffsetFactor;
+      
+      // Zufällige Variation pro Linie (nutze connection.glowOffset als Seed)
+      const seed = connection.glowOffset;
+      const rand1 = Math.sin(seed) * 0.5 + 0.5; // 0..1
+      const rand2 = Math.cos(seed) * 0.5 + 0.5;
+      
+      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2; // 0.8 ... 1.2 + randomness
+      const angleVar = (rand2 - 0.5) * Math.PI * 0.5; // -45° bis +45°
 
+      const offset = baseOffset * offsetFactor;
+      
       const midX = (from.x + to.x) / 2;
       const midY = (from.y + to.y) / 2;
 
+      // Senkrechter Vektor (normalisiert)
       const perpX = -dy / dist;
       const perpY = dx / dist;
 
+      // Rotation des senkrechten Vektors um angleVar
       const cos = Math.cos(angleVar);
       const sin = Math.sin(angleVar);
       const rotatedX = perpX * cos - perpY * sin;
       const rotatedY = perpX * sin + perpY * cos;
 
-      const cpX = midX + rotatedX * offsetVar;
-      const cpY = midY + rotatedY * offsetVar;
+      const cpX = midX + rotatedX * offset;
+      const cpY = midY + rotatedY * offset;
 
       this.ctx.beginPath();
       this.ctx.moveTo(from.x, from.y);
@@ -811,22 +794,16 @@
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
-      if (config.curve && !this.settings.useSimplifiedRendering) {
-        this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight);
-      } else {
-        // Gerade Linie (Wellen sind deaktiviert, also immer gerade)
-        this.ctx.beginPath();
-        this.ctx.moveTo(from.x, from.y);
-        this.ctx.lineTo(to.x, to.y);
-        this.ctx.strokeStyle = gradient;
-        this.ctx.lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
-        this.ctx.stroke();
-      }
+      // Immer Kurven zeichnen
+      this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, connection);
 
       this.ctx.setLineDash([]);
 
+      // Flowing Glow – mit variierender Geschwindigkeit pro Linie
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
-        const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
+        const speedVariation = 0.8 + 0.4 * Math.sin(connection.glowOffset * 10); // 0.8..1.2
+        const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity * speedVariation;
+        
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
         const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
         const glowEnd = Math.min(1, glowProgress + this.settings.glowLength / 2);
@@ -855,14 +832,8 @@
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          if (config.curve && !this.settings.useSimplifiedRendering) {
-            this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth);
-          } else {
-            this.ctx.beginPath();
-            this.ctx.moveTo(from.x, from.y);
-            this.ctx.lineTo(to.x, to.y);
-            this.ctx.stroke();
-          }
+          // Kurve noch einmal mit Glow-Gradient zeichnen
+          this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth, connection);
 
           this.ctx.shadowBlur = 0;
         }
@@ -1020,7 +991,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v13.5 – Ruhig & Präsent');
+    console.group('🚀 Color Flow v13.6 – Organic Curves');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
