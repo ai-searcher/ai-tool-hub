@@ -1,5 +1,5 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V14.0 – ORGANIC CURVES (WebGL)
+// GRID SYNCHRONIZED NETWORK V14.1 – ORGANIC CURVES (WebGL)
 // - Alle Linien als Bézier-Kurven (keine 90° Winkel)
 // - Fließende, natürliche Krümmung
 // - Unregelmäßigerer Puls durch variierende Geschwindigkeit
@@ -7,6 +7,7 @@
 // - Optimiert für alle Geräte
 // - Integriert Performance.AnimationScheduler für optimierte Framerate
 // - WebGL-beschleunigtes Rendering mit Kurventessellierung für maximale Performance
+// - FIX: Linien werden jetzt korrekt angezeigt
 // =========================================
 
 (function() {
@@ -31,12 +32,7 @@
       this.clearColor = [0, 0, 0, 0];
       
       // Aktive Zeichendaten
-      this.curveVertices = [];
-      this.curveColors = [];
-      this.curveCount = 0;
-      this.pointVertices = [];
-      this.pointColors = [];
-      this.pointSizes = [];
+      this.curves = []; // Array von { vertices: [], colors: [] }
     }
 
     initShaders() {
@@ -158,37 +154,38 @@
     }
 
     // Kurve als Linienzug zeichnen (Punkte werden als LINE_STRIP gerendert)
-    drawCurve(points, colors) {
-      if (points.length < 2) return;
-      
+    addCurve(points, colors) {
+      if (points.length < 4) return; // mindestens 2 Punkte (x,y) = 4 Werte
+      this.curves.push({
+        vertices: new Float32Array(points),
+        colors: new Float32Array(colors)
+      });
+    }
+
+    drawAllCurves() {
       const gl = this.gl;
       gl.useProgram(this.lineProgram);
       gl.uniform2f(this.resUniformLine, this.canvas.width, this.canvas.height);
 
-      // Punkte und Farben in Buffer laden
-      const vertices = new Float32Array(points.flat());
-      const colorArray = new Float32Array(colors.flat());
+      this.curves.forEach(curve => {
+        // Vertex-Puffer
+        if (!this.buffers.curveVBO) this.buffers.curveVBO = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveVBO);
+        gl.bufferData(gl.ARRAY_BUFFER, curve.vertices, gl.DYNAMIC_DRAW);
+        gl.enableVertexAttribArray(this.lineAttribs.position);
+        gl.vertexAttribPointer(this.lineAttribs.position, 2, gl.FLOAT, false, 0, 0);
 
-      if (!this.buffers.curveVBO) this.buffers.curveVBO = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveVBO);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
-      gl.enableVertexAttribArray(this.lineAttribs.position);
-      gl.vertexAttribPointer(this.lineAttribs.position, 2, gl.FLOAT, false, 0, 0);
+        // Farb-Puffer
+        if (!this.buffers.curveCBO) this.buffers.curveCBO = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveCBO);
+        gl.bufferData(gl.ARRAY_BUFFER, curve.colors, gl.DYNAMIC_DRAW);
+        gl.enableVertexAttribArray(this.lineAttribs.color);
+        gl.vertexAttribPointer(this.lineAttribs.color, 4, gl.FLOAT, false, 0, 0);
 
-      if (!this.buffers.curveCBO) this.buffers.curveCBO = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveCBO);
-      gl.bufferData(gl.ARRAY_BUFFER, colorArray, gl.DYNAMIC_DRAW);
-      gl.enableVertexAttribArray(this.lineAttribs.color);
-      gl.vertexAttribPointer(this.lineAttribs.color, 4, gl.FLOAT, false, 0, 0);
-
-      gl.drawArrays(gl.LINE_STRIP, 0, points.length);
-    }
-
-    // Batch mehrerer Kurven (für Effizienz, jede einzeln zeichnen)
-    drawCurves(curves) {
-      curves.forEach(curve => {
-        this.drawCurve(curve.points, curve.colors);
+        gl.drawArrays(gl.LINE_STRIP, 0, curve.vertices.length / 2);
       });
+
+      this.curves = []; // leeren
     }
 
     // Punkte zeichnen (Sterne, Ripples)
@@ -446,7 +443,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v14.0 – WebGL');
+      console.log('🚀 GridSynchronizedNetwork v14.1 – WebGL (FIX)');
 
       window.addEventListener('quantum:ready', () => {
         console.log('📡 quantum:ready received');
@@ -1042,7 +1039,6 @@
         const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * t);
         const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * t);
         const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * t);
-        // Opazität kann ebenfalls variieren (optional)
         const a = baseOpacity;
         colors.push(r/255, g/255, b/255, a);
       }
@@ -1078,33 +1074,25 @@
         }
 
         // Kurven sammeln (normale und Glow)
-        const curves = [];
         this.connections.forEach(conn => {
           const activeState = this.activeConnections.get(conn) || 1;
           
           // Normale Linie
           const normal = this.tessellateCurve(conn.from, conn.to, conn, activeState, now, false);
           if (normal.points.length) {
-            curves.push({
-              points: normal.points,
-              colors: normal.colors
-            });
+            this.glRenderer.addCurve(normal.points, normal.colors);
           }
 
           // Glow (nicht bei simplified rendering)
           if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
             const glow = this.tessellateCurve(conn.from, conn.to, conn, activeState, now, true);
             if (glow.points.length) {
-              // Für Glow verwenden wir die gleichen Punkte, aber andere Farben (bereits in tessellateCurve)
-              curves.push({
-                points: glow.points,
-                colors: glow.colors
-              });
+              this.glRenderer.addCurve(glow.points, glow.colors);
             }
           }
         });
 
-        this.glRenderer.drawCurves(curves);
+        this.glRenderer.drawAllCurves();
 
         // Ripples
         if (this.settings.enableRipples) {
@@ -1416,7 +1404,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v14.0 – WebGL');
+    console.group('🚀 Color Flow v14.1 – WebGL');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
