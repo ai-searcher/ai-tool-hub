@@ -1329,6 +1329,20 @@ const app = {
           ui.switchView(view);
         });
       }
+      
+      // Globale Scroll-Buttons
+const globalScrollTop = document.getElementById('globalScrollTopBtn');
+const globalScrollBottom = document.getElementById('globalScrollBottomBtn');
+if (globalScrollTop) {
+  globalScrollTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+if (globalScrollBottom) {
+  globalScrollBottom.addEventListener('click', () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+}
 
       // Sortier-Dropdown initialisieren (NEU)
       const sortTrigger = document.querySelector('.sort-trigger');
