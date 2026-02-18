@@ -1349,7 +1349,7 @@ if (ui.elements.viewToggle) {
   const toggleElement = ui.elements.viewToggle;
   const toggleStickyClass = () => {
     const rect = toggleElement.getBoundingClientRect();
-    if (rect.top <= 0) {
+    if (rect.top <= 10) {
       toggleElement.classList.add('sticky-active');
     } else {
       toggleElement.classList.remove('sticky-active');
