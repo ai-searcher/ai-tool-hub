@@ -51,14 +51,13 @@
       statsFeatured: 'FEATURED',
       statsBest: 'BEST',
       statsNew: 'NEU',
-      // StackViewController Fallback-Tags (falls keine categoryTags)
+      // Fallback-Tags für Kategorie-Köpfe (falls keine categoryTags)
       fallbackTags: ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'],
       // Weitere allgemeine Texte
       unknownTool: 'Unbekannt',
       noDescription: 'Keine Beschreibung verfügbar.',
       noProvider: 'Unbekannt',
       linkNotAvailable: 'Link nicht verfügbar',
-      // Empty State
       noResults: 'Keine Ergebnisse für "{query}"',
       tryOther: 'Versuche einen anderen Suchbegriff'
     },
@@ -141,23 +140,28 @@
       currentLang = lang;
       localStorage.setItem('language', lang);
       updatePageLanguage();
+      // Button-Beschriftung aktualisieren
+      const langToggle = document.getElementById('languageToggle');
+      if (langToggle) langToggle.textContent = lang === 'de' ? 'DE' : 'EN';
+      // Event auslösen, damit app.js neu rendert (für Kategorienamen, Stats, etc.)
       window.dispatchEvent(new CustomEvent('languagechange', { detail: { lang } }));
     }
   }
 
+  // Initialisierung nach DOM-Laden
   document.addEventListener('DOMContentLoaded', () => {
     updatePageLanguage();
     const langToggle = document.getElementById('languageToggle');
     if (langToggle) {
-      langToggle.textContent = currentLang === 'de' ? 'DE' : 'EN'; // Button-Beschriftung
+      langToggle.textContent = currentLang === 'de' ? 'DE' : 'EN';
       langToggle.addEventListener('click', () => {
         const newLang = currentLang === 'de' ? 'en' : 'de';
         setLanguage(newLang);
-        langToggle.textContent = newLang === 'de' ? 'DE' : 'EN';
       });
     }
   });
 
+  // Globale API bereitstellen
   window.i18n = {
     t,
     setLanguage,
