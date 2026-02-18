@@ -1808,23 +1808,19 @@ a:focus-visible {
     padding: 0.5rem;
   }
 
-.toggle-btn {
-  padding: 2px 8px;        /* vertikal nur 2px */
-  font-size: 0.8rem;       /* ca. 13–14px */
-  line-height: 1.2;        /* ergibt etwa 15–16px */
-}
-
-.view-toggle {
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
+ .view-toggle.toggle-btn {
+  flex: 0 1 auto;
+  padding: 0.5rem 0.8rem; 
+  font-size: 0.9rem; 
+  white-space: nowrap;
+ }
 
   .sort-dropdown {
     flex: 0 1 auto;
   }
 
   .sort-trigger {
-  padding-right: 1.5rem;   /* Platz für Pfeil anpassen */
+  padding-right: 1.8rem;   /* Platz für Pfeil anpassen */
 }
 }
 
