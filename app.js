@@ -1473,17 +1473,14 @@ const app = {
       }
       
       // ==================== FARBSCHEMA-UMSCHALTER ====================
+      // Nur initiale Klasse setzen, Event-Listener wird in setupUIListeners gesetzt
       const colorSchemeToggle = document.getElementById('colorSchemeToggle');
       if (colorSchemeToggle) {
         const savedScheme = localStorage.getItem('colorScheme');
         if (savedScheme === 'custom') {
           document.body.classList.add('custom-color-scheme');
         }
-        colorSchemeToggle.addEventListener('click', () => {
-          document.body.classList.toggle('custom-color-scheme');
-          const isCustom = document.body.classList.contains('custom-color-scheme');
-          localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
-        });
+        // Kein Event-Listener hier – nur einmal in setupUIListeners()
       }
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
