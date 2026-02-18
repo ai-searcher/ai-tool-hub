@@ -179,12 +179,18 @@ body {
 }
 
 /* ==================== HEADER ==================== */
+/* ==================== HEADER ==================== */
 .header {
   padding: var(--spacing-xl) 0 16px 0;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
+  background: var(--bg-dark);  /* Einheitliche Hintergrundfarbe ohne Verlauf */
   position: relative;
   z-index: 2200;
+}
+
+/* Entferne die störenden radialen Gradienten */
+.header::before {
+  display: none;
 }
 
 .header::before {
@@ -195,9 +201,9 @@ body {
   right: 0;
   bottom: 0;
   background-image:
-    radial-gradient(circle at 20% 50%, var(--header-glow-color) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--header-glow-color) 0%, transparent 50%);
-  opacity: 0.3;
+    radial-gradient(circle at 20% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 70%),
+    radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.05) 0%, transparent 70%);
+  opacity: 0.5;  /* leichter, heller Schimmer */
   pointer-events: none;
   z-index: var(--z-base);
 }
