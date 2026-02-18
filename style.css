@@ -1945,9 +1945,8 @@ a:focus-visible {
 
 /* Glasiger Hintergrund für die sticky Bar */
 .view-toggle.sticky-active {
-  background: rgba(26, 30, 55, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  /* Rand und Animation bleiben unverändert */
+  background: rgba(26, 30, 55, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
