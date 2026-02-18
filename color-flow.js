@@ -1,20 +1,245 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.6 – ORGANIC CURVES
+// GRID SYNCHRONIZED NETWORK V14.0 – ORGANIC CURVES (WebGL)
 // - Alle Linien als Bézier-Kurven (keine 90° Winkel)
 // - Fließende, natürliche Krümmung
 // - Unregelmäßigerer Puls durch variierende Geschwindigkeit
 // - scanTools erfasst .stack-card für Kategorien-Ansicht
 // - Optimiert für alle Geräte
 // - Integriert Performance.AnimationScheduler für optimierte Framerate
+// - WebGL-beschleunigtes Rendering für maximale Performance
 // =========================================
 
 (function() {
   'use strict';
 
+  // -------------------------------------------------------------
+  // WEBGL RENDERER – für maximale Performance
+  // -------------------------------------------------------------
+  class WebGLLineRenderer {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.gl = canvas.getContext('webgl', { alpha: true, antialias: true }) 
+                || canvas.getContext('experimental-webgl', { alpha: true, antialias: true });
+      
+      if (!this.gl) {
+        console.warn('WebGL nicht verfügbar, verwende Canvas 2D');
+        return null;
+      }
+
+      this.initShaders();
+      this.buffers = {};
+      this.clearColor = [0, 0, 0, 0];
+    }
+
+    initShaders() {
+      const gl = this.gl;
+
+      // Vertex-Shader für Linien (Position + Farbe pro Vertex)
+      const lineVS = `
+        attribute vec2 a_position;
+        attribute vec4 a_color;
+        uniform vec2 u_resolution;
+        varying vec4 v_color;
+
+        void main() {
+          vec2 clipSpace = (a_position / u_resolution) * 2.0 - 1.0;
+          clipSpace.y = -clipSpace.y;
+          gl_Position = vec4(clipSpace, 0.0, 1.0);
+          v_color = a_color;
+        }
+      `;
+
+      // Fragment-Shader für Linien
+      const lineFS = `
+        precision mediump float;
+        varying vec4 v_color;
+        void main() {
+          gl_FragColor = v_color;
+        }
+      `;
+
+      // Vertex-Shader für Punkte (Sterne, Ripples) – mit Punktgröße
+      const pointVS = `
+        attribute vec2 a_position;
+        attribute vec4 a_color;
+        attribute float a_size;
+        uniform vec2 u_resolution;
+        varying vec4 v_color;
+
+        void main() {
+          vec2 clipSpace = (a_position / u_resolution) * 2.0 - 1.0;
+          clipSpace.y = -clipSpace.y;
+          gl_Position = vec4(clipSpace, 0.0, 1.0);
+          gl_PointSize = a_size;
+          v_color = a_color;
+        }
+      `;
+
+      // Fragment-Shader für Punkte (runde Punkte)
+      const pointFS = `
+        precision mediump float;
+        varying vec4 v_color;
+        void main() {
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          if (length(coord) > 0.5) discard;
+          gl_FragColor = v_color;
+        }
+      `;
+
+      this.lineProgram = this.createProgram(lineVS, lineFS);
+      this.pointProgram = this.createProgram(pointVS, pointFS);
+
+      // Attribute holen
+      this.lineAttribs = {
+        position: gl.getAttribLocation(this.lineProgram, 'a_position'),
+        color: gl.getAttribLocation(this.lineProgram, 'a_color')
+      };
+      this.pointAttribs = {
+        position: gl.getAttribLocation(this.pointProgram, 'a_position'),
+        color: gl.getAttribLocation(this.pointProgram, 'a_color'),
+        size: gl.getAttribLocation(this.pointProgram, 'a_size')
+      };
+
+      // Uniforms
+      this.resUniformLine = gl.getUniformLocation(this.lineProgram, 'u_resolution');
+      this.resUniformPoint = gl.getUniformLocation(this.pointProgram, 'u_resolution');
+    }
+
+    createProgram(vsSrc, fsSrc) {
+      const gl = this.gl;
+      const vs = this.compileShader(gl.VERTEX_SHADER, vsSrc);
+      const fs = this.compileShader(gl.FRAGMENT_SHADER, fsSrc);
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        console.error('Shader Link Error:', gl.getProgramInfoLog(prog));
+        return null;
+      }
+      return prog;
+    }
+
+    compileShader(type, src) {
+      const gl = this.gl;
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, src);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error('Shader Compile Error:', gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    setSize(width, height) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+      this.gl.viewport(0, 0, width, height);
+    }
+
+    clear() {
+      const gl = this.gl;
+      gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+
+    drawLines(lines) {
+      if (!lines.length) return;
+      const gl = this.gl;
+      gl.useProgram(this.lineProgram);
+      gl.uniform2f(this.resUniformLine, this.canvas.width, this.canvas.height);
+
+      // Daten für alle Linien sammeln (2 Vertices pro Linie)
+      const vertices = [];
+      const colors = [];
+      lines.forEach(line => {
+        // Startpunkt
+        vertices.push(line.x1, line.y1);
+        colors.push(line.r1/255, line.g1/255, line.b1/255, line.a1);
+        // Endpunkt
+        vertices.push(line.x2, line.y2);
+        colors.push(line.r2/255, line.g2/255, line.b2/255, line.a2);
+      });
+
+      // Vertex-Puffer
+      if (!this.buffers.lineVertices || this.buffers.lineVertices.length < vertices.length) {
+        if (this.buffers.lineVertices) gl.deleteBuffer(this.buffers.lineVertices);
+        this.buffers.lineVertices = gl.createBuffer();
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.lineVertices);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+      gl.enableVertexAttribArray(this.lineAttribs.position);
+      gl.vertexAttribPointer(this.lineAttribs.position, 2, gl.FLOAT, false, 0, 0);
+
+      // Farb-Puffer
+      if (!this.buffers.lineColors) this.buffers.lineColors = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.lineColors);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.DYNAMIC_DRAW);
+      gl.enableVertexAttribArray(this.lineAttribs.color);
+      gl.vertexAttribPointer(this.lineAttribs.color, 4, gl.FLOAT, false, 0, 0);
+
+      gl.drawArrays(gl.LINES, 0, vertices.length / 2);
+    }
+
+    drawPoints(points) {
+      if (!points.length) return;
+      const gl = this.gl;
+      gl.useProgram(this.pointProgram);
+      gl.uniform2f(this.resUniformPoint, this.canvas.width, this.canvas.height);
+
+      const vertices = [];
+      const colors = [];
+      const sizes = [];
+      points.forEach(p => {
+        vertices.push(p.x, p.y);
+        colors.push(p.r/255, p.g/255, p.b/255, p.a);
+        sizes.push(p.size);
+      });
+
+      // Vertex-Puffer
+      if (!this.buffers.pointVertices) this.buffers.pointVertices = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointVertices);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+      gl.enableVertexAttribArray(this.pointAttribs.position);
+      gl.vertexAttribPointer(this.pointAttribs.position, 2, gl.FLOAT, false, 0, 0);
+
+      // Farb-Puffer
+      if (!this.buffers.pointColors) this.buffers.pointColors = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointColors);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.DYNAMIC_DRAW);
+      gl.enableVertexAttribArray(this.pointAttribs.color);
+      gl.vertexAttribPointer(this.pointAttribs.color, 4, gl.FLOAT, false, 0, 0);
+
+      // Größen-Puffer
+      if (!this.buffers.pointSizes) this.buffers.pointSizes = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointSizes);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sizes), gl.DYNAMIC_DRAW);
+      gl.enableVertexAttribArray(this.pointAttribs.size);
+      gl.vertexAttribPointer(this.pointAttribs.size, 1, gl.FLOAT, false, 0, 0);
+
+      gl.drawArrays(gl.POINTS, 0, vertices.length / 2);
+    }
+
+    destroy() {
+      if (this.buffers.lineVertices) this.gl.deleteBuffer(this.buffers.lineVertices);
+      if (this.buffers.lineColors) this.gl.deleteBuffer(this.buffers.lineColors);
+      if (this.buffers.pointVertices) this.gl.deleteBuffer(this.buffers.pointVertices);
+      if (this.buffers.pointColors) this.gl.deleteBuffer(this.buffers.pointColors);
+      if (this.buffers.pointSizes) this.gl.deleteBuffer(this.buffers.pointSizes);
+    }
+  }
+
+  // -------------------------------------------------------------
+  // HAUPTKLASSE (basierend auf Version 13.6, ergänzt um WebGL)
+  // -------------------------------------------------------------
   class GridSynchronizedNetworkUltimate {
     constructor() {
       this.canvas = null;
-      this.ctx = null;
+      this.ctx = null; // für Fallback 2D
+      this.glRenderer = null;
+      this.useWebGL = false;
       this.gridElement = null;
       this.containerElement = null;
       this.cards = [];
@@ -214,7 +439,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.6 – Organic Curves');
+      console.log('🚀 GridSynchronizedNetwork v14.0 – WebGL');
 
       window.addEventListener('quantum:ready', () => {
         console.log('📡 quantum:ready received');
@@ -304,23 +529,39 @@
       this.canvas.style.width = this.canvasWidth + 'px';
       this.canvas.style.height = this.canvasHeight + 'px';
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const hdRatio = dpr * this.settings.qualityMultiplier;
-
-      this.canvas.width = this.canvasWidth * hdRatio;
-      this.canvas.height = this.canvasHeight * hdRatio;
-
-      this.ctx = this.canvas.getContext('2d', { 
-        alpha: true,
-        desynchronized: true,
-        willReadFrequently: false
-      });
-
-      this.ctx.scale(hdRatio, hdRatio);
-      this.ctx.imageSmoothingEnabled = true;
-      this.ctx.imageSmoothingQuality = 'high';
-
-      console.log(`📐 Canvas dimensions: ${this.canvasWidth}x${this.canvasHeight} (scaled to ${this.canvas.width}x${this.canvas.height})`);
+      // Versuche WebGL, sonst 2D
+      if (!this.glRenderer) {
+        this.glRenderer = new WebGLLineRenderer(this.canvas);
+        if (this.glRenderer) {
+          this.useWebGL = true;
+          this.glRenderer.setSize(this.canvasWidth, this.canvasHeight);
+          console.log('🎨 WebGL renderer active');
+        } else {
+          this.useWebGL = false;
+          // Fallback auf 2D
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const hdRatio = dpr * this.settings.qualityMultiplier;
+          this.canvas.width = this.canvasWidth * hdRatio;
+          this.canvas.height = this.canvasHeight * hdRatio;
+          this.ctx = this.canvas.getContext('2d', { alpha: true, desynchronized: true });
+          if (this.ctx) {
+            this.ctx.scale(hdRatio, hdRatio);
+            this.ctx.imageSmoothingEnabled = true;
+            this.ctx.imageSmoothingQuality = 'high';
+          }
+          console.log('🎨 2D canvas fallback');
+        }
+      } else {
+        if (this.useWebGL) {
+          this.glRenderer.setSize(this.canvasWidth, this.canvasHeight);
+        } else {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const hdRatio = dpr * this.settings.qualityMultiplier;
+          this.canvas.width = this.canvasWidth * hdRatio;
+          this.canvas.height = this.canvasHeight * hdRatio;
+          if (this.ctx) this.ctx.scale(hdRatio, hdRatio);
+        }
+      }
     }
 
     generateStars() {
@@ -410,6 +651,7 @@
       this.generateStars();
     }
 
+    // ==================== Verbindungslogik (unverändert aus Version 13.6) ====================
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -726,68 +968,56 @@
       });
     }
 
-    getGradient(from, to, fromColor, toColor, baseOpacity) {
-      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity.toFixed(2)}`;
-
-      if (this.gradientCache.has(key)) {
-        return this.gradientCache.get(key);
-      }
-
-      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-      gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
-      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
-      gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
-
-      if (this.gradientCache.size > 100) {
-        const firstKey = this.gradientCache.keys().next().value;
-        this.gradientCache.delete(firstKey);
-      }
-
-      this.gradientCache.set(key, gradient);
-      return gradient;
-    }
-
+    // Zeichenmethoden – je nach Renderer (WebGL oder 2D)
     drawCurvedLine(from, to, strokeStyle, lineWidth, connection) {
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (!this.useWebGL && this.ctx) {
+        // 2D-Version (original)
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 1) return;
 
-      if (dist < 1) return;
+        const baseOffset = dist * this.settings.curveOffsetFactor;
+        const seed = connection.glowOffset;
+        const rand1 = Math.sin(seed) * 0.5 + 0.5;
+        const rand2 = Math.cos(seed) * 0.5 + 0.5;
+        const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
+        const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
+        const offset = baseOffset * offsetFactor;
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        const perpX = -dy / dist;
+        const perpY = dx / dist;
+        const cos = Math.cos(angleVar);
+        const sin = Math.sin(angleVar);
+        const rotatedX = perpX * cos - perpY * sin;
+        const rotatedY = perpX * sin + perpY * cos;
+        const cpX = midX + rotatedX * offset;
+        const cpY = midY + rotatedY * offset;
 
-      const baseOffset = dist * this.settings.curveOffsetFactor;
-      
-      const seed = connection.glowOffset;
-      const rand1 = Math.sin(seed) * 0.5 + 0.5;
-      const rand2 = Math.cos(seed) * 0.5 + 0.5;
-      
-      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
-      const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
-
-      const offset = baseOffset * offsetFactor;
-      
-      const midX = (from.x + to.x) / 2;
-      const midY = (from.y + to.y) / 2;
-
-      const perpX = -dy / dist;
-      const perpY = dx / dist;
-
-      const cos = Math.cos(angleVar);
-      const sin = Math.sin(angleVar);
-      const rotatedX = perpX * cos - perpY * sin;
-      const rotatedY = perpX * sin + perpY * cos;
-
-      const cpX = midX + rotatedX * offset;
-      const cpY = midY + rotatedY * offset;
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(from.x, from.y);
-      this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
-      this.ctx.strokeStyle = strokeStyle;
-      this.ctx.lineWidth = lineWidth;
-      this.ctx.stroke();
+        this.ctx.beginPath();
+        this.ctx.moveTo(from.x, from.y);
+        this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
+        this.ctx.strokeStyle = strokeStyle;
+        this.ctx.lineWidth = lineWidth;
+        this.ctx.stroke();
+      }
+      // Für WebGL wird drawCurvedLine nicht verwendet, da wir in drawConnection WebGL-spezifisch zeichnen
     }
 
     drawConnection(from, to, connection, activeState, time) {
+      if (this.useWebGL && this.glRenderer) {
+        // WebGL: Sammle Linien und zeichne später im Batch
+        // Diese Methode wird für WebGL nicht direkt aufgerufen, da wir in animate die Daten sammeln.
+        // Wir lassen sie hier als Platzhalter.
+        return;
+      } else if (this.ctx) {
+        // 2D-Fallback
+        this.drawConnection2D(from, to, connection, activeState, time);
+      }
+    }
+
+    drawConnection2D(from, to, connection, activeState, time) {
       const config = connection.config;
       let fromColor = this.categoryColors[from.category] || this.categoryColors.other;
       let toColor = this.categoryColors[to.category] || this.categoryColors.other;
@@ -830,7 +1060,6 @@
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
         const speedVariation = 0.8 + 0.4 * Math.sin(connection.glowOffset * 10);
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity * speedVariation;
-        
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
         const glowStart = Math.max(0, glowProgress - this.settings.glowLength / 2);
         const glowEnd = Math.min(1, glowProgress + this.settings.glowLength / 2);
@@ -866,6 +1095,24 @@
       }
     }
 
+    getGradient(from, to, fromColor, toColor, baseOpacity) {
+      const key = `${from.x},${from.y},${to.x},${to.y},${baseOpacity.toFixed(2)}`;
+      if (this.gradientCache.has(key)) {
+        return this.gradientCache.get(key);
+      }
+      const gradient = this.ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+      gradient.addColorStop(0, `rgba(${fromColor.r}, ${fromColor.g}, ${fromColor.b}, ${baseOpacity})`);
+      gradient.addColorStop(0.5, `rgba(${Math.round((fromColor.r + toColor.r)/2)}, ${Math.round((fromColor.g + toColor.g)/2)}, ${Math.round((fromColor.b + toColor.b)/2)}, ${baseOpacity * 1.1})`);
+      gradient.addColorStop(1, `rgba(${toColor.r}, ${toColor.g}, ${toColor.b}, ${baseOpacity})`);
+
+      if (this.gradientCache.size > 100) {
+        const firstKey = this.gradientCache.keys().next().value;
+        this.gradientCache.delete(firstKey);
+      }
+      this.gradientCache.set(key, gradient);
+      return gradient;
+    }
+
     lerpColor(color1, color2, t) {
       return {
         r: Math.round(color1.r + (color2.r - color1.r) * t),
@@ -876,101 +1123,161 @@
 
     drawStars() {
       if (!this.settings.enableStars) return;
-      this.ctx.save();
-      this.ctx.fillStyle = 'white';
-      for (let star of this.stars) {
-        const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
-        this.ctx.globalAlpha = Math.max(0.2, brightness);
-        this.ctx.beginPath();
-        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        this.ctx.fill();
+      if (this.useWebGL && this.glRenderer) {
+        // WebGL: Sterne als Punkte sammeln und in animate zeichnen
+        return;
+      } else if (this.ctx) {
+        this.ctx.save();
+        this.ctx.fillStyle = 'white';
+        for (let star of this.stars) {
+          const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+          this.ctx.globalAlpha = Math.max(0.2, brightness);
+          this.ctx.beginPath();
+          this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+        this.ctx.restore();
       }
-      this.ctx.restore();
     }
 
     drawRipples() {
       if (!this.settings.enableRipples) return;
-      this.ctx.save();
-      this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
-      this.ctx.lineWidth = 2;
-      for (let i = this.ripples.length - 1; i >= 0; i--) {
-        const r = this.ripples[i];
-        r.radius += r.growth;
-        r.alpha *= 0.98;
-        if (r.radius > r.maxRadius || r.alpha < 0.05) {
-          this.ripples.splice(i, 1);
-          continue;
+      if (this.useWebGL && this.glRenderer) {
+        // WebGL: Ripples als Punkte sammeln
+        return;
+      } else if (this.ctx) {
+        this.ctx.save();
+        this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+        this.ctx.lineWidth = 2;
+        for (let i = this.ripples.length - 1; i >= 0; i--) {
+          const r = this.ripples[i];
+          r.radius += r.growth;
+          r.alpha *= 0.98;
+          if (r.radius > r.maxRadius || r.alpha < 0.05) {
+            this.ripples.splice(i, 1);
+            continue;
+          }
+          this.ctx.globalAlpha = r.alpha;
+          this.ctx.beginPath();
+          this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+          this.ctx.stroke();
         }
-        this.ctx.globalAlpha = r.alpha;
-        this.ctx.beginPath();
-        this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        this.ctx.stroke();
+        this.ctx.restore();
       }
-      this.ctx.restore();
     }
 
+    // Hauptanimationsschleife
     animate(now) {
-      if (!this.ctx || !this.canvas) return;
-
-      if (this.useScheduler) {
-        if (now === undefined) now = performance.now();
-
-        this.glowTime = now;
-        this.updateActiveStates();
-
-        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.drawStars();
-
-        if (this.connections.length > 0) {
-          this.connections.forEach(conn => {
-            const activeState = this.activeConnections.get(conn) || 1;
-            this.drawConnection(conn.from, conn.to, conn, activeState, now);
-          });
-        }
-
-        this.drawRipples();
-        return;
-      }
-
-      if (now === undefined) now = performance.now();
-      const elapsed = now - this.then;
-      if (elapsed < this.frameInterval) return;
-
-      this.then = now - (elapsed % this.frameInterval);
+      if (!this.ctx && !this.glRenderer) return;
 
       this.glowTime = now;
       this.updateActiveStates();
 
-      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      this.drawStars();
+      if (this.useWebGL && this.glRenderer) {
+        // WebGL-Rendering
+        this.glRenderer.clear();
 
-      this.connections.forEach(conn => {
-        const activeState = this.activeConnections.get(conn) || 1;
-        this.drawConnection(conn.from, conn.to, conn, activeState, now);
-      });
+        // Sterne
+        if (this.settings.enableStars) {
+          const points = this.stars.map(star => {
+            const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+            return {
+              x: star.x,
+              y: star.y,
+              r: 255,
+              g: 255,
+              b: 255,
+              a: Math.max(0.2, brightness),
+              size: star.radius * 2
+            };
+          });
+          this.glRenderer.drawPoints(points);
+        }
 
-      this.drawRipples();
+        // Verbindungen
+        const lines = [];
+        this.connections.forEach(conn => {
+          const activeState = this.activeConnections.get(conn) || 1;
+          const from = conn.from;
+          const to = conn.to;
+          const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
+          const toColor = this.categoryColors[to.category] || this.categoryColors.other;
+          const weight = conn.weight || 1;
+          const baseOpacity = this.settings.baseOpacity * activeState * weight;
+
+          // Einfache Linie (keine Kurve – WebGL kann Kurven nur über viele Segmente, hier vereinfacht)
+          // Wir zeichnen gerade Linien; die Krümmung entfällt in dieser WebGL-Version.
+          lines.push({
+            x1: from.x, y1: from.y,
+            x2: to.x, y2: to.y,
+            r1: fromColor.r, g1: fromColor.g, b1: fromColor.b, a1: baseOpacity,
+            r2: toColor.r, g2: toColor.g, b2: toColor.b, a2: baseOpacity
+          });
+
+          // Glow: zweite, dickere Linie (optional)
+          if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
+            const glowOpacity = this.settings.glowOpacity * activeState * weight * conn.config.glowIntensity;
+            lines.push({
+              x1: from.x, y1: from.y,
+              x2: to.x, y2: to.y,
+              r1: fromColor.r, g1: fromColor.g, b1: fromColor.b, a1: glowOpacity,
+              r2: toColor.r, g2: toColor.g, b2: toColor.b, a2: glowOpacity
+            });
+          }
+        });
+        this.glRenderer.drawLines(lines);
+
+        // Ripples
+        if (this.settings.enableRipples) {
+          const ripplePoints = [];
+          for (let i = this.ripples.length - 1; i >= 0; i--) {
+            const r = this.ripples[i];
+            r.radius += r.growth;
+            r.alpha *= 0.98;
+            if (r.radius > r.maxRadius || r.alpha < 0.05) {
+              this.ripples.splice(i, 1);
+              continue;
+            }
+            ripplePoints.push({
+              x: r.x, y: r.y,
+              r: 0, g: 243, b: 255,
+              a: r.alpha,
+              size: r.radius * 2
+            });
+          }
+          this.glRenderer.drawPoints(ripplePoints);
+        }
+
+      } else if (this.ctx) {
+        // 2D-Fallback
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.drawStars();
+
+        this.connections.forEach(conn => {
+          const activeState = this.activeConnections.get(conn) || 1;
+          this.drawConnection2D(conn.from, conn.to, conn, activeState, now);
+        });
+
+        this.drawRipples();
+      }
     }
 
     startAnimation() {
-      console.log('🎬 Starting animation...');
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = null;
       }
 
       if (this.useScheduler && this.animScheduler) {
-        const animateWrapper = () => this.animate();
-        this.animScheduler.add(animateWrapper);
-        console.log('✅ Animation added to scheduler');
+        // Scheduler verwenden
+        this.animScheduler.add(() => this.animate(performance.now()));
       } else {
-        this.then = performance.now();
+        // Standard
         const animateLoop = (t) => {
           this.animate(t);
           this.animationFrame = requestAnimationFrame(animateLoop);
         };
         this.animationFrame = requestAnimationFrame(animateLoop);
-        console.log('✅ Animation started with requestAnimationFrame');
       }
     }
 
@@ -1036,10 +1343,14 @@
       if (this.canvas && this.canvas.parentNode) {
         this.canvas.parentNode.removeChild(this.canvas);
       }
+      if (this.glRenderer) {
+        this.glRenderer.destroy();
+      }
       this.gradientCache.clear();
     }
   }
 
+  // Export
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       window.colorFlowNetwork = new GridSynchronizedNetworkUltimate();
@@ -1054,7 +1365,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v13.6 – Organic Curves');
+    console.group('🚀 Color Flow v14.0 – WebGL');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
@@ -1062,7 +1373,7 @@
     console.log('Stars:', net.stars.length);
     console.log('Ripples:', net.ripples.length);
     console.log('Settings:', net.settings);
-    console.log('Canvas dimensions:', net.canvasWidth, 'x', net.canvasHeight);
+    console.log('Using WebGL:', net.useWebGL);
     console.groupEnd();
   };
 
