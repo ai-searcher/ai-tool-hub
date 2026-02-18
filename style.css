@@ -1887,18 +1887,8 @@ a:focus-visible {
   }
 }
 
-/* ==================== GLOBALE SCROLL-BUTTONS (WIE IM PANEL) ==================== */
-.global-scroll-buttons {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 1000; /* Über den meisten Elementen */
-}
-
-.global-scroll-buttons .scroll-btn {
+/* ==================== ALLGEMEINE SCHWEBENDE BUTTONS (WIE IM PANEL) ==================== */
+.scroll-btn {
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -1913,27 +1903,38 @@ a:focus-visible {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-size: 20px;
+  font-size: 20px; /* Standard für Pfeile */
   line-height: 1;
   padding: 0;
   outline: none;
 }
 
-.global-scroll-buttons .scroll-btn:focus {
+.scroll-btn:focus {
   outline: none;
 }
 
-.global-scroll-buttons .scroll-btn:focus-visible {
+.scroll-btn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-.global-scroll-buttons .scroll-btn:hover,
-.global-scroll-buttons .scroll-btn:active {
+.scroll-btn:hover,
+.scroll-btn:active {
   background: rgba(50, 55, 80, 0.9);
   border-color: var(--primary);
   transform: scale(1.05);
   box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* ==================== GLOBALE SCROLL-BUTTONS (rechts) ==================== */
+.global-scroll-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
 }
 
 /* Nur auf mobilen Geräten anzeigen (unter 768px) */
@@ -1941,6 +1942,21 @@ a:focus-visible {
   .global-scroll-buttons {
     display: none;
   }
+}
+
+/* ==================== LINKE SCHWEBENDE BUTTONS (Sprache & Farbschema) ==================== */
+.left-floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.left-floating-buttons .scroll-btn {
+  font-size: 1rem; /* für Text "DE" und Icon */
 }
 
 /* ==================== LINKE SCHWEBENDE BUTTONS (SPRACHE & FARBSCHEMA) ==================== */
