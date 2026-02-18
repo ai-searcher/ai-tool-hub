@@ -1411,6 +1411,22 @@ const app = {
 
       const activeSortBtn = document.querySelector(`.sort-menu button[data-sort="${state.sortBy}"][data-dir="${state.sortDirection}"]`);
       if (activeSortBtn) activeSortBtn.classList.add('active');
+      
+      // ==================== FARBSCHEMA-UMSCHALTER ====================
+const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+if (colorSchemeToggle) {
+  // Gespeicherte Einstellung laden
+  const savedScheme = localStorage.getItem('colorScheme');
+  if (savedScheme === 'custom') {
+    document.body.classList.add('custom-color-scheme');
+  }
+
+  colorSchemeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('custom-color-scheme');
+    const isCustom = document.body.classList.contains('custom-color-scheme');
+    localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+  });
+}
 
       console.log('✅ App initialized successfully!');
 
