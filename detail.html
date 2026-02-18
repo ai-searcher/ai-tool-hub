@@ -216,14 +216,14 @@
     
     .rating-bar {
       flex: 1;
-      height: 4px; /* reduziert von 8px */
+      height: 4px;
       background: rgba(255,255,255,0.1);
       border-radius: 20px;
       overflow: hidden;
     }
     
     .rating-fill {
-      height: 4px; /* reduziert von 8px */
+      height: 4px;
       width: 0%;
       background: var(--full-color);
       border-radius: 20px;
@@ -239,7 +239,7 @@
       flex-shrink: 0;
     }
     
-    /* ===== Ausklappbare Sektionen ===== */
+    /* ===== Ausklappbare Sektionen mit Pfeilen ===== */
     .collapsible-section {
       margin-top: 8px;
       flex-shrink: 0;
@@ -247,7 +247,7 @@
     }
     
     .collapsible-section.collapsed {
-      margin-top: 4px;  /* reduzierter Abstand */
+      margin-top: 4px;
       margin-bottom: 4px;
     }
     
@@ -260,7 +260,7 @@
       animation: title-glow 8s ease-in-out infinite;
       cursor: pointer;
       position: relative;
-      padding-left: 20px;
+      padding-left: 24px;
       transition: color 0.2s ease;
     }
     
@@ -268,23 +268,23 @@
       color: var(--primary);
     }
     
+    /* Pfeil nach unten für geöffnete Sektion */
     .detail-section-title::before {
-      content: '';
+      content: '▼';
       position: absolute;
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: #4caf50;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 0 8px #4caf50;
+      font-size: 1rem;
+      line-height: 1;
+      color: var(--full-color);
+      text-shadow: 0 0 8px var(--full-color);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
     
+    /* Pfeil nach rechts für geschlossene Sektion */
     .collapsible-section.collapsed .detail-section-title::before {
-      background-color: #888;
-      box-shadow: none;
+      content: '▶';
     }
     
     .collapsible-section .detail-list {
@@ -380,10 +380,10 @@
       50% { text-shadow: 0 0 12px var(--glow-intense); }
     }
     
-   @keyframes rating-pulse {
-  0%, 100% { box-shadow: 0 0 10px var(--glow-intense); }
-  50% { box-shadow: 0 0 30px var(--glow-intense); }
-}
+    @keyframes rating-pulse {
+      0%, 100% { box-shadow: 0 0 10px var(--glow-intense); }
+      50% { box-shadow: 0 0 30px var(--glow-intense); }
+    }
     
     .detail-panel[data-category="text"] {
       --full-color: var(--color-text);
@@ -474,12 +474,12 @@
   <div class="detail-panel" id="detailPanel" data-category="">
     <div class="loading-state" id="loadingState">
       <div class="spinner" style="margin: 0 auto 16px;"></div>
-      <p>Lade Details...</p>
+      <p data-i18n="loading">Lade Details...</p>
     </div>
     
     <div class="error-state" id="errorState" style="display: none;">
-      <p id="errorMessage">❌ Tool nicht gefunden.</p>
-      <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;">Zurück</button>
+      <p id="errorMessage" data-i18n="error">❌ Tool nicht gefunden.</p>
+      <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;" data-i18n="back">Zurück</button>
     </div>
     
     <div id="detailContent" style="display: none;">
@@ -490,16 +490,16 @@
       
       <div class="detail-meta">
         <div class="meta-item">
-          <span class="meta-label">Kategorie</span>
+          <span class="meta-label" data-i18n="category">Kategorie</span>
           <span class="category-badge" id="toolCategory"></span>
         </div>
         <div class="meta-item" id="providerContainer">
-          <span class="meta-label">Anbieter</span>
+          <span class="meta-label" data-i18n="provider">Anbieter</span>
           <span class="meta-value" id="toolProvider"></span>
         </div>
         
         <div class="meta-item" id="ratingContainer">
-          <span class="meta-label">Bewertung</span>
+          <span class="meta-label" data-i18n="rating">Bewertung</span>
           <div class="rating-container">
             <span class="rating-value" id="toolRating"></span>
             <div class="rating-bar">
@@ -512,26 +512,26 @@
       <p class="detail-description" id="toolDescription"></p>
       
       <div id="strengthsContainer" class="detail-section collapsible-section" style="display: none;">
-        <h3 class="detail-section-title">Das kann das Tool</h3>
+        <h3 class="detail-section-title" data-i18n="sectionStrengths">Das kann das Tool</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
       <div id="useCasesContainer" class="detail-section collapsible-section" style="display: none;">
-        <h3 class="detail-section-title">Dafür nutzt du es</h3>
+        <h3 class="detail-section-title" data-i18n="sectionUseCases">Dafür nutzt du es</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
       <div id="promptExamplesContainer" class="detail-section collapsible-section" style="display: none;">
-        <h3 class="detail-section-title">Zum Ausprobieren</h3>
+        <h3 class="detail-section-title" data-i18n="sectionPrompts">Zum Ausprobieren</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
       <div id="promptTipsContainer" class="detail-section collapsible-section" style="display: none;">
-        <h3 class="detail-section-title">So bekommst du bessere Antworten</h3>
+        <h3 class="detail-section-title" data-i18n="sectionTips">So bekommst du bessere Antworten</h3>
         <div class="detail-list" id="promptTipsList"></div>
       </div>
       
-      <a class="detail-link" id="toolLink" target="_blank" rel="noopener noreferrer">
+      <a class="detail-link" id="toolLink" target="_blank" rel="noopener noreferrer" data-i18n="openTool">
         <span>Tool öffnen</span>
         <span>➜</span>
       </a>
@@ -543,6 +543,13 @@
     <button class="scroll-btn" id="scrollBottomBtn" aria-label="Zum Ende">↓</button>
   </div>
 
+  <!-- Linke schwebende Buttons (Sprache oben, Farbschema unten) -->
+  <div class="left-floating-buttons">
+    <button class="floating-btn" id="languageToggle">DE</button>
+    <button class="floating-btn" id="colorSchemeToggle">🌓</button>
+  </div>
+
+  <script src="i18n.js"></script>
   <script>
     (function() {
       'use strict';
@@ -647,17 +654,17 @@
         
         titleEl.textContent = tool.title || 'Unbekannt';
         descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        // Kategorie-Namen Mapping
-const categoryNames = {
-  'text': 'Text',
-  'image': 'Bilder',
-  'code': 'Code',
-  'audio': 'Audio',
-  'video': 'Video',
-  'data': 'Daten',
-  'other': 'Sonstige'
-};
-catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+        // Kategorie-Namen Mapping (später über i18n?)
+        const categoryNames = {
+          'text': 'Text',
+          'image': 'Bilder',
+          'code': 'Code',
+          'audio': 'Audio',
+          'video': 'Video',
+          'data': 'Daten',
+          'other': 'Sonstige'
+        };
+        catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
         
         if (tool.rating) {
