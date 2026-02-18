@@ -167,7 +167,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease; /* optional für sanften Wechsel */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ==================== CONTAINER ==================== */
@@ -584,14 +584,9 @@ body {
   animation: fadeInUp 0.6s ease 0.25s backwards, toggle-glow 8s ease-in-out infinite;
 }
 
-/* Pulsierender Rand – wie bei den Tool‑Quadrate, nur farbig */
 @keyframes toggle-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 1px transparent;
-  }
-  50% {
-    box-shadow: 0 0 0 1px var(--primary);
-  }
+  0%, 100% { box-shadow: 0 0 0 1px transparent; }
+  50% { box-shadow: 0 0 0 1px var(--primary); }
 }
 
 .toggle-btn {
@@ -675,7 +670,6 @@ body {
   box-shadow: var(--card-shadow), var(--card-inset-shadow);
   transition: all 0.3s ease;
   cursor: pointer;
-  /* Gleiche Optik wie .card-square, aber ohne aspect-ratio */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -716,17 +710,17 @@ body {
 /* Stack-Container für die Karten */
 .stack-cards {
   position: relative;
-  min-height: 120px; /* Platz für mindestens eine Karte */
+  min-height: 120px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Einzelne Karte im Stapel – jetzt mit vollem Quadrat-Design */
+/* Einzelne Karte im Stapel */
 .stack-card {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  aspect-ratio: 1 / 1; /* quadratisch wie die normalen Karten */
+  aspect-ratio: 1 / 1;
   background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -746,7 +740,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Innerer Inhalt der Stack-Karte – angelehnt an .square-content-centered */
 .stack-card .stack-card-title {
   font-size: 1rem;
   font-weight: 600;
@@ -836,9 +829,8 @@ body {
   transform: none !important;
   opacity: 1 !important;
   margin-bottom: 0.5rem;
-  aspect-ratio: 1/1; /* wieder quadratisch */
-  width: 100%; /* volle Breite im Stack */
-  min-height: auto; /* keine Mindesthöhe nötig, da aspect-ratio greift */
+  aspect-ratio: 1/1;
+  width: 100%;
 }
 
 /* Kategoriespezifische Rahmenfarbe im fanned-Zustand */
@@ -1073,8 +1065,6 @@ body {
   pointer-events: none;
   background: transparent;
   z-index: 2;
-
-  /* Fade links 8 mm, rechts 12 mm – sauber via Maskierung */
   -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
   mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
 }
@@ -1358,6 +1348,29 @@ button,
 
   .context-marquee .marquee-track {
     animation-duration: 18s !important;
+  }
+
+  /* View-Toggle auf mobil – exakt wie im Original */
+  .view-toggle {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.25rem;
+  }
+
+  .view-toggle .toggle-btn {
+    flex: 0 1 auto;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .sort-dropdown {
+    flex: 0 1 auto;
+  }
+
+  .sort-trigger {
+    padding-right: 1.8rem;
   }
 }
 
@@ -1722,7 +1735,6 @@ a:focus-visible {
   white-space: nowrap;
   display: flex;
   align-items: center;
-  /* Kein Hintergrund, kein Blur, keine abgerundeten Ecken, keine Maske */
 }
 
 .stats-marquee .marquee-track {
@@ -1768,9 +1780,6 @@ a:focus-visible {
   }
 }
 
- /* ==================== KATEGORIE-STACKS (bereits oben integriert) ==================== */
-/* Alles für Stacks wurde bereits im entsprechenden Abschnitt definiert */
-
 /* ==================== SORTIER-DROPDOWN ==================== */
 .sort-dropdown {
   position: relative;
@@ -1778,7 +1787,7 @@ a:focus-visible {
 }
 
 .sort-trigger {
-  padding-right: 30px; /* Platz für den Pfeil */
+  padding-right: 30px;
   position: relative;
 }
 
@@ -1926,24 +1935,9 @@ a:focus-visible {
 }
 
 .left-floating-buttons .scroll-btn {
-  font-size: 1rem; /* für Text "DE" und Icon */
-}
-
-/* ==================== LINKE SCHWEBENDE BUTTONS (SPRACHE & FARBSCHEMA) ==================== */
-.left-floating-buttons {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 1000;
-}
-
-.left-floating-buttons .scroll-btn {
-  width: 38px;                  /* jetzt gleich groß wie die rechten Buttons */
+  width: 38px;
   height: 38px;
-  font-size: 0.9rem;            /* etwas kleinere Schrift, damit "DE" gut passt */
+  font-size: 0.9rem;
 }
 
 /* Glasiger Hintergrund für die sticky Bar */
@@ -1957,8 +1951,8 @@ a:focus-visible {
 /* ==================== HEADER SUBLINE ==================== */
 .header-subline {
   text-align: center;
-  margin-top: 24px;                /* ca. 1,3 cm nach unten */
-  margin-bottom: 10mm;              /* bleibt oder nach Wunsch anpassen */
+  margin-top: 24px;
+  margin-bottom: 10mm;
   font-size: 1rem;
   color: var(--primary);
   animation: header-glow 8s ease-in-out infinite;
@@ -1984,7 +1978,7 @@ a:focus-visible {
 .category-header-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Inhalt oben, Marquee unten */
+  justify-content: space-between;
   animation: category-glow 4s ease-in-out infinite;
 }
 
@@ -2040,7 +2034,7 @@ body.custom-color-scheme {
   --header-glow-color: var(--primary-dim);
 
   /* Titel-Gradient (zweite Farbe heller) */
-  --title-gradient-to: #FFFFFF; /* bleibt weiß, da Hintergrund hell */
+  --title-gradient-to: #FFFFFF;
 
   /* Karten-Hintergründe */
   --card-bg: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
@@ -2082,11 +2076,9 @@ body.custom-color-scheme {
   --category-header-glow-mid: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
 }
 
-/* Header-Verlauf (dunkler Fade) heller machen – wird bereits über Variable gesteuert */
-
 /* Spezifische Anpassungen für Elemente, die nicht über Variablen abgedeckt sind */
 body.custom-color-scheme .context-marquee .marquee-seq {
-  color: var(--marquee-text-color); /* bereits durch Variable */
+  color: var(--marquee-text-color);
 }
 
 body.custom-color-scheme .stats-marquee .marquee-track span {
@@ -2117,7 +2109,4 @@ body.custom-color-scheme .detail-list-item {
   color: var(--text-primary);
 }
 
-/* Farbschema-Button vorübergehend ausblenden – bleibt wie gewünscht 
-#colorSchemeToggle {
-  display: none;
-}*/
+/* Farbschema-Button bleibt sichtbar – keine display:none mehr! */
