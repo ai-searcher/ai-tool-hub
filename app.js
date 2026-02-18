@@ -1425,14 +1425,7 @@ const app = {
         });
       }
 
-      // ==================== SPRACHUMSCHALTER ====================
-      const languageToggle = document.getElementById('languageToggle');
-      if (languageToggle && window.i18n) {
-        languageToggle.addEventListener('click', () => {
-          const newLang = window.i18n.currentLang === 'de' ? 'en' : 'de';
-          window.i18n.setLanguage(newLang);
-        });
-      }
+    
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
