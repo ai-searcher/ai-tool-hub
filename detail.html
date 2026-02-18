@@ -545,6 +545,22 @@
     (function() {
       'use strict';
       
+      // Hilfsfunktion für mehrsprachige Felder
+      function getLocalizedToolField(tool, field) {
+        const lang = window.i18n ? window.i18n.currentLang : 'de';
+        if (lang === 'en' && tool.en && tool.en[field] !== undefined) {
+          return tool.en[field];
+        }
+        return tool[field];
+      }
+      
+      // Kategoriename übersetzt
+      function getCategoryName(cat) {
+        if (!cat) return 'Sonstige';
+        const key = 'cat_' + cat;
+        return window.i18n ? window.i18n.t(key) : (cat.charAt(0).toUpperCase() + cat.slice(1));
+      }
+      
       async function loadToolData() {
         try {
           const response = await fetch('data.json');
@@ -643,18 +659,13 @@
           return;
         }
         
-        titleEl.textContent = tool.title || 'Unbekannt';
-        descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        const categoryNames = {
-          'text': 'Text',
-          'image': 'Bilder',
-          'code': 'Code',
-          'audio': 'Audio',
-          'video': 'Video',
-          'data': 'Daten',
-          'other': 'Sonstige'
-        };
-        catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+        // Titel und Beschreibung übersetzt
+        titleEl.textContent = getLocalizedToolField(tool, 'title') || 'Unbekannt';
+        descEl.textContent = getLocalizedToolField(tool, 'description') || 'Keine Beschreibung verfügbar.';
+        
+        // Kategorie übersetzt (über i18n)
+        catEl.textContent = getCategoryName(category);
+        
         providerEl.textContent = tool.provider || 'Unbekannt';
         
         if (tool.rating) {
@@ -670,10 +681,11 @@
         
         providerContainer.style.display = tool.provider ? 'flex' : 'none';
         
-        fillList('strengthsContainer', 'strengthsList', tool.strengths);
-        fillList('useCasesContainer', 'useCasesList', tool.useCases);
-        fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
-        fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
+        // Listen befüllen – übersetzte Versionen verwenden
+        fillList('strengthsContainer', 'strengthsList', getLocalizedToolField(tool, 'strengths'));
+        fillList('useCasesContainer', 'useCasesList', getLocalizedToolField(tool, 'useCases'));
+        fillList('promptExamplesContainer', 'promptExamplesList', getLocalizedToolField(tool, 'promptExamples'));
+        fillList('promptTipsContainer', 'promptTipsList', getLocalizedToolField(tool, 'promptTips'));
         
         document.querySelectorAll('.collapsible-section').forEach(section => {
           section.classList.add('collapsed');
