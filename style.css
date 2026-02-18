@@ -1805,23 +1805,23 @@ a:focus-visible {
     width: 100%;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.25rem;          /* leicht reduziert (ca. 4px) */
   }
 
- .view-toggle.toggle-btn {
-  flex: 0 1 auto;
-  padding: 0.5rem 0.8rem; 
-  font-size: 0rem; 
-  white-space: nowrap;
- }
+  .view-toggle .toggle-btn {   /* Korrektur: Leerzeichen zwischen .view-toggle und .toggle-btn */
+    flex: 0 1 auto;
+    padding: 6px 12px;         /* ursprünglich 10px 20px, für Mobil etwas kleiner */
+    font-size: 0.85rem;        /* ursprünglich 0.95rem, leicht reduziert */
+    white-space: nowrap;
+  }
 
   .sort-dropdown {
     flex: 0 1 auto;
   }
 
   .sort-trigger {
-  padding-right: 1.8rem;   /* Platz für Pfeil anpassen */
-}
+    padding-right: 1.8rem;     /* Platz für Pfeil */
+  }
 }
 
 /* ==================== SORTIER-DROPDOWN – GLASIG WIE TOOL-QUADRATE ==================== */
