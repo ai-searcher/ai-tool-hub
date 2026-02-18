@@ -647,7 +647,17 @@
         
         titleEl.textContent = tool.title || 'Unbekannt';
         descEl.textContent = tool.description || 'Keine Beschreibung verfügbar.';
-        catEl.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+        // Kategorie-Namen Mapping
+const categoryNames = {
+  'text': 'Text',
+  'image': 'Bilder',
+  'code': 'Code',
+  'audio': 'Audio',
+  'video': 'Video',
+  'data': 'Daten',
+  'other': 'Sonstige'
+};
+catEl.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
         providerEl.textContent = tool.provider || 'Unbekannt';
         
         if (tool.rating) {
