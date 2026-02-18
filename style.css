@@ -1,30 +1,30 @@
 /* =========================================
-   QUANTUM AI HUB - STYLE.CSS (FINAL)
-   Production Ready – Clean Version
+   QUANTUM AI HUB - STYLE.CSS (ROTES SCHEMA)
+   Hellgrauer Hintergrund, rote Akzente, schwarzer Text
    ========================================= */
 
 /* ==================== CSS VARIABLES ==================== */
 :root {
   /* Colors - Main */
-  --bg-dark: #0A0E27;
-  --bg-card: #1A1E37;
-  --bg-card-hover: #1F2442;
-  --border: #2A2E47;
-  --border-hover: #3A3E57;
+  --bg-dark: #F5F5F5;           /* Heller Hintergrund */
+  --bg-card: #FFFFFF;            /* Weiße Karten */
+  --bg-card-hover: #F0F0F0;      /* Leicht dunkler bei Hover */
+  --border: #DDDDDD;              /* Hellgraue Rahmen */
+  --border-hover: #CCCCCC;
 
   /* Colors - Text */
-  --text-primary: #FFFFFF;
-  --text-secondary: #E0E0F0;
-  --text-dim: #A0A0B0;
-  --text-muted: #8080A0;
+  --text-primary: #222222;        /* Fast schwarz */
+  --text-secondary: #444444;
+  --text-dim: #666666;
+  --text-muted: #888888;
 
-  /* Colors - Brand */
-  --primary: #00F3FF;
-  --primary-hover: #00D4E0;
-  --primary-glow: rgba(0, 243, 255, 0.2);
-  --primary-dim: rgba(0, 243, 255, 0.1);
+  /* Colors - Brand (rot) */
+  --primary: #D32F2F;             /* Kräftiges Rot */
+  --primary-hover: #B71C1C;
+  --primary-glow: rgba(211, 47, 47, 0.2);
+  --primary-dim: rgba(211, 47, 47, 0.1);
 
-  /* Colors - States */
+  /* Colors - States (bleiben) */
   --error: #FF4466;
   --warning: #FFB800;
   --success: #00FF9D;
@@ -53,9 +53,9 @@
   --transition-slow: 500ms ease;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 20px var(--primary-glow);
 
   /* Layout */
@@ -68,22 +68,22 @@
   --z-sticky: 100;
   --z-overlay: 1000;
 
-  /* Elegant Category Colors */
-  --color-text: #00D4FF;
-  --color-image: #E040FB;
-  --color-code: #7C4DFF;
-  --color-audio: #FF6B9D;
-  --color-video: #448AFF;
-  --color-data: #1DE9B6;
-  --color-other: #B0BEC5;
+  /* Elegant Category Colors (jetzt rot-basiert) */
+  --color-text: #D32F2F;
+  --color-image: #E64A19;        /* Orange-Rot */
+  --color-code: #C2185B;          /* Pink-Rot */
+  --color-audio: #7B1FA2;         /* Violett */
+  --color-video: #0288D1;         /* Blau (bleibt, weil nicht primär) */
+  --color-data: #388E3C;          /* Grün */
+  --color-other: #757575;         /* Grau */
 
-  /* Glow variants */
-  --glow-text: rgba(0, 212, 255, 0.25);
-  --glow-image: rgba(224, 64, 251, 0.25);
-  --glow-code: rgba(124, 77, 255, 0.25);
-  --glow-audio: rgba(255, 107, 157, 0.25);
-  --glow-video: rgba(68, 138, 255, 0.25);
-  --glow-data: rgba(29, 233, 182, 0.25);
+  /* Glow variants (passend zu den Kategorien) */
+  --glow-text: rgba(211, 47, 47, 0.25);
+  --glow-image: rgba(230, 74, 25, 0.25);
+  --glow-code: rgba(194, 24, 91, 0.25);
+  --glow-audio: rgba(123, 31, 162, 0.25);
+  --glow-video: rgba(2, 136, 209, 0.25);
+  --glow-data: rgba(56, 142, 60, 0.25);
 
   /* Marquee */
   --marquee-overscan: 20px;
@@ -131,7 +131,7 @@ body {
 .header {
   padding: var(--spacing-xl) 0 16px 0;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
+  background: var(--bg-dark);
   position: relative;
   z-index: 2200;
 }
@@ -163,7 +163,7 @@ body {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--primary) 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #222222 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -345,7 +345,7 @@ body {
   font-size: 1rem;
   font-weight: 600;
   background: var(--primary);
-  color: var(--bg-dark);
+  color: white; /* Kontrast zu rot */
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -476,7 +476,7 @@ body {
   justify-content: center;
   padding: 12px 24px;
   background: var(--primary);
-  color: var(--bg-dark);
+  color: white;
   text-decoration: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -522,7 +522,7 @@ body {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: 0;                 /* negativen Wert entfernt */
+  margin-top: 0;
   margin-bottom: var(--spacing-lg);
   padding: var(--spacing-sm);
   background: transparent;
@@ -533,7 +533,7 @@ body {
   animation: fadeInUp 0.6s ease 0.25s backwards, toggle-glow 8s ease-in-out infinite;
 }
 
-/* Pulsierender Rand – wie bei den Tool‑Quadrate, nur farbig */
+/* Pulsierender Rand */
 @keyframes toggle-glow {
   0%, 100% {
     box-shadow: 0 0 0 1px transparent;
@@ -551,7 +551,7 @@ body {
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  color: var(--text-dim);
+  color: var(--text-primary); /* schwarz */
   font-family: var(--font-family);
   font-size: 0.95rem;
   font-weight: 500;
@@ -577,7 +577,7 @@ body {
 
 .toggle-btn.active {
   background: var(--primary-dim);
-  color: var(--primary);
+  color: var(--primary); /* rot */
   border-color: var(--primary);
   font-weight: 600;
 }
@@ -585,7 +585,6 @@ body {
 .toggle-btn.active svg { transform: scale(1.05); }
 
 .toggle-btn:active { transform: scale(0.98); }
-
 
 /* ==================== TOOL STACKS (3D VIEW) ==================== */
 .tool-stacks {
@@ -597,7 +596,7 @@ body {
 
 .category-stack {
   position: relative;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-card);
   border-radius: 24px;
   padding: 1.5rem 1rem;
   transition: all 0.3s ease;
@@ -613,30 +612,29 @@ body {
 .category-stack:nth-child(5) { animation-delay: 0.5s; }
 .category-stack:nth-child(6) { animation-delay: 0.6s; }
 
-/* Kategorie-Header – jetzt im Design der Tool-Quadrate */
+/* Kategorie-Header */
 .category-header-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: var(--bg-card);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
   cursor: pointer;
-  /* Gleiche Optik wie .card-square, aber ohne aspect-ratio */
 }
 
 .category-header-card:hover {
   border-color: var(--primary);
-  box-shadow: 0 0 20px var(--primary-glow), 0 6px 20px rgba(2,12,30,0.45);
+  box-shadow: 0 0 20px var(--primary-glow), var(--shadow-md);
 }
 
 .category-header-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary); /* rot */
   margin: 0 0 0.5rem 0;
 }
 
@@ -649,24 +647,24 @@ body {
 /* Stack-Container für die Karten */
 .stack-cards {
   position: relative;
-  min-height: 120px; /* Platz für mindestens eine Karte */
+  min-height: 120px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Einzelne Karte im Stapel – jetzt mit vollem Quadrat-Design */
+/* Einzelne Karte im Stapel */
 .stack-card {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  aspect-ratio: 1 / 1; /* quadratisch wie die normalen Karten */
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  aspect-ratio: 1 / 1;
+  background: var(--bg-card);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
   padding: 1rem;
   border: 1px solid var(--border);
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.4s ease,
               box-shadow 0.4s ease;
@@ -679,7 +677,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Innerer Inhalt der Stack-Karte – angelehnt an .square-content-centered */
 .stack-card .stack-card-title {
   font-size: 1rem;
   font-weight: 600;
@@ -755,7 +752,7 @@ body {
   opacity: 0.6;
 }
 
-/* Aufgeklappter Zustand (fanned) – alle Karten untereinander */
+/* Aufgeklappter Zustand (fanned) */
 .stack-cards.fanned {
   display: flex;
   flex-direction: column;
@@ -769,9 +766,9 @@ body {
   transform: none !important;
   opacity: 1 !important;
   margin-bottom: 0.5rem;
-  aspect-ratio: 1/1; /* wieder quadratisch */
-  width: 100%; /* volle Breite im Stack */
-  min-height: auto; /* keine Mindesthöhe nötig, da aspect-ratio greift */
+  aspect-ratio: 1/1;
+  width: 100%;
+  min-height: auto;
 }
 
 /* Kategoriespezifische Rahmenfarbe im fanned-Zustand */
@@ -867,7 +864,7 @@ body {
 /* ==================== CARD-SQUARE - MODERN ==================== */
 .card-square {
   position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: var(--bg-card);
   border-radius: 20px;
   padding: 18px;
   aspect-ratio: 1/1;
@@ -882,12 +879,10 @@ body {
   user-select: none;
   cursor: pointer;
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Entfernt störende Pseudo-Elemente (Glow-Linien) */
+/* Entfernt störende Pseudo-Elemente */
 .card-square::before,
 .card-square::after {
   display: none !important;
@@ -912,7 +907,7 @@ body {
   pointer-events: none;
 }
 
-/* Category Badge – absolute Positionierung 3mm links, 2mm oben */
+/* Category Badge */
 .square-category-badge {
   position: absolute;
   top: 8px;
@@ -926,9 +921,11 @@ body {
   transition: all var(--transition-fast);
   pointer-events: none;
   z-index: 3;
+  background: var(--primary-dim);
+  color: var(--primary);
 }
 
-/* Tool Title – absolute Positionierung 3mm links, 4mm über Marquee */
+/* Tool Title */
 .card-square .square-title-large {
   position: absolute;
   left: 12px;
@@ -945,7 +942,7 @@ body {
   z-index: 3;
 }
 
-/* Overlay Link – deckt gesamte Karte ab */
+/* Overlay Link */
 .card-overlay-link {
   position: absolute;
   inset: 0;
@@ -983,7 +980,7 @@ body {
   color: var(--color-data);
 }
 
-/* ==================== MARQUEE – EINHEITLICHER BLOCK ==================== */
+/* ==================== MARQUEE ==================== */
 .context-marquee {
   position: relative;
   width: 100%;
@@ -995,7 +992,7 @@ body {
   flex-shrink: 0;
 }
 
-/* Card-spezifische Marquee – absolute Positionierung */
+/* Card-spezifische Marquee */
 .card-square .context-marquee {
   position: absolute;
   left: 3px;
@@ -1006,13 +1003,10 @@ body {
   pointer-events: none;
   background: transparent;
   z-index: 2;
-
-  /* Fade links 8 mm, rechts 12 mm – sauber via Maskierung */
   -webkit-mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
   mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 12px), transparent);
 }
 
-/* Track (laufender Text) */
 .context-marquee .marquee-track {
   display: inline-flex;
   white-space: nowrap;
@@ -1026,7 +1020,7 @@ body {
   padding-right: 3.5rem;
   font-size: 0.68rem;
   font-weight: 500;
-  color: rgba(255,255,255,0.78);
+  color: var(--text-dim);
   letter-spacing: 0.02em;
   line-height: 22px;
   pointer-events: none;
@@ -1052,18 +1046,18 @@ body {
 
 /* ==================== SCHWEBEEFFEKT (BREATHING) ==================== */
 
-/* Definition der Kategorie-Glow-Farben (dezente 25% Opazität) */
+/* Definition der Kategorie-Glow-Farben (dezent) */
 :root {
-  --glow-text: rgba(0, 212, 255, 0.25);
-  --glow-image: rgba(236, 72, 153, 0.25);
-  --glow-code: rgba(124, 77, 255, 0.25);
-  --glow-audio: rgba(255, 107, 157, 0.25);
-  --glow-video: rgba(68, 138, 255, 0.25);
-  --glow-data: rgba(29, 233, 182, 0.25);
-  --glow-other: rgba(176, 190, 197, 0.25);
+  --glow-text: rgba(211, 47, 47, 0.25);
+  --glow-image: rgba(230, 74, 25, 0.25);
+  --glow-code: rgba(194, 24, 91, 0.25);
+  --glow-audio: rgba(123, 31, 162, 0.25);
+  --glow-video: rgba(2, 136, 209, 0.25);
+  --glow-data: rgba(56, 142, 60, 0.25);
+  --glow-other: rgba(117, 117, 117, 0.25);
 }
 
-/* Zuweisung der Glow-Farbe pro Kategorie (wird von der Animation verwendet) */
+/* Zuweisung der Glow-Farbe pro Kategorie */
 #tool-grid .card-square[data-category="text"],
 .tool-grid-squares .card-square[data-category="text"] {
   --glow-color: var(--glow-text);
@@ -1093,30 +1087,30 @@ body {
   --glow-color: var(--glow-other);
 }
 
-/* Universelle Breathing-Animation mit variablem Farbrand */
+/* Universelle Breathing-Animation */
 @keyframes breathing-glow {
   0%, 100% {
     transform: scale(1);
     box-shadow:
-      0 4px 8px rgba(0, 0, 0, 0.2),
+      0 4px 8px var(--shadow-sm),
       0 0 0 1px transparent;
   }
   50% {
     transform: scale(1.055);
     box-shadow:
-      0 14px 28px rgba(0, 0, 0, 0.4),
-      0 0 20px rgba(99, 102, 241, 0.18),
+      0 14px 28px var(--shadow-md),
+      0 0 20px var(--glow-color),
       0 0 0 1px var(--glow-color);
   }
 }
 
-/* Allen Karten die Animation zuweisen (gleiche Dauer, gleiche Kurve) */
+/* Allen Karten die Animation zuweisen */
 #tool-grid .card-square,
 .tool-grid-squares .card-square {
   animation: breathing-glow 8s ease-in-out infinite;
 }
 
-/* Zeitversetzte Starts – organischer Gesamteindruck */
+/* Zeitversetzte Starts */
 #tool-grid .card-square:nth-child(1),
 .tool-grid-squares .card-square:nth-child(1) { animation-delay: 0s; }
 #tool-grid .card-square:nth-child(2),
@@ -1137,9 +1131,8 @@ body {
 .tool-grid-squares .card-square:nth-child(9) { animation-delay: 3.2s; }
 #tool-grid .card-square:nth-child(10),
 .tool-grid-squares .card-square:nth-child(10) { animation-delay: 3.6s; }
-/* weitere Delays für mehr Karten – einfach das Muster fortsetzen, falls nötig */
 
-/* Variationen für gerade/ungerade – leicht unterschiedliche Kurven (optional) */
+/* Variationen für gerade/ungerade */
 #tool-grid .card-square:nth-child(odd),
 .tool-grid-squares .card-square:nth-child(odd) {
   animation-timing-function: ease-in-out;
@@ -1149,17 +1142,17 @@ body {
   animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
-/* ========== HOVER (DESKTOP) – überschreibt die Animation ========== */
+/* ========== HOVER (DESKTOP) ========== */
 @media (min-width: 768px) {
   #tool-grid .card-square:hover,
   .tool-grid-squares .card-square:hover {
     animation: none !important;
     transform: translateY(-8px) scale(1.03) !important;
     box-shadow:
-      0 16px 32px rgba(0, 0, 0, 0.5),
-      0 0 40px rgba(99, 102, 241, 0.25),
-      0 0 0 1px rgba(255, 255, 255, 0.12) !important;
-    border-color: rgba(99, 102, 241, 0.4) !important;
+      0 16px 32px var(--shadow-lg),
+      0 0 40px var(--primary-glow),
+      0 0 0 1px rgba(0, 0, 0, 0.1) !important;
+    border-color: var(--primary) !important;
   }
 
   #tool-grid .card-square:hover .context-marquee .marquee-track,
@@ -1169,14 +1162,14 @@ body {
 
   #tool-grid .card-square:hover .square-category-badge,
   .tool-grid-squares .card-square:hover .square-category-badge {
-    background: rgba(99, 102, 241, 0.25) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
+    background: var(--primary) !important;
+    color: white !important;
     transform: scale(1.05) !important;
   }
 
   #tool-grid .card-square:hover .square-title-large,
   .tool-grid-squares .card-square:hover .square-title-large {
-    color: rgba(255, 255, 255, 1) !important;
+    color: var(--primary) !important;
   }
 }
 
@@ -1186,10 +1179,10 @@ body {
   .tool-grid-squares .card-square:active {
     transform: scale(1.08) !important;
     box-shadow:
-      0 12px 24px rgba(0, 0, 0, 0.4),
-      0 0 30px rgba(99, 102, 241, 0.2),
-      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(99, 102, 241, 0.3) !important;
+      0 12px 24px var(--shadow-md),
+      0 0 30px var(--primary-glow),
+      0 0 0 1px rgba(0, 0, 0, 0.1) !important;
+    border-color: var(--primary) !important;
   }
 
   #tool-grid .card-square:active .context-marquee .marquee-track,
@@ -1215,7 +1208,7 @@ body {
   }
 }
 
-/* ==================== TOUCH FEEDBACK (App.js) ==================== */
+/* ==================== TOUCH FEEDBACK ==================== */
 .card-square.card-touch-active,
 .card-touch-active {
   transform: scale(0.98) !important;
@@ -1225,15 +1218,15 @@ body {
 
 @media (hover: none) {
   .card-square:hover {
-    animation: breathing 8s ease-in-out infinite !important;
+    animation: breathing-glow 8s ease-in-out infinite !important;
     transform: scale(1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px var(--shadow-sm);
   }
 }
 
 /* Focus States */
 .card-square:focus-visible {
-  outline: 2px solid rgba(0, 243, 255, 0.5);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
   z-index: 101;
 }
@@ -1360,8 +1353,8 @@ a:focus-visible {
 
 @media (prefers-contrast: high) {
   :root {
-    --border: #4A4E67;
-    --text-dim: #C0C0D0;
+    --border: #AAAAAA;
+    --text-dim: #222222;
   }
 }
 
@@ -1377,7 +1370,7 @@ a:focus-visible {
 /* ==================== SMART COLOR FLOW SYSTEM ==================== */
 .card-square.connection-active {
   transform: translateY(-6px) scale(1.05) !important;
-  box-shadow: 0 12px 32px rgba(0, 243, 255, 0.5) !important;
+  box-shadow: 0 12px 32px var(--primary-glow) !important;
   z-index: 900 !important;
   position: relative;
 }
@@ -1407,11 +1400,11 @@ a:focus-visible {
 }
 
 .label-content {
-  background: var(--bg-dark);
+  background: var(--bg-card);
   border: 2px solid var(--primary);
   border-radius: 12px;
   padding: 8px 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1433,184 +1426,19 @@ a:focus-visible {
 
 .label-type {
   background: var(--primary);
-  color: var(--bg-dark);
+  color: white;
   padding: 2px 8px;
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.7rem;
 }
 
-/* Floating Legend Button */
-.color-legend-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 2100 !important;
-  pointer-events: auto;
-}
-
-.legend-toggle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgb(0,243,255) 0%, rgb(236,72,153) 50%, rgb(250,204,21) 100%);
-  border: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-}
-.legend-toggle:active { transform: scale(0.95); }
-
-.legend-icon {
-  font-size: 1.8rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-/* Legend Panel */
+/* Floating Legend Button (nicht mehr verwendet) */
+.color-legend-fab,
+.legend-toggle,
+.legend-icon,
 .color-legend-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--bg-dark);
-  border-radius: 24px 24px 0 0;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2300 !important;
-  max-height: 70vh;
-  overflow-y: auto;
-  box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
-}
-
-.color-legend-panel.active { transform: translateY(0); }
-
-.legend-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  border-bottom: 2px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg-dark);
-  z-index: 1;
-}
-
-.legend-header h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, rgb(0,243,255), rgb(236,72,153));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.legend-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.legend-body { padding: 20px; }
-
-.legend-section { margin-bottom: 24px; }
-
-.legend-section h4 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-}
-
-.legend-line {
-  width: 40px;
-  height: 3px;
-  border-radius: 2px;
-  position: relative;
-}
-
-.legend-line.solid { background: currentColor; }
-.legend-line.dashed {
-  background: linear-gradient(90deg, currentColor 0%, currentColor 50%, transparent 50%, transparent 100%);
-  background-size: 8px 3px;
-}
-.legend-line.dotted {
-  background: radial-gradient(circle, currentColor 40%, transparent 40%);
-  background-size: 6px 3px;
-  background-position: 0 center;
-}
-
-.legend-item span {
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-/* Onboarding Toast (used by JS) */
-.onboarding-toast {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 200;
-  max-width: 90%;
-}
-.onboarding-toast.visible {
-  transform: translateX(-50%) translateY(0);
-  opacity: 1;
-}
-
-.toast-content {
-  background: var(--bg-dark);
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  padding: 16px 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.toast-icon { font-size: 1.8rem; flex-shrink: 0; }
-.toast-text { flex: 1; }
-.toast-text strong {
-  color: var(--primary);
-  font-size: 1rem;
-  display: block;
-  margin-bottom: 4px;
-}
-.toast-text small { color: var(--text-secondary); font-size: 0.85rem; }
-
-/* Mobile Anpassungen für Legend */
-@media (max-width: 768px) {
-  .color-legend-fab { bottom: 16px; right: 16px; }
-  .legend-toggle { width: 48px; height: 48px; }
-  .legend-icon { font-size: 1.5rem; }
-  .connection-label { max-width: 140px; }
-  .label-content { padding: 6px 10px; min-width: 100px; }
+  display: none;
 }
 
 /* ==================== COLOR FLOW Z-INDEX FIX ==================== */
@@ -1666,7 +1494,6 @@ a:focus-visible {
   white-space: nowrap;
   display: flex;
   align-items: center;
-  /* Kein Hintergrund, kein Blur, keine abgerundeten Ecken, keine Maske */
 }
 
 .stats-marquee .marquee-track {
@@ -1682,12 +1509,12 @@ a:focus-visible {
   padding-right: 3rem;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--primary);
+  color: var(--text-primary);
   letter-spacing: 0.03em;
 }
 
 .stats-marquee .marquee-track span strong {
-  color: var(--text-primary);
+  color: var(--primary);
   font-weight: 600;
   margin-right: 0.2rem;
 }
@@ -1712,9 +1539,6 @@ a:focus-visible {
   }
 }
 
- /* ==================== KATEGORIE-STACKS (bereits oben integriert) ==================== */
-/* Alles für Stacks wurde bereits im entsprechenden Abschnitt definiert */
-
 /* ==================== SORTIER-DROPDOWN ==================== */
 .sort-dropdown {
   position: relative;
@@ -1722,7 +1546,7 @@ a:focus-visible {
 }
 
 .sort-trigger {
-  padding-right: 30px; /* Platz für den Pfeil */
+  padding-right: 30px;
   position: relative;
 }
 
@@ -1735,6 +1559,7 @@ a:focus-visible {
   font-size: 1.2rem;
   opacity: 0.7;
   transition: transform 0.2s ease;
+  color: var(--text-primary);
 }
 
 .sort-dropdown.active .sort-trigger::after {
@@ -1765,7 +1590,7 @@ a:focus-visible {
 .sort-menu button {
   background: transparent;
   border: none;
-  color: var(--text-dim);
+  color: var(--text-primary);
   padding: 10px 16px;
   text-align: left;
   font-size: 0.9rem;
@@ -1805,13 +1630,13 @@ a:focus-visible {
     width: 100%;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.25rem;          /* leicht reduziert (ca. 4px) */
+    padding: 0.25rem;
   }
 
-  .view-toggle .toggle-btn {   /* Korrektur: Leerzeichen zwischen .view-toggle und .toggle-btn */
+  .view-toggle .toggle-btn {
     flex: 0 1 auto;
-    padding: 6px 12px;         /* ursprünglich 10px 20px, für Mobil etwas kleiner */
-    font-size: 0.85rem;        /* ursprünglich 0.95rem, leicht reduziert */
+    padding: 6px 12px;
+    font-size: 0.85rem;
     white-space: nowrap;
   }
 
@@ -1820,113 +1645,11 @@ a:focus-visible {
   }
 
   .sort-trigger {
-    padding-right: 1.8rem;     /* Platz für Pfeil */
+    padding-right: 1.8rem;
   }
 }
 
-/* ==================== SORTIER-DROPDOWN – GLASIG WIE TOOL-QUADRATE ==================== */
-.sort-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  min-width: 200px;
-  background: rgba(26, 30, 55, 0.7);        /* --bg-card mit Transparenz */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-lg);          /* großzügige Abrundung */
-  padding: 8px 0;
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.02);
-  z-index: 1000;
-  display: none;
-  flex-direction: column;
-}
-
-.sort-dropdown.active .sort-menu {
-  display: flex;
-}
-
-.sort-menu button {
-  background: transparent;
-  border: none;
-  color: var(--text-dim);
-  padding: 12px 20px;
-  text-align: left;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-  font-family: var(--font-family);
-  position: relative;
-}
-
-.sort-menu button:hover {
-  background: rgba(255, 255, 255, 0.05);   /* dezentes Hover */
-  color: var(--text-primary);
-}
-
-.sort-menu button.active {
-  background: var(--primary-dim);
-  color: var(--primary);
-  font-weight: 500;
-}
-
-/* Kleiner Pfeil (optional – bereits im Trigger vorhanden) */
-
-/* Mobile Anpassung */
-@media (max-width: 767px) {
-  .sort-menu {
-    left: auto;
-    right: 0;
-    min-width: 180px;
-  }
-  .sort-menu button {
-    white-space: normal;
-    font-size: 0.85rem;
-    padding: 12px 16px;
-  }
-}
-
-/* ==================== ALLGEMEINE SCHWEBENDE BUTTONS (WIE IM PANEL) ==================== */
-.scroll-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(30, 35, 55, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-size: 20px; /* Standard für Pfeile */
-  line-height: 1;
-  padding: 0;
-  outline: none;
-}
-
-.scroll-btn:focus {
-  outline: none;
-}
-
-.scroll-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.scroll-btn:hover,
-.scroll-btn:active {
-  background: rgba(50, 55, 80, 0.9);
-  border-color: var(--primary);
-  transform: scale(1.05);
-  box-shadow: 0 0 15px var(--primary-glow);
-}
-
-/* ==================== GLOBALE SCROLL-BUTTONS (rechts) ==================== */
+/* ==================== GLOBALE SCROLL-BUTTONS ==================== */
 .global-scroll-buttons {
   position: fixed;
   bottom: 20px;
@@ -1937,7 +1660,7 @@ a:focus-visible {
   z-index: 1000;
 }
 
-/* Nur auf mobilen Geräten anzeigen (unter 768px) */
+/* Nur auf mobil sichtbar */
 @media (min-width: 768px) {
   .global-scroll-buttons {
     display: none;
@@ -1956,39 +1679,22 @@ a:focus-visible {
 }
 
 .left-floating-buttons .scroll-btn {
-  font-size: 1rem; /* für Text "DE" und Icon */
-}
-
-/* ==================== LINKE SCHWEBENDE BUTTONS (SPRACHE & FARBSCHEMA) ==================== */
-.left-floating-buttons {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 1000;
-}
-
-.left-floating-buttons .scroll-btn {
-  width: 38px;                  /* jetzt gleich groß wie die rechten Buttons */
-  height: 38px;
-  font-size: 0.9rem;            /* etwas kleinere Schrift, damit "DE" gut passt */
+  font-size: 1rem;
 }
 
 /* Glasiger Hintergrund für die sticky Bar */
 .view-toggle.sticky-active {
-  background: rgba(26, 30, 55, 0.7) !important;
+  background: rgba(255, 255, 255, 0.7) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* ==================== HEADER SUBLINE ==================== */
 .header-subline {
   text-align: center;
-  margin-top: 24px;                /* ca. 1,3 cm nach unten */
-  margin-bottom: 10mm;              /* bleibt oder nach Wunsch anpassen */
+  margin-top: 24px;
+  margin-bottom: 10mm;
   font-size: 1rem;
   color: var(--primary);
   animation: header-glow 8s ease-in-out infinite;
@@ -2014,31 +1720,27 @@ a:focus-visible {
 .category-header-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Inhalt oben, Marquee unten */
-  /* Bestehende Eigenschaften bleiben erhalten, nur ergänzen */
+  justify-content: space-between;
 }
 
 .category-header-content {
-  flex: 1; /* Nimmt den verfügbaren Platz ein */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Titel und Beschreibung vertikal zentrieren (optional) */
+  justify-content: center;
   text-align: center;
 }
 
 .category-header-card .context-marquee {
-  margin-top: auto; /* Schiebt den Marquee nach unten */
+  margin-top: auto;
   width: 100%;
-  height: 22px; /* Gleiche Höhe wie bei Tool-Karten */
-  /* Maskierung etc. wird von .context-marquee geerbt */
+  height: 22px;
 }
 
-/* Falls die Tool-Karten-Marquee bereits definiert ist, wird sie automatisch übernommen */
-
-/* Pulsierender Glow für Kategorie-Köpfe (signalisiert Klickbarkeit) */
+/* Pulsierender Glow für Kategorie-Köpfe */
 @keyframes category-glow {
   0%, 100% {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: 0 4px 12px var(--shadow-sm), 0 0 0 1px transparent;
   }
   50% {
     box-shadow: 0 4px 20px var(--primary-glow), 0 0 0 1px var(--primary);
@@ -2047,80 +1749,4 @@ a:focus-visible {
 
 .category-header-card {
   animation: category-glow 4s ease-in-out infinite;
-}
-
-/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & PETROL) ==================== */
-body.custom-color-scheme {
-  /* Hintergründe */
-  --bg-dark: #F0F2F5;
-  --bg-card: #E5E8ED;
-  --bg-card-hover: #DADEE5;
-  --border: #C0C6D0;
-  --border-hover: #A0A8B5;
-
-  /* Textfarben */
-  --text-primary: #2E3440;
-  --text-secondary: #3A4050;
-  --text-dim: #4A5060;
-  --text-muted: #5A6070;
-
-  /* Akzentfarben (Petrol) */
-  --primary: #006D77;
-  --primary-hover: #00535C;
-  --primary-glow: rgba(0, 109, 119, 0.2);
-  --primary-dim: rgba(0, 109, 119, 0.1);
-
-  /* Schatten */
-  --shadow-glow: 0 0 20px var(--primary-glow);
-}
-
-/* Header-Verlauf (dunkler Fade) heller machen */
-body.custom-color-scheme .header::before {
-  background-image:
-    radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
-  opacity: 0.2;
-}
-
-/* Marquee-Texte in den Karten auf dunkle Farbe setzen */
-body.custom-color-scheme .context-marquee .marquee-seq {
-  color: #2E3440;
-}
-
-/* Stats-Marquee (Lauftext im Header) */
-body.custom-color-scheme .stats-marquee .marquee-track span {
-  color: #2E3440;
-}
-body.custom-color-scheme .stats-marquee .marquee-track span strong {
-  color: #2E3440;
-}
-
-/* Subline unter dem Header */
-body.custom-color-scheme .header-subline {
-  color: #006D77; /* Akzentfarbe */
-}
-
-/* Detail-Panel – heller Hintergrund und dunkle Schrift */
-body.custom-color-scheme .detail-panel {
-  background: var(--bg-card);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
-}
-
-body.custom-color-scheme .detail-title,
-body.custom-color-scheme .detail-section-title {
-  color: var(--primary);
-}
-
-body.custom-color-scheme .detail-description,
-body.custom-color-scheme .detail-list-item {
-  color: var(--text-primary);
-}
-
-/* ==================== THEME-TOGGLE (FARBSCHEMA) – WIRD NICHT MEHR BENÖTIGT, STATT .LEFT-FLOATING-BUTTONS ==================== */
-/* .theme-toggle wurde durch .left-floating-buttons ersetzt */
-
-/* Farbschema-Button vorübergehend ausblenden */
-#colorSchemeToggle {
-  display: none;
 }
