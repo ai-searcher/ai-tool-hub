@@ -1954,7 +1954,7 @@ a:focus-visible {
 /* ==================== HEADER SUBLINE ==================== */
 .header-subline {
   text-align: center;
-  margin-top: 49px;                /* ca. 1,3 cm nach unten */
+  margin-top: 24px;                /* ca. 1,3 cm nach unten */
   margin-bottom: 10mm;              /* bleibt oder nach Wunsch anpassen */
   font-size: 1rem;
   color: var(--primary);
