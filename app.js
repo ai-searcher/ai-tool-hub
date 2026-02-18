@@ -855,55 +855,55 @@ const ui = {
   },
 
   updateStats() {
-    if (!this.elements.statsMarquee) {
-      this.elements.statsMarquee = getElement('#stats-marquee');
+  if (!this.elements.statsMarquee) {
+    this.elements.statsMarquee = getElement('#stats-marquee');
+  }
+  if (!this.elements.statsMarquee) return;
+
+  const categories = new Set(state.tools.map(t => t.category)).size;
+  const featured = state.tools.filter(t => t.featured).length;
+
+  state.stats = {
+    total: state.tools.length,
+    categories,
+    featured
+  };
+
+  // Übersetzungsfunktion holen
+  const t = window.i18n ? window.i18n.t : (key) => key;
+
+  const marqueeItems = [
+    `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
+    `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
+    `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
+  ];
+
+  if (state.tools.length > 0) {
+    const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
+    marqueeItems.push(`${t('statsBest')}: ${topRated.title} (${topRated.rating.toFixed(1)})`);
+
+    const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
+    const newest = sortedByDate[0];
+    marqueeItems.push(`${t('statsNew')}: ${newest.title}`);
+  }
+
+  const track = this.elements.statsMarquee.querySelector('.marquee-track');
+  if (track) {
+    track.innerHTML = '';
+    for (let i = 0; i < 2; i++) {
+      marqueeItems.forEach(text => {
+        const span = document.createElement('span');
+        span.innerHTML = text;
+        track.appendChild(span);
+      });
     }
-    if (!this.elements.statsMarquee) return;
+  }
 
-    const categories = new Set(state.tools.map(t => t.category)).size;
-    const featured = state.tools.filter(t => t.featured).length;
-
-    state.stats = {
-      total: state.tools.length,
-      categories,
-      featured
-    };
-
-    const t = window.i18n ? window.i18n.t : (key) => key;
-
-    const marqueeItems = [
-      `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
-      `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
-      `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
-    ];
-
-    if (state.tools.length > 0) {
-      const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-      marqueeItems.push(`${t('statsBest')}: ${topRated.title} (${topRated.rating.toFixed(1)})`);
-
-      const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
-      const newest = sortedByDate[0];
-      marqueeItems.push(`${t('statsNew')}: ${newest.title}`);
-    }
-
-    const track = this.elements.statsMarquee.querySelector('.marquee-track');
-    if (track) {
-      track.innerHTML = '';
-      for (let i = 0; i < 2; i++) {
-        marqueeItems.forEach(text => {
-          const span = document.createElement('span');
-          span.innerHTML = text;
-          track.appendChild(span);
-        });
-      }
-    }
-
-    this.elements.statsMarquee.style.display = 'flex';
-    if (this.elements.statsBar) {
-      this.elements.statsBar.style.display = 'none';
-    }
-  },
-
+  this.elements.statsMarquee.style.display = 'flex';
+  if (this.elements.statsBar) {
+    this.elements.statsBar.style.display = 'none';
+  }
+},
   updateDataSource() {
     if (!this.elements.dataSource) return;
     const sources = {
