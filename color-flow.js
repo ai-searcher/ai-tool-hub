@@ -6,20 +6,20 @@
 // - scanTools erfasst .stack-card für Kategorien-Ansicht
 // - Optimiert für alle Geräte
 // - Integriert Performance.AnimationScheduler für optimierte Framerate
-// - WebGL-beschleunigtes Rendering für maximale Performance
+// - WebGL-beschleunigtes Rendering mit Kurventessellierung für maximale Performance
 // =========================================
 
 (function() {
   'use strict';
 
   // -------------------------------------------------------------
-  // WEBGL RENDERER – für maximale Performance
+  // WEBGL RENDERER – für maximale Performance mit Kurven
   // -------------------------------------------------------------
-  class WebGLLineRenderer {
+  class WebGLCurveRenderer {
     constructor(canvas) {
       this.canvas = canvas;
-      this.gl = canvas.getContext('webgl', { alpha: true, antialias: true }) 
-                || canvas.getContext('experimental-webgl', { alpha: true, antialias: true });
+      this.gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false }) 
+                || canvas.getContext('experimental-webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
       
       if (!this.gl) {
         console.warn('WebGL nicht verfügbar, verwende Canvas 2D');
@@ -29,12 +29,20 @@
       this.initShaders();
       this.buffers = {};
       this.clearColor = [0, 0, 0, 0];
+      
+      // Aktive Zeichendaten
+      this.curveVertices = [];
+      this.curveColors = [];
+      this.curveCount = 0;
+      this.pointVertices = [];
+      this.pointColors = [];
+      this.pointSizes = [];
     }
 
     initShaders() {
       const gl = this.gl;
 
-      // Vertex-Shader für Linien (Position + Farbe pro Vertex)
+      // Vertex-Shader für Linienzüge (Position + Farbe pro Vertex)
       const lineVS = `
         attribute vec2 a_position;
         attribute vec4 a_color;
@@ -49,7 +57,7 @@
         }
       `;
 
-      // Fragment-Shader für Linien
+      // Fragment-Shader für Linienzüge
       const lineFS = `
         precision mediump float;
         varying vec4 v_color;
@@ -103,6 +111,10 @@
       // Uniforms
       this.resUniformLine = gl.getUniformLocation(this.lineProgram, 'u_resolution');
       this.resUniformPoint = gl.getUniformLocation(this.pointProgram, 'u_resolution');
+
+      // Enable blending für Transparenz
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     }
 
     createProgram(vsSrc, fsSrc) {
@@ -145,44 +157,41 @@
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
 
-    drawLines(lines) {
-      if (!lines.length) return;
+    // Kurve als Linienzug zeichnen (Punkte werden als LINE_STRIP gerendert)
+    drawCurve(points, colors) {
+      if (points.length < 2) return;
+      
       const gl = this.gl;
       gl.useProgram(this.lineProgram);
       gl.uniform2f(this.resUniformLine, this.canvas.width, this.canvas.height);
 
-      // Daten für alle Linien sammeln (2 Vertices pro Linie)
-      const vertices = [];
-      const colors = [];
-      lines.forEach(line => {
-        // Startpunkt
-        vertices.push(line.x1, line.y1);
-        colors.push(line.r1/255, line.g1/255, line.b1/255, line.a1);
-        // Endpunkt
-        vertices.push(line.x2, line.y2);
-        colors.push(line.r2/255, line.g2/255, line.b2/255, line.a2);
-      });
+      // Punkte und Farben in Buffer laden
+      const vertices = new Float32Array(points.flat());
+      const colorArray = new Float32Array(colors.flat());
 
-      // Vertex-Puffer
-      if (!this.buffers.lineVertices || this.buffers.lineVertices.length < vertices.length) {
-        if (this.buffers.lineVertices) gl.deleteBuffer(this.buffers.lineVertices);
-        this.buffers.lineVertices = gl.createBuffer();
-      }
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.lineVertices);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
+      if (!this.buffers.curveVBO) this.buffers.curveVBO = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveVBO);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(this.lineAttribs.position);
       gl.vertexAttribPointer(this.lineAttribs.position, 2, gl.FLOAT, false, 0, 0);
 
-      // Farb-Puffer
-      if (!this.buffers.lineColors) this.buffers.lineColors = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.lineColors);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.DYNAMIC_DRAW);
+      if (!this.buffers.curveCBO) this.buffers.curveCBO = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.curveCBO);
+      gl.bufferData(gl.ARRAY_BUFFER, colorArray, gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(this.lineAttribs.color);
       gl.vertexAttribPointer(this.lineAttribs.color, 4, gl.FLOAT, false, 0, 0);
 
-      gl.drawArrays(gl.LINES, 0, vertices.length / 2);
+      gl.drawArrays(gl.LINE_STRIP, 0, points.length);
     }
 
+    // Batch mehrerer Kurven (für Effizienz, jede einzeln zeichnen)
+    drawCurves(curves) {
+      curves.forEach(curve => {
+        this.drawCurve(curve.points, curve.colors);
+      });
+    }
+
+    // Punkte zeichnen (Sterne, Ripples)
     drawPoints(points) {
       if (!points.length) return;
       const gl = this.gl;
@@ -198,23 +207,20 @@
         sizes.push(p.size);
       });
 
-      // Vertex-Puffer
-      if (!this.buffers.pointVertices) this.buffers.pointVertices = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointVertices);
+      if (!this.buffers.pointVBO) this.buffers.pointVBO = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointVBO);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(this.pointAttribs.position);
       gl.vertexAttribPointer(this.pointAttribs.position, 2, gl.FLOAT, false, 0, 0);
 
-      // Farb-Puffer
-      if (!this.buffers.pointColors) this.buffers.pointColors = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointColors);
+      if (!this.buffers.pointCBO) this.buffers.pointCBO = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointCBO);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(this.pointAttribs.color);
       gl.vertexAttribPointer(this.pointAttribs.color, 4, gl.FLOAT, false, 0, 0);
 
-      // Größen-Puffer
-      if (!this.buffers.pointSizes) this.buffers.pointSizes = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointSizes);
+      if (!this.buffers.pointSBO) this.buffers.pointSBO = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.pointSBO);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sizes), gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(this.pointAttribs.size);
       gl.vertexAttribPointer(this.pointAttribs.size, 1, gl.FLOAT, false, 0, 0);
@@ -223,11 +229,12 @@
     }
 
     destroy() {
-      if (this.buffers.lineVertices) this.gl.deleteBuffer(this.buffers.lineVertices);
-      if (this.buffers.lineColors) this.gl.deleteBuffer(this.buffers.lineColors);
-      if (this.buffers.pointVertices) this.gl.deleteBuffer(this.buffers.pointVertices);
-      if (this.buffers.pointColors) this.gl.deleteBuffer(this.buffers.pointColors);
-      if (this.buffers.pointSizes) this.gl.deleteBuffer(this.buffers.pointSizes);
+      const gl = this.gl;
+      if (this.buffers.curveVBO) gl.deleteBuffer(this.buffers.curveVBO);
+      if (this.buffers.curveCBO) gl.deleteBuffer(this.buffers.curveCBO);
+      if (this.buffers.pointVBO) gl.deleteBuffer(this.buffers.pointVBO);
+      if (this.buffers.pointCBO) gl.deleteBuffer(this.buffers.pointCBO);
+      if (this.buffers.pointSBO) gl.deleteBuffer(this.buffers.pointSBO);
     }
   }
 
@@ -531,7 +538,7 @@
 
       // Versuche WebGL, sonst 2D
       if (!this.glRenderer) {
-        this.glRenderer = new WebGLLineRenderer(this.canvas);
+        this.glRenderer = new WebGLCurveRenderer(this.canvas);
         if (this.glRenderer) {
           this.useWebGL = true;
           this.glRenderer.setSize(this.canvasWidth, this.canvasHeight);
@@ -969,52 +976,205 @@
     }
 
     // Zeichenmethoden – je nach Renderer (WebGL oder 2D)
-    drawCurvedLine(from, to, strokeStyle, lineWidth, connection) {
-      if (!this.useWebGL && this.ctx) {
-        // 2D-Version (original)
-        const dx = to.x - from.x;
-        const dy = to.y - from.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 1) return;
 
-        const baseOffset = dist * this.settings.curveOffsetFactor;
-        const seed = connection.glowOffset;
-        const rand1 = Math.sin(seed) * 0.5 + 0.5;
-        const rand2 = Math.cos(seed) * 0.5 + 0.5;
-        const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
-        const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
-        const offset = baseOffset * offsetFactor;
-        const midX = (from.x + to.x) / 2;
-        const midY = (from.y + to.y) / 2;
-        const perpX = -dy / dist;
-        const perpY = dx / dist;
-        const cos = Math.cos(angleVar);
-        const sin = Math.sin(angleVar);
-        const rotatedX = perpX * cos - perpY * sin;
-        const rotatedY = perpX * sin + perpY * cos;
-        const cpX = midX + rotatedX * offset;
-        const cpY = midY + rotatedY * offset;
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(from.x, from.y);
-        this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
-        this.ctx.strokeStyle = strokeStyle;
-        this.ctx.lineWidth = lineWidth;
-        this.ctx.stroke();
+    // Berechnet eine quadratische Bézier-Kurve und gibt Array von Punkten und Farben zurück
+    tessellateCurve(from, to, connection, activeState, time, forGlow = false) {
+      const config = connection.config;
+      let fromColor = this.categoryColors[from.category] || this.categoryColors.other;
+      let toColor = this.categoryColors[to.category] || this.categoryColors.other;
+      
+      let weight = connection.weight || 1;
+      if (this.settings.enableVariableWidth) {
+        const degree = (from.degree + to.degree) / 2;
+        weight *= (0.8 + degree * 0.1);
       }
-      // Für WebGL wird drawCurvedLine nicht verwendet, da wir in drawConnection WebGL-spezifisch zeichnen
+
+      let baseOpacity;
+      if (forGlow) {
+        baseOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+      } else {
+        baseOpacity = this.settings.baseOpacity * activeState * weight;
+      }
+
+      if (this.settings.enableGlitch && Math.random() < this.settings.glitchProbability) {
+        const tmp = fromColor;
+        fromColor = toColor;
+        toColor = tmp;
+      }
+
+      // Kurvenpunkte berechnen (quadratische Bézier)
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1) return { points: [], colors: [] };
+
+      const baseOffset = dist * this.settings.curveOffsetFactor;
+      const seed = connection.glowOffset;
+      const rand1 = Math.sin(seed) * 0.5 + 0.5;
+      const rand2 = Math.cos(seed) * 0.5 + 0.5;
+      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
+      const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
+      const offset = baseOffset * offsetFactor;
+
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2;
+      const perpX = -dy / dist;
+      const perpY = dx / dist;
+      const cos = Math.cos(angleVar);
+      const sin = Math.sin(angleVar);
+      const rotatedX = perpX * cos - perpY * sin;
+      const rotatedY = perpX * sin + perpY * cos;
+      const cpX = midX + rotatedX * offset;
+      const cpY = midY + rotatedY * offset;
+
+      // Tessellierung: 20 Segmente
+      const segments = 20;
+      const points = [];
+      const colors = [];
+      for (let i = 0; i <= segments; i++) {
+        const t = i / segments;
+        // Quadratische Bézier: B(t) = (1-t)^2*P0 + 2(1-t)*t*P1 + t^2*P2
+        const x = (1-t)*(1-t)*from.x + 2*(1-t)*t*cpX + t*t*to.x;
+        const y = (1-t)*(1-t)*from.y + 2*(1-t)*t*cpY + t*t*to.y;
+        points.push(x, y);
+        
+        // Farbe linear interpolieren
+        const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * t);
+        const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * t);
+        const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * t);
+        // Opazität kann ebenfalls variieren (optional)
+        const a = baseOpacity;
+        colors.push(r/255, g/255, b/255, a);
+      }
+      return { points, colors };
     }
 
-    drawConnection(from, to, connection, activeState, time) {
+    // Hauptanimationsschleife
+    animate(now) {
+      if (!this.ctx && !this.glRenderer) return;
+
+      this.glowTime = now;
+      this.updateActiveStates();
+
       if (this.useWebGL && this.glRenderer) {
-        // WebGL: Sammle Linien und zeichne später im Batch
-        // Diese Methode wird für WebGL nicht direkt aufgerufen, da wir in animate die Daten sammeln.
-        // Wir lassen sie hier als Platzhalter.
-        return;
+        // WebGL-Rendering
+        this.glRenderer.clear();
+
+        // Sterne
+        if (this.settings.enableStars) {
+          const starPoints = this.stars.map(star => {
+            const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+            return {
+              x: star.x,
+              y: star.y,
+              r: 255,
+              g: 255,
+              b: 255,
+              a: Math.max(0.2, brightness),
+              size: star.radius * 2
+            };
+          });
+          this.glRenderer.drawPoints(starPoints);
+        }
+
+        // Kurven sammeln (normale und Glow)
+        const curves = [];
+        this.connections.forEach(conn => {
+          const activeState = this.activeConnections.get(conn) || 1;
+          
+          // Normale Linie
+          const normal = this.tessellateCurve(conn.from, conn.to, conn, activeState, now, false);
+          if (normal.points.length) {
+            curves.push({
+              points: normal.points,
+              colors: normal.colors
+            });
+          }
+
+          // Glow (nicht bei simplified rendering)
+          if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
+            const glow = this.tessellateCurve(conn.from, conn.to, conn, activeState, now, true);
+            if (glow.points.length) {
+              // Für Glow verwenden wir die gleichen Punkte, aber andere Farben (bereits in tessellateCurve)
+              curves.push({
+                points: glow.points,
+                colors: glow.colors
+              });
+            }
+          }
+        });
+
+        this.glRenderer.drawCurves(curves);
+
+        // Ripples
+        if (this.settings.enableRipples) {
+          const ripplePoints = [];
+          for (let i = this.ripples.length - 1; i >= 0; i--) {
+            const r = this.ripples[i];
+            r.radius += r.growth;
+            r.alpha *= 0.98;
+            if (r.radius > r.maxRadius || r.alpha < 0.05) {
+              this.ripples.splice(i, 1);
+              continue;
+            }
+            ripplePoints.push({
+              x: r.x, y: r.y,
+              r: 0, g: 243, b: 255,
+              a: r.alpha,
+              size: r.radius * 2
+            });
+          }
+          this.glRenderer.drawPoints(ripplePoints);
+        }
+
       } else if (this.ctx) {
         // 2D-Fallback
-        this.drawConnection2D(from, to, connection, activeState, time);
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        this.drawStars2D();
+
+        this.connections.forEach(conn => {
+          const activeState = this.activeConnections.get(conn) || 1;
+          this.drawConnection2D(conn.from, conn.to, conn, activeState, now);
+        });
+
+        this.drawRipples2D();
       }
+    }
+
+    // 2D-Fallback-Methoden (aus Original)
+    drawStars2D() {
+      if (!this.settings.enableStars) return;
+      this.ctx.save();
+      this.ctx.fillStyle = 'white';
+      for (let star of this.stars) {
+        const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
+        this.ctx.globalAlpha = Math.max(0.2, brightness);
+        this.ctx.beginPath();
+        this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+    }
+
+    drawRipples2D() {
+      if (!this.settings.enableRipples) return;
+      this.ctx.save();
+      this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
+      this.ctx.lineWidth = 2;
+      for (let i = this.ripples.length - 1; i >= 0; i--) {
+        const r = this.ripples[i];
+        r.radius += r.growth;
+        r.alpha *= 0.98;
+        if (r.radius > r.maxRadius || r.alpha < 0.05) {
+          this.ripples.splice(i, 1);
+          continue;
+        }
+        this.ctx.globalAlpha = r.alpha;
+        this.ctx.beginPath();
+        this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+      this.ctx.restore();
     }
 
     drawConnection2D(from, to, connection, activeState, time) {
@@ -1053,7 +1213,7 @@
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
-      this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, connection);
+      this.drawCurvedLine2D(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, connection);
 
       this.ctx.setLineDash([]);
 
@@ -1088,11 +1248,43 @@
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth, connection);
+          this.drawCurvedLine2D(from, to, glowGradient, this.ctx.lineWidth, connection);
 
           this.ctx.shadowBlur = 0;
         }
       }
+    }
+
+    drawCurvedLine2D(from, to, strokeStyle, lineWidth, connection) {
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 1) return;
+
+      const baseOffset = dist * this.settings.curveOffsetFactor;
+      const seed = connection.glowOffset;
+      const rand1 = Math.sin(seed) * 0.5 + 0.5;
+      const rand2 = Math.cos(seed) * 0.5 + 0.5;
+      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
+      const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
+      const offset = baseOffset * offsetFactor;
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2;
+      const perpX = -dy / dist;
+      const perpY = dx / dist;
+      const cos = Math.cos(angleVar);
+      const sin = Math.sin(angleVar);
+      const rotatedX = perpX * cos - perpY * sin;
+      const rotatedY = perpX * sin + perpY * cos;
+      const cpX = midX + rotatedX * offset;
+      const cpY = midY + rotatedY * offset;
+
+      this.ctx.beginPath();
+      this.ctx.moveTo(from.x, from.y);
+      this.ctx.quadraticCurveTo(cpX, cpY, to.x, to.y);
+      this.ctx.strokeStyle = strokeStyle;
+      this.ctx.lineWidth = lineWidth;
+      this.ctx.stroke();
     }
 
     getGradient(from, to, fromColor, toColor, baseOpacity) {
@@ -1119,147 +1311,6 @@
         g: Math.round(color1.g + (color2.g - color1.g) * t),
         b: Math.round(color1.b + (color2.b - color1.b) * t)
       };
-    }
-
-    drawStars() {
-      if (!this.settings.enableStars) return;
-      if (this.useWebGL && this.glRenderer) {
-        // WebGL: Sterne als Punkte sammeln und in animate zeichnen
-        return;
-      } else if (this.ctx) {
-        this.ctx.save();
-        this.ctx.fillStyle = 'white';
-        for (let star of this.stars) {
-          const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
-          this.ctx.globalAlpha = Math.max(0.2, brightness);
-          this.ctx.beginPath();
-          this.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-          this.ctx.fill();
-        }
-        this.ctx.restore();
-      }
-    }
-
-    drawRipples() {
-      if (!this.settings.enableRipples) return;
-      if (this.useWebGL && this.glRenderer) {
-        // WebGL: Ripples als Punkte sammeln
-        return;
-      } else if (this.ctx) {
-        this.ctx.save();
-        this.ctx.strokeStyle = 'rgba(0, 243, 255, 0.6)';
-        this.ctx.lineWidth = 2;
-        for (let i = this.ripples.length - 1; i >= 0; i--) {
-          const r = this.ripples[i];
-          r.radius += r.growth;
-          r.alpha *= 0.98;
-          if (r.radius > r.maxRadius || r.alpha < 0.05) {
-            this.ripples.splice(i, 1);
-            continue;
-          }
-          this.ctx.globalAlpha = r.alpha;
-          this.ctx.beginPath();
-          this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-          this.ctx.stroke();
-        }
-        this.ctx.restore();
-      }
-    }
-
-    // Hauptanimationsschleife
-    animate(now) {
-      if (!this.ctx && !this.glRenderer) return;
-
-      this.glowTime = now;
-      this.updateActiveStates();
-
-      if (this.useWebGL && this.glRenderer) {
-        // WebGL-Rendering
-        this.glRenderer.clear();
-
-        // Sterne
-        if (this.settings.enableStars) {
-          const points = this.stars.map(star => {
-            const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
-            return {
-              x: star.x,
-              y: star.y,
-              r: 255,
-              g: 255,
-              b: 255,
-              a: Math.max(0.2, brightness),
-              size: star.radius * 2
-            };
-          });
-          this.glRenderer.drawPoints(points);
-        }
-
-        // Verbindungen
-        const lines = [];
-        this.connections.forEach(conn => {
-          const activeState = this.activeConnections.get(conn) || 1;
-          const from = conn.from;
-          const to = conn.to;
-          const fromColor = this.categoryColors[from.category] || this.categoryColors.other;
-          const toColor = this.categoryColors[to.category] || this.categoryColors.other;
-          const weight = conn.weight || 1;
-          const baseOpacity = this.settings.baseOpacity * activeState * weight;
-
-          // Einfache Linie (keine Kurve – WebGL kann Kurven nur über viele Segmente, hier vereinfacht)
-          // Wir zeichnen gerade Linien; die Krümmung entfällt in dieser WebGL-Version.
-          lines.push({
-            x1: from.x, y1: from.y,
-            x2: to.x, y2: to.y,
-            r1: fromColor.r, g1: fromColor.g, b1: fromColor.b, a1: baseOpacity,
-            r2: toColor.r, g2: toColor.g, b2: toColor.b, a2: baseOpacity
-          });
-
-          // Glow: zweite, dickere Linie (optional)
-          if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
-            const glowOpacity = this.settings.glowOpacity * activeState * weight * conn.config.glowIntensity;
-            lines.push({
-              x1: from.x, y1: from.y,
-              x2: to.x, y2: to.y,
-              r1: fromColor.r, g1: fromColor.g, b1: fromColor.b, a1: glowOpacity,
-              r2: toColor.r, g2: toColor.g, b2: toColor.b, a2: glowOpacity
-            });
-          }
-        });
-        this.glRenderer.drawLines(lines);
-
-        // Ripples
-        if (this.settings.enableRipples) {
-          const ripplePoints = [];
-          for (let i = this.ripples.length - 1; i >= 0; i--) {
-            const r = this.ripples[i];
-            r.radius += r.growth;
-            r.alpha *= 0.98;
-            if (r.radius > r.maxRadius || r.alpha < 0.05) {
-              this.ripples.splice(i, 1);
-              continue;
-            }
-            ripplePoints.push({
-              x: r.x, y: r.y,
-              r: 0, g: 243, b: 255,
-              a: r.alpha,
-              size: r.radius * 2
-            });
-          }
-          this.glRenderer.drawPoints(ripplePoints);
-        }
-
-      } else if (this.ctx) {
-        // 2D-Fallback
-        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.drawStars();
-
-        this.connections.forEach(conn => {
-          const activeState = this.activeConnections.get(conn) || 1;
-          this.drawConnection2D(conn.from, conn.to, conn, activeState, now);
-        });
-
-        this.drawRipples();
-      }
     }
 
     startAnimation() {
