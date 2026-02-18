@@ -2016,30 +2016,29 @@ a:focus-visible {
   animation: category-glow 4s ease-in-out infinite;
 }
 
-/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (GELB/VIOLETT) ==================== */
+/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & PETROL) ==================== */
 body.custom-color-scheme {
   /* Hintergründe */
-  --bg-dark: #CE9B62;           /* Hauptseitenhintergrund */
-  --bg-card: #B8864B;            /* Kartenhintergrund (dunkleres Gelb) */
-  --bg-card-hover: #A67642;      /* Karten-Hover */
-  --border: #AD7F4A;             /* Rahmenfarbe */
+  --bg-dark: #F0F2F5;
+  --bg-card: #E5E8ED;
+  --bg-card-hover: #DADEE5;
+  --border: #C0C6D0;
+  --border-hover: #A0A8B5;
 
-  /* Textfarben (alle Violett) */
-  --text-primary: #610299;
-  --text-secondary: #610299;
-  --text-dim: #610299;
-  --text-muted: #610299;
+  /* Textfarben */
+  --text-primary: #2E3440;
+  --text-secondary: #3A4050;
+  --text-dim: #4A5060;
+  --text-muted: #5A6070;
 
-  /* Primärfarbe (Akzente) – wir verwenden das Violett auch hier */
-  --primary: #610299;
-  --primary-hover: #4F017A;      /* etwas dunkleres Violett */
-  --primary-glow: rgba(97, 2, 153, 0.2);
-  --primary-dim: rgba(97, 2, 153, 0.1);
+  /* Akzentfarben (Petrol) */
+  --primary: #006D77;
+  --primary-hover: #00535C;
+  --primary-glow: rgba(0, 109, 119, 0.2);
+  --primary-dim: rgba(0, 109, 119, 0.1);
 
-  /* Schatten ggf. anpassen (optional) */
+  /* Schatten – an Akzentfarbe angepasst */
   --shadow-glow: 0 0 20px var(--primary-glow);
-  
-  /* Falls es andere farbabhängige Elemente gibt, die mit --primary arbeiten, werden sie automatisch violett. */
 }
 
 /* Damit der Button im neuen Schema auch gut aussieht, können wir ihn speziell stylen */
