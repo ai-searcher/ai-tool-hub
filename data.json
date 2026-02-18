@@ -5,6 +5,15 @@
     "total_tools": 20,
     "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung"
   },
+  "categoryTags": {
+    "text": ["Texte schreiben", "Chatten & Fragen stellen", "Briefe/E-Mails formulieren", "Zusammenfassen", "Übersetzen", "Korrekturlesen"],
+    "image": ["Bilder erstellen", "Fotos bearbeiten", "KI-Kunst machen", "Designs entwerfen", "Bilder verändern"],
+    "code": ["Programmieren lernen", "Code schreiben", "Fehler suchen", "Websites bauen", "Apps entwickeln"],
+    "audio": ["Sprache erzeugen", "Hörbücher machen", "Musik komponieren", "Podcasts erstellen", "Stimmen klonen"],
+    "video": ["Videos machen", "Filme bearbeiten", "Animationen erstellen", "Social-Media-Clips", "Erklärvideos"],
+    "data": ["Daten auswerten", "Diagramme erstellen", "Zahlen verstehen", "Tabellen analysieren"],
+    "other": ["Alltagsaufgaben", "Lernen & Üben", "Recherchieren", "Organisieren", "Kreativ sein"]
+  },
   "tools": [
     {
       "id": 1,
