@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.5.0 (Intelligente Tool-Vorschläge mit Direktaufruf)
+// Version: 1.6.0 (Optimiert mit Performance-Engine)
 // =========================================
 
 'use strict';
@@ -129,85 +129,42 @@ const DEFAULT_TOOLS = [
 ];
 
 // =========================================
-// INTELLIGENTE SUCHFUNKTIONEN
+// PERFORMANCE-OPTIMIERTE SUCHFUNKTIONEN (mit SearchIndex)
 // =========================================
+let searchIndex = null; // wird nach dem Laden der Tools initialisiert
+let domBatcher = null;  // für gebündelte DOM-Updates
 
-// Prüft, ob ein Tool zu einem Suchbegriff passt (erweiterte Suche)
-function toolMatchesSearch(tool, query) {
-  if (!query || query.length < CONFIG.search.minLength) return true;
-  const q = query.toLowerCase();
-
-  // Sammle alle relevanten Textfelder
-  const fields = [];
-
-  // Deutsche Felder (immer vorhanden)
-  if (tool.title) fields.push(tool.title);
-  if (tool.description) fields.push(tool.description);
-  if (tool.tags && Array.isArray(tool.tags)) fields.push(...tool.tags);
-  if (tool.provider) fields.push(tool.provider);
-  if (tool.badges && Array.isArray(tool.badges)) fields.push(...tool.badges);
-  fields.push(getCategoryName(tool.category)); // lokalisierter Kategoriename
-
-  // Englische Felder (falls vorhanden)
-  if (tool.en) {
-    if (tool.en.title) fields.push(tool.en.title);
-    if (tool.en.description) fields.push(tool.en.description);
-    if (tool.en.badges && Array.isArray(tool.en.badges)) fields.push(...tool.en.badges);
-  }
-
-  return fields.some(field => field && String(field).toLowerCase().includes(q));
+// Filter-Funktion, die den Suchindex nutzt
+function filterTools(query) {
+  if (!query || query.length < 2) return state.tools;
+  if (!searchIndex) return state.tools; // Fallback, falls Index nicht bereit
+  const ids = searchIndex.search(query);
+  return ids.map(id => searchIndex.getTool(id)).filter(Boolean);
 }
 
-// Generiert Vorschläge (nur Tools, mit Favicon) – basierend auf toolMatchesSearch
-function generateToolSuggestions(query, tools) {
+// Vorschläge basierend auf dem Suchindex
+function generateToolSuggestions(query) {
   if (!query || query.length < 2) return [];
-  
-  const q = query.toLowerCase();
-  const suggestions = [];
-  const seen = new Set();
-
-  tools.forEach(tool => {
-    // Nur Tools, die zum Suchbegriff passen
-    if (!toolMatchesSearch(tool, query)) return;
-
-    const title = getLocalizedToolField(tool, 'title');
-    if (!seen.has(title)) {
-      // Relevanz-Score: 2 wenn Titel den Suchbegriff enthält, sonst 1
-      const titleLower = title.toLowerCase();
-      const score = titleLower.includes(q) ? 2 : 1;
-
-      // Domain für Favicon
-      let domain = '';
-      try {
-        if (tool.link) {
-          const url = new URL(tool.link);
-          domain = url.hostname;
-        }
-      } catch (e) {}
-
-      suggestions.push({
-        type: 'tool',
-        text: title,
-        toolId: tool.id,
-        domain: domain,
-        link: tool.link,
-        category: tool.category,
-        score: score
-      });
-      seen.add(title);
-    }
-  });
-
-  // Sortieren: zuerst nach Score, dann nach Position des Suchbegriffs im Titel
-  suggestions.sort((a, b) => {
-    if (a.score !== b.score) return b.score - a.score;
-    const aIndex = a.text.toLowerCase().indexOf(q);
-    const bIndex = b.text.toLowerCase().indexOf(q);
-    if (aIndex === bIndex) return a.text.length - b.text.length;
-    return aIndex - bIndex;
-  });
-
-  return suggestions.slice(0, CONFIG.search.maxSuggestions);
+  if (!searchIndex) return [];
+  const ids = searchIndex.search(query).slice(0, CONFIG.search.maxSuggestions);
+  return ids.map(id => {
+    const tool = searchIndex.getTool(id);
+    if (!tool) return null;
+    let domain = '';
+    try {
+      if (tool.link) {
+        const url = new URL(tool.link);
+        domain = url.hostname;
+      }
+    } catch (e) {}
+    return {
+      type: 'tool',
+      text: getLocalizedToolField(tool, 'title'),
+      toolId: tool.id,
+      domain: domain,
+      category: tool.category
+    };
+  }).filter(Boolean);
 }
 
 // =========================================
@@ -804,15 +761,26 @@ const validator = {
 // DATA LOADING (Triple Fallback)
 // =========================================
 const dataLoader = {
+  // Cache für Supabase-Daten (optional)
+  toolCache: window.Performance ? new window.Performance.Cache(5 * 60 * 1000) : null,
+
   async loadFromSupabase() {
     if (!CONFIG.fallback.useSupabase) return null;
     
     try {
       console.log('🔄 Trying Supabase...');
+      
+      // Mit Cache
+      if (this.toolCache && this.toolCache.has('supabase-tools')) {
+        console.log('📦 Using cached Supabase tools');
+        return this.toolCache.get('supabase-tools');
+      }
+
       const tools = await supabase.getTools();
       
       if (tools && tools.length > 0) {
         state.dataSource = 'supabase';
+        if (this.toolCache) this.toolCache.set('supabase-tools', tools);
         return tools;
       }
       
@@ -1080,10 +1048,9 @@ const ui = {
   },
 
   render() {
-    // Intelligente Suche: Nutze toolMatchesSearch
+    // Intelligente Suche mit SearchIndex
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      const query = state.searchQuery;
-      state.filtered = state.tools.filter(tool => toolMatchesSearch(tool, query));
+      state.filtered = filterTools(state.searchQuery);
     } else {
       state.filtered = [...state.tools];
     }
@@ -1116,8 +1083,18 @@ const ui = {
         if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
           this.elements.toolGrid.classList.add('tool-grid-squares');
         }
-        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-        this.attachCardHandlers();
+
+        // DOM-Update über Batcher
+        if (domBatcher) {
+          domBatcher.add(() => {
+            this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+            this.attachCardHandlers();
+          });
+        } else {
+          this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+          this.attachCardHandlers();
+        }
+
         if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
           window.colorFlowNetwork.refresh();
         }
@@ -1131,7 +1108,13 @@ const ui = {
         this.stackView.activeSort = state.sortBy;
         this.stackView.sortDirection = state.sortDirection;
       }
-      this.stackView.render();
+
+      if (domBatcher) {
+        domBatcher.add(() => this.stackView.render());
+      } else {
+        this.stackView.render();
+      }
+
       if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
         window.colorFlowNetwork.refresh();
       }
@@ -1401,7 +1384,7 @@ const smartSearch = {
       return;
     }
 
-    const suggestions = generateToolSuggestions(query, state.tools);
+    const suggestions = generateToolSuggestions(query);
     if (suggestions.length === 0) {
       this.hide();
       return;
@@ -1645,6 +1628,22 @@ const app = {
       }
       
       console.log('✅ Valid tools ready:', state.tools.length);
+
+      // Suchindex initialisieren (falls Performance verfügbar)
+      if (window.Performance && window.Performance.SearchIndex) {
+        searchIndex = new window.Performance.SearchIndex();
+        searchIndex.addTools(state.tools);
+        console.log('🔍 SearchIndex initialized');
+      } else {
+        console.warn('Performance.SearchIndex not available, using fallback search');
+        // Fallback: alte toolMatchesSearch bleibt erhalten (wird aber nicht mehr verwendet)
+      }
+
+      // DOMBatcher initialisieren
+      if (window.Performance && window.Performance.DOMBatcher) {
+        domBatcher = new window.Performance.DOMBatcher();
+        console.log('📦 DOMBatcher initialized');
+      }
       
       ui.updateStats();
       ui.updateDataSource();
@@ -1671,7 +1670,14 @@ const app = {
             toggleElement.classList.remove('sticky-active');
           }
         };
-        window.addEventListener('scroll', toggleStickyClass, { passive: true });
+
+        // Throttle für Scroll-Ereignis
+        if (window.Performance && window.Performance.throttle) {
+          const throttledToggle = window.Performance.throttle(toggleStickyClass, 100);
+          window.addEventListener('scroll', throttledToggle, { passive: true });
+        } else {
+          window.addEventListener('scroll', toggleStickyClass, { passive: true });
+        }
         toggleStickyClass();
       }
       
