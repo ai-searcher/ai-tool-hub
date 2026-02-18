@@ -577,6 +577,26 @@
         }
       }
       
+      // NEUE FUNKTION: Event-Listener für ausklappbare Sektionen setzen
+      function setupCollapsibleListeners() {
+        const sections = document.querySelectorAll('.collapsible-section');
+        sections.forEach(section => {
+          const title = section.querySelector('.detail-section-title');
+          if (title) {
+            // Alten Listener entfernen (falls vorhanden)
+            if (title._clickHandler) {
+              title.removeEventListener('click', title._clickHandler);
+            }
+            // Neuen Listener hinzufügen
+            title._clickHandler = (e) => {
+              e.stopPropagation();
+              section.classList.toggle('collapsed');
+            };
+            title.addEventListener('click', title._clickHandler);
+          }
+        });
+      }
+      
       function renderTool(tool) {
         if (!tool) return;
         
@@ -613,15 +633,8 @@
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
         
-        const sections = document.querySelectorAll('.collapsible-section');
-        sections.forEach(section => {
-          const title = section.querySelector('.detail-section-title');
-          if (title) {
-            title.addEventListener('click', () => {
-              section.classList.toggle('collapsed');
-            });
-          }
-        });
+        // Event-Listener für Ausklappen setzen
+        setupCollapsibleListeners();
       }
       
       function fillList(containerId, listId, items) {
