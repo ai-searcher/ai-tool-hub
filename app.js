@@ -1963,4 +1963,4 @@ function initializeModalSystem() {
   window.openToolModal = openToolModal;
   window.closeToolModal = closeToolModal;
   console.log('✅ Modal system ready');
-}
+} 
