@@ -2037,26 +2037,51 @@ body.custom-color-scheme {
   --primary-glow: rgba(0, 109, 119, 0.2);
   --primary-dim: rgba(0, 109, 119, 0.1);
 
-  /* Schatten – an Akzentfarbe angepasst */
+  /* Schatten */
   --shadow-glow: 0 0 20px var(--primary-glow);
 }
 
-/* Damit der Button im neuen Schema auch gut aussieht, können wir ihn speziell stylen */
-.color-scheme-toggle {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.3rem 0.8rem;
-  border-radius: 30px;
-  transition: all 0.2s ease;
-  margin-left: 1rem;
+/* Header-Verlauf (dunkler Fade) heller machen */
+body.custom-color-scheme .header::before {
+  background-image:
+    radial-gradient(circle at 20% 50%, var(--primary-dim) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--primary-dim) 0%, transparent 50%);
+  opacity: 0.2;
 }
 
-.color-scheme-toggle:hover {
-  background: var(--primary-dim);
-  border-color: var(--primary);
+/* Marquee-Texte in den Karten auf dunkle Farbe setzen */
+body.custom-color-scheme .context-marquee .marquee-seq {
+  color: #2E3440;
+}
+
+/* Stats-Marquee (Lauftext im Header) */
+body.custom-color-scheme .stats-marquee .marquee-track span {
+  color: #2E3440;
+}
+body.custom-color-scheme .stats-marquee .marquee-track span strong {
+  color: #2E3440;
+}
+
+/* Subline unter dem Header */
+body.custom-color-scheme .header-subline {
+  color: #006D77; /* Akzentfarbe */
+}
+
+/* Detail-Panel – heller Hintergrund und dunkle Schrift */
+body.custom-color-scheme .detail-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+}
+
+body.custom-color-scheme .detail-title,
+body.custom-color-scheme .detail-section-title {
+  color: var(--primary);
+}
+
+body.custom-color-scheme .detail-description,
+body.custom-color-scheme .detail-list-item {
+  color: var(--text-primary);
 }
 
 /* ==================== THEME-TOGGLE (FARBSCHEMA) ==================== */
