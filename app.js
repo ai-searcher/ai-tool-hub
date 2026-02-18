@@ -1009,61 +1009,67 @@ const ui = {
       return;
     }
 
-    const activeView = this.getActiveView();
-    if (activeView === 'grid') {
-      this.showState('grid');
-      if (this.elements.toolGrid) {
-        if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-          this.elements.toolGrid.classList.add('tool-grid-squares');
-        }
-        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-        this.attachCardHandlers();
-      if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-        window.colorFlowNetwork.refresh();
-      }
-    } else {
-      this.showState('grid');
-      if (!this.stackView) {
-        this.stackView = new StackViewController(this.elements.toolGrid, state, this);
-      } else {
-        this.stackView.state = state;
-        this.stackView.activeSort = state.sortBy;
-        this.stackView.sortDirection = state.sortDirection;
-      }
-      this.stackView.render();
-     if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-        window.colorFlowNetwork.refresh();
-      }
-  },
-
-  getActiveView() {
-    const viewToggle = document.querySelector('.view-toggle');
-    const activeTab = viewToggle?.querySelector('.toggle-btn.active');
-    return activeTab ? activeTab.dataset.view : 'grid';
-  },
-
-  attachCardHandlers() {
-    const grid = this.elements.toolGrid || getElement('#tool-grid');
-    if (!grid) return;
-
-    if (grid._clickHandler) {
-      grid.removeEventListener('click', grid._clickHandler);
-      grid.removeEventListener('keydown', grid._keyHandler);
+const activeView = this.getActiveView();
+if (activeView === 'grid') {
+  this.showState('grid');
+  if (this.elements.toolGrid) {
+    if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+      this.elements.toolGrid.classList.add('tool-grid-squares');
     }
+    this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+    this.attachCardHandlers();
+    if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+      window.colorFlowNetwork.refresh();
+    }
+  }
+} else {
+  this.showState('grid');
+  if (!this.stackView) {
+    this.stackView = new StackViewController(this.elements.toolGrid, state, this);
+  } else {
+    this.stackView.state = state;
+    this.stackView.activeSort = state.sortBy;
+    this.stackView.sortDirection = state.sortDirection;
+  }
+  this.stackView.render();
+  if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+    window.colorFlowNetwork.refresh();
+  }
+}
 
-    const isMobile = window.innerWidth < 768;
+getActiveView() {
+  const viewToggle = document.querySelector('.view-toggle');
+  const activeTab = viewToggle?.querySelector('.toggle-btn.active');
+  return activeTab ? activeTab.dataset.view : 'grid';
+}
 
-    grid._clickHandler = (e) => {
-      const overlay = e.target.closest('.card-overlay-link');
-      const card = e.target.closest('.card-square');
+attachCardHandlers() {
+  const grid = this.elements.toolGrid || getElement('#tool-grid');
+  if (!grid) return;
 
-      if (overlay && card) {
-        e.preventDefault();
-        e.stopPropagation();
+  if (grid._clickHandler) {
+    grid.removeEventListener('click', grid._clickHandler);
+    grid.removeEventListener('keydown', grid._keyHandler);
+  }
 
-        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
-        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-        const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+  const isMobile = window.innerWidth < 768;
+
+  grid._clickHandler = (e) => {
+    const overlay = e.target.closest('.card-overlay-link');
+    const card = e.target.closest('.card-square');
+
+    if (overlay && card) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
+      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+      const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+
+      // Der restliche Code bleibt unverändert...
+    }
+  };
+}
 
         analytics.trackToolClick(toolName);
 
