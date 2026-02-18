@@ -23,7 +23,6 @@
       overflow: hidden;
     }
     
-    /* Das milchig-glasige Panel – scrollbar im Panel */
     .detail-panel {
       position: relative;
       width: 100%;
@@ -38,7 +37,6 @@
       box-shadow: 0 6px 20px rgba(2,12,30,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
       box-sizing: border-box;
       
-      /* Eigene Panel-Animation – pulsierender Rand */
       animation: panel-pulse 8s ease-in-out infinite;
       
       display: flex;
@@ -60,7 +58,6 @@
       border-radius: 10px;
     }
     
-    /* Schwebende Scroll-Buttons (fixed, nur auf mobil) */
     .scroll-buttons {
       position: fixed;
       bottom: 20px;
@@ -109,14 +106,12 @@
       box-shadow: 0 0 15px var(--glow-intense);
     }
     
-    /* Nur auf mobilen Geräten anzeigen (unter 768px) */
     @media (min-width: 768px) {
       .scroll-buttons {
         display: none;
       }
     }
     
-    /* Kopfzeile */
     .detail-header {
       display: flex;
       align-items: flex-start;
@@ -136,7 +131,6 @@
       animation: title-glow 8s ease-in-out infinite;
     }
     
-    /* Schließen-Button */
     .close-button {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -164,7 +158,6 @@
       transform: scale(1.05);
     }
     
-    /* Metadaten – untereinander */
     .detail-meta {
       display: flex;
       flex-direction: column;
@@ -205,7 +198,7 @@
       letter-spacing: 0.05em;
     }
     
-    /* Bewertung als Powerbar */
+    /* Bewertung als Powerbar – schmaler */
     .rating-container {
       display: flex;
       align-items: center;
@@ -223,22 +216,21 @@
     
     .rating-bar {
       flex: 1;
-      height: 8px;
+      height: 4px; /* reduziert von 8px */
       background: rgba(255,255,255,0.1);
       border-radius: 20px;
       overflow: hidden;
     }
     
     .rating-fill {
-      height: 100%;
-      width: 0%; /* wird per JS gesetzt */
+      height: 4px; /* reduziert von 8px */
+      width: 0%;
       background: var(--full-color);
       border-radius: 20px;
       box-shadow: 0 0 8px var(--glow-intense);
       animation: rating-pulse 8s ease-in-out infinite;
     }
     
-    /* Beschreibung */
     .detail-description {
       color: var(--text-dim);
       font-size: 1rem;
@@ -254,6 +246,11 @@
       transition: margin 0.3s ease;
     }
     
+    .collapsible-section.collapsed {
+      margin-top: 4px;  /* reduzierter Abstand */
+      margin-bottom: 4px;
+    }
+    
     .detail-section-title {
       font-size: 1.1rem;
       font-weight: 600;
@@ -263,7 +260,7 @@
       animation: title-glow 8s ease-in-out infinite;
       cursor: pointer;
       position: relative;
-      padding-left: 20px; /* Platz für den Punkt */
+      padding-left: 20px;
       transition: color 0.2s ease;
     }
     
@@ -271,7 +268,6 @@
       color: var(--primary);
     }
     
-    /* Punkt-Status-Indikator */
     .detail-section-title::before {
       content: '';
       position: absolute;
@@ -281,19 +277,18 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: #4caf50; /* grün = geöffnet */
+      background-color: #4caf50;
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 0 8px #4caf50;
     }
     
     .collapsible-section.collapsed .detail-section-title::before {
-      background-color: #888; /* grau = geschlossen */
+      background-color: #888;
       box-shadow: none;
     }
     
-    /* Inhalt mit sanfter Ein-/Ausblendung */
     .collapsible-section .detail-list {
-      max-height: 1000px;     /* großzügiger Wert, damit Animation funktioniert */
+      max-height: 1000px;
       opacity: 1;
       overflow: hidden;
       transition: max-height 0.5s ease-in-out, opacity 0.3s ease, margin 0.3s ease;
@@ -306,7 +301,6 @@
       margin-bottom: 0;
     }
     
-    /* Listen-Styling (unverändert) */
     .detail-list {
       display: flex;
       flex-direction: column;
@@ -333,7 +327,6 @@
       top: -2px;
     }
     
-    /* Link-Button */
     .detail-link {
       display: inline-flex;
       align-items: center;
@@ -360,7 +353,6 @@
       box-shadow: 0 0 20px var(--primary-glow);
     }
     
-    /* Lade- und Fehlerzustand */
     .loading-state,
     .error-state {
       text-align: center;
@@ -368,7 +360,6 @@
       color: var(--text-dim);
     }
     
-    /* Animationen */
     @keyframes panel-pulse {
       0%, 100% {
         box-shadow:
@@ -394,7 +385,6 @@
       50% { box-shadow: 0 0 20px var(--glow-intense); }
     }
     
-    /* Kategoriespezifische Farben */
     .detail-panel[data-category="text"] {
       --full-color: var(--color-text);
       --glow-intense: rgba(0, 212, 255, 0.8);
@@ -482,19 +472,16 @@
 </head>
 <body>
   <div class="detail-panel" id="detailPanel" data-category="">
-    <!-- Ladezustand -->
     <div class="loading-state" id="loadingState">
       <div class="spinner" style="margin: 0 auto 16px;"></div>
       <p>Lade Details...</p>
     </div>
     
-    <!-- Fehlerzustand -->
     <div class="error-state" id="errorState" style="display: none;">
       <p id="errorMessage">❌ Tool nicht gefunden.</p>
       <button class="retry-button" onclick="window.location.href='index.html'" style="margin-top: 16px;">Zurück</button>
     </div>
     
-    <!-- Dynamisch befüllter Inhalt -->
     <div id="detailContent" style="display: none;">
       <div class="detail-header">
         <h2 class="detail-title" id="toolTitle"></h2>
@@ -511,7 +498,6 @@
           <span class="meta-value" id="toolProvider"></span>
         </div>
         
-        <!-- Bewertung als Powerbar -->
         <div class="meta-item" id="ratingContainer">
           <span class="meta-label">Bewertung</span>
           <div class="rating-container">
@@ -525,25 +511,21 @@
       
       <p class="detail-description" id="toolDescription"></p>
       
-      <!-- Kernfunktionen – ausklappbar -->
       <div id="strengthsContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Das kann das Tool</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
-      <!-- Einsatzbereiche – ausklappbar -->
       <div id="useCasesContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Dafür nutzt du es</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
-      <!-- Beispiel-Prompts – ausklappbar -->
       <div id="promptExamplesContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Zum Ausprobieren</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
-      <!-- Prompt-Richtlinien – ausklappbar -->
       <div id="promptTipsContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">So bekommst du bessere Antworten</h3>
         <div class="detail-list" id="promptTipsList"></div>
@@ -556,7 +538,6 @@
     </div>
   </div>
   
-  <!-- Schwebende Scroll-Buttons (außerhalb des Panels, fixed) -->
   <div class="scroll-buttons">
     <button class="scroll-btn" id="scrollTopBtn" aria-label="Zum Anfang">↑</button>
     <button class="scroll-btn" id="scrollBottomBtn" aria-label="Zum Ende">↓</button>
@@ -566,7 +547,6 @@
     (function() {
       'use strict';
       
-      // Funktion zum Laden der Tool-Daten
       async function loadToolData() {
         try {
           const response = await fetch('data.json');
@@ -579,11 +559,9 @@
         }
       }
       
-      // URL-Parameter auslesen
       const urlParams = new URLSearchParams(window.location.search);
       const toolId = urlParams.get('id');
       
-      // Elemente referenzieren
       const loadingEl = document.getElementById('loadingState');
       const errorEl = document.getElementById('errorState');
       const errorMsg = document.getElementById('errorMessage');
@@ -603,7 +581,6 @@
         return;
       }
       
-      // Hilfsfunktion für Listen
       function fillList(containerId, listId, items) {
         const container = document.getElementById(containerId);
         const listEl = document.getElementById(listId);
@@ -626,7 +603,6 @@
         }
       }
       
-      // Daten laden und anzeigen
       loadToolData().then(tools => {
         if (!tools || !Array.isArray(tools)) {
           throw new Error('Daten konnten nicht geladen werden');
@@ -692,11 +668,15 @@
         fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
         fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
         
-        // Ladezustand ausblenden, Inhalt anzeigen
+        // Alle Sektionen standardmäßig einklappen
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+          section.classList.add('collapsed');
+        });
+        
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
         
-        // ===== Ausklappbare Sektionen initialisieren =====
+        // Event-Listener für Ausklappen
         const sections = document.querySelectorAll('.collapsible-section');
         sections.forEach(section => {
           const title = section.querySelector('.detail-section-title');
@@ -714,34 +694,15 @@
         errorMsg.textContent = '❌ ' + err.message;
       });
       
-      // Schließen-Button
-      const closeBtn = document.getElementById('closeButton');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
-          window.history.back();
-        });
-      }
+      document.getElementById('closeButton')?.addEventListener('click', () => window.history.back());
       
-      // Scroll-Buttons
       const scrollTopBtn = document.getElementById('scrollTopBtn');
       const scrollBottomBtn = document.getElementById('scrollBottomBtn');
-      
       if (scrollTopBtn) {
-        scrollTopBtn.addEventListener('click', function() {
-          panel.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        });
+        scrollTopBtn.addEventListener('click', () => panel.scrollTo({ top: 0, behavior: 'smooth' }));
       }
-      
       if (scrollBottomBtn) {
-        scrollBottomBtn.addEventListener('click', function() {
-          panel.scrollTo({
-            top: panel.scrollHeight,
-            behavior: 'smooth'
-          });
-        });
+        scrollBottomBtn.addEventListener('click', () => panel.scrollTo({ top: panel.scrollHeight, behavior: 'smooth' }));
       }
       
     })();
