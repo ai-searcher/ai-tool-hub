@@ -1,6 +1,6 @@
 // =========================================
 // PERFORMANCE.JS – Optimierungs-Engine für Quantum AI Hub
-// Version: 1.0.0
+// Version: 1.0.1 (Fix: entfernte Abhängigkeit zu getCategoryName)
 // Enthält: Suchindex, Animation-Scheduler, DOM-Batcher, Cache, Throttler
 // =========================================
 
@@ -37,7 +37,7 @@
       if (tool.tags) fields.push(...tool.tags);
       if (tool.provider) fields.push(tool.provider);
       if (tool.badges) fields.push(...tool.badges);
-      if (tool.category) fields.push(getCategoryName(tool.category)); // Kategoriename übersetzt
+      if (tool.category) fields.push(tool.category); // FIX: Roh-Kategorie statt übersetzter Name
 
       // Englische Felder (falls vorhanden)
       if (tool.en) {
@@ -66,7 +66,7 @@
       const tokenSets = tokens.map(t => this.index.get(t)).filter(Boolean);
       if (tokenSets.length === 0) return [];
 
-      // Schnittmenge oder Vereinigungsmenge? Wir nehmen Vereinigungsmenge + Gewichtung
+      // Vereinigungsmenge
       const union = new Set();
       tokenSets.forEach(set => set.forEach(id => union.add(id)));
 
