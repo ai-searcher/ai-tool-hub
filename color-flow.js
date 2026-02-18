@@ -84,9 +84,9 @@
       // Performance-Optimierung: AnimationScheduler nutzen falls verfügbar
       this.useScheduler = window.Performance && window.Performance.AnimationScheduler;
       if (this.useScheduler) {
-        // Ziel-FPS leicht reduzieren für bessere Performance (kann angepasst werden)
         const schedulerFPS = Math.min(this.targetFPS, 30);
         this.animScheduler = new window.Performance.AnimationScheduler(schedulerFPS);
+        console.log('🎬 Using AnimationScheduler with', schedulerFPS, 'fps');
       } else {
         this.animScheduler = null;
       }
@@ -217,10 +217,12 @@
       console.log('🚀 GridSynchronizedNetwork v13.6 – Organic Curves');
 
       window.addEventListener('quantum:ready', () => {
+        console.log('📡 quantum:ready received');
         setTimeout(() => this.setup(), 50);
       });
 
       if (document.readyState === 'complete') {
+        console.log('📄 Document already complete, setting up...');
         setTimeout(() => this.setup(), 100);
       }
 
@@ -232,9 +234,11 @@
     }
 
     setup() {
+      console.log('🔧 Setting up network...');
       this.gridElement = document.getElementById('tool-grid');
 
       if (!this.gridElement) {
+        console.log('⏳ tool-grid not found, retrying in 500ms');
         setTimeout(() => this.setup(), 500);
         return;
       }
@@ -251,7 +255,8 @@
       this.generateStars();
 
       if (this.cards.length === 0) {
-        console.warn('⚠️ No cards found');
+        console.warn('⚠️ No cards found, waiting for cards...');
+        setTimeout(() => this.refresh(), 500);
         return;
       }
 
@@ -261,6 +266,8 @@
         console.log('📋 Using fallback connection generation');
         this.generateFallbackConnections();
       }
+
+      console.log(`🃏 Found ${this.cards.length} cards, generated ${this.connections.length} connections`);
 
       this.setupInputDetection();
       this.startAnimation();
@@ -283,6 +290,7 @@
         this.canvas.style.zIndex = '1';
         this.canvas.style.willChange = 'transform';
         this.containerElement.insertBefore(this.canvas, this.gridElement);
+        console.log('🖼️ Canvas created and inserted');
       }
 
       const gridRect = this.gridElement.getBoundingClientRect();
@@ -311,6 +319,8 @@
       this.ctx.scale(hdRatio, hdRatio);
       this.ctx.imageSmoothingEnabled = true;
       this.ctx.imageSmoothingQuality = 'high';
+
+      console.log(`📐 Canvas dimensions: ${this.canvasWidth}x${this.canvasHeight} (scaled to ${this.canvas.width}x${this.canvas.height})`);
     }
 
     generateStars() {
@@ -349,6 +359,8 @@
           degree: 0
         });
       });
+
+      console.log(`🔍 Scanned ${this.cards.length} cards`);
     }
 
     setupInputDetection() {
@@ -382,12 +394,20 @@
     }
 
     refresh() {
-      if (!this.gridElement) return;
+      console.log('🔄 Refreshing network...');
+      if (!this.gridElement) {
+        console.warn('refresh: gridElement missing');
+        return;
+      }
       this.scanTools();
       this.generateIntelligentConnections();
       if (this.connections.length === 0) {
+        console.log('📋 No intelligent connections, using fallback');
         this.generateFallbackConnections();
       }
+      console.log(`🕸️ After refresh: ${this.connections.length} connections`);
+      this.setupCanvas();
+      this.generateStars();
     }
 
     generateIntelligentConnections() {
@@ -727,33 +747,30 @@
       return gradient;
     }
 
-    // Neue Methode: Zeichnet eine quadratische Bézier-Kurve mit organischer Krümmung
     drawCurvedLine(from, to, strokeStyle, lineWidth, connection) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Basis-Offset: Prozentsatz der Distanz
+      if (dist < 1) return;
+
       const baseOffset = dist * this.settings.curveOffsetFactor;
       
-      // Zufällige Variation pro Linie (nutze connection.glowOffset als Seed)
       const seed = connection.glowOffset;
-      const rand1 = Math.sin(seed) * 0.5 + 0.5; // 0..1
+      const rand1 = Math.sin(seed) * 0.5 + 0.5;
       const rand2 = Math.cos(seed) * 0.5 + 0.5;
       
-      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2; // 0.8 ... 1.2 + randomness
-      const angleVar = (rand2 - 0.5) * Math.PI * 0.5; // -45° bis +45°
+      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
+      const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
 
       const offset = baseOffset * offsetFactor;
       
       const midX = (from.x + to.x) / 2;
       const midY = (from.y + to.y) / 2;
 
-      // Senkrechter Vektor (normalisiert)
       const perpX = -dy / dist;
       const perpY = dx / dist;
 
-      // Rotation des senkrechten Vektors um angleVar
       const cos = Math.cos(angleVar);
       const sin = Math.sin(angleVar);
       const rotatedX = perpX * cos - perpY * sin;
@@ -806,14 +823,12 @@
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
-      // Immer Kurven zeichnen
       this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, connection);
 
       this.ctx.setLineDash([]);
 
-      // Flowing Glow – mit variierender Geschwindigkeit pro Linie
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
-        const speedVariation = 0.8 + 0.4 * Math.sin(connection.glowOffset * 10); // 0.8..1.2
+        const speedVariation = 0.8 + 0.4 * Math.sin(connection.glowOffset * 10);
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity * speedVariation;
         
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
@@ -844,7 +859,6 @@
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          // Kurve noch einmal mit Glow-Gradient zeichnen
           this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth, connection);
 
           this.ctx.shadowBlur = 0;
@@ -895,34 +909,30 @@
       this.ctx.restore();
     }
 
-    // Die animate-Methode wird jetzt sowohl vom alten als auch vom neuen Scheduler verwendet.
-    // Bei Nutzung des Schedulers entfällt die manuelle FPS-Steuerung.
     animate(now) {
-      // Falls kein Parameter übergeben (z.B. vom Scheduler), verwende aktuelle Zeit
-      if (now === undefined) now = performance.now();
-
       if (!this.ctx || !this.canvas) return;
 
-      // Falls der Scheduler verwendet wird, wird die Zeitsteuerung vom Scheduler übernommen.
-      // Wir zeichnen einfach jedes Mal, wenn der Scheduler uns aufruft.
-      // Die alte FPS-Begrenzung entfällt in diesem Zweig.
       if (this.useScheduler) {
+        if (now === undefined) now = performance.now();
+
         this.glowTime = now;
         this.updateActiveStates();
 
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.drawStars();
 
-        this.connections.forEach(conn => {
-          const activeState = this.activeConnections.get(conn) || 1;
-          this.drawConnection(conn.from, conn.to, conn, activeState, now);
-        });
+        if (this.connections.length > 0) {
+          this.connections.forEach(conn => {
+            const activeState = this.activeConnections.get(conn) || 1;
+            this.drawConnection(conn.from, conn.to, conn, activeState, now);
+          });
+        }
 
         this.drawRipples();
         return;
       }
 
-      // Alter Pfad: FPS-Begrenzung via requestAnimationFrame und frameInterval
+      if (now === undefined) now = performance.now();
       const elapsed = now - this.then;
       if (elapsed < this.frameInterval) return;
 
@@ -943,22 +953,24 @@
     }
 
     startAnimation() {
+      console.log('🎬 Starting animation...');
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
         this.animationFrame = null;
       }
 
       if (this.useScheduler && this.animScheduler) {
-        // Scheduler verwenden – füge die animate-Methode als dauerhafte Aufgabe hinzu
-        // Wir müssen sicherstellen, dass die Funktion ohne Argument aufgerufen werden kann,
-        // daher übergeben wir einen Wrapper, der this.animate() aufruft (ohne Parameter).
-        // In animate() wird dann now = performance.now() gesetzt.
-        this.animScheduler.add(() => this.animate());
-        // Der Scheduler startet automatisch, wenn Aufgaben vorhanden sind.
+        const animateWrapper = () => this.animate();
+        this.animScheduler.add(animateWrapper);
+        console.log('✅ Animation added to scheduler');
       } else {
-        // Alte Methode
         this.then = performance.now();
-        this.animate(this.then);
+        const animateLoop = (t) => {
+          this.animate(t);
+          this.animationFrame = requestAnimationFrame(animateLoop);
+        };
+        this.animationFrame = requestAnimationFrame(animateLoop);
+        console.log('✅ Animation started with requestAnimationFrame');
       }
     }
 
@@ -979,6 +991,7 @@
         this.generateFallbackConnections();
       }
       this.setupInputDetection();
+      console.log('📏 Resize handled, connections:', this.connections.length);
     }
 
     setupResizeObserver() {
@@ -1014,7 +1027,6 @@
         cancelAnimationFrame(this.animationFrame);
       }
       if (this.animScheduler) {
-        // Entferne die animate-Aufgabe und stoppe den Scheduler
         this.animScheduler.remove(() => this.animate);
         this.animScheduler.stop();
       }
@@ -1050,6 +1062,7 @@
     console.log('Stars:', net.stars.length);
     console.log('Ripples:', net.ripples.length);
     console.log('Settings:', net.settings);
+    console.log('Canvas dimensions:', net.canvasWidth, 'x', net.canvasHeight);
     console.groupEnd();
   };
 
