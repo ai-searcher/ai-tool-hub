@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.0.0 (mehrsprachig)
+// Version: 1.0.0 (mehrsprachig, fix für Dropdown nach Sprachwechsel)
 // =========================================
 
 'use strict';
@@ -231,10 +231,8 @@ class StackViewController {
     const lang = window.i18n ? window.i18n.currentLang : 'de';
     let tags = this.categoryTags?.[category];
     if (tags && typeof tags === 'object' && !Array.isArray(tags)) {
-      // tags ist ein Objekt mit de/en
       tags = tags[lang] || tags.de || [];
     } else {
-      // Fallback
       const t = window.i18n ? window.i18n.t : (key) => key;
       tags = Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'];
     }
@@ -258,7 +256,7 @@ class StackViewController {
     card.className = 'stack-card';
     card.dataset.toolId = tool.id;
     card.dataset.category = tool.category || 'other';
-    card.dataset.toolName = tool.title; // Originaltitel (deutsch) – wir übersetzen später für die Anzeige
+    card.dataset.toolName = tool.title;
     card.dataset.href = tool.link;
     card.setAttribute('tabindex', '0');
     card.setAttribute('role', 'article');
@@ -266,7 +264,7 @@ class StackViewController {
 
     const title = document.createElement('div');
     title.className = 'stack-card-title';
-    title.textContent = getLocalizedToolField(tool, 'title'); // Übersetzter Titel
+    title.textContent = getLocalizedToolField(tool, 'title');
     card.appendChild(title);
 
     const badge = document.createElement('span');
@@ -933,14 +931,12 @@ const ui = {
 
   getContextText(tool) {
     const lang = window.i18n ? window.i18n.currentLang : 'de';
-    // Wenn Englisch und tool.en.badges existiert, diese verwenden
     if (lang === 'en' && tool.en && tool.en.badges && tool.en.badges.length) {
       return tool.en.badges.slice(0, 3).map(badge => {
         const text = String(badge).split('.')[0].trim();
         return text.length > 28 ? text.slice(0, 28) + '…' : text;
       });
     }
-    // Ansonsten die deutschen Badges
     if (!tool.badges || !tool.badges.length) {
       const fallback = [
         getLocalizedToolField(tool, 'description') || '',
@@ -1059,6 +1055,9 @@ const ui = {
         window.colorFlowNetwork.refresh();
       }
     }
+
+    // Nach dem Rendern die UI-Event-Listener neu setzen
+    this.setupUIListeners();
   },
 
   getActiveView() {
@@ -1153,6 +1152,58 @@ const ui = {
 
     grid.addEventListener('click', grid._clickHandler);
     grid.addEventListener('keydown', grid._keyHandler, { passive: false });
+  },
+
+  setupUIListeners() {
+    // Tabs-Listener
+    const viewToggle = document.querySelector('.view-toggle');
+    if (viewToggle) {
+      // Entferne alten Listener (falls vorhanden)
+      if (viewToggle._clickHandler) {
+        viewToggle.removeEventListener('click', viewToggle._clickHandler);
+      }
+      viewToggle._clickHandler = (e) => {
+        const btn = e.target.closest('.toggle-btn');
+        if (!btn) return;
+        if (btn.classList.contains('sort-trigger')) return;
+        const view = btn.dataset.view;
+        if (!view) return;
+        // Aktiven Zustand setzen
+        viewToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.switchView(view);
+      };
+      viewToggle.addEventListener('click', viewToggle._clickHandler);
+    }
+
+    // Sortier-Dropdown Listener
+    const sortTrigger = document.querySelector('.sort-trigger');
+    if (sortTrigger) {
+      if (sortTrigger._clickHandler) {
+        sortTrigger.removeEventListener('click', sortTrigger._clickHandler);
+      }
+      sortTrigger._clickHandler = (e) => {
+        e.stopPropagation();
+        this.toggleSortMenu();
+      };
+      sortTrigger.addEventListener('click', sortTrigger._clickHandler);
+    }
+
+    // Sortier-Optionen
+    document.querySelectorAll('.sort-menu button').forEach(btn => {
+      if (btn._clickHandler) {
+        btn.removeEventListener('click', btn._clickHandler);
+      }
+      btn._clickHandler = (e) => {
+        e.stopPropagation();
+        const sortBy = btn.dataset.sort;
+        const sortDir = btn.dataset.dir;
+        if (sortBy && sortDir) {
+          this.setSort(sortBy, sortDir);
+        }
+      };
+      btn.addEventListener('click', btn._clickHandler);
+    });
   },
 
   switchView(view) {
@@ -1371,26 +1422,7 @@ const app = {
       ui.render();
       search.init();
 
-      const viewToggle = document.querySelector('.view-toggle');
-      if (viewToggle) {
-        const newToggle = viewToggle.cloneNode(true);
-        viewToggle.parentNode.replaceChild(newToggle, viewToggle);
-        ui.elements.viewToggle = newToggle;
-        
-        newToggle.addEventListener('click', (e) => {
-          const btn = e.target.closest('.toggle-btn');
-          if (!btn) return;
-          if (btn.classList.contains('sort-trigger')) return;
-          const view = btn.dataset.view;
-          if (!view) return;
-          
-          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          
-          ui.switchView(view);
-        });
-      }
-      
+      // Globale Scroll-Buttons
       const globalScrollTop = document.getElementById('globalScrollTopBtn');
       const globalScrollBottom = document.getElementById('globalScrollBottomBtn');
       if (globalScrollTop) {
@@ -1414,28 +1446,6 @@ const app = {
         toggleStickyClass();
       }
       
-      const sortTrigger = document.querySelector('.sort-trigger');
-      if (sortTrigger) {
-        sortTrigger.addEventListener('click', (e) => {
-          e.stopPropagation();
-          ui.toggleSortMenu();
-        });
-      }
-
-      document.querySelectorAll('.sort-menu button').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const sortBy = btn.dataset.sort;
-          const sortDir = btn.dataset.dir;
-          if (sortBy && sortDir) {
-            ui.setSort(sortBy, sortDir);
-          }
-        });
-      });
-
-      const activeSortBtn = document.querySelector(`.sort-menu button[data-sort="${state.sortBy}"][data-dir="${state.sortDirection}"]`);
-      if (activeSortBtn) activeSortBtn.classList.add('active');
-      
       // ==================== FARBSCHEMA-UMSCHALTER ====================
       const colorSchemeToggle = document.getElementById('colorSchemeToggle');
       if (colorSchemeToggle) {
@@ -1452,8 +1462,8 @@ const app = {
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
-        ui.updateStats(); // Stats-Marquee sofort aktualisieren
-        ui.render();      // Ansicht neu rendern (für Kategorienamen etc.)
+        ui.updateStats();
+        ui.render();
       });
 
       console.log('✅ App initialized successfully!');
