@@ -78,6 +78,19 @@ const CONFIG = {
 };
 
 // =========================================
+// KATEGORIE-NAMEN (DEUTSCH)
+// =========================================
+const categoryNames = {
+  'text': 'Text',
+  'image': 'Bilder',
+  'code': 'Code',
+  'audio': 'Audio',
+  'video': 'Video',
+  'data': 'Daten',
+  'other': 'Sonstige'
+};
+
+// =========================================
 // DEFAULT TOOLS (Always Available)
 // =========================================
 const DEFAULT_TOOLS = [
@@ -198,7 +211,7 @@ class StackViewController {
 
     const title = document.createElement('h3');
     title.className = 'category-header-title';
-    title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    title.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
 
     const desc = document.createElement('p');
     desc.className = 'category-header-description';
@@ -931,10 +944,8 @@ const ui = {
   },
 
   renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
-
-    const contextTexts = this.getContextText(tool);
+ const categoryDisplay = categoryNames[categoryName] || categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+ const contextTexts = this.getContextText(tool);
 
     return `
       <div class="card-square"
