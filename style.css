@@ -1,4 +1,4 @@
-./* =========================================
+/* =========================================
    QUANTUM AI HUB - STYLE.CSS (FINAL)
    Production Ready – Clean Version
    ========================================= */
@@ -2103,44 +2103,4 @@ body.custom-color-scheme .detail-list-item {
     bottom: 20px;
     left: 20px;
   }
-}
-
-/* ==================== LINKE SCHWEBENDE BUTTONS (SPRACHE & FARBSCHEMA) ==================== */
-.left-floating-buttons {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
-
-.floating-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 30px;
-  background: rgba(30, 35, 55, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  padding: 0;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.floating-btn:hover {
-  background: rgba(50, 55, 80, 0.9);
-  border-color: var(--primary);
-  transform: scale(1.05);
-  box-shadow: 0 0 15px var(--primary-glow);
 }
