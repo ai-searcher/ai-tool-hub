@@ -134,11 +134,9 @@ class StackViewController {
     this.stacks = [];
     this.activeSort = 'name';
     this.sortDirection = 'asc';
-    // Kategorie-Tags (werden später aus data.json geladen)
     this.categoryTags = null;
   }
 
-  // Kategorie-Tags laden (wird einmalig in render() aufgerufen)
   async loadCategoryTags() {
     if (this.categoryTags) return;
     try {
@@ -154,7 +152,7 @@ class StackViewController {
   async render() {
     if (!this.state.tools || this.state.tools.length === 0) return;
 
-    await this.loadCategoryTags(); // Tags laden
+    await this.loadCategoryTags();
 
     const grouped = this.groupByCategory(this.state.tools);
     
@@ -205,7 +203,6 @@ class StackViewController {
     const header = document.createElement('div');
     header.className = 'category-header-card';
 
-    // Container für Titel + Beschreibung (flex)
     const content = document.createElement('div');
     content.className = 'category-header-content';
 
@@ -220,19 +217,16 @@ class StackViewController {
     content.appendChild(title);
     content.appendChild(desc);
 
-    // Marquee für Tags
     const marquee = document.createElement('div');
     marquee.className = 'context-marquee';
     const track = document.createElement('div');
     track.className = 'marquee-track';
     marquee.appendChild(track);
 
-    // Tags für diese Kategorie holen (Fallback)
     const tags = this.categoryTags?.[category] || [
-      'Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen' // Fallback
+      'Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'
     ];
 
-    // Tags zweimal hintereinander für nahtlosen Loop
     for (let i = 0; i < 2; i++) {
       tags.forEach(tag => {
         const span = document.createElement('span');
@@ -335,9 +329,6 @@ class StackViewController {
     this.container.classList.remove('tool-stacks');
   }
 }
-// =========================================
-// VALIDATION RULES
-// =========================================
 
 // =========================================
 // VALIDATION RULES
@@ -377,7 +368,6 @@ const VALIDATION_RULES = {
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
-// Safe Element Getter
 const getElement = (selector) => {
   const el = $(selector);
   if (!el) {
@@ -386,7 +376,6 @@ const getElement = (selector) => {
   return el;
 };
 
-// Sanitize Input
 const sanitizeInput = (input) => {
   if (typeof input !== 'string') return '';
   return input
@@ -395,7 +384,6 @@ const sanitizeInput = (input) => {
     .substring(0, CONFIG.search.maxLength);
 };
 
-// Debounce Function
 const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
@@ -423,12 +411,12 @@ const state = {
     categories: 0,
     featured: 0
   },
-  sortBy: 'name',      // NEU: Sortierkriterium
-  sortDirection: 'asc' // NEU: Sortierrichtung
+  sortBy: 'name',
+  sortDirection: 'asc'
 };
 
 // =========================================
-// HILFSFUNKTION SORTIERUNG (NEU)
+// HILFSFUNKTION SORTIERUNG
 // =========================================
 function sortTools(tools) {
   const { sortBy, sortDirection } = state;
@@ -827,7 +815,7 @@ const dataLoader = {
 const ui = {
   elements: {},
   stackView: null,
-  sortMenuActive: false, // NEU: Zustand des Dropdowns
+  sortMenuActive: false,
 
   cacheElements() {
     this.elements = {
@@ -944,8 +932,9 @@ const ui = {
   },
 
   renderCard(tool) {
- const categoryDisplay = categoryNames[categoryName] || categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
- const contextTexts = this.getContextText(tool);
+    const categoryName = tool.category_name || tool.category || 'other';
+    const categoryDisplay = categoryNames[categoryName] || categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+    const contextTexts = this.getContextText(tool);
 
     return `
       <div class="card-square"
@@ -989,7 +978,6 @@ const ui = {
   },
 
   render() {
-    // Filterung
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
       const query = state.searchQuery.toLowerCase();
       state.filtered = state.tools.filter(tool =>
@@ -1000,7 +988,6 @@ const ui = {
       state.filtered = [...state.tools];
     }
 
-    // Sortierung (NEU)
     state.filtered = sortTools(state.filtered);
 
     if (state.loading) {
@@ -1032,13 +1019,11 @@ const ui = {
         this.attachCardHandlers();
       }
     } else {
-      // Stack-Ansicht
       this.showState('grid');
       if (!this.stackView) {
         this.stackView = new StackViewController(this.elements.toolGrid, state, this);
       } else {
         this.stackView.state = state;
-        // Sortierkriterien an StackViewController übergeben
         this.stackView.activeSort = state.sortBy;
         this.stackView.sortDirection = state.sortDirection;
       }
@@ -1156,7 +1141,6 @@ const ui = {
     }
   },
 
-  // NEUE METHODEN FÜR SORTIER-DROPDOWN
   toggleSortMenu(show) {
     const dropdown = document.querySelector('.sort-dropdown');
     if (!dropdown) return;
@@ -1186,7 +1170,6 @@ const ui = {
     state.sortBy = sortBy;
     state.sortDirection = sortDir;
     
-    // Aktiven Button im Menü markieren
     document.querySelectorAll('.sort-menu button').forEach(btn => {
       const btnSort = btn.dataset.sort;
       const btnDir = btn.dataset.dir;
@@ -1205,7 +1188,6 @@ const search = {
   init() {
     if (!ui.elements.search) return;
 
-    // Cleanup: alte Handler entfernen, falls init mehrfach läuft
     if (ui.handlers && ui.handlers.search) {
       ui.elements.search.removeEventListener('input', ui.handlers.search);
     }
@@ -1227,15 +1209,12 @@ const search = {
           if (typeof analytics !== 'undefined' && analytics.trackSearch) {
             analytics.trackSearch(value);
           }
-        } catch (err) {
-          // optional: console.warn('Analytics search tracking failed', err);
-        }
+        } catch (err) {}
       }
 
       ui.render();
     }, CONFIG.search.debounceMs);
 
-    // merken, damit wir später sauber entfernen können
     if (!ui.handlers) ui.handlers = {};
     ui.handlers.search = handleInput;
 
@@ -1361,60 +1340,49 @@ const app = {
       ui.render();
       search.init();
 
-      // Tabs initialisieren (robust)
       const viewToggle = document.querySelector('.view-toggle');
       if (viewToggle) {
         const newToggle = viewToggle.cloneNode(true);
         viewToggle.parentNode.replaceChild(newToggle, viewToggle);
         ui.elements.viewToggle = newToggle;
         
-newToggle.addEventListener('click', (e) => {
-  const btn = e.target.closest('.toggle-btn');
-  if (!btn) return;
-  
-  // Sortier-Button ignorieren
-  if (btn.classList.contains('sort-trigger')) return;
-  
-  const view = btn.dataset.view;
-  if (!view) return;
-  
-  newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  
-  ui.switchView(view);
-});
+        newToggle.addEventListener('click', (e) => {
+          const btn = e.target.closest('.toggle-btn');
+          if (!btn) return;
+          if (btn.classList.contains('sort-trigger')) return;
+          const view = btn.dataset.view;
+          if (!view) return;
+          
+          newToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          ui.switchView(view);
+        });
       }
       
-      // Globale Scroll-Buttons
-const globalScrollTop = document.getElementById('globalScrollTopBtn');
-const globalScrollBottom = document.getElementById('globalScrollBottomBtn');
-if (globalScrollTop) {
-  globalScrollTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-if (globalScrollBottom) {
-  globalScrollBottom.addEventListener('click', () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  });
-}
+      const globalScrollTop = document.getElementById('globalScrollTopBtn');
+      const globalScrollBottom = document.getElementById('globalScrollBottomBtn');
+      if (globalScrollTop) {
+        globalScrollTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      }
+      if (globalScrollBottom) {
+        globalScrollBottom.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+      }
       
- // Sticky-Bar-Hintergrund aktivieren (korrigiert)
-if (ui.elements.viewToggle) {
-  const toggleElement = ui.elements.viewToggle;
-  const toggleStickyClass = () => {
-    const rect = toggleElement.getBoundingClientRect();
-    if (rect.top <= 10) {
-      toggleElement.classList.add('sticky-active');
-    } else {
-      toggleElement.classList.remove('sticky-active');
-    }
-  };
-  window.addEventListener('scroll', toggleStickyClass, { passive: true });
-  toggleStickyClass();
-}
+      if (ui.elements.viewToggle) {
+        const toggleElement = ui.elements.viewToggle;
+        const toggleStickyClass = () => {
+          const rect = toggleElement.getBoundingClientRect();
+          if (rect.top <= 10) {
+            toggleElement.classList.add('sticky-active');
+          } else {
+            toggleElement.classList.remove('sticky-active');
+          }
+        };
+        window.addEventListener('scroll', toggleStickyClass, { passive: true });
+        toggleStickyClass();
+      }
       
-      // Sortier-Dropdown initialisieren (NEU)
       const sortTrigger = document.querySelector('.sort-trigger');
       if (sortTrigger) {
         sortTrigger.addEventListener('click', (e) => {
@@ -1423,7 +1391,6 @@ if (ui.elements.viewToggle) {
         });
       }
 
-      // Sortier-Optionen initialisieren (NEU)
       document.querySelectorAll('.sort-menu button').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1435,7 +1402,6 @@ if (ui.elements.viewToggle) {
         });
       });
 
-      // Aktiven Sortiermodus initial markieren (NEU)
       const activeSortBtn = document.querySelector(`.sort-menu button[data-sort="${state.sortBy}"][data-dir="${state.sortDirection}"]`);
       if (activeSortBtn) activeSortBtn.classList.add('active');
 
