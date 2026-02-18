@@ -2104,3 +2104,19 @@ body.custom-color-scheme .detail-list-item {
     left: 20px;
   }
 }
+
+/* ==================== LINKE SCHWEBENDE BUTTONS ==================== */
+.left-floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+/* Die Buttons erben automatisch das Styling von .scroll-btn */
+.left-floating-buttons .scroll-btn {
+  /* Falls du spezielle Anpassungen brauchst, hier ergänzen */
+}
