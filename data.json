@@ -6,13 +6,34 @@
     "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung"
   },
   "categoryTags": {
-    "text": ["Texte schreiben", "Chatten & Fragen stellen", "Briefe/E-Mails formulieren", "Zusammenfassen", "Übersetzen", "Korrekturlesen"],
-    "image": ["Bilder erstellen", "Fotos bearbeiten", "KI-Kunst machen", "Designs entwerfen", "Bilder verändern"],
-    "code": ["Programmieren lernen", "Code schreiben", "Fehler suchen", "Websites bauen", "Apps entwickeln"],
-    "audio": ["Sprache erzeugen", "Hörbücher machen", "Musik komponieren", "Podcasts erstellen", "Stimmen klonen"],
-    "video": ["Videos machen", "Filme bearbeiten", "Animationen erstellen", "Social-Media-Clips", "Erklärvideos"],
-    "data": ["Daten auswerten", "Diagramme erstellen", "Zahlen verstehen", "Tabellen analysieren"],
-    "other": ["Alltagsaufgaben", "Lernen & Üben", "Recherchieren", "Organisieren", "Kreativ sein"]
+    "text": {
+      "de": ["Texte schreiben", "Chatten & Fragen stellen", "Briefe/E-Mails formulieren", "Zusammenfassen", "Übersetzen", "Korrekturlesen"],
+      "en": ["Write texts", "Chat & ask questions", "Draft emails/letters", "Summarize", "Translate", "Proofread"]
+    },
+    "image": {
+      "de": ["Bilder erstellen", "Fotos bearbeiten", "KI-Kunst machen", "Designs entwerfen", "Bilder verändern"],
+      "en": ["Create images", "Edit photos", "Make AI art", "Design concepts", "Modify images"]
+    },
+    "code": {
+      "de": ["Programmieren lernen", "Code schreiben", "Fehler suchen", "Websites bauen", "Apps entwickeln"],
+      "en": ["Learn programming", "Write code", "Find bugs", "Build websites", "Develop apps"]
+    },
+    "audio": {
+      "de": ["Sprache erzeugen", "Hörbücher machen", "Musik komponieren", "Podcasts erstellen", "Stimmen klonen"],
+      "en": ["Generate speech", "Make audiobooks", "Compose music", "Create podcasts", "Clone voices"]
+    },
+    "video": {
+      "de": ["Videos machen", "Filme bearbeiten", "Animationen erstellen", "Social-Media-Clips", "Erklärvideos"],
+      "en": ["Make videos", "Edit films", "Create animations", "Social media clips", "Explainer videos"]
+    },
+    "data": {
+      "de": ["Daten auswerten", "Diagramme erstellen", "Zahlen verstehen", "Tabellen analysieren"],
+      "en": ["Analyze data", "Create charts", "Understand numbers", "Analyze tables"]
+    },
+    "other": {
+      "de": ["Alltagsaufgaben", "Lernen & Üben", "Recherchieren", "Organisieren", "Kreativ sein"],
+      "en": ["Everyday tasks", "Learn & practice", "Research", "Organize", "Be creative"]
+    }
   },
   "tools": [
     {
@@ -50,7 +71,31 @@
         "Sag Ziel + Länge: „max. 5 Sätze“ oder „3 Bulletpoints“.",
         "Gib Kontext: Für wen ist der Text (Schüler, Kunde, Freund)?",
         "Bitte um 1 konkretes Beispiel — das macht Antworten verständlicher."
-      ]
+      ],
+      "en": {
+        "title": "ChatGPT",
+        "description": "Chatbot for questions, texts, and help with school, work, and everyday life.",
+        "strengths": [
+          "Explains complex topics in simple words (ideal for students).",
+          "Helps with writing: emails, applications, summaries, improving text.",
+          "Can assist with programming: explain code, find bugs, build examples."
+        ],
+        "useCases": [
+          "Quick answers: 'What is this?' / 'How does it work?' — without jargon.",
+          "Create or shorten texts: 3–5 sentences that capture the key points.",
+          "Learning: Have topics explained as if to a 12-year-old (with examples)."
+        ],
+        "promptExamples": [
+          "Explain [topic] in 5 simple sentences and give 1 example.",
+          "Write a short, friendly email to [person] about [request].",
+          "Summarize this text in 4 bullet points: [text]"
+        ],
+        "promptTips": [
+          "State goal + length: 'max. 5 sentences' or '3 bullet points'.",
+          "Provide context: Who is the text for (student, customer, friend)?",
+          "Ask for 1 concrete example — it makes answers clearer."
+        ]
+      }
     },
     {
       "id": 2,
@@ -87,7 +132,31 @@
         "Sag „für Laien“ und „ohne Fachwörter“ — wirkt sofort.",
         "Bitte um „Kernaussagen + To-do“ statt nur Zusammenfassung.",
         "Wenn es wichtig ist: „Nenne auch Risiken/Unsicherheiten“."
-      ]
+      ],
+      "en": {
+        "title": "Claude",
+        "description": "Assistant for long texts: read, sort, clearly summarize.",
+        "strengths": [
+          "Can make long texts/PDFs understandable in a few points.",
+          "Often writes objectively and clearly (less 'marketing fluff').",
+          "Helps with logic & code: explain step by step and improve."
+        ],
+        "useCases": [
+          "Documents/articles: 'Give me the 7 key points + what I should do.'",
+          "School/university: Summarize chapters and generate study questions.",
+          "Programming: Error analysis with clear cause → fix."
+        ],
+        "promptExamples": [
+          "Summarize this text in 6 bullet points and briefly explain technical terms: [text]",
+          "Turn this into a checklist (max. 10 items): [text/instructions]",
+          "Explain this error and give a fix: [error message + code]"
+        ],
+        "promptTips": [
+          "Say 'for laypeople' and 'without jargon' — it works immediately.",
+          "Ask for 'key points + to-do' instead of just a summary.",
+          "If it's important: 'Also name risks/uncertainties'."
+        ]
+      }
     },
     {
       "id": 3,
@@ -124,7 +193,31 @@
         "Frag nach „mit Quellen“ und „nur seriöse Seiten“.",
         "Sag „kurz + Tabelle“ wenn du schnell vergleichen willst.",
         "Nutze konkrete Begriffe (Modellname, Jahr, Budget) — dann wird’s genauer."
-      ]
+      ],
+      "en": {
+        "title": "Perplexity AI",
+        "description": "AI search with source links: good for looking up and checking facts.",
+        "strengths": [
+          "Provides links/sources (helps against misinformation).",
+          "Good for current topics, product comparisons, and 'What's really true?'",
+          "Often creates clear lists/tables instead of long texts."
+        ],
+        "useCases": [
+          "School: presentation/project — short answer + sources to cite.",
+          "Shopping help: 'Best [product] under [budget]' with reviews/sources.",
+          "Fact-check: 'Is this statement true?' — with evidence."
+        ],
+        "promptExamples": [
+          "Compare [A] vs [B] in a table (price, advantages, disadvantages) with sources.",
+          "Explain [topic] for beginners in 5 sentences and name 3 reputable sources.",
+          "Check this claim and provide evidence: [claim]"
+        ],
+        "promptTips": [
+          "Ask for 'with sources' and 'only reputable sites'.",
+          "Say 'short + table' if you want to compare quickly.",
+          "Use specific terms (model name, year, budget) — it'll be more accurate."
+        ]
+      }
     },
     {
       "id": 4,
@@ -161,7 +254,31 @@
         "Beschreibe Motiv + Stil + Licht + Stimmung (kurz, aber klar).",
         "Wenn etwas gleich bleiben soll: erwähne es jedes Mal (Kleidung, Haare, Farben).",
         "Teste 2–3 Varianten statt 20 Details in einem Prompt."
-      ]
+      ],
+      "en": {
+        "title": "Midjourney",
+        "description": "Image AI for artistic styles, posters, covers, and design ideas.",
+        "strengths": [
+          "Often creates particularly 'stylish' images (art/poster/concept).",
+          "Many variants and fine-tuning via parameters (more control).",
+          "Good for consistent image series (e.g., same character/look)."
+        ],
+        "useCases": [
+          "Covers, posters, album art, wallpaper — quickly test many ideas.",
+          "Moodboards for brands/projects (colors, mood, style).",
+          "Concept images for games/stories (characters, places, scenes)."
+        ],
+        "promptExamples": [
+          "Create a cover design for [topic] in the style of [style], 16:9.",
+          "A character design: [description], neutral studio light, clear look.",
+          "Moodboard: 8 images for '[mood]' with color palette [colors]."
+        ],
+        "promptTips": [
+          "Describe subject + style + light + mood (short but clear).",
+          "If something should stay the same, mention it every time (clothes, hair, colors).",
+          "Test 2–3 variants instead of 20 details in one prompt."
+        ]
+      }
     },
     {
       "id": 5,
@@ -198,7 +315,31 @@
         "Schreibe die wichtigsten Details zuerst (Motiv → Stil → Farben).",
         "Wenn Text im Bild soll: nenne den exakten Wortlaut kurz und eindeutig.",
         "Sag „einfach, übersichtlich“ wenn es nicht zu voll werden soll."
-      ]
+      ],
+      "en": {
+        "title": "DALL-E 3",
+        "description": "Image AI for precise implementations: when details and specifications matter.",
+        "strengths": [
+          "Good when you know exactly what should be in the image (objects/positions).",
+          "Practical for illustrations, icons, simple graphics, and mockups.",
+          "Often useful for images with text (e.g., signs, covers)."
+        ],
+        "useCases": [
+          "Illustrations for school, blog, slides — fitting the topic.",
+          "Product/ad mockups according to specifications (colors, style, perspective).",
+          "Social graphics (e.g., simple motifs, clear visual language)."
+        ],
+        "promptExamples": [
+          "Create an illustration for [topic] in simple style, clear colors, 1 main subject.",
+          "A product photo mockup: [product] on neutral background, studio light.",
+          "A poster: title '[text]', style [style], color palette [colors]."
+        ],
+        "promptTips": [
+          "Write the most important details first (subject → style → colors).",
+          "If text should appear in the image, state the exact wording briefly and clearly.",
+          "Say 'simple, clear' if it shouldn't become too crowded."
+        ]
+      }
     },
     {
       "id": 6,
@@ -235,7 +376,31 @@
         "Starte mit einfachen Prompts und verbessere in 2–3 Schritten.",
         "Wenn du Kontrolle willst: arbeite mit Referenzen/Skizzen statt nur Text.",
         "Notiere Settings, damit du gute Ergebnisse wiederholen kannst."
-      ]
+      ],
+      "en": {
+        "title": "Stable Diffusion",
+        "description": "Open-source image AI: lots of control, many styles, can also run locally.",
+        "strengths": [
+          "Can run locally (depending on setup): more privacy, less cloud.",
+          "Huge community with many models for different looks.",
+          "Tools like ControlNet help control pose/composition more precisely."
+        ],
+        "useCases": [
+          "Create many images in the same style (series/assets).",
+          "Use or customize own styles/models (for advanced users).",
+          "Creative experiments with high control over the result."
+        ],
+        "promptExamples": [
+          "Create 10 variations of: [subject], style [style], same color palette.",
+          "Turn this sketch into an image in [style] style (with clear outlines).",
+          "Generate a set of icons: [topic], consistent style, transparent."
+        ],
+        "promptTips": [
+          "Start with simple prompts and improve in 2–3 steps.",
+          "If you want control: work with references/sketches instead of just text.",
+          "Note settings so you can repeat good results."
+        ]
+      }
     },
     {
       "id": 7,
@@ -272,7 +437,31 @@
         "Schreibe klare Kommentare im Code — daraus macht Copilot gute Vorschläge.",
         "Akzeptiere nur, was du verstehst, und lass dir Code erklären.",
         "Klein anfangen: erst Funktion, dann Edge-Cases ergänzen."
-      ]
+      ],
+      "en": {
+        "title": "GitHub Copilot",
+        "description": "AI in the code editor: suggests code and saves typing.",
+        "strengths": [
+          "Writes standard code faster (forms, routes, tests, boilerplate).",
+          "Helps learning: you see examples immediately in the right context.",
+          "Practical for small features 'on the fly' without long searches."
+        ],
+        "useCases": [
+          "Quick start: generate basic structure for projects and components.",
+          "Fewer errors: let typical patterns be auto-completed.",
+          "Create tests/helper functions faster."
+        ],
+        "promptExamples": [
+          "Write a function that does [task], including tests.",
+          "Create a simple API route for [use case] with validation.",
+          "Build a UI component: [description], cleanly commented."
+        ],
+        "promptTips": [
+          "Write clear comments in the code — Copilot makes good suggestions from them.",
+          "Only accept what you understand and ask to explain code.",
+          "Start small: first function, then add edge cases."
+        ]
+      }
     },
     {
       "id": 8,
@@ -309,7 +498,31 @@
         "Sag „ohne Funktion zu ändern“ wenn nur Umbau gewünscht ist.",
         "Bitte um „kurze Erklärung + Diff/Änderung“ statt langer Texte.",
         "Arbeite Datei für Datei — das hält es übersichtlich."
-      ]
+      ],
+      "en": {
+        "title": "Cursor",
+        "description": "Code editor with built-in AI: write, modify, and explain code.",
+        "strengths": [
+          "Helps modify existing files (refactor/rename/structure).",
+          "Can explain code sections if you don't understand them.",
+          "Good for prototyping: idea → first working skeleton."
+        ],
+        "useCases": [
+          "Clean up project: 'Make it more readable and remove duplicates.'",
+          "Bugfix: 'Why does this crash? Show cause + fix.'",
+          "Quickly sketch new features and then improve."
+        ],
+        "promptExamples": [
+          "Refactor this code without changing behavior: [code]",
+          "Find the bug and explain briefly: [error + code]",
+          "Create a small feature: [description] + filenames/structure"
+        ],
+        "promptTips": [
+          "Say 'without changing function' if only restructuring is desired.",
+          "Ask for 'short explanation + diff/change' instead of long texts.",
+          "Work file by file — it keeps things clear."
+        ]
+      }
     },
     {
       "id": 9,
@@ -346,7 +559,31 @@
         "Beschreibe im Kommentar genau, was du willst — dann wird’s passender.",
         "Wenn der Vorschlag falsch ist: minimal korrigieren und weiter tippen.",
         "Nutze kleine Schritte: erst korrekt, dann „schön machen“."
-      ]
+      ],
+      "en": {
+        "title": "Codeium",
+        "description": "Free code autocomplete for many IDEs (good entry without subscription).",
+        "strengths": [
+          "Free to use for many standard use cases.",
+          "Saves time writing repetitive code.",
+          "Runs in many editors/IDEs (flexible setup)."
+        ],
+        "useCases": [
+          "Learning & practice: quickly see example code and adapt.",
+          "Routine code: getters/setters, requests, validation, boilerplate.",
+          "Small projects with no monthly costs."
+        ],
+        "promptExamples": [
+          "Create a function for [task] in [language].",
+          "Write a simple class/DTO for this JSON: [JSON].",
+          "Generate an example API request and explain briefly."
+        ],
+        "promptTips": [
+          "Describe exactly what you want in the comment — it'll be more suitable.",
+          "If the suggestion is wrong, correct minimally and keep typing.",
+          "Use small steps: first correct, then 'make it nice'."
+        ]
+      }
     },
     {
       "id": 10,
@@ -383,7 +620,31 @@
         "Halte Sätze kurz — das klingt natürlicher.",
         "Schreibe so, wie man spricht (nicht wie im Amtsdeutsch).",
         "Teste 2–3 Stimmen und wähle die, die zur Zielgruppe passt."
-      ]
+      ],
+      "en": {
+        "title": "ElevenLabs",
+        "description": "Text-to-speech with very natural voices (for voiceovers and learning).",
+        "strengths": [
+          "Often sounds very real — good for narration, explainer videos, audiobook style.",
+          "Many languages/voices — good for international content.",
+          "Practical for quick production without a studio."
+        ],
+        "useCases": [
+          "Voiceover for YouTube/TikTok/explainer videos (text in, audio out).",
+          "Have learning texts read aloud (e.g., vocabulary, summaries).",
+          "Podcast/intro/announcements with consistent sound."
+        ],
+        "promptExamples": [
+          "Read this text in a friendly and clear way: [text].",
+          "Make the text sound like a serious documentary voice: [text].",
+          "Speak slowly and clearly for learners: [text]."
+        ],
+        "promptTips": [
+          "Keep sentences short — it sounds more natural.",
+          "Write as you speak (not like officialese).",
+          "Test 2–3 voices and choose the one that fits the target audience."
+        ]
+      }
     },
     {
       "id": 11,
@@ -420,7 +681,31 @@
         "Nenne Genre + Stimmung + Tempo (oder „langsam/schnell“).",
         "Weniger ist mehr: 1 klare Idee pro Song.",
         "Mach mehrere Versionen — oft ist die 3. oder 4. am besten."
-      ]
+      ],
+      "en": {
+        "title": "Suno AI",
+        "description": "Makes songs from text: choose genre, describe topic, get a song.",
+        "strengths": [
+          "Creates music including vocals/beat (depending on prompt).",
+          "Simple: you describe style + mood + topic.",
+          "Good for trying many variants and picking the best."
+        ],
+        "useCases": [
+          "Create jingles/intros for videos or streams.",
+          "Test music ideas for your own projects (demo versions).",
+          "Fun: songs about friends, school, gaming, everyday life."
+        ],
+        "promptExamples": [
+          "A cheerful pop song about [topic], 30 seconds, catchy chorus.",
+          "A lo-fi beat for studying, calm, no vocals, 90 BPM.",
+          "A rock track for sports motivation, fast, with strong drums."
+        ],
+        "promptTips": [
+          "Mention genre + mood + tempo (or 'slow/fast').",
+          "Less is more: 1 clear idea per song.",
+          "Make several versions — often the 3rd or 4th is best."
+        ]
+      }
     },
     {
       "id": 12,
@@ -457,7 +742,31 @@
         "Halte Videos kurz (5–10 Sek.) für bessere Kontrolle.",
         "Wenn es „komisch“ wirkt: weniger Elemente im Prompt nennen.",
         "Erst grob generieren, dann mit Editing-Tools verfeinern."
-      ]
+      ],
+      "en": {
+        "title": "Runway ML",
+        "description": "Video AI in the browser: create clips, use effects, edit videos quickly.",
+        "strengths": [
+          "Text-to-video & effects (depending on feature/plan) for quick results.",
+          "Practical for cuts/retouching (e.g., edit background/objects).",
+          "Runs in the browser — no powerful hardware needed."
+        ],
+        "useCases": [
+          "Social clips from ideas: short prompt → short clip.",
+          "Clean up video: remove background, make things unrecognizable.",
+          "Quick prototypes for ads/storyboards."
+        ],
+        "promptExamples": [
+          "Create a 5-second clip: [scene], style [cinematic/anime/etc.].",
+          "Remove the background from this video and replace it with [place].",
+          "Make this clip a slow motion and add smooth transitions."
+        ],
+        "promptTips": [
+          "Keep videos short (5–10 sec.) for better control.",
+          "If it looks 'weird', mention fewer elements in the prompt.",
+          "First generate roughly, then refine with editing tools."
+        ]
+      }
     },
     {
       "id": 13,
@@ -494,7 +803,31 @@
         "Sag „für Einsteiger“ und „kurz“ (z.B. „max. 6 Sätze“).",
         "Bitte um Beispiele aus dem Alltag — das hilft Laien.",
         "Wenn du unsicher bist: „Stell mir 3 Rückfragen, bevor du antwortest.“"
-      ]
+      ],
+      "en": {
+        "title": "Gemini",
+        "description": "Google AI for chat & research, often good with current info and media.",
+        "strengths": [
+          "Helps explain images/info (e.g., 'What is that?').",
+          "Good for research questions and quick overviews.",
+          "Practical for planning (e.g., travel, ideas, lists)."
+        ],
+        "useCases": [
+          "Learning: have a topic explained + get examples.",
+          "Travel/daily life: create a plan, gather tips, compare options.",
+          "Understand images: 'What do you see? What does it mean?'"
+        ],
+        "promptExamples": [
+          "Explain this image for beginners and name 3 important points: [image].",
+          "Give me a simple plan for [goal] in 7 steps.",
+          "Compare [option A] and [option B] briefly: advantages/disadvantages."
+        ],
+        "promptTips": [
+          "Say 'for beginners' and 'short' (e.g., 'max. 6 sentences').",
+          "Ask for everyday examples — it helps laypeople.",
+          "If unsure: 'Ask me 3 clarifying questions before answering.'"
+        ]
+      }
     },
     {
       "id": 14,
@@ -531,7 +864,31 @@
         "Lass dir „Überschrift + 5 Punkte“ geben — perfekt zum schnellen Lesen.",
         "Nutze „kürzer + einfacher“ als Standard-Befehl.",
         "Wenn es wichtig ist: „Markiere offene Fragen“."
-      ]
+      ],
+      "en": {
+        "title": "Notion AI",
+        "description": "AI in Notion: summarize notes, write texts, generate to-dos.",
+        "strengths": [
+          "Quickly turns text into a clean structure (headings, bullet points, to-dos).",
+          "Helps rewrite (shorter, friendlier, more formal).",
+          "Practical for project pages, study notes, and minutes."
+        ],
+        "useCases": [
+          "Meeting/class: notes → summary + task list.",
+          "Texts: bullet points → finished paragraph (short and clear).",
+          "Organization: plans, checklists, small wiki pages."
+        ],
+        "promptExamples": [
+          "Summarize these notes in 5 bullet points: [notes].",
+          "Turn this into a to-do list with priorities: [text].",
+          "Make this text simpler and shorter (max. 6 sentences): [text]."
+        ],
+        "promptTips": [
+          "Ask for 'heading + 5 points' — perfect for quick reading.",
+          "Use 'shorter + simpler' as a standard command.",
+          "If it's important: 'Mark open questions'."
+        ]
+      }
     },
     {
       "id": 15,
@@ -568,7 +925,31 @@
         "Gib Ziel an: „als Icon“, „als Asset“, „für UI“ — dann passt der Stil besser.",
         "Nutze eine feste Farbpalette, wenn alles zusammen passen soll.",
         "Erst Variationen, dann Details nachschärfen."
-      ]
+      ],
+      "en": {
+        "title": "Leonardo AI",
+        "description": "Image AI for game assets, characters, and design variants.",
+        "strengths": [
+          "Ideal for characters, items, icons, and backgrounds.",
+          "Variations help quickly find the best version.",
+          "Many presets/styles for different asset types."
+        ],
+        "useCases": [
+          "Game assets: weapons, items, UI icons, NPCs.",
+          "Design ideas: logos/illustrations as starting point.",
+          "Quickly test multiple looks for a project."
+        ],
+        "promptExamples": [
+          "Create 6 variants of a game item: [description], isometric, clean.",
+          "A character icon: [description], clear style, consistent colors.",
+          "A background for a level: [place], mood [mood], without text."
+        ],
+        "promptTips": [
+          "Specify the purpose: 'as icon', 'as asset', 'for UI' — the style will fit better.",
+          "Use a fixed color palette if everything should match.",
+          "First variations, then refine details."
+        ]
+      }
     },
     {
       "id": 16,
@@ -605,7 +986,31 @@
         "Sag, welche Spalte was bedeutet (Datum, Umsatz, Kategorie).",
         "Frag zuerst breit („Was fällt auf?“), dann gezielt („Warum März so hoch?“).",
         "Bitte um „kurz + Diagramm + 3 Erkenntnisse“."
-      ]
+      ],
+      "en": {
+        "title": "Julius AI",
+        "description": "Data AI: upload CSV/Excel, ask questions, get charts.",
+        "strengths": [
+          "You ask in plain language: 'Show sales by month'.",
+          "Creates charts and explains what stands out (trends/outliers).",
+          "Helps with simple forecasts and pattern recognition (depending on data)."
+        ],
+        "useCases": [
+          "School/project: evaluate surveys and show as charts.",
+          "Business: understand CSV/Excel — key numbers in minutes.",
+          "Check data: errors, gaps, outliers."
+        ],
+        "promptExamples": [
+          "Show the development over time as a line chart: [file].",
+          "What 3 things stand out most in the data? Briefly explain.",
+          "Make a simple summary: min/max/avg and top 5 categories."
+        ],
+        "promptTips": [
+          "Say which column means what (date, sales, category).",
+          "Ask broadly first ('What stands out?'), then targeted ('Why was March so high?').",
+          "Ask for 'short + chart + 3 insights'."
+        ]
+      }
     },
     {
       "id": 17,
@@ -642,7 +1047,31 @@
         "Halte den Prompt kurz (1 Szene, 1 Stil) — wirkt oft besser.",
         "Sag „ruhige Kamera“ oder „kein Wackeln“, wenn’s stabil sein soll.",
         "Mach 3 Versionen und wähle die beste statt zu überladen."
-      ]
+      ],
+      "en": {
+        "title": "Pika Labs",
+        "description": "Text-to-video for short clips: fast, simple, good for social media.",
+        "strengths": [
+          "Quick results for short videos (e.g., 3–5 seconds).",
+          "Easy to use — good without prior knowledge.",
+          "Great for visual ideas, storyboards, and social experiments."
+        ],
+        "useCases": [
+          "TikTok/Reels/Shorts: quickly generate scenes from text.",
+          "Test ad ideas before actually filming.",
+          "Animated banners/teasers for websites or projects."
+        ],
+        "promptExamples": [
+          "A 3-second clip: [scene], style [style], clear camera, good lighting.",
+          "Create a short animation of a logo: [description], clean, modern.",
+          "A calm scene: [place], sunset, soft colors, 5 seconds."
+        ],
+        "promptTips": [
+          "Keep the prompt short (1 scene, 1 style) — often works better.",
+          "Say 'steady camera' or 'no shaking' if it should be stable.",
+          "Make 3 versions and choose the best instead of overloading."
+        ]
+      }
     },
     {
       "id": 18,
@@ -679,7 +1108,31 @@
         "Sag Zielgruppe + Ton (jung, seriös, locker) — dann passt es besser.",
         "Bitte um „kurz + 3 Varianten“ statt einen langen Text.",
         "Gib 3 Fakten/USPs vor — sonst erfindet das Tool eher Marketing-Floskeln."
-      ]
+      ],
+      "en": {
+        "title": "Jasper AI",
+        "description": "Marketing text AI: ads, blog drafts, and product descriptions.",
+        "strengths": [
+          "Creates multiple variants (headlines, hooks, CTA) for testing.",
+          "Saves time on standard texts (product copy, landing page, post).",
+          "Helps keep tone/style consistent (depending on workflow)."
+        ],
+        "useCases": [
+          "Advertising: 10 ad texts for a product in 2 minutes.",
+          "Shop: product description short, clear, convincing.",
+          "Blog/social: draft + structure, you just refine."
+        ],
+        "promptExamples": [
+          "Write 5 short ad texts for [product] with CTA (max. 90 characters).",
+          "Create a product description (120 words) for [product] + 5 bullet points.",
+          "Write an Instagram post: topic [topic], target audience [audience], tone [tone]."
+        ],
+        "promptTips": [
+          "Specify target audience + tone (young, serious, casual) — it'll fit better.",
+          "Ask for 'short + 3 variants' instead of one long text.",
+          "Provide 3 facts/USPs — otherwise the tool may invent marketing fluff."
+        ]
+      }
     },
     {
       "id": 19,
@@ -716,7 +1169,31 @@
         "Schreibe wie gesprochen (kurze Sätze, klare Worte).",
         "Baue Pausen ein (Punkt/Absätze) — klingt natürlicher.",
         "Sag „für Laien“ und „max. 60 Sekunden“, damit es kurz bleibt."
-      ]
+      ],
+      "en": {
+        "title": "Synthesia",
+        "description": "Avatar videos: input text, get a video with a speaking avatar.",
+        "strengths": [
+          "Explainer video production without filming (time savings).",
+          "Many languages possible — good for international audiences.",
+          "Easy to update: change text instead of reshooting."
+        ],
+        "useCases": [
+          "Training videos: explain processes, quickly incorporate updates.",
+          "Product explainer videos for website or support.",
+          "Internal communication: short announcements/onboarding."
+        ],
+        "promptExamples": [
+          "Write a 45-second script that explains [topic] simply (3 steps).",
+          "Create a friendly onboarding text for new employees (max. 120 words).",
+          "Write a short product video script: problem → solution → benefit."
+        ],
+        "promptTips": [
+          "Write as you speak (short sentences, clear words).",
+          "Include pauses (periods/paragraphs) — it sounds more natural.",
+          "Say 'for laypeople' and 'max. 60 seconds' to keep it short."
+        ]
+      }
     },
     {
       "id": 20,
@@ -753,7 +1230,31 @@
         "Beschreibe Layout + Elemente + Verhalten (z.B. „mobile first“).",
         "Sag, ob du Tailwind willst oder plain CSS/Komponentenstil.",
         "Erst Basis generieren, dann Schritt für Schritt verbessern."
-      ]
+      ],
+      "en": {
+        "title": "V0 by Vercel",
+        "description": "UI from text: generates React/Next.js components (often with Tailwind).",
+        "strengths": [
+          "From description → first UI component in minutes.",
+          "Helps learning: you see finished code and can adapt it.",
+          "Good for quick prototypes (e.g., landing pages, cards, forms)."
+        ],
+        "useCases": [
+          "Quickly build a page/component (login, card, navbar).",
+          "Test UI ideas before coding everything yourself.",
+          "Starter code for projects and demos."
+        ],
+        "promptExamples": [
+          "Create a responsive navbar with logo left and 3 links right, dark mode.",
+          "Build a product card with image, price, rating, and buy button.",
+          "Create a login form with email, password, and 'Forgot password?' link."
+        ],
+        "promptTips": [
+          "Describe layout + elements + behavior (e.g., 'mobile first').",
+          "Specify if you want Tailwind or plain CSS/component style.",
+          "First generate basis, then improve step by step."
+        ]
+      }
     }
   ]
 }
