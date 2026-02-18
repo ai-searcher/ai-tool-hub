@@ -1976,3 +1976,28 @@ a:focus-visible {
     margin-bottom: 8mm;
   }
 }
+
+/* ==================== KATEGORIE-KOPF MIT MARQUEE ==================== */
+.category-header-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Inhalt oben, Marquee unten */
+  /* Bestehende Eigenschaften bleiben erhalten, nur ergänzen */
+}
+
+.category-header-content {
+  flex: 1; /* Nimmt den verfügbaren Platz ein */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Titel und Beschreibung vertikal zentrieren (optional) */
+  text-align: center;
+}
+
+.category-header-card .context-marquee {
+  margin-top: auto; /* Schiebt den Marquee nach unten */
+  width: 100%;
+  height: 22px; /* Gleiche Höhe wie bei Tool-Karten */
+  /* Maskierung etc. wird von .context-marquee geerbt */
+}
+
+/* Falls die Tool-Karten-Marquee bereits definiert ist, wird sie automatisch übernommen */
