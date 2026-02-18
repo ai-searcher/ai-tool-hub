@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.0.0 (mehrsprachig, fix für Dropdown nach Sprachwechsel)
+// Version: 1.1.0 (intelligente Suche)
 // =========================================
 
 'use strict';
@@ -126,6 +126,37 @@ const DEFAULT_TOOLS = [
     rating: 4.6
   }
 ];
+
+// =========================================
+// INTELLIGENTE SUCHFUNKTION
+// =========================================
+function toolMatchesSearch(tool, query) {
+  if (!query || query.length < CONFIG.search.minLength) return true;
+  const q = query.toLowerCase();
+
+  // Sammle alle relevanten Textfelder
+  const fields = [];
+
+  // Deutsche Felder (immer vorhanden)
+  if (tool.title) fields.push(tool.title);
+  if (tool.description) fields.push(tool.description);
+  if (tool.tags && Array.isArray(tool.tags)) fields.push(...tool.tags);
+  if (tool.provider) fields.push(tool.provider);
+  if (tool.badges && Array.isArray(tool.badges)) fields.push(...tool.badges);
+  fields.push(getCategoryName(tool.category)); // lokalisierter Kategoriename
+
+  // Englische Felder (falls vorhanden)
+  if (tool.en) {
+    if (tool.en.title) fields.push(tool.en.title);
+    if (tool.en.description) fields.push(tool.en.description);
+    if (tool.en.badges && Array.isArray(tool.en.badges)) fields.push(...tool.en.badges);
+  }
+
+  // Prüfen, ob der Suchbegriff in einem der Felder vorkommt
+  return fields.some(field => 
+    field && String(field).toLowerCase().includes(q)
+  );
+}
 
 // =========================================
 // STACK VIEW CONTROLLER (KATEGORIE-STACKS)
@@ -997,12 +1028,10 @@ const ui = {
   },
 
   render() {
+    // Intelligente Suche: Nutze toolMatchesSearch
     if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      const query = state.searchQuery.toLowerCase();
-      state.filtered = state.tools.filter(tool =>
-        (tool.title || '').toLowerCase().includes(query) ||
-        (tool.description && tool.description.toLowerCase().includes(query))
-      );
+      const query = state.searchQuery;
+      state.filtered = state.tools.filter(tool => toolMatchesSearch(tool, query));
     } else {
       state.filtered = [...state.tools];
     }
