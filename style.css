@@ -2117,7 +2117,7 @@ body.custom-color-scheme .detail-list-item {
   color: var(--text-primary);
 }
 
-/* Farbschema-Button vorübergehend ausblenden – bleibt wie gewünscht */
+/* Farbschema-Button vorübergehend ausblenden – bleibt wie gewünscht 
 #colorSchemeToggle {
   display: none;
-}
+}*/
