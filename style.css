@@ -1971,14 +1971,9 @@ a:focus-visible {
 }
 
 .left-floating-buttons .scroll-btn {
-  width: 50px;                 /* etwas größer als die rechten */
-  height: 50px;
-  font-size: 1.2rem;           /* gut lesbar */
-}
-
-.left-floating-buttons .scroll-btn:first-child {
-  font-size: 1rem;             /* für "DE" etwas kleiner? */
-  font-weight: 500;
+  width: 38px;                  /* jetzt gleich groß wie die rechten Buttons */
+  height: 38px;
+  font-size: 0.9rem;            /* etwas kleinere Schrift, damit "DE" gut passt */
 }
 
 /* Glasiger Hintergrund für die sticky Bar */
