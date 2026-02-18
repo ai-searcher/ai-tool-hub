@@ -108,6 +108,7 @@
             </svg>
           </button>
         </div>
+        <!-- Platz für intelligente Suchvorschläge (per JS eingefügt) -->
       </div>
 
       <div class="stats-marquee" id="stats-marquee" style="display: none;" role="status" aria-live="polite">
@@ -191,15 +192,15 @@
     <button class="scroll-btn" id="globalScrollBottomBtn" aria-label="Zum Seitenende">↓</button>
   </div>
 
-  <!-- Linke schwebende Buttons (Sprache oben, Farbschema unten) – gleiche Größe wie rechts -->
+  <!-- Linke schwebende Buttons (nur noch Sprache) -->
   <div class="left-floating-buttons">
     <button class="scroll-btn" id="languageToggle" aria-label="Sprache wechseln">DE</button>
-    <button class="scroll-btn" id="colorSchemeToggle" aria-label="Farbschema wechseln">🌓</button>
+    <!-- Farbschema-Button entfernt -->
   </div>
 
   <!-- Skripte -->
   <script src="i18n.js"></script>
-  <script src="app.js?v=1.1"></script>
+  <script src="app.js?v=1.2"></script>
   <script src="color-flow.js"></script>
 
 </body>
