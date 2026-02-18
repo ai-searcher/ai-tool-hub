@@ -1354,7 +1354,7 @@ if (viewToggle) {
       viewToggle.classList.add('sticky-active');
     } else {
       viewToggle.classList.remove('sticky-active');
-    }
+    });
   }
   
   // Beim Scrollen und einmal initial prüfen
