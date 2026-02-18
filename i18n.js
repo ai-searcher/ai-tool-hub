@@ -1,248 +1,136 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <!-- ==================== SECURITY HEADERS ==================== -->
+// i18n.js – Einfache Sprachumschaltung (DE/EN)
+(function() {
+  'use strict';
 
-  <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.supabase.co;
-        style-src 'self' 'unsafe-inline';
-        img-src 'self'  https:;
-        font-src 'self' ;
-        connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://doicozkpdbkyvdkpujoh.supabase.co;
-        frame-ancestors 'none';
-        base-uri 'self';
-        form-action 'self';
-        upgrade-insecure-requests;
-    ">
+  const translations = {
+    de: {
+      // Header
+      title: '⚡ Quantum AI Hub',
+      subtitle: 'Deine kuratierte AI Tool-Sammlung',
+      searchPlaceholder: 'Tool suchen... (z.B. ChatGPT, Midjourney)',
+      // Tabs
+      viewGrid: 'Raster',
+      viewStacks: 'Kategorien',
+      sortTrigger: 'Sortieren ▾',
+      sortNameAsc: 'Name (A-Z)',
+      sortNameDesc: 'Name (Z-A)',
+      sortRatingDesc: 'Bewertung (absteigend)',
+      sortRatingAsc: 'Bewertung (aufsteigend)',
+      sortDateDesc: 'Neueste zuerst',
+      sortDateAsc: 'Älteste zuerst',
+      // Subline
+      subline: '▽▽ Finde KI-Tools für Text, Bild, Code und mehr ▽▽',
+      // Footer
+      footerText: 'Gebaut mit 💙',
+      footerGitHub: 'GitHub',
+      dataSource: 'Datenquelle',
+      // Detailseite
+      category: 'Kategorie',
+      provider: 'Anbieter',
+      rating: 'Bewertung',
+      sectionStrengths: 'Das kann das Tool',
+      sectionUseCases: 'Dafür nutzt du es',
+      sectionPrompts: 'Zum Ausprobieren',
+      sectionTips: 'So bekommst du bessere Antworten',
+      openTool: 'Tool öffnen',
+      close: 'Schließen',
+      loading: 'Lade Details...',
+      error: '❌ Tool nicht gefunden.',
+      back: 'Zurück'
+    },
+    en: {
+      title: '⚡ Quantum AI Hub',
+      subtitle: 'Your curated AI Tool Collection',
+      searchPlaceholder: 'Search tools... (e.g. ChatGPT, Midjourney)',
+      viewGrid: 'Grid',
+      viewStacks: 'Categories',
+      sortTrigger: 'Sort ▾',
+      sortNameAsc: 'Name (A-Z)',
+      sortNameDesc: 'Name (Z-A)',
+      sortRatingDesc: 'Rating (highest first)',
+      sortRatingAsc: 'Rating (lowest first)',
+      sortDateDesc: 'Newest first',
+      sortDateAsc: 'Oldest first',
+      subline: '▽▽ Find AI tools for text, image, code and more ▽▽',
+      footerText: 'Built with 💙',
+      footerGitHub: 'GitHub',
+      dataSource: 'Data source',
+      category: 'Category',
+      provider: 'Provider',
+      rating: 'Rating',
+      sectionStrengths: 'What it can do',
+      sectionUseCases: 'What it\'s good for',
+      sectionPrompts: 'Try it out',
+      sectionTips: 'Tips for better results',
+      openTool: 'Open tool',
+      close: 'Close',
+      loading: 'Loading details...',
+      error: '❌ Tool not found.',
+      back: 'Back'
+    }
+  };
 
-  <!-- XSS Protection -->
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  // Aktuelle Sprache ermitteln
+  let currentLang = localStorage.getItem('language');
+  if (!currentLang) {
+    // Browser-Sprache erkennen (z.B. 'de-DE' → 'de')
+    const browserLang = navigator.language.split('-')[0];
+    currentLang = browserLang === 'de' ? 'de' : 'en';
+    localStorage.setItem('language', currentLang);
+  }
 
-  <!-- Prevent MIME-Type Sniffing -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  // Übersetzungsfunktion
+  function t(key) {
+    return translations[currentLang][key] || key;
+  }
 
-  <!-- Clickjacking Protection -->
-  <meta http-equiv="X-Frame-Options" content="DENY">
-
-  <!-- Referrer Policy -->
-  <meta name="referrer" content="strict-origin-when-cross-origin">
-
-  <!-- Permissions Policy -->
-  <meta http-equiv="Permissions-Policy" content="
-        geolocation=(),
-        microphone=(),
-        camera=(),
-        payment=(),
-        usb=(),
-        magnetometer=(),
-        gyroscope=(),
-        speaker=()
-    ">
-
-  <!-- ==================== STANDARD META TAGS ==================== -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kuratierte Sammlung der besten AI Tools - Von Text über Bilder bis Code">
-  <meta name="keywords" content="AI Tools, Künstliche Intelligenz, ChatGPT, Midjourney, AI Hub">
-  <meta name="author" content="Quantum AI Hub">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Quantum AI Hub">
-  <meta property="og:description" content="Deine kuratierte AI Tool-Sammlung">
-  <meta property="og:type" content="website">
-
-  <!-- Title -->
-  <title>⚡ Quantum AI Hub - Die besten AI Tools</title>
-
-  <!-- ==================== GOOGLE ANALYTICS (SECURE) ==================== -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-53RF07VYJ8"></script>
-  <script>
-    // Strict Mode
-    'use strict';
-
-    // Google Analytics mit Security
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-53RF07VYJ8', {
-      'anonymize_ip': true,
-      'allow_google_signals': false,
-      'allow_ad_personalization_signals': false,
-      'cookie_flags': 'SameSite=Strict;Secure',
-      'cookie_expires': 63072000, // 2 Jahre
-      'client_storage': 'cookies'
+  // Alle übersetzbaren Elemente aktualisieren
+  function updatePageLanguage() {
+    // Elemente mit data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      el.textContent = t(key);
     });
-
-    // Error Handling
-    window.addEventListener('error', function(e) {
-      console.error('Global Error:', e && e.message);
-      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    // Platzhalter (z.B. Suchfeld)
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      el.placeholder = t(key);
     });
+    // ggf. weitere Attribute (z.B. value bei Buttons) – hier nicht nötig
+  }
 
-    // Unhandled Promise Rejection
-    window.addEventListener('unhandledrejection', function(e) {
-      console.error('Unhandled Promise:', e && e.reason);
-      if (e && typeof e.preventDefault === 'function') e.preventDefault();
-    });
-  </script>
+  // Sprache umschalten
+  function setLanguage(lang) {
+    if (translations[lang]) {
+      currentLang = lang;
+      localStorage.setItem('language', lang);
+      updatePageLanguage();
+      // Seite neu rendern? Für dynamische Inhalte (z.B. Tool-Karten) nicht nötig, 
+      // da sie aus Daten kommen. Aber falls Kategorienamen übersetzt werden sollen, 
+      // müsste man ein Event auslösen, das app.js abfängt. Vereinfacht: Seite neu laden.
+      // Für bessere UX könnten wir ein Custom Event dispatchen.
+      window.dispatchEvent(new CustomEvent('languagechange', { detail: { lang } }));
+    }
+  }
 
-  <!-- Favicon (optional) -->
-  <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+  // Initialisierung
+  document.addEventListener('DOMContentLoaded', () => {
+    updatePageLanguage();
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=1.2">
+    // Sprachumschalter-Button (muss in HTML existieren)
+    const langToggle = document.getElementById('languageToggle');
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        const newLang = currentLang === 'de' ? 'en' : 'de';
+        setLanguage(newLang);
+      });
+    }
+  });
 
-</head>
-<body>
-
-  <!-- Connection Labels Container -->
-  <div class="connection-labels" id="connection-labels" aria-hidden="true"></div>
-
-  <!-- ==================== HEADER ==================== -->
-<header class="header">
-  <div class="container">
-
-    <!-- Marquee container -->
-    <div id="marquee-container" class="marquee-container" aria-hidden="true"></div>
-
-    <!-- Logo & Title -->
-    <div class="header-top">
-      <h1 class="title" data-i18n="title">⚡ Quantum AI Hub</h1>
-      <p class="subtitle" data-i18n="subtitle">Deine kuratierte AI Tool-Sammlung</p>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="search-wrapper">
-      <div class="search-box">
-        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <input
-          type="text"
-          id="search"
-          class="search-input"
-          placeholder="Tool suchen... (z.B. ChatGPT, Midjourney)"
-          data-i18n-placeholder="searchPlaceholder"
-          autocomplete="off"
-          spellcheck="false"
-          maxlength="100"
-          aria-label="Tool suchen"
-        >
-        <button
-          id="search-clear"
-          class="search-clear"
-          style="display: none;"
-          aria-label="Suche löschen"
-          type="button"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Stats Marquee -->
-    <div class="stats-marquee" id="stats-marquee" style="display: none;" role="status" aria-live="polite">
-      <div class="marquee-track"></div>
-    </div>
-
-    <!-- Header Subline -->
-    <div class="header-subline" data-i18n="subline">▽▽ Finde KI-Tools für Text, Bild, Code und mehr ▽▽</div>
-
-  </div>
-</header>
-
-  <!-- ==================== MAIN ==================== -->
-  <main class="main">
-    <div class="container">
-
-      <!-- Loading State -->
-      <div id="loading" class="state-container loading-state" role="status" aria-live="polite">
-        <div class="spinner" aria-hidden="true"></div>
-        <p class="state-text">Lädt Tools...</p>
-        <p class="state-subtext">Verbinde mit Datenbank</p>
-      </div>
-
-      <!-- Error State -->
-      <div id="error" class="state-container error-state" style="display: none;" role="alert" aria-live="assertive">
-        <div class="state-icon" aria-hidden="true">⚠️</div>
-        <p class="state-text">Fehler beim Laden</p>
-        <p class="state-subtext">Bitte Seite neu laden oder Console prüfen (F12)</p>
-        <button id="retry-button" class="retry-button" type="button">Erneut versuchen</button>
-      </div>
-
-      <!-- Empty State -->
-      <div id="empty" class="state-container empty-state" style="display: none;" role="status" aria-live="polite">
-        <div class="state-icon" aria-hidden="true">🔍</div>
-        <p class="state-text">Keine Tools gefunden</p>
-        <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff</p>
-      </div>
-      
-      <!-- View Toggle mit Sortier-Dropdown -->
-      <div class="view-toggle">
-        <button class="toggle-btn active" data-view="grid" data-i18n="viewGrid">Raster</button>
-        <button class="toggle-btn" data-view="stacks" data-i18n="viewStacks">Kategorien</button>
-        <div class="sort-dropdown">
-          <button class="toggle-btn sort-trigger" data-i18n="sortTrigger">Sortieren ▾</button>
-          <div class="sort-menu">
-            <button data-sort="name" data-dir="asc" data-i18n="sortNameAsc">Name (A-Z)</button>
-            <button data-sort="name" data-dir="desc" data-i18n="sortNameDesc">Name (Z-A)</button>
-            <button data-sort="rating" data-dir="desc" data-i18n="sortRatingDesc">Bewertung (absteigend)</button>
-            <button data-sort="rating" data-dir="asc" data-i18n="sortRatingAsc">Bewertung (aufsteigend)</button>
-            <button data-sort="date" data-dir="desc" data-i18n="sortDateDesc">Neueste zuerst</button>
-            <button data-sort="date" data-dir="asc" data-i18n="sortDateAsc">Älteste zuerst</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tool Grid -->
-      <div id="tool-grid" class="tool-grid tool-grid-squares" style="display: none;"></div>
-
-      <!-- Neural Canvas -->
-      <canvas id="neural-canvas" class="neural-canvas" aria-hidden="true"></canvas>
-
-    </div>
-  </main>
-
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <p class="footer-text">
-          <strong>Quantum AI Hub</strong> v1.0
-          <span class="footer-separator" aria-hidden="true">•</span>
-          <span data-i18n="footerText">Gebaut mit 💙</span>
-        </p>
-        <p class="footer-links">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer nofollow" class="footer-link" data-i18n="footerGitHub">GitHub</a>
-          <span class="footer-separator" aria-hidden="true">•</span>
-          <span class="footer-link" id="source-indicator">
-            <span data-i18n="dataSource">Datenquelle</span>: <span id="data-source">Lädt...</span>
-          </span>
-        </p>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- Schwebende Scroll-Buttons (nur mobil) -->
-  <div class="global-scroll-buttons">
-    <button class="scroll-btn" id="globalScrollTopBtn" aria-label="Zum Seitenanfang">↑</button>
-    <button class="scroll-btn" id="globalScrollBottomBtn" aria-label="Zum Seitenende">↓</button>
-  </div>
-
-  <!-- Linke schwebende Buttons (Sprache oben, Farbschema unten) -->
-  <div class="left-floating-buttons">
-    <button class="floating-btn" id="languageToggle">DE</button>
-    <button class="floating-btn" id="colorSchemeToggle">🌓</button>
-  </div>
-
-  <!-- SCRIPT -->
-  <script src="i18n.js"></script>
-  <script src="app.js?v=1.1"></script>
-  <script src="color-flow.js"></script>
-
-</body>
-</html>
+  // Globale API bereitstellen
+  window.i18n = {
+    t,
+    setLanguage,
+    get currentLang() { return currentLang; }
+  };
+})();
