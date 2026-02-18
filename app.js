@@ -1412,23 +1412,22 @@ const app = {
       const activeSortBtn = document.querySelector(`.sort-menu button[data-sort="${state.sortBy}"][data-dir="${state.sortDirection}"]`);
       if (activeSortBtn) activeSortBtn.classList.add('active');
       
-      // ==================== FARBSCHEMA-UMSCHALTER ====================
+// ==================== NEU: FARBSCHEMA-UMSCHALTER ====================
 const colorSchemeToggle = document.getElementById('colorSchemeToggle');
 if (colorSchemeToggle) {
-  // Gespeicherte Einstellung laden
   const savedScheme = localStorage.getItem('colorScheme');
   if (savedScheme === 'custom') {
     document.body.classList.add('custom-color-scheme');
   }
-
   colorSchemeToggle.addEventListener('click', () => {
     document.body.classList.toggle('custom-color-scheme');
     const isCustom = document.body.classList.contains('custom-color-scheme');
     localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
   });
 }
-      
-      // ==================== NEU: SPRACHUMSCHALTER ====================
+// ==================== ENDE NEU ====================
+
+// ==================== NEU: SPRACHUMSCHALTER ====================
 const languageToggle = document.getElementById('languageToggle');
 if (languageToggle && window.i18n) {
   languageToggle.addEventListener('click', () => {
@@ -1438,7 +1437,13 @@ if (languageToggle && window.i18n) {
 }
 // ==================== ENDE NEU ====================
 
-      console.log('✅ App initialized successfully!');
+// ==================== NEU: BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
+window.addEventListener('languagechange', () => {
+  ui.render(); // Neu rendern, damit z.B. Kategorienamen aktualisiert werden
+});
+// ==================== ENDE NEU ====================
+
+console.log('✅ App initialized successfully!');
 
       try {
         if (!window.appState) window.appState = state;
