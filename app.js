@@ -1344,22 +1344,20 @@ if (globalScrollBottom) {
   });
 }
       
-      // Sticky-Bar-Hintergrund aktivieren
+ // Sticky-Bar-Hintergrund aktivieren
 const viewToggle = document.querySelector('.view-toggle');
 if (viewToggle) {
   const toggleStickyClass = () => {
     const rect = viewToggle.getBoundingClientRect();
-    // Wenn das Element den oberen Rand erreicht (oder leicht überschreitet)
     if (rect.top <= 0) {
       viewToggle.classList.add('sticky-active');
     } else {
       viewToggle.classList.remove('sticky-active');
-    });
-  }
+    }
+  };
   
-  // Beim Scrollen und einmal initial prüfen
   window.addEventListener('scroll', toggleStickyClass, { passive: true });
-  toggleStickyClass(); // Initialer Check
+  toggleStickyClass();
 }
       
       // Sortier-Dropdown initialisieren (NEU)
