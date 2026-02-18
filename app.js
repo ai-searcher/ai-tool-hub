@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.4.0 (Tool-Vorschläge mit Favicons)
+// Version: 1.5.0 (Intelligente Tool-Vorschläge mit Direktaufruf)
 // =========================================
 
 'use strict';
@@ -158,7 +158,7 @@ function toolMatchesSearch(tool, query) {
   return fields.some(field => field && String(field).toLowerCase().includes(q));
 }
 
-// Generiert Vorschläge (nur Tools, mit Favicon)
+// Generiert Vorschläge (nur Tools, mit Favicon) – basierend auf toolMatchesSearch
 function generateToolSuggestions(query, tools) {
   if (!query || query.length < 2) return [];
   
@@ -167,32 +167,40 @@ function generateToolSuggestions(query, tools) {
   const seen = new Set();
 
   tools.forEach(tool => {
+    // Nur Tools, die zum Suchbegriff passen
+    if (!toolMatchesSearch(tool, query)) return;
+
     const title = getLocalizedToolField(tool, 'title');
-    if (title.toLowerCase().includes(q) && !seen.has(title)) {
-      // Domain aus dem Link extrahieren für Favicon
+    if (!seen.has(title)) {
+      // Relevanz-Score: 2 wenn Titel den Suchbegriff enthält, sonst 1
+      const titleLower = title.toLowerCase();
+      const score = titleLower.includes(q) ? 2 : 1;
+
+      // Domain für Favicon
       let domain = '';
       try {
         if (tool.link) {
           const url = new URL(tool.link);
           domain = url.hostname;
         }
-      } catch (e) {
-        // Fallback, falls Link ungültig
-      }
+      } catch (e) {}
 
       suggestions.push({
         type: 'tool',
         text: title,
         toolId: tool.id,
         domain: domain,
-        link: tool.link
+        link: tool.link,
+        category: tool.category,
+        score: score
       });
       seen.add(title);
     }
   });
 
-  // Nach Relevanz sortieren: Suchbegriff möglichst früh im Namen
+  // Sortieren: zuerst nach Score, dann nach Position des Suchbegriffs im Titel
   suggestions.sort((a, b) => {
+    if (a.score !== b.score) return b.score - a.score;
     const aIndex = a.text.toLowerCase().indexOf(q);
     const bIndex = b.text.toLowerCase().indexOf(q);
     if (aIndex === bIndex) return a.text.length - b.text.length;
@@ -1290,7 +1298,6 @@ const ui = {
     }
 
     // Farbschema-Button (entfernt)
-    // Kein Code mehr für colorSchemeToggle
   },
 
   switchView(view) {
@@ -1351,7 +1358,7 @@ const ui = {
 };
 
 // =========================================
-// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS
+// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS + DIREKTÖFFNUNG
 // =========================================
 const smartSearch = {
   dropdown: null,
@@ -1405,20 +1412,15 @@ const smartSearch = {
       const item = document.createElement('div');
       item.className = 'suggestion-item';
 
-      // Favicon erstellen (Fallback auf Kategorie-Emoji, falls keine Domain)
+      // Favicon oder Emoji
       let iconHtml = '';
       if (sug.domain) {
         iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
       } else {
-        // Fallback-Emoji basierend auf Kategorie (müssen wir aus dem Tool holen)
-        // Da wir das Tool hier nicht direkt haben, könnten wir eine Map vorhalten, oder wir nutzen einen generischen Platzhalter.
-        // Vereinfacht: wir lassen das Feld leer oder zeigen ein Standard-Emoji
-        const tool = state.tools.find(t => t.id === sug.toolId);
-        const category = tool ? tool.category : 'other';
         const icons = {
           text: '📝', image: '🖼️', code: '👨‍💻', audio: '🎵', video: '🎬', data: '📊', other: '🔧'
         };
-        iconHtml = `<span class="suggestion-emoji">${icons[category] || '🔧'}</span>`;
+        iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
       }
 
       item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
@@ -1436,15 +1438,33 @@ const smartSearch = {
   },
 
   handleSuggestionClick(sug) {
-    const searchInput = ui.elements.search;
-    if (!searchInput) return;
+    if (sug.type === 'tool') {
+      // Tool direkt öffnen (wie Klick auf Karte)
+      const tool = state.tools.find(t => t.id === sug.toolId);
+      if (!tool) return;
 
-    // Suchfeld mit Toolnamen füllen und Suche ausführen
-    searchInput.value = sug.text;
-    state.searchQuery = sug.text;
-    ui.render();
-    this.hide();
-    searchInput.focus();
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        window.location.href = 'detail.html?id=' + encodeURIComponent(tool.id);
+      } else {
+        if (typeof openToolModal === 'function') {
+          openToolModal(tool);
+        } else {
+          window.open(tool.link, '_blank', 'noopener,noreferrer');
+        }
+      }
+      this.hide();
+    } else {
+      // Fallback (z.B. für zukünftige Kategorie-Vorschläge)
+      const searchInput = ui.elements.search;
+      if (searchInput) {
+        searchInput.value = sug.text;
+        state.searchQuery = sug.text;
+        ui.render();
+      }
+      this.hide();
+      if (searchInput) searchInput.focus();
+    }
   },
 
   escapeHtml(text) {
@@ -1655,7 +1675,7 @@ const app = {
         toggleStickyClass();
       }
       
-      // Keine Farbschema-Initialisierung mehr
+      // Keine Farbschema-Initialisierung
 
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
