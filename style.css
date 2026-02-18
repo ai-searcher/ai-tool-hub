@@ -1,30 +1,29 @@
 /* =========================================
-   QUANTUM AI HUB - STYLE.CSS (ROTES SCHEMA)
-   Hellgrauer Hintergrund, rote Akzente, schwarzer Text
+   QUANTUM AI HUB - STYLE.CSS (mit rotem Farbschema per Button)
    ========================================= */
 
-/* ==================== CSS VARIABLES ==================== */
+/* ==================== CSS VARIABLES (DEFAULT DARK) ==================== */
 :root {
   /* Colors - Main */
-  --bg-dark: #F5F5F5;           /* Heller Hintergrund */
-  --bg-card: #FFFFFF;            /* Weiße Karten */
-  --bg-card-hover: #F0F0F0;      /* Leicht dunkler bei Hover */
-  --border: #DDDDDD;              /* Hellgraue Rahmen */
-  --border-hover: #CCCCCC;
+  --bg-dark: #0A0E27;
+  --bg-card: #1A1E37;
+  --bg-card-hover: #1F2442;
+  --border: #2A2E47;
+  --border-hover: #3A3E57;
 
   /* Colors - Text */
-  --text-primary: #222222;        /* Fast schwarz */
-  --text-secondary: #444444;
-  --text-dim: #666666;
-  --text-muted: #888888;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0F0;
+  --text-dim: #A0A0B0;
+  --text-muted: #8080A0;
 
-  /* Colors - Brand (rot) */
-  --primary: #D32F2F;             /* Kräftiges Rot */
-  --primary-hover: #B71C1C;
-  --primary-glow: rgba(211, 47, 47, 0.2);
-  --primary-dim: rgba(211, 47, 47, 0.1);
+  /* Colors - Brand (cyan) */
+  --primary: #00F3FF;
+  --primary-hover: #00D4E0;
+  --primary-glow: rgba(0, 243, 255, 0.2);
+  --primary-dim: rgba(0, 243, 255, 0.1);
 
-  /* Colors - States (bleiben) */
+  /* Colors - States */
   --error: #FF4466;
   --warning: #FFB800;
   --success: #00FF9D;
@@ -53,9 +52,9 @@
   --transition-slow: 500ms ease;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 20px var(--primary-glow);
 
   /* Layout */
@@ -68,25 +67,50 @@
   --z-sticky: 100;
   --z-overlay: 1000;
 
-  /* Elegant Category Colors (jetzt rot-basiert) */
-  --color-text: #D32F2F;
-  --color-image: #E64A19;        /* Orange-Rot */
-  --color-code: #C2185B;          /* Pink-Rot */
-  --color-audio: #7B1FA2;         /* Violett */
-  --color-video: #0288D1;         /* Blau (bleibt, weil nicht primär) */
-  --color-data: #388E3C;          /* Grün */
-  --color-other: #757575;         /* Grau */
+  /* Elegant Category Colors (bleiben in beiden Schemata gleich) */
+  --color-text: #00D4FF;
+  --color-image: #E040FB;
+  --color-code: #7C4DFF;
+  --color-audio: #FF6B9D;
+  --color-video: #448AFF;
+  --color-data: #1DE9B6;
+  --color-other: #B0BEC5;
 
-  /* Glow variants (passend zu den Kategorien) */
-  --glow-text: rgba(211, 47, 47, 0.25);
-  --glow-image: rgba(230, 74, 25, 0.25);
-  --glow-code: rgba(194, 24, 91, 0.25);
-  --glow-audio: rgba(123, 31, 162, 0.25);
-  --glow-video: rgba(2, 136, 209, 0.25);
-  --glow-data: rgba(56, 142, 60, 0.25);
+  /* Glow variants (angepasst an Kategoriefarben) */
+  --glow-text: rgba(0, 212, 255, 0.25);
+  --glow-image: rgba(224, 64, 251, 0.25);
+  --glow-code: rgba(124, 77, 255, 0.25);
+  --glow-audio: rgba(255, 107, 157, 0.25);
+  --glow-video: rgba(68, 138, 255, 0.25);
+  --glow-data: rgba(29, 233, 182, 0.25);
 
   /* Marquee */
   --marquee-overscan: 20px;
+}
+
+/* ==================== ROTES FARBSCHEMA (per Button aktivierbar) ==================== */
+body.custom-color-scheme {
+  --bg-dark: #F5F5F5;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F0F0F0;
+  --border: #DDDDDD;
+  --border-hover: #CCCCCC;
+
+  --text-primary: #222222;
+  --text-secondary: #444444;
+  --text-dim: #666666;
+  --text-muted: #888888;
+
+  /* Akzentfarbe rot */
+  --primary: #D32F2F;
+  --primary-hover: #B71C1C;
+  --primary-glow: rgba(211, 47, 47, 0.2);
+  --primary-dim: rgba(211, 47, 47, 0.1);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px var(--primary-glow);
 }
 
 /* ==================== RESET & BASE ==================== */
@@ -163,7 +187,7 @@ body {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--primary) 0%, #222222 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--text-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -345,7 +369,7 @@ body {
   font-size: 1rem;
   font-weight: 600;
   background: var(--primary);
-  color: white; /* Kontrast zu rot */
+  color: var(--bg-dark);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -476,7 +500,7 @@ body {
   justify-content: center;
   padding: 12px 24px;
   background: var(--primary);
-  color: white;
+  color: var(--bg-dark);
   text-decoration: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
@@ -551,7 +575,7 @@ body {
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  color: var(--text-primary); /* schwarz */
+  color: var(--text-primary);
   font-family: var(--font-family);
   font-size: 0.95rem;
   font-weight: 500;
@@ -577,7 +601,7 @@ body {
 
 .toggle-btn.active {
   background: var(--primary-dim);
-  color: var(--primary); /* rot */
+  color: var(--primary);
   border-color: var(--primary);
   font-weight: 600;
 }
@@ -634,7 +658,7 @@ body {
 .category-header-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--primary); /* rot */
+  color: var(--primary);
   margin: 0 0 0.5rem 0;
 }
 
@@ -699,7 +723,7 @@ body {
   align-self: flex-start;
 }
 
-/* Kategoriespezifische Farben für den Badge in der Stack-Karte */
+/* Kategoriespezifische Farben für den Badge in der Stack-Karte (bleiben gleich) */
 .category-stack[data-category="text"] .stack-card .stack-card-category {
   background: var(--glow-text);
   color: var(--color-text);
@@ -954,7 +978,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Category-specific Badge Colors */
+/* Category-specific Badge Colors (bleiben gleich) */
 .card-square[data-category="text"] .square-category-badge {
   background: var(--glow-text);
   color: var(--color-text);
@@ -1046,18 +1070,7 @@ body {
 
 /* ==================== SCHWEBEEFFEKT (BREATHING) ==================== */
 
-/* Definition der Kategorie-Glow-Farben (dezent) */
-:root {
-  --glow-text: rgba(211, 47, 47, 0.25);
-  --glow-image: rgba(230, 74, 25, 0.25);
-  --glow-code: rgba(194, 24, 91, 0.25);
-  --glow-audio: rgba(123, 31, 162, 0.25);
-  --glow-video: rgba(2, 136, 209, 0.25);
-  --glow-data: rgba(56, 142, 60, 0.25);
-  --glow-other: rgba(117, 117, 117, 0.25);
-}
-
-/* Zuweisung der Glow-Farbe pro Kategorie */
+/* Zuweisung der Glow-Farbe pro Kategorie (bleibt gleich) */
 #tool-grid .card-square[data-category="text"],
 .tool-grid-squares .card-square[data-category="text"] {
   --glow-color: var(--glow-text);
@@ -1151,7 +1164,7 @@ body {
     box-shadow:
       0 16px 32px var(--shadow-lg),
       0 0 40px var(--primary-glow),
-      0 0 0 1px rgba(0, 0, 0, 0.1) !important;
+      0 0 0 1px rgba(255, 255, 255, 0.12) !important;
     border-color: var(--primary) !important;
   }
 
@@ -1163,7 +1176,7 @@ body {
   #tool-grid .card-square:hover .square-category-badge,
   .tool-grid-squares .card-square:hover .square-category-badge {
     background: var(--primary) !important;
-    color: white !important;
+    color: var(--bg-dark) !important;
     transform: scale(1.05) !important;
   }
 
@@ -1181,7 +1194,7 @@ body {
     box-shadow:
       0 12px 24px var(--shadow-md),
       0 0 30px var(--primary-glow),
-      0 0 0 1px rgba(0, 0, 0, 0.1) !important;
+      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
     border-color: var(--primary) !important;
   }
 
@@ -1353,6 +1366,10 @@ a:focus-visible {
 
 @media (prefers-contrast: high) {
   :root {
+    --border: #4A4E67;
+    --text-dim: #C0C0D0;
+  }
+  body.custom-color-scheme {
     --border: #AAAAAA;
     --text-dim: #222222;
   }
@@ -1426,7 +1443,7 @@ a:focus-visible {
 
 .label-type {
   background: var(--primary);
-  color: white;
+  color: var(--bg-dark);
   padding: 2px 8px;
   border-radius: 6px;
   font-weight: 600;
