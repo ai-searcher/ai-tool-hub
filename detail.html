@@ -545,6 +545,28 @@
     (function() {
       'use strict';
       
+      // ===== Farbschema-Logik =====
+      function initColorScheme() {
+        const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+        if (!colorSchemeToggle) return;
+
+        // Gespeichertes Schema anwenden
+        const savedScheme = localStorage.getItem('colorScheme');
+        if (savedScheme === 'custom') {
+          document.body.classList.add('custom-color-scheme');
+        }
+
+        // Event-Listener (nur einmal)
+        if (!colorSchemeToggle._colorHandler) {
+          colorSchemeToggle._colorHandler = () => {
+            document.body.classList.toggle('custom-color-scheme');
+            const isCustom = document.body.classList.contains('custom-color-scheme');
+            localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+          };
+          colorSchemeToggle.addEventListener('click', colorSchemeToggle._colorHandler);
+        }
+      }
+      
       // Hilfsfunktion für mehrsprachige Felder
       function getLocalizedToolField(tool, field) {
         const lang = window.i18n ? window.i18n.currentLang : 'de';
@@ -728,6 +750,9 @@
           renderTool(currentTool);
         }
       });
+
+      // Farbschema initialisieren
+      initColorScheme();
       
     })();
   </script>
