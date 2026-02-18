@@ -2014,12 +2014,12 @@ a:focus-visible {
 
 /* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & ROT) ==================== */
 body.custom-color-scheme {
-  /* Hintergründe */
-  --bg-dark: #F0F2F5;
-  --bg-card: #E5E8ED;
-  --bg-card-hover: #DADEE5;
-  --border: #C0C6D0;
-  --border-hover: #A0A8B5;
+  --bg-dark: #E5E5E5;
+  --bg-card: #DADADA;
+  --bg-card-hover: #CFCFCF;
+  --border: #B5B5B5;
+  --border-hover: #A0A0A0;
+}
 
   /* Textfarben */
   --text-primary: #2E3440;
