@@ -1,4 +1,4 @@
-// i18n.js – Einfache Sprachumschaltung (DE/EN)
+// i18n.js – Professionelle Sprachumschaltung (DE/EN) mit allen UI-Texten
 (function() {
   'use strict';
 
@@ -24,7 +24,7 @@
       footerText: 'Gebaut mit 💙',
       footerGitHub: 'GitHub',
       dataSource: 'Datenquelle',
-      // Detailseite
+      // Detailseite (Meta)
       category: 'Kategorie',
       provider: 'Anbieter',
       rating: 'Bewertung',
@@ -36,7 +36,31 @@
       close: 'Schließen',
       loading: 'Lade Details...',
       error: '❌ Tool nicht gefunden.',
-      back: 'Zurück'
+      back: 'Zurück',
+      // Kategorienamen (für Badges, Kategorie-Köpfe, etc.)
+      cat_text: 'Text',
+      cat_image: 'Bilder',
+      cat_code: 'Code',
+      cat_audio: 'Audio',
+      cat_video: 'Video',
+      cat_data: 'Daten',
+      cat_other: 'Sonstige',
+      // Stats-Marquee
+      statsTools: 'TOOLS',
+      statsCategories: 'KATEGORIEN',
+      statsFeatured: 'FEATURED',
+      statsBest: 'BEST',
+      statsNew: 'NEU',
+      // StackViewController Fallback-Tags (falls keine categoryTags)
+      fallbackTags: ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'],
+      // Weitere allgemeine Texte
+      unknownTool: 'Unbekannt',
+      noDescription: 'Keine Beschreibung verfügbar.',
+      noProvider: 'Unbekannt',
+      linkNotAvailable: 'Link nicht verfügbar',
+      // Empty State
+      noResults: 'Keine Ergebnisse für "{query}"',
+      tryOther: 'Versuche einen anderen Suchbegriff'
     },
     en: {
       title: '⚡ Quantum AI Hub',
@@ -66,68 +90,74 @@
       close: 'Close',
       loading: 'Loading details...',
       error: '❌ Tool not found.',
-      back: 'Back'
+      back: 'Back',
+      cat_text: 'Text',
+      cat_image: 'Image',
+      cat_code: 'Code',
+      cat_audio: 'Audio',
+      cat_video: 'Video',
+      cat_data: 'Data',
+      cat_other: 'Other',
+      statsTools: 'TOOLS',
+      statsCategories: 'CATEGORIES',
+      statsFeatured: 'FEATURED',
+      statsBest: 'BEST',
+      statsNew: 'NEW',
+      fallbackTags: ['Write texts', 'Chat', 'Translate', 'Proofread'],
+      unknownTool: 'Unknown',
+      noDescription: 'No description available.',
+      noProvider: 'Unknown',
+      linkNotAvailable: 'Link not available',
+      noResults: 'No results for "{query}"',
+      tryOther: 'Try a different search term'
     }
   };
 
   // Aktuelle Sprache ermitteln
   let currentLang = localStorage.getItem('language');
   if (!currentLang) {
-    // Browser-Sprache erkennen (z.B. 'de-DE' → 'de')
     const browserLang = navigator.language.split('-')[0];
     currentLang = browserLang === 'de' ? 'de' : 'en';
     localStorage.setItem('language', currentLang);
   }
 
-  // Übersetzungsfunktion
   function t(key) {
     return translations[currentLang][key] || key;
   }
 
-  // Alle übersetzbaren Elemente aktualisieren
   function updatePageLanguage() {
-    // Elemente mit data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       el.textContent = t(key);
     });
-    // Platzhalter (z.B. Suchfeld)
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.getAttribute('data-i18n-placeholder');
       el.placeholder = t(key);
     });
-    // ggf. weitere Attribute (z.B. value bei Buttons) – hier nicht nötig
   }
 
-  // Sprache umschalten
   function setLanguage(lang) {
     if (translations[lang]) {
       currentLang = lang;
       localStorage.setItem('language', lang);
       updatePageLanguage();
-      // Seite neu rendern? Für dynamische Inhalte (z.B. Tool-Karten) nicht nötig, 
-      // da sie aus Daten kommen. Aber falls Kategorienamen übersetzt werden sollen, 
-      // müsste man ein Event auslösen, das app.js abfängt. Vereinfacht: Seite neu laden.
-      // Für bessere UX könnten wir ein Custom Event dispatchen.
       window.dispatchEvent(new CustomEvent('languagechange', { detail: { lang } }));
     }
   }
 
-  // Initialisierung
   document.addEventListener('DOMContentLoaded', () => {
     updatePageLanguage();
-
-    // Sprachumschalter-Button (muss in HTML existieren)
     const langToggle = document.getElementById('languageToggle');
     if (langToggle) {
+      langToggle.textContent = currentLang === 'de' ? 'DE' : 'EN'; // Button-Beschriftung
       langToggle.addEventListener('click', () => {
         const newLang = currentLang === 'de' ? 'en' : 'de';
         setLanguage(newLang);
+        langToggle.textContent = newLang === 'de' ? 'DE' : 'EN';
       });
     }
   });
 
-  // Globale API bereitstellen
   window.i18n = {
     t,
     setLanguage,
