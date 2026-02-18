@@ -259,7 +259,8 @@ class StackViewController {
 
     const badge = document.createElement('span');
     badge.className = 'stack-card-category';
-    badge.textContent = (tool.category || 'other').charAt(0).toUpperCase();
+    // === ÄNDERUNG: Vollständigen Kategorienamen anzeigen ===
+    badge.textContent = categoryNames[tool.category] || tool.category.charAt(0).toUpperCase() + tool.category.slice(1);
     card.appendChild(badge);
 
     return card;
