@@ -1344,18 +1344,17 @@ if (globalScrollBottom) {
   });
 }
       
- // Sticky-Bar-Hintergrund aktivieren
-const viewToggle = document.querySelector('.view-toggle');
-if (viewToggle) {
+ // Sticky-Bar-Hintergrund aktivieren (korrigiert)
+if (ui.elements.viewToggle) {
+  const toggleElement = ui.elements.viewToggle;
   const toggleStickyClass = () => {
-    const rect = viewToggle.getBoundingClientRect();
+    const rect = toggleElement.getBoundingClientRect();
     if (rect.top <= 0) {
-      viewToggle.classList.add('sticky-active');
+      toggleElement.classList.add('sticky-active');
     } else {
-      viewToggle.classList.remove('sticky-active');
+      toggleElement.classList.remove('sticky-active');
     }
   };
-  
   window.addEventListener('scroll', toggleStickyClass, { passive: true });
   toggleStickyClass();
 }
