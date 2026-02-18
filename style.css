@@ -1950,3 +1950,18 @@ a:focus-visible {
   -webkit-backdrop-filter: blur(8px) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
+
+/* ==================== HEADER SUBLINE ==================== */
+.header-subline {
+  text-align: center;
+  margin-bottom: 5mm;          /* 5 mm Abstand zur Trennlinie */
+  font-size: 1rem;
+  color: var(--primary);
+  animation: header-glow 8s ease-in-out infinite;
+  letter-spacing: 0.02em;
+}
+
+@keyframes header-glow {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  50% { text-shadow: 0 0 12px var(--primary); }
+}
