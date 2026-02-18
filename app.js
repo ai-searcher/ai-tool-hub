@@ -1009,126 +1009,94 @@ const ui = {
       return;
     }
 
-const activeView = this.getActiveView();
-if (activeView === 'grid') {
-  this.showState('grid');
-  if (this.elements.toolGrid) {
-    if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-      this.elements.toolGrid.classList.add('tool-grid-squares');
-    }
-    this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-    this.attachCardHandlers();
-    if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-      window.colorFlowNetwork.refresh();
-    }
-  }
-} else {
-  this.showState('grid');
-  if (!this.stackView) {
-    this.stackView = new StackViewController(this.elements.toolGrid, state, this);
-  } else {
-    this.stackView.state = state;
-    this.stackView.activeSort = state.sortBy;
-    this.stackView.sortDirection = state.sortDirection;
-  }
-  this.stackView.render();
-  if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-    window.colorFlowNetwork.refresh();
-  }
-}
-
-getActiveView() {
-  const viewToggle = document.querySelector('.view-toggle');
-  const activeTab = viewToggle?.querySelector('.toggle-btn.active');
-  return activeTab ? activeTab.dataset.view : 'grid';
-}
-
-attachCardHandlers() {
-  const grid = this.elements.toolGrid || getElement('#tool-grid');
-  if (!grid) return;
-
-  if (grid._clickHandler) {
-    grid.removeEventListener('click', grid._clickHandler);
-    grid.removeEventListener('keydown', grid._keyHandler);
-  }
-
-  const isMobile = window.innerWidth < 768;
-
-  grid._clickHandler = (e) => {
-    const overlay = e.target.closest('.card-overlay-link');
-    const card = e.target.closest('.card-square');
-
-    if (overlay && card) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
-      const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-      const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
-
-      analytics.trackToolClick(toolName);
-
-      if (isMobile) {
-        if (toolId) {
-          card.style.transform = 'scale(0.95)';
-          card.style.opacity = '0.7';
-          setTimeout(() => {
-            window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-          }, 150);
-        } else if (href && href !== '#') {
-          window.open(href, '_blank', 'noopener,noreferrer');
-        } else {
-          alert('Link nicht verfügbar');
+    const activeView = this.getActiveView();
+    if (activeView === 'grid') {
+      this.showState('grid');
+      if (this.elements.toolGrid) {
+        if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
+          this.elements.toolGrid.classList.add('tool-grid-squares');
         }
+        this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
+        this.attachCardHandlers();
+        if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+          window.colorFlowNetwork.refresh();
+        }
+      }
+    } else {
+      this.showState('grid');
+      if (!this.stackView) {
+        this.stackView = new StackViewController(this.elements.toolGrid, state, this);
       } else {
-        if (typeof openToolModal === 'function') {
-          try {
-            let tool = null;
-            if (toolId && state.tools) {
-              tool = state.tools.find(t => String(t.id) === String(toolId));
-            }
-            if (tool) {
-              openToolModal(tool);
-            } else {
-              openToolModal({
-                title: toolName,
-                link: href,
-                description: `${toolName} - AI Tool`
-              });
-            }
-          } catch (err) {
-            console.error('openToolModal error', err);
-            if (href) {
-              window.open(href, '_blank', 'noopener,noreferrer');
-            } else {
-              card.classList.toggle('card-armed');
-            }
+        this.stackView.state = state;
+        this.stackView.activeSort = state.sortBy;
+        this.stackView.sortDirection = state.sortDirection;
+      }
+      this.stackView.render();
+      if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+        window.colorFlowNetwork.refresh();
+      }
+    }
+  },
+
+  getActiveView() {
+    const viewToggle = document.querySelector('.view-toggle');
+    const activeTab = viewToggle?.querySelector('.toggle-btn.active');
+    return activeTab ? activeTab.dataset.view : 'grid';
+  },
+
+  attachCardHandlers() {
+    const grid = this.elements.toolGrid || getElement('#tool-grid');
+    if (!grid) return;
+
+    if (grid._clickHandler) {
+      grid.removeEventListener('click', grid._clickHandler);
+      grid.removeEventListener('keydown', grid._keyHandler);
+    }
+
+    const isMobile = window.innerWidth < 768;
+
+    grid._clickHandler = (e) => {
+      const overlay = e.target.closest('.card-overlay-link');
+      const card = e.target.closest('.card-square');
+
+      if (overlay && card) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
+        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
+        const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
+
+        analytics.trackToolClick(toolName);
+
+        if (isMobile) {
+          if (toolId) {
+            card.style.transform = 'scale(0.95)';
+            card.style.opacity = '0.7';
+            setTimeout(() => {
+              window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+            }, 150);
+          } else if (href && href !== '#') {
+            window.open(href, '_blank', 'noopener,noreferrer');
+          } else {
+            alert('Link nicht verfügbar');
           }
         } else {
-          if (href) {
-            window.open(href, '_blank', 'noopener,noreferrer');
-          }
-        }
-      }
-      return;
-    }
-  };
-
-  grid._keyHandler = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      const card = e.target.closest('.card-square');
-      if (!card) return;
-      const overlay = card.querySelector('.card-overlay-link');
-      if (overlay) {
-        overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        e.preventDefault();
-      }
-    }
-  };
-
-  grid.addEventListener('click', grid._clickHandler);
-  grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-}
+          if (typeof openToolModal === 'function') {
+            try {
+              let tool = null;
+              if (toolId && state.tools) {
+                tool = state.tools.find(t => String(t.id) === String(toolId));
+              }
+              if (tool) {
+                openToolModal(tool);
+              } else {
+                openToolModal({
+                  title: toolName,
+                  link: href,
+                  description: `${toolName} - AI Tool`
+                });
+              }
             } catch (err) {
               console.error('openToolModal error', err);
               if (href) {
