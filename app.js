@@ -1427,6 +1427,16 @@ if (colorSchemeToggle) {
     localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
   });
 }
+      
+      // ==================== NEU: SPRACHUMSCHALTER ====================
+const languageToggle = document.getElementById('languageToggle');
+if (languageToggle && window.i18n) {
+  languageToggle.addEventListener('click', () => {
+    const newLang = window.i18n.currentLang === 'de' ? 'en' : 'de';
+    window.i18n.setLanguage(newLang);
+  });
+}
+// ==================== ENDE NEU ====================
 
       console.log('✅ App initialized successfully!');
 
