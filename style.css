@@ -2120,7 +2120,7 @@ body.custom-color-scheme .detail-list-item {
 /* ==================== THEME-TOGGLE (FARBSCHEMA) – WIRD NICHT MEHR BENÖTIGT, STATT .LEFT-FLOATING-BUTTONS ==================== */
 /* .theme-toggle wurde durch .left-floating-buttons ersetzt */
 
-/* Farbschema-Button vorübergehend ausblenden */
+/* Farbschema-Button vorübergehend ausblenden  
 #colorSchemeToggle {
   display: none;
-}
+}*/
