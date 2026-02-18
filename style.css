@@ -129,7 +129,7 @@ body {
 
 /* ==================== HEADER ==================== */
 .header {
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-xl) 0 16px 0;
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(10, 14, 39, 0.95) 100%);
   position: relative;
