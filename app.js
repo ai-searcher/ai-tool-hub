@@ -1056,7 +1056,7 @@ const ui = {
       }
     }
 
-    // Nach dem Rendern die UI-Event-Listener neu setzen
+    // Nach jedem Rendern die Event-Listener neu setzen
     this.setupUIListeners();
   },
 
@@ -1154,11 +1154,11 @@ const ui = {
     grid.addEventListener('keydown', grid._keyHandler, { passive: false });
   },
 
+  // NEUE METHODE: Setzt alle UI-Event-Listener neu (wichtig nach Sprachwechsel)
   setupUIListeners() {
     // Tabs-Listener
     const viewToggle = document.querySelector('.view-toggle');
     if (viewToggle) {
-      // Entferne alten Listener (falls vorhanden)
       if (viewToggle._clickHandler) {
         viewToggle.removeEventListener('click', viewToggle._clickHandler);
       }
@@ -1176,7 +1176,7 @@ const ui = {
       viewToggle.addEventListener('click', viewToggle._clickHandler);
     }
 
-    // Sortier-Dropdown Listener
+    // Sortier-Dropdown Trigger
     const sortTrigger = document.querySelector('.sort-trigger');
     if (sortTrigger) {
       if (sortTrigger._clickHandler) {
@@ -1204,6 +1204,33 @@ const ui = {
       };
       btn.addEventListener('click', btn._clickHandler);
     });
+
+    // Sprach-Button (falls in i18n.js nicht vorhanden)
+    const languageToggle = document.getElementById('languageToggle');
+    if (languageToggle && window.i18n) {
+      if (languageToggle._clickHandler) {
+        languageToggle.removeEventListener('click', languageToggle._clickHandler);
+      }
+      languageToggle._clickHandler = () => {
+        const newLang = window.i18n.currentLang === 'de' ? 'en' : 'de';
+        window.i18n.setLanguage(newLang);
+      };
+      languageToggle.addEventListener('click', languageToggle._clickHandler);
+    }
+
+    // Farbschema-Button
+    const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+    if (colorSchemeToggle) {
+      if (colorSchemeToggle._clickHandler) {
+        colorSchemeToggle.removeEventListener('click', colorSchemeToggle._clickHandler);
+      }
+      colorSchemeToggle._clickHandler = () => {
+        document.body.classList.toggle('custom-color-scheme');
+        const isCustom = document.body.classList.contains('custom-color-scheme');
+        localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+      };
+      colorSchemeToggle.addEventListener('click', colorSchemeToggle._clickHandler);
+    }
   },
 
   switchView(view) {
@@ -1262,7 +1289,6 @@ const ui = {
     this.toggleSortMenu(false);
   }
 };
-
 // =========================================
 // SEARCH FUNCTIONALITY
 // =========================================
