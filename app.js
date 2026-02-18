@@ -202,7 +202,7 @@ class StackViewController {
 
     const desc = document.createElement('p');
     desc.className = 'category-header-description';
-    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''} in dieser Kategorie`;
+    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''}`;
 
     content.appendChild(title);
     content.appendChild(desc);
