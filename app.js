@@ -1355,7 +1355,7 @@ if (viewToggle) {
     } else {
       viewToggle.classList.remove('sticky-active');
     }
-  };
+  }
   
   // Beim Scrollen und einmal initial prüfen
   window.addEventListener('scroll', toggleStickyClass, { passive: true });
