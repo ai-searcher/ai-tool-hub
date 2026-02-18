@@ -516,13 +516,16 @@ body {
 
 /* ==================== VIEW TOGGLE ==================== */
 .view-toggle {
+  position: sticky;
+  top: 10px;
+  z-index: 100;
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
-  margin-top: -23px;        /* dein aktueller Wert */
+  margin-top: 0;                 /* negativen Wert entfernt */
   margin-bottom: var(--spacing-lg);
   padding: var(--spacing-sm);
-  background: transparent;   /* kein Hintergrund mehr */
+  background: transparent;
   border-radius: var(--radius-md);
   width: fit-content;
   margin-left: auto;
