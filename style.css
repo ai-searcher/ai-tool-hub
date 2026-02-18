@@ -1808,10 +1808,15 @@ a:focus-visible {
     padding: 0.5rem;
   }
 
- .view-toggle .toggle-btn {
-  padding: 2px 8px;        /* reduziertes Padding */
-  font-size: 0.7rem;       /* kleinere Schrift */
-  line-height: 1.2;        /* kompakte Zeilenhöhe */
+.toggle-btn {
+  padding: 2px 8px;        /* vertikal nur 2px */
+  font-size: 0.8rem;       /* ca. 13–14px */
+  line-height: 1.2;        /* ergibt etwa 15–16px */
+}
+
+.view-toggle {
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
   .sort-dropdown {
