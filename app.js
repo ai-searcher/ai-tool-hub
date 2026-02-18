@@ -1,12 +1,11 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.0.0
-// Production Ready - All Systems Checked
+// Version: 1.0.0 (mehrsprachig)
 // =========================================
 
 'use strict';
 
-// ======= DEBUG: globaler Error- und Fetch-Logger (temporär) =======
+// ======= DEBUG: globaler Error- und Fetch-Logger =======
 window.addEventListener('error', (e) => {
   try {
     console.error('Global error event:', {
@@ -19,7 +18,6 @@ window.addEventListener('error', (e) => {
   } catch (err) { console.error('error listener failed', err); }
 });
 
-// Wrap fetch to log failing requests
 (function() {
   if (!window.fetch) return;
   const _origFetch = window.fetch;
@@ -39,7 +37,6 @@ window.addEventListener('error', (e) => {
   };
 })();
 
-// GLOBAL DEBUG: make unhandled promise rejections visible
 window.addEventListener('unhandledrejection', (ev) => {
   try {
     console.group('%cUnhandled Promise Rejection (global)', 'color:#fff;background:#d9534f;padding:3px;border-radius:4px;');
@@ -87,6 +84,17 @@ function getCategoryName(cat) {
 }
 
 // =========================================
+// HILFSFUNKTION FÜR MEHRSPRACHIGE TOOL-FELDER
+// =========================================
+function getLocalizedToolField(tool, field) {
+  const lang = window.i18n ? window.i18n.currentLang : 'de';
+  if (lang === 'en' && tool.en && tool.en[field] !== undefined) {
+    return tool.en[field];
+  }
+  return tool[field];
+}
+
+// =========================================
 // DEFAULT TOOLS (Always Available)
 // =========================================
 const DEFAULT_TOOLS = [
@@ -130,7 +138,7 @@ class StackViewController {
     this.stacks = [];
     this.activeSort = 'name';
     this.sortDirection = 'asc';
-    this.categoryTags = null;
+    this.categoryTags = null; // wird später als Objekt mit de/en geladen
   }
 
   async loadCategoryTags() {
@@ -219,9 +227,17 @@ class StackViewController {
     track.className = 'marquee-track';
     marquee.appendChild(track);
 
-    // Tags für diese Kategorie holen (Fallback)
-    const t = window.i18n ? window.i18n.t : (key) => key;
-    const tags = this.categoryTags?.[category] || (Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen']);
+    // Tags für diese Kategorie holen – jetzt zweisprachig
+    const lang = window.i18n ? window.i18n.currentLang : 'de';
+    let tags = this.categoryTags?.[category];
+    if (tags && typeof tags === 'object' && !Array.isArray(tags)) {
+      // tags ist ein Objekt mit de/en
+      tags = tags[lang] || tags.de || [];
+    } else {
+      // Fallback
+      const t = window.i18n ? window.i18n.t : (key) => key;
+      tags = Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'];
+    }
 
     for (let i = 0; i < 2; i++) {
       tags.forEach(tag => {
@@ -242,15 +258,15 @@ class StackViewController {
     card.className = 'stack-card';
     card.dataset.toolId = tool.id;
     card.dataset.category = tool.category || 'other';
-    card.dataset.toolName = tool.title;
+    card.dataset.toolName = tool.title; // Originaltitel (deutsch) – wir übersetzen später für die Anzeige
     card.dataset.href = tool.link;
     card.setAttribute('tabindex', '0');
     card.setAttribute('role', 'article');
-    card.setAttribute('aria-label', tool.title);
+    card.setAttribute('aria-label', getLocalizedToolField(tool, 'title'));
 
     const title = document.createElement('div');
     title.className = 'stack-card-title';
-    title.textContent = tool.title;
+    title.textContent = getLocalizedToolField(tool, 'title'); // Übersetzter Titel
     card.appendChild(title);
 
     const badge = document.createElement('span');
@@ -855,55 +871,55 @@ const ui = {
   },
 
   updateStats() {
-  if (!this.elements.statsMarquee) {
-    this.elements.statsMarquee = getElement('#stats-marquee');
-  }
-  if (!this.elements.statsMarquee) return;
-
-  const categories = new Set(state.tools.map(t => t.category)).size;
-  const featured = state.tools.filter(t => t.featured).length;
-
-  state.stats = {
-    total: state.tools.length,
-    categories,
-    featured
-  };
-
-  // Übersetzungsfunktion holen
-  const t = window.i18n ? window.i18n.t : (key) => key;
-
-  const marqueeItems = [
-    `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
-    `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
-    `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
-  ];
-
-  if (state.tools.length > 0) {
-    const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-    marqueeItems.push(`${t('statsBest')}: ${topRated.title} (${topRated.rating.toFixed(1)})`);
-
-    const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
-    const newest = sortedByDate[0];
-    marqueeItems.push(`${t('statsNew')}: ${newest.title}`);
-  }
-
-  const track = this.elements.statsMarquee.querySelector('.marquee-track');
-  if (track) {
-    track.innerHTML = '';
-    for (let i = 0; i < 2; i++) {
-      marqueeItems.forEach(text => {
-        const span = document.createElement('span');
-        span.innerHTML = text;
-        track.appendChild(span);
-      });
+    if (!this.elements.statsMarquee) {
+      this.elements.statsMarquee = getElement('#stats-marquee');
     }
-  }
+    if (!this.elements.statsMarquee) return;
 
-  this.elements.statsMarquee.style.display = 'flex';
-  if (this.elements.statsBar) {
-    this.elements.statsBar.style.display = 'none';
-  }
-},
+    const categories = new Set(state.tools.map(t => t.category)).size;
+    const featured = state.tools.filter(t => t.featured).length;
+
+    state.stats = {
+      total: state.tools.length,
+      categories,
+      featured
+    };
+
+    const t = window.i18n ? window.i18n.t : (key) => key;
+
+    const marqueeItems = [
+      `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
+      `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
+      `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
+    ];
+
+    if (state.tools.length > 0) {
+      const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
+      marqueeItems.push(`${t('statsBest')}: ${getLocalizedToolField(topRated, 'title')} (${topRated.rating.toFixed(1)})`);
+
+      const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
+      const newest = sortedByDate[0];
+      marqueeItems.push(`${t('statsNew')}: ${getLocalizedToolField(newest, 'title')}`);
+    }
+
+    const track = this.elements.statsMarquee.querySelector('.marquee-track');
+    if (track) {
+      track.innerHTML = '';
+      for (let i = 0; i < 2; i++) {
+        marqueeItems.forEach(text => {
+          const span = document.createElement('span');
+          span.innerHTML = text;
+          track.appendChild(span);
+        });
+      }
+    }
+
+    this.elements.statsMarquee.style.display = 'flex';
+    if (this.elements.statsBar) {
+      this.elements.statsBar.style.display = 'none';
+    }
+  },
+
   updateDataSource() {
     if (!this.elements.dataSource) return;
     const sources = {
@@ -916,9 +932,18 @@ const ui = {
   },
 
   getContextText(tool) {
+    const lang = window.i18n ? window.i18n.currentLang : 'de';
+    // Wenn Englisch und tool.en.badges existiert, diese verwenden
+    if (lang === 'en' && tool.en && tool.en.badges && tool.en.badges.length) {
+      return tool.en.badges.slice(0, 3).map(badge => {
+        const text = String(badge).split('.')[0].trim();
+        return text.length > 28 ? text.slice(0, 28) + '…' : text;
+      });
+    }
+    // Ansonsten die deutschen Badges
     if (!tool.badges || !tool.badges.length) {
       const fallback = [
-        tool.description || '',
+        getLocalizedToolField(tool, 'description') || '',
         ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
       ].filter(Boolean);
       return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
@@ -943,14 +968,14 @@ const ui = {
            data-depth="10"
            tabindex="0"
            role="article"
-           aria-label="${this.escapeHtml(tool.title)} — ${this.escapeHtml(categoryDisplay)}">
+           aria-label="${this.escapeHtml(getLocalizedToolField(tool, 'title'))} — ${this.escapeHtml(categoryDisplay)}">
 
         <div class="square-content-centered">
           <div class="square-category-badge" aria-hidden="true">
             ${this.escapeHtml(categoryDisplay)}
           </div>
-          <h3 class="square-title-large" title="${this.escapeHtml(tool.title)}">
-            ${this.escapeHtml(tool.title)}
+          <h3 class="square-title-large" title="${this.escapeHtml(getLocalizedToolField(tool, 'title'))}">
+            ${this.escapeHtml(getLocalizedToolField(tool, 'title'))}
           </h3>
           <div class="context-marquee" aria-hidden="true">
             <div class="marquee-track" role="presentation">
@@ -962,7 +987,7 @@ const ui = {
              role="button"
              tabindex="-1"
              data-href="${this.escapeHtml(tool.link)}"
-             aria-label="${this.escapeHtml(tool.title)} öffnen"></a>
+             aria-label="${this.escapeHtml(getLocalizedToolField(tool, 'title'))} öffnen"></a>
         </div>
       </div>
     `;
@@ -1425,13 +1450,11 @@ const app = {
         });
       }
 
-    
-
       // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
       window.addEventListener('languagechange', () => {
-  ui.updateStats(); // Stats-Marquee sofort aktualisieren
-  ui.render();      // Ansicht neu rendern (für Kategorienamen etc.)
-});
+        ui.updateStats(); // Stats-Marquee sofort aktualisieren
+        ui.render();      // Ansicht neu rendern (für Kategorienamen etc.)
+      });
 
       console.log('✅ App initialized successfully!');
 
