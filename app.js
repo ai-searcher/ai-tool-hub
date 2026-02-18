@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.1.0 (intelligente Suche)
+// Version: 1.2.0 (intelligente Suche mit Vorschlägen)
 // =========================================
 
 'use strict';
@@ -65,7 +65,8 @@ const CONFIG = {
   search: {
     minLength: 1,
     maxLength: 100,
-    debounceMs: 300
+    debounceMs: 300,
+    maxSuggestions: 8          // Maximale Anzahl Vorschläge
   },
   validation: {
     autoFix: true,
@@ -128,8 +129,38 @@ const DEFAULT_TOOLS = [
 ];
 
 // =========================================
-// INTELLIGENTE SUCHFUNKTION
+// INTELLIGENTE SUCHFUNKTIONEN
 // =========================================
+
+// Synonym-Mapping für semantische Kategorieerkennung (mehrsprachig)
+const CATEGORY_KEYWORDS = {
+  text: {
+    de: ['text', 'schreiben', 'brief', 'email', 'chat', 'unterhaltung', 'fragen', 'antworten', 'dokument', 'artikel', 'zusammenfassen', 'übersetzen', 'korrektur'],
+    en: ['text', 'write', 'letter', 'email', 'chat', 'conversation', 'questions', 'answers', 'document', 'article', 'summarize', 'translate', 'proofread']
+  },
+  image: {
+    de: ['bild', 'foto', 'fotografie', 'zeichnung', 'grafik', 'design', 'kunst', 'illustration', 'cover', 'poster', 'malen', 'generieren'],
+    en: ['image', 'photo', 'photography', 'drawing', 'graphic', 'design', 'art', 'illustration', 'cover', 'poster', 'paint', 'generate']
+  },
+  code: {
+    de: ['code', 'programmieren', 'entwickeln', 'software', 'app', 'website', 'javascript', 'python', 'fehler', 'debuggen', 'copilot'],
+    en: ['code', 'programming', 'develop', 'software', 'app', 'website', 'javascript', 'python', 'bug', 'debug', 'copilot']
+  },
+  audio: {
+    de: ['audio', 'musik', 'sound', 'stimme', 'sprache', 'podcast', 'hörbuch', 'singen', 'komponieren', 'elevenlabs'],
+    en: ['audio', 'music', 'sound', 'voice', 'speech', 'podcast', 'audiobook', 'sing', 'compose', 'elevenlabs']
+  },
+  video: {
+    de: ['video', 'film', 'clip', 'animation', 'bearbeiten', 'schneiden', 'effekte', 'runway', 'pika'],
+    en: ['video', 'film', 'clip', 'animation', 'edit', 'cut', 'effects', 'runway', 'pika']
+  },
+  data: {
+    de: ['daten', 'analyse', 'tabelle', 'csv', 'excel', 'diagramm', 'statistik', 'zahlen', 'auswerten', 'julius'],
+    en: ['data', 'analysis', 'table', 'csv', 'excel', 'chart', 'statistics', 'numbers', 'evaluate', 'julius']
+  }
+};
+
+// Prüft, ob ein Tool zu einem Suchbegriff passt (erweiterte Suche)
 function toolMatchesSearch(tool, query) {
   if (!query || query.length < CONFIG.search.minLength) return true;
   const q = query.toLowerCase();
@@ -156,6 +187,93 @@ function toolMatchesSearch(tool, query) {
   return fields.some(field => 
     field && String(field).toLowerCase().includes(q)
   );
+}
+
+// Generiert Vorschläge basierend auf der aktuellen Eingabe
+function generateSuggestions(query, tools) {
+  if (!query || query.length < 2) return [];
+  
+  const q = query.toLowerCase();
+  const suggestions = [];
+  const seen = new Set();
+
+  // 1. Kategorie-Vorschläge anhand von Synonymen
+  for (const [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    // Prüfe deutsche und englische Keywords
+    const allKeywords = [...keywords.de, ...keywords.en];
+    for (const keyword of allKeywords) {
+      if (keyword.includes(q) || q.includes(keyword)) {
+        const catName = getCategoryName(cat);
+        const suggestion = {
+          type: 'category',
+          text: catName,
+          category: cat,
+          score: 10 // hohe Priorität
+        };
+        if (!seen.has(suggestion.text)) {
+          suggestions.push(suggestion);
+          seen.add(suggestion.text);
+        }
+        break; // nur einmal pro Kategorie
+      }
+    }
+  }
+
+  // 2. Tool-Namen als Vorschläge (Autocomplete)
+  tools.forEach(tool => {
+    const title = getLocalizedToolField(tool, 'title');
+    if (title.toLowerCase().includes(q) && !seen.has(title)) {
+      suggestions.push({
+        type: 'tool',
+        text: title,
+        toolId: tool.id,
+        score: 5
+      });
+      seen.add(title);
+    }
+  });
+
+  // 3. Beliebte Tags als Vorschläge (aus Tool-Tags)
+  const tagCount = {};
+  tools.forEach(tool => {
+    if (tool.tags) {
+      tool.tags.forEach(tag => {
+        if (tag.toLowerCase().includes(q)) {
+          tagCount[tag] = (tagCount[tag] || 0) + 1;
+        }
+      });
+    }
+    if (tool.en && tool.en.badges) {
+      tool.en.badges.forEach(badge => {
+        const words = badge.split(' ');
+        words.forEach(word => {
+          if (word.length > 3 && word.toLowerCase().includes(q)) {
+            tagCount[word] = (tagCount[word] || 0) + 1;
+          }
+        });
+      });
+    }
+  });
+
+  // Sortiere Tags nach Häufigkeit und füge hinzu
+  Object.entries(tagCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .forEach(([tag]) => {
+      if (!seen.has(tag)) {
+        suggestions.push({
+          type: 'tag',
+          text: tag,
+          score: 3
+        });
+        seen.add(tag);
+      }
+    });
+
+  // Nach Score sortieren und begrenzen
+  return suggestions
+    .sort((a, b) => b.score - a.score)
+    .slice(0, CONFIG.search.maxSuggestions);
 }
 
 // =========================================
@@ -1318,13 +1436,125 @@ const ui = {
     this.toggleSortMenu(false);
   }
 };
+
 // =========================================
-// SEARCH FUNCTIONALITY
+// INTELLIGENTE SUCHE MIT VORSCHLAGEN
+// =========================================
+const smartSearch = {
+  dropdown: null,
+  visible: false,
+
+  init() {
+    // Dropdown-Container erstellen, falls nicht vorhanden
+    if (!this.dropdown) {
+      this.dropdown = document.createElement('div');
+      this.dropdown.className = 'search-suggestions';
+      this.dropdown.style.display = 'none';
+      // Nach der Suchbox einfügen
+      const searchWrapper = document.querySelector('.search-wrapper');
+      if (searchWrapper) {
+        searchWrapper.appendChild(this.dropdown);
+      }
+    }
+
+    // Globalen Klick-Listener zum Schließen
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-wrapper')) {
+        this.hide();
+      }
+    });
+  },
+
+  show() {
+    if (this.dropdown && this.visible) {
+      this.dropdown.style.display = 'block';
+    }
+  },
+
+  hide() {
+    if (this.dropdown) {
+      this.dropdown.style.display = 'none';
+      this.visible = false;
+    }
+  },
+
+  updateSuggestions(query) {
+    if (!query || query.length < 2) {
+      this.hide();
+      return;
+    }
+
+    const suggestions = generateSuggestions(query, state.tools);
+    if (suggestions.length === 0) {
+      this.hide();
+      return;
+    }
+
+    // Dropdown befüllen
+    this.dropdown.innerHTML = '';
+    suggestions.forEach(sug => {
+      const item = document.createElement('div');
+      item.className = 'suggestion-item';
+      
+      let icon = '';
+      if (sug.type === 'category') icon = '📁';
+      else if (sug.type === 'tool') icon = '🔧';
+      else icon = '🏷️';
+      
+      item.innerHTML = `<span class="suggestion-icon">${icon}</span> <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
+      
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.handleSuggestionClick(sug);
+      });
+      
+      this.dropdown.appendChild(item);
+    });
+
+    this.visible = true;
+    this.show();
+  },
+
+  handleSuggestionClick(sug) {
+    const searchInput = ui.elements.search;
+    if (!searchInput) return;
+
+    if (sug.type === 'category') {
+      // Kategorie als Suchbegriff setzen
+      searchInput.value = sug.text;
+      state.searchQuery = sug.text;
+      ui.render();
+    } else if (sug.type === 'tool') {
+      // Tool direkt öffnen? Oder Suchfeld mit Toolnamen füllen?
+      // Besser: Suchfeld mit Toolnamen füllen und suchen
+      searchInput.value = sug.text;
+      state.searchQuery = sug.text;
+      ui.render();
+    } else if (sug.type === 'tag') {
+      searchInput.value = sug.text;
+      state.searchQuery = sug.text;
+      ui.render();
+    }
+    this.hide();
+    searchInput.focus();
+  },
+
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+};
+
+// =========================================
+// SEARCH FUNCTIONALITY (erweitert)
 // =========================================
 const search = {
   init() {
     if (!ui.elements.search) return;
 
+    // Bestehende Handler entfernen
     if (ui.handlers && ui.handlers.search) {
       ui.elements.search.removeEventListener('input', ui.handlers.search);
     }
@@ -1332,10 +1562,16 @@ const search = {
       ui.elements.searchClear.removeEventListener('click', ui.handlers.searchClear);
     }
 
+    // Intelligentes Dropdown initialisieren
+    smartSearch.init();
+
     const handleInput = debounce((e) => {
       const raw = e && e.target ? e.target.value : '';
       const value = sanitizeInput(raw);
       state.searchQuery = value;
+
+      // Vorschläge aktualisieren
+      smartSearch.updateSuggestions(value);
 
       if (ui.elements.searchClear) {
         ui.elements.searchClear.style.display = value ? 'flex' : 'none';
@@ -1357,11 +1593,19 @@ const search = {
 
     ui.elements.search.addEventListener('input', handleInput);
 
+    // Enter-Taste: Vorschläge schließen, Suche ausführen (bereits durch render)
+    ui.elements.search.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        smartSearch.hide();
+      }
+    });
+
     if (ui.elements.searchClear) {
       const clearHandler = () => {
         ui.elements.search.value = '';
         state.searchQuery = '';
         ui.elements.searchClear.style.display = 'none';
+        smartSearch.hide();
         ui.render();
         ui.elements.search.focus();
       };
@@ -1369,6 +1613,13 @@ const search = {
       ui.handlers.searchClear = clearHandler;
       ui.elements.searchClear.addEventListener('click', clearHandler);
     }
+
+    // Bei Fokus Vorschläge anzeigen, falls bereits Text vorhanden
+    ui.elements.search.addEventListener('focus', () => {
+      if (state.searchQuery && state.searchQuery.length >= 2) {
+        smartSearch.updateSuggestions(state.searchQuery);
+      }
+    });
   }
 };
 
@@ -1475,7 +1726,7 @@ const app = {
       ui.updateStats();
       ui.updateDataSource();
       ui.render();
-      search.init();
+      search.init(); // Jetzt mit intelligenter Suche
 
       // Globale Scroll-Buttons
       const globalScrollTop = document.getElementById('globalScrollTopBtn');
@@ -1502,7 +1753,6 @@ const app = {
       }
       
       // ==================== FARBSCHEMA-UMSCHALTER ====================
-      // Nur initiale Klasse setzen, Event-Listener wird in setupUIListeners gesetzt
       const colorSchemeToggle = document.getElementById('colorSchemeToggle');
       if (colorSchemeToggle) {
         const savedScheme = localStorage.getItem('colorScheme');
