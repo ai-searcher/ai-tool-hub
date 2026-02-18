@@ -1954,14 +1954,24 @@ a:focus-visible {
 /* ==================== HEADER SUBLINE ==================== */
 .header-subline {
   text-align: center;
-  margin-bottom: 5mm;          /* 5 mm Abstand zur Trennlinie */
+  margin-bottom: 10mm;          /* größerer Abstand nach unten */
   font-size: 1rem;
   color: var(--primary);
   animation: header-glow 8s ease-in-out infinite;
   letter-spacing: 0.02em;
+  white-space: nowrap;           /* erzwingt Einzeiligkeit */
+  overflow: hidden;              /* versteckt Überlauf */
+  text-overflow: ellipsis;       /* zeigt ... falls nötig */
 }
 
 @keyframes header-glow {
   0%, 100% { text-shadow: 0 0 0 transparent; }
   50% { text-shadow: 0 0 12px var(--primary); }
+}
+
+@media (max-width: 767px) {
+  .header-subline {
+    font-size: 0.85rem;
+    margin-bottom: 8mm;
+  }
 }
