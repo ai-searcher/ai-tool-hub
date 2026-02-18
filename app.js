@@ -259,7 +259,6 @@ class StackViewController {
 
     const badge = document.createElement('span');
     badge.className = 'stack-card-category';
-    // === ÄNDERUNG: Vollständigen Kategorienamen anzeigen ===
     badge.textContent = categoryNames[tool.category] || tool.category.charAt(0).toUpperCase() + tool.category.slice(1);
     card.appendChild(badge);
 
@@ -1413,20 +1412,32 @@ const app = {
       if (activeSortBtn) activeSortBtn.classList.add('active');
       
       // ==================== FARBSCHEMA-UMSCHALTER ====================
-const colorSchemeToggle = document.getElementById('colorSchemeToggle');
-if (colorSchemeToggle) {
-  // Gespeicherte Einstellung laden
-  const savedScheme = localStorage.getItem('colorScheme');
-  if (savedScheme === 'custom') {
-    document.body.classList.add('custom-color-scheme');
-  }
+      const colorSchemeToggle = document.getElementById('colorSchemeToggle');
+      if (colorSchemeToggle) {
+        const savedScheme = localStorage.getItem('colorScheme');
+        if (savedScheme === 'custom') {
+          document.body.classList.add('custom-color-scheme');
+        }
+        colorSchemeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('custom-color-scheme');
+          const isCustom = document.body.classList.contains('custom-color-scheme');
+          localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
+        });
+      }
 
-  colorSchemeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('custom-color-scheme');
-    const isCustom = document.body.classList.contains('custom-color-scheme');
-    localStorage.setItem('colorScheme', isCustom ? 'custom' : 'default');
-  });
-}
+      // ==================== SPRACHUMSCHALTER ====================
+      const languageToggle = document.getElementById('languageToggle');
+      if (languageToggle && window.i18n) {
+        languageToggle.addEventListener('click', () => {
+          const newLang = window.i18n.currentLang === 'de' ? 'en' : 'de';
+          window.i18n.setLanguage(newLang);
+        });
+      }
+
+      // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
+      window.addEventListener('languagechange', () => {
+        ui.render();
+      });
 
       console.log('✅ App initialized successfully!');
 
