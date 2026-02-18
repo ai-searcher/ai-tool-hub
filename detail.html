@@ -561,6 +561,10 @@
         return window.i18n ? window.i18n.t(key) : (cat.charAt(0).toUpperCase() + cat.slice(1));
       }
       
+      // Globale Variablen für Tool-Daten und -ID
+      let currentTool = null;
+      let currentToolId = null;
+      
       async function loadToolData() {
         try {
           const response = await fetch('data.json');
@@ -573,26 +577,51 @@
         }
       }
       
-      const urlParams = new URLSearchParams(window.location.search);
-      const toolId = urlParams.get('id');
-      
-      const loadingEl = document.getElementById('loadingState');
-      const errorEl = document.getElementById('errorState');
-      const errorMsg = document.getElementById('errorMessage');
-      const contentEl = document.getElementById('detailContent');
-      const panel = document.getElementById('detailPanel');
-      
-      if (!loadingEl || !errorEl || !errorMsg || !contentEl || !panel) {
-        console.error('Kritische Container fehlen im DOM');
-        document.body.innerHTML = '<div style="color:white; padding:20px;">Ein interner Fehler ist aufgetreten (fehlende Container).</div>';
-        return;
-      }
-      
-      if (!toolId) {
+      function renderTool(tool) {
+        if (!tool) return;
+        
+        const category = tool.category || 'other';
+        panel.setAttribute('data-category', category);
+        
+        titleEl.textContent = getLocalizedToolField(tool, 'title') || 'Unbekannt';
+        descEl.textContent = getLocalizedToolField(tool, 'description') || 'Keine Beschreibung verfügbar.';
+        catEl.textContent = getCategoryName(category);
+        providerEl.textContent = tool.provider || 'Unbekannt';
+        
+        if (tool.rating) {
+          ratingEl.textContent = tool.rating.toFixed(1);
+          const percent = (tool.rating / 5) * 100;
+          ratingFill.style.width = percent + '%';
+          ratingContainer.style.display = 'flex';
+        } else {
+          ratingContainer.style.display = 'none';
+        }
+        
+        linkEl.href = tool.link || '#';
+        
+        providerContainer.style.display = tool.provider ? 'flex' : 'none';
+        
+        fillList('strengthsContainer', 'strengthsList', getLocalizedToolField(tool, 'strengths'));
+        fillList('useCasesContainer', 'useCasesList', getLocalizedToolField(tool, 'useCases'));
+        fillList('promptExamplesContainer', 'promptExamplesList', getLocalizedToolField(tool, 'promptExamples'));
+        fillList('promptTipsContainer', 'promptTipsList', getLocalizedToolField(tool, 'promptTips'));
+        
+        document.querySelectorAll('.collapsible-section').forEach(section => {
+          section.classList.add('collapsed');
+        });
+        
         loadingEl.style.display = 'none';
-        errorEl.style.display = 'block';
-        errorMsg.textContent = '❌ Keine Tool-ID angegeben.';
-        return;
+        contentEl.style.display = 'block';
+        
+        const sections = document.querySelectorAll('.collapsible-section');
+        sections.forEach(section => {
+          const title = section.querySelector('.detail-section-title');
+          if (title) {
+            title.addEventListener('click', () => {
+              section.classList.toggle('collapsed');
+            });
+          }
+        });
       }
       
       function fillList(containerId, listId, items) {
@@ -617,92 +646,50 @@
         }
       }
       
+      const urlParams = new URLSearchParams(window.location.search);
+      currentToolId = urlParams.get('id');
+      
+      const loadingEl = document.getElementById('loadingState');
+      const errorEl = document.getElementById('errorState');
+      const errorMsg = document.getElementById('errorMessage');
+      const contentEl = document.getElementById('detailContent');
+      const panel = document.getElementById('detailPanel');
+      const titleEl = document.getElementById('toolTitle');
+      const descEl = document.getElementById('toolDescription');
+      const catEl = document.getElementById('toolCategory');
+      const providerEl = document.getElementById('toolProvider');
+      const ratingEl = document.getElementById('toolRating');
+      const ratingFill = document.getElementById('ratingFill');
+      const linkEl = document.getElementById('toolLink');
+      const providerContainer = document.getElementById('providerContainer');
+      const ratingContainer = document.getElementById('ratingContainer');
+      
+      if (!loadingEl || !errorEl || !errorMsg || !contentEl || !panel) {
+        console.error('Kritische Container fehlen im DOM');
+        document.body.innerHTML = '<div style="color:white; padding:20px;">Ein interner Fehler ist aufgetreten (fehlende Container).</div>';
+        return;
+      }
+      
+      if (!currentToolId) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorMsg.textContent = '❌ Keine Tool-ID angegeben.';
+        return;
+      }
+      
+      // Tool-Daten laden und anzeigen
       loadToolData().then(tools => {
         if (!tools || !Array.isArray(tools)) {
           throw new Error('Daten konnten nicht geladen werden');
         }
         
-        const tool = tools.find(t => String(t.id) === String(toolId));
+        const tool = tools.find(t => String(t.id) === String(currentToolId));
         if (!tool) {
-          throw new Error(`Tool mit ID ${toolId} nicht gefunden`);
+          throw new Error(`Tool mit ID ${currentToolId} nicht gefunden`);
         }
         
-        const category = tool.category || 'other';
-        panel.setAttribute('data-category', category);
-        
-        const titleEl = document.getElementById('toolTitle');
-        const descEl = document.getElementById('toolDescription');
-        const catEl = document.getElementById('toolCategory');
-        const providerEl = document.getElementById('toolProvider');
-        const ratingEl = document.getElementById('toolRating');
-        const ratingFill = document.getElementById('ratingFill');
-        const linkEl = document.getElementById('toolLink');
-        const providerContainer = document.getElementById('providerContainer');
-        const ratingContainer = document.getElementById('ratingContainer');
-        
-        const missing = [];
-        if (!titleEl) missing.push('toolTitle');
-        if (!descEl) missing.push('toolDescription');
-        if (!catEl) missing.push('toolCategory');
-        if (!providerEl) missing.push('toolProvider');
-        if (!ratingEl) missing.push('toolRating');
-        if (!ratingFill) missing.push('ratingFill');
-        if (!linkEl) missing.push('toolLink');
-        if (!providerContainer) missing.push('providerContainer');
-        if (!ratingContainer) missing.push('ratingContainer');
-        
-        if (missing.length > 0) {
-          console.error('Folgende Elemente fehlen:', missing);
-          loadingEl.style.display = 'none';
-          errorEl.style.display = 'block';
-          errorMsg.textContent = `❌ Technischer Fehler: Fehlende Elemente (${missing.join(', ')}).`;
-          return;
-        }
-        
-        // Titel und Beschreibung übersetzt
-        titleEl.textContent = getLocalizedToolField(tool, 'title') || 'Unbekannt';
-        descEl.textContent = getLocalizedToolField(tool, 'description') || 'Keine Beschreibung verfügbar.';
-        
-        // Kategorie übersetzt (über i18n)
-        catEl.textContent = getCategoryName(category);
-        
-        providerEl.textContent = tool.provider || 'Unbekannt';
-        
-        if (tool.rating) {
-          ratingEl.textContent = tool.rating.toFixed(1);
-          const percent = (tool.rating / 5) * 100;
-          ratingFill.style.width = percent + '%';
-          ratingContainer.style.display = 'flex';
-        } else {
-          ratingContainer.style.display = 'none';
-        }
-        
-        linkEl.href = tool.link || '#';
-        
-        providerContainer.style.display = tool.provider ? 'flex' : 'none';
-        
-        // Listen befüllen – übersetzte Versionen verwenden
-        fillList('strengthsContainer', 'strengthsList', getLocalizedToolField(tool, 'strengths'));
-        fillList('useCasesContainer', 'useCasesList', getLocalizedToolField(tool, 'useCases'));
-        fillList('promptExamplesContainer', 'promptExamplesList', getLocalizedToolField(tool, 'promptExamples'));
-        fillList('promptTipsContainer', 'promptTipsList', getLocalizedToolField(tool, 'promptTips'));
-        
-        document.querySelectorAll('.collapsible-section').forEach(section => {
-          section.classList.add('collapsed');
-        });
-        
-        loadingEl.style.display = 'none';
-        contentEl.style.display = 'block';
-        
-        const sections = document.querySelectorAll('.collapsible-section');
-        sections.forEach(section => {
-          const title = section.querySelector('.detail-section-title');
-          if (title) {
-            title.addEventListener('click', () => {
-              section.classList.toggle('collapsed');
-            });
-          }
-        });
+        currentTool = tool; // speichern für später
+        renderTool(tool);
         
       }).catch(err => {
         console.error(err);
@@ -721,6 +708,13 @@
       if (scrollBottomBtn) {
         scrollBottomBtn.addEventListener('click', () => panel.scrollTo({ top: panel.scrollHeight, behavior: 'smooth' }));
       }
+      
+      // Auf Sprachwechsel reagieren
+      window.addEventListener('languagechange', () => {
+        if (currentTool) {
+          renderTool(currentTool);
+        }
+      });
       
     })();
   </script>
