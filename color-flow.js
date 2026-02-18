@@ -1,9 +1,6 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.4 MOBILE-OPTIMIZED
-// Ruhige, organische Linien – reduziertes Zappeln
-// - Wellenamplitude auf mobil halbiert (4 statt 8)
-// - Langsamere zeitliche Bewegung
-// - Sanftere Übergänge, weniger hektisch
+// GRID SYNCHRONIZED NETWORK V13.4 MOBILE-OPTIMIZED (ruhige Wellen)
+// Robuster gegen fehlendes Grid-Element (z.B. bei Ansichtswechsel)
 // =========================================
 
 (function() {
@@ -24,30 +21,21 @@
       this.canvasHeight = 0;
       this.glowTime = 0;
 
-      // Sterne
       this.stars = [];
       this.starFieldActive = true;
-
-      // Glitch
       this.glitchFrame = 0;
       this.glitchIntensity = 0;
-
-      // Ripples (Datenwellen)
       this.ripples = [];
 
-      // Performance optimization
       this.targetFPS = 60;
       this.frameInterval = 1000 / this.targetFPS;
       this.then = 0;
 
-      // Device Detection
       this.isMobile = window.innerWidth < 768;
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
 
-      // Object pooling for performance
       this.gradientCache = new Map();
 
-      // Connection type definitions
       this.connectionTypes = {
         primary: {
           style: 'solid',
@@ -86,10 +74,7 @@
 
       this.setupAdaptiveSettings();
       this.activeConnections = new Map();
-
-      // Klick-Listener für Ripples
       this.setupRippleListener();
-
       this.init();
     }
 
@@ -111,7 +96,6 @@
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 400,
-          // Mobile-schonende organische Wellen – ruhiger!
           enableWaves: true,
           enableGlitch: false,
           enableStars: true,
@@ -119,10 +103,10 @@
           enableCategoryStyles: true,
           enableVariableWidth: false,
           starCount: 50,
-          waveComplexity: 1,            // nur eine Grundwelle
-          organicNoise: 0,               // kein Rauschen
-          waveAmplitude: 4,              // halbe Amplitude = ruhiger
-          waveSpeed: 0.001                // langsamere Bewegung
+          waveComplexity: 1,
+          organicNoise: 0,
+          waveAmplitude: 4,
+          waveSpeed: 0.001
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -197,7 +181,6 @@
       };
     }
 
-    // Klick-Listener für Ripples
     setupRippleListener() {
       document.addEventListener('click', (e) => {
         const card = e.target.closest('.card-square');
@@ -278,6 +261,10 @@
     }
 
     setupCanvas() {
+      if (!this.gridElement) {
+        console.warn('setupCanvas: gridElement missing');
+        return;
+      }
       if (!this.canvas) {
         this.canvas = document.createElement('canvas');
         this.canvas.className = 'connection-canvas';
@@ -331,6 +318,7 @@
     }
 
     scanTools() {
+      if (!this.gridElement) return;
       const cardElements = this.gridElement.querySelectorAll('.card-square');
       this.cards = [];
 
@@ -383,7 +371,6 @@
       });
     }
 
-    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -401,7 +388,6 @@
       }
     }
 
-    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
       const categoryGroups = {};
 
@@ -412,7 +398,6 @@
         categoryGroups[card.category].push(card);
       });
 
-      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
           group.sort((a, b) => {
@@ -427,7 +412,6 @@
         }
       });
 
-      // Secondary: Skip connections within larger groups
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 3) {
           group.sort((a, b) => {
@@ -446,7 +430,6 @@
         }
       });
 
-      // Bridge: Connect different categories
       const categories = Object.keys(categoryGroups);
       const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
 
@@ -474,7 +457,6 @@
         }
       }
 
-      // Cluster: Curved connections for visual variety
       if (this.settings.enableCurves) {
         Object.values(categoryGroups).forEach(group => {
           if (group.length > 3) {
@@ -726,7 +708,6 @@
       return gradient;
     }
 
-    // Organische wellenförmige Linie – ruhigere Version
     drawWavyLine(from, to, lineWidth, strokeStyle) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
@@ -739,9 +720,7 @@
       const perpX = -dirY * amplitude;
       const perpY = dirX * amplitude;
 
-      // Feste Phasen für jede Linie (damit sie nicht alle gleich aussehen, aber nicht zu zufällig)
       const phase = Math.random() * Math.PI * 2;
-      // Zeitfaktor für langsame Bewegung
       const timeFactor = this.settings.waveSpeed || 0.001;
 
       this.ctx.beginPath();
@@ -749,10 +728,9 @@
 
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
-        const ease = Math.sin(t * Math.PI); // weicher Ein-/Auslauf
+        const ease = Math.sin(t * Math.PI);
         const amp = ease * amplitude;
 
-        // Einfache Sinuswelle (bei Komplexität 1) oder gemischt
         let wave;
         if (this.settings.waveComplexity >= 2) {
           const w1 = Math.sin(t * Math.PI * 3 + this.glowTime * timeFactor + phase) * 0.7;
@@ -775,7 +753,6 @@
       this.ctx.stroke();
     }
 
-    // Organische Kurve mit zufälligem Kontrollpunkt
     drawCurvedLine(from, to, strokeStyle, lineWidth) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
@@ -812,7 +789,6 @@
       let fromColor = this.categoryColors[from.category] || this.categoryColors.other;
       let toColor = this.categoryColors[to.category] || this.categoryColors.other;
 
-      // Kategorie-Leuchtspuren
       let dashPattern = config.dashPattern;
       if (this.settings.enableCategoryStyles) {
         const cat = from.category;
@@ -825,7 +801,6 @@
         else dashPattern = config.dashPattern;
       }
 
-      // Variable Linienstärke
       let weight = connection.weight || 1;
       if (this.settings.enableVariableWidth) {
         const degree = (from.degree + to.degree) / 2;
@@ -834,7 +809,6 @@
 
       const baseOpacity = this.settings.baseOpacity * activeState * weight;
 
-      // Glitch
       if (this.settings.enableGlitch && Math.random() < this.settings.glitchProbability) {
         const tmp = fromColor;
         fromColor = toColor;
@@ -843,7 +817,6 @@
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
 
-      // Basislinie zeichnen
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
@@ -862,7 +835,6 @@
 
       this.ctx.setLineDash([]);
 
-      // Flowing glow
       if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
         const flowSpeed = this.settings.glowSpeed * config.flowSpeed * config.glowIntensity;
         const glowProgress = ((time * flowSpeed + connection.glowOffset) % (Math.PI * 2)) / (Math.PI * 2);
@@ -917,7 +889,6 @@
       };
     }
 
-    // Sternenhimmel zeichnen
     drawStars() {
       if (!this.settings.enableStars) return;
       this.ctx.save();
@@ -932,7 +903,6 @@
       this.ctx.restore();
     }
 
-    // Ripples zeichnen
     drawRipples() {
       if (!this.settings.enableRipples) return;
       this.ctx.save();
@@ -988,11 +958,16 @@
     }
 
     handleResize() {
+      // Sicherheitscheck: gridElement muss existieren
+      if (!this.gridElement) {
+        console.warn('handleResize: gridElement missing – skipping resize');
+        return;
+      }
       this.isMobile = window.innerWidth < 768;
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
       this.setupAdaptiveSettings();
       this.gradientCache.clear();
-      this.setupCanvas();
+      this.setupCanvas();   // hier wird ebenfalls gridElement geprüft
       this.scanTools();
       this.generateStars();
       this.generateIntelligentConnections();
@@ -1008,6 +983,7 @@
       this.resizeObserver = new ResizeObserver(() => {
         clearTimeout(this.resizeTimeout);
         this.resizeTimeout = setTimeout(() => {
+          if (!this.gridElement) return;  // zusätzlicher Check
           this.setupCanvas();
           this.scanTools();
           this.generateStars();
