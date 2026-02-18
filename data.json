@@ -75,6 +75,10 @@
       "en": {
         "title": "ChatGPT",
         "description": "Chatbot for questions, texts, and help with school, work, and everyday life.",
+        "badges": [
+          "Strength: Very versatile — explain, write, plan, rephrase (also for beginners).",
+          "Context: Good 'all-round' choice when you want quick, suitable results. Similar to: Claude, Gemini."
+        ],
         "strengths": [
           "Explains complex topics in simple words (ideal for students).",
           "Helps with writing: emails, applications, summaries, improving text.",
@@ -136,6 +140,10 @@
       "en": {
         "title": "Claude",
         "description": "Assistant for long texts: read, sort, clearly summarize.",
+        "badges": [
+          "Strength: Very good with long documents — structured, calm, precise.",
+          "Context: Ideal for summaries, rules/contracts/articles. Similar to: ChatGPT."
+        ],
         "strengths": [
           "Can make long texts/PDFs understandable in a few points.",
           "Often writes objectively and clearly (less 'marketing fluff').",
@@ -197,6 +205,10 @@
       "en": {
         "title": "Perplexity AI",
         "description": "AI search with source links: good for looking up and checking facts.",
+        "badges": [
+          "Strength: Answers with sources — you can directly verify where it comes from.",
+          "Context: Perfect for research and fact-checking. Similar to: Elicit, Kagi Answers."
+        ],
         "strengths": [
           "Provides links/sources (helps against misinformation).",
           "Good for current topics, product comparisons, and 'What's really true?'",
@@ -258,6 +270,10 @@
       "en": {
         "title": "Midjourney",
         "description": "Image AI for artistic styles, posters, covers, and design ideas.",
+        "badges": [
+          "Strength: Very strong looks/styles — perfect for creative images with 'wow' effect.",
+          "Context: Good for moodboards & art. Similar to: Leonardo AI, DALL-E 3."
+        ],
         "strengths": [
           "Often creates particularly 'stylish' images (art/poster/concept).",
           "Many variants and fine-tuning via parameters (more control).",
@@ -319,6 +335,10 @@
       "en": {
         "title": "DALL-E 3",
         "description": "Image AI for precise implementations: when details and specifications matter.",
+        "badges": [
+          "Strength: Often follows text instructions very accurately — good for clear, 'clean' images.",
+          "Context: Ideal for exact requirements. Similar to: Midjourney (more creative), Stable Diffusion (more control)."
+        ],
         "strengths": [
           "Good when you know exactly what should be in the image (objects/positions).",
           "Practical for illustrations, icons, simple graphics, and mockups.",
@@ -380,6 +400,10 @@
       "en": {
         "title": "Stable Diffusion",
         "description": "Open-source image AI: lots of control, many styles, can also run locally.",
+        "badges": [
+          "Strength: Very flexible — many models/styles, ideal if you want more control.",
+          "Context: Good for tinkerers/creators/studios (also possible offline). Similar to: Runway, local setups."
+        ],
         "strengths": [
           "Can run locally (depending on setup): more privacy, less cloud.",
           "Huge community with many models for different looks.",
@@ -441,6 +465,10 @@
       "en": {
         "title": "GitHub Copilot",
         "description": "AI in the code editor: suggests code and saves typing.",
+        "badges": [
+          "Strength: Code suggestions as you type — great for routine code and quick prototypes.",
+          "Context: Ideal in VS Code & GitHub environment. Similar to: Codeium, Tabnine."
+        ],
         "strengths": [
           "Writes standard code faster (forms, routes, tests, boilerplate).",
           "Helps learning: you see examples immediately in the right context.",
@@ -502,6 +530,10 @@
       "en": {
         "title": "Cursor",
         "description": "Code editor with built-in AI: write, modify, and explain code.",
+        "badges": [
+          "Strength: AI directly in the editor — good for quick refactoring and 'make it like this' changes.",
+          "Context: For developers who want AI tightly integrated in the workflow. Similar to: Copilot, Replit."
+        ],
         "strengths": [
           "Helps modify existing files (refactor/rename/structure).",
           "Can explain code sections if you don't understand them.",
@@ -563,6 +595,10 @@
       "en": {
         "title": "Codeium",
         "description": "Free code autocomplete for many IDEs (good entry without subscription).",
+        "badges": [
+          "Strength: Start for free — solid autocomplete for everyday code.",
+          "Context: Good for individuals/teams with small budgets. Similar to: Copilot."
+        ],
         "strengths": [
           "Free to use for many standard use cases.",
           "Saves time writing repetitive code.",
@@ -624,6 +660,10 @@
       "en": {
         "title": "ElevenLabs",
         "description": "Text-to-speech with very natural voices (for voiceovers and learning).",
+        "badges": [
+          "Strength: Often sounds very real — good for narration, explainer videos, audiobook style.",
+          "Context: Ideal for voiceover/E-learning. Similar to: Replica Studios, Google TTS."
+        ],
         "strengths": [
           "Often sounds very real — good for narration, explainer videos, audiobook style.",
           "Many languages/voices — good for international content.",
@@ -685,6 +725,10 @@
       "en": {
         "title": "Suno AI",
         "description": "Makes songs from text: choose genre, describe topic, get a song.",
+        "badges": [
+          "Strength: Complete song in minutes — good for demos, fun, jingles.",
+          "Context: For quick music ideas. Similar to: AIVA, Amper Music."
+        ],
         "strengths": [
           "Creates music including vocals/beat (depending on prompt).",
           "Simple: you describe style + mood + topic.",
@@ -746,6 +790,10 @@
       "en": {
         "title": "Runway ML",
         "description": "Video AI in the browser: create clips, use effects, edit videos quickly.",
+        "badges": [
+          "Strength: Many video tools in one place — generate + edit + effects.",
+          "Context: For creators and quick prototypes. Similar to: Pika (simpler), other editing tools."
+        ],
         "strengths": [
           "Text-to-video & effects (depending on feature/plan) for quick results.",
           "Practical for cuts/retouching (e.g., edit background/objects).",
@@ -807,6 +855,10 @@
       "en": {
         "title": "Gemini",
         "description": "Google AI for chat & research, often good with current info and media.",
+        "badges": [
+          "Strength: Can (depending on mode) understand text + images — good for research with context.",
+          "Context: For users who like Google-like research. Similar to: Perplexity (sources), ChatGPT (all-round)."
+        ],
         "strengths": [
           "Helps explain images/info (e.g., 'What is that?').",
           "Good for research questions and quick overviews.",
@@ -868,6 +920,10 @@
       "en": {
         "title": "Notion AI",
         "description": "AI in Notion: summarize notes, write texts, generate to-dos.",
+        "badges": [
+          "Strength: Directly in Notion — you stay in the same document/workflow.",
+          "Context: Good for organization, school, projects, teams. Similar to: Coda AI, M365 Copilot."
+        ],
         "strengths": [
           "Quickly turns text into a clean structure (headings, bullet points, to-dos).",
           "Helps rewrite (shorter, friendlier, more formal).",
@@ -929,6 +985,10 @@
       "en": {
         "title": "Leonardo AI",
         "description": "Image AI for game assets, characters, and design variants.",
+        "badges": [
+          "Strength: Good for assets & variations — quickly compare multiple designs.",
+          "Context: Especially interesting for game/design projects. Similar to: Midjourney (creative look)."
+        ],
         "strengths": [
           "Ideal for characters, items, icons, and backgrounds.",
           "Variations help quickly find the best version.",
@@ -990,6 +1050,10 @@
       "en": {
         "title": "Julius AI",
         "description": "Data AI: upload CSV/Excel, ask questions, get charts.",
+        "badges": [
+          "Strength: Quickly understand data — without complicated formulas or BI tools.",
+          "Context: Good for evaluations, charts, simple analyses. Similar to: BI tools with AI."
+        ],
         "strengths": [
           "You ask in plain language: 'Show sales by month'.",
           "Creates charts and explains what stands out (trends/outliers).",
@@ -1051,6 +1115,10 @@
       "en": {
         "title": "Pika Labs",
         "description": "Text-to-video for short clips: fast, simple, good for social media.",
+        "badges": [
+          "Strength: Very beginner-friendly — prompt in, short clip out.",
+          "Context: Ideal for quick ideas/clips. Similar to: Runway (more editing), Synthesia (avatars)."
+        ],
         "strengths": [
           "Quick results for short videos (e.g., 3–5 seconds).",
           "Easy to use — good without prior knowledge.",
@@ -1112,6 +1180,10 @@
       "en": {
         "title": "Jasper AI",
         "description": "Marketing text AI: ads, blog drafts, and product descriptions.",
+        "badges": [
+          "Strength: Templates for marketing — quickly create many text variants for ads & content.",
+          "Context: Good for social/ads/SEO texts. Similar to: Copy.ai, Writesonic."
+        ],
         "strengths": [
           "Creates multiple variants (headlines, hooks, CTA) for testing.",
           "Saves time on standard texts (product copy, landing page, post).",
@@ -1173,6 +1245,10 @@
       "en": {
         "title": "Synthesia",
         "description": "Avatar videos: input text, get a video with a speaking avatar.",
+        "badges": [
+          "Strength: Professional explainer videos without filming — good for training and onboarding.",
+          "Context: For companies/training/multilingual. Similar to: Rephrase.ai, Elai.io."
+        ],
         "strengths": [
           "Explainer video production without filming (time savings).",
           "Many languages possible — good for international audiences.",
@@ -1234,6 +1310,10 @@
       "en": {
         "title": "V0 by Vercel",
         "description": "UI from text: generates React/Next.js components (often with Tailwind).",
+        "badges": [
+          "Strength: Quickly build UI prototypes — good basis for frontend projects.",
+          "Context: Ideal for React/Next.js. Similar to: Uizard, TeleportHQ (UI tools)."
+        ],
         "strengths": [
           "From description → first UI component in minutes.",
           "Helps learning: you see finished code and can adapt it.",
