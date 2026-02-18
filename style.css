@@ -1808,20 +1808,19 @@ a:focus-visible {
     padding: 0.5rem;
   }
 
-  .view-toggle .toggle-btn {
-    flex: 0 1 auto;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
+ .view-toggle .toggle-btn {
+  padding: 2px 8px;        /* reduziertes Padding */
+  font-size: 0.7rem;       /* kleinere Schrift */
+  line-height: 1.2;        /* kompakte Zeilenhöhe */
+}
 
   .sort-dropdown {
     flex: 0 1 auto;
   }
 
   .sort-trigger {
-    padding-right: 1.8rem; /* Platz für den Pfeil */
-  }
+  padding-right: 1.5rem;   /* Platz für Pfeil anpassen */
+}
 }
 
 /* ==================== SORTIER-DROPDOWN – GLASIG WIE TOOL-QUADRATE ==================== */
@@ -1954,7 +1953,7 @@ a:focus-visible {
 /* ==================== HEADER SUBLINE ==================== */
 .header-subline {
   text-align: center;
-  margin-bottom: 10mm;          /* größerer Abstand nach unten */
+  margin-bottom: 0mm;          /* größerer Abstand nach unten */
   font-size: 1rem;
   color: var(--primary);
   animation: header-glow 8s ease-in-out infinite;
