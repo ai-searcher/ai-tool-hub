@@ -104,9 +104,9 @@
     .scroll-btn:hover,
     .scroll-btn:active {
       background: rgba(50, 55, 80, 0.9);
-      border-color: var(--full-color);          /* Kategorienfarbe */
+      border-color: var(--full-color);
       transform: scale(1.05);
-      box-shadow: 0 0 15px var(--glow-intense); /* Leuchten in Kategorienfarbe */
+      box-shadow: 0 0 15px var(--glow-intense);
     }
     
     /* Nur auf mobilen Geräten anzeigen (unter 768px) */
@@ -129,7 +129,7 @@
       font-size: 1.8rem;
       font-weight: 700;
       line-height: 1.2;
-      color: var(--full-color);                 /* Jetzt in Kategorienfarbe */
+      color: var(--full-color);
       margin: 0;
       flex: 1;
       word-break: break-word;
@@ -247,10 +247,11 @@
       flex-shrink: 0;
     }
     
-    /* Abschnitte (Kernfunktionen, Einsatzbereiche, etc.) */
-    .detail-section {
+    /* ===== Ausklappbare Sektionen ===== */
+    .collapsible-section {
       margin-top: 8px;
       flex-shrink: 0;
+      transition: margin 0.3s ease;
     }
     
     .detail-section-title {
@@ -260,8 +261,52 @@
       margin: 0 0 12px 0;
       letter-spacing: 0.02em;
       animation: title-glow 8s ease-in-out infinite;
+      cursor: pointer;
+      position: relative;
+      padding-left: 20px; /* Platz für den Punkt */
+      transition: color 0.2s ease;
     }
     
+    .detail-section-title:hover {
+      color: var(--primary);
+    }
+    
+    /* Punkt-Status-Indikator */
+    .detail-section-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #4caf50; /* grün = geöffnet */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 8px #4caf50;
+    }
+    
+    .collapsible-section.collapsed .detail-section-title::before {
+      background-color: #888; /* grau = geschlossen */
+      box-shadow: none;
+    }
+    
+    /* Inhalt mit sanfter Ein-/Ausblendung */
+    .collapsible-section .detail-list {
+      max-height: 1000px;     /* großzügiger Wert, damit Animation funktioniert */
+      opacity: 1;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out, opacity 0.3s ease, margin 0.3s ease;
+      margin-bottom: 0;
+    }
+    
+    .collapsible-section.collapsed .detail-list {
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+    }
+    
+    /* Listen-Styling (unverändert) */
     .detail-list {
       display: flex;
       flex-direction: column;
@@ -480,26 +525,26 @@
       
       <p class="detail-description" id="toolDescription"></p>
       
-      <!-- Kernfunktionen -->
-      <div id="strengthsContainer" class="detail-section" style="display: none;">
+      <!-- Kernfunktionen – ausklappbar -->
+      <div id="strengthsContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Das kann das Tool</h3>
         <div class="detail-list" id="strengthsList"></div>
       </div>
       
-      <!-- Einsatzbereiche -->
-      <div id="useCasesContainer" class="detail-section" style="display: none;">
+      <!-- Einsatzbereiche – ausklappbar -->
+      <div id="useCasesContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Dafür nutzt du es</h3>
         <div class="detail-list" id="useCasesList"></div>
       </div>
       
-      <!-- Beispiel-Prompts -->
-      <div id="promptExamplesContainer" class="detail-section" style="display: none;">
+      <!-- Beispiel-Prompts – ausklappbar -->
+      <div id="promptExamplesContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">Zum Ausprobieren</h3>
         <div class="detail-list" id="promptExamplesList"></div>
       </div>
       
-      <!-- Prompt-Richtlinien -->
-      <div id="promptTipsContainer" class="detail-section" style="display: none;">
+      <!-- Prompt-Richtlinien – ausklappbar -->
+      <div id="promptTipsContainer" class="detail-section collapsible-section" style="display: none;">
         <h3 class="detail-section-title">So bekommst du bessere Antworten</h3>
         <div class="detail-list" id="promptTipsList"></div>
       </div>
@@ -521,6 +566,7 @@
     (function() {
       'use strict';
       
+      // Funktion zum Laden der Tool-Daten
       async function loadToolData() {
         try {
           const response = await fetch('data.json');
@@ -533,9 +579,11 @@
         }
       }
       
+      // URL-Parameter auslesen
       const urlParams = new URLSearchParams(window.location.search);
       const toolId = urlParams.get('id');
       
+      // Elemente referenzieren
       const loadingEl = document.getElementById('loadingState');
       const errorEl = document.getElementById('errorState');
       const errorMsg = document.getElementById('errorMessage');
@@ -555,6 +603,7 @@
         return;
       }
       
+      // Hilfsfunktion für Listen
       function fillList(containerId, listId, items) {
         const container = document.getElementById(containerId);
         const listEl = document.getElementById(listId);
@@ -577,6 +626,7 @@
         }
       }
       
+      // Daten laden und anzeigen
       loadToolData().then(tools => {
         if (!tools || !Array.isArray(tools)) {
           throw new Error('Daten konnten nicht geladen werden');
@@ -642,8 +692,20 @@
         fillList('promptExamplesContainer', 'promptExamplesList', tool.promptExamples);
         fillList('promptTipsContainer', 'promptTipsList', tool.promptTips);
         
+        // Ladezustand ausblenden, Inhalt anzeigen
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
+        
+        // ===== Ausklappbare Sektionen initialisieren =====
+        const sections = document.querySelectorAll('.collapsible-section');
+        sections.forEach(section => {
+          const title = section.querySelector('.detail-section-title');
+          if (title) {
+            title.addEventListener('click', () => {
+              section.classList.toggle('collapsed');
+            });
+          }
+        });
         
       }).catch(err => {
         console.error(err);
