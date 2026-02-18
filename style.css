@@ -2015,3 +2015,47 @@ a:focus-visible {
 .category-header-card {
   animation: category-glow 4s ease-in-out infinite;
 }
+
+/* ==================== BENUTZERDEFINIERTES FARBSCHEMA (GELB/VIOLETT) ==================== */
+body.custom-color-scheme {
+  /* Hintergründe */
+  --bg-dark: #CE9B62;           /* Hauptseitenhintergrund */
+  --bg-card: #B8864B;            /* Kartenhintergrund (dunkleres Gelb) */
+  --bg-card-hover: #A67642;      /* Karten-Hover */
+  --border: #AD7F4A;             /* Rahmenfarbe */
+
+  /* Textfarben (alle Violett) */
+  --text-primary: #610299;
+  --text-secondary: #610299;
+  --text-dim: #610299;
+  --text-muted: #610299;
+
+  /* Primärfarbe (Akzente) – wir verwenden das Violett auch hier */
+  --primary: #610299;
+  --primary-hover: #4F017A;      /* etwas dunkleres Violett */
+  --primary-glow: rgba(97, 2, 153, 0.2);
+  --primary-dim: rgba(97, 2, 153, 0.1);
+
+  /* Schatten ggf. anpassen (optional) */
+  --shadow-glow: 0 0 20px var(--primary-glow);
+  
+  /* Falls es andere farbabhängige Elemente gibt, die mit --primary arbeiten, werden sie automatisch violett. */
+}
+
+/* Damit der Button im neuen Schema auch gut aussieht, können wir ihn speziell stylen */
+.color-scheme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  transition: all 0.2s ease;
+  margin-left: 1rem;
+}
+
+.color-scheme-toggle:hover {
+  background: var(--primary-dim);
+  border-color: var(--primary);
+}
