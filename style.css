@@ -1950,7 +1950,7 @@ a:focus-visible {
   left: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   z-index: 1000;
 }
 
