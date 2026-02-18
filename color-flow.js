@@ -1,6 +1,11 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V13.4 MOBILE-OPTIMIZED (ruhige Wellen)
-// Robuster gegen fehlendes Grid-Element (z.B. bei Ansichtswechsel)
+// GRID SYNCHRONIZED NETWORK V13.5 – RUHIG & PRÄSENT
+// - Wellen deaktiviert (kein Zittern)
+// - Dickere Linien für mehr Präsenz
+// - Verstärkter Glow, aber nicht störend
+// - scanTools erfasst .stack-card für Kategorien-Ansicht
+// - Neue refresh() Methode für Ansichtswechsel
+// - Optimiert für alle Geräte
 // =========================================
 
 (function() {
@@ -82,8 +87,8 @@
       if (this.isMobile) {
         this.settings = {
           qualityMultiplier: 1.0,
-          baseLineWidth: 1.5,
-          glowWidth: 10,
+          baseLineWidth: 2.0,                // erhöht von 1.5
+          glowWidth: 12,                      // leicht erhöht
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: false,
@@ -92,11 +97,12 @@
           maxBridgeConnections: 2,
           hoverSpeed: 0.30,
           baseOpacity: 0.45,
-          glowOpacity: 0.50,
+          glowOpacity: 0.55,                  // erhöht
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 400,
-          enableWaves: true,
+          // Wellen deaktiviert – kein Zittern
+          enableWaves: false,
           enableGlitch: false,
           enableStars: true,
           enableRipples: true,
@@ -105,14 +111,14 @@
           starCount: 50,
           waveComplexity: 1,
           organicNoise: 0,
-          waveAmplitude: 4,
-          waveSpeed: 0.001
+          waveAmplitude: 0,                    // deaktiviert
+          waveSpeed: 0
         };
       } else if (this.isTablet) {
         this.settings = {
           qualityMultiplier: 1.2,
-          baseLineWidth: 2.0,
-          glowWidth: 12,
+          baseLineWidth: 2.5,                  // erhöht von 2.0
+          glowWidth: 14,
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: true,
@@ -121,11 +127,11 @@
           maxBridgeConnections: 3,
           hoverSpeed: 0.25,
           baseOpacity: 0.40,
-          glowOpacity: 0.45,
+          glowOpacity: 0.50,                    // erhöht
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 450,
-          enableWaves: true,
+          enableWaves: false,                   // deaktiviert
           enableGlitch: true,
           enableStars: true,
           enableRipples: true,
@@ -135,14 +141,14 @@
           glitchProbability: 0.01,
           waveComplexity: 2,
           organicNoise: 0.3,
-          waveAmplitude: 6,
-          waveSpeed: 0.0015
+          waveAmplitude: 0,
+          waveSpeed: 0
         };
       } else {
         this.settings = {
           qualityMultiplier: 1.5,
-          baseLineWidth: 2.5,
-          glowWidth: 15,
+          baseLineWidth: 3.0,                  // erhöht von 2.5
+          glowWidth: 18,
           glowSpeed: 0.0015,
           glowLength: 0.3,
           enableCurves: true,
@@ -151,11 +157,11 @@
           maxBridgeConnections: 4,
           hoverSpeed: 0.25,
           baseOpacity: 0.45,
-          glowOpacity: 0.40,
+          glowOpacity: 0.50,                    // erhöht
           useSimplifiedRendering: false,
           minClusterSize: 2,
           maxDistance: 500,
-          enableWaves: true,
+          enableWaves: false,                   // deaktiviert
           enableGlitch: true,
           enableStars: true,
           enableRipples: true,
@@ -165,8 +171,8 @@
           glitchProbability: 0.02,
           waveComplexity: 3,
           organicNoise: 0.4,
-          waveAmplitude: 8,
-          waveSpeed: 0.002
+          waveAmplitude: 0,
+          waveSpeed: 0
         };
       }
 
@@ -204,7 +210,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v13.4 MOBILE-OPTIMIZED (ruhige Wellen)');
+      console.log('🚀 GridSynchronizedNetwork v13.5 – Ruhig & Präsent');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -319,7 +325,8 @@
 
     scanTools() {
       if (!this.gridElement) return;
-      const cardElements = this.gridElement.querySelectorAll('.card-square');
+      // Erfasse sowohl Grid-Karten als auch Stack-Karten
+      const cardElements = this.gridElement.querySelectorAll('.card-square, .stack-card');
       this.cards = [];
 
       cardElements.forEach((el, index) => {
@@ -371,6 +378,18 @@
       });
     }
 
+    // NEUE METHODE: Netzwerk aktualisieren (z.B. nach Ansichtswechsel)
+    refresh() {
+      if (!this.gridElement) return;
+      this.scanTools();
+      this.generateIntelligentConnections();
+      if (this.connections.length === 0) {
+        this.generateFallbackConnections();
+      }
+      // Kein Neustart der Animation nötig, da sie weiterläuft und die neuen Verbindungen im nächsten Frame zeichnet
+    }
+
+    // INTELLIGENT CONNECTION GENERATION
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -388,6 +407,7 @@
       }
     }
 
+    // FALLBACK: Simple but guaranteed working
     generateFallbackConnections() {
       const categoryGroups = {};
 
@@ -398,6 +418,7 @@
         categoryGroups[card.category].push(card);
       });
 
+      // Primary: Connect within categories
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 1) {
           group.sort((a, b) => {
@@ -412,6 +433,7 @@
         }
       });
 
+      // Secondary: Skip connections within larger groups
       Object.values(categoryGroups).forEach(group => {
         if (group.length > 3) {
           group.sort((a, b) => {
@@ -430,6 +452,7 @@
         }
       });
 
+      // Bridge: Connect different categories
       const categories = Object.keys(categoryGroups);
       const maxBridges = Math.min(categories.length - 1, this.settings.maxBridgeConnections);
 
@@ -457,6 +480,7 @@
         }
       }
 
+      // Cluster: Curved connections for visual variety
       if (this.settings.enableCurves) {
         Object.values(categoryGroups).forEach(group => {
           if (group.length > 3) {
@@ -708,46 +732,13 @@
       return gradient;
     }
 
+    // Wellenlinie wird nicht mehr verwendet (enableWaves = false), aber wir lassen die Methode zur Sicherheit drin
     drawWavyLine(from, to, lineWidth, strokeStyle) {
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const steps = Math.max(30, Math.floor(dist / 5));
-      
-      const dirX = dx / dist;
-      const dirY = dy / dist;
-      const amplitude = this.settings.waveAmplitude || 4;
-      const perpX = -dirY * amplitude;
-      const perpY = dirX * amplitude;
-
-      const phase = Math.random() * Math.PI * 2;
-      const timeFactor = this.settings.waveSpeed || 0.001;
-
+      // Diese Methode wird nicht aufgerufen, da Wellen deaktiviert sind.
+      // Falls doch, zeichnen wir einfach eine gerade Linie als Fallback.
       this.ctx.beginPath();
       this.ctx.moveTo(from.x, from.y);
-
-      for (let i = 1; i <= steps; i++) {
-        const t = i / steps;
-        const ease = Math.sin(t * Math.PI);
-        const amp = ease * amplitude;
-
-        let wave;
-        if (this.settings.waveComplexity >= 2) {
-          const w1 = Math.sin(t * Math.PI * 3 + this.glowTime * timeFactor + phase) * 0.7;
-          const w2 = Math.sin(t * Math.PI * 1.8 + this.glowTime * timeFactor * 1.2 + phase * 1.3) * 0.5;
-          wave = (w1 + w2) / 1.2;
-        } else {
-          wave = Math.sin(t * Math.PI * 3 + this.glowTime * timeFactor + phase);
-        }
-
-        const offsetX = perpX * wave;
-        const offsetY = perpY * wave;
-
-        const x = from.x + dx * t + offsetX;
-        const y = from.y + dy * t + offsetY;
-        this.ctx.lineTo(x, y);
-      }
-
+      this.ctx.lineTo(to.x, to.y);
       this.ctx.strokeStyle = strokeStyle;
       this.ctx.lineWidth = lineWidth;
       this.ctx.stroke();
@@ -822,9 +813,8 @@
 
       if (config.curve && !this.settings.useSimplifiedRendering) {
         this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight);
-      } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
-        this.drawWavyLine(from, to, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, gradient);
       } else {
+        // Gerade Linie (Wellen sind deaktiviert, also immer gerade)
         this.ctx.beginPath();
         this.ctx.moveTo(from.x, from.y);
         this.ctx.lineTo(to.x, to.y);
@@ -867,8 +857,6 @@
 
           if (config.curve && !this.settings.useSimplifiedRendering) {
             this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth);
-          } else if (this.settings.enableWaves && !this.settings.useSimplifiedRendering) {
-            this.drawWavyLine(from, to, this.ctx.lineWidth, glowGradient);
           } else {
             this.ctx.beginPath();
             this.ctx.moveTo(from.x, from.y);
@@ -958,7 +946,6 @@
     }
 
     handleResize() {
-      // Sicherheitscheck: gridElement muss existieren
       if (!this.gridElement) {
         console.warn('handleResize: gridElement missing – skipping resize');
         return;
@@ -967,7 +954,7 @@
       this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
       this.setupAdaptiveSettings();
       this.gradientCache.clear();
-      this.setupCanvas();   // hier wird ebenfalls gridElement geprüft
+      this.setupCanvas();
       this.scanTools();
       this.generateStars();
       this.generateIntelligentConnections();
@@ -983,7 +970,7 @@
       this.resizeObserver = new ResizeObserver(() => {
         clearTimeout(this.resizeTimeout);
         this.resizeTimeout = setTimeout(() => {
-          if (!this.gridElement) return;  // zusätzlicher Check
+          if (!this.gridElement) return;
           this.setupCanvas();
           this.scanTools();
           this.generateStars();
@@ -1033,7 +1020,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v13.4 MOBILE-OPTIMIZED (ruhige Wellen)');
+    console.group('🚀 Color Flow v13.5 – Ruhig & Präsent');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
