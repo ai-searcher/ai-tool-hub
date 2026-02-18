@@ -121,10 +121,27 @@ class StackViewController {
     this.stacks = [];
     this.activeSort = 'name';
     this.sortDirection = 'asc';
+    // Kategorie-Tags (werden später aus data.json geladen)
+    this.categoryTags = null;
   }
 
-  render() {
+  // Kategorie-Tags laden (wird einmalig in render() aufgerufen)
+  async loadCategoryTags() {
+    if (this.categoryTags) return;
+    try {
+      const response = await fetch('data.json');
+      const data = await response.json();
+      this.categoryTags = data.categoryTags || {};
+    } catch (e) {
+      console.warn('Konnte categoryTags nicht laden', e);
+      this.categoryTags = {};
+    }
+  }
+
+  async render() {
     if (!this.state.tools || this.state.tools.length === 0) return;
+
+    await this.loadCategoryTags(); // Tags laden
 
     const grouped = this.groupByCategory(this.state.tools);
     
@@ -175,6 +192,10 @@ class StackViewController {
     const header = document.createElement('div');
     header.className = 'category-header-card';
 
+    // Container für Titel + Beschreibung (flex)
+    const content = document.createElement('div');
+    content.className = 'category-header-content';
+
     const title = document.createElement('h3');
     title.className = 'category-header-title';
     title.textContent = category.charAt(0).toUpperCase() + category.slice(1);
@@ -183,8 +204,33 @@ class StackViewController {
     desc.className = 'category-header-description';
     desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''} in dieser Kategorie`;
 
-    header.appendChild(title);
-    header.appendChild(desc);
+    content.appendChild(title);
+    content.appendChild(desc);
+
+    // Marquee für Tags
+    const marquee = document.createElement('div');
+    marquee.className = 'context-marquee';
+    const track = document.createElement('div');
+    track.className = 'marquee-track';
+    marquee.appendChild(track);
+
+    // Tags für diese Kategorie holen (Fallback)
+    const tags = this.categoryTags?.[category] || [
+      'Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen' // Fallback
+    ];
+
+    // Tags zweimal hintereinander für nahtlosen Loop
+    for (let i = 0; i < 2; i++) {
+      tags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'marquee-seq';
+        span.textContent = tag;
+        track.appendChild(span);
+      });
+    }
+
+    header.appendChild(content);
+    header.appendChild(marquee);
     return header;
   }
 
@@ -226,62 +272,56 @@ class StackViewController {
     }
   }
 
+  attachStackListeners() {
+    const stacks = this.container.querySelectorAll('.category-stack');
+    stacks.forEach(stack => {
+      const header = stack.querySelector('.category-header-card');
+      if (header) {
+        header.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cardsContainer = stack.querySelector('.stack-cards');
+          if (cardsContainer) {
+            cardsContainer.classList.toggle('fanned');
+          }
+        });
+      }
 
-attachStackListeners() {
-  const stacks = this.container.querySelectorAll('.category-stack');
-  stacks.forEach(stack => {
-    // Klick auf den Header toggelt den Stapel
-    const header = stack.querySelector('.category-header-card');
-    if (header) {
-      header.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const cardsContainer = stack.querySelector('.stack-cards');
-        if (cardsContainer) {
+      const cardsContainer = stack.querySelector('.stack-cards');
+      if (cardsContainer) {
+        cardsContainer.addEventListener('click', (e) => {
+          if (e.target.closest('.stack-card')) return;
           cardsContainer.classList.toggle('fanned');
-        }
-      });
-    }
-
-    // Klick auf den Karten-Container (nicht auf einzelne Karten) toggelt ebenfalls
-    const cardsContainer = stack.querySelector('.stack-cards');
-    if (cardsContainer) {
-      cardsContainer.addEventListener('click', (e) => {
-        // Nur toggeln, wenn nicht direkt auf eine Karte geklickt wurde
-        if (e.target.closest('.stack-card')) return;
-        cardsContainer.classList.toggle('fanned');
-      });
-    }
-  });
-
-  // Klick auf einzelne Karten – gleiches Verhalten wie im Grid
-  const stackCards = this.container.querySelectorAll('.stack-card');
-  stackCards.forEach(card => {
-    card.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const toolId = card.dataset.toolId;
-      const tool = this.state.tools.find(t => String(t.id) === String(toolId));
-      if (!tool) return;
-
-      if (window.innerWidth < 768) {
-        window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-      } else {
-        if (typeof openToolModal === 'function') {
-          openToolModal(tool);
-        } else {
-          window.open(tool.link, '_blank', 'noopener,noreferrer');
-        }
+        });
       }
     });
-  });
-}
 
-destroy() {
-  this.container.innerHTML = '';
-  this.container.classList.remove('tool-stacks');
-}
-}
+    const stackCards = this.container.querySelectorAll('.stack-card');
+    stackCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const toolId = card.dataset.toolId;
+        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
+        if (!tool) return;
 
+        if (window.innerWidth < 768) {
+          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
+        } else {
+          if (typeof openToolModal === 'function') {
+            openToolModal(tool);
+          } else {
+            window.open(tool.link, '_blank', 'noopener,noreferrer');
+          }
+        }
+      });
+    });
+  }
+
+  destroy() {
+    this.container.innerHTML = '';
+    this.container.classList.remove('tool-stacks');
+  }
+}
 // =========================================
 // VALIDATION RULES
 // =========================================
