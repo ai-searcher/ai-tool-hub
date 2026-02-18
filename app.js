@@ -78,17 +78,13 @@ const CONFIG = {
 };
 
 // =========================================
-// KATEGORIE-NAMEN (DEUTSCH)
+// KATEGORIE-NAMEN (ÜBERSETZT ÜBER i18n)
 // =========================================
-const categoryNames = {
-  'text': 'Text',
-  'image': 'Bilder',
-  'code': 'Code',
-  'audio': 'Audio',
-  'video': 'Video',
-  'data': 'Daten',
-  'other': 'Sonstige'
-};
+function getCategoryName(cat) {
+  if (!cat) return 'Sonstige';
+  const key = 'cat_' + cat;
+  return window.i18n ? window.i18n.t(key) : (cat.charAt(0).toUpperCase() + cat.slice(1));
+}
 
 // =========================================
 // DEFAULT TOOLS (Always Available)
@@ -208,7 +204,7 @@ class StackViewController {
 
     const title = document.createElement('h3');
     title.className = 'category-header-title';
-    title.textContent = categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
+    title.textContent = getCategoryName(category);
 
     const desc = document.createElement('p');
     desc.className = 'category-header-description';
@@ -223,9 +219,9 @@ class StackViewController {
     track.className = 'marquee-track';
     marquee.appendChild(track);
 
-    const tags = this.categoryTags?.[category] || [
-      'Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'
-    ];
+    // Tags für diese Kategorie holen (Fallback)
+    const t = window.i18n ? window.i18n.t : (key) => key;
+    const tags = this.categoryTags?.[category] || (Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen']);
 
     for (let i = 0; i < 2; i++) {
       tags.forEach(tag => {
@@ -259,7 +255,7 @@ class StackViewController {
 
     const badge = document.createElement('span');
     badge.className = 'stack-card-category';
-    badge.textContent = categoryNames[tool.category] || tool.category.charAt(0).toUpperCase() + tool.category.slice(1);
+    badge.textContent = getCategoryName(tool.category);
     card.appendChild(badge);
 
     return card;
@@ -873,19 +869,21 @@ const ui = {
       featured
     };
 
+    const t = window.i18n ? window.i18n.t : (key) => key;
+
     const marqueeItems = [
-      `<strong>${state.stats.total}</strong> TOOLS`,
-      `<strong>${state.stats.categories}</strong> KATEGORIEN`,
-      `<strong>${state.stats.featured}</strong> FEATURED`,
+      `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
+      `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
+      `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
     ];
 
     if (state.tools.length > 0) {
       const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-      marqueeItems.push(`BEST: ${topRated.title} (${topRated.rating.toFixed(1)})`);
+      marqueeItems.push(`${t('statsBest')}: ${topRated.title} (${topRated.rating.toFixed(1)})`);
 
       const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
       const newest = sortedByDate[0];
-      marqueeItems.push(`NEU: ${newest.title}`);
+      marqueeItems.push(`${t('statsNew')}: ${newest.title}`);
     }
 
     const track = this.elements.statsMarquee.querySelector('.marquee-track');
@@ -933,7 +931,7 @@ const ui = {
 
   renderCard(tool) {
     const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = categoryNames[categoryName] || categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+    const categoryDisplay = getCategoryName(categoryName);
     const contextTexts = this.getContextText(tool);
 
     return `
@@ -1003,7 +1001,8 @@ const ui = {
     if (state.filtered.length === 0) {
       this.showState('empty');
       if (this.elements.emptyQuery && state.searchQuery) {
-        this.elements.emptyQuery.textContent = `Keine Ergebnisse für "${state.searchQuery}"`;
+        const t = window.i18n ? window.i18n.t : (key) => key;
+        this.elements.emptyQuery.textContent = t('noResults').replace('{query}', state.searchQuery);
       }
       return;
     }
@@ -1053,6 +1052,7 @@ const ui = {
     }
 
     const isMobile = window.innerWidth < 768;
+    const t = window.i18n ? window.i18n.t : (key) => key;
 
     grid._clickHandler = (e) => {
       const overlay = e.target.closest('.card-overlay-link');
@@ -1078,7 +1078,7 @@ const ui = {
           } else if (href && href !== '#') {
             window.open(href, '_blank', 'noopener,noreferrer');
           } else {
-            alert('Link nicht verfügbar');
+            alert(t('linkNotAvailable'));
           }
         } else {
           if (typeof openToolModal === 'function') {
