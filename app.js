@@ -1018,6 +1018,8 @@ const ui = {
         }
         this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
         this.attachCardHandlers();
+      if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+        window.colorFlowNetwork.refresh();
       }
     } else {
       this.showState('grid');
@@ -1029,7 +1031,9 @@ const ui = {
         this.stackView.sortDirection = state.sortDirection;
       }
       this.stackView.render();
-    }
+     if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
+        window.colorFlowNetwork.refresh();
+      }
   },
 
   getActiveView() {
