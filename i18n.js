@@ -50,7 +50,7 @@
       cat_other: 'Sonstige',
       // Stats-Marquee
       statsTools: 'Verfügbare Tools',
-      statsCategories: 'Anwendungsbereiche',
+      statsCategories: 'Kategorien',
       statsFeatured: 'Empfohlene Tools',
       statsBest: 'Top bewertet',
       statsNew: 'Neu hinzugefügt',
@@ -104,7 +104,7 @@
       cat_data: 'Data',
       cat_other: 'Other',
       statsTools: 'Available Tools',
-      statsCategories: 'Use Cases',
+      statsCategories: 'Categories',
       statsFeatured: 'Featured Tools',
       statsBest: 'Top Rated',
       statsNew: 'Recently Added',
