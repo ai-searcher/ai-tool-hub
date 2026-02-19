@@ -19,7 +19,7 @@
       sortDateDesc: 'Neueste zuerst',
       sortDateAsc: 'Älteste zuerst',
       // Subline
-      subline: '▽▽ ▽▽ Finde das passende KI-Tool für dein Vorhaben ▽▽',
+      subline: '▽▽Finde das passende KI-Tool für dein Vorhaben▽▽',
       // Footer
       footerText: 'Gebaut mit 💙',
       footerGitHub: 'GitHub',
@@ -77,7 +77,7 @@
       sortRatingAsc: 'Rating (lowest first)',
       sortDateDesc: 'Newest first',
       sortDateAsc: 'Oldest first',
-      subline: '▽▽ Find the right AI tool for your task ▽▽',
+      subline: '▽▽Find the right AI tool for your task▽▽',
       footerText: 'Built with 💙',
       footerGitHub: 'GitHub',
       dataSource: 'Data source',
