@@ -6,10 +6,10 @@
     de: {
       // Header
       title: '⚡ Quantum AI Hub',
-      subtitle: 'Deine kuratierte AI Tool-Sammlung',
+      subtitle: 'Finde das richtige Tool für dein Problem',
       searchPlaceholder: 'Tool suchen... (z.B. ChatGPT, Midjourney)',
       // Tabs
-      viewGrid: 'Raster',
+      viewGrid: 'Alle Tools',
       viewStacks: 'Kategorien',
       sortTrigger: 'Sortieren ▾',
       sortNameAsc: 'Name (A-Z)',
@@ -19,7 +19,7 @@
       sortDateDesc: 'Neueste zuerst',
       sortDateAsc: 'Älteste zuerst',
       // Subline
-      subline: '▽▽ Finde KI-Tools für Text, Bild, Code und mehr ▽▽',
+      subline: '▽▽ ▽▽ Finde das passende KI-Tool für dein Vorhaben ▽▽',
       // Footer
       footerText: 'Gebaut mit 💙',
       footerGitHub: 'GitHub',
@@ -66,9 +66,9 @@
     },
     en: {
       title: '⚡ Quantum AI Hub',
-      subtitle: 'Your curated AI Tool Collection',
+      subtitle: 'Find the right tool for your problem',
       searchPlaceholder: 'Search tools... (e.g. ChatGPT, Midjourney)',
-      viewGrid: 'Grid',
+      viewGrid: 'All Tools',
       viewStacks: 'Categories',
       sortTrigger: 'Sort ▾',
       sortNameAsc: 'Name (A-Z)',
@@ -77,7 +77,7 @@
       sortRatingAsc: 'Rating (lowest first)',
       sortDateDesc: 'Newest first',
       sortDateAsc: 'Oldest first',
-      subline: '▽▽ Find AI tools for text, image, code and more ▽▽',
+      subline: '▽▽ Find the right AI tool for your task ▽▽',
       footerText: 'Built with 💙',
       footerGitHub: 'GitHub',
       dataSource: 'Data source',
