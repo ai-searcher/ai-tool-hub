@@ -1,11 +1,6 @@
 // =========================================
 // LEGAL.JS – DSGVO-konformes Cookie-Management & Rechtstexte
-// Version: 1.0.0
-// Enthält: Cookie-Banner, Cookie-Einstellungen, Datenschutz, Impressum
-// Integration: Einfach nach i18n.js einbinden – Footer-Links müssen existieren:
-//   - #privacyLink (Datenschutz)
-//   - #imprintLink (Impressum)
-//   - #cookieSettingsLink (Cookie-Einstellungen)
+// Version: 1.0.1 (Schließen-Button als einfaches X)
 // =========================================
 
 (function() {
@@ -15,13 +10,9 @@
   // KONFIGURATION
   // =========================================
   const CONFIG = {
-    // Google Analytics Mess-ID (deine existierende)
     gaId: 'G-53RF07VYJ8',
-    // Speicherdauer der Einwilligung in Tagen
     consentMaxAge: 365,
-    // Verzögerung für das Einblenden des Cookie-Banners (ms)
     bannerDelay: 1000,
-    // CSS-Selektoren für Footer-Links (müssen im HTML vorhanden sein)
     selectors: {
       privacyLink: '#privacyLink',
       imprintLink: '#imprintLink',
@@ -103,7 +94,7 @@
     }
   };
 
-  // Ausführliche Rechtstexte mit vollständigen Kontaktdaten
+  // Ausführliche Rechtstexte
   const legalContent = {
     de: {
       privacy: `
@@ -239,13 +230,10 @@
   }
 
   function t(key) {
-    const lang = getCurrentLang();
-    // Falls window.i18n vorhanden, dessen Übersetzungen nutzen, sonst interne
     if (window.i18n && typeof window.i18n.t === 'function') {
       return window.i18n.t(key) || key;
     }
-    // Fallback auf interne Texte (nicht alle Keys vorhanden – wird später erweitert)
-    return texts[lang]?.cookieBanner?.[key] || key;
+    return texts[getCurrentLang()]?.cookieBanner?.[key] || key;
   }
 
   // =========================================
@@ -268,7 +256,6 @@
       }
     }
     updateCheckboxesFromPrefs();
-    // GA nachladen, falls bereits gespeicherte Zustimmung existiert
     if (cookiePreferences.analytics) {
       loadGoogleAnalytics();
     }
@@ -293,13 +280,12 @@
   }
 
   // =========================================
-  // GOOGLE ANALYTICS NACHADEN (NUR BEI ZUSTIMMUNG)
+  // GOOGLE ANALYTICS NACHADEN
   // =========================================
   function loadGoogleAnalytics() {
     if (window.gaLoaded) return;
     window.gaLoaded = true;
 
-    // GTM/GA4 Script einfügen
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.gaId}`;
@@ -320,7 +306,7 @@
   }
 
   // =========================================
-  // COOKIE-BANNER ANZEIGEN / VERSTECKEN
+  // COOKIE-BANNER
   // =========================================
   function showCookieBanner() {
     const banner = document.getElementById('cookieBanner');
@@ -337,7 +323,7 @@
   }
 
   // =========================================
-  // HTML-STRUKTUREN ERZEUGEN UND EINFÜGEN
+  // HTML-STRUKTUREN ERZEUGEN
   // =========================================
   function createCookieBanner() {
     const banner = document.createElement('div');
@@ -369,7 +355,7 @@
       <div class="cookie-modal-content">
         <div class="cookie-modal-header">
           <h3 class="cookie-modal-title">${texts[lang].cookieModal.title}</h3>
-          <button class="cookie-modal-close" id="cookieModalClose"><i class="fas fa-times"></i></button>
+          <button class="cookie-modal-close" id="cookieModalClose">✕</button>
         </div>
         <div class="cookie-modal-body">
           <div class="cookie-option">
@@ -430,7 +416,7 @@
       <div class="legal-modal-content">
         <div class="legal-modal-header">
           <h3 class="legal-modal-title">${titleContent}</h3>
-          <button class="legal-modal-close" id="${id}Close"><i class="fas fa-times"></i></button>
+          <button class="legal-modal-close" id="${id}Close">✕</button>
         </div>
         <div class="legal-modal-body" id="${id}Body">${bodyContent}</div>
       </div>
@@ -442,7 +428,6 @@
   // EVENT-HANDLER
   // =========================================
   function attachEvents() {
-    // Cookie-Banner Buttons
     const acceptAllBtn = document.getElementById('cookieAcceptAllBtn');
     const necessaryBtn = document.getElementById('cookieNecessaryBtn');
     const settingsBtn = document.getElementById('cookieSettingsBtn');
@@ -490,7 +475,6 @@
       });
     }
 
-    // Modals schließen bei Klick außerhalb
     const cookieModal = document.getElementById('cookieModal');
     const privacyModal = document.getElementById('privacyModal');
     const imprintModal = document.getElementById('imprintModal');
@@ -513,7 +497,6 @@
       });
     }
 
-    // Footer-Links
     const privacyLink = document.querySelector(CONFIG.selectors.privacyLink);
     const imprintLink = document.querySelector(CONFIG.selectors.imprintLink);
     const cookieSettingsLink = document.querySelector(CONFIG.selectors.cookieSettingsLink);
@@ -539,7 +522,6 @@
       });
     }
 
-    // Schließen-Buttons für Legal-Modals
     const privacyClose = document.getElementById('privacyModalClose');
     const imprintClose = document.getElementById('imprintModalClose');
     if (privacyClose) privacyClose.addEventListener('click', closePrivacyModal);
@@ -547,7 +529,7 @@
   }
 
   // =========================================
-  // MODAL-ÖFFNEN/-SCHLIESSEN
+  // MODAL-FUNKTIONEN
   // =========================================
   function openCookieModal() {
     const modal = document.getElementById('cookieModal');
@@ -606,7 +588,6 @@
   // INITIALISIERUNG
   // =========================================
   function init() {
-    // HTML-Strukturen nur einfügen, wenn sie noch nicht existieren
     if (!document.getElementById('cookieBanner')) createCookieBanner();
     if (!document.getElementById('cookieModal')) createCookieModal();
     if (!document.getElementById('privacyModal')) {
@@ -618,17 +599,13 @@
 
     loadCookiePreferences();
 
-    // Cookie-Banner nur anzeigen, wenn noch keine Einwilligung vorliegt
     if (!isConsentGiven()) {
       setTimeout(showCookieBanner, CONFIG.bannerDelay);
     }
 
     attachEvents();
 
-    // Bei Sprachwechsel Modals neu befüllen (optional – da wir beim Öffnen neu laden, nicht nötig)
-    window.addEventListener('languagechange', () => {
-      // nichts, da Texte dynamisch beim Öffnen geholt werden
-    });
+    window.addEventListener('languagechange', () => {});
   }
 
   if (document.readyState === 'loading') {
