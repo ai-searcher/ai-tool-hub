@@ -1,8 +1,8 @@
 {
   "meta": {
     "version": "1.0.0",
-    "last_updated": "2026-02-11",
-    "total_tools": 20,
+    "last_updated": "2026-02-20",
+    "total_tools": 32,
     "description": "Quantum AI Hub - Kuratierte AI Tools Sammlung"
   },
   "categoryTags": {
@@ -1333,6 +1333,916 @@
           "Describe layout + elements + behavior (e.g., 'mobile first').",
           "Specify if you want Tailwind or plain CSS/component style.",
           "First generate basis, then improve step by step."
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "title": "Replit Ghostwriter",
+      "link": "https://replit.com/ghostwriter",
+      "description": "KI-Assistent direkt in der Cloud-IDE: hilft beim Code schreiben, erklären und Fehler suchen.",
+      "category": "code",
+      "tags": ["coding", "assistant", "ide", "replit"],
+      "is_free": true,
+      "rating": 4.4,
+      "provider": "Replit",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Direkt in der Replit-Umgebung eingebaut — ideal für Schüler und Einsteiger, die online programmieren.",
+        "Kontext: Perfekt für schnelle Code-Hilfe, Fehleranalyse und Erklärungen. Ähnlich zu: GitHub Copilot."
+      ],
+      "strengths": [
+        "Funktioniert sofort in der Cloud – keine Installation nötig.",
+        "Hilft beim Verstehen von Code durch Erklärungen in einfacher Sprache.",
+        "Kann Fehler im Code finden und Lösungsvorschläge machen."
+      ],
+      "useCases": [
+        "Programmieren lernen: Code Schritt für Schritt erklären lassen.",
+        "Hausaufgaben: Bei Programmieraufgaben helfen und Tipps geben.",
+        "Projekte: Schnell Prototypen bauen und testen."
+      ],
+      "promptExamples": [
+        "Erkläre mir diesen Code: [Code]",
+        "Was ist falsch an dieser Funktion? [Code]",
+        "Schreibe ein einfaches Python-Skript, das eine Datei liest."
+      ],
+      "promptTips": [
+        "Sag genau, welche Programmiersprache du nutzt.",
+        "Wenn du einen Fehler siehst, kopiere die ganze Fehlermeldung mit.",
+        "Frag nach Beispielen, wenn du etwas nicht verstehst."
+      ],
+      "en": {
+        "title": "Replit Ghostwriter",
+        "description": "AI assistant built into the cloud IDE: helps writing code, explaining, and debugging.",
+        "badges": [
+          "Strength: Integrated directly into Replit — ideal for students and beginners learning online.",
+          "Context: Perfect for quick code help, error analysis, and explanations. Similar to: GitHub Copilot."
+        ],
+        "strengths": [
+          "Works instantly in the cloud – no installation needed.",
+          "Helps understand code with plain-language explanations.",
+          "Can find bugs and suggest fixes."
+        ],
+        "useCases": [
+          "Learning programming: get step-by-step code explanations.",
+          "Homework: help with coding tasks and tips.",
+          "Projects: quickly prototype and test."
+        ],
+        "promptExamples": [
+          "Explain this code: [code]",
+          "What's wrong with this function? [code]",
+          "Write a simple Python script that reads a file."
+        ],
+        "promptTips": [
+          "Be specific about the programming language.",
+          "If you see an error, copy the full error message.",
+          "Ask for examples if something is unclear."
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "title": "Tabnine",
+      "link": "https://www.tabnine.com",
+      "description": "Code-Vervollständigung mit KI, die lokal läuft – besonders gut für Datenschutz.",
+      "category": "code",
+      "tags": ["coding", "autocomplete", "privacy", "local"],
+      "is_free": true,
+      "rating": 4.3,
+      "provider": "Tabnine",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Lässt sich lokal installieren, dein Code bleibt privat – ideal für Unternehmen oder sensible Projekte.",
+        "Kontext: Gute Alternative zu Copilot, wenn Datenschutz wichtig ist. Ähnlich zu: Codeium."
+      ],
+      "strengths": [
+        "Kann komplett offline laufen – kein Datenleck.",
+        "Unterstützt viele Programmiersprachen und Editoren.",
+        "Lernt aus deinem eigenen Code und macht bessere Vorschläge."
+      ],
+      "useCases": [
+        "Sensible Projekte: wenn Code nicht in die Cloud darf.",
+        "Teamarbeit: einheitliche Code-Vervollständigung für alle.",
+        "Lernen: Vorschläge helfen, besseren Code zu schreiben."
+      ],
+      "promptExamples": [
+        "Schreibe eine Funktion, die eine Liste sortiert.",
+        "Vervollständige diesen Code: [Code]",
+        "Erstelle eine Klasse für einen Benutzer mit Name und E-Mail."
+      ],
+      "promptTips": [
+        "Je mehr Code du schreibst, desto besser werden die Vorschläge.",
+        "Nutze die lokale Version für maximale Privatsphäre.",
+        "Akzeptiere nur Vorschläge, die du verstehst."
+      ],
+      "en": {
+        "title": "Tabnine",
+        "description": "AI code completion that runs locally – great for privacy.",
+        "badges": [
+          "Strength: Can run fully locally – your code stays private. Ideal for companies or sensitive projects.",
+          "Context: Good alternative to Copilot when privacy matters. Similar to: Codeium."
+        ],
+        "strengths": [
+          "Can work completely offline – no data leaks.",
+          "Supports many languages and editors.",
+          "Learns from your own code for better suggestions."
+        ],
+        "useCases": [
+          "Sensitive projects: when code must not leave your computer.",
+          "Teamwork: consistent code completion for everyone.",
+          "Learning: suggestions help you write better code."
+        ],
+        "promptExamples": [
+          "Write a function that sorts a list.",
+          "Complete this code: [code]",
+          "Create a class for a user with name and email."
+        ],
+        "promptTips": [
+          "The more code you write, the better the suggestions.",
+          "Use the local version for maximum privacy.",
+          "Only accept suggestions you understand."
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "title": "Sourcegraph Cody",
+      "link": "https://sourcegraph.com/cody",
+      "description": "KI, die deinen gesamten Code versteht – hilft bei großen Projekten und beim Refactoring.",
+      "category": "code",
+      "tags": ["coding", "codebase", "search", "refactoring"],
+      "is_free": true,
+      "rating": 4.2,
+      "provider": "Sourcegraph",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Versteht den ganzen Projekt-Code und kann Fragen dazu beantworten – perfekt für große Codebasen.",
+        "Kontext: Ideal für erfahrene Entwickler, die schnell Zusammenhänge verstehen wollen. Ähnlich zu: Cursor."
+      ],
+      "strengths": [
+        "Beantwortet Fragen zu deinem Code, z.B. „Wo wird diese Funktion verwendet?“",
+        "Hilft beim Refactoring: „Mach diese Klasse übersichtlicher.“",
+        "Erklärt komplexe Zusammenhänge im gesamten Projekt."
+      ],
+      "useCases": [
+        "Große Projekte: schnell etwas wiederfinden oder verstehen.",
+        "Refactoring: Code aufräumen und verbessern.",
+        "Onboarding: Neue Teammitglieder können das Projekt erkunden."
+      ],
+      "promptExamples": [
+        "Wo wird die Funktion `login` aufgerufen?",
+        "Erkläre mir die Struktur dieser Klasse: [Code]",
+        "Wie kann ich diese Funktion sicher umbenennen?"
+      ],
+      "promptTips": [
+        "Gib so viel Kontext wie möglich – zeige die Datei oder den Code.",
+        "Frag nach Erklärungen, wenn du etwas nicht verstehst.",
+        "Nutze Cody, um Code-Stellen zu finden, bevor du änderst."
+      ],
+      "en": {
+        "title": "Sourcegraph Cody",
+        "description": "AI that understands your entire codebase – helps with large projects and refactoring.",
+        "badges": [
+          "Strength: Understands the whole project and answers questions about it – perfect for large codebases.",
+          "Context: Ideal for experienced developers who need to quickly grasp relationships. Similar to: Cursor."
+        ],
+        "strengths": [
+          "Answers questions like 'Where is this function used?'",
+          "Helps with refactoring: 'Make this class cleaner.'",
+          "Explains complex relationships across the project."
+        ],
+        "useCases": [
+          "Large projects: quickly find and understand code.",
+          "Refactoring: clean up and improve code.",
+          "Onboarding: new team members can explore the project."
+        ],
+        "promptExamples": [
+          "Where is the `login` function called?",
+          "Explain the structure of this class: [code]",
+          "How can I safely rename this function?"
+        ],
+        "promptTips": [
+          "Provide as much context as possible – show the file or code.",
+          "Ask for explanations when something is unclear.",
+          "Use Cody to find code locations before making changes."
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "title": "MutableAI",
+      "link": "https://mutable.ai",
+      "description": "KI-gestütztes Refactoring: Verbessert bestehenden Code automatisch.",
+      "category": "code",
+      "tags": ["coding", "refactoring", "optimization"],
+      "is_free": false,
+      "rating": 4.0,
+      "provider": "MutableAI",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Automatisches Verbessern und Umschreiben von Code – spart Zeit bei der Code-Pflege.",
+        "Kontext: Gut für Entwickler, die Code optimieren oder modernisieren wollen. Ähnlich zu: Cursor."
+      ],
+      "strengths": [
+        "Schreibt Code um, ohne die Funktion zu ändern – perfekt für Refactoring.",
+        "Kann Code in eine andere Sprache oder Framework übertragen.",
+        "Erkennt schlechte Muster und macht Verbesserungsvorschläge."
+      ],
+      "useCases": [
+        "Altprojekte modernisieren: Code auf neuesten Stand bringen.",
+        "Refactoring: Schneller sauberen Code produzieren.",
+        "Portierung: Code von Python nach Java umwandeln lassen."
+      ],
+      "promptExamples": [
+        "Refaktorisiere diese Klasse und mach sie lesbarer: [Code]",
+        "Wandle diesen Python-Code in TypeScript um: [Code]",
+        "Finde und behebe Performance-Probleme in dieser Funktion: [Code]"
+      ],
+      "promptTips": [
+        "Gib immer den kompletten Code an, der geändert werden soll.",
+        "Sag, was das Ziel ist: schneller, lesbarer, sicherer?",
+        "Prüfe die Änderungen, bevor du sie übernimmst."
+      ],
+      "en": {
+        "title": "MutableAI",
+        "description": "AI-powered refactoring: automatically improves existing code.",
+        "badges": [
+          "Strength: Automatically rewrites code without changing behavior – saves time on maintenance.",
+          "Context: Good for developers who want to optimize or modernize code. Similar to: Cursor."
+        ],
+        "strengths": [
+          "Rewrites code without changing function – perfect for refactoring.",
+          "Can port code to another language or framework.",
+          "Detects bad patterns and suggests improvements."
+        ],
+        "useCases": [
+          "Modernize legacy code: bring old code up to date.",
+          "Refactoring: produce cleaner code faster.",
+          "Porting: convert Python code to TypeScript."
+        ],
+        "promptExamples": [
+          "Refactor this class to be more readable: [code]",
+          "Convert this Python code to TypeScript: [code]",
+          "Find and fix performance issues in this function: [code]"
+        ],
+        "promptTips": [
+          "Always provide the full code to be changed.",
+          "Specify the goal: faster, more readable, safer?",
+          "Review changes before accepting them."
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "title": "Phind",
+      "link": "https://www.phind.com",
+      "description": "Suchmaschine speziell für Entwickler – beantwortet technische Fragen mit Quellen.",
+      "category": "code",
+      "tags": ["search", "developer", "answers", "research"],
+      "is_free": true,
+      "rating": 4.5,
+      "provider": "Phind",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Liefert Antworten auf Programmierfragen mit aktuellen Quellen – besser als normale Google-Suche.",
+        "Kontext: Perfekt für schnelle Recherche, Fehlersuche und Best Practices. Ähnlich zu: Perplexity AI."
+      ],
+      "strengths": [
+        "Versteht technische Fragen und sucht im Web nach passenden Lösungen.",
+        "Zeit Quellen an, damit du die Antwort prüfen kannst.",
+        "Kann auch Code generieren und erklären."
+      ],
+      "useCases": [
+        "Fehlersuche: „Warum bekomme ich diesen Fehler in Python?“",
+        "Recherche: „Welche Library eignet sich für Diagramme in JavaScript?“",
+        "Lernen: „Erkläre mir asynchrone Programmierung einfach.“"
+      ],
+      "promptExamples": [
+        "Warum gibt meine Funktion 'undefined' zurück? [Code]",
+        "Wie installiere ich TensorFlow unter Windows?",
+        "Vergleiche React und Vue – Vor- und Nachteile."
+      ],
+      "promptTips": [
+        "Stelle Fragen, als würdest du einen erfahrenen Kollegen fragen.",
+        "Gib Fehlermeldungen immer vollständig mit an.",
+        "Nutze die Quellen, um die Antwort zu verifizieren."
+      ],
+      "en": {
+        "title": "Phind",
+        "description": "Search engine for developers – answers technical questions with sources.",
+        "badges": [
+          "Strength: Provides answers to programming questions with up-to-date sources – better than plain Google.",
+          "Context: Perfect for quick research, debugging, and best practices. Similar to: Perplexity AI."
+        ],
+        "strengths": [
+          "Understands technical questions and searches the web for solutions.",
+          "Shows sources so you can verify the answer.",
+          "Can also generate and explain code."
+        ],
+        "useCases": [
+          "Debugging: 'Why am I getting this error in Python?'",
+          "Research: 'Which library is good for charts in JavaScript?'",
+          "Learning: 'Explain async programming simply.'"
+        ],
+        "promptExamples": [
+          "Why does my function return 'undefined'? [code]",
+          "How do I install TensorFlow on Windows?",
+          "Compare React and Vue – pros and cons."
+        ],
+        "promptTips": [
+          "Ask questions as if you were asking a senior developer.",
+          "Always include full error messages.",
+          "Use the sources to verify the answer."
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "title": "Mintlify Writer",
+      "link": "https://mintlify.com/writer",
+      "description": "KI, die automatisch Code-Dokumentation schreibt – einfach Code markieren, Docs generieren.",
+      "category": "code",
+      "tags": ["documentation", "code", "writing"],
+      "is_free": true,
+      "rating": 4.1,
+      "provider": "Mintlify",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Spart Zeit beim Schreiben von Dokumentation – ideal für Open-Source-Projekte oder Teams.",
+        "Kontext: Perfekt, wenn du saubere Kommentare oder Readmes brauchst. Ähnlich zu: GitHub Copilot."
+      ],
+      "strengths": [
+        "Generiert aus Code sofort lesbare Erklärungen.",
+        "Unterstützt viele Sprachen und Formate (Markdown, JSDoc, etc.).",
+        "Kann auch komplette Readme-Dateien erstellen."
+      ],
+      "useCases": [
+        "Projektdokumentation: Schnell eine gute Readme schreiben.",
+        "Code-Kommentare: Funktionen automatisch beschreiben lassen.",
+        "Teamarbeit: Einheitliche Dokumentation für alle."
+      ],
+      "promptExamples": [
+        "Dokumentiere diese Funktion: [Code]",
+        "Erstelle eine Markdown-Dokumentation für diese Klasse: [Code]",
+        "Schreibe eine kurze Readme für mein Projekt."
+      ],
+      "promptTips": [
+        "Je mehr Code du markierst, desto besser die Dokumentation.",
+        "Überprüfe die generierten Texte und passe sie an.",
+        "Nutze es, um die Dokumentation aktuell zu halten."
+      ],
+      "en": {
+        "title": "Mintlify Writer",
+        "description": "AI that automatically writes code documentation – just highlight code, get docs.",
+        "badges": [
+          "Strength: Saves time writing documentation – great for open source or teams.",
+          "Context: Perfect when you need clean comments or readmes. Similar to: GitHub Copilot."
+        ],
+        "strengths": [
+          "Instantly generates readable explanations from code.",
+          "Supports many languages and formats (Markdown, JSDoc, etc.).",
+          "Can create full readme files."
+        ],
+        "useCases": [
+          "Project documentation: quickly write a good readme.",
+          "Code comments: auto-describe functions.",
+          "Teamwork: consistent documentation for everyone."
+        ],
+        "promptExamples": [
+          "Document this function: [code]",
+          "Create Markdown docs for this class: [code]",
+          "Write a short readme for my project."
+        ],
+        "promptTips": [
+          "The more code you highlight, the better the docs.",
+          "Review and tweak the generated text.",
+          "Use it to keep documentation up-to-date."
+        ]
+      }
+    },
+    {
+      "id": 27,
+      "title": "PlayHT",
+      "link": "https://play.ht",
+      "description": "Text-zu-Sprache für Podcasts, Werbung und Videos – viele natürliche Stimmen.",
+      "category": "audio",
+      "tags": ["tts", "voice", "podcast", "ads"],
+      "is_free": false,
+      "rating": 4.3,
+      "provider": "PlayHT",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Sehr natürliche, emotionale Stimmen – gut für Voiceover und Werbung.",
+        "Kontext: Ideal für YouTuber, Podcaster und Content-Creator. Ähnlich zu: ElevenLabs."
+      ],
+      "strengths": [
+        "Viele verschiedene Stimmen und Emotionen wählbar.",
+        "Unterstützt mehrere Sprachen, darunter Deutsch.",
+        "Einfach zu bedienen: Text einfügen, Stimme wählen, Audio runterladen."
+      ],
+      "useCases": [
+        "Podcast-Intros: Professionelle Ansagen erstellen.",
+        "Werbung: Vertonung von Videospots.",
+        "Hörbücher: Texte in Sprache umwandeln."
+      ],
+      "promptExamples": [
+        "Erstelle einen freundlichen Voiceover für ein Produktvideo: [Text]",
+        "Lies diesen Text wie ein Hörbuch vor: [Text]",
+        "Eine energische Stimme für einen Werbespot: [Text]"
+      ],
+      "promptTips": [
+        "Wähle die Stimme passend zum Inhalt (fröhlich, seriös, etc.).",
+        "Achte auf Satzzeichen – sie beeinflussen die Betonung.",
+        "Teste verschiedene Stimmen, bevor du dich entscheidest."
+      ],
+      "en": {
+        "title": "PlayHT",
+        "description": "Text-to-speech for podcasts, ads, and videos – many natural voices.",
+        "badges": [
+          "Strength: Very natural, emotional voices – great for voiceovers and ads.",
+          "Context: Ideal for YouTubers, podcasters, and content creators. Similar to: ElevenLabs."
+        ],
+        "strengths": [
+          "Many different voices and emotions available.",
+          "Supports multiple languages, including German.",
+          "Easy to use: paste text, pick voice, download audio."
+        ],
+        "useCases": [
+          "Podcast intros: create professional announcements.",
+          "Advertising: voiceovers for video spots.",
+          "Audiobooks: convert text to speech."
+        ],
+        "promptExamples": [
+          "Create a friendly voiceover for a product video: [text]",
+          "Read this text like an audiobook: [text]",
+          "An energetic voice for an ad: [text]"
+        ],
+        "promptTips": [
+          "Choose a voice that fits the content (cheerful, serious, etc.).",
+          "Pay attention to punctuation – it affects intonation.",
+          "Test different voices before deciding."
+        ]
+      }
+    },
+    {
+      "id": 28,
+      "title": "Murf AI",
+      "link": "https://murf.ai",
+      "description": "Professionelle Voiceover für Business und E-Learning – mit vielen Anpassungen.",
+      "category": "audio",
+      "tags": ["voiceover", "business", "elearning"],
+      "is_free": false,
+      "rating": 4.4,
+      "provider": "Murf AI",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Besonders gut für professionelle Anwendungen wie Erklärvideos, Präsentationen und Kurse.",
+        "Kontext: Ideal für Unternehmen, Bildungseinrichtungen und Trainer. Ähnlich zu: PlayHT."
+      ],
+      "strengths": [
+        "Viele Stimmen mit feinen Nuancen und Betonungen.",
+        "Integrierter Editor, um Aussprache und Pausen anzupassen.",
+        "Export in verschiedene Audioformate möglich."
+      ],
+      "useCases": [
+        "E-Learning-Kurse: Lehrinhalte vertonen.",
+        "Firmenvideos: Professionelle Sprachausgabe für interne Schulungen.",
+        "YouTube: Kanal-Intros und Erklärvideos."
+      ],
+      "promptExamples": [
+        "Vertone dieses Erklärvideo-Skript: [Text]",
+        "Eine freundliche, aber professionelle Stimme für eine Präsentation: [Text]",
+        "Erstelle eine Sprachausgabe für einen Online-Kurs."
+      ],
+      "promptTips": [
+        "Nutze den Editor, um die Betonung bestimmter Wörter zu verbessern.",
+        "Füge Pausen hinzu, wo sie natürlich klingen sollen.",
+        "Wähle eine Stimme, die zur Marke oder Zielgruppe passt."
+      ],
+      "en": {
+        "title": "Murf AI",
+        "description": "Professional voiceovers for business and e-learning – with many customizations.",
+        "badges": [
+          "Strength: Especially good for professional use like explainer videos, presentations, and courses.",
+          "Context: Ideal for companies, educators, and trainers. Similar to: PlayHT."
+        ],
+        "strengths": [
+          "Many voices with fine nuances and emphasis.",
+          "Built-in editor to adjust pronunciation and pauses.",
+          "Export to various audio formats."
+        ],
+        "useCases": [
+          "E-learning courses: narrate educational content.",
+          "Corporate videos: professional voiceovers for internal training.",
+          "YouTube: channel intros and explainer videos."
+        ],
+        "promptExamples": [
+          "Narrate this explainer video script: [text]",
+          "A friendly but professional voice for a presentation: [text]",
+          "Create a voiceover for an online course."
+        ],
+        "promptTips": [
+          "Use the editor to improve emphasis on certain words.",
+          "Add pauses where they sound natural.",
+          "Pick a voice that fits your brand or audience."
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "title": "Descript",
+      "link": "https://www.descript.com",
+      "description": "Audio- und Videobearbeitung per Text – schneide, indem du Wörter löscht.",
+      "category": "audio",
+      "tags": ["audio-editing", "video-editing", "transcription"],
+      "is_free": true,
+      "rating": 4.7,
+      "provider": "Descript",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Revolutionäre Audio-Bearbeitung – du löscht Wörter im transkribierten Text, und das Audio wird automatisch geschnitten.",
+        "Kontext: Perfekt für Podcaster, Video-Creator und alle, die schnell Inhalte bearbeiten wollen. Ähnlich zu: Audacity, aber viel einfacher."
+      ],
+      "strengths": [
+        "Transkribiert Audio automatisch und macht es editierbar wie Text.",
+        "Kann störende Füllwörter wie „ähm“ mit einem Klick entfernen.",
+        "Einfache Video-Bearbeitung, Overlays und Untertitel."
+      ],
+      "useCases": [
+        "Podcast schneiden: Stottern und Pausen entfernen.",
+        "Interviews: Schnell die besten Stellen herausschneiden.",
+        "YouTube: Videos mit Untertiteln versehen."
+      ],
+      "promptExamples": [
+        "Entferne alle „ähm“ und „ah“ aus dieser Aufnahme.",
+        "Schneide den Teil zwischen 2:30 und 4:15 heraus.",
+        "Füge Untertitel zu diesem Video hinzu."
+      ],
+      "promptTips": [
+        "Lade die Audiodatei hoch und warte auf die Transkription.",
+        "Markiere Text, den du löschen willst – das Audio folgt automatisch.",
+        "Nutze die Overdub-Funktion, um Stimmen zu korrigieren."
+      ],
+      "en": {
+        "title": "Descript",
+        "description": "Audio and video editing by text – cut by deleting words.",
+        "badges": [
+          "Strength: Revolutionary audio editing – delete words in the transcript and the audio is automatically cut.",
+          "Context: Perfect for podcasters, video creators, and anyone who needs fast editing. Similar to: Audacity, but much simpler."
+        ],
+        "strengths": [
+          "Automatically transcribes audio and makes it text-editable.",
+          "Can remove filler words like 'um' with one click.",
+          "Simple video editing, overlays, and subtitles."
+        ],
+        "useCases": [
+          "Podcast editing: remove stutters and pauses.",
+          "Interviews: quickly cut out the best parts.",
+          "YouTube: add subtitles to videos."
+        ],
+        "promptExamples": [
+          "Remove all 'um' and 'ah' from this recording.",
+          "Cut out the part from 2:30 to 4:15.",
+          "Add subtitles to this video."
+        ],
+        "promptTips": [
+          "Upload audio and wait for transcription.",
+          "Select text you want to delete – audio follows automatically.",
+          "Use the overdub feature to correct voices."
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "title": "Resemble AI",
+      "link": "https://www.resemble.ai",
+      "description": "Stimmenklonen: Erstelle eine künstliche Version deiner eigenen Stimme.",
+      "category": "audio",
+      "tags": ["voice-cloning", "tts", "ai-voice"],
+      "is_free": false,
+      "rating": 4.2,
+      "provider": "Resemble AI",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Kann deine Stimme klonen und beliebige Texte damit sprechen – perfekt für Content, wenn du mal keine Zeit hast.",
+        "Kontext: Ideal für Creator, die konsistente Sprachausgaben brauchen. Ähnlich zu: ElevenLabs Voice Cloning."
+      ],
+      "strengths": [
+        "Braucht nur wenige Minuten Sprachaufnahmen, um deine Stimme zu klonen.",
+        "Erzeugt sehr natürliche, emotionale Sprachausgabe.",
+        "API verfügbar für Automatisierung."
+      ],
+      "useCases": [
+        "Content-Erstellung: Videos mit deiner Stimme vertonen, ohne selbst zu sprechen.",
+        "Audiobücher: Deine Stimme für Hörbücher nutzen.",
+        "Assistenten: Personalisierte Sprachassistenten bauen."
+      ],
+      "promptExamples": [
+        "Erstelle einen Klon meiner Stimme aus diesen Aufnahmen.",
+        "Lies diesen Text in meiner Stimme vor: [Text]",
+        "Erzeuge eine Audioversion meines Blogartikels."
+      ],
+      "promptTips": [
+        "Sorge für gute Audioqualität bei den Aufnahmen (ruhig, ohne Hintergrundgeräusche).",
+        "Sprich deutlich und in normalem Tempo.",
+        "Teste den Klon mit verschiedenen Texten, bevor du ihn produktiv nutzt."
+      ],
+      "en": {
+        "title": "Resemble AI",
+        "description": "Voice cloning: create an artificial version of your own voice.",
+        "badges": [
+          "Strength: Can clone your voice and speak any text – perfect for content when you're short on time.",
+          "Context: Ideal for creators who need consistent voice output. Similar to: ElevenLabs Voice Cloning."
+        ],
+        "strengths": [
+          "Needs only a few minutes of voice recordings to clone your voice.",
+          "Produces very natural, emotional speech.",
+          "API available for automation."
+        ],
+        "useCases": [
+          "Content creation: voice videos without speaking yourself.",
+          "Audiobooks: use your voice for narrations.",
+          "Assistants: build personalized voice assistants."
+        ],
+        "promptExamples": [
+          "Create a clone of my voice from these recordings.",
+          "Read this text in my voice: [text]",
+          "Generate an audio version of my blog post."
+        ],
+        "promptTips": [
+          "Ensure good audio quality (quiet, no background noise).",
+          "Speak clearly at a normal pace.",
+          "Test the clone with different texts before using it productively."
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "title": "MonkeyLearn",
+      "link": "https://monkeylearn.com",
+      "description": "Textanalyse ohne Programmieren: Stimmungen, Themen und Kategorien in Texten erkennen.",
+      "category": "data",
+      "tags": ["text-analysis", "nlp", "sentiment"],
+      "is_free": true,
+      "rating": 4.2,
+      "provider": "MonkeyLearn",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Kein Code nötig – du kannst mit wenigen Klicks Texte analysieren lassen (z.B. Kundenbewertungen).",
+        "Kontext: Ideal für Marketing, Kundenservice und Marktforschung. Ähnlich zu: Google Cloud NLP."
+      ],
+      "strengths": [
+        "Vorgefertigte Modelle für Stimmungsanalyse, Themen-Erkennung, etc.",
+        "Eigene Modelle trainierbar, ohne Programmierkenntnisse.",
+        "Integration mit Excel, Google Sheets, Zapier."
+      ],
+      "useCases": [
+        "Kundenfeedback: Sind die Bewertungen positiv oder negativ?",
+        "Social Media: Überwachen, was über deine Marke gesagt wird.",
+        "Umfragen: Offene Antworten automatisch kategorisieren."
+      ],
+      "promptExamples": [
+        "Analysiere die Stimmung dieser Kundenbewertungen: [Texte]",
+        "Finde heraus, welche Themen in diesen Kommentaren vorkommen.",
+        "Extrahiere Produktmerkmale aus Produktbeschreibungen."
+      ],
+      "promptTips": [
+        "Je mehr Beispiele du gibst, desto genauer wird das Modell.",
+        "Nutze die vorgefertigten Modelle für einen schnellen Start.",
+        "Exportiere die Ergebnisse als Tabelle für weitere Analysen."
+      ],
+      "en": {
+        "title": "MonkeyLearn",
+        "description": "Text analysis without coding: detect sentiments, topics, and categories in texts.",
+        "badges": [
+          "Strength: No code needed – analyze texts (e.g., customer reviews) in a few clicks.",
+          "Context: Ideal for marketing, customer service, and market research. Similar to: Google Cloud NLP."
+        ],
+        "strengths": [
+          "Pre-built models for sentiment analysis, topic detection, etc.",
+          "Train your own models without coding.",
+          "Integrates with Excel, Google Sheets, Zapier."
+        ],
+        "useCases": [
+          "Customer feedback: are reviews positive or negative?",
+          "Social media: monitor what's said about your brand.",
+          "Surveys: automatically categorize open-ended answers."
+        ],
+        "promptExamples": [
+          "Analyze the sentiment of these customer reviews: [texts]",
+          "Find out which topics appear in these comments.",
+          "Extract product features from descriptions."
+        ],
+        "promptTips": [
+          "More examples make the model more accurate.",
+          "Use pre-built models for a quick start.",
+          "Export results as a table for further analysis."
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "title": "Obviously AI",
+      "link": "https://www.obviously.ai",
+      "description": "No-Code Prognosen: Sag voraus, welche Kunden kaufen oder wann Maschinen ausfallen.",
+      "category": "data",
+      "tags": ["predictive", "no-code", "forecasting"],
+      "is_free": false,
+      "rating": 4.1,
+      "provider": "Obviously AI",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Du musst kein Data Scientist sein – lade einfach deine Daten hoch und bekomme Prognosen.",
+        "Kontext: Perfekt für kleine Unternehmen, die datengetrieben entscheiden wollen. Ähnlich zu: BigML."
+      ],
+      "strengths": [
+        "Einfache Oberfläche: CSV hochladen, Zielvariable wählen, Ergebnis bekommen.",
+        "Erstellt automatisch Diagramme und Erklärungen.",
+        "Unterstützt Klassifikation, Regression und Zeitreihen."
+      ],
+      "useCases": [
+        "Vertrieb: Welche Kunden werden wahrscheinlich kaufen?",
+        "Wartung: Wann wird eine Maschine voraussichtlich ausfallen?",
+        "Marketing: Welche Kampagne bringt die meisten Neukunden?"
+      ],
+      "promptExamples": [
+        "Sage auf Basis dieser Daten voraus, welche Kunden abwandern werden.",
+        "Erstelle eine Prognose für die nächsten 3 Monate: [Daten]",
+        "Welche Faktoren beeinflussen den Umsatz am meisten?"
+      ],
+      "promptTips": [
+        "Achte auf saubere Daten – keine leeren Zellen, einheitliche Formate.",
+        "Je mehr Daten, desto besser die Prognose.",
+        "Interpretiere die Ergebnisse immer im Kontext deines Geschäfts."
+      ],
+      "en": {
+        "title": "Obviously AI",
+        "description": "No-code predictions: forecast which customers will buy or when machines will fail.",
+        "badges": [
+          "Strength: No data scientist needed – upload your data and get predictions.",
+          "Context: Perfect for small businesses that want data-driven decisions. Similar to: BigML."
+        ],
+        "strengths": [
+          "Simple interface: upload CSV, pick target, get results.",
+          "Automatically creates charts and explanations.",
+          "Supports classification, regression, and time series."
+        ],
+        "useCases": [
+          "Sales: which customers are likely to buy?",
+          "Maintenance: when will a machine likely fail?",
+          "Marketing: which campaign brings the most new customers?"
+        ],
+        "promptExamples": [
+          "Predict which customers will churn based on this data.",
+          "Create a forecast for the next 3 months: [data]",
+          "Which factors most influence revenue?"
+        ],
+        "promptTips": [
+          "Clean data is key – no empty cells, consistent formats.",
+          "More data leads to better predictions.",
+          "Always interpret results in your business context."
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "title": "Hex Magic AI",
+      "link": "https://hex.tech/magic-ai",
+      "description": "Datenanalyse mit SQL und KI – schreib einfache Abfragen und lass dir komplexe Analysen generieren.",
+      "category": "data",
+      "tags": ["sql", "data-analysis", "notebook"],
+      "is_free": true,
+      "rating": 4.3,
+      "provider": "Hex",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Kombiniert SQL mit KI – du beschreibst, was du brauchst, und die KI erstellt die passende Abfrage.",
+        "Kontext: Ideal für Data Analysts und alle, die regelmäßig mit Daten arbeiten. Ähnlich zu: Jupyter Notebooks mit KI."
+      ],
+      "strengths": [
+        "Schreibt SQL-Code aus natürlicher Sprache – keine komplizierten Syntaxkenntnisse nötig.",
+        "Visualisiert Ergebnisse automatisch in Diagrammen.",
+        "Arbeitet kollaborativ wie ein Google Docs für Daten."
+      ],
+      "useCases": [
+        "Berichte erstellen: „Zeige mir den Umsatz pro Monat aufgeschlüsselt nach Region.“",
+        "Ad-hoc-Analysen: „Welche Produkte haben die höchste Rücklaufquote?“",
+        "Datenaufbereitung: „Bereinige diese Tabelle und entferne Duplikate.“"
+      ],
+      "promptExamples": [
+        "Schreibe eine SQL-Abfrage, die die 10 meistverkauften Produkte zeigt.",
+        "Erstelle ein Liniendiagramm der Verkaufszahlen der letzten 6 Monate.",
+        "Verbinde diese beiden Tabellen und zeige mir die Ergebnisse."
+      ],
+      "promptTips": [
+        "Beschreibe deine Anfrage so genau wie möglich.",
+        "Wenn das Ergebnis nicht passt, gib Feedback – die KI lernt dazu.",
+        "Nutze die Visualisierungen, um Muster schnell zu erkennen."
+      ],
+      "en": {
+        "title": "Hex Magic AI",
+        "description": "Data analysis with SQL and AI – write simple queries and let AI generate complex analyses.",
+        "badges": [
+          "Strength: Combines SQL with AI – describe what you need, and AI creates the right query.",
+          "Context: Ideal for data analysts and anyone working with data regularly. Similar to: Jupyter Notebooks with AI."
+        ],
+        "strengths": [
+          "Writes SQL from natural language – no complex syntax needed.",
+          "Automatically visualizes results in charts.",
+          "Collaborative like Google Docs for data."
+        ],
+        "useCases": [
+          "Reports: 'Show me revenue per month by region.'",
+          "Ad-hoc analysis: 'Which products have the highest return rate?'",
+          "Data cleaning: 'Clean this table and remove duplicates.'"
+        ],
+        "promptExamples": [
+          "Write an SQL query showing the top 10 best-selling products.",
+          "Create a line chart of sales over the last 6 months.",
+          "Join these two tables and show me the results."
+        ],
+        "promptTips": [
+          "Describe your request as precisely as possible.",
+          "If the result isn't right, give feedback – the AI learns.",
+          "Use visualizations to quickly spot patterns."
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "title": "Polymer AI",
+      "link": "https://www.polymer.co/ai",
+      "description": "Business Intelligence ohne SQL – verwandle Tabellen in interaktive Dashboards per Sprache.",
+      "category": "data",
+      "tags": ["bi", "no-code", "dashboards"],
+      "is_free": false,
+      "rating": 4.2,
+      "provider": "Polymer",
+      "added": "2024-06-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Du musst keine komplizierten BI-Tools lernen – einfach hochladen und per Chat Fragen stellen.",
+        "Kontext: Perfekt für Manager und Teams, die schnell Einblicke brauchen. Ähnlich zu: Tableau, aber viel einfacher."
+      ],
+      "strengths": [
+        "Erstellt aus CSV/Excel sofort interaktive Dashboards.",
+        "Beantwortet Fragen in natürlicher Sprache: „Zeig mir den Umsatz nach Stadt.“",
+        "Kann automatisch Korrelationen und Trends finden."
+      ],
+      "useCases": [
+        "Verkaufsanalyse: Welche Regionen laufen gut?",
+        "Finanz-Reporting: Monatliche Ausgaben visualisieren.",
+        "Marketing: Kampagnenergebnisse auf einen Blick."
+      ],
+      "promptExamples": [
+        "Erstelle ein Dashboard aus dieser Tabelle.",
+        "Zeig mir die Entwicklung der Kundenzahlen nach Monat.",
+        "Welcher Werbekanal bringt die meisten Conversions?"
+      ],
+      "promptTips": [
+        "Stelle Fragen, als würdest du einen Kollegen fragen.",
+        "Das Dashboard passt sich dynamisch an – klick dich durch.",
+        "Exportiere die Ansichten, um sie in Präsentationen zu nutzen."
+      ],
+      "en": {
+        "title": "Polymer AI",
+        "description": "Business Intelligence without SQL – turn spreadsheets into interactive dashboards via chat.",
+        "badges": [
+          "Strength: No need to learn complex BI tools – just upload and ask questions.",
+          "Context: Perfect for managers and teams who need quick insights. Similar to: Tableau, but much simpler."
+        ],
+        "strengths": [
+          "Creates interactive dashboards instantly from CSV/Excel.",
+          "Answers natural language questions: 'Show me revenue by city.'",
+          "Finds correlations and trends automatically."
+        ],
+        "useCases": [
+          "Sales analysis: which regions are performing well?",
+          "Financial reporting: visualize monthly expenses.",
+          "Marketing: campaign results at a glance."
+        ],
+        "promptExamples": [
+          "Create a dashboard from this spreadsheet.",
+          "Show me customer growth by month.",
+          "Which ad channel brings the most conversions?"
+        ],
+        "promptTips": [
+          "Ask questions as if you were asking a colleague.",
+          "The dashboard is dynamic – click around.",
+          "Export views for presentations."
         ]
       }
     }
