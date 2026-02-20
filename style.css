@@ -961,20 +961,26 @@ body {
 }
 
 /* Category Badge – absolute Positionierung 3mm links, 2mm oben */
+/* Allgemeine Definition (für Desktop/Tablet) */
 .square-category-badge {
   position: absolute;
   top: 8px;
-  left: 12px;
-  padding: 6px 12px;           /* mehr horizontaler Abstand */
+  left: 10px;
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 0.665rem;           /* noch etwas kleiner */
+  font-size: 0.665rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   white-space: normal;
-  max-width: calc(100% - 24px);
-  line-height: 1.2;
+  max-width: calc(100% - 20px);
+  line-height: 1.3;
   pointer-events: none;
   z-index: 3;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 /* Tool Title – absolute Positionierung 3mm links, 4mm über Marquee */
@@ -1316,12 +1322,16 @@ button,
     padding: 10px 10px 0 10px !important;
   }
 
-.square-category-badge {
+  .square-category-badge {
     font-size: 0.618rem !important;
     padding: 4px 10px !important;
     top: 8px;
     left: 10px !important;
     max-width: calc(100% - 16px) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   .card-square .context-marquee {
