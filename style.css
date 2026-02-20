@@ -2658,7 +2658,7 @@ input:disabled + .cookie-slider {
   }
 }
 
-/* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE (INNERHALB) === */
+/* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE === */
 .category-header-card {
   position: relative;
   overflow: visible;
@@ -2666,40 +2666,40 @@ input:disabled + .cookie-slider {
 
 .corner-lines {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   pointer-events: none;
-  z-index: 5;
+  z-index: 10;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  color: var(--glow-color); /* für currentColor im SVG */
+  color: var(--glow-color); /* Erbt die Kategoriefarbe */
 }
 
-/* Oben links – Linien nach rechts und unten */
+/* Oben links – drei waagrechte und drei senkrechte Linien nach innen */
 .corner-lines.top-left {
-  top: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='0' y1='3' x2='14' y2='3' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='8' x2='14' y2='8' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='13' x2='14' y2='13' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='3' y1='0' x2='3' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='8' y1='0' x2='8' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='13' y1='0' x2='13' y2='14' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  top: -2px;
+  left: -2px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='5' y1='5' x2='18' y2='5' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='11' x2='18' y2='11' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='17' x2='18' y2='17' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='5' x2='5' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='11' y1='5' x2='11' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='17' y1='5' x2='17' y2='18' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
 }
 
 /* Oben rechts – Linien nach links und unten */
 .corner-lines.top-right {
-  top: 0;
-  right: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='16' y1='3' x2='30' y2='3' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='8' x2='30' y2='8' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='13' x2='30' y2='13' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='27' y1='0' x2='27' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='22' y1='0' x2='22' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='17' y1='0' x2='17' y2='14' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  top: -2px;
+  right: -2px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='22' y1='5' x2='35' y2='5' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='11' x2='35' y2='11' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='17' x2='35' y2='17' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='35' y1='5' x2='35' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='29' y1='5' x2='29' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='23' y1='5' x2='23' y2='18' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
 }
 
 /* Unten links – Linien nach rechts und oben */
 .corner-lines.bottom-left {
-  bottom: 0;
-  left: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='0' y1='17' x2='14' y2='17' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='22' x2='14' y2='22' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='27' x2='14' y2='27' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='3' y1='16' x2='3' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='8' y1='16' x2='8' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='13' y1='16' x2='13' y2='30' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  bottom: -2px;
+  left: -2px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='5' y1='22' x2='18' y2='22' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='28' x2='18' y2='28' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='34' x2='18' y2='34' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='22' x2='5' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='11' y1='22' x2='11' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='17' y1='22' x2='17' y2='35' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
 }
 
 /* Unten rechts – Linien nach links und oben */
 .corner-lines.bottom-right {
-  bottom: 0;
-  right: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='16' y1='17' x2='30' y2='17' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='22' x2='30' y2='22' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='27' x2='30' y2='27' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='27' y1='16' x2='27' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='22' y1='16' x2='22' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='17' y1='16' x2='17' y2='30' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
+  bottom: -2px;
+  right: -2px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='22' y1='22' x2='35' y2='22' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='28' x2='35' y2='28' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='34' x2='35' y2='34' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='35' y1='22' x2='35' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='29' y1='22' x2='29' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='23' y1='22' x2='23' y2='35' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
 }
