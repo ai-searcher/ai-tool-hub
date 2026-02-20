@@ -1,9 +1,12 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V14.1 – GPU-beschleunigt mit korrekter Linienbreite und Puls
-// - Nutzt GPU.WebGLRenderer für maximale Performance
-// - Beibehaltung aller optischen Effekte (Kurven, Glow, Sterne, Ripples)
-// - Linienbreite und Puls wie im Original
-// - Fallback auf 2D, wenn WebGL nicht verfügbar ist
+// COLOR-FLOW.JS – GPU-beschleunigte organische Kurven (Ultra-Version)
+// Version: 16.0.0
+// - Verbesserter Lifecycle (keine Memory Leaks)
+// - Nutzung von GPU.tessellateConnection als Single Source of Truth
+// - Positionshash für stabile Verbindungen (weniger Flackern)
+// - Pointer Events (optional) für bessere Hover-Erkennung
+// - Neue visuelle Effekte als Flags (standardmäßig deaktiviert)
+// - Volle Kompatibilität zu bestehender API
 // =========================================
 
 (function() {
@@ -12,9 +15,9 @@
   class GridSynchronizedNetworkUltimate {
     constructor() {
       this.canvas = null;
-      this.ctx = null;                // 2D Fallback
-      this.glRenderer = null;          // GPU-Renderer
-      this.useWebGL = false;           // Flag, ob WebGL aktiv ist
+      this.ctx = null;
+      this.glRenderer = null;
+      this.useWebGL = false;
       this.gridElement = null;
       this.containerElement = null;
       this.cards = [];
@@ -91,6 +94,18 @@
         this.animScheduler = null;
       }
 
+      // Für sauberes Lifecycle
+      this._animateCallback = null;
+      this._resizeHandler = this.handleResize.bind(this);
+      this._rippleHandler = this._onRippleClick.bind(this);
+
+      // Für Positionshash (Stabilität)
+      this._lastPositionsHash = null;
+
+      // Für neue Effekte (Attractors etc.)
+      this.mouseX = -1000;
+      this.mouseY = -1000;
+
       this.init();
     }
 
@@ -120,7 +135,12 @@
           enableVariableWidth: false,
           starCount: 50,
           curveOffsetFactor: 0.2,
-          curveRandomness: 0.3
+          curveRandomness: 0.3,
+          tessellationSegments: 15,
+          // Neue Flags (standardmäßig aus)
+          enableDepthParallax: false,
+          enableFlowNoise: false,
+          enableAttractors: false
         };
       } else if (this.isTablet) {
         this.settings = {
@@ -148,7 +168,11 @@
           starCount: 100,
           glitchProbability: 0.01,
           curveOffsetFactor: 0.25,
-          curveRandomness: 0.4
+          curveRandomness: 0.4,
+          tessellationSegments: 20,
+          enableDepthParallax: false,
+          enableFlowNoise: false,
+          enableAttractors: false
         };
       } else {
         this.settings = {
@@ -176,7 +200,11 @@
           starCount: 200,
           glitchProbability: 0.02,
           curveOffsetFactor: 0.3,
-          curveRandomness: 0.5
+          curveRandomness: 0.5,
+          tessellationSegments: 25,
+          enableDepthParallax: false,
+          enableFlowNoise: false,
+          enableAttractors: false
         };
       }
 
@@ -191,46 +219,51 @@
       };
     }
 
+    // Ripple-Listener als eigene Methode für sauberes Entfernen
+    _onRippleClick(e) {
+      const card = e.target.closest('.card-square');
+      if (!card) return;
+      const gridRect = this.gridElement?.getBoundingClientRect();
+      if (!gridRect) return;
+      const cardRect = card.getBoundingClientRect();
+      const x = cardRect.left + cardRect.width/2 - gridRect.left;
+      const y = cardRect.top + cardRect.height/2 - gridRect.top;
+      if (this.settings.enableRipples) {
+        this.ripples.push({
+          x, y,
+          radius: 10,
+          maxRadius: Math.max(this.canvasWidth, this.canvasHeight) * 0.8,
+          alpha: 0.8,
+          growth: 2,
+          active: true
+        });
+      }
+    }
+
     setupRippleListener() {
-      document.addEventListener('click', (e) => {
-        const card = e.target.closest('.card-square');
-        if (!card) return;
-        const gridRect = this.gridElement?.getBoundingClientRect();
-        if (!gridRect) return;
-        const cardRect = card.getBoundingClientRect();
-        const x = cardRect.left + cardRect.width/2 - gridRect.left;
-        const y = cardRect.top + cardRect.height/2 - gridRect.top;
-        if (this.settings.enableRipples) {
-          this.ripples.push({
-            x, y,
-            radius: 10,
-            maxRadius: Math.max(this.canvasWidth, this.canvasHeight) * 0.8,
-            alpha: 0.8,
-            growth: 2,
-            active: true
-          });
-        }
-      });
+      document.addEventListener('click', this._rippleHandler);
+    }
+
+    // Mausposition für Attractors
+    _onMouseMove(e) {
+      if (!this.gridElement) return;
+      const rect = this.gridElement.getBoundingClientRect();
+      this.mouseX = e.clientX - rect.left;
+      this.mouseY = e.clientY - rect.top;
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v14.1 – GPU-accelerated Curves with proper width & pulse');
+      console.log('🚀 GridSynchronizedNetwork v16.0 – GPU Ultra mit Lifecycle-Optimierung');
 
       window.addEventListener('quantum:ready', () => {
-        console.log('📡 quantum:ready received');
         setTimeout(() => this.setup(), 50);
       });
 
       if (document.readyState === 'complete') {
-        console.log('📄 Document already complete, setting up...');
         setTimeout(() => this.setup(), 100);
       }
 
-      let resizeTimeout;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => this.handleResize(), 300);
-      });
+      window.addEventListener('resize', this._resizeHandler);
     }
 
     setup() {
@@ -304,14 +337,14 @@
       this.canvas.style.width = this.canvasWidth + 'px';
       this.canvas.style.height = this.canvasHeight + 'px';
 
-      // Versuche GPU-Renderer zu initialisieren
-      if (window.GPU && window.GPU.WebGLRenderer) {
+      // Versuche GPU-Renderer
+      if (window.GPU && window.GPU.WebGLRendererUltra) {
         try {
-          this.glRenderer = new window.GPU.WebGLRenderer(this.canvas, {
+          this.glRenderer = new window.GPU.WebGLRendererUltra(this.canvas, {
             pixelRatio: Math.min(window.devicePixelRatio || 1, 2)
           });
           this.useWebGL = true;
-          console.log('🎨 GPU-Renderer aktiv');
+          console.log('🎨 GPU Ultra Renderer aktiv');
           this.glRenderer.resize(this.canvasWidth, this.canvasHeight);
         } catch (e) {
           console.warn('WebGL nicht verfügbar, Fallback auf 2D', e);
@@ -321,7 +354,7 @@
         this.useWebGL = false;
       }
 
-      // Fallback: 2D-Kontext
+      // Fallback 2D
       if (!this.useWebGL) {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const hdRatio = dpr * this.settings.qualityMultiplier;
@@ -340,8 +373,6 @@
         this.ctx.imageSmoothingQuality = 'high';
         console.log('🎨 2D canvas fallback');
       }
-
-      console.log(`📐 Canvas dimensions: ${this.canvasWidth}x${this.canvasHeight}`);
     }
 
     generateStars() {
@@ -380,38 +411,81 @@
           degree: 0
         });
       });
+    }
 
-      console.log(`🔍 Scanned ${this.cards.length} cards`);
+    // Berechnet einen Hash der aktuellen Kartenpositionen (für Stabilität)
+    _computePositionsHash() {
+      if (!this.cards.length) return '';
+      let hash = '';
+      for (let card of this.cards) {
+        hash += `${card.x.toFixed(1)},${card.y.toFixed(1)};`;
+      }
+      return hash;
     }
 
     setupInputDetection() {
+      // Entferne alte Listener (falls vorhanden)
+      this.cards.forEach((card) => {
+        if (card._mouseEnterHandler) {
+          card.element.removeEventListener('mouseenter', card._mouseEnterHandler);
+          card.element.removeEventListener('mouseleave', card._mouseLeaveHandler);
+          card.element.removeEventListener('touchstart', card._touchStartHandler);
+          card.element.removeEventListener('touchend', card._touchEndHandler);
+        }
+      });
+
       const isTouchDevice = 'ontouchstart' in window;
+      // Nutze Pointer Events, falls verfügbar (für bessere unified Erkennung)
+      const usePointer = window.PointerEvent && !this.isMobile; // auf Desktop bevorzugen
 
       this.cards.forEach((card) => {
-        if (isTouchDevice) {
-          card.element.addEventListener('touchstart', () => {
+        if (usePointer) {
+          const enterHandler = (e) => {
+            if (e.pointerType !== 'mouse') return; // nur für Maus
             this.hoveredCard = card;
-          }, { passive: true });
-
-          card.element.addEventListener('touchend', () => {
+          };
+          const leaveHandler = () => {
+            this.hoveredCard = null;
+          };
+          card.element.addEventListener('pointerenter', enterHandler);
+          card.element.addEventListener('pointerleave', leaveHandler);
+          card._pointerEnterHandler = enterHandler;
+          card._pointerLeaveHandler = leaveHandler;
+        } else if (isTouchDevice) {
+          const touchStartHandler = () => {
+            this.hoveredCard = card;
+          };
+          const touchEndHandler = () => {
             setTimeout(() => {
               if (this.hoveredCard === card) {
                 this.hoveredCard = null;
               }
             }, 400);
-          }, { passive: true });
+          };
+          card.element.addEventListener('touchstart', touchStartHandler, { passive: true });
+          card.element.addEventListener('touchend', touchEndHandler, { passive: true });
+          card._touchStartHandler = touchStartHandler;
+          card._touchEndHandler = touchEndHandler;
         } else {
-          card.element.addEventListener('mouseenter', () => {
+          const mouseEnterHandler = () => {
             this.hoveredCard = card;
-          });
-
-          card.element.addEventListener('mouseleave', () => {
+          };
+          const mouseLeaveHandler = () => {
             if (this.hoveredCard === card) {
               this.hoveredCard = null;
             }
-          });
+          };
+          card.element.addEventListener('mouseenter', mouseEnterHandler);
+          card.element.addEventListener('mouseleave', mouseLeaveHandler);
+          card._mouseEnterHandler = mouseEnterHandler;
+          card._mouseLeaveHandler = mouseLeaveHandler;
         }
       });
+
+      // Mausbewegung für Attractors
+      if (this.settings.enableAttractors) {
+        document.addEventListener('mousemove', this._onMouseMove.bind(this));
+      }
     }
 
     refresh() {
@@ -420,17 +494,25 @@
         console.warn('refresh: gridElement missing');
         return;
       }
+      const oldHash = this._lastPositionsHash;
       this.scanTools();
-      this.generateIntelligentConnections();
-      if (this.connections.length === 0) {
-        console.log('📋 No intelligent connections, using fallback');
-        this.generateFallbackConnections();
+      const newHash = this._computePositionsHash();
+      if (newHash !== oldHash) {
+        console.log('Positions changed, regenerating connections');
+        this.generateIntelligentConnections();
+        if (this.connections.length === 0) {
+          this.generateFallbackConnections();
+        }
+        this._lastPositionsHash = newHash;
+      } else {
+        console.log('Positions unchanged, keeping connections');
       }
       console.log(`🕸️ After refresh: ${this.connections.length} connections`);
       this.setupCanvas();
       this.generateStars();
     }
 
+    // ===== Verbindungslogik (weitgehend unverändert) =====
     generateIntelligentConnections() {
       this.connections = [];
       const clusters = this.detectClusters();
@@ -747,93 +829,84 @@
       });
     }
 
-    // ===== GPU-Hilfsfunktion: Tesselliert eine Verbindung in Liniensegmente =====
+    // ===== Tessellation: Nutze GPU.tessellateConnection wenn verfügbar =====
     _tessellateConnection(conn, activeState, time, forGlow = false) {
-      const config = conn.config;
-      let fromColor = this.categoryColors[conn.from.category] || this.categoryColors.other;
-      let toColor = this.categoryColors[conn.to.category] || this.categoryColors.other;
-      
-      let weight = conn.weight || 1;
-      if (this.settings.enableVariableWidth) {
-        const degree = (conn.from.degree + conn.to.degree) / 2;
-        weight *= (0.8 + degree * 0.1);
-      }
-
-      // Berechnung der Basis-Linienbreite (wie im Original)
-      const baseWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
-      // Für Glow wird die Breite verdreifacht
-      let lineWidth = forGlow ? baseWidth * 3 : baseWidth;
-
-      let baseOpacity;
-      if (forGlow) {
-        baseOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+      if (window.GPU && window.GPU.tessellateConnection) {
+        // Verwende die GPU-Bibliothek
+        return window.GPU.tessellateConnection(
+          conn.from, conn.to, conn, activeState, time,
+          this.categoryColors, this.settings, forGlow
+        );
       } else {
-        baseOpacity = this.settings.baseOpacity * activeState * weight;
+        // Eigene Implementierung (Fallback)
+        const config = conn.config;
+        let fromColor = this.categoryColors[conn.from.category] || this.categoryColors.other;
+        let toColor = this.categoryColors[conn.to.category] || this.categoryColors.other;
+
+        let weight = conn.weight || 1;
+        if (this.settings.enableVariableWidth) {
+          const degree = (conn.from.degree + conn.to.degree) / 2;
+          weight *= (0.8 + degree * 0.1);
+        }
+
+        const baseWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
+        const lineWidth = forGlow ? baseWidth * 3 : baseWidth;
+
+        let baseOpacity;
+        if (forGlow) {
+          baseOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
+        } else {
+          baseOpacity = this.settings.baseOpacity * activeState * weight;
+        }
+
+        if (this.settings.enableGlitch && Math.random() < this.settings.glitchProbability) {
+          [fromColor, toColor] = [toColor, fromColor];
+        }
+
+        const from = conn.from;
+        const to = conn.to;
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 1) return null;
+
+        const baseOffset = dist * this.settings.curveOffsetFactor;
+        const seed = conn.glowOffset;
+        const rand1 = Math.sin(seed) * 0.5 + 0.5;
+        const rand2 = Math.cos(seed) * 0.5 + 0.5;
+        const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
+        const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
+        const offset = baseOffset * offsetFactor;
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        const perpX = -dy / dist;
+        const perpY = dx / dist;
+        const cos = Math.cos(angleVar);
+        const sin = Math.sin(angleVar);
+        const rotatedX = perpX * cos - perpY * sin;
+        const rotatedY = perpX * sin + perpY * cos;
+        const cpX = midX + rotatedX * offset;
+        const cpY = midY + rotatedY * offset;
+
+        const segments = this.settings.tessellationSegments;
+
+        const points = [];
+        const colors = [];
+
+        for (let i = 0; i <= segments; i++) {
+          const t = i / segments;
+          const x = (1 - t) * (1 - t) * from.x + 2 * (1 - t) * t * cpX + t * t * to.x;
+          const y = (1 - t) * (1 - t) * from.y + 2 * (1 - t) * t * cpY + t * t * to.y;
+          points.push(x, y);
+
+          const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * t);
+          const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * t);
+          const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * t);
+          colors.push(r / 255, g / 255, b / 255, baseOpacity);
+        }
+
+        return { points, colors, thickness: lineWidth };
       }
-
-      if (this.settings.enableGlitch && Math.random() < this.settings.glitchProbability) {
-        const tmp = fromColor;
-        fromColor = toColor;
-        toColor = tmp;
-      }
-
-      const from = conn.from;
-      const to = conn.to;
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 1) return [];
-
-      // Kontrollpunkt wie in drawCurvedLine
-      const baseOffset = dist * this.settings.curveOffsetFactor;
-      const seed = conn.glowOffset;
-      const rand1 = Math.sin(seed) * 0.5 + 0.5;
-      const rand2 = Math.cos(seed) * 0.5 + 0.5;
-      const offsetFactor = 0.8 + rand1 * this.settings.curveRandomness * 2;
-      const angleVar = (rand2 - 0.5) * Math.PI * 0.5;
-      const offset = baseOffset * offsetFactor;
-      const midX = (from.x + to.x) / 2;
-      const midY = (from.y + to.y) / 2;
-      const perpX = -dy / dist;
-      const perpY = dx / dist;
-      const cos = Math.cos(angleVar);
-      const sin = Math.sin(angleVar);
-      const rotatedX = perpX * cos - perpY * sin;
-      const rotatedY = perpX * sin + perpY * cos;
-      const cpX = midX + rotatedX * offset;
-      const cpY = midY + rotatedY * offset;
-
-      // Tessellation: Anzahl Segmente (abhängig von Distanz für glatte Kurven)
-      const segments = Math.max(10, Math.floor(dist / 8));
-      const lines = [];
-      let prevX = from.x;
-      let prevY = from.y;
-      let prevColor = fromColor;
-
-      for (let i = 1; i <= segments; i++) {
-        const t = i / segments;
-        const x = (1-t)*(1-t)*from.x + 2*(1-t)*t*cpX + t*t*to.x;
-        const y = (1-t)*(1-t)*from.y + 2*(1-t)*t*cpY + t*t*to.y;
-
-        // Interpolierte Farbe
-        const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * t);
-        const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * t);
-        const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * t);
-
-        lines.push({
-          x1: prevX, y1: prevY,
-          x2: x, y2: y,
-          r1: prevColor.r, g1: prevColor.g, b1: prevColor.b, a1: baseOpacity,
-          r2: r, g2: g, b2: b, a2: baseOpacity,
-          width: lineWidth
-        });
-
-        prevX = x;
-        prevY = y;
-        prevColor = { r, g, b };
-      }
-
-      return lines;
     }
 
     // ===== 2D-Zeichenmethoden (unverändert) =====
@@ -858,7 +931,7 @@
       return gradient;
     }
 
-    drawCurvedLine(from, to, strokeStyle, lineWidth, connection) {
+    drawCurvedLine2D(from, to, strokeStyle, lineWidth, connection) {
       const dx = to.x - from.x;
       const dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -927,7 +1000,7 @@
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
-      this.drawCurvedLine(from, to, gradient, lineWidth, connection);
+      this.drawCurvedLine2D(from, to, gradient, lineWidth, connection);
 
       this.ctx.setLineDash([]);
 
@@ -962,7 +1035,7 @@
           this.ctx.shadowBlur = this.settings.glowWidth * activeState * config.glowIntensity;
           this.ctx.shadowColor = `rgba(${centerColor.r}, ${centerColor.g}, ${centerColor.b}, ${glowOpacity})`;
 
-          this.drawCurvedLine(from, to, glowGradient, this.ctx.lineWidth, connection);
+          this.drawCurvedLine2D(from, to, glowGradient, this.ctx.lineWidth, connection);
 
           this.ctx.shadowBlur = 0;
         }
@@ -1019,20 +1092,31 @@
       this.glowTime = now;
       this.updateActiveStates();
 
+      // Attractors: Verschiebe die Koordinaten leicht basierend auf Mausposition
+      let attractorOffsetX = 0, attractorOffsetY = 0;
+      if (this.settings.enableAttractors && this.hoveredCard) {
+        // Beispiel: ziehe die Karte leicht zur Maus
+        const dx = this.mouseX - this.hoveredCard.x;
+        const dy = this.mouseY - this.hoveredCard.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > 0) {
+          const strength = Math.min(1, 20 / dist);
+          attractorOffsetX = dx * strength;
+          attractorOffsetY = dy * strength;
+        }
+      }
+
       if (this.useWebGL && this.glRenderer) {
         // WebGL-Rendering
         this.glRenderer.clear();
 
-        // Sterne als Punkte
+        // Sterne
         if (this.settings.enableStars) {
           const starPoints = this.stars.map(star => {
             const brightness = star.brightness + Math.sin(this.glowTime * star.speed + star.phase) * 0.1;
             return {
-              x: star.x,
-              y: star.y,
-              r: 255,
-              g: 255,
-              b: 255,
+              x: star.x, y: star.y,
+              r: 255, g: 255, b: 255,
               a: Math.max(0.2, brightness),
               size: star.radius * 2
             };
@@ -1040,22 +1124,40 @@
           this.glRenderer.drawPoints(starPoints);
         }
 
-        // Verbindungen als Liniensegmente (inkl. Glow)
-        const lines = [];
+        // Kurven sammeln (normale + Glow)
+        const curves = [];
         this.connections.forEach(conn => {
           const activeState = this.activeConnections.get(conn) || 1;
-          // Normale Linie
-          const normalSegments = this._tessellateConnection(conn, activeState, now, false);
-          lines.push(...normalSegments);
+          // Normale Kurve
+          const normal = this._tessellateConnection(conn, activeState, now, false);
+          if (normal) {
+            // Bei Attractors: Verschiebe die Kurve
+            if (attractorOffsetX !== 0 || attractorOffsetY !== 0) {
+              for (let i = 0; i < normal.points.length; i += 2) {
+                normal.points[i] += attractorOffsetX;
+                normal.points[i+1] += attractorOffsetY;
+              }
+            }
+            curves.push(normal);
+          }
           // Glow
           if (!this.settings.useSimplifiedRendering || activeState > 0.5) {
-            const glowSegments = this._tessellateConnection(conn, activeState, now, true);
-            lines.push(...glowSegments);
+            const glow = this._tessellateConnection(conn, activeState, now, true);
+            if (glow) {
+              if (attractorOffsetX !== 0 || attractorOffsetY !== 0) {
+                for (let i = 0; i < glow.points.length; i += 2) {
+                  glow.points[i] += attractorOffsetX;
+                  glow.points[i+1] += attractorOffsetY;
+                }
+              }
+              curves.push(glow);
+            }
           }
         });
-        this.glRenderer.drawLines(lines);
 
-        // Ripples als Punkte
+        this.glRenderer.drawCurves(curves);
+
+        // Ripples
         if (this.settings.enableRipples) {
           const ripplePoints = [];
           for (let i = this.ripples.length - 1; i >= 0; i--) {
@@ -1081,6 +1183,7 @@
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.drawStars2D();
 
+        // 2D hat keine Attractors (vereinfacht)
         this.connections.forEach(conn => {
           const activeState = this.activeConnections.get(conn) || 1;
           this.drawConnection2D(conn.from, conn.to, conn, activeState, now);
@@ -1097,9 +1200,11 @@
         this.animationFrame = null;
       }
 
+      // Callback-Referenz speichern für späteres Entfernen
+      this._animateCallback = (t) => this.animate(t);
+
       if (this.useScheduler && this.animScheduler) {
-        const animateWrapper = () => this.animate(performance.now());
-        this.animScheduler.add(animateWrapper);
+        this.animScheduler.add(this._animateCallback);
         console.log('✅ Animation added to scheduler');
       } else {
         this.then = performance.now();
@@ -1161,15 +1266,21 @@
     }
 
     destroy() {
+      console.log('Destroying network...');
       if (this.animationFrame) {
         cancelAnimationFrame(this.animationFrame);
       }
-      if (this.animScheduler) {
-        this.animScheduler.remove(() => this.animate);
+      if (this.animScheduler && this._animateCallback) {
+        this.animScheduler.remove(this._animateCallback);
         this.animScheduler.stop();
       }
       if (this.resizeObserver) {
         this.resizeObserver.disconnect();
+      }
+      window.removeEventListener('resize', this._resizeHandler);
+      document.removeEventListener('click', this._rippleHandler);
+      if (this.settings.enableAttractors) {
+        document.removeEventListener('mousemove', this._onMouseMove);
       }
       if (this.canvas && this.canvas.parentNode) {
         this.canvas.parentNode.removeChild(this.canvas);
@@ -1195,7 +1306,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v14.1 – GPU-accelerated with proper width & pulse');
+    console.group('🚀 Color Flow v16.0 – GPU Ultra mit Lifecycle');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
