@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ===== KONFIGURATION =====
-const BASE_URL = 'https://ai-searcher.github.io/ai-tool-hub';
+const BASE_URL = 'https://ai-searcher.github.io/ai-tool-hub/';
 const DATA_FILE = './data.json';
 const OUTPUT_FILE = './sitemap.xml';
 
