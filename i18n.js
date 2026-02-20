@@ -7,7 +7,7 @@
       // Header
       title: '⚡ Quantum AI Hub',
       subtitle: 'Finde das richtige Tool für dein Problem',
-      searchPlaceholder: 'Ich brauche ein Tool für… (z.B. Daten analysieren)'',
+      searchPlaceholder: 'Ich brauche ein Tool für… (z.B. Daten analysieren)',
       // Tabs
       viewGrid: 'Alle Tools',
       viewStacks: 'Kategorien',
