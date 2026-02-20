@@ -1,1 +1,31 @@
+name: Sitemap automatisch generieren
 
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'data.json'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MY_PAT }}   # Wichtig: Hier wird der PAT verwendet!
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Sitemap generieren
+        run: node build-sitemap.js
+
+      - name: Änderungen committen und pushen
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add sitemap.xml
+          git diff --quiet && git diff --staged --quiet || git commit -m 'Sitemap automatisch aktualisiert'
+          git push origin main
