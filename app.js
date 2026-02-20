@@ -279,52 +279,61 @@ class StackViewController {
   }
 
   createCategoryHeader(category, tools) {
-    const header = document.createElement('div');
-    header.className = 'category-header-card';
+  const header = document.createElement('div');
+  header.className = 'category-header-card';
 
-    const content = document.createElement('div');
-    content.className = 'category-header-content';
+  // === Vier Ecken-Linien als echte DOM-Elemente erzeugen ===
+  const corners = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+  corners.forEach(pos => {
+    const line = document.createElement('div');
+    line.className = `corner-lines ${pos}`;
+    header.appendChild(line);
+  });
 
-    const title = document.createElement('h3');
-    title.className = 'category-header-title';
-    title.textContent = getCategoryName(category);
+  // === Restlicher Inhalt (unverändert) ===
+  const content = document.createElement('div');
+  content.className = 'category-header-content';
 
-    const desc = document.createElement('p');
-    desc.className = 'category-header-description';
-    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''}`;
+  const title = document.createElement('h3');
+  title.className = 'category-header-title';
+  title.textContent = getCategoryName(category);
 
-    content.appendChild(title);
-    content.appendChild(desc);
+  const desc = document.createElement('p');
+  desc.className = 'category-header-description';
+  desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''}`;
 
-    const marquee = document.createElement('div');
-    marquee.className = 'context-marquee';
-    const track = document.createElement('div');
-    track.className = 'marquee-track';
-    marquee.appendChild(track);
+  content.appendChild(title);
+  content.appendChild(desc);
 
-    // Tags für diese Kategorie holen – jetzt zweisprachig
-    const lang = window.i18n ? window.i18n.currentLang : 'de';
-    let tags = this.categoryTags?.[category];
-    if (tags && typeof tags === 'object' && !Array.isArray(tags)) {
-      tags = tags[lang] || tags.de || [];
-    } else {
-      const t = window.i18n ? window.i18n.t : (key) => key;
-      tags = Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'];
-    }
+  const marquee = document.createElement('div');
+  marquee.className = 'context-marquee';
+  const track = document.createElement('div');
+  track.className = 'marquee-track';
+  marquee.appendChild(track);
 
-    for (let i = 0; i < 2; i++) {
-      tags.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'marquee-seq';
-        span.textContent = tag;
-        track.appendChild(span);
-      });
-    }
-
-    header.appendChild(content);
-    header.appendChild(marquee);
-    return header;
+  // Tags für diese Kategorie holen (zweisprachig) – bleibt wie gehabt
+  const lang = window.i18n ? window.i18n.currentLang : 'de';
+  let tags = this.categoryTags?.[category];
+  if (tags && typeof tags === 'object' && !Array.isArray(tags)) {
+    tags = tags[lang] || tags.de || [];
+  } else {
+    const t = window.i18n ? window.i18n.t : (key) => key;
+    tags = Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'];
   }
+
+  for (let i = 0; i < 2; i++) {
+    tags.forEach(tag => {
+      const span = document.createElement('span');
+      span.className = 'marquee-seq';
+      span.textContent = tag;
+      track.appendChild(span);
+    });
+  }
+
+  header.appendChild(content);
+  header.appendChild(marquee);
+  return header;
+}
 
   createStackCard(tool) {
     const card = document.createElement('div');
