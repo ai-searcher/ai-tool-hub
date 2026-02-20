@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.7.0 (SmartSearch integriert)
+// Version: 1.7.1 (Verbesserte Suchvorschläge mit Font Awesome Icons)
 // =========================================
 
 'use strict';
@@ -498,7 +498,7 @@ const state = {
   },
   sortBy: 'name',
   sortDirection: 'asc',
-  smartFilters: { category: null, freeOnly: false, beginner: false } // Neu
+  smartFilters: { category: null, freeOnly: false, beginner: false }
 };
 
 // =========================================
@@ -1381,6 +1381,26 @@ const smartSearch = {
   dropdown: null,
   visible: false,
 
+  // Font Awesome Icons pro Kategorie (passend zum Design)
+  categoryIconMap: {
+    text: 'fa-file-lines',
+    image: 'fa-image',
+    code: 'fa-code',
+    audio: 'fa-music',
+    video: 'fa-video',
+    data: 'fa-chart-simple',
+    other: 'fa-cube'
+  },
+
+  actionIconMap: {
+    freeOnly: 'fa-gift',
+    beginner: 'fa-graduation-cap',
+    category: 'fa-tag',
+    sortRating: 'fa-star',
+    sortDate: 'fa-calendar',
+    default: 'fa-filter'
+  },
+
   init() {
     if (!this.dropdown) {
       this.dropdown = document.createElement('div');
@@ -1452,22 +1472,31 @@ const smartSearch = {
 
       // Icon bestimmen
       let iconHtml = '';
-      const icons = {
-        text: '📝', image: '🖼️', code: '👨‍💻', audio: '🎵', video: '🎬', data: '📊', other: '🔧'
-      };
 
       if (sug.type === 'action') {
-        iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
-        item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
+        // Action-Suggestion: passendes Font Awesome Icon
+        let icon = this.actionIconMap.default;
+        const action = sug.action;
+        if (action && action.kind === 'setFilters') {
+          if (action.filters && action.filters.freeOnly) icon = this.actionIconMap.freeOnly;
+          else if (action.filters && action.filters.beginner) icon = this.actionIconMap.beginner;
+          else if (action.filters && action.filters.category) icon = this.actionIconMap.category;
+        } else if (action && action.kind === 'setSort') {
+          if (action.sortBy === 'rating') icon = this.actionIconMap.sortRating;
+          else if (action.sortBy === 'date') icon = this.actionIconMap.sortDate;
+        }
+        iconHtml = `<i class="fas ${icon} suggestion-icon"></i>`;
       } else {
         // Tool-Suggestion
         if (sug.domain) {
           iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
         } else {
-          iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
+          const icon = this.categoryIconMap[sug.category] || this.categoryIconMap.other;
+          iconHtml = `<i class="fas ${icon} suggestion-icon"></i>`;
         }
-        item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
       }
+
+      item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
 
       item.addEventListener('click', (e) => {
         e.stopPropagation();
