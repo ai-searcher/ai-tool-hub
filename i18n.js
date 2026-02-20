@@ -7,7 +7,7 @@
       // Header
       title: '⚡ Quantum AI Hub',
       subtitle: 'Finde das richtige Tool für dein Problem',
-      searchPlaceholder: 'Tool suchen... (z.B. ChatGPT, Midjourney)',
+      searchPlaceholder: 'Ich brauche ein Tool für… (z.B. Daten analysieren)'',
       // Tabs
       viewGrid: 'Alle Tools',
       viewStacks: 'Kategorien',
@@ -67,7 +67,7 @@
     en: {
       title: '⚡ Quantum AI Hub',
       subtitle: 'Find the right tool for your problem',
-      searchPlaceholder: 'Search tools... (e.g. ChatGPT, Midjourney)',
+      searchPlaceholder: 'I need a tool for... (e.g. analyze data)',
       viewGrid: 'All Tools',
       viewStacks: 'Categories',
       sortTrigger: 'Sort ▾',
