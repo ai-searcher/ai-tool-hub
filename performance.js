@@ -1,6 +1,6 @@
 // =========================================
 // PERFORMANCE.JS – Optimierungs-Engine für Quantum AI Hub
-// Version: 1.1.0 (Erweitert um SmartSearch)
+// Version: 1.2.0 (Erweiterte SmartSearch – maximale Erkennung)
 // Enthält: Suchindex, Animation-Scheduler, DOM-Batcher, Cache, Throttler, LazyLoader, SmartSearch
 // =========================================
 
@@ -265,7 +265,7 @@
   }
 
   // -------------------------------------------------------------
-  // 7. SMART SEARCH – Intent-basierte Suchlogik (ohne DOM)
+  // 7. SMART SEARCH – Intent-basierte Suchlogik (ohne DOM) – erweitert für maximale Erkennung
   // -------------------------------------------------------------
   const SmartSearch = (function() {
     // Hilfsfunktion: Normalisiert Query (entfernt Sonderzeichen, Mehrfachspaces, trimmt, lowercase)
@@ -280,53 +280,80 @@
         .toLowerCase();
     }
 
-    // Listen für Einleitungen, Flags, Kategorien
+    // Erweiterte Listen für Einleitungen (deutsch/englisch)
     const INTRO_PHRASES = [
-      'ich will', 'ich brauche', 'suche', 'hilf mir', 'bitte',
-      'i want', 'i need', 'find', 'help me', 'please'
+      'ich will', 'ich brauche', 'suche', 'hilf mir', 'bitte', 'kannst du mir',
+      'kennt jemand', 'welches tool', 'tool für', 'app für', 'software für',
+      'i want', 'i need', 'find', 'help me', 'please', 'looking for', 'need a',
+      'any tool', 'tool to', 'app to', 'software to', 'best tool for'
     ];
 
+    // Erweiterte Flags
     const FLAG_KEYWORDS = {
       free: [
-        'kostenlos', 'gratis', 'umsonst', 'free', 'frei', 'kostenfrei'
+        'kostenlos', 'gratis', 'umsonst', 'free', 'frei', 'kostenfrei',
+        'ohne kosten', 'no cost', 'zero cost', 'fremium', 'freemium'
       ],
       beginner: [
         'anfänger', 'einsteiger', 'schüler', 'leicht', 'einfach', 'simple',
-        'beginner', 'starter', 'easy', 'learn', 'student'
+        'beginner', 'starter', 'easy', 'learn', 'student', 'newbie',
+        'für anfänger', 'für einsteiger', 'for beginners', 'easy to use',
+        'nicht kompliziert', 'keine vorkenntnisse'
       ],
       top: [
         'beste', 'top', 'empfohlen', 'bewertung', 'rating', 'best',
-        'beliebt', 'popular', 'höchste'
+        'beliebt', 'popular', 'höchste', 'meistgenutzt', 'most popular',
+        'highest rated', 'recommended', 'top rated'
+      ],
+      premium: [
+        'premium', 'bezahlt', 'kostenpflichtig', 'paid', 'pro', 'professionell',
+        'professional', 'business'
+      ],
+      new: [
+        'neu', 'neueste', 'latest', 'new', 'aktuell', 'upcoming', 'trending'
       ]
     };
 
+    // Erweiterte Kategorie-Keywords (umfangreich)
     const CATEGORY_KEYWORDS = {
       image: [
         'bild', 'foto', 'fotografie', 'zeichnung', 'grafik', 'design', 'kunst', 'illustration',
         'cover', 'poster', 'malen', 'generieren', 'logo', 'icon', 'ai art', 'stable diffusion',
-        'midjourney', 'dall·e', 'dall-e', 'dalle'
+        'midjourney', 'dall·e', 'dall-e', 'dalle', 'bilderstellung', 'image generation',
+        'photo editing', 'bearbeiten', 'retusche', 'collage', 'moodboard', 'visual',
+        'paint', 'sketch', 'canvas', 'kreativ'
       ],
       text: [
         'text', 'schreiben', 'brief', 'email', 'chat', 'unterhaltung', 'fragen', 'antworten',
         'dokument', 'artikel', 'zusammenfassen', 'übersetzen', 'korrektur', 'bewerbung',
-        'aufsatz', 'essay', 'proofread', 'rewrite', 'paraphrase'
+        'aufsatz', 'essay', 'proofread', 'rewrite', 'paraphrase', 'grammatik', 'rechtschreibung',
+        'blog', 'content', 'copywriting', 'werbetext', 'marketing', 'kommunikation',
+        'konversation', 'dialogue', 'assistent'
       ],
       code: [
         'code', 'programmieren', 'entwickeln', 'software', 'app', 'website', 'javascript',
         'python', 'html', 'css', 'bug', 'debug', 'copilot', 'programming', 'coding',
-        'fehler', 'debuggen'
+        'fehler', 'debuggen', 'entwicklung', 'webseite', 'app entwicklung', 'softwareentwicklung',
+        'algorithmus', 'funktion', 'script', 'programm', 'api', 'backend', 'frontend',
+        'datenbank', 'sql', 'react', 'node', 'typescript'
       ],
       audio: [
         'audio', 'musik', 'sound', 'stimme', 'sprache', 'podcast', 'hörbuch', 'singen',
-        'komponieren', 'voice', 'tts', 'text to speech', 'voiceover'
+        'komponieren', 'voice', 'tts', 'text to speech', 'voiceover', 'audiobearbeitung',
+        'audiobearbeitung', 'musikproduktion', 'beat', 'song', 'melodie', 'instrument',
+        'klang', 'geräusch', 'aufnahme', 'recording', 'mixing', 'mastering'
       ],
       video: [
         'video', 'film', 'clip', 'animation', 'bearbeiten', 'schneiden', 'effekte',
-        'reels', 'shorts', 'tiktok', 'youtube'
+        'reels', 'shorts', 'tiktok', 'youtube', 'videobearbeitung', 'video editing',
+        'filmmaking', 'movie', 'trailer', 'teaser', 'motion graphics', 'vfx',
+        'green screen', 'untertitel', 'subtitles', 'transkription'
       ],
       data: [
         'daten', 'analyse', 'tabelle', 'csv', 'excel', 'diagramm', 'statistik', 'zahlen',
-        'auswerten', 'forecast', 'prediction', 'bi', 'dashboard'
+        'auswerten', 'forecast', 'prediction', 'bi', 'dashboard', 'data science',
+        'machine learning', 'ml', 'ki', 'ai', 'datenvisualisierung', 'data visualization',
+        'bericht', 'report', 'kpi', 'metriken', 'auswertung'
       ]
     };
 
@@ -340,19 +367,21 @@
       return result;
     }
 
-    // Hilfsfunktion: Extrahiert Flags
+    // Hilfsfunktion: Extrahiert Flags (alle erkannten Flags)
     function extractFlags(q) {
-      const flags = { free: false, beginner: false, top: false };
+      const flags = { free: false, beginner: false, top: false, premium: false, new: false };
       const words = q.split(/\s+/);
       for (let word of words) {
-        if (FLAG_KEYWORDS.free.includes(word)) flags.free = true;
-        if (FLAG_KEYWORDS.beginner.includes(word)) flags.beginner = true;
-        if (FLAG_KEYWORDS.top.includes(word)) flags.top = true;
+        for (let [flag, list] of Object.entries(FLAG_KEYWORDS)) {
+          if (list.includes(word)) {
+            flags[flag] = true;
+          }
+        }
       }
       return flags;
     }
 
-    // Hilfsfunktion: Extrahiert Kategorie
+    // Hilfsfunktion: Extrahiert Kategorie (gibt die erste passende Kategorie zurück)
     function extractCategory(q) {
       const words = q.split(/\s+/);
       // Für jede Kategorie prüfen, ob eines der Keywords vorkommt (ganze Wörter)
@@ -363,7 +392,6 @@
           }
         }
       }
-      // Fallback: wenn kein Keyword, aber einzelne Wörter könnten auch Teil von längeren Keywords sein? Wir bleiben bei exakt.
       return null;
     }
 
@@ -396,7 +424,11 @@
       toolLooksBeginnerFriendly(tool, options = {}) {
         try {
           if (!tool) return false;
-          const beginnerWords = ['anfänger', 'einfach', 'easy', 'beginner', 'schüler', 'student', 'learn', 'starter', 'simple'];
+          const beginnerWords = [
+            'anfänger', 'einfach', 'easy', 'beginner', 'schüler', 'student', 'learn',
+            'starter', 'simple', 'für einsteiger', 'für anfänger', 'noob', 'newbie',
+            'grundlagen', 'basics', 'tutorial', 'hilfe', 'erklärung'
+          ];
           const fields = [];
 
           if (tool.title) fields.push(tool.title);
@@ -430,6 +462,7 @@
             if (filters.category && tool.category !== filters.category) return false;
             if (filters.freeOnly && !tool.is_free) return false;
             if (filters.beginner && !this.toolLooksBeginnerFriendly(tool)) return false;
+            if (filters.premiumOnly && tool.is_free) return false; // Beispiel: nicht kostenlos
             return true;
           } catch (e) {
             return false;
@@ -450,6 +483,14 @@
             text: 'Nur kostenlose Tools',
             category: null,
             action: { kind: 'setFilters', filters: { freeOnly: true } }
+          });
+        }
+        if (flags.premium) {
+          suggestions.push({
+            type: 'action',
+            text: 'Nur Premium-Tools',
+            category: null,
+            action: { kind: 'setFilters', filters: { freeOnly: false, premiumOnly: true } }
           });
         }
         if (flags.beginner) {
@@ -476,14 +517,30 @@
             action: { kind: 'setSort', sortBy: 'rating', sortDirection: 'desc' }
           });
         }
+        if (flags.new) {
+          suggestions.push({
+            type: 'action',
+            text: 'Neueste zuerst',
+            category: null,
+            action: { kind: 'setSort', sortBy: 'date', sortDirection: 'desc' }
+          });
+        }
 
-        // Kombinationen (optional) – z.B. wenn free und category zusammen erkannt wurden
+        // Kombinationen – z.B. wenn free und category zusammen erkannt wurden
         if (flags.free && category) {
           suggestions.push({
             type: 'action',
             text: `Kostenlose Tools in ${getCategoryLabel(category)}`,
             category: category,
             action: { kind: 'setFilters', filters: { freeOnly: true, category } }
+          });
+        }
+        if (flags.beginner && category) {
+          suggestions.push({
+            type: 'action',
+            text: `Anfängerfreundliche Tools in ${getCategoryLabel(category)}`,
+            category: category,
+            action: { kind: 'setFilters', filters: { beginner: true, category } }
           });
         }
 
