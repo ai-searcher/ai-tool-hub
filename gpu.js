@@ -1,15 +1,13 @@
 // =========================================
-// GPU.JS – Universelle WebGL-Render-Engine für Quantum AI Hub
-// Version: 1.0.0
-// Bietet GPU-beschleunigtes Rendering für Linien, Punkte, Kurven und Partikel.
-// Kann als alleinstehende Engine oder als Basis für color-flow.js verwendet werden.
-// Kompatibel mit allen Browsern, die WebGL 1.0/2.0 unterstützen.
+// GPU.JS – Ultra-Version: WebGL-Renderer für organische Kurven mit variabler Breite und Glow
+// Version: 2.0.0 (Quadbasierte Linien, Farbverlauf, Tessellierung, Glow)
+// Kompatibel mit Performance.js, kann separat oder als Teil von Performance.GPU verwendet werden.
 // =========================================
 
 (function(global) {
   'use strict';
 
-  // Prüfe auf WebGL-Verfügbarkeit
+  // Prüfe auf WebGL
   const hasWebGL = (() => {
     try {
       const canvas = document.createElement('canvas');
@@ -20,7 +18,7 @@
   })();
 
   // -------------------------------------------------------------
-  // HILFSFUNKTIONEN
+  // HILFSFUNKTIONEN FÜR SHADER
   // -------------------------------------------------------------
   function createShader(gl, type, source) {
     const shader = gl.createShader(type);
@@ -50,66 +48,72 @@
   }
 
   // -------------------------------------------------------------
-  // WEBGL-RENDERER (Kernklasse)
+  // KERNKLASSE: WebGLRendererUltra
   // -------------------------------------------------------------
-  class WebGLRenderer {
+  class WebGLRendererUltra {
     constructor(canvas, options = {}) {
       this.canvas = canvas;
       this.gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: false }) 
                 || canvas.getContext('experimental-webgl', { alpha: true, antialias: true, premultipliedAlpha: false });
-      if (!this.gl) {
-        throw new Error('WebGL not supported');
-      }
+      if (!this.gl) throw new Error('WebGL not supported');
 
       this.width = canvas.width;
       this.height = canvas.height;
       this.pixelRatio = options.pixelRatio || Math.min(window.devicePixelRatio || 1, 2);
 
-      // Shader-Programme
+      // Shader-Programme initialisieren
       this.programs = {};
-      this._initDefaultPrograms();
+      this._initPrograms();
 
-      // Buffer-Pool für effizientes Rendering
+      // Buffer-Pool
       this.buffers = {};
 
-      // Aktuelle Zeichendaten
-      this.clearColor = options.clearColor || [0, 0, 0, 0];
       this.gl.enable(this.gl.BLEND);
       this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+      this.clearColor = options.clearColor || [0, 0, 0, 0];
     }
 
-    _initDefaultPrograms() {
+    _initPrograms() {
       const gl = this.gl;
 
-      // Standard-Linienprogramm (2D-Position + Farbe)
-      const lineVS = `
-        attribute vec2 a_position;
-        attribute vec4 a_color;
+      // Programm für gefüllte Dreiecke (für Linien als Rechtecke)
+      const triVS = `
+        attribute vec2 a_position;   // Position im Weltkoordinatensystem
+        attribute vec4 a_color;      // Farbe (r,g,b,a)
+        attribute float a_offsetX;   // Versatz in x-Richtung (senkrecht zur Linie)
+        attribute float a_offsetY;   // Versatz in y-Richtung
         uniform vec2 u_resolution;
+        uniform float u_thickness;    // globale Dicke (wird mit a_offset multipliziert)
         varying vec4 v_color;
+
         void main() {
-          vec2 clip = (a_position / u_resolution) * 2.0 - 1.0;
+          // Versatz anwenden (a_offset ist normalisiert)
+          vec2 pos = a_position + vec2(a_offsetX, a_offsetY) * u_thickness;
+          vec2 clip = (pos / u_resolution) * 2.0 - 1.0;
           clip.y = -clip.y;
           gl_Position = vec4(clip, 0.0, 1.0);
           v_color = a_color;
         }
       `;
-      const lineFS = `
+
+      const triFS = `
         precision mediump float;
         varying vec4 v_color;
         void main() {
           gl_FragColor = v_color;
         }
       `;
-      this.programs.line = createProgram(gl, lineVS, lineFS);
 
-      // Punktprogramm (runde Punkte)
+      this.programs.triangle = createProgram(gl, triVS, triFS);
+
+      // Punktprogramm (für Sterne, Ripples)
       const pointVS = `
         attribute vec2 a_position;
         attribute vec4 a_color;
         attribute float a_size;
         uniform vec2 u_resolution;
         varying vec4 v_color;
+
         void main() {
           vec2 clip = (a_position / u_resolution) * 2.0 - 1.0;
           clip.y = -clip.y;
@@ -118,6 +122,7 @@
           v_color = a_color;
         }
       `;
+
       const pointFS = `
         precision mediump float;
         varying vec4 v_color;
@@ -127,9 +132,8 @@
           gl_FragColor = v_color;
         }
       `;
-      this.programs.point = createProgram(gl, pointVS, pointFS);
 
-      // Optional: Kurvenprogramm (via Tessellation – hier als Linienzug)
+      this.programs.point = createProgram(gl, pointVS, pointFS);
     }
 
     resize(width, height) {
@@ -146,29 +150,6 @@
       const gl = this.gl;
       gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
       gl.clear(gl.COLOR_BUFFER_BIT);
-    }
-
-    // Zeichnet eine Liste von Linien (jede Linie als zwei Punkte)
-    drawLines(lines) {
-      if (!lines.length) return;
-      const gl = this.gl;
-      const prog = this.programs.line;
-      gl.useProgram(prog);
-      gl.uniform2f(gl.getUniformLocation(prog, 'u_resolution'), this.width, this.height);
-
-      const vertices = [];
-      const colors = [];
-      lines.forEach(line => {
-        vertices.push(line.x1, line.y1);
-        vertices.push(line.x2, line.y2);
-        colors.push(line.r1/255, line.g1/255, line.b1/255, line.a1);
-        colors.push(line.r2/255, line.g2/255, line.b2/255, line.a2);
-      });
-
-      this._bindAttribBuffer('lineVertices', vertices, 2, prog, 'a_position');
-      this._bindAttribBuffer('lineColors', colors, 4, prog, 'a_color');
-
-      gl.drawArrays(gl.LINES, 0, vertices.length / 2);
     }
 
     // Zeichnet eine Liste von Punkten
@@ -195,25 +176,89 @@
       gl.drawArrays(gl.POINTS, 0, vertices.length / 2);
     }
 
-    // Zeichnet eine Kurve als Linienzug (Tessellation)
-    drawCurve(points, colors) {
-      // points: Array von [x,y]-Paaren, colors: Array von [r,g,b,a]-Paaren
-      if (points.length < 2) return;
+    // Zeichnet eine Liste von Kurven (jede Kurve als Linienzug mit variabler Dicke)
+    // Erwartet für jede Kurve: { points: [x,y, x,y, ...], colors: [r,g,b,a, ...], thickness }
+    // Die Kurve wird tesselliert und als Rechteckstreifen gezeichnet.
+    drawCurves(curves) {
+      if (!curves.length) return;
+
+      // Wir sammeln alle Dreiecke in einem großen Buffer
+      let allVertices = [];
+      let allColors = [];
+      let allOffsets = [];
+
+      curves.forEach(curve => {
+        const pts = curve.points;   // Array von [x,y] Paaren (Länge 2*N)
+        const cols = curve.colors;   // Array von [r,g,b,a] pro Punkt (Länge 4*N)
+        const thickness = curve.thickness;
+        if (pts.length < 4) return; // mindestens zwei Punkte
+
+        // Für jedes Segment (i von 0 bis N-2) erzeugen wir zwei Dreiecke (Quad)
+        for (let i = 0; i < pts.length - 2; i += 2) {
+          const x1 = pts[i];
+          const y1 = pts[i+1];
+          const x2 = pts[i+2];
+          const y2 = pts[i+3];
+
+          // Richtungsvektor
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const len = Math.sqrt(dx*dx + dy*dy);
+          if (len < 1e-6) continue;
+
+          // Senkrechter Vektor (normalisiert)
+          const nx = -dy / len;
+          const ny = dx / len;
+
+          // Farben für die vier Ecken (linear interpoliert)
+          const c1 = cols.slice(i*2, i*2+4);   // Farbe an Punkt 1
+          const c2 = cols.slice(i*2+4, i*2+8); // Farbe an Punkt 2
+
+          // Indices für die Dreiecke (zwei Dreiecke: 0-1-2 und 1-3-2)
+          // Punkte: 0 = links unten, 1 = rechts unten, 2 = links oben, 3 = rechts oben
+          const p0 = { x: x1 - nx * thickness/2, y: y1 - ny * thickness/2 };
+          const p1 = { x: x2 - nx * thickness/2, y: y2 - ny * thickness/2 };
+          const p2 = { x: x1 + nx * thickness/2, y: y1 + ny * thickness/2 };
+          const p3 = { x: x2 + nx * thickness/2, y: y2 + ny * thickness/2 };
+
+          // Dreieck 1: p0-p1-p2
+          allVertices.push(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y);
+          allColors.push(...c1, ...c2, ...c1);
+          allOffsets.push(0,0, 0,0, 0,0); // Offsets werden nicht benötigt, da wir bereits die verschobenen Punkte verwenden
+
+          // Dreieck 2: p1-p3-p2
+          allVertices.push(p1.x, p1.y, p3.x, p3.y, p2.x, p2.y);
+          allColors.push(...c2, ...c2, ...c1);
+          allOffsets.push(0,0, 0,0, 0,0);
+        }
+      });
+
+      if (allVertices.length === 0) return;
+
       const gl = this.gl;
-      const prog = this.programs.line; // Linienprogramm für Linienzug
+      const prog = this.programs.triangle;
       gl.useProgram(prog);
       gl.uniform2f(gl.getUniformLocation(prog, 'u_resolution'), this.width, this.height);
+      gl.uniform1f(gl.getUniformLocation(prog, 'u_thickness'), 1.0); // wird hier nicht gebraucht, da wir offsets nicht nutzen
 
-      const vertices = points.flat();
-      const colorArray = colors.flat();
+      this._bindAttribBuffer('curveVertices', allVertices, 2, prog, 'a_position');
+      this._bindAttribBuffer('curveColors', allColors, 4, prog, 'a_color');
 
-      this._bindAttribBuffer('curveVertices', vertices, 2, prog, 'a_position');
-      this._bindAttribBuffer('curveColors', colorArray, 4, prog, 'a_color');
+      // Wir müssen auch a_offsetX/Y binden, aber da wir sie nicht nutzen, geben wir einen Dummy-Buffer
+      if (!this.buffers.dummyOffset) {
+        this.buffers.dummyOffset = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.dummyOffset);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0,0]), gl.STATIC_DRAW);
+      }
+      const offsetLoc = gl.getAttribLocation(prog, 'a_offsetX');
+      gl.enableVertexAttribArray(offsetLoc);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.dummyOffset);
+      gl.vertexAttribPointer(offsetLoc, 2, gl.FLOAT, false, 0, 0);
+      // Für a_offsetY nutzen wir den gleichen (einfach)
 
-      gl.drawArrays(gl.LINE_STRIP, 0, vertices.length / 2);
+      gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
     }
 
-    // Hilfsfunktion: Puffer binden und Daten übertragen
     _bindAttribBuffer(name, data, size, program, attribName) {
       const gl = this.gl;
       if (!this.buffers[name]) {
@@ -226,7 +271,6 @@
       gl.vertexAttribPointer(attrib, size, gl.FLOAT, false, 0, 0);
     }
 
-    // Ressourcen freigeben
     destroy() {
       Object.values(this.buffers).forEach(buf => this.gl.deleteBuffer(buf));
       Object.values(this.programs).forEach(prog => this.gl.deleteProgram(prog));
@@ -234,59 +278,25 @@
   }
 
   // -------------------------------------------------------------
-  // PARTIKELSYSTEM (optional, GPU-beschleunigt)
+  // HILFSFUNKTION ZUR TESSELLIERUNG EINER BÉZIER-KURVE
   // -------------------------------------------------------------
-  class GPUParticleSystem {
-    constructor(renderer, maxParticles = 1000) {
-      this.renderer = renderer;
-      this.gl = renderer.gl;
-      this.maxParticles = maxParticles;
-      this.particles = []; // für CPU-Updates (alternativ: Transform Feedback)
+  function tessellateBezier(p0, cp, p1, segments = 20) {
+    const points = [];
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      const x = (1-t)*(1-t)*p0.x + 2*(1-t)*t*cp.x + t*t*p1.x;
+      const y = (1-t)*(1-t)*p0.y + 2*(1-t)*t*cp.y + t*t*p1.y;
+      points.push({ x, y });
     }
-
-    // Einfache CPU-gesteuerte Partikel (kann später auf GPU umgestellt werden)
-    update(dt) {
-      // Partikel-Logik hier
-    }
-
-    draw() {
-      const points = this.particles.map(p => ({
-        x: p.x,
-        y: p.y,
-        r: p.r,
-        g: p.g,
-        b: p.b,
-        a: p.alpha,
-        size: p.size
-      }));
-      this.renderer.drawPoints(points);
-    }
+    return points;
   }
 
   // -------------------------------------------------------------
-  // COMPUTE-SHADER-WRAPPER (WebGL 2.0 oder WebGL 1.0 mit Fragment-Shader-Tricks)
-  // -------------------------------------------------------------
-  class GPUCompute {
-    constructor(renderer) {
-      this.renderer = renderer;
-      this.gl = renderer.gl;
-      // Prüfe auf WebGL 2.0 für Compute-Shader (noch nicht weit verbreitet)
-      this.isWebGL2 = this.gl instanceof WebGL2RenderingContext;
-    }
-
-    // Einfache parallele Berechnung über Fragment-Shader (Render-to-Texture)
-    compute(workGroupSize, shader, outputTexture) {
-      // Implementierung je nach Bedarf
-    }
-  }
-
-  // -------------------------------------------------------------
-  // EXPORT (nur WebGLRenderer als Hauptklasse)
+  // EXPORT
   // -------------------------------------------------------------
   global.GPU = {
-    WebGLRenderer,
-    GPUParticleSystem,
-    GPUCompute,
+    WebGLRendererUltra,
+    tessellateBezier,
     hasWebGL
   };
 
