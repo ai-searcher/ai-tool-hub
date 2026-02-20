@@ -2658,7 +2658,7 @@ input:disabled + .cookie-slider {
   }
 }
 
-/* === DREI SEHR DÜNNE LINIEN AN JEDER ECKE (INNERHALB DES QUADRATS) === */
+/* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE (INNERHALB) === */
 .category-header-card {
   position: relative;
   overflow: visible;
@@ -2669,82 +2669,37 @@ input:disabled + .cookie-slider {
   width: 30px;
   height: 30px;
   pointer-events: none;
-  z-index: 3;
+  z-index: 5;
   background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  color: var(--glow-color); /* für currentColor im SVG */
 }
 
-/* Oben links – Linien von links oben kommend */
+/* Oben links – Linien nach rechts und unten */
 .corner-lines.top-left {
   top: 0;
   left: 0;
-  background-image: 
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    0 0, 0 4px, 0 8px,
-    0 0, 4px 0, 8px 0;
-  background-size: 
-    100% 1px, 100% 1px, 100% 1px,
-    1px 100%, 1px 100%, 1px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='0' y1='3' x2='14' y2='3' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='8' x2='14' y2='8' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='13' x2='14' y2='13' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='3' y1='0' x2='3' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='8' y1='0' x2='8' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='13' y1='0' x2='13' y2='14' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-/* Oben rechts – Linien von rechts oben kommend */
+/* Oben rechts – Linien nach links und unten */
 .corner-lines.top-right {
   top: 0;
   right: 0;
-  background-image: 
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    100% 0, 100% 4px, 100% 8px,
-    100% 0, calc(100% - 4px) 0, calc(100% - 8px) 0;
-  background-size: 
-    100% 1px, 100% 1px, 100% 1px,
-    1px 100%, 1px 100%, 1px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='16' y1='3' x2='30' y2='3' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='8' x2='30' y2='8' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='13' x2='30' y2='13' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='27' y1='0' x2='27' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='22' y1='0' x2='22' y2='14' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='17' y1='0' x2='17' y2='14' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-/* Unten links – Linien von links unten kommend */
+/* Unten links – Linien nach rechts und oben */
 .corner-lines.bottom-left {
   bottom: 0;
   left: 0;
-  background-image: 
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    0 100%, 0 calc(100% - 4px), 0 calc(100% - 8px),
-    0 100%, 4px 100%, 8px 100%;
-  background-size: 
-    100% 1px, 100% 1px, 100% 1px,
-    1px 100%, 1px 100%, 1px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='0' y1='17' x2='14' y2='17' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='22' x2='14' y2='22' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='0' y1='27' x2='14' y2='27' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='3' y1='16' x2='3' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='8' y1='16' x2='8' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='13' y1='16' x2='13' y2='30' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
 }
 
-/* Unten rechts – Linien von rechts unten kommend */
+/* Unten rechts – Linien nach links und oben */
 .corner-lines.bottom-right {
   bottom: 0;
   right: 0;
-  background-image: 
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    100% 100%, 100% calc(100% - 4px), 100% calc(100% - 8px),
-    100% 100%, calc(100% - 4px) 100%, calc(100% - 8px) 100%;
-  background-size: 
-    100% 1px, 100% 1px, 100% 1px,
-    1px 100%, 1px 100%, 1px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cline x1='16' y1='17' x2='30' y2='17' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='22' x2='30' y2='22' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='16' y1='27' x2='30' y2='27' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='27' y1='16' x2='27' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='22' y1='16' x2='22' y2='30' stroke='currentColor' stroke-width='1'/%3E%3Cline x1='17' y1='16' x2='17' y2='30' stroke='currentColor' stroke-width='1'/%3E%3C/svg%3E");
 }
