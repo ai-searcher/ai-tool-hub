@@ -961,10 +961,11 @@ body {
 }
 
 /* Allgemeine Definition (für Desktop/Tablet) */
+/* Allgemeine Definition (für Desktop/Tablet) */
 .square-category-badge {
   position: absolute;
-  top: 3.4mm;
-  left: 3.4mm;
+  top: 13px;                     /* ≈ 3,4 mm bei 96 dpi */
+  left: 13px;                    /* ≈ 3,4 mm */
   padding: 4px 8px;
   border-radius: 999px;
   font-size: 0.48rem;
@@ -1323,8 +1324,8 @@ button,
   .square-category-badge {
     font-size: 0.45rem !important;
     padding: 3px 6px !important;
-    top: 3.4mm !important;
-    left: 3.4mm !important;
+    top: 10px !important;          /* etwas kleiner auf mobil */
+    left: 10px !important;
     max-width: calc(100% - 16px) !important;
   }
 
