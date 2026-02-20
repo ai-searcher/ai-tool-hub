@@ -504,6 +504,47 @@ const state = {
 // =========================================
 // HILFSFUNKTION SORTIERUNG
 // =========================================
+
+// Hilfsfunktion: Berechnet einen Score für ein Tool basierend auf Use‑Cases
+function getUseCaseScore(tool, type) {
+  // Schlüsselwörter für Schule/Studium
+  const schoolKeywords = [
+    'schule', 'studium', 'student', 'lernen', 'aufgabe', 'hausaufgabe', 'referat',
+    'übersetzen', 'zusammenfassen', 'erklären', 'präsentation', 'bildung',
+    'school', 'university', 'student', 'learn', 'homework', 'assignment',
+    'translate', 'summarize', 'explain', 'presentation', 'education'
+  ];
+  
+  // Schlüsselwörter für Beruf/Arbeit
+  const workKeywords = [
+    'arbeit', 'beruf', 'business', 'produktivität', 'analyse', 'daten',
+    'präsentation', 'email', 'marketing', 'projekt', 'team', 'kunde',
+    'work', 'job', 'business', 'productivity', 'analysis', 'data',
+    'presentation', 'email', 'marketing', 'project', 'team', 'client'
+  ];
+
+  const keywords = type === 'school' ? schoolKeywords : workKeywords;
+  
+  // Sammle alle relevanten Textfelder (deutsch + englisch)
+  const fields = [];
+  if (tool.title) fields.push(tool.title);
+  if (tool.description) fields.push(tool.description);
+  if (tool.tags) fields.push(...tool.tags);
+  if (tool.useCases) fields.push(...tool.useCases);
+  if (tool.en) {
+    if (tool.en.title) fields.push(tool.en.title);
+    if (tool.en.description) fields.push(tool.en.description);
+    if (tool.en.useCases) fields.push(...tool.en.useCases);
+  }
+  
+  const text = fields.join(' ').toLowerCase();
+  let score = 0;
+  keywords.forEach(keyword => {
+    if (text.includes(keyword)) score += 1;
+  });
+  return score;
+}
+
 function sortTools(tools) {
   const { sortBy, sortDirection } = state;
   const dir = sortDirection === 'asc' ? 1 : -1;
@@ -519,6 +560,14 @@ function sortTools(tools) {
       const aDate = new Date(a.added || 0);
       const bDate = new Date(b.added || 0);
       return dir * (aDate - bDate);
+    } else if (sortBy === 'school') {
+      const aScore = getUseCaseScore(a, 'school');
+      const bScore = getUseCaseScore(b, 'school');
+      return bScore - aScore; // absteigend (höchster Score zuerst)
+    } else if (sortBy === 'work') {
+      const aScore = getUseCaseScore(a, 'work');
+      const bScore = getUseCaseScore(b, 'work');
+      return bScore - aScore;
     }
     return 0;
   });
