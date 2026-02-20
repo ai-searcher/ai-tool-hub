@@ -964,17 +964,18 @@ body {
 /* Allgemeine Definition (für Desktop/Tablet) */
 /* Allgemeine Definition (für Desktop/Tablet) */
 /* Allgemeine Definition (für Desktop/Tablet) */
+/* Allgemeine Definition (für Desktop/Tablet) */
 .square-category-badge {
   position: absolute;
   top: 8px;
   left: 12px;
-  padding: 6px 12px;
+  padding: 4px 8px;               /* 35% kleiner (6px→4px, 12px→8px) */
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.48rem;              /* 40% kleiner (0.8rem→0.48rem) */
   font-weight: 700;
   letter-spacing: 0.08em;
   white-space: normal;
-  max-width: calc(100% - 24px);
+  max-width: calc(100% - 20px);    /* etwas weniger Abzug, weil Badge kleiner */
   line-height: 1.2;
   text-align: center;
   pointer-events: none;
@@ -1324,11 +1325,11 @@ button,
 /* Mobile Anpassung (innerhalb des Media-Queries) */
 @media (max-width: 767px) {
   .square-category-badge {
-    font-size: 0.75rem !important;
-    padding: 4px 8px !important;
+    font-size: 0.45rem !important;   /* 40% kleiner als 0.75rem (≈0.45rem) */
+    padding: 3px 6px !important;      /* 35% kleiner (4px→3px, 8px→5px gerundet) */
     top: 8px;
     left: 12px !important;
-    max-width: calc(100% - 20px) !important;
+    max-width: calc(100% - 16px) !important;
   }
 
   .card-square .context-marquee {
