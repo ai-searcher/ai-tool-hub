@@ -2245,6 +2245,71 @@
           "Export views for presentations."
         ]
       }
+    },
+    {
+      "id": 35,
+      "title": "Fliki",
+      "link": "https://fliki.ai",
+      "description": "Verwandle Blogartikel, Ideen oder Skripte in Minuten in fertige Videos mit realistischer Sprachausgabe – ideal für Social Media und YouTube.",
+      "category": "video",
+      "tags": ["text-to-video", "voiceover", "social-media", "content-creation"],
+      "is_free": true,
+      "rating": 4.5,
+      "provider": "Fliki",
+      "added": "2024-07-01",
+      "featured": false,
+      "badges": [
+        "Stärke: Extrem einfach zu bedienen – gib einen Text ein, wähle Stimme und Stil, und erhalte ein fertiges Video mit Untertiteln.",
+        "Kontext: Bietet über 2000 Stimmen in 80+ Sprachen, inklusive deutscher Natural-Sounding-Voices. Ähnlich zu: Pictory, InVideo."
+      ],
+      "strengths": [
+        "Blog-zu-Video: Füge einfach einen Link zu einem Artikel ein, und Fliki extrahiert den Inhalt automatisch.",
+        "Realistische KI-Stimmen: Über 2000 Stimmen, darunter viele deutschsprachige, klingen natürlich und emotionsreich.",
+        "Automatische Untertitel: Passgenaue Untertitel für bessere Zugänglichkeit und höhere Klickraten."
+      ],
+      "useCases": [
+        "Social Media Kurzvideos: Erstelle TikTok- oder Reel-Clips aus deinen Blogposts.",
+        "YouTube-Erklärvideos: Produziere schnelle Tutorials oder Produktvorstellungen ohne aufwändige Aufnahmen.",
+        "Marketing: Verwandle Kundenreferenzen oder Ankündigungen in ansprechende Videoclips."
+      ],
+      "promptExamples": [
+        "Erstelle ein 60-Sekunden-Video aus diesem Blogartikel: [URL] mit einer freundlichen deutschen Stimme.",
+        "Generiere ein kurzes Erklärvideo zu diesem Thema: [Thema] mit passenden Bildern und Hintergrundmusik.",
+        "Füge diesem Text eine natürliche deutsche Sprachausgabe hinzu und erstelle ein Video mit Untertiteln: [Text]"
+      ],
+      "promptTips": [
+        "Wähle eine Stimme, die zur Zielgruppe passt – jugendlich, seriös oder motivierend.",
+        "Nutze die integrierte Medienbibliothek, um das Video mit Stock-Videos und Bildern aufzuwerten.",
+        "Kürze den Text auf die Kernaussagen – das hält das Video spannend und die Zuschauer bei der Stange."
+      ],
+      "en": {
+        "title": "Fliki",
+        "description": "Turn blog posts, ideas, or scripts into finished videos with realistic voiceovers in minutes – ideal for social media and YouTube.",
+        "badges": [
+          "Strength: Extremely easy to use – input text, choose voice and style, and get a finished video with subtitles.",
+          "Context: Offers over 2000 voices in 80+ languages, including German natural-sounding voices. Similar to: Pictory, InVideo."
+        ],
+        "strengths": [
+          "Blog-to-video: Simply paste a link to an article, and Fliki extracts the content automatically.",
+          "Realistic AI voices: Over 2000 voices, many of them German, sound natural and emotional.",
+          "Automatic subtitles: Perfectly timed subtitles for better accessibility and higher engagement."
+        ],
+        "useCases": [
+          "Social media shorts: Create TikTok or Reel clips from your blog posts.",
+          "YouTube explainer videos: Produce quick tutorials or product demos without elaborate recordings.",
+          "Marketing: Turn customer testimonials or announcements into engaging video clips."
+        ],
+        "promptExamples": [
+          "Create a 60-second video from this blog post: [URL] with a friendly German voice.",
+          "Generate a short explainer video on this topic: [topic] with matching visuals and background music.",
+          "Add a natural German voiceover to this text and create a video with subtitles: [text]"
+        ],
+        "promptTips": [
+          "Choose a voice that fits your target audience – youthful, serious, or motivating.",
+          "Use the built-in media library to enhance the video with stock footage and images.",
+          "Shorten the text to the key messages – it keeps the video exciting and viewers engaged."
+        ]
+      }
     }
   ]
 }
