@@ -2658,7 +2658,7 @@ input:disabled + .cookie-slider {
   }
 }
 
-/* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE === */
+/* === DREI DÜNNE LINIEN AN JEDER ECKE (MOBIL-KOMPATIBEL) === */
 .category-header-card {
   position: relative;
   overflow: visible;
@@ -2671,35 +2671,82 @@ input:disabled + .cookie-slider {
   pointer-events: none;
   z-index: 10;
   background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  color: var(--glow-color); /* Erbt die Kategoriefarbe */
+  background-size: 40px 40px;
+  background-color: transparent; /* Wichtig: kein eigener Hintergrund */
 }
 
-/* Oben links – drei waagrechte und drei senkrechte Linien nach innen */
+/* Oben links – drei waagerechte und drei senkrechte Linien */
 .corner-lines.top-left {
   top: -2px;
   left: -2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='5' y1='5' x2='18' y2='5' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='11' x2='18' y2='11' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='17' x2='18' y2='17' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='5' x2='5' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='11' y1='5' x2='11' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='17' y1='5' x2='17' y2='18' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
+  background-image: 
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
+  background-position: 
+    5px 5px, 5px 13px, 5px 21px,
+    5px 5px, 13px 5px, 21px 5px;
+  background-size: 
+    16px 1px, 16px 1px, 16px 1px,
+    1px 16px, 1px 16px, 1px 16px;
 }
 
-/* Oben rechts – Linien nach links und unten */
+/* Oben rechts */
 .corner-lines.top-right {
   top: -2px;
   right: -2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='22' y1='5' x2='35' y2='5' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='11' x2='35' y2='11' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='17' x2='35' y2='17' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='35' y1='5' x2='35' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='29' y1='5' x2='29' y2='18' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='23' y1='5' x2='23' y2='18' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
+  background-image: 
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
+  background-position: 
+    calc(100% - 5px) 5px, calc(100% - 5px) 13px, calc(100% - 5px) 21px,
+    calc(100% - 5px) 5px, calc(100% - 13px) 5px, calc(100% - 21px) 5px;
+  background-size: 
+    16px 1px, 16px 1px, 16px 1px,
+    1px 16px, 1px 16px, 1px 16px;
 }
 
-/* Unten links – Linien nach rechts und oben */
+/* Unten links */
 .corner-lines.bottom-left {
   bottom: -2px;
   left: -2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='5' y1='22' x2='18' y2='22' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='28' x2='18' y2='28' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='34' x2='18' y2='34' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='5' y1='22' x2='5' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='11' y1='22' x2='11' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='17' y1='22' x2='17' y2='35' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
+  background-image: 
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
+  background-position: 
+    5px calc(100% - 5px), 5px calc(100% - 13px), 5px calc(100% - 21px),
+    5px calc(100% - 5px), 13px calc(100% - 5px), 21px calc(100% - 5px);
+  background-size: 
+    16px 1px, 16px 1px, 16px 1px,
+    1px 16px, 1px 16px, 1px 16px;
 }
 
-/* Unten rechts – Linien nach links und oben */
+/* Unten rechts */
 .corner-lines.bottom-right {
   bottom: -2px;
   right: -2px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cline x1='22' y1='22' x2='35' y2='22' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='28' x2='35' y2='28' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='22' y1='34' x2='35' y2='34' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='35' y1='22' x2='35' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='29' y1='22' x2='29' y2='35' stroke='currentColor' stroke-width='1' /%3E%3Cline x1='23' y1='22' x2='23' y2='35' stroke='currentColor' stroke-width='1' /%3E%3C/svg%3E");
+  background-image: 
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
+    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
+  background-position: 
+    calc(100% - 5px) calc(100% - 5px), calc(100% - 5px) calc(100% - 13px), calc(100% - 5px) calc(100% - 21px),
+    calc(100% - 5px) calc(100% - 5px), calc(100% - 13px) calc(100% - 5px), calc(100% - 21px) calc(100% - 5px);
+  background-size: 
+    16px 1px, 16px 1px, 16px 1px,
+    1px 16px, 1px 16px, 1px 16px;
 }
