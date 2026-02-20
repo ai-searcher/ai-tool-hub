@@ -1,6 +1,6 @@
 // =========================================
 // QUANTUM AI HUB - APP.JS
-// Version: 1.6.1 (Optimiert mit Performance-Engine – stabilisiert)
+// Version: 1.7.0 (SmartSearch integriert)
 // =========================================
 
 'use strict';
@@ -134,20 +134,45 @@ const DEFAULT_TOOLS = [
 let searchIndex = null; // wird nach dem Laden der Tools initialisiert
 let domBatcher = null;  // für gebündelte DOM-Updates
 
-// Filter-Funktion, die den Suchindex nutzt (mit Fallback)
+// Filter-Funktion, die den Suchindex und Smart-Filter nutzt
 function filterTools(query) {
-  if (!query || query.length < 2) return state.tools;
-  if (!searchIndex) return state.tools; // Fallback, falls Index nicht bereit
-  try {
-    const ids = searchIndex.search(query);
-    return ids.map(id => searchIndex.getTool(id)).filter(Boolean);
-  } catch (e) {
-    console.warn('SearchIndex error, using fallback', e);
-    return state.tools;
+  let effectiveQuery = query;
+  // SmartSearch getEffectiveQuery nutzen, falls verfügbar
+  if (window.Performance && window.Performance.SmartSearch) {
+    try {
+      effectiveQuery = window.Performance.SmartSearch.getEffectiveQuery(query);
+    } catch (e) {
+      console.warn('getEffectiveQuery error', e);
+    }
   }
+
+  let results = state.tools;
+
+  // Nur suchen, wenn effektive Query lang genug
+  if (effectiveQuery && effectiveQuery.length >= 2) {
+    if (searchIndex) {
+      try {
+        const ids = searchIndex.search(effectiveQuery);
+        results = ids.map(id => searchIndex.getTool(id)).filter(Boolean);
+      } catch (e) {
+        console.warn('SearchIndex error, using fallback', e);
+      }
+    }
+  }
+
+  // Smart-Filter anwenden (auch wenn Query kurz/leer)
+  if (window.Performance && window.Performance.SmartSearch) {
+    try {
+      results = window.Performance.SmartSearch.applyFilters(results, state.smartFilters);
+    } catch (e) {
+      console.warn('SmartSearch applyFilters error', e);
+    }
+  }
+
+  return results;
 }
 
-// Vorschläge basierend auf dem Suchindex (mit Fallback)
+// Vorschläge basierend auf dem Suchindex (Fallback)
 function generateToolSuggestions(query) {
   if (!query || query.length < 2) return [];
   if (!searchIndex) return [];
@@ -472,7 +497,8 @@ const state = {
     featured: 0
   },
   sortBy: 'name',
-  sortDirection: 'asc'
+  sortDirection: 'asc',
+  smartFilters: { category: null, freeOnly: false, beginner: false } // Neu
 };
 
 // =========================================
@@ -1058,12 +1084,8 @@ const ui = {
   },
 
   render() {
-    // Intelligente Suche mit SearchIndex (Fallback vorhanden)
-    if (state.searchQuery && state.searchQuery.length >= CONFIG.search.minLength) {
-      state.filtered = filterTools(state.searchQuery);
-    } else {
-      state.filtered = [...state.tools];
-    }
+    // Intelligente Suche mit Filtern (immer anwenden)
+    state.filtered = filterTools(state.searchQuery);
 
     state.filtered = sortTools(state.filtered);
 
@@ -1353,7 +1375,7 @@ const ui = {
 };
 
 // =========================================
-// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS + DIREKTÖFFNUNG
+// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS + DIREKTÖFFNUNG + ACTIONS
 // =========================================
 const smartSearch = {
   dropdown: null,
@@ -1396,7 +1418,28 @@ const smartSearch = {
       return;
     }
 
-    const suggestions = generateToolSuggestions(query);
+    let suggestions = [];
+
+    // SmartSearch nutzen, falls verfügbar
+    if (window.Performance && window.Performance.SmartSearch) {
+      try {
+        suggestions = window.Performance.SmartSearch.buildSuggestions({
+          query: query,
+          tools: state.tools,
+          searchIndex: searchIndex,
+          maxSuggestions: CONFIG.search.maxSuggestions,
+          getCategoryLabel: getCategoryName
+        });
+      } catch (e) {
+        console.warn('SmartSearch buildSuggestions error, using fallback', e);
+      }
+    }
+
+    // Fallback, falls keine Suggestions oder kein SmartSearch
+    if (!suggestions || suggestions.length === 0) {
+      suggestions = generateToolSuggestions(query);
+    }
+
     if (suggestions.length === 0) {
       this.hide();
       return;
@@ -1407,19 +1450,25 @@ const smartSearch = {
       const item = document.createElement('div');
       item.className = 'suggestion-item';
 
-      // Favicon oder Emoji
+      // Icon bestimmen
       let iconHtml = '';
-      if (sug.domain) {
-        iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
-      } else {
-        const icons = {
-          text: '📝', image: '🖼️', code: '👨‍💻', audio: '🎵', video: '🎬', data: '📊', other: '🔧'
-        };
+      const icons = {
+        text: '📝', image: '🖼️', code: '👨‍💻', audio: '🎵', video: '🎬', data: '📊', other: '🔧'
+      };
+
+      if (sug.type === 'action') {
         iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
+        item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
+      } else {
+        // Tool-Suggestion
+        if (sug.domain) {
+          iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
+        } else {
+          iconHtml = `<span class="suggestion-emoji">${icons[sug.category] || '🔧'}</span>`;
+        }
+        item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
       }
 
-      item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
-      
       item.addEventListener('click', (e) => {
         e.stopPropagation();
         this.handleSuggestionClick(sug);
@@ -1449,6 +1498,23 @@ const smartSearch = {
         }
       }
       this.hide();
+    } else if (sug.type === 'action') {
+      const action = sug.action;
+      if (action.kind === 'setFilters') {
+        // Filter setzen (merge)
+        state.smartFilters = { ...state.smartFilters, ...action.filters };
+        ui.render();
+      } else if (action.kind === 'clearFilters') {
+        state.smartFilters = { category: null, freeOnly: false, beginner: false };
+        ui.render();
+      } else if (action.kind === 'setSort') {
+        state.sortBy = action.sortBy;
+        state.sortDirection = action.sortDirection;
+        ui.render();
+      }
+      this.hide();
+      // Fokus wieder auf Suchfeld
+      if (ui.elements.search) ui.elements.search.focus();
     } else {
       // Fallback (z.B. für zukünftige Kategorie-Vorschläge)
       const searchInput = ui.elements.search;
@@ -1963,4 +2029,4 @@ function initializeModalSystem() {
   window.openToolModal = openToolModal;
   window.closeToolModal = closeToolModal;
   console.log('✅ Modal system ready');
-} 
+}
