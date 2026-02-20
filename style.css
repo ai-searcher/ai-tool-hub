@@ -2658,7 +2658,7 @@ input:disabled + .cookie-slider {
   }
 }
 
-/* === DREI DÜNNE LINIEN AN JEDER ECKE (MOBIL-KOMPATIBEL) === */
+/* === DREI DÜNNE LINIEN AN JEDER ECKE MIT box-shadow === */
 .category-header-card {
   position: relative;
   overflow: visible;
@@ -2666,87 +2666,63 @@ input:disabled + .cookie-slider {
 
 .corner-lines {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 36px;   /* Groß genug für drei Linien im Abstand von 6px */
+  height: 36px;
   pointer-events: none;
   z-index: 10;
-  background-repeat: no-repeat;
-  background-size: 40px 40px;
-  background-color: transparent; /* Wichtig: kein eigener Hintergrund */
+  background: transparent;
 }
 
-/* Oben links – drei waagerechte und drei senkrechte Linien */
+/* Oben links */
 .corner-lines.top-left {
-  top: -2px;
-  left: -2px;
-  background-image: 
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    5px 5px, 5px 13px, 5px 21px,
-    5px 5px, 13px 5px, 21px 5px;
-  background-size: 
-    16px 1px, 16px 1px, 16px 1px,
-    1px 16px, 1px 16px, 1px 16px;
+  top: -4px;      /* Leicht nach außen versetzt, damit die Linien von der Kante ausgehen */
+  left: -4px;
+  box-shadow:
+    6px 6px 0 0 var(--glow-color),   /* erste Linie (horizontal und vertikal) */
+    12px 6px 0 0 var(--glow-color),  /* zweite horizontal */
+    18px 6px 0 0 var(--glow-color),  /* dritte horizontal */
+    6px 12px 0 0 var(--glow-color),  /* erste vertikal */
+    6px 18px 0 0 var(--glow-color);  /* zweite vertikal */
+    /* Dritte vertikale fehlt? Wir brauchen drei. Ergänzen: */
+    6px 24px 0 0 var(--glow-color);  /* dritte vertikal */
+  /* Aber box-shadow kann mehrere Schatten haben, hier sind es 6 */
 }
 
 /* Oben rechts */
 .corner-lines.top-right {
-  top: -2px;
-  right: -2px;
-  background-image: 
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    calc(100% - 5px) 5px, calc(100% - 5px) 13px, calc(100% - 5px) 21px,
-    calc(100% - 5px) 5px, calc(100% - 13px) 5px, calc(100% - 21px) 5px;
-  background-size: 
-    16px 1px, 16px 1px, 16px 1px,
-    1px 16px, 1px 16px, 1px 16px;
+  top: -4px;
+  right: -4px;
+  box-shadow:
+    -6px 6px 0 0 var(--glow-color),
+    -12px 6px 0 0 var(--glow-color),
+    -18px 6px 0 0 var(--glow-color),
+    -6px 12px 0 0 var(--glow-color),
+    -6px 18px 0 0 var(--glow-color),
+    -6px 24px 0 0 var(--glow-color);
 }
 
 /* Unten links */
 .corner-lines.bottom-left {
-  bottom: -2px;
-  left: -2px;
-  background-image: 
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to right, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    5px calc(100% - 5px), 5px calc(100% - 13px), 5px calc(100% - 21px),
-    5px calc(100% - 5px), 13px calc(100% - 5px), 21px calc(100% - 5px);
-  background-size: 
-    16px 1px, 16px 1px, 16px 1px,
-    1px 16px, 1px 16px, 1px 16px;
+  bottom: -4px;
+  left: -4px;
+  box-shadow:
+    6px -6px 0 0 var(--glow-color),
+    12px -6px 0 0 var(--glow-color),
+    18px -6px 0 0 var(--glow-color),
+    6px -12px 0 0 var(--glow-color),
+    6px -18px 0 0 var(--glow-color),
+    6px -24px 0 0 var(--glow-color);
 }
 
 /* Unten rechts */
 .corner-lines.bottom-right {
-  bottom: -2px;
-  right: -2px;
-  background-image: 
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to left, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px),
-    linear-gradient(to top, var(--glow-color) 1px, transparent 1px);
-  background-position: 
-    calc(100% - 5px) calc(100% - 5px), calc(100% - 5px) calc(100% - 13px), calc(100% - 5px) calc(100% - 21px),
-    calc(100% - 5px) calc(100% - 5px), calc(100% - 13px) calc(100% - 5px), calc(100% - 21px) calc(100% - 5px);
-  background-size: 
-    16px 1px, 16px 1px, 16px 1px,
-    1px 16px, 1px 16px, 1px 16px;
+  bottom: -4px;
+  right: -4px;
+  box-shadow:
+    -6px -6px 0 0 var(--glow-color),
+    -12px -6px 0 0 var(--glow-color),
+    -18px -6px 0 0 var(--glow-color),
+    -6px -12px 0 0 var(--glow-color),
+    -6px -18px 0 0 var(--glow-color),
+    -6px -24px 0 0 var(--glow-color);
 }
