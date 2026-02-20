@@ -1994,7 +1994,6 @@ a:focus-visible {
   z-index: 5; /* über dem Canvas */
 }
 
-/* Optionale Anpassung für kleine Bildschirme (falls gewünscht) */
 @media (max-width: 767px) {
   .category-header-card {
     padding: 0.8rem 0.5rem;
@@ -2008,6 +2007,14 @@ a:focus-visible {
   .category-header-card .context-marquee {
     height: 18px;
     font-size: 0.55rem;
+    /* NEUE REGELN für das Marquee-Problem */
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    transform: translateZ(0) translate3d(0,0,0);
+    backface-visibility: hidden;
+    will-change: transform;
+    animation: marqueeLoop 20s linear infinite !important;
+    animation-play-state: running !important;
   }
 }
 
