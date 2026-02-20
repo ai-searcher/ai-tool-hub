@@ -14,8 +14,8 @@
       sortTrigger: 'Sortieren ▾',
       sortNameAsc: 'Name (A-Z)',
       sortNameDesc: 'Name (Z-A)',
-      sortRatingDesc: 'Bewertung (absteigend)',
-      sortRatingAsc: 'Bewertung (aufsteigend)',
+      sortSchool: 'Für Schule / Studium',
+      sortWork: 'Für Beruf / Arbeit',
       sortDateDesc: 'Neueste zuerst',
       sortDateAsc: 'Älteste zuerst',
       // Subline
@@ -73,8 +73,8 @@
       sortTrigger: 'Sort ▾',
       sortNameAsc: 'Name (A-Z)',
       sortNameDesc: 'Name (Z-A)',
-      sortRatingDesc: 'Rating (highest first)',
-      sortRatingAsc: 'Rating (lowest first)',
+      sortSchool: 'For school / study',
+      sortWork: 'For work / business'
       sortDateDesc: 'Newest first',
       sortDateAsc: 'Oldest first',
       subline: '▽Find the right AI tool for your task▽',
