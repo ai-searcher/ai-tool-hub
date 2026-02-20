@@ -2006,16 +2006,58 @@ a:focus-visible {
   }
 }
 
+/* ==================== KATEGORIE-KÖPFE – PULSIERENDER RAND FÜR KLICKBARKEIT ==================== */
 
+/* Zuerst die kategoriespezifischen Glow-Farben für die Header */
+.category-stack[data-category="text"] .category-header-card {
+  --glow-color: var(--glow-text);
+}
+.category-stack[data-category="image"] .category-header-card {
+  --glow-color: var(--glow-image);
+}
+.category-stack[data-category="code"] .category-header-card {
+  --glow-color: var(--glow-code);
+}
+.category-stack[data-category="audio"] .category-header-card {
+  --glow-color: var(--glow-audio);
+}
+.category-stack[data-category="video"] .category-header-card {
+  --glow-color: var(--glow-video);
+}
+.category-stack[data-category="data"] .category-header-card {
+  --glow-color: var(--glow-data);
+}
+.category-stack[data-category="other"] .category-header-card {
+  --glow-color: var(--glow-other, rgba(176,190,197,0.25));
+}
 
-/* Pulsierender Glow für Kategorie-Köpfe (signalisiert Klickbarkeit) */
-@keyframes category-glow {
+/* Definiere eine Puls-Animation OHNE Skalierung (nur Rand) */
+@keyframes category-pulse {
   0%, 100% {
-    box-shadow: var(--category-header-glow);
+    box-shadow: var(--card-shadow), var(--card-inset-shadow), 0 0 0 1px transparent;
   }
   50% {
-    box-shadow: var(--category-header-glow-mid);
+    box-shadow: var(--card-shadow), var(--card-inset-shadow), 0 0 0 2px var(--glow-color);
   }
+}
+
+/* Wende die Animation auf alle Kategorie-Köpfe an */
+.category-header-card {
+  animation: category-pulse 4s ease-in-out infinite; /* Sanfter, langsamer Puls */
+}
+
+/* Hover-Effekt – überschreibt die Animation, um stärker zu reagieren */
+.category-header-card:hover {
+  animation: none !important; /* Puls stoppen */
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 20px var(--primary-glow), var(--card-shadow) !important;
+}
+
+/* Falls die Animation bei :active anders sein soll (optional) */
+.category-header-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
 }
 
 /* ==================== BENUTZERDEFINIERTES FARBSCHEMA (HELLGRAU & ROT) – NUR HINTERGRÜNDE GRÄULICHER ==================== */
