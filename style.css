@@ -653,7 +653,7 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
-  padding: 1rem;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: var(--card-shadow), var(--card-inset-shadow);
@@ -661,22 +661,23 @@ body {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: center;      /* Inhalt vertikal zentrieren */
-  align-items: center;          /* Inhalt horizontal zentrieren */
-  aspect-ratio: 1 / 1;          /* Erzwingt quadratische Form */
-  width: 100%;                  /* Nimmt volle Breite des Containers */
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  width: 100%;
   text-align: center;
-  overflow: hidden;             /* Verhindert Überlauf */
+  overflow: hidden;
 }
 
 .category-header-title {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--primary);
   margin: 0 0 0.25rem 0;
   line-height: 1.3;
-  word-break: break-word;       /* Erlaubt Umbruch bei langen Wörtern */
-  hyphens: auto;                /* Silbentrennung für besseren Umbruch */
+  word-break: break-word;       /* Umbruch nur an Leerzeichen */
+  overflow-wrap: break-word;    /* zusätzliche Sicherheit */
+  hyphens: none;                /* keine Silbentrennung */
   max-width: 100%;
   padding: 0 0.5rem;
 }
@@ -687,12 +688,12 @@ body {
   margin: 0;
   line-height: 1.4;
   word-break: break-word;
-  hyphens: auto;
+  overflow-wrap: break-word;
+  hyphens: none;
   max-width: 100%;
   padding: 0 0.5rem;
 }
 
-/* Marquee im Kategorie-Kopf – etwas anpassen */
 .category-header-card .context-marquee {
   margin-top: 0.5rem;
   width: 100%;
@@ -2231,14 +2232,6 @@ body.custom-color-scheme .detail-list-item {
   text-overflow: ellipsis;
 }
 
-/* Mobile Anpassung */
-@media (max-width: 767px) {
-  .search-suggestions {
-    max-height: 250px;
-  }
-  .search-suggestions .suggestion-item {
-    padding: 10px 12px;
-  }
 }
 
 /* ==================== COOKIE BANNER & MODALS ==================== */
