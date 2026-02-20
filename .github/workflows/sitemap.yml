@@ -12,11 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false   # wichtig: verhindert die Verwendung des Standard‑Tokens
+
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
+
       - name: Sitemap generieren
         run: node build-sitemap.js
+
       - name: Änderungen committen und pushen
         run: |
           git config --global user.name 'GitHub Action'
