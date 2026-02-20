@@ -2004,31 +2004,15 @@ a:focus-visible {
   .category-header-description {
     font-size: 0.65rem;
   }
+  /* Nur Positionskorrektur für das Marquee – nichts anderes */
   .category-header-card .context-marquee {
-    height: 18px;
-    font-size: 0.55rem;
-    /* NEUE REGELN für das Marquee-Problem */
-    -webkit-mask-image: none !important;
-    mask-image: none !important;
-    transform: translateZ(0) translate3d(0,0,0);
-    backface-visibility: hidden;
-    will-change: transform;
-    animation: marqueeLoop 20s linear infinite !important;
-    animation-play-state: running !important;
-    /* Korrektur für die linke Verschiebung */
     left: 0 !important;
     margin-left: 0 !important;
     padding-left: 0 !important;
     width: 100% !important;
     box-sizing: border-box;
   }
-  /* Falls der Track selbst verschoben ist: */
-  .category-header-card .context-marquee .marquee-track {
-    transform: none !important;
-    left: 0 !important;
-  }
 }
-
 /* ==================== KATEGORIE-KÖPFE – STÄRKERER PULS FÜR KLICKBARKEIT ==================== */
 
 /* Zuerst die kategoriespezifischen Glow-Farben für die Header */
