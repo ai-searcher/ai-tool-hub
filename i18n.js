@@ -43,7 +43,7 @@
       // Kategorienamen (für Badges, Kategorie-Köpfe, etc.)
       cat_text: 'Texte schreiben & bearbeiten',
       cat_image: 'Bilder erstellen & designen',
-      cat_code: 'Programmieren & entwickeln',
+      cat_code: 'codieren & entwickeln',
       cat_audio: 'Audio & Podcasts',
       cat_video: 'Videos & Animationen',
       cat_data: 'Daten auswerten & visualisieren',
