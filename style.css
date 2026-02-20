@@ -653,7 +653,7 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 1rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: var(--card-shadow), var(--card-inset-shadow);
@@ -661,37 +661,43 @@ body {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  aspect-ratio: 1/1; /* ← quadratisch machen */
+  justify-content: center;      /* Inhalt vertikal zentrieren */
+  align-items: center;          /* Inhalt horizontal zentrieren */
+  aspect-ratio: 1 / 1;          /* Erzwingt quadratische Form */
+  width: 100%;                  /* Nimmt volle Breite des Containers */
+  text-align: center;
+  overflow: hidden;             /* Verhindert Überlauf */
 }
 
 .category-header-title {
-  font-size: 1.3rem; /* etwas kleiner als vorher */
+  font-size: 1rem;
   font-weight: 700;
   color: var(--primary);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
-  word-break: break-word;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+  word-break: break-word;       /* Erlaubt Umbruch bei langen Wörtern */
+  hyphens: auto;                /* Silbentrennung für besseren Umbruch */
+  max-width: 100%;
+  padding: 0 0.5rem;
 }
 
 .category-header-description {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-dim);
   margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  padding: 0 0.5rem;
 }
 
-.category-header-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
+/* Marquee im Kategorie-Kopf – etwas anpassen */
 .category-header-card .context-marquee {
-  margin-top: auto;
+  margin-top: 0.5rem;
   width: 100%;
   height: 22px;
+  font-size: 0.7rem;
 }
 
 /* Stack-Container für die Karten */
@@ -1378,7 +1384,7 @@ button,
     padding: 3px 6px !important;
   }
   .category-header-title {
-    font-size: 1.2rem !important;
+    font-size: 0.75rem !important;
   }
 }
 
