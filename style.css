@@ -2657,3 +2657,90 @@ input:disabled + .cookie-slider {
     align-self: flex-start;
   }
 }
+
+/* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE === */
+.category-header-card {
+  position: relative;
+  overflow: visible; /* damit die Linien außerhalb sichtbar sind */
+}
+
+/* Obere linke Ecke */
+.category-header-card::before {
+  content: '';
+  position: absolute;
+  top: -6px;  /* etwas außerhalb der Karte, damit die Linien nach innen zeigen */
+  left: -6px;
+  width: 40px;  /* groß genug für die drei Linien */
+  height: 40px;
+  box-shadow:
+    0 2px 0 0 var(--glow-color),   /* erste horizontale Linie (von oben nach innen) */
+    0 4px 0 0 var(--glow-color),   /* zweite horizontale Linie */
+    0 6px 0 0 var(--glow-color),   /* dritte horizontale Linie */
+    2px 0 0 0 var(--glow-color),   /* erste vertikale Linie */
+    4px 0 0 0 var(--glow-color),   /* zweite vertikale Linie */
+    6px 0 0 0 var(--glow-color);   /* dritte vertikale Linie */
+  pointer-events: none;
+  z-index: 2;  /* über dem Hintergrund, aber unter dem Inhalt */
+}
+
+/* Obere rechte Ecke */
+.category-header-card::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 40px;
+  height: 40px;
+  box-shadow:
+    0 2px 0 0 var(--glow-color),
+    0 4px 0 0 var(--glow-color),
+    0 6px 0 0 var(--glow-color),
+    -2px 0 0 0 var(--glow-color),
+    -4px 0 0 0 var(--glow-color),
+    -6px 0 0 0 var(--glow-color);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Untere linke Ecke – nutze .category-header-content (muss existieren) */
+.category-header-content::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: -6px;
+  width: 40px;
+  height: 40px;
+  box-shadow:
+    0 -2px 0 0 var(--glow-color),
+    0 -4px 0 0 var(--glow-color),
+    0 -6px 0 0 var(--glow-color),
+    2px 0 0 0 var(--glow-color),
+    4px 0 0 0 var(--glow-color),
+    6px 0 0 0 var(--glow-color);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Untere rechte Ecke */
+.category-header-content::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  width: 40px;
+  height: 40px;
+  box-shadow:
+    0 -2px 0 0 var(--glow-color),
+    0 -4px 0 0 var(--glow-color),
+    0 -6px 0 0 var(--glow-color),
+    -2px 0 0 0 var(--glow-color),
+    -4px 0 0 0 var(--glow-color),
+    -6px 0 0 0 var(--glow-color);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Wichtig: .category-header-content muss relativ positioniert sein */
+.category-header-content {
+  position: relative;
+}
