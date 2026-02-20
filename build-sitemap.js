@@ -1,47 +1,31 @@
-// build-sitemap.js – Erzeugt eine vollständige Sitemap mit allen 34 Tools
-// Dieses Skript sollte nach jeder Änderung an data.json ausgeführt werden.
-// Für die Automatisierung nutze den bereits beschriebenen GitHub Actions Workflow.
+name: Sitemap automatisch generieren
 
-const fs = require('fs');
-const path = require('path');
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'data.json'
+  workflow_dispatch:
 
-// ===== KONFIGURATION =====
-const BASE_URL = 'https://ai-searcher.github.io/ai-tool-hub/';
-const DATA_FILE = './data.json';
-const OUTPUT_FILE = './sitemap.xml';
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MY_PAT }}   # Wichtig: Hier wird der PAT verwendet!
 
-// ===== DATEN LADEN =====
-const raw = fs.readFileSync(DATA_FILE, 'utf8');
-const data = JSON.parse(raw);
-const tools = data.tools || [];
-const lastUpdated = data.meta?.last_updated || new Date().toISOString().split('T')[0];
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-// ===== SITEMAP AUFBAUEN =====
-let sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n';
-sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+      - name: Sitemap generieren
+        run: node build-sitemap.js
 
-// Hauptseite
-sitemap += `  <url>\n`;
-sitemap += `    <loc>${BASE_URL}/</loc>\n`;
-sitemap += `    <lastmod>${lastUpdated}</lastmod>\n`;
-sitemap += `    <changefreq>weekly</changefreq>\n`;
-sitemap += `    <priority>1.0</priority>\n`;
-sitemap += `  </url>\n`;
-
-// Jede Tool-Detailseite (aktuell 34)
-tools.forEach(tool => {
-  // Falls es kein added-Datum gibt, verwende lastUpdated
-  const toolDate = tool.added ? tool.added.split('T')[0] : lastUpdated;
-  sitemap += `  <url>\n`;
-  sitemap += `    <loc>${BASE_URL}/detail.html?id=${tool.id}</loc>\n`;
-  sitemap += `    <lastmod>${toolDate}</lastmod>\n`;
-  sitemap += `    <changefreq>monthly</changefreq>\n`;
-  sitemap += `    <priority>0.8</priority>\n`;
-  sitemap += `  </url>\n`;
-});
-
-sitemap += '</urlset>';
-
-// ===== DATEI SCHREIBEN =====
-fs.writeFileSync(OUTPUT_FILE, sitemap);
-console.log(`✅ Sitemap mit ${tools.length + 1} URLs erfolgreich unter ${OUTPUT_FILE} erstellt!`);
+      - name: Änderungen committen und pushen
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add sitemap.xml
+          git diff --quiet && git diff --staged --quiet || git commit -m 'Sitemap automatisch aktualisiert'
+          git push origin main
