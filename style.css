@@ -653,7 +653,7 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 1.2rem 0.8rem;
   margin-bottom: 1.5rem;
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: var(--card-shadow), var(--card-inset-shadow);
@@ -666,39 +666,39 @@ body {
   aspect-ratio: 1 / 1;
   width: 100%;
   text-align: center;
-  overflow: hidden;
+  overflow: visible;           /* Kein Abschneiden von Text */
 }
 
 .category-header-title {
-  font-size: 1.2rem;
+  font-size: 0.9rem;            /* Klein genug, dass langer Text Platz hat */
   font-weight: 700;
   color: var(--primary);
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 0.2rem 0;
   line-height: 1.3;
-  word-break: break-word;       /* Umbruch nur an Leerzeichen */
-  overflow-wrap: break-word;    /* zusätzliche Sicherheit */
-  hyphens: none;                /* keine Silbentrennung */
-  max-width: 100%;
-  padding: 0 0.5rem;
-}
-
-.category-header-description {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  margin: 0;
-  line-height: 1.4;
   word-break: break-word;
   overflow-wrap: break-word;
   hyphens: none;
   max-width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 0.2rem;
+}
+
+.category-header-description {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: none;
+  max-width: 100%;
+  padding: 0 0.2rem;
 }
 
 .category-header-card .context-marquee {
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
   width: 100%;
-  height: 22px;
-  font-size: 0.7rem;
+  height: 20px;
+  font-size: 0.6rem;
 }
 
 /* Stack-Container für die Karten */
@@ -1989,28 +1989,76 @@ a:focus-visible {
   }
 }
 
-/* ==================== KATEGORIE-KOPF MIT MARQUEE ==================== */
+/* ==================== KATEGORIE-KÖPFE – QUADRATISCH, TEXT VOLLSTÄNDIG SICHTBAR ==================== */
 .category-header-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  animation: category-glow 4s ease-in-out infinite;
-}
-
-.category-header-content {
-  flex: 1;
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 1.2rem 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: var(--card-shadow), var(--card-inset-shadow);
+  transition: all 0.3s ease;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;          /* Quadratisch */
+  width: 100%;
   text-align: center;
+  overflow: visible;            /* Kein Abschneiden von Text */
+}
+
+.category-header-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 0.2rem 0;
+  line-height: 1.3;
+  word-break: break-word;       /* Umbruch nur an Wortgrenzen */
+  overflow-wrap: break-word;     /* Sicherheit für lange Wörter */
+  hyphens: none;                 /* Keine Silbentrennung */
+  max-width: 100%;
+  padding: 0 0.2rem;
+}
+
+.category-header-description {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: none;
+  max-width: 100%;
+  padding: 0 0.2rem;
 }
 
 .category-header-card .context-marquee {
-  margin-top: auto;
+  margin-top: 0.3rem;
   width: 100%;
-  height: 22px;
+  height: 20px;
+  font-size: 0.6rem;
 }
 
+/* Optionale Anpassung für kleine Bildschirme (falls gewünscht) */
+@media (max-width: 767px) {
+  .category-header-card {
+    padding: 0.8rem 0.5rem;
+  }
+  .category-header-title {
+    font-size: 0.8rem;
+  }
+  .category-header-description {
+    font-size: 0.65rem;
+  }
+  .category-header-card .context-marquee {
+    height: 18px;
+    font-size: 0.55rem;
+  }
+}
 /* Pulsierender Glow für Kategorie-Köpfe (signalisiert Klickbarkeit) */
 @keyframes category-glow {
   0%, 100% {
