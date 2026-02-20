@@ -960,22 +960,18 @@ body {
   pointer-events: none;
 }
 
-/* Category Badge – absolute Positionierung 3mm links, 2mm oben */
-/* Allgemeine Definition (für Desktop/Tablet) */
-/* Allgemeine Definition (für Desktop/Tablet) */
-/* Allgemeine Definition (für Desktop/Tablet) */
 /* Allgemeine Definition (für Desktop/Tablet) */
 .square-category-badge {
   position: absolute;
-  top: 8px;
-  left: 12px;
-  padding: 4px 8px;               /* 35% kleiner (6px→4px, 12px→8px) */
+  top: 3.4mm;
+  left: 3.4mm;
+  padding: 4px 8px;
   border-radius: 999px;
-  font-size: 0.48rem;              /* 40% kleiner (0.8rem→0.48rem) */
+  font-size: 0.48rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   white-space: normal;
-  max-width: calc(100% - 20px);    /* etwas weniger Abzug, weil Badge kleiner */
+  max-width: calc(100% - 20px);
   line-height: 1.2;
   text-align: center;
   pointer-events: none;
@@ -1325,10 +1321,10 @@ button,
 /* Mobile Anpassung (innerhalb des Media-Queries) */
 @media (max-width: 767px) {
   .square-category-badge {
-    font-size: 0.45rem !important;   /* 40% kleiner als 0.75rem (≈0.45rem) */
-    padding: 3px 6px !important;      /* 35% kleiner (4px→3px, 8px→5px gerundet) */
-    top: 8px;
-    left: 12px !important;
+    font-size: 0.45rem !important;
+    padding: 3px 6px !important;
+    top: 3.4mm !important;
+    left: 3.4mm !important;
     max-width: calc(100% - 16px) !important;
   }
 
