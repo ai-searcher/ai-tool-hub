@@ -2031,31 +2031,41 @@ a:focus-visible {
   --glow-color: var(--glow-other, rgba(176,190,197,0.25));
 }
 
-/* Definiere eine stärkere Puls-Animation (nur Rand, dicker und schneller) */
-@keyframes category-pulse-strong {
+/* Definiere eine stärkere Puls-Animation mit Schatten von unten */
+@keyframes category-pulse-underglow {
   0%, 100% {
-    box-shadow: var(--card-shadow), var(--card-inset-shadow), 0 0 0 1px transparent;
+    box-shadow: 
+      var(--card-shadow), 
+      var(--card-inset-shadow),
+      0 0 0 1px transparent; /* kein zusätzlicher Glow */
   }
   50% {
-    box-shadow: var(--card-shadow), var(--card-inset-shadow), 0 0 0 3px var(--glow-color); /* Dickerer Rand */
+    box-shadow: 
+      var(--card-shadow), 
+      var(--card-inset-shadow),
+      0 12px 25px -5px var(--glow-color),  /* nach unten gerichteter Glow */
+      inset 0 -3px 8px var(--glow-color);  /* innerer Glow von unten */
   }
 }
 
-/* Wende die stärkere Animation auf alle Kategorie-Köpfe an */
+/* Wende die Animation auf alle Kategorie-Köpfe an */
 .category-header-card {
-  animation: category-pulse-strong 2.5s ease-in-out infinite; /* Schnellerer Puls */
+  animation: category-pulse-underglow 2.2s ease-in-out infinite;
 }
 
 /* Hover-Effekt – überschreibt die Animation, um stärker zu reagieren */
 .category-header-card:hover {
-  animation: none !important; /* Puls stoppen */
+  animation: none !important;
   border-color: var(--primary) !important;
-  box-shadow: 0 0 25px var(--primary-glow), var(--card-shadow) !important;
-  transform: scale(1.02); /* Leichtes Vergrößern beim Hovern – zusätzlicher Hinweis */
+  box-shadow: 
+    0 8px 30px var(--primary-glow), 
+    inset 0 -4px 12px var(--primary-glow), 
+    var(--card-shadow) !important;
+  transform: scale(1.02);
   transition: transform 0.2s ease;
 }
 
-/* Zusätzlicher Hinweis: Tooltip beim Hovern (optional, nur für Desktop) */
+/* Tooltip (optional) – bleibt unverändert */
 @media (min-width: 768px) {
   .category-header-card:hover::after {
     content: "Klicken zum Aufklappen";
