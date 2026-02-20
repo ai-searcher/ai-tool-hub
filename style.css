@@ -967,7 +967,7 @@ body {
   left: 12px;
   padding: 6px 12px;           /* mehr horizontaler Abstand */
   border-radius: 999px;
-  font-size: 0.68rem;           /* noch etwas kleiner */
+  font-size: 0.665rem;           /* noch etwas kleiner */
   font-weight: 700;
   letter-spacing: 0.08em;
   white-space: normal;
@@ -1317,7 +1317,7 @@ button,
   }
 
 .square-category-badge {
-    font-size: 0.65rem !important;
+    font-size: 0.618rem !important;
     padding: 4px 10px !important;
     top: 8px;
     left: 10px !important;
