@@ -965,13 +965,14 @@ body {
   position: absolute;
   top: 8px;
   left: 12px;
-  padding: 6px 14px;
+  padding: 4px 8px;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  white-space: nowrap;
-  transition: all var(--transition-fast);
+  white-space: normal;
+  max-width: calc(100% - 24px);
+  line-height: 1.2;
   pointer-events: none;
   z-index: 3;
 }
