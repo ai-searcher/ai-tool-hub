@@ -74,7 +74,7 @@
       sortNameAsc: 'Name (A-Z)',
       sortNameDesc: 'Name (Z-A)',
       sortSchool: 'For school / study',
-      sortWork: 'For work / business'
+      sortWork: 'For work / business',
       sortDateDesc: 'Newest first',
       sortDateAsc: 'Oldest first',
       subline: '▽Find the right AI tool for your task▽',
