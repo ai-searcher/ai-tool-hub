@@ -670,10 +670,12 @@ body {
 }
 
 .category-header-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--primary);
   margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .category-header-description {
@@ -743,12 +745,17 @@ body {
   display: inline-block;
   background: var(--primary-dim);
   color: var(--primary);
-  padding: 2px 8px;
+  padding: 4px 8px;
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   align-self: flex-start;
+  white-space: normal;
+  max-width: 100%;
+  line-height: 1.2;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 /* Kategoriespezifische Farben für den Badge in der Stack-Karte */
@@ -1324,7 +1331,7 @@ button,
   .square-category-badge {
     font-size: 0.45rem !important;
     padding: 3px 6px !important;
-    top: 10px !important;          /* etwas kleiner auf mobil */
+    top: 10px !important;
     left: 10px !important;
     max-width: calc(100% - 16px) !important;
   }
@@ -1367,6 +1374,15 @@ button,
 
   .sort-trigger {
     padding-right: 1.8rem;
+  }
+
+  /* NEU: Stack-Ansicht Kategorie-Badge und Header-Titel für mobile */
+  .stack-card .stack-card-category {
+    font-size: 0.65rem !important;
+    padding: 3px 6px !important;
+  }
+  .category-header-title {
+    font-size: 1.2rem !important;
   }
 }
 
