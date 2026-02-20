@@ -1,2061 +1,664 @@
 // =========================================
-// QUANTUM AI HUB - APP.JS
-// Version: 1.7.1 (Verbesserte Suchvorschläge mit Font Awesome Icons)
+// PERFORMANCE.JS – Optimierungs-Engine für Quantum AI Hub
+// Version: 1.2.0 (Erweiterte SmartSearch – maximale Erkennung)
+// Enthält: Suchindex, Animation-Scheduler, DOM-Batcher, Cache, Throttler, LazyLoader, SmartSearch
 // =========================================
 
-'use strict';
+(function(global) {
+  'use strict';
 
-// ======= DEBUG: globaler Error- und Fetch-Logger =======
-window.addEventListener('error', (e) => {
-  try {
-    console.error('Global error event:', {
-      message: e.message,
-      filename: e.filename,
-      lineno: e.lineno,
-      colno: e.colno,
-      error: e.error
-    });
-  } catch (err) { console.error('error listener failed', err); }
-});
-
-(function() {
-  if (!window.fetch) return;
-  const _origFetch = window.fetch;
-  window.fetch = async function(resource, init) {
-    try {
-      const res = await _origFetch(resource, init);
-      if (!res.ok) {
-        console.warn('Fetch non-ok:', { url: String(resource), status: res.status, statusText: res.statusText });
-      }
-      return res;
-    } catch (err) {
-      try {
-        console.error('Fetch failed:', { url: String(resource), error: err });
-      } catch (e) {}
-      throw err;
-    }
-  };
-})();
-
-window.addEventListener('unhandledrejection', (ev) => {
-  try {
-    console.group('%cUnhandled Promise Rejection (global)', 'color:#fff;background:#d9534f;padding:3px;border-radius:4px;');
-    console.error('reason:', ev.reason);
-    if (ev.reason && ev.reason.stack) console.error(ev.reason.stack);
-    console.trace();
-    console.groupEnd();
-  } catch (e) {
-    console.error('unhandledrejection logging failed', e);
-  }
-});
-
-// =========================================
-// CONFIGURATION
-// =========================================
-const CONFIG = {
-  supabase: {
-    url: 'https://doicozkpdbkyvdkpujoh.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaWNvemtwZGJreXZka3B1am9oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzOTY4NDksImV4cCI6MjA4NTk3Mjg0OX0.-xgzqvOVE9NgJIxFaTrJoMXwsZJ_kWRcNPSoaRJvfRI'
-  },
-  fallback: {
-    useSupabase: false,
-    useLocalJSON: true,
-    useDefaults: true
-  },
-  search: {
-    minLength: 1,
-    maxLength: 100,
-    debounceMs: 300,
-    maxSuggestions: 8
-  },
-  validation: {
-    autoFix: true,
-    logErrors: true,
-    strictMode: false
-  }
-};
-
-// =========================================
-// KATEGORIE-NAMEN (ÜBERSETZT ÜBER i18n)
-// =========================================
-function getCategoryName(cat) {
-  if (!cat) return 'Sonstige';
-  const key = 'cat_' + cat;
-  return window.i18n ? window.i18n.t(key) : (cat.charAt(0).toUpperCase() + cat.slice(1));
-}
-
-// =========================================
-// HILFSFUNKTION FÜR MEHRSPRACHIGE TOOL-FELDER
-// =========================================
-function getLocalizedToolField(tool, field) {
-  const lang = window.i18n ? window.i18n.currentLang : 'de';
-  if (lang === 'en' && tool.en && tool.en[field] !== undefined) {
-    return tool.en[field];
-  }
-  return tool[field];
-}
-
-// =========================================
-// DEFAULT TOOLS (Always Available)
-// =========================================
-const DEFAULT_TOOLS = [
-  {
-    id: 1,
-    title: 'ChatGPT',
-    link: 'https://chat.openai.com',
-    description: 'AI Chatbot von OpenAI',
-    category: 'text',
-    is_free: true,
-    rating: 4.8
-  },
-  {
-    id: 2,
-    title: 'Midjourney',
-    link: 'https://midjourney.com',
-    description: 'AI Bild-Generator',
-    category: 'image',
-    is_free: false,
-    rating: 4.7
-  },
-  {
-    id: 3,
-    title: 'GitHub Copilot',
-    link: 'https://github.com/copilot',
-    description: 'AI Code-Assistent',
-    category: 'code',
-    is_free: false,
-    rating: 4.6
-  }
-];
-
-// =========================================
-// PERFORMANCE-OPTIMIERTE SUCHFUNKTIONEN (mit SearchIndex)
-// =========================================
-let searchIndex = null; // wird nach dem Laden der Tools initialisiert
-let domBatcher = null;  // für gebündelte DOM-Updates
-
-// Filter-Funktion, die den Suchindex und Smart-Filter nutzt
-function filterTools(query) {
-  let effectiveQuery = query;
-  // SmartSearch getEffectiveQuery nutzen, falls verfügbar
-  if (window.Performance && window.Performance.SmartSearch) {
-    try {
-      effectiveQuery = window.Performance.SmartSearch.getEffectiveQuery(query);
-    } catch (e) {
-      console.warn('getEffectiveQuery error', e);
-    }
-  }
-
-  let results = state.tools;
-
-  // Nur suchen, wenn effektive Query lang genug
-  if (effectiveQuery && effectiveQuery.length >= 2) {
-    if (searchIndex) {
-      try {
-        const ids = searchIndex.search(effectiveQuery);
-        results = ids.map(id => searchIndex.getTool(id)).filter(Boolean);
-      } catch (e) {
-        console.warn('SearchIndex error, using fallback', e);
-      }
-    }
-  }
-
-  // Smart-Filter anwenden (auch wenn Query kurz/leer)
-  if (window.Performance && window.Performance.SmartSearch) {
-    try {
-      results = window.Performance.SmartSearch.applyFilters(results, state.smartFilters);
-    } catch (e) {
-      console.warn('SmartSearch applyFilters error', e);
-    }
-  }
-
-  return results;
-}
-
-// Vorschläge basierend auf dem Suchindex (Fallback)
-function generateToolSuggestions(query) {
-  if (!query || query.length < 2) return [];
-  if (!searchIndex) return [];
-  try {
-    const ids = searchIndex.search(query).slice(0, CONFIG.search.maxSuggestions);
-    return ids.map(id => {
-      const tool = searchIndex.getTool(id);
-      if (!tool) return null;
-      let domain = '';
-      try {
-        if (tool.link) {
-          const url = new URL(tool.link);
-          domain = url.hostname;
-        }
-      } catch (e) {}
-      return {
-        type: 'tool',
-        text: getLocalizedToolField(tool, 'title'),
-        toolId: tool.id,
-        domain: domain,
-        category: tool.category
-      };
-    }).filter(Boolean);
-  } catch (e) {
-    console.warn('generateToolSuggestions error', e);
-    return [];
-  }
-}
-
-// =========================================
-// STACK VIEW CONTROLLER (KATEGORIE-STACKS)
-// =========================================
-class StackViewController {
-  constructor(container, state, ui) {
-    this.container = container;
-    this.state = state;
-    this.ui = ui;
-    this.stacks = [];
-    this.activeSort = 'name';
-    this.sortDirection = 'asc';
-    this.categoryTags = null; // wird später als Objekt mit de/en geladen
-  }
-
-  async loadCategoryTags() {
-    if (this.categoryTags) return;
-    try {
-      const response = await fetch('data.json');
-      const data = await response.json();
-      this.categoryTags = data.categoryTags || {};
-    } catch (e) {
-      console.warn('Konnte categoryTags nicht laden', e);
-      this.categoryTags = {};
-    }
-  }
-
-  async render() {
-    if (!this.state.tools || this.state.tools.length === 0) return;
-
-    await this.loadCategoryTags();
-
-    const grouped = this.groupByCategory(this.state.tools);
-    
-    this.container.innerHTML = '';
-    this.container.classList.add('tool-stacks');
-    
-    for (const [category, tools] of Object.entries(grouped)) {
-      const stackElement = this.createStack(category, tools);
-      this.container.appendChild(stackElement);
+  // -------------------------------------------------------------
+  // 1. SUCHINDEX – Schnelle Volltextsuche (invertierter Index)
+  // -------------------------------------------------------------
+  class SearchIndex {
+    constructor() {
+      this.index = new Map(); // token -> Set von toolIds
+      this.tools = new Map(); // toolId -> tool
+      this.tokenizer = (text) => text.toLowerCase().split(/\W+/).filter(t => t.length > 1);
     }
 
-    this.attachStackListeners();
-  }
-
-  groupByCategory(tools) {
-    const groups = {};
-    tools.forEach(tool => {
-      const cat = tool.category || 'other';
-      if (!groups[cat]) groups[cat] = [];
-      groups[cat].push(tool);
-    });
-    return groups;
-  }
-
-  createStack(category, tools) {
-    const stackDiv = document.createElement('div');
-    stackDiv.className = 'category-stack';
-    stackDiv.dataset.category = category;
-
-    const header = this.createCategoryHeader(category, tools);
-    stackDiv.appendChild(header);
-
-    const cardsContainer = document.createElement('div');
-    cardsContainer.className = 'stack-cards';
-    
-    const sortedTools = this.sortTools(tools);
-    
-    sortedTools.forEach(tool => {
-      const card = this.createStackCard(tool);
-      cardsContainer.appendChild(card);
-    });
-
-    stackDiv.appendChild(cardsContainer);
-    return stackDiv;
-  }
-
-  createCategoryHeader(category, tools) {
-    const header = document.createElement('div');
-    header.className = 'category-header-card';
-
-    const content = document.createElement('div');
-    content.className = 'category-header-content';
-
-    const title = document.createElement('h3');
-    title.className = 'category-header-title';
-    title.textContent = getCategoryName(category);
-
-    const desc = document.createElement('p');
-    desc.className = 'category-header-description';
-    desc.textContent = `${tools.length} Tool${tools.length !== 1 ? 's' : ''}`;
-
-    content.appendChild(title);
-    content.appendChild(desc);
-
-    const marquee = document.createElement('div');
-    marquee.className = 'context-marquee';
-    const track = document.createElement('div');
-    track.className = 'marquee-track';
-    marquee.appendChild(track);
-
-    // Tags für diese Kategorie holen – jetzt zweisprachig
-    const lang = window.i18n ? window.i18n.currentLang : 'de';
-    let tags = this.categoryTags?.[category];
-    if (tags && typeof tags === 'object' && !Array.isArray(tags)) {
-      tags = tags[lang] || tags.de || [];
-    } else {
-      const t = window.i18n ? window.i18n.t : (key) => key;
-      tags = Array.isArray(t('fallbackTags')) ? t('fallbackTags') : ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'];
-    }
-
-    for (let i = 0; i < 2; i++) {
-      tags.forEach(tag => {
-        const span = document.createElement('span');
-        span.className = 'marquee-seq';
-        span.textContent = tag;
-        track.appendChild(span);
-      });
-    }
-
-    header.appendChild(content);
-    header.appendChild(marquee);
-    return header;
-  }
-
-  createStackCard(tool) {
-    const card = document.createElement('div');
-    card.className = 'stack-card';
-    card.dataset.toolId = tool.id;
-    card.dataset.category = tool.category || 'other';
-    card.dataset.toolName = tool.title;
-    card.dataset.href = tool.link;
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'article');
-    card.setAttribute('aria-label', getLocalizedToolField(tool, 'title'));
-
-    const title = document.createElement('div');
-    title.className = 'stack-card-title';
-    title.textContent = getLocalizedToolField(tool, 'title');
-    card.appendChild(title);
-
-    const badge = document.createElement('span');
-    badge.className = 'stack-card-category';
-    badge.textContent = getCategoryName(tool.category);
-    card.appendChild(badge);
-
-    return card;
-  }
-
-  sortTools(tools) {
-    const dir = this.sortDirection === 'asc' ? 1 : -1;
-    switch (this.activeSort) {
-      case 'name':
-        return [...tools].sort((a, b) => dir * a.title.localeCompare(b.title));
-      case 'rating':
-        return [...tools].sort((a, b) => dir * ((a.rating || 0) - (b.rating || 0)));
-      case 'date':
-        return [...tools].sort((a, b) => dir * (new Date(b.added) - new Date(a.added)));
-      default:
-        return tools;
-    }
-  }
-
-  attachStackListeners() {
-    const stacks = this.container.querySelectorAll('.category-stack');
-    stacks.forEach(stack => {
-      const header = stack.querySelector('.category-header-card');
-      if (header) {
-        header.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const cardsContainer = stack.querySelector('.stack-cards');
-          if (cardsContainer) {
-            cardsContainer.classList.toggle('fanned');
-          }
-        });
-      }
-
-      const cardsContainer = stack.querySelector('.stack-cards');
-      if (cardsContainer) {
-        cardsContainer.addEventListener('click', (e) => {
-          if (e.target.closest('.stack-card')) return;
-          cardsContainer.classList.toggle('fanned');
-        });
-      }
-    });
-
-    const stackCards = this.container.querySelectorAll('.stack-card');
-    stackCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const toolId = card.dataset.toolId;
-        const tool = this.state.tools.find(t => String(t.id) === String(toolId));
-        if (!tool) return;
-
-        if (window.innerWidth < 768) {
-          window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-        } else {
-          if (typeof openToolModal === 'function') {
-            openToolModal(tool);
-          } else {
-            window.open(tool.link, '_blank', 'noopener,noreferrer');
-          }
-        }
-      });
-    });
-  }
-
-  destroy() {
-    this.container.innerHTML = '';
-    this.container.classList.remove('tool-stacks');
-  }
-}
-
-// =========================================
-// VALIDATION RULES
-// =========================================
-const VALIDATION_RULES = {
-  required: ['id', 'title', 'link'],
-  optional: ['description', 'category', 'tags', 'is_free', 'rating', 'provider', 'added', 'featured'],
-  
-  types: {
-    id: 'number',
-    title: 'string',
-    link: 'string',
-    description: 'string',
-    category: 'string',
-    tags: 'array',
-    is_free: 'boolean',
-    rating: 'number',
-    provider: 'string',
-    added: 'string',
-    featured: 'boolean'
-  },
-  
-  ranges: {
-    rating: { min: 0, max: 5 },
-    title: { minLength: 2, maxLength: 50 }
-  },
-  
-  patterns: {
-    link: /^https?:\/\/.+/i,
-    category: /^(text|image|code|audio|video|data|other)$/i
-  }
-};
-
-// =========================================
-// UTILITIES
-// =========================================
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-
-const getElement = (selector) => {
-  const el = $(selector);
-  if (!el) {
-    console.warn(`Element not found: ${selector}`);
-  }
-  return el;
-};
-
-const sanitizeInput = (input) => {
-  if (typeof input !== 'string') return '';
-  return input
-    .replace(/[<>'"]/g, '')
-    .trim()
-    .substring(0, CONFIG.search.maxLength);
-};
-
-const debounce = (func, wait) => {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-};
-
-// =========================================
-// STATE MANAGEMENT
-// =========================================
-const state = {
-  tools: [],
-  filtered: [],
-  loading: true,
-  error: null,
-  searchQuery: '',
-  dataSource: 'loading',
-  stats: {
-    total: 0,
-    categories: 0,
-    featured: 0
-  },
-  sortBy: 'name',
-  sortDirection: 'asc',
-  smartFilters: { category: null, freeOnly: false, beginner: false }
-};
-
-// =========================================
-// HILFSFUNKTION SORTIERUNG
-// =========================================
-function sortTools(tools) {
-  const { sortBy, sortDirection } = state;
-  const dir = sortDirection === 'asc' ? 1 : -1;
-
-  return [...tools].sort((a, b) => {
-    if (sortBy === 'name') {
-      return dir * a.title.localeCompare(b.title);
-    } else if (sortBy === 'rating') {
-      const aRating = a.rating || 0;
-      const bRating = b.rating || 0;
-      return dir * (aRating - bRating);
-    } else if (sortBy === 'date') {
-      const aDate = new Date(a.added || 0);
-      const bDate = new Date(b.added || 0);
-      return dir * (aDate - bDate);
-    }
-    return 0;
-  });
-}
-
-// =========================================
-// SUPABASE CLIENT (No Library)
-// =========================================
-const supabase = {
-  async fetch(endpoint, options = {}) {
-    const url = `${CONFIG.supabase.url}/rest/v1/${endpoint}`;
-    const headers = {
-      'apikey': CONFIG.supabase.anonKey,
-      'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...options.headers
-    };
-    
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-      try {
-        const response = await fetch(url, {
-          ...options,
-          headers,
-          signal: controller.signal
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        return await response.json();
-      } finally {
-        clearTimeout(timeoutId);
-      }
-    } catch (error) {
-      console.error('Supabase fetch error:', error);
-      throw error;
-    }
-  },
-  
-  async getTools() {
-    try {
-      const tools = await this.fetch('tools_with_category?order=created_at.desc');
-      console.log('✅ Supabase: Loaded', tools.length, 'tools');
-      return tools;
-    } catch (error) {
-      console.error('❌ Supabase getTools failed:', error.message);
-      return null;
-    }
-  }
-};
-
-// =========================================
-// DATA VALIDATION
-// =========================================
-const validator = {
-  validateTool(tool, index) {
-    const errors = [];
-    const warnings = [];
-    
-    VALIDATION_RULES.required.forEach(field => {
-      if (tool[field] === undefined || tool[field] === null || tool[field] === '') {
-        errors.push({
-          type: 'MISSING_FIELD',
-          field,
-          message: `Tool #${index + 1}: Required field "${field}" is missing`,
-          tool: tool.title || 'Unknown'
-        });
-      }
-    });
-    
-    Object.keys(tool).forEach(field => {
-      const expectedType = VALIDATION_RULES.types[field];
-      if (!expectedType) return;
-      
-      const actualType = Array.isArray(tool[field]) ? 'array' : typeof tool[field];
-      
-      if (actualType !== expectedType && tool[field] !== null) {
-        errors.push({
-          type: 'WRONG_TYPE',
-          field,
-          message: `Tool "${tool.title}": Field "${field}" should be ${expectedType}, got ${actualType}`,
-          expected: expectedType,
-          actual: actualType
-        });
-      }
-    });
-    
-    if (tool.rating !== undefined && tool.rating !== null) {
-      const { min, max } = VALIDATION_RULES.ranges.rating;
-      if (tool.rating < min || tool.rating > max) {
-        warnings.push({
-          type: 'OUT_OF_RANGE',
-          field: 'rating',
-          message: `Tool "${tool.title}": Rating ${tool.rating} is outside range ${min}-${max}`
-        });
-      }
-    }
-    
-    if (tool.title) {
-      const { minLength, maxLength } = VALIDATION_RULES.ranges.title;
-      if (tool.title.length < minLength || tool.title.length > maxLength) {
-        warnings.push({
-          type: 'INVALID_LENGTH',
-          field: 'title',
-          message: `Tool "${tool.title}": Title length ${tool.title.length} outside ${minLength}-${maxLength}`
-        });
-      }
-    }
-    
-    if (tool.link && !VALIDATION_RULES.patterns.link.test(tool.link)) {
-      errors.push({
-        type: 'INVALID_PATTERN',
-        field: 'link',
-        message: `Tool "${tool.title}": Invalid URL "${tool.link}"`,
-        hint: 'URL must start with http:// or https://'
-      });
-    }
-    
-    if (tool.category && !VALIDATION_RULES.patterns.category.test(tool.category)) {
-      warnings.push({
-        type: 'INVALID_CATEGORY',
-        field: 'category',
-        message: `Tool "${tool.title}": Unknown category "${tool.category}"`,
-        hint: 'Valid: text, image, code, audio, video, data, other'
-      });
-    }
-    
-    return { errors, warnings };
-  },
-  
-  autoFix(tool) {
-    const fixed = { ...tool };
-    
-    if (!fixed.id || typeof fixed.id !== 'number') {
-      fixed.id = Date.now() + Math.floor(Math.random() * 1000);
-      console.log(`🔧 Auto-fix: Generated ID for "${fixed.title}"`);
-    }
-    
-    if (fixed.link && !fixed.link.match(/^https?:\/\//i)) {
-      fixed.link = 'https://' + fixed.link;
-      console.log(`🔧 Auto-fix: Added https:// to "${fixed.title}"`);
-    }
-    
-    if (!fixed.description || fixed.description === '') {
-      fixed.description = `${fixed.title} - AI Tool`;
-      console.log(`🔧 Auto-fix: Generated description for "${fixed.title}"`);
-    }
-    
-    if (!fixed.category) {
-      fixed.category = this.detectCategory(fixed);
-      console.log(`🔧 Auto-fix: Detected category "${fixed.category}" for "${fixed.title}"`);
-    }
-    
-    if (fixed.rating !== undefined && fixed.rating !== null) {
-      if (fixed.rating < 0) fixed.rating = 0;
-      if (fixed.rating > 5) fixed.rating = 5;
-    }
-    
-    return fixed;
-  },
-  
-  detectCategory(tool) {
-    const text = `${tool.title} ${tool.description || ''}`.toLowerCase();
-    
-    const patterns = {
-      text: ['chat', 'text', 'write', 'language', 'gpt', 'claude', 'conversation'],
-      image: ['image', 'photo', 'art', 'visual', 'picture', 'midjourney', 'dall'],
-      code: ['code', 'dev', 'github', 'programming', 'copilot', 'cursor'],
-      audio: ['audio', 'music', 'voice', 'sound', 'speech', 'eleven'],
-      video: ['video', 'film', 'animation', 'runway']
-    };
-    
-    for (const [category, keywords] of Object.entries(patterns)) {
-      if (keywords.some(kw => text.includes(kw))) {
-        return category;
-      }
-    }
-    
-    return 'other';
-  },
-  
-  validateAll(tools) {
-    const allErrors = [];
-    const allWarnings = [];
-    const validTools = [];
-    const invalidTools = [];
-    
-    const seenIds = new Set();
-    const seenTitles = new Set();
-    
-    tools.forEach((tool, index) => {
-      const processedTool = CONFIG.validation.autoFix ? this.autoFix(tool) : tool;
-      
-      const { errors, warnings } = this.validateTool(processedTool, index);
-      
-      if (processedTool.id && seenIds.has(processedTool.id)) {
-        errors.push({
-          type: 'DUPLICATE_ID',
-          field: 'id',
-          message: `Tool "${processedTool.title}": Duplicate ID ${processedTool.id}`
-        });
-      }
-      seenIds.add(processedTool.id);
-      
-      const titleLower = processedTool.title?.toLowerCase();
-      if (titleLower && seenTitles.has(titleLower)) {
-        warnings.push({
-          type: 'DUPLICATE_TITLE',
-          field: 'title',
-          message: `Tool "${processedTool.title}": Duplicate title detected`
-        });
-      }
-      seenTitles.add(titleLower);
-      
-      allErrors.push(...errors);
-      allWarnings.push(...warnings);
-      
-      if (errors.length === 0) {
-        validTools.push(processedTool);
+    // Tools hinzufügen (Array oder einzelnes Tool)
+    addTools(tools) {
+      if (Array.isArray(tools)) {
+        tools.forEach(t => this.addTool(t));
       } else {
-        invalidTools.push({ tool: processedTool, errors });
+        this.addTool(tools);
       }
-    });
-    
-    return {
-      valid: allErrors.length === 0,
-      validTools,
-      invalidTools,
-      errors: allErrors,
-      warnings: allWarnings,
-      stats: {
-        total: tools.length,
-        valid: validTools.length,
-        invalid: invalidTools.length,
-        errorCount: allErrors.length,
-        warningCount: allWarnings.length
-      }
-    };
-  },
-  
-  displayReport(validation) {
-    if (!CONFIG.validation.logErrors) return;
-    
-    console.group('📊 VALIDATION REPORT');
-    console.log(`✅ Valid: ${validation.stats.valid}`);
-    console.log(`❌ Invalid: ${validation.stats.invalid}`);
-    console.log(`⚠️ Warnings: ${validation.stats.warningCount}`);
-    console.log(`📦 Total: ${validation.stats.total}`);
-    
-    if (validation.errors.length > 0) {
-      console.group('❌ ERRORS:');
-      validation.errors.forEach((error, i) => {
-        console.error(`${i + 1}. ${error.message}`);
-      });
-      console.groupEnd();
     }
-    
-    if (validation.warnings.length > 0) {
-      console.group('⚠️ WARNINGS:');
-      validation.warnings.forEach((warning, i) => {
-        console.warn(`${i + 1}. ${warning.message}`);
-      });
-      console.groupEnd();
-    }
-    
-    console.groupEnd();
-  }
-};
 
-// =========================================
-// DATA LOADING (Triple Fallback)
-// =========================================
-const dataLoader = {
-  // Cache für Supabase-Daten (optional)
-  toolCache: (window.Performance && window.Performance.Cache) ? new window.Performance.Cache(5 * 60 * 1000) : null,
+    addTool(tool) {
+      if (!tool || !tool.id) return;
+      this.tools.set(tool.id, tool);
 
-  async loadFromSupabase() {
-    if (!CONFIG.fallback.useSupabase) return null;
-    
-    try {
-      console.log('🔄 Trying Supabase...');
-      
-      // Mit Cache
-      if (this.toolCache && this.toolCache.has('supabase-tools')) {
-        console.log('📦 Using cached Supabase tools');
-        return this.toolCache.get('supabase-tools');
+      // Alle durchsuchbaren Felder sammeln
+      const fields = [];
+      if (tool.title) fields.push(tool.title);
+      if (tool.description) fields.push(tool.description);
+      if (tool.tags) fields.push(...tool.tags);
+      if (tool.provider) fields.push(tool.provider);
+      if (tool.badges) fields.push(...tool.badges);
+      if (tool.category) fields.push(tool.category);
+
+      // Englische Felder (falls vorhanden)
+      if (tool.en) {
+        if (tool.en.title) fields.push(tool.en.title);
+        if (tool.en.description) fields.push(tool.en.description);
+        if (tool.en.badges) fields.push(...tool.en.badges);
       }
 
-      const tools = await supabase.getTools();
-      
-      if (tools && tools.length > 0) {
-        state.dataSource = 'supabase';
-        if (this.toolCache) this.toolCache.set('supabase-tools', tools);
-        return tools;
-      }
-      
-      return null;
-    } catch (error) {
-      console.warn('⚠️ Supabase failed:', error.message);
-      return null;
-    }
-  },
-  
-  async loadFromJSON() {
-    if (!CONFIG.fallback.useLocalJSON) return null;
-    
-    try {
-      console.log('🔄 Trying local JSON...');
-      console.log('📍 Current URL:', window.location.href);
-      console.log('📍 Fetch URL:', new URL('./data.json', window.location.href).href);
-
-      let data = null;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-      try {
-        const response = await fetch('./data.json', {
-          signal: controller.signal
+      // Tokenisieren und Index aufbauen
+      fields.forEach(text => {
+        if (!text) return;
+        this.tokenizer(text).forEach(token => {
+          if (!this.index.has(token)) this.index.set(token, new Set());
+          this.index.get(token).add(tool.id);
         });
+      });
+    }
 
-        console.log('📥 Response status:', response.status);
-        console.log('📥 Response OK:', response.ok);
-        console.log('📥 Response headers:', [...response.headers.entries()]);
+    // Suche: gibt Array von Tool-IDs zurück (Relevanz absteigend)
+    search(query) {
+      if (!query || query.length < 2) return [];
+      const tokens = this.tokenizer(query);
+      if (tokens.length === 0) return [];
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+      const tokenSets = tokens.map(t => this.index.get(t)).filter(Boolean);
+      if (tokenSets.length === 0) return [];
 
-        data = await response.json();
-      } finally {
-        clearTimeout(timeoutId);
+      const union = new Set();
+      tokenSets.forEach(set => set.forEach(id => union.add(id)));
+
+      const scored = Array.from(union).map(id => {
+        const tool = this.tools.get(id);
+        if (!tool) return { id, score: 0 };
+        const title = tool.title?.toLowerCase() || '';
+        const titleTokens = this.tokenizer(title);
+        let score = 0;
+        tokens.forEach(t => {
+          if (titleTokens.includes(t)) score += 2;
+          else score += 1;
+        });
+        return { id, score };
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      return scored.map(s => s.id);
+    }
+
+    getTool(id) {
+      return this.tools.get(id);
+    }
+
+    clear() {
+      this.index.clear();
+      this.tools.clear();
+    }
+  }
+
+  // -------------------------------------------------------------
+  // 2. ANIMATION-SCHEDULER – Optimiertes Zeichnen mit requestAnimationFrame
+  // -------------------------------------------------------------
+  class AnimationScheduler {
+    constructor(fps = 30) {
+      this.fps = fps;
+      this.interval = 1000 / fps;
+      this.tasks = new Set();
+      this.running = false;
+      this.lastFrame = 0;
+      this.frameId = null;
+    }
+
+    add(task) {
+      this.tasks.add(task);
+      this.start();
+    }
+
+    remove(task) {
+      this.tasks.delete(task);
+      if (this.tasks.size === 0) this.stop();
+    }
+
+    start() {
+      if (this.running) return;
+      this.running = true;
+      this.lastFrame = performance.now();
+      this.loop();
+    }
+
+    stop() {
+      if (this.frameId) {
+        cancelAnimationFrame(this.frameId);
+        this.frameId = null;
+      }
+      this.running = false;
+    }
+
+    loop() {
+      const now = performance.now();
+      const elapsed = now - this.lastFrame;
+
+      if (elapsed >= this.interval) {
+        this.tasks.forEach(task => {
+          try { task(); } catch (e) { console.error('Animation task error', e); }
+        });
+        this.lastFrame = now - (elapsed % this.interval);
       }
 
-      console.log('📦 JSON parsed successfully');
+      this.frameId = requestAnimationFrame(() => this.loop());
+    }
+  }
 
-      if (!data) {
-        console.warn('⚠️ JSON parsed but empty');
+  // -------------------------------------------------------------
+  // 3. DOM-BATCHER – Stapelt DOM-Updates für reduzierte Reflows
+  // -------------------------------------------------------------
+  class DOMBatcher {
+    constructor() {
+      this.queue = new Set();
+      this.scheduled = false;
+    }
+
+    add(updateFn) {
+      this.queue.add(updateFn);
+      if (!this.scheduled) {
+        this.scheduled = true;
+        requestAnimationFrame(() => this.flush());
+      }
+    }
+
+    flush() {
+      this.queue.forEach(fn => {
+        try { fn(); } catch (e) { console.error('DOM batch error', e); }
+      });
+      this.queue.clear();
+      this.scheduled = false;
+    }
+  }
+
+  // -------------------------------------------------------------
+  // 4. CACHE – Einfacher In-Memory-Cache mit Verfallszeit
+  // -------------------------------------------------------------
+  class Cache {
+    constructor(ttl = 60000) {
+      this.ttl = ttl;
+      this.store = new Map();
+    }
+
+    set(key, value) {
+      this.store.set(key, { value, expires: Date.now() + this.ttl });
+    }
+
+    get(key) {
+      const item = this.store.get(key);
+      if (!item) return null;
+      if (Date.now() > item.expires) {
+        this.store.delete(key);
         return null;
       }
-
-      const tools = Array.isArray(data) ? data : (data.tools || data);
-
-      if (tools && tools.length > 0) {
-        console.log('✅ Loaded from data.json:', tools.length, 'tools');
-        state.dataSource = 'json';
-        return tools;
-      }
-
-      console.warn('⚠️ JSON loaded but no tools found');
-      return null;
-      
-    } catch (error) {
-      console.error('❌ JSON load failed:');
-      console.error('❌ Error type:', error.constructor.name);
-      console.error('❌ Error message:', error.message);
-      console.error('❌ Error stack:', error.stack);
-      console.error('❌ Full error:', error);
-      return null;
+      return item.value;
     }
-  },
-  
-  loadDefaults() {
-    if (!CONFIG.fallback.useDefaults) return [];
-    
-    console.log('📦 Using default tools:', DEFAULT_TOOLS.length);
-    state.dataSource = 'defaults';
-    return DEFAULT_TOOLS;
-  },
-  
-  async load() {
-    console.log('🚀 Starting data load sequence...');
-    
-    let tools = await this.loadFromSupabase();
-    if (tools) return tools;
-    
-    tools = await this.loadFromJSON();
-    if (tools) return tools;
-    
-    return this.loadDefaults();
+
+    has(key) {
+      return this.get(key) !== null;
+    }
+
+    delete(key) {
+      this.store.delete(key);
+    }
+
+    clear() {
+      this.store.clear();
+    }
   }
-};
 
-// =========================================
-// UI RENDERING
-// =========================================
-const ui = {
-  elements: {},
-  stackView: null,
-  sortMenuActive: false,
-
-  cacheElements() {
-    this.elements = {
-      loading: getElement('#loading'),
-      error: getElement('#error'),
-      empty: getElement('#empty'),
-      emptyQuery: getElement('#empty-query'),
-      toolGrid: getElement('#tool-grid'),
-      search: getElement('#search'),
-      searchClear: getElement('#search-clear'),
-      retryButton: getElement('#retry-button'),
-      statsBar: getElement('#stats-bar'),
-      statsMarquee: getElement('#stats-marquee'),
-      statTotal: getElement('#stat-total'),
-      statCategories: getElement('#stat-categories'),
-      statFeatured: getElement('#stat-featured'),
-      dataSource: getElement('#data-source'),
-      viewToggle: document.querySelector('.view-toggle')
-    };
-  },
-
-  showState(stateName) {
-    const states = ['loading', 'error', 'empty'];
-
-    states.forEach(s => {
-      const el = this.elements[s];
-      if (el) {
-        el.style.display = s === stateName ? 'block' : 'none';
+  // -------------------------------------------------------------
+  // 5. EVENT-THROTTLER – Begrenzt die Ausführung von Event-Handlern
+  // -------------------------------------------------------------
+  function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
       }
-    });
-
-    if (this.elements.toolGrid) {
-      if (stateName === 'grid') {
-        this.elements.toolGrid.style.display = 'grid';
-        this.elements.toolGrid.style.removeProperty('visibility');
-        this.elements.toolGrid.style.removeProperty('opacity');
-      } else {
-        this.elements.toolGrid.style.display = 'none';
-      }
-    }
-  },
-
-  updateStats() {
-    if (!this.elements.statsMarquee) {
-      this.elements.statsMarquee = getElement('#stats-marquee');
-    }
-    if (!this.elements.statsMarquee) return;
-
-    const categories = new Set(state.tools.map(t => t.category)).size;
-    const featured = state.tools.filter(t => t.featured).length;
-
-    state.stats = {
-      total: state.tools.length,
-      categories,
-      featured
     };
+  }
 
-    const t = window.i18n ? window.i18n.t : (key) => key;
+  function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
 
-    const marqueeItems = [
-      `<strong>${state.stats.total}</strong> ${t('statsTools')}`,
-      `<strong>${state.stats.categories}</strong> ${t('statsCategories')}`,
-      `<strong>${state.stats.featured}</strong> ${t('statsFeatured')}`,
-    ];
-
-    if (state.tools.length > 0) {
-      const topRated = state.tools.reduce((best, t) => (t.rating > best.rating ? t : best), state.tools[0]);
-      marqueeItems.push(`${t('statsBest')}: ${getLocalizedToolField(topRated, 'title')} (${topRated.rating.toFixed(1)})`);
-
-      const sortedByDate = [...state.tools].sort((a, b) => new Date(b.added) - new Date(a.added));
-      const newest = sortedByDate[0];
-      marqueeItems.push(`${t('statsNew')}: ${getLocalizedToolField(newest, 'title')}`);
+  // -------------------------------------------------------------
+  // 6. LAZY-LOADER – Lädt Bilder erst bei Sichtbarkeit
+  // -------------------------------------------------------------
+  class LazyLoader {
+    constructor(selector = '.lazy') {
+      this.selector = selector;
+      this.observer = null;
+      this.init();
     }
 
-    const track = this.elements.statsMarquee.querySelector('.marquee-track');
-    if (track) {
-      track.innerHTML = '';
-      for (let i = 0; i < 2; i++) {
-        marqueeItems.forEach(text => {
-          const span = document.createElement('span');
-          span.innerHTML = text;
-          track.appendChild(span);
+    init() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll(this.selector).forEach(img => {
+          if (img.dataset.src) img.src = img.dataset.src;
         });
-      }
-    }
-
-    this.elements.statsMarquee.style.display = 'flex';
-    if (this.elements.statsBar) {
-      this.elements.statsBar.style.display = 'none';
-    }
-  },
-
-  updateDataSource() {
-    if (!this.elements.dataSource) return;
-    const sources = {
-      supabase: 'D: SB',
-      json: 'D: LJ',
-      defaults: 'D: DEF',
-      loading: '...'
-    };
-    this.elements.dataSource.textContent = sources[state.dataSource] || 'Unknown';
-  },
-
-  getContextText(tool) {
-    const lang = window.i18n ? window.i18n.currentLang : 'de';
-    if (lang === 'en' && tool.en && tool.en.badges && tool.en.badges.length) {
-      return tool.en.badges.slice(0, 3).map(badge => {
-        const text = String(badge).split('.')[0].trim();
-        return text.length > 28 ? text.slice(0, 28) + '…' : text;
-      });
-    }
-    if (!tool.badges || !tool.badges.length) {
-      const fallback = [
-        getLocalizedToolField(tool, 'description') || '',
-        ...(Array.isArray(tool.tags) ? tool.tags.slice(0, 3) : [])
-      ].filter(Boolean);
-      return fallback.length ? fallback.slice(0, 3) : ['KI-powered Tool'];
-    }
-    return tool.badges.slice(0, 3).map(badge => {
-      const text = String(badge).split('.')[0].trim();
-      return text.length > 28 ? text.slice(0, 28) + '…' : text;
-    });
-  },
-
-  renderCard(tool) {
-    const categoryName = tool.category_name || tool.category || 'other';
-    const categoryDisplay = getCategoryName(categoryName);
-    const contextTexts = this.getContextText(tool);
-
-    return `
-      <div class="card-square"
-           data-tool-id="${this.escapeHtml(String(tool.id || ''))}"
-           data-category="${this.escapeHtml(categoryName)}"
-           data-tool-name="${this.escapeHtml(tool.title)}"
-           data-href="${this.escapeHtml(tool.link)}"
-           data-depth="10"
-           tabindex="0"
-           role="article"
-           aria-label="${this.escapeHtml(getLocalizedToolField(tool, 'title'))} — ${this.escapeHtml(categoryDisplay)}">
-
-        <div class="square-content-centered">
-          <div class="square-category-badge" aria-hidden="true">
-            ${this.escapeHtml(categoryDisplay)}
-          </div>
-          <h3 class="square-title-large" title="${this.escapeHtml(getLocalizedToolField(tool, 'title'))}">
-            ${this.escapeHtml(getLocalizedToolField(tool, 'title'))}
-          </h3>
-          <div class="context-marquee" aria-hidden="true">
-            <div class="marquee-track" role="presentation">
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-              <span class="marquee-seq">${this.escapeHtml(contextTexts.join(' • '))}</span>
-            </div>
-          </div>
-          <a class="card-overlay-link"
-             role="button"
-             tabindex="-1"
-             data-href="${this.escapeHtml(tool.link)}"
-             aria-label="${this.escapeHtml(getLocalizedToolField(tool, 'title'))} öffnen"></a>
-        </div>
-      </div>
-    `;
-  },
-
-  escapeHtml(text) {
-    if (text === null || text === undefined) return '';
-    const div = document.createElement('div');
-    div.textContent = String(text);
-    return div.innerHTML;
-  },
-
-  render() {
-    // Intelligente Suche mit Filtern (immer anwenden)
-    state.filtered = filterTools(state.searchQuery);
-
-    state.filtered = sortTools(state.filtered);
-
-    if (state.loading) {
-      this.showState('loading');
-      return;
-    }
-
-    if (state.error) {
-      this.showState('error');
-      return;
-    }
-
-    if (state.filtered.length === 0) {
-      this.showState('empty');
-      if (this.elements.emptyQuery && state.searchQuery) {
-        const t = window.i18n ? window.i18n.t : (key) => key;
-        this.elements.emptyQuery.textContent = t('noResults').replace('{query}', state.searchQuery);
-      }
-      return;
-    }
-
-    const activeView = this.getActiveView();
-    if (activeView === 'grid') {
-      this.showState('grid');
-      if (this.elements.toolGrid) {
-        if (!this.elements.toolGrid.classList.contains('tool-grid-squares')) {
-          this.elements.toolGrid.classList.add('tool-grid-squares');
-        }
-
-        // DOM-Update über Batcher (falls vorhanden)
-        const updateGrid = () => {
-          this.elements.toolGrid.innerHTML = state.filtered.map(tool => this.renderCard(tool)).join('');
-          this.attachCardHandlers();
-        };
-
-        if (domBatcher) {
-          domBatcher.add(updateGrid);
-        } else {
-          updateGrid();
-        }
-
-        if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-          window.colorFlowNetwork.refresh();
-        }
-      }
-    } else {
-      this.showState('grid');
-      if (!this.stackView) {
-        this.stackView = new StackViewController(this.elements.toolGrid, state, this);
-      } else {
-        this.stackView.state = state;
-        this.stackView.activeSort = state.sortBy;
-        this.stackView.sortDirection = state.sortDirection;
-      }
-
-      const renderStack = () => this.stackView.render();
-      if (domBatcher) {
-        domBatcher.add(renderStack);
-      } else {
-        renderStack();
-      }
-
-      if (window.colorFlowNetwork && typeof window.colorFlowNetwork.refresh === 'function') {
-        window.colorFlowNetwork.refresh();
-      }
-    }
-
-    // Nach jedem Rendern die Event-Listener neu setzen
-    this.setupUIListeners();
-  },
-
-  getActiveView() {
-    const viewToggle = document.querySelector('.view-toggle');
-    const activeTab = viewToggle?.querySelector('.toggle-btn.active');
-    return activeTab ? activeTab.dataset.view : 'grid';
-  },
-
-  attachCardHandlers() {
-    const grid = this.elements.toolGrid || getElement('#tool-grid');
-    if (!grid) return;
-
-    if (grid._clickHandler) {
-      grid.removeEventListener('click', grid._clickHandler);
-      grid.removeEventListener('keydown', grid._keyHandler);
-    }
-
-    const isMobile = window.innerWidth < 768;
-    const t = window.i18n ? window.i18n.t : (key) => key;
-
-    grid._clickHandler = (e) => {
-      const overlay = e.target.closest('.card-overlay-link');
-      const card = e.target.closest('.card-square');
-
-      if (overlay && card) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const toolId = card.dataset.toolId || card.getAttribute('data-tool-id');
-        const toolName = card.dataset.toolName || card.getAttribute('data-tool-name') || card.querySelector('.square-title-large')?.textContent || 'Unknown';
-        const href = overlay.getAttribute('data-href') || card.getAttribute('data-href') || overlay.getAttribute('href');
-
-        analytics.trackToolClick(toolName);
-
-        if (isMobile) {
-          if (toolId) {
-            card.style.transform = 'scale(0.95)';
-            card.style.opacity = '0.7';
-            setTimeout(() => {
-              window.location.href = 'detail.html?id=' + encodeURIComponent(toolId);
-            }, 150);
-          } else if (href && href !== '#') {
-            window.open(href, '_blank', 'noopener,noreferrer');
-          } else {
-            alert(t('linkNotAvailable'));
-          }
-        } else {
-          if (typeof openToolModal === 'function') {
-            try {
-              let tool = null;
-              if (toolId && state.tools) {
-                tool = state.tools.find(t => String(t.id) === String(toolId));
-              }
-              if (tool) {
-                openToolModal(tool);
-              } else {
-                openToolModal({
-                  title: toolName,
-                  link: href,
-                  description: `${toolName} - AI Tool`
-                });
-              }
-            } catch (err) {
-              console.error('openToolModal error', err);
-              if (href) {
-                window.open(href, '_blank', 'noopener,noreferrer');
-              } else {
-                card.classList.toggle('card-armed');
-              }
-            }
-          } else {
-            if (href) {
-              window.open(href, '_blank', 'noopener,noreferrer');
-            }
-          }
-        }
         return;
       }
-    };
 
-    grid._keyHandler = (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const card = e.target.closest('.card-square');
-        if (!card) return;
-        const overlay = card.querySelector('.card-overlay-link');
-        if (overlay) {
-          overlay.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-          e.preventDefault();
-        }
-      }
-    };
-
-    grid.addEventListener('click', grid._clickHandler);
-    grid.addEventListener('keydown', grid._keyHandler, { passive: false });
-  },
-
-  setupUIListeners() {
-    // Tabs-Listener
-    const viewToggle = document.querySelector('.view-toggle');
-    if (viewToggle) {
-      if (viewToggle._clickHandler) {
-        viewToggle.removeEventListener('click', viewToggle._clickHandler);
-      }
-      viewToggle._clickHandler = (e) => {
-        const btn = e.target.closest('.toggle-btn');
-        if (!btn) return;
-        if (btn.classList.contains('sort-trigger')) return;
-        const view = btn.dataset.view;
-        if (!view) return;
-        viewToggle.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.switchView(view);
-      };
-      viewToggle.addEventListener('click', viewToggle._clickHandler);
-    }
-
-    // Sortier-Dropdown Trigger
-    const sortTrigger = document.querySelector('.sort-trigger');
-    if (sortTrigger) {
-      if (sortTrigger._clickHandler) {
-        sortTrigger.removeEventListener('click', sortTrigger._clickHandler);
-      }
-      sortTrigger._clickHandler = (e) => {
-        e.stopPropagation();
-        this.toggleSortMenu();
-      };
-      sortTrigger.addEventListener('click', sortTrigger._clickHandler);
-    }
-
-    // Sortier-Optionen
-    document.querySelectorAll('.sort-menu button').forEach(btn => {
-      if (btn._clickHandler) {
-        btn.removeEventListener('click', btn._clickHandler);
-      }
-      btn._clickHandler = (e) => {
-        e.stopPropagation();
-        const sortBy = btn.dataset.sort;
-        const sortDir = btn.dataset.dir;
-        if (sortBy && sortDir) {
-          this.setSort(sortBy, sortDir);
-        }
-      };
-      btn.addEventListener('click', btn._clickHandler);
-    });
-
-    // Sprach-Button (falls in i18n.js nicht vorhanden)
-    const languageToggle = document.getElementById('languageToggle');
-    if (languageToggle && window.i18n) {
-      if (languageToggle._clickHandler) {
-        languageToggle.removeEventListener('click', languageToggle._clickHandler);
-      }
-      languageToggle._clickHandler = () => {
-        const newLang = window.i18n.currentLang === 'de' ? 'en' : 'de';
-        window.i18n.setLanguage(newLang);
-      };
-      languageToggle.addEventListener('click', languageToggle._clickHandler);
-    }
-
-    // Farbschema-Button (entfernt)
-  },
-
-  switchView(view) {
-    const buttons = this.elements.viewToggle?.querySelectorAll('.toggle-btn');
-    buttons?.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.view === view);
-    });
-    
-    if (view === 'grid') {
-      if (this.stackView) {
-        this.stackView.destroy();
-        this.stackView = null;
-      }
-      this.render();
-    } else if (view === 'stacks') {
-      this.render();
-    }
-  },
-
-  toggleSortMenu(show) {
-    const dropdown = document.querySelector('.sort-dropdown');
-    if (!dropdown) return;
-    
-    if (show === undefined) {
-      this.sortMenuActive = !this.sortMenuActive;
-    } else {
-      this.sortMenuActive = show;
-    }
-    
-    dropdown.classList.toggle('active', this.sortMenuActive);
-    
-    if (this.sortMenuActive) {
-      setTimeout(() => {
-        const closeHandler = (e) => {
-          if (!e.target.closest('.sort-dropdown')) {
-            this.toggleSortMenu(false);
-            document.removeEventListener('click', closeHandler);
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) img.src = img.dataset.src;
+            this.observer.unobserve(img);
           }
-        };
-        document.addEventListener('click', closeHandler);
-      }, 0);
-    }
-  },
-
-  setSort(sortBy, sortDir) {
-    state.sortBy = sortBy;
-    state.sortDirection = sortDir;
-    
-    document.querySelectorAll('.sort-menu button').forEach(btn => {
-      const btnSort = btn.dataset.sort;
-      const btnDir = btn.dataset.dir;
-      btn.classList.toggle('active', btnSort === sortBy && btnDir === sortDir);
-    });
-    
-    this.render();
-    this.toggleSortMenu(false);
-  }
-};
-
-// =========================================
-// INTELLIGENTE SUCHE MIT TOOL-VORSCHLÄGEN + FAVICONS + DIREKTÖFFNUNG + ACTIONS
-// =========================================
-const smartSearch = {
-  dropdown: null,
-  visible: false,
-
-  // Font Awesome Icons pro Kategorie (passend zum Design)
-  categoryIconMap: {
-    text: 'fa-file-lines',
-    image: 'fa-image',
-    code: 'fa-code',
-    audio: 'fa-music',
-    video: 'fa-video',
-    data: 'fa-chart-simple',
-    other: 'fa-cube'
-  },
-
-  actionIconMap: {
-    freeOnly: 'fa-gift',
-    beginner: 'fa-graduation-cap',
-    category: 'fa-tag',
-    sortRating: 'fa-star',
-    sortDate: 'fa-calendar',
-    default: 'fa-filter'
-  },
-
-  init() {
-    if (!this.dropdown) {
-      this.dropdown = document.createElement('div');
-      this.dropdown.className = 'search-suggestions';
-      this.dropdown.style.display = 'none';
-      const searchWrapper = document.querySelector('.search-wrapper');
-      if (searchWrapper) {
-        searchWrapper.appendChild(this.dropdown);
-      }
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.search-wrapper')) {
-        this.hide();
-      }
-    });
-  },
-
-  show() {
-    if (this.dropdown && this.visible) {
-      this.dropdown.style.display = 'block';
-    }
-  },
-
-  hide() {
-    if (this.dropdown) {
-      this.dropdown.style.display = 'none';
-      this.visible = false;
-    }
-  },
-
-  updateSuggestions(query) {
-    if (!query || query.length < 2) {
-      this.hide();
-      return;
-    }
-
-    let suggestions = [];
-
-    // SmartSearch nutzen, falls verfügbar
-    if (window.Performance && window.Performance.SmartSearch) {
-      try {
-        suggestions = window.Performance.SmartSearch.buildSuggestions({
-          query: query,
-          tools: state.tools,
-          searchIndex: searchIndex,
-          maxSuggestions: CONFIG.search.maxSuggestions,
-          getCategoryLabel: getCategoryName
         });
-      } catch (e) {
-        console.warn('SmartSearch buildSuggestions error, using fallback', e);
-      }
-    }
-
-    // Fallback, falls keine Suggestions oder kein SmartSearch
-    if (!suggestions || suggestions.length === 0) {
-      suggestions = generateToolSuggestions(query);
-    }
-
-    if (suggestions.length === 0) {
-      this.hide();
-      return;
-    }
-
-    this.dropdown.innerHTML = '';
-    suggestions.forEach(sug => {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-
-      // Icon bestimmen
-      let iconHtml = '';
-
-      if (sug.type === 'action') {
-        // Action-Suggestion: passendes Font Awesome Icon
-        let icon = this.actionIconMap.default;
-        const action = sug.action;
-        if (action && action.kind === 'setFilters') {
-          if (action.filters && action.filters.freeOnly) icon = this.actionIconMap.freeOnly;
-          else if (action.filters && action.filters.beginner) icon = this.actionIconMap.beginner;
-          else if (action.filters && action.filters.category) icon = this.actionIconMap.category;
-        } else if (action && action.kind === 'setSort') {
-          if (action.sortBy === 'rating') icon = this.actionIconMap.sortRating;
-          else if (action.sortBy === 'date') icon = this.actionIconMap.sortDate;
-        }
-        iconHtml = `<i class="fas ${icon} suggestion-icon"></i>`;
-      } else {
-        // Tool-Suggestion
-        if (sug.domain) {
-          iconHtml = `<img class="suggestion-favicon" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(sug.domain)}&sz=16" alt="" width="16" height="16" onerror="this.style.display='none'">`;
-        } else {
-          const icon = this.categoryIconMap[sug.category] || this.categoryIconMap.other;
-          iconHtml = `<i class="fas ${icon} suggestion-icon"></i>`;
-        }
-      }
-
-      item.innerHTML = `${iconHtml} <span class="suggestion-text">${this.escapeHtml(sug.text)}</span>`;
-
-      item.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.handleSuggestionClick(sug);
       });
 
-      this.dropdown.appendChild(item);
-    });
-
-    this.visible = true;
-    this.show();
-  },
-
-  handleSuggestionClick(sug) {
-    if (sug.type === 'tool') {
-      // Tool direkt öffnen (wie Klick auf Karte)
-      const tool = state.tools.find(t => t.id === sug.toolId);
-      if (!tool) return;
-
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        window.location.href = 'detail.html?id=' + encodeURIComponent(tool.id);
-      } else {
-        if (typeof openToolModal === 'function') {
-          openToolModal(tool);
-        } else {
-          window.open(tool.link, '_blank', 'noopener,noreferrer');
-        }
-      }
-      this.hide();
-    } else if (sug.type === 'action') {
-      const action = sug.action;
-      if (action.kind === 'setFilters') {
-        // Filter setzen (merge)
-        state.smartFilters = { ...state.smartFilters, ...action.filters };
-        ui.render();
-      } else if (action.kind === 'clearFilters') {
-        state.smartFilters = { category: null, freeOnly: false, beginner: false };
-        ui.render();
-      } else if (action.kind === 'setSort') {
-        state.sortBy = action.sortBy;
-        state.sortDirection = action.sortDirection;
-        ui.render();
-      }
-      this.hide();
-      // Fokus wieder auf Suchfeld
-      if (ui.elements.search) ui.elements.search.focus();
-    } else {
-      // Fallback (z.B. für zukünftige Kategorie-Vorschläge)
-      const searchInput = ui.elements.search;
-      if (searchInput) {
-        searchInput.value = sug.text;
-        state.searchQuery = sug.text;
-        ui.render();
-      }
-      this.hide();
-      if (searchInput) searchInput.focus();
+      document.querySelectorAll(this.selector).forEach(img => this.observer.observe(img));
     }
-  },
-
-  escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
-};
 
-// =========================================
-// SEARCH FUNCTIONALITY (erweitert)
-// =========================================
-const search = {
-  init() {
-    if (!ui.elements.search) return;
-
-    if (ui.handlers && ui.handlers.search) {
-      ui.elements.search.removeEventListener('input', ui.handlers.search);
-    }
-    if (ui.elements.searchClear && ui.handlers && ui.handlers.searchClear) {
-      ui.elements.searchClear.removeEventListener('click', ui.handlers.searchClear);
-    }
-
-    smartSearch.init();
-
-    const handleInput = debounce((e) => {
-      const raw = e && e.target ? e.target.value : '';
-      const value = sanitizeInput(raw);
-      state.searchQuery = value;
-
-      smartSearch.updateSuggestions(value);
-
-      if (ui.elements.searchClear) {
-        ui.elements.searchClear.style.display = value ? 'flex' : 'none';
-      }
-
-      if (value) {
-        try {
-          if (typeof analytics !== 'undefined' && analytics.trackSearch) {
-            analytics.trackSearch(value);
-          }
-        } catch (err) {}
-      }
-
-      ui.render();
-    }, CONFIG.search.debounceMs);
-
-    if (!ui.handlers) ui.handlers = {};
-    ui.handlers.search = handleInput;
-
-    ui.elements.search.addEventListener('input', handleInput);
-
-    ui.elements.search.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        smartSearch.hide();
-      }
-    });
-
-    if (ui.elements.searchClear) {
-      const clearHandler = () => {
-        ui.elements.search.value = '';
-        state.searchQuery = '';
-        ui.elements.searchClear.style.display = 'none';
-        smartSearch.hide();
-        ui.render();
-        ui.elements.search.focus();
-      };
-
-      ui.handlers.searchClear = clearHandler;
-      ui.elements.searchClear.addEventListener('click', clearHandler);
+  // -------------------------------------------------------------
+  // 7. SMART SEARCH – Intent-basierte Suchlogik (ohne DOM) – erweitert für maximale Erkennung
+  // -------------------------------------------------------------
+  const SmartSearch = (function() {
+    // Hilfsfunktion: Normalisiert Query (entfernt Sonderzeichen, Mehrfachspaces, trimmt, lowercase)
+    function normalizeQuery(q) {
+      if (typeof q !== 'string') return '';
+      return q
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/[^\p{L}\p{N}\s-]/gu, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
     }
 
-    ui.elements.search.addEventListener('focus', () => {
-      if (state.searchQuery && state.searchQuery.length >= 2) {
-        smartSearch.updateSuggestions(state.searchQuery);
-      }
-    });
-  }
-};
+    // Erweiterte Listen für Einleitungen (deutsch/englisch)
+    const INTRO_PHRASES = [
+      'ich will', 'ich brauche', 'suche', 'hilf mir', 'bitte', 'kannst du mir',
+      'kennt jemand', 'welches tool', 'tool für', 'app für', 'software für',
+      'i want', 'i need', 'find', 'help me', 'please', 'looking for', 'need a',
+      'any tool', 'tool to', 'app to', 'software to', 'best tool for'
+    ];
 
-// =========================================
-// ANALYTICS (Google Analytics Events)
-// =========================================
-const analytics = {
-  track(eventName, params = {}) {
-    if (typeof gtag === 'undefined') {
-      console.log('📊 Analytics (dry-run):', eventName, params);
-      return;
-    }
-    
-    try {
-      gtag('event', eventName, params);
-    } catch (error) {
-      console.warn('Analytics error:', error);
-    }
-  },
-  
-  trackToolClick(toolName) {
-    this.track('tool_click', {
-      event_category: 'engagement',
-      tool_name: toolName
-    });
-  },
-  
-  trackSearch(query) {
-    this.track('search', {
-      search_term: query
-    });
-  },
-  
-  trackError(errorType, message) {
-    this.track('error', {
-      event_category: 'error',
-      error_type: errorType,
-      error_message: message
-    });
-  }
-};
-
-// =========================================
-// ERROR HANDLING
-// =========================================
-const errorHandler = {
-  handle(error, context = 'Unknown') {
-    console.error(`❌ Error in ${context}:`, error);
-    
-    state.error = {
-      message: error.message || 'Unknown error',
-      context
+    // Erweiterte Flags
+    const FLAG_KEYWORDS = {
+      free: [
+        'kostenlos', 'gratis', 'umsonst', 'free', 'frei', 'kostenfrei',
+        'ohne kosten', 'no cost', 'zero cost', 'fremium', 'freemium'
+      ],
+      beginner: [
+        'anfänger', 'einsteiger', 'schüler', 'leicht', 'einfach', 'simple',
+        'beginner', 'starter', 'easy', 'learn', 'student', 'newbie',
+        'für anfänger', 'für einsteiger', 'for beginners', 'easy to use',
+        'nicht kompliziert', 'keine vorkenntnisse'
+      ],
+      top: [
+        'beste', 'top', 'empfohlen', 'bewertung', 'rating', 'best',
+        'beliebt', 'popular', 'höchste', 'meistgenutzt', 'most popular',
+        'highest rated', 'recommended', 'top rated'
+      ],
+      premium: [
+        'premium', 'bezahlt', 'kostenpflichtig', 'paid', 'pro', 'professionell',
+        'professional', 'business'
+      ],
+      new: [
+        'neu', 'neueste', 'latest', 'new', 'aktuell', 'upcoming', 'trending'
+      ]
     };
-    
-    analytics.trackError(context, error.message);
-    
-    ui.showState('error');
-  },
-  
-  setupRetry() {
-    if (!ui.elements.retryButton) return;
-    
-    ui.elements.retryButton.addEventListener('click', () => {
-      console.log('🔄 Retrying...');
-      location.reload();
-    });
-  }
-};
 
-// =========================================
-// INITIALIZATION
-// =========================================
-const app = {
-  async init() {
-    try {
-      console.log('🚀 Initializing Quantum AI Hub...');
-      console.log('Config:', CONFIG);
-      
-      ui.cacheElements();
-      errorHandler.setupRetry();
-      ui.showState('loading');
-      
-      const rawTools = await dataLoader.load();
-      
-      if (!rawTools || rawTools.length === 0) {
-        throw new Error('No data available from any source');
-      }
-      
-      console.log('📥 Raw tools loaded:', rawTools.length);
-      
-      const validation = validator.validateAll(rawTools);
-      validator.displayReport(validation);
-      
-      state.tools = validation.validTools;
-      state.filtered = [...state.tools];
-      state.loading = false;
-      
-      if (state.tools.length === 0) {
-        throw new Error('No valid tools after validation');
-      }
-      
-      console.log('✅ Valid tools ready:', state.tools.length);
+    // Erweiterte Kategorie-Keywords (umfangreich)
+    const CATEGORY_KEYWORDS = {
+      image: [
+        'bild', 'foto', 'fotografie', 'zeichnung', 'grafik', 'design', 'kunst', 'illustration',
+        'cover', 'poster', 'malen', 'generieren', 'logo', 'icon', 'ai art', 'stable diffusion',
+        'midjourney', 'dall·e', 'dall-e', 'dalle', 'bilderstellung', 'image generation',
+        'photo editing', 'bearbeiten', 'retusche', 'collage', 'moodboard', 'visual',
+        'paint', 'sketch', 'canvas', 'kreativ'
+      ],
+      text: [
+        'text', 'schreiben', 'brief', 'email', 'chat', 'unterhaltung', 'fragen', 'antworten',
+        'dokument', 'artikel', 'zusammenfassen', 'übersetzen', 'korrektur', 'bewerbung',
+        'aufsatz', 'essay', 'proofread', 'rewrite', 'paraphrase', 'grammatik', 'rechtschreibung',
+        'blog', 'content', 'copywriting', 'werbetext', 'marketing', 'kommunikation',
+        'konversation', 'dialogue', 'assistent'
+      ],
+      code: [
+        'code', 'programmieren', 'entwickeln', 'software', 'app', 'website', 'javascript',
+        'python', 'html', 'css', 'bug', 'debug', 'copilot', 'programming', 'coding',
+        'fehler', 'debuggen', 'entwicklung', 'webseite', 'app entwicklung', 'softwareentwicklung',
+        'algorithmus', 'funktion', 'script', 'programm', 'api', 'backend', 'frontend',
+        'datenbank', 'sql', 'react', 'node', 'typescript'
+      ],
+      audio: [
+        'audio', 'musik', 'sound', 'stimme', 'sprache', 'podcast', 'hörbuch', 'singen',
+        'komponieren', 'voice', 'tts', 'text to speech', 'voiceover', 'audiobearbeitung',
+        'audiobearbeitung', 'musikproduktion', 'beat', 'song', 'melodie', 'instrument',
+        'klang', 'geräusch', 'aufnahme', 'recording', 'mixing', 'mastering'
+      ],
+      video: [
+        'video', 'film', 'clip', 'animation', 'bearbeiten', 'schneiden', 'effekte',
+        'reels', 'shorts', 'tiktok', 'youtube', 'videobearbeitung', 'video editing',
+        'filmmaking', 'movie', 'trailer', 'teaser', 'motion graphics', 'vfx',
+        'green screen', 'untertitel', 'subtitles', 'transkription'
+      ],
+      data: [
+        'daten', 'analyse', 'tabelle', 'csv', 'excel', 'diagramm', 'statistik', 'zahlen',
+        'auswerten', 'forecast', 'prediction', 'bi', 'dashboard', 'data science',
+        'machine learning', 'ml', 'ki', 'ai', 'datenvisualisierung', 'data visualization',
+        'bericht', 'report', 'kpi', 'metriken', 'auswertung'
+      ]
+    };
 
-      // Suchindex initialisieren (falls Performance verfügbar)
-      if (window.Performance && window.Performance.SearchIndex) {
-        try {
-          searchIndex = new window.Performance.SearchIndex();
-          searchIndex.addTools(state.tools);
-          console.log('🔍 SearchIndex initialized');
-        } catch (e) {
-          console.warn('SearchIndex initialization failed', e);
-          searchIndex = null;
-        }
-      } else {
-        console.warn('Performance.SearchIndex not available, using fallback search');
+    // Hilfsfunktion: Entfernt Einleitungen aus Query
+    function stripIntro(q) {
+      let result = q;
+      for (let phrase of INTRO_PHRASES) {
+        const regex = new RegExp('^' + phrase + '\\s+', 'i');
+        result = result.replace(regex, '');
       }
+      return result;
+    }
 
-      // DOMBatcher initialisieren
-      if (window.Performance && window.Performance.DOMBatcher) {
-        try {
-          domBatcher = new window.Performance.DOMBatcher();
-          console.log('📦 DOMBatcher initialized');
-        } catch (e) {
-          console.warn('DOMBatcher initialization failed', e);
-          domBatcher = null;
-        }
-      }
-      
-      ui.updateStats();
-      ui.updateDataSource();
-      ui.render();
-      search.init();
-
-      // Globale Scroll-Buttons
-      const globalScrollTop = document.getElementById('globalScrollTopBtn');
-      const globalScrollBottom = document.getElementById('globalScrollBottomBtn');
-      if (globalScrollTop) {
-        globalScrollTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-      }
-      if (globalScrollBottom) {
-        globalScrollBottom.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
-      }
-      
-      if (ui.elements.viewToggle) {
-        const toggleElement = ui.elements.viewToggle;
-        const toggleStickyClass = () => {
-          const rect = toggleElement.getBoundingClientRect();
-          if (rect.top <= 10) {
-            toggleElement.classList.add('sticky-active');
-          } else {
-            toggleElement.classList.remove('sticky-active');
+    // Hilfsfunktion: Extrahiert Flags (alle erkannten Flags)
+    function extractFlags(q) {
+      const flags = { free: false, beginner: false, top: false, premium: false, new: false };
+      const words = q.split(/\s+/);
+      for (let word of words) {
+        for (let [flag, list] of Object.entries(FLAG_KEYWORDS)) {
+          if (list.includes(word)) {
+            flags[flag] = true;
           }
+        }
+      }
+      return flags;
+    }
+
+    // Hilfsfunktion: Extrahiert Kategorie (gibt die erste passende Kategorie zurück)
+    function extractCategory(q) {
+      const words = q.split(/\s+/);
+      // Für jede Kategorie prüfen, ob eines der Keywords vorkommt (ganze Wörter)
+      for (let [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+        for (let kw of keywords) {
+          if (words.includes(kw)) {
+            return cat;
+          }
+        }
+      }
+      return null;
+    }
+
+    // Öffentliche Methoden
+    return {
+      normalizeQuery,
+
+      parseIntent(rawQuery, options = {}) {
+        if (typeof rawQuery !== 'string') rawQuery = '';
+        const q = normalizeQuery(rawQuery);
+        const task = stripIntro(q);
+        const flags = extractFlags(q);
+        const category = extractCategory(q);
+        return {
+          raw: rawQuery,
+          q,
+          task,
+          flags,
+          category
         };
+      },
 
-        // Throttle für Scroll-Ereignis
-        if (window.Performance && window.Performance.throttle) {
-          const throttledToggle = window.Performance.throttle(toggleStickyClass, 100);
-          window.addEventListener('scroll', throttledToggle, { passive: true });
+      getEffectiveQuery(rawQuery, options = {}) {
+        const intent = this.parseIntent(rawQuery, options);
+        const task = intent.task.trim();
+        if (task.length >= 2) return task;
+        return rawQuery;
+      },
+
+      toolLooksBeginnerFriendly(tool, options = {}) {
+        try {
+          if (!tool) return false;
+          const beginnerWords = [
+            'anfänger', 'einfach', 'easy', 'beginner', 'schüler', 'student', 'learn',
+            'starter', 'simple', 'für einsteiger', 'für anfänger', 'noob', 'newbie',
+            'grundlagen', 'basics', 'tutorial', 'hilfe', 'erklärung'
+          ];
+          const fields = [];
+
+          if (tool.title) fields.push(tool.title);
+          if (tool.description) fields.push(tool.description);
+          if (tool.provider) fields.push(tool.provider);
+          if (Array.isArray(tool.tags)) fields.push(...tool.tags);
+          if (Array.isArray(tool.badges)) fields.push(...tool.badges);
+          if (Array.isArray(tool.strengths)) fields.push(...tool.strengths);
+          if (Array.isArray(tool.useCases)) fields.push(...tool.useCases);
+          if (Array.isArray(tool.promptTips)) fields.push(...tool.promptTips);
+          if (tool.en) {
+            if (tool.en.title) fields.push(tool.en.title);
+            if (tool.en.description) fields.push(tool.en.description);
+            if (Array.isArray(tool.en.badges)) fields.push(...tool.en.badges);
+            if (Array.isArray(tool.en.strengths)) fields.push(...tool.en.strengths);
+            if (Array.isArray(tool.en.useCases)) fields.push(...tool.en.useCases);
+            if (Array.isArray(tool.en.promptTips)) fields.push(...tool.en.promptTips);
+          }
+
+          const combined = fields.join(' ').toLowerCase();
+          return beginnerWords.some(word => combined.includes(word));
+        } catch (e) {
+          return false;
+        }
+      },
+
+      applyFilters(tools, filters = {}, options = {}) {
+        if (!Array.isArray(tools)) return [];
+        return tools.filter(tool => {
+          try {
+            if (filters.category && tool.category !== filters.category) return false;
+            if (filters.freeOnly && !tool.is_free) return false;
+            if (filters.beginner && !this.toolLooksBeginnerFriendly(tool)) return false;
+            if (filters.premiumOnly && tool.is_free) return false; // Beispiel: nicht kostenlos
+            return true;
+          } catch (e) {
+            return false;
+          }
+        });
+      },
+
+      buildActionSuggestions(rawQuery, ctx) {
+        const intent = this.parseIntent(rawQuery);
+        const { flags, category } = intent;
+        const suggestions = [];
+        const getCategoryLabel = ctx?.getCategoryLabel || (cat => cat);
+
+        // Einzelfilter
+        if (flags.free) {
+          suggestions.push({
+            type: 'action',
+            text: 'Nur kostenlose Tools',
+            category: null,
+            action: { kind: 'setFilters', filters: { freeOnly: true } }
+          });
+        }
+        if (flags.premium) {
+          suggestions.push({
+            type: 'action',
+            text: 'Nur Premium-Tools',
+            category: null,
+            action: { kind: 'setFilters', filters: { freeOnly: false, premiumOnly: true } }
+          });
+        }
+        if (flags.beginner) {
+          suggestions.push({
+            type: 'action',
+            text: 'Für Anfänger geeignet',
+            category: null,
+            action: { kind: 'setFilters', filters: { beginner: true } }
+          });
+        }
+        if (category) {
+          suggestions.push({
+            type: 'action',
+            text: `Kategorie: ${getCategoryLabel(category)}`,
+            category: category,
+            action: { kind: 'setFilters', filters: { category } }
+          });
+        }
+        if (flags.top) {
+          suggestions.push({
+            type: 'action',
+            text: 'Beste zuerst (Bewertung)',
+            category: null,
+            action: { kind: 'setSort', sortBy: 'rating', sortDirection: 'desc' }
+          });
+        }
+        if (flags.new) {
+          suggestions.push({
+            type: 'action',
+            text: 'Neueste zuerst',
+            category: null,
+            action: { kind: 'setSort', sortBy: 'date', sortDirection: 'desc' }
+          });
+        }
+
+        // Kombinationen – z.B. wenn free und category zusammen erkannt wurden
+        if (flags.free && category) {
+          suggestions.push({
+            type: 'action',
+            text: `Kostenlose Tools in ${getCategoryLabel(category)}`,
+            category: category,
+            action: { kind: 'setFilters', filters: { freeOnly: true, category } }
+          });
+        }
+        if (flags.beginner && category) {
+          suggestions.push({
+            type: 'action',
+            text: `Anfängerfreundliche Tools in ${getCategoryLabel(category)}`,
+            category: category,
+            action: { kind: 'setFilters', filters: { beginner: true, category } }
+          });
+        }
+
+        return suggestions;
+      },
+
+      buildSuggestions(params) {
+        const {
+          query,
+          tools,
+          searchIndex,
+          maxSuggestions = 8,
+          getCategoryLabel = cat => cat,
+          dedupe = true
+        } = params || {};
+
+        if (!query || typeof query !== 'string') return [];
+
+        const intent = this.parseIntent(query);
+        const ctx = { getCategoryLabel };
+        const actions = this.buildActionSuggestions(query, ctx);
+        const effectiveQuery = this.getEffectiveQuery(query);
+
+        let toolSuggestions = [];
+        if (searchIndex && typeof searchIndex.search === 'function') {
+          try {
+            const ids = searchIndex.search(effectiveQuery);
+            toolSuggestions = ids
+              .map(id => {
+                const tool = searchIndex.getTool(id);
+                if (!tool) return null;
+                let domain = '';
+                try {
+                  if (tool.link) {
+                    const url = new URL(tool.link);
+                    domain = url.hostname;
+                  }
+                } catch (e) {}
+                return {
+                  type: 'tool',
+                  text: tool.title,
+                  toolId: tool.id,
+                  domain,
+                  category: tool.category
+                };
+              })
+              .filter(Boolean);
+          } catch (e) {
+            // Fallback bei Fehler
+          }
         } else {
-          window.addEventListener('scroll', toggleStickyClass, { passive: true });
+          // Fallback: einfache Suche über tools
+          try {
+            const qNorm = normalizeQuery(effectiveQuery);
+            const tokens = qNorm.split(/\s+/);
+            toolSuggestions = tools
+              .map(tool => {
+                const title = (tool.title || '').toLowerCase();
+                const desc = (tool.description || '').toLowerCase();
+                let score = 0;
+                tokens.forEach(t => {
+                  if (title.includes(t)) score += 2;
+                  if (desc.includes(t)) score += 1;
+                });
+                return { tool, score };
+              })
+              .filter(item => item.score > 0)
+              .sort((a, b) => b.score - a.score)
+              .map(item => {
+                const tool = item.tool;
+                let domain = '';
+                try {
+                  if (tool.link) {
+                    const url = new URL(tool.link);
+                    domain = url.hostname;
+                  }
+                } catch (e) {}
+                return {
+                  type: 'tool',
+                  text: tool.title,
+                  toolId: tool.id,
+                  domain,
+                  category: tool.category
+                };
+              });
+          } catch (e) {}
         }
-        toggleStickyClass();
-      }
-      
-      // Keine Farbschema-Initialisierung
 
-      // ==================== BEI SPRACHWECHSEL SEITE NEU RENDERN ====================
-      window.addEventListener('languagechange', () => {
-        ui.updateStats();
-        ui.render();
-      });
-
-      console.log('✅ App initialized successfully!');
-
-      try {
-        if (!window.appState) window.appState = state;
-        window.dispatchEvent(new Event('quantum:ready'));
-      } catch (e) {
-        console.debug('app: could not expose global state or dispatch event', e);
-      }
-
-      try {
-        if (typeof initializeModalSystem === 'function') {
-          initializeModalSystem();
+        // Deduplizieren (nach text)
+        if (dedupe) {
+          const seen = new Set();
+          toolSuggestions = toolSuggestions.filter(s => {
+            if (seen.has(s.text)) return false;
+            seen.add(s.text);
+            return true;
+          });
         }
-      } catch (modalError) {
-        console.warn('Modal system init failed:', modalError);
+
+        // Begrenzen
+        toolSuggestions = toolSuggestions.slice(0, maxSuggestions - actions.length);
+        const combined = [...actions, ...toolSuggestions];
+        return combined.slice(0, maxSuggestions);
       }
-      
-    } catch (error) {
-      console.error('❌ CRITICAL ERROR in init:', error);
-      console.error('❌ Error type:', error.constructor.name);
-      console.error('❌ Error message:', error.message);
-      console.error('❌ Error stack:', error.stack);
-      
-      console.log('🚨 EMERGENCY: Activating fallback to defaults...');
-      
-      try {
-        state.tools = DEFAULT_TOOLS;
-        state.filtered = [...state.tools];
-        state.loading = false;
-        state.error = null;
-        state.dataSource = 'emergency';
-        
-        console.log('🔧 Emergency: Updating UI...');
-        ui.updateStats();
-        ui.updateDataSource();
-        ui.render();
-        
-        console.log('🔧 Emergency: Initializing search...');
-        search.init();
-        
-        console.log('✅ Emergency recovery successful! App running with defaults.');
-        console.log('💡 Check console errors above to debug the original issue.');
-        
-      } catch (recoveryError) {
-        console.error('💥 EMERGENCY RECOVERY FAILED:', recoveryError);
-        console.error('💥 This should never happen. Something is very wrong.');
-        
-        errorHandler.handle(error, 'Initialization');
-      }
-    }
-  }
-};
+    };
+  })();
 
-// =========================================
-// START APPLICATION
-// =========================================
-const startApp = async () => {
-  try {
-    await app.init();
-  } catch (e) {
-    console.error('App init failed (caught):', e);
-  }
-};
+  // -------------------------------------------------------------
+  // EXPORT
+  // -------------------------------------------------------------
+  global.Performance = {
+    SearchIndex,
+    AnimationScheduler,
+    DOMBatcher,
+    Cache,
+    throttle,
+    debounce,
+    LazyLoader,
+    SmartSearch
+  };
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => startApp());
-} else {
-  startApp();
-}
-
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  window.appState = state;
-  window.appConfig = CONFIG;
-  console.log('💡 Debug mode: window.appState and window.appConfig available');
-}
-
-// =========================================
-// MODAL SYSTEM - FIXED VERSION
-// =========================================
-
-function createToolModal() {
-  if (document.getElementById('tool-modal')) return;
-  
-  const modal = document.createElement('div');
-  modal.id = 'tool-modal';
-  modal.className = 'tool-modal-overlay';
-  
-  Object.assign(modal.style, {
-    display: 'none',
-    position: 'fixed',
-    inset: '0',
-    zIndex: '9999',
-    background: 'rgba(0, 0, 0, 0.7)',
-    backdropFilter: 'blur(4px)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    opacity: '0',
-    transition: 'opacity 0.2s ease'
-  });
-  
-  modal.innerHTML = `
-    <div class="modal-box" role="dialog" aria-modal="true" 
-         style="background:#0f1224;
-                border-radius:14px;
-                padding:24px;
-                width:90%;
-                max-width:500px;
-                box-shadow:0 20px 60px rgba(0,0,0,0.8);
-                transform:scale(0.9);
-                transition:transform 0.2s ease;">
-      <h3 id="tool-modal-title" 
-          style="color:var(--primary);
-                 margin-bottom:8px;
-                 font-size:1.5rem;">Tool</h3>
-      <p id="tool-modal-desc" 
-         style="color:var(--text-dim);
-                margin-bottom:12px;
-                line-height:1.5;">Beschreibung lädt...</p>
-      <div style="display:flex;
-                  gap:8px;
-                  justify-content:flex-end;
-                  margin-top:16px;">
-        <a id="tool-modal-open" 
-           class="card-link" 
-           style="display:inline-flex;
-                  padding:10px 20px;
-                  border-radius:8px;
-                  background:var(--primary);
-                  color:var(--bg-dark);
-                  text-decoration:none;
-                  font-weight:600;
-                  transition:transform 0.2s ease;">
-          Tool öffnen ➜
-        </a>
-        <button id="tool-modal-close" 
-                style="background:transparent;
-                       border:1px solid rgba(255,255,255,0.1);
-                       padding:10px 20px;
-                       border-radius:8px;
-                       color:var(--text-secondary);
-                       cursor:pointer;
-                       transition:all 0.2s ease;">
-          Schließen
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeToolModal();
-    }
-  });
-  
-  if (!document._toolModalEscapeHandlerAttached) {
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeToolModal();
-      }
-    });
-    document._toolModalEscapeHandlerAttached = true;
-  }
-  
-  const closeBtn = modal.querySelector('#tool-modal-close');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeToolModal);
-  }
-  
-  console.log('✅ Modal created and initialized');
-}
-
-function openToolModal(toolData) {
-  try {
-    console.log('🎯 Opening modal with:', toolData);
-    
-    createToolModal();
-    
-    const modal = document.getElementById('tool-modal');
-    if (!modal) {
-      console.error('❌ Modal not found after creation!');
-      return;
-    }
-    
-    const titleEl = modal.querySelector('#tool-modal-title');
-    const descEl = modal.querySelector('#tool-modal-desc');
-    const openLink = modal.querySelector('#tool-modal-open');
-    
-    if (!titleEl || !descEl || !openLink) {
-      console.error('❌ Modal elements missing!');
-      return;
-    }
-    
-    const toolLink = toolData.link || toolData.href || '#';
-    const toolTitle = toolData.title || 'AI Tool';
-    const toolDesc = toolData.description || 'Klicke auf "Tool öffnen" um fortzufahren.';
-    
-    titleEl.textContent = toolTitle;
-    descEl.textContent = toolDesc;
-    openLink.href = toolLink;
-    openLink.target = '_blank';
-    openLink.rel = 'noopener noreferrer';
-    
-    modal.style.display = 'flex';
-    modal.offsetHeight;
-    modal.style.opacity = '1';
-    
-    const modalBox = modal.querySelector('.modal-box');
-    if (modalBox) {
-      modalBox.style.transform = 'scale(1)';
-    }
-    
-    document.body.style.overflow = 'hidden';
-    
-    console.log('✅ Modal opened:', toolTitle);
-    
-  } catch (error) {
-    console.error('❌ Error opening modal:', error);
-    console.error('Stack:', error.stack);
-    
-    const link = toolData.link || toolData.href;
-    if (link) {
-      console.log('🔗 Fallback: Opening link directly');
-      window.open(link, '_blank', 'noopener,noreferrer');
-    }
-  }
-}
-
-function closeToolModal() {
-  const modal = document.getElementById('tool-modal');
-  if (!modal) return;
-  
-  modal.style.opacity = '0';
-  const modalBox = modal.querySelector('.modal-box');
-  if (modalBox) {
-    modalBox.style.transform = 'scale(0.9)';
-  }
-  
-  setTimeout(() => {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }, 200);
-  
-  console.log('✅ Modal closed');
-}
-
-function initializeModalSystem() {
-  console.log('🚀 Initializing modal system...');
-  createToolModal();
-  window.openToolModal = openToolModal;
-  window.closeToolModal = closeToolModal;
-  console.log('✅ Modal system ready');
-}
+})(window);
