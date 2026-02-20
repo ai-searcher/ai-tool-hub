@@ -505,7 +505,7 @@ const state = {
 // HILFSFUNKTION SORTIERUNG
 // =========================================
 
-// Hilfsfunktion: Berechnet einen Score für ein Tool basierend auf Use‑Cases
+// Hilfsfunktion: Berechnet einen gewichteten Score für ein Tool basierend auf Use‑Cases
 function getUseCaseScore(tool, type) {
   // Schlüsselwörter für Schule/Studium
   const schoolKeywords = [
@@ -525,23 +525,63 @@ function getUseCaseScore(tool, type) {
 
   const keywords = type === 'school' ? schoolKeywords : workKeywords;
   
-  // Sammle alle relevanten Textfelder (deutsch + englisch)
-  const fields = [];
-  if (tool.title) fields.push(tool.title);
-  if (tool.description) fields.push(tool.description);
-  if (tool.tags) fields.push(...tool.tags);
-  if (tool.useCases) fields.push(...tool.useCases);
+  // Gewichtung der einzelnen Felder (je relevanter, desto höher)
+  const weights = {
+    useCases: 5,
+    title: 4,
+    description: 3,
+    strengths: 3,
+    tags: 2,
+    promptExamples: 1
+  };
+
+  // Alle relevanten Felder sammeln (deutsch + englisch)
+  const fields = {
+    title: tool.title || '',
+    description: tool.description || '',
+    tags: tool.tags ? tool.tags.join(' ') : '',
+    useCases: tool.useCases ? tool.useCases.join(' ') : '',
+    strengths: tool.strengths ? tool.strengths.join(' ') : '',
+    promptExamples: tool.promptExamples ? tool.promptExamples.join(' ') : ''
+  };
+
+  // Englische Felder hinzufügen (falls vorhanden)
   if (tool.en) {
-    if (tool.en.title) fields.push(tool.en.title);
-    if (tool.en.description) fields.push(tool.en.description);
-    if (tool.en.useCases) fields.push(...tool.en.useCases);
+    fields.enTitle = tool.en.title || '';
+    fields.enDescription = tool.en.description || '';
+    fields.enUseCases = tool.en.useCases ? tool.en.useCases.join(' ') : '';
+    fields.enStrengths = tool.en.strengths ? tool.en.strengths.join(' ') : '';
+    fields.enPromptExamples = tool.en.promptExamples ? tool.en.promptExamples.join(' ') : '';
+    fields.enTags = ''; // Tags sind meist englisch, aber nicht in en enthalten
   }
-  
-  const text = fields.join(' ').toLowerCase();
+
   let score = 0;
+  const textFields = { ...fields }; // Alle Felder in einem Objekt
+
+  // Für jedes Keyword prüfen, in welchen Feldern es vorkommt und gewichten
   keywords.forEach(keyword => {
-    if (text.includes(keyword)) score += 1;
+    const lowerKeyword = keyword.toLowerCase();
+    Object.entries(textFields).forEach(([fieldName, fieldText]) => {
+      if (fieldText && fieldText.toLowerCase().includes(lowerKeyword)) {
+        // Grundgewichtung für das Feld
+        let weight = 0;
+        if (fieldName.includes('UseCases')) weight = weights.useCases;
+        else if (fieldName.includes('title')) weight = weights.title;
+        else if (fieldName.includes('description')) weight = weights.description;
+        else if (fieldName.includes('strengths')) weight = weights.strengths;
+        else if (fieldName.includes('tags')) weight = weights.tags;
+        else if (fieldName.includes('promptExamples')) weight = weights.promptExamples;
+        else weight = 1; // Fallback
+
+        // Zusätzlich: Wenn das Keyword zu den besonders relevanten gehört (z.B. "lernen"), doppelte Gewichtung
+        const superRelevant = ['lernen', 'schule', 'studium', 'aufgabe', 'homework', 'assignment', 'business', 'work', 'job'];
+        if (superRelevant.includes(keyword)) weight *= 2;
+
+        score += weight;
+      }
+    });
   });
+
   return score;
 }
 
