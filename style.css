@@ -2661,86 +2661,62 @@ input:disabled + .cookie-slider {
 /* === DREI DÜNNE LINIEN AN JEDER ECKE DER KATEGORIE-QUADRATE === */
 .category-header-card {
   position: relative;
-  overflow: visible; /* damit die Linien außerhalb sichtbar sind */
+  overflow: visible;
 }
 
-/* Obere linke Ecke */
-.category-header-card::before {
-  content: '';
+/* Gemeinsame Basis für alle Ecken */
+.category-header-card .corner-lines {
   position: absolute;
-  top: -6px;  /* etwas außerhalb der Karte, damit die Linien nach innen zeigen */
-  left: -6px;
-  width: 40px;  /* groß genug für die drei Linien */
-  height: 40px;
-  box-shadow:
-    0 2px 0 0 var(--glow-color),   /* erste horizontale Linie (von oben nach innen) */
-    0 4px 0 0 var(--glow-color),   /* zweite horizontale Linie */
-    0 6px 0 0 var(--glow-color),   /* dritte horizontale Linie */
-    2px 0 0 0 var(--glow-color),   /* erste vertikale Linie */
-    4px 0 0 0 var(--glow-color),   /* zweite vertikale Linie */
-    6px 0 0 0 var(--glow-color);   /* dritte vertikale Linie */
+  width: 20px;
+  height: 20px;
   pointer-events: none;
-  z-index: 2;  /* über dem Hintergrund, aber unter dem Inhalt */
+  z-index: 3;
 }
 
-/* Obere rechte Ecke */
-.category-header-card::after {
-  content: '';
-  position: absolute;
+/* Oben links */
+.category-header-card .corner-lines.top-left {
+  top: -6px;
+  left: -6px;
+  border-left: 2px solid var(--glow-color);
+  border-top: 2px solid var(--glow-color);
+  border-radius: 20px 0 0 0;
+  box-shadow: 
+    -2px -2px 0 0 var(--glow-color),
+    -4px -4px 0 0 var(--glow-color);
+}
+
+/* Oben rechts */
+.category-header-card .corner-lines.top-right {
   top: -6px;
   right: -6px;
-  width: 40px;
-  height: 40px;
-  box-shadow:
-    0 2px 0 0 var(--glow-color),
-    0 4px 0 0 var(--glow-color),
-    0 6px 0 0 var(--glow-color),
-    -2px 0 0 0 var(--glow-color),
-    -4px 0 0 0 var(--glow-color),
-    -6px 0 0 0 var(--glow-color);
-  pointer-events: none;
-  z-index: 2;
+  border-right: 2px solid var(--glow-color);
+  border-top: 2px solid var(--glow-color);
+  border-radius: 0 20px 0 0;
+  box-shadow: 
+    2px -2px 0 0 var(--glow-color),
+    4px -4px 0 0 var(--glow-color);
 }
 
-/* Untere linke Ecke – nutze .category-header-content (muss existieren) */
-.category-header-content::before {
-  content: '';
-  position: absolute;
+/* Unten links */
+.category-header-card .corner-lines.bottom-left {
   bottom: -6px;
   left: -6px;
-  width: 40px;
-  height: 40px;
-  box-shadow:
-    0 -2px 0 0 var(--glow-color),
-    0 -4px 0 0 var(--glow-color),
-    0 -6px 0 0 var(--glow-color),
-    2px 0 0 0 var(--glow-color),
-    4px 0 0 0 var(--glow-color),
-    6px 0 0 0 var(--glow-color);
-  pointer-events: none;
-  z-index: 2;
+  border-left: 2px solid var(--glow-color);
+  border-bottom: 2px solid var(--glow-color);
+  border-radius: 0 0 0 20px;
+  box-shadow: 
+    -2px 2px 0 0 var(--glow-color),
+    -4px 4px 0 0 var(--glow-color);
 }
 
-/* Untere rechte Ecke */
-.category-header-content::after {
-  content: '';
-  position: absolute;
+/* Unten rechts */
+.category-header-card .corner-lines.bottom-right {
   bottom: -6px;
   right: -6px;
-  width: 40px;
-  height: 40px;
-  box-shadow:
-    0 -2px 0 0 var(--glow-color),
-    0 -4px 0 0 var(--glow-color),
-    0 -6px 0 0 var(--glow-color),
-    -2px 0 0 0 var(--glow-color),
-    -4px 0 0 0 var(--glow-color),
-    -6px 0 0 0 var(--glow-color);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Wichtig: .category-header-content muss relativ positioniert sein */
-.category-header-content {
-  position: relative;
+  border-right: 2px solid var(--glow-color);
+  border-bottom: 2px solid var(--glow-color);
+  border-radius: 0 0 20px 0;
+  box-shadow: 
+    2px 2px 0 0 var(--glow-color),
+    4px 4px 0 0 var(--glow-color);
 }
