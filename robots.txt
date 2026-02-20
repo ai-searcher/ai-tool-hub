@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://ai-searcher.github.io/ai-tool-hub/sitemap.xml
