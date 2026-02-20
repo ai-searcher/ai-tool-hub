@@ -1,7 +1,8 @@
 // =========================================
-// GRID SYNCHRONIZED NETWORK V14.0 – GPU-beschleunigte Organische Kurven
+// GRID SYNCHRONIZED NETWORK V14.1 – GPU-beschleunigt mit korrekter Linienbreite und Puls
 // - Nutzt GPU.WebGLRenderer für maximale Performance
 // - Beibehaltung aller optischen Effekte (Kurven, Glow, Sterne, Ripples)
+// - Linienbreite und Puls wie im Original
 // - Fallback auf 2D, wenn WebGL nicht verfügbar ist
 // =========================================
 
@@ -213,7 +214,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v14.0 – GPU-accelerated Curves');
+      console.log('🚀 GridSynchronizedNetwork v14.1 – GPU-accelerated Curves with proper width & pulse');
 
       window.addEventListener('quantum:ready', () => {
         console.log('📡 quantum:ready received');
@@ -758,6 +759,11 @@
         weight *= (0.8 + degree * 0.1);
       }
 
+      // Berechnung der Basis-Linienbreite (wie im Original)
+      const baseWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
+      // Für Glow wird die Breite verdreifacht
+      let lineWidth = forGlow ? baseWidth * 3 : baseWidth;
+
       let baseOpacity;
       if (forGlow) {
         baseOpacity = this.settings.glowOpacity * activeState * weight * config.glowIntensity;
@@ -797,8 +803,8 @@
       const cpX = midX + rotatedX * offset;
       const cpY = midY + rotatedY * offset;
 
-      // Tessellation: Anzahl Segmente (je nach Distanz, aber fest)
-      const segments = Math.max(10, Math.floor(dist / 10)); // mindestens 10, mehr bei längeren Linien
+      // Tessellation: Anzahl Segmente (abhängig von Distanz für glatte Kurven)
+      const segments = Math.max(10, Math.floor(dist / 8));
       const lines = [];
       let prevX = from.x;
       let prevY = from.y;
@@ -806,11 +812,10 @@
 
       for (let i = 1; i <= segments; i++) {
         const t = i / segments;
-        // Quadratische Bézier: B(t) = (1-t)^2*P0 + 2(1-t)*t*P1 + t^2*P2
         const x = (1-t)*(1-t)*from.x + 2*(1-t)*t*cpX + t*t*to.x;
         const y = (1-t)*(1-t)*from.y + 2*(1-t)*t*cpY + t*t*to.y;
 
-        // interpolierte Farbe
+        // Interpolierte Farbe
         const r = Math.round(fromColor.r + (toColor.r - fromColor.r) * t);
         const g = Math.round(fromColor.g + (toColor.g - fromColor.g) * t);
         const b = Math.round(fromColor.b + (toColor.b - fromColor.b) * t);
@@ -819,7 +824,8 @@
           x1: prevX, y1: prevY,
           x2: x, y2: y,
           r1: prevColor.r, g1: prevColor.g, b1: prevColor.b, a1: baseOpacity,
-          r2: r, g2: r, b2: b, a2: baseOpacity  // etwas vereinfacht: gleiche Farbe für beide Enden des Segments
+          r2: r, g2: g, b2: b, a2: baseOpacity,
+          width: lineWidth
         });
 
         prevX = x;
@@ -916,11 +922,12 @@
       }
 
       const gradient = this.getGradient(from, to, fromColor, toColor, baseOpacity);
+      const lineWidth = (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight;
 
       this.ctx.lineCap = 'round';
       this.ctx.setLineDash(dashPattern);
 
-      this.drawCurvedLine(from, to, gradient, (this.settings.baseLineWidth * config.lineWidth / 2.5) * weight, connection);
+      this.drawCurvedLine(from, to, gradient, lineWidth, connection);
 
       this.ctx.setLineDash([]);
 
@@ -1188,7 +1195,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v14.0 – GPU-accelerated');
+    console.group('🚀 Color Flow v14.1 – GPU-accelerated with proper width & pulse');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
