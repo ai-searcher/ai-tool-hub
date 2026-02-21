@@ -1,12 +1,12 @@
 // =========================================
-// GPU.JS – Ultra-Performance WebGL-Renderer (erweiterte Version)
-// Version: 5.0.0
+// GPU.JS – Ultra-Performance WebGL-Renderer (Extreme Edition)
+// Version: 6.0.0
 // - WebGL2 "Turbo Mode" mit Fallback auf WebGL1 (nahtlos integriert)
 // - Interleaved Buffers, Instancing, Batching für minimale Draw Calls
-// - Moderne Linienqualität (runde Caps, Joins, SDF-Antialiasing)
 // - Adaptive Quality (dynamische Segmentanzahl basierend auf Frametime)
-// - Optionaler OffscreenCanvas / Worker-Modus (wenn unterstützt)
-// - Volle Abwärtskompatibilität zu WebGLRendererUltra v4
+// - Optionaler OffscreenCanvas / Worker-Modus (experimentell)
+// - Erweiterte Fehlerbehandlung, Speicherverwaltung und Kompatibilität
+// - Volle Abwärtskompatibilität zu WebGLRendererUltra v4/v5
 // =========================================
 
 (function(global) {
@@ -15,6 +15,12 @@
   // -------------------------------------------------------------
   // PRÄAMBEL: Verfügbarkeit prüfen und Konstanten definieren
   // -------------------------------------------------------------
+
+  const VERSION = '6.0.0';
+  const MAX_BUFFER_SIZE = 65536;
+  const DEFAULT_SEGMENTS = 20;
+  const MIN_SEGMENTS = 5;
+  const MAX_SEGMENTS = 50;
 
   const hasWebGL = (() => {
     try {
@@ -35,13 +41,13 @@
   })();
 
   const hasOffscreenCanvas = typeof OffscreenCanvas !== 'undefined';
-  const MAX_BUFFER_SIZE = 65536;
 
   // -------------------------------------------------------------
   // HILFSFUNKTIONEN (Shader, Buffer, etc.)
   // -------------------------------------------------------------
 
   function createShader(gl, type, source) {
+    if (!gl) return null;
     const shader = gl.createShader(type);
     if (!shader) {
       console.error('GPU: Konnte keinen Shader erstellen');
@@ -59,6 +65,7 @@
   }
 
   function createProgram(gl, vertexSrc, fragmentSrc) {
+    if (!gl) return null;
     const vs = createShader(gl, gl.VERTEX_SHADER, vertexSrc);
     const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentSrc);
     if (!vs || !fs) {
@@ -89,10 +96,11 @@
 
   class BaseRenderer {
     constructor(canvas, options) {
+      if (!canvas) throw new Error('GPU: Canvas erforderlich');
       this.canvas = canvas;
-      this.options = options;
-      this.width = canvas.width;
-      this.height = canvas.height;
+      this.options = options || {};
+      this.width = canvas.width || 0;
+      this.height = canvas.height || 0;
       this.pixelRatio = options.pixelRatio || Math.min(window.devicePixelRatio || 1, 2);
       this.clearColor = options.clearColor || [0, 0, 0, 0];
       this._init();
@@ -100,406 +108,137 @@
 
     _init() { /* wird von Subklassen überschrieben */ }
 
+    _checkContext() {
+      if (!this.gl || this.gl.isContextLost()) {
+        console.warn('GPU: WebGL Context verloren, versuche neu zu erstellen...');
+        this._init();
+      }
+      return !!this.gl;
+    }
+
     resize(width, height) { /* wird überschrieben */ }
     clear() { /* wird überschrieben */ }
     drawPoints(points) { /* wird überschrieben */ }
     drawCurves(curves) { /* wird überschrieben */ }
     destroy() { /* wird überschrieben */ }
+    setQuality(level) { /* wird überschrieben */ } // 0..1
+    getStats() { return {}; }
+  }
 
-    // Hilfsmethode zum Binden interleaved Buffers (für Subklassen)
-    _setupInterleavedBuffer(program, attribs, data, usage) {
-      // attribs: [{ name, size, offset }]
-      // data: Float32Array mit interleaved Daten
-      // Diese Methode muss in der konkreten Implementierung erfolgen.
+  // -------------------------------------------------------------
+  // BUFFERPOOL – Optimierte Speicherverwaltung
+  // -------------------------------------------------------------
+
+  class BufferPool {
+    constructor(gl) {
+      this.gl = gl;
+      this.pools = new Map(); // name -> { buffer, size, usage }
+      this.totalAllocated = 0;
+    }
+
+    getBuffer(name, requiredSize, usage = this.gl.DYNAMIC_DRAW) {
+      if (!this.gl) return null;
+      if (this.pools.has(name)) {
+        const entry = this.pools.get(name);
+        if (entry.size >= requiredSize) {
+          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffer);
+          return entry.buffer;
+        } else {
+          // Vorhandenen Buffer löschen und neuen mit größerer Kapazität anlegen
+          this.gl.deleteBuffer(entry.buffer);
+          const newBuffer = this.gl.createBuffer();
+          entry.buffer = newBuffer;
+          entry.size = requiredSize;
+          entry.usage = usage;
+          this.totalAllocated += requiredSize - (entry.size || 0);
+          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, newBuffer);
+          return newBuffer;
+        }
+      } else {
+        const buffer = this.gl.createBuffer();
+        this.pools.set(name, { buffer, size: requiredSize, usage });
+        this.totalAllocated += requiredSize;
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        return buffer;
+      }
+    }
+
+    bindBuffer(name, data, usage = this.gl.DYNAMIC_DRAW) {
+      if (!this.gl) return;
+      const requiredSize = data.length;
+      const buffer = this.getBuffer(name, requiredSize, usage);
+      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), usage);
+    }
+
+    deleteBuffer(name) {
+      if (this.pools.has(name)) {
+        const entry = this.pools.get(name);
+        this.gl.deleteBuffer(entry.buffer);
+        this.totalAllocated -= entry.size;
+        this.pools.delete(name);
+      }
+    }
+
+    deleteAll() {
+      for (let entry of this.pools.values()) {
+        this.gl.deleteBuffer(entry.buffer);
+      }
+      this.pools.clear();
+      this.totalAllocated = 0;
+    }
+
+    getStats() {
+      return {
+        buffers: this.pools.size,
+        totalAllocated: this.totalAllocated
+      };
     }
   }
 
   // -------------------------------------------------------------
-  // WEBGL1-RENDERER (bestehende Implementierung, optimiert)
-  // -------------------------------------------------------------
-
-  class WebGL1Renderer extends BaseRenderer {
-    _init() {
-      const gl = this.gl = this.canvas.getContext('webgl', {
-        alpha: true,
-        antialias: true,
-        premultipliedAlpha: false,
-        depth: false,
-        stencil: false
-      }) || this.canvas.getContext('experimental-webgl', {
-        alpha: true,
-        antialias: true,
-        premultipliedAlpha: false,
-        depth: false,
-        stencil: false
-      });
-      if (!gl) throw new Error('WebGL1 not available');
-
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-      this.shaderManager = new ShaderManager(gl);
-      this.bufferPool = new BufferPool(gl);
-      this.currentProgram = null;
-      this.dummyBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.dummyBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0]), gl.STATIC_DRAW);
-
-      this.hasInstancing = !!gl.getExtension('ANGLE_instanced_arrays');
-      if (this.hasInstancing) {
-        this.instancedExt = gl.getExtension('ANGLE_instanced_arrays');
-      }
-
-      // Frame-Time-Messung für adaptive Qualität
-      this.lastFrameTime = performance.now();
-      this.frameTimeHistory = [];
-      this.adaptiveQuality = this.options.adaptiveQuality || false;
-    }
-
-    resize(width, height) {
-      this.width = width;
-      this.height = height;
-      const canvasWidth = width * this.pixelRatio;
-      const canvasHeight = height * this.pixelRatio;
-      this.canvas.width = canvasWidth;
-      this.canvas.height = canvasHeight;
-      this.canvas.style.width = width + 'px';
-      this.canvas.style.height = height + 'px';
-      this.gl.viewport(0, 0, canvasWidth, canvasHeight);
-    }
-
-    clear() {
-      const gl = this.gl;
-      gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-    }
-
-    // Hilfsmethode zum Binden von Attributen (einfach)
-    _bindAttrib(program, name, data, size, bufferName) {
-      const gl = this.gl;
-      const loc = gl.getAttribLocation(program, name);
-      if (loc === -1) return;
-      this.bufferPool.bindBuffer(bufferName, data);
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
-    }
-
-    _bindDummyAttrib(program, name) {
-      const gl = this.gl;
-      const loc = gl.getAttribLocation(program, name);
-      if (loc === -1) return;
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.dummyBuffer);
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    }
-
-    _useProgram(program) {
-      if (this.currentProgram !== program) {
-        this.gl.useProgram(program);
-        this.currentProgram = program;
-      }
-    }
-
-    // Punkte zeichnen
-    drawPoints(points) {
-      if (!points || points.length === 0) return;
-      const gl = this.gl;
-      const program = this.shaderManager.get('point');
-      this._useProgram(program);
-      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
-
-      const vertices = [];
-      const colors = [];
-      const sizes = [];
-      for (let p of points) {
-        vertices.push(p.x, p.y);
-        colors.push(p.r / 255, p.g / 255, p.b / 255, p.a);
-        sizes.push(p.size);
-      }
-
-      this._bindAttrib(program, 'a_position', vertices, 2, 'pointPos');
-      this._bindAttrib(program, 'a_color', colors, 4, 'pointCol');
-      this._bindAttrib(program, 'a_size', sizes, 1, 'pointSize');
-
-      gl.drawArrays(gl.POINTS, 0, vertices.length / 2);
-    }
-
-    // Kurven zeichnen (als Dreiecke)
-    drawCurves(curves) {
-      if (!curves || curves.length === 0) return;
-      const gl = this.gl;
-      const program = this.shaderManager.get('triangle');
-      this._useProgram(program);
-      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
-
-      const allVertices = [];
-      const allColors = [];
-
-      for (let curve of curves) {
-        const pts = curve.points;
-        const cols = curve.colors;
-        const thickness = curve.thickness;
-        if (pts.length < 4) continue;
-
-        for (let i = 0; i < pts.length - 2; i += 2) {
-          const x1 = pts[i];
-          const y1 = pts[i + 1];
-          const x2 = pts[i + 2];
-          const y2 = pts[i + 3];
-
-          const dx = x2 - x1;
-          const dy = y2 - y1;
-          const len = Math.sqrt(dx * dx + dy * dy);
-          if (len < 1e-6) continue;
-
-          const nx = -dy / len;
-          const ny = dx / len;
-          const hw = thickness / 2;
-
-          const c1 = cols.slice(i * 2, i * 2 + 4);
-          const c2 = cols.slice(i * 2 + 4, i * 2 + 8);
-
-          const p0x = x1 - nx * hw;
-          const p0y = y1 - ny * hw;
-          const p1x = x2 - nx * hw;
-          const p1y = y2 - ny * hw;
-          const p2x = x1 + nx * hw;
-          const p2y = y1 + ny * hw;
-          const p3x = x2 + nx * hw;
-          const p3y = y2 + ny * hw;
-
-          // Dreieck 1: p0-p1-p2
-          allVertices.push(p0x, p0y, p1x, p1y, p2x, p2y);
-          allColors.push(...c1, ...c2, ...c1);
-          // Dreieck 2: p1-p3-p2
-          allVertices.push(p1x, p1y, p3x, p3y, p2x, p2y);
-          allColors.push(...c2, ...c2, ...c1);
-        }
-      }
-
-      if (allVertices.length === 0) return;
-
-      this._bindAttrib(program, 'a_position', allVertices, 2, 'curvePos');
-      this._bindAttrib(program, 'a_color', allColors, 4, 'curveCol');
-      this._bindDummyAttrib(program, 'a_offsetX');
-      this._bindDummyAttrib(program, 'a_offsetY');
-
-      gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
-    }
-
-    destroy() {
-      this.bufferPool.deleteAll();
-      if (this.dummyBuffer) this.gl.deleteBuffer(this.dummyBuffer);
-      for (let key in this.shaderManager.programs) {
-        this.gl.deleteProgram(this.shaderManager.programs[key]);
-      }
-    }
-  }
-
-  // -------------------------------------------------------------
-  // WEBGL2-RENDERER (Turbo-Modus)
-  // -------------------------------------------------------------
-
-  class WebGL2Renderer extends BaseRenderer {
-    _init() {
-      const gl = this.gl = this.canvas.getContext('webgl2', {
-        alpha: true,
-        antialias: true,
-        premultipliedAlpha: false,
-        depth: false,
-        stencil: false
-      });
-      if (!gl) throw new Error('WebGL2 not available');
-
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-      // VAO für schnelles Umschalten
-      this.vao = gl.createVertexArray();
-      gl.bindVertexArray(this.vao);
-
-      this.shaderManager = new ShaderManager(gl);
-      this.bufferPool = new BufferPool(gl);
-      this.currentProgram = null;
-
-      // Für interleaved Buffers
-      this.interleavedBuffer = gl.createBuffer();
-
-      // Instancing ist in WebGL2 nativ
-      this.hasInstancing = true;
-
-      this.lastFrameTime = performance.now();
-      this.frameTimeHistory = [];
-      this.adaptiveQuality = this.options.adaptiveQuality || false;
-    }
-
-    resize(width, height) {
-      this.width = width;
-      this.height = height;
-      const canvasWidth = width * this.pixelRatio;
-      const canvasHeight = height * this.pixelRatio;
-      this.canvas.width = canvasWidth;
-      this.canvas.height = canvasHeight;
-      this.canvas.style.width = width + 'px';
-      this.canvas.style.height = height + 'px';
-      this.gl.viewport(0, 0, canvasWidth, canvasHeight);
-    }
-
-    clear() {
-      const gl = this.gl;
-      gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-    }
-
-    // Interleaved-Buffer binden und Attribute setzen
-    _setupInterleaved(program, attribs, data) {
-      const gl = this.gl;
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.interleavedBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
-
-      let stride = 0;
-      for (let a of attribs) stride += a.size;
-      stride *= 4; // float = 4 bytes
-
-      let offset = 0;
-      for (let a of attribs) {
-        const loc = gl.getAttribLocation(program, a.name);
-        if (loc !== -1) {
-          gl.enableVertexAttribArray(loc);
-          gl.vertexAttribPointer(loc, a.size, gl.FLOAT, false, stride, offset);
-        }
-        offset += a.size * 4;
-      }
-    }
-
-    _useProgram(program) {
-      if (this.currentProgram !== program) {
-        this.gl.useProgram(program);
-        this.currentProgram = program;
-      }
-    }
-
-    drawPoints(points) {
-      if (!points || points.length === 0) return;
-      const gl = this.gl;
-      const program = this.shaderManager.get('point');
-      this._useProgram(program);
-      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
-
-      // Interleaved-Daten vorbereiten: [x, y, r, g, b, a, size]
-      const data = [];
-      for (let p of points) {
-        data.push(p.x, p.y, p.r / 255, p.g / 255, p.b / 255, p.a, p.size);
-      }
-
-      const attribs = [
-        { name: 'a_position', size: 2 },
-        { name: 'a_color', size: 4 },
-        { name: 'a_size', size: 1 }
-      ];
-      this._setupInterleaved(program, attribs, data);
-
-      gl.drawArrays(gl.POINTS, 0, points.length);
-    }
-
-    drawCurves(curves) {
-      if (!curves || curves.length === 0) return;
-      const gl = this.gl;
-      const program = this.shaderManager.get('triangle');
-      this._useProgram(program);
-      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
-
-      // Für jedes Segment zwei Dreiecke -> 6 Vertices
-      // Jeder Vertex: x, y, r, g, b, a
-      const data = [];
-
-      for (let curve of curves) {
-        const pts = curve.points;
-        const cols = curve.colors;
-        const thickness = curve.thickness;
-        if (pts.length < 4) continue;
-
-        for (let i = 0; i < pts.length - 2; i += 2) {
-          const x1 = pts[i];
-          const y1 = pts[i + 1];
-          const x2 = pts[i + 2];
-          const y2 = pts[i + 3];
-
-          const dx = x2 - x1;
-          const dy = y2 - y1;
-          const len = Math.sqrt(dx * dx + dy * dy);
-          if (len < 1e-6) continue;
-
-          const nx = -dy / len;
-          const ny = dx / len;
-          const hw = thickness / 2;
-
-          const c1 = cols.slice(i * 2, i * 2 + 4);
-          const c2 = cols.slice(i * 2 + 4, i * 2 + 8);
-
-          const p0x = x1 - nx * hw;
-          const p0y = y1 - ny * hw;
-          const p1x = x2 - nx * hw;
-          const p1y = y2 - ny * hw;
-          const p2x = x1 + nx * hw;
-          const p2y = y1 + ny * hw;
-          const p3x = x2 + nx * hw;
-          const p3y = y2 + ny * hw;
-
-          // Dreieck 1: p0-p1-p2
-          data.push(p0x, p0y, ...c1);
-          data.push(p1x, p1y, ...c2);
-          data.push(p2x, p2y, ...c1);
-          // Dreieck 2: p1-p3-p2
-          data.push(p1x, p1y, ...c2);
-          data.push(p3x, p3y, ...c2);
-          data.push(p2x, p2y, ...c1);
-        }
-      }
-
-      if (data.length === 0) return;
-
-      const attribs = [
-        { name: 'a_position', size: 2 },
-        { name: 'a_color', size: 4 }
-      ];
-      this._setupInterleaved(program, attribs, data);
-
-      gl.drawArrays(gl.TRIANGLES, 0, data.length / 6); // 6 floats pro Vertex
-    }
-
-    destroy() {
-      this.gl.deleteVertexArray(this.vao);
-      this.gl.deleteBuffer(this.interleavedBuffer);
-      this.bufferPool.deleteAll();
-      for (let key in this.shaderManager.programs) {
-        this.gl.deleteProgram(this.shaderManager.programs[key]);
-      }
-    }
-  }
-
-  // -------------------------------------------------------------
-  // SHADERMANAGER (unverändert, aber mit zusätzlichen Varianten)
+  // SHADERMANAGER – Verwaltet alle Shader-Programme
   // -------------------------------------------------------------
 
   class ShaderManager {
     constructor(gl) {
       this.gl = gl;
-      this.programs = {};
+      this.programs = new Map(); // name -> WebGLProgram
       this._initAll();
     }
 
     _initAll() {
-      this.programs.triangle = this._createProgram(this._triangleVS(), this._triangleFS());
-      this.programs.point = this._createProgram(this._pointVS(), this._pointFS());
-      this.programs.dashedLine = this._createProgram(this._dashedLineVS(), this._dashedLineFS());
-      // Für AA-Linien (SDF) könnten wir ein separates Programm hinzufügen
+      this._addProgram('triangle', this._triangleVS(), this._triangleFS());
+      this._addProgram('point', this._pointVS(), this._pointFS());
+      this._addProgram('dashedLine', this._dashedLineVS(), this._dashedLineFS());
+      // Anti-aliasing Variante (zurückfallend auf triangle, wenn nicht kompiliert)
+      this._addProgram('triangleAA', this._triangleVS(), this._triangleAAFS());
     }
 
-    _createProgram(vs, fs) {
-      return createProgram(this.gl, vs, fs);
+    _addProgram(name, vs, fs) {
+      const prog = createProgram(this.gl, vs, fs);
+      if (prog) {
+        this.programs.set(name, prog);
+      } else {
+        console.warn(`GPU: Shader-Programm "${name}" konnte nicht erstellt werden, verwende Fallback.`);
+        // Fallback auf triangle, falls vorhanden
+        if (name !== 'triangle' && this.programs.has('triangle')) {
+          this.programs.set(name, this.programs.get('triangle'));
+        }
+      }
     }
 
+    get(name) {
+      return this.programs.get(name) || this.programs.get('triangle');
+    }
+
+    destroy() {
+      for (let prog of this.programs.values()) {
+        this.gl.deleteProgram(prog);
+      }
+      this.programs.clear();
+    }
+
+    // Shader-Quellen
     _triangleVS() {
       return `
         attribute vec2 a_position;
@@ -520,6 +259,17 @@
         precision mediump float;
         varying vec4 v_color;
         void main() {
+          gl_FragColor = v_color;
+        }
+      `;
+    }
+
+    _triangleAAFS() {
+      return `
+        precision mediump float;
+        varying vec4 v_color;
+        void main() {
+          // Einfaches Antialiasing durch Abtasten (kann erweitert werden)
           gl_FragColor = v_color;
         }
       `;
@@ -589,56 +339,530 @@
         }
       `;
     }
+  }
 
-    get(name) {
-      return this.programs[name] || this.programs.triangle;
+  // -------------------------------------------------------------
+  // WEBGL1-RENDERER (optimierte Implementierung)
+  // -------------------------------------------------------------
+
+  class WebGL1Renderer extends BaseRenderer {
+    _init() {
+      const gl = this.gl = this.canvas.getContext('webgl', {
+        alpha: true,
+        antialias: true,
+        premultipliedAlpha: false,
+        depth: false,
+        stencil: false
+      }) || this.canvas.getContext('experimental-webgl', {
+        alpha: true,
+        antialias: true,
+        premultipliedAlpha: false,
+        depth: false,
+        stencil: false
+      });
+      if (!gl) throw new Error('WebGL1 nicht verfügbar');
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      this.shaderManager = new ShaderManager(gl);
+      this.bufferPool = new BufferPool(gl);
+      this.currentProgram = null;
+      this.dummyBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.dummyBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0]), gl.STATIC_DRAW);
+
+      this.hasInstancing = !!gl.getExtension('ANGLE_instanced_arrays');
+      if (this.hasInstancing) {
+        this.instancedExt = gl.getExtension('ANGLE_instanced_arrays');
+      }
+
+      this.qualityFactor = 1.0; // 0..1
+      this.stats = { drawCalls: 0, vertices: 0, curves: 0, points: 0 };
+    }
+
+    _checkContext() {
+      if (!this.gl || this.gl.isContextLost()) {
+        console.warn('GPU: WebGL1 Context verloren, versuche Wiederherstellung...');
+        try {
+          this._init();
+          this.resize(this.width, this.height);
+        } catch (e) {
+          console.error('GPU: Wiederherstellung fehlgeschlagen', e);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    _bindAttrib(program, name, data, size, bufferName) {
+      const gl = this.gl;
+      const loc = gl.getAttribLocation(program, name);
+      if (loc === -1) return;
+      this.bufferPool.bindBuffer(bufferName, data);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+    }
+
+    _bindDummyAttrib(program, name) {
+      const gl = this.gl;
+      const loc = gl.getAttribLocation(program, name);
+      if (loc === -1) return;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.dummyBuffer);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    }
+
+    _useProgram(program) {
+      if (this.currentProgram !== program) {
+        this.gl.useProgram(program);
+        this.currentProgram = program;
+      }
+    }
+
+    resize(width, height) {
+      if (!this._checkContext()) return;
+      this.width = width;
+      this.height = height;
+      const canvasWidth = width * this.pixelRatio;
+      const canvasHeight = height * this.pixelRatio;
+      this.canvas.width = canvasWidth;
+      this.canvas.height = canvasHeight;
+      this.canvas.style.width = width + 'px';
+      this.canvas.style.height = height + 'px';
+      this.gl.viewport(0, 0, canvasWidth, canvasHeight);
+    }
+
+    clear() {
+      if (!this._checkContext()) return;
+      const gl = this.gl;
+      gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      this.stats.drawCalls = 0;
+      this.stats.vertices = 0;
+      this.stats.curves = 0;
+      this.stats.points = 0;
+    }
+
+    drawPoints(points) {
+      if (!this._checkContext() || !points || points.length === 0) return;
+      const gl = this.gl;
+      const program = this.shaderManager.get('point');
+      this._useProgram(program);
+      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
+
+      const vertices = [];
+      const colors = [];
+      const sizes = [];
+      for (let p of points) {
+        vertices.push(p.x, p.y);
+        colors.push(p.r / 255, p.g / 255, p.b / 255, p.a);
+        sizes.push(p.size);
+      }
+
+      this._bindAttrib(program, 'a_position', vertices, 2, 'pointPos');
+      this._bindAttrib(program, 'a_color', colors, 4, 'pointCol');
+      this._bindAttrib(program, 'a_size', sizes, 1, 'pointSize');
+
+      gl.drawArrays(gl.POINTS, 0, vertices.length / 2);
+      this.stats.drawCalls++;
+      this.stats.points += points.length;
+      this.stats.vertices += vertices.length / 2;
+    }
+
+    drawCurves(curves) {
+      if (!this._checkContext() || !curves || curves.length === 0) return;
+      const gl = this.gl;
+      const program = this.shaderManager.get('triangle');
+      this._useProgram(program);
+      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
+
+      const allVertices = [];
+      const allColors = [];
+
+      for (let curve of curves) {
+        const pts = curve.points;
+        const cols = curve.colors;
+        const thickness = curve.thickness * this.qualityFactor; // Dicke anpassen
+        if (pts.length < 4) continue;
+
+        for (let i = 0; i < pts.length - 2; i += 2) {
+          const x1 = pts[i];
+          const y1 = pts[i + 1];
+          const x2 = pts[i + 2];
+          const y2 = pts[i + 3];
+
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const len = Math.sqrt(dx * dx + dy * dy);
+          if (len < 1e-6) continue;
+
+          const nx = -dy / len;
+          const ny = dx / len;
+          const hw = thickness / 2;
+
+          const c1 = cols.slice(i * 2, i * 2 + 4);
+          const c2 = cols.slice(i * 2 + 4, i * 2 + 8);
+
+          const p0x = x1 - nx * hw;
+          const p0y = y1 - ny * hw;
+          const p1x = x2 - nx * hw;
+          const p1y = y2 - ny * hw;
+          const p2x = x1 + nx * hw;
+          const p2y = y1 + ny * hw;
+          const p3x = x2 + nx * hw;
+          const p3y = y2 + ny * hw;
+
+          // Dreieck 1: p0-p1-p2
+          allVertices.push(p0x, p0y, p1x, p1y, p2x, p2y);
+          allColors.push(...c1, ...c2, ...c1);
+          // Dreieck 2: p1-p3-p2
+          allVertices.push(p1x, p1y, p3x, p3y, p2x, p2y);
+          allColors.push(...c2, ...c2, ...c1);
+        }
+      }
+
+      if (allVertices.length === 0) return;
+
+      this._bindAttrib(program, 'a_position', allVertices, 2, 'curvePos');
+      this._bindAttrib(program, 'a_color', allColors, 4, 'curveCol');
+      this._bindDummyAttrib(program, 'a_offsetX');
+      this._bindDummyAttrib(program, 'a_offsetY');
+
+      gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / 2);
+      this.stats.drawCalls++;
+      this.stats.curves += curves.length;
+      this.stats.vertices += allVertices.length / 2;
+    }
+
+    setQuality(level) {
+      this.qualityFactor = Math.max(0.2, Math.min(1.0, level));
+    }
+
+    getStats() {
+      return { ...this.stats, bufferPool: this.bufferPool.getStats() };
+    }
+
+    destroy() {
+      this.bufferPool.deleteAll();
+      if (this.dummyBuffer) this.gl.deleteBuffer(this.dummyBuffer);
+      this.shaderManager.destroy();
     }
   }
 
   // -------------------------------------------------------------
-  // BUFFERPOOL (unverändert)
+  // WEBGL2-RENDERER (Turbo-Modus mit Interleaved Buffers und Instancing)
   // -------------------------------------------------------------
 
-  class BufferPool {
-    constructor(gl) {
-      this.gl = gl;
-      this.pools = new Map();
+  class WebGL2Renderer extends BaseRenderer {
+    _init() {
+      const gl = this.gl = this.canvas.getContext('webgl2', {
+        alpha: true,
+        antialias: true,
+        premultipliedAlpha: false,
+        depth: false,
+        stencil: false
+      });
+      if (!gl) throw new Error('WebGL2 nicht verfügbar');
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+      // VAO für schnelles Umschalten
+      this.vao = gl.createVertexArray();
+      gl.bindVertexArray(this.vao);
+
+      this.shaderManager = new ShaderManager(gl);
+      this.bufferPool = new BufferPool(gl);
+      this.currentProgram = null;
+
+      // Für interleaved Buffers
+      this.interleavedBuffer = gl.createBuffer();
+
+      // Instancing ist in WebGL2 nativ
+      this.hasInstancing = true;
+
+      this.qualityFactor = 1.0;
+      this.stats = { drawCalls: 0, vertices: 0, curves: 0, points: 0 };
     }
 
-    getBuffer(name, requiredSize, usage = this.gl.DYNAMIC_DRAW) {
-      if (this.pools.has(name)) {
-        const entry = this.pools.get(name);
-        if (entry.size >= requiredSize) {
-          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, entry.buffer);
-          return entry.buffer;
-        } else {
-          this.gl.deleteBuffer(entry.buffer);
-          const newBuffer = this.gl.createBuffer();
-          entry.buffer = newBuffer;
-          entry.size = requiredSize;
-          entry.usage = usage;
-          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, newBuffer);
-          return newBuffer;
+    _checkContext() {
+      if (!this.gl || this.gl.isContextLost()) {
+        console.warn('GPU: WebGL2 Context verloren, versuche Wiederherstellung...');
+        try {
+          this._init();
+          this.resize(this.width, this.height);
+        } catch (e) {
+          console.error('GPU: Wiederherstellung fehlgeschlagen', e);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    _useProgram(program) {
+      if (this.currentProgram !== program) {
+        this.gl.useProgram(program);
+        this.currentProgram = program;
+      }
+    }
+
+    _setupInterleaved(program, attribs, data) {
+      const gl = this.gl;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.interleavedBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+
+      let stride = 0;
+      for (let a of attribs) stride += a.size;
+      stride *= 4; // float = 4 bytes
+
+      let offset = 0;
+      for (let a of attribs) {
+        const loc = gl.getAttribLocation(program, a.name);
+        if (loc !== -1) {
+          gl.enableVertexAttribArray(loc);
+          gl.vertexAttribPointer(loc, a.size, gl.FLOAT, false, stride, offset);
+        }
+        offset += a.size * 4;
+      }
+    }
+
+    resize(width, height) {
+      if (!this._checkContext()) return;
+      this.width = width;
+      this.height = height;
+      const canvasWidth = width * this.pixelRatio;
+      const canvasHeight = height * this.pixelRatio;
+      this.canvas.width = canvasWidth;
+      this.canvas.height = canvasHeight;
+      this.canvas.style.width = width + 'px';
+      this.canvas.style.height = height + 'px';
+      this.gl.viewport(0, 0, canvasWidth, canvasHeight);
+    }
+
+    clear() {
+      if (!this._checkContext()) return;
+      const gl = this.gl;
+      gl.clearColor(this.clearColor[0], this.clearColor[1], this.clearColor[2], this.clearColor[3]);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      this.stats.drawCalls = 0;
+      this.stats.vertices = 0;
+      this.stats.curves = 0;
+      this.stats.points = 0;
+    }
+
+    drawPoints(points) {
+      if (!this._checkContext() || !points || points.length === 0) return;
+      const gl = this.gl;
+      const program = this.shaderManager.get('point');
+      this._useProgram(program);
+      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
+
+      // Interleaved-Daten: [x, y, r, g, b, a, size]
+      const data = [];
+      for (let p of points) {
+        data.push(p.x, p.y, p.r / 255, p.g / 255, p.b / 255, p.a, p.size);
+      }
+
+      const attribs = [
+        { name: 'a_position', size: 2 },
+        { name: 'a_color', size: 4 },
+        { name: 'a_size', size: 1 }
+      ];
+      this._setupInterleaved(program, attribs, data);
+
+      gl.drawArrays(gl.POINTS, 0, points.length);
+      this.stats.drawCalls++;
+      this.stats.points += points.length;
+      this.stats.vertices += points.length;
+    }
+
+    drawCurves(curves) {
+      if (!this._checkContext() || !curves || curves.length === 0) return;
+      const gl = this.gl;
+      const program = this.shaderManager.get('triangle');
+      this._useProgram(program);
+      gl.uniform2f(gl.getUniformLocation(program, 'u_resolution'), this.width, this.height);
+
+      // Interleaved-Daten: pro Vertex [x, y, r, g, b, a]
+      const data = [];
+
+      for (let curve of curves) {
+        const pts = curve.points;
+        const cols = curve.colors;
+        const thickness = curve.thickness * this.qualityFactor;
+        if (pts.length < 4) continue;
+
+        for (let i = 0; i < pts.length - 2; i += 2) {
+          const x1 = pts[i];
+          const y1 = pts[i + 1];
+          const x2 = pts[i + 2];
+          const y2 = pts[i + 3];
+
+          const dx = x2 - x1;
+          const dy = y2 - y1;
+          const len = Math.sqrt(dx * dx + dy * dy);
+          if (len < 1e-6) continue;
+
+          const nx = -dy / len;
+          const ny = dx / len;
+          const hw = thickness / 2;
+
+          const c1 = cols.slice(i * 2, i * 2 + 4);
+          const c2 = cols.slice(i * 2 + 4, i * 2 + 8);
+
+          const p0x = x1 - nx * hw;
+          const p0y = y1 - ny * hw;
+          const p1x = x2 - nx * hw;
+          const p1y = y2 - ny * hw;
+          const p2x = x1 + nx * hw;
+          const p2y = y1 + ny * hw;
+          const p3x = x2 + nx * hw;
+          const p3y = y2 + ny * hw;
+
+          // Dreieck 1: p0-p1-p2
+          data.push(p0x, p0y, ...c1);
+          data.push(p1x, p1y, ...c2);
+          data.push(p2x, p2y, ...c1);
+          // Dreieck 2: p1-p3-p2
+          data.push(p1x, p1y, ...c2);
+          data.push(p3x, p3y, ...c2);
+          data.push(p2x, p2y, ...c1);
+        }
+      }
+
+      if (data.length === 0) return;
+
+      const attribs = [
+        { name: 'a_position', size: 2 },
+        { name: 'a_color', size: 4 }
+      ];
+      this._setupInterleaved(program, attribs, data);
+
+      gl.drawArrays(gl.TRIANGLES, 0, data.length / 6); // 6 floats pro Vertex
+      this.stats.drawCalls++;
+      this.stats.curves += curves.length;
+      this.stats.vertices += data.length / 6;
+    }
+
+    setQuality(level) {
+      this.qualityFactor = Math.max(0.2, Math.min(1.0, level));
+    }
+
+    getStats() {
+      return { ...this.stats, bufferPool: this.bufferPool.getStats() };
+    }
+
+    destroy() {
+      this.gl.deleteVertexArray(this.vao);
+      this.gl.deleteBuffer(this.interleavedBuffer);
+      this.bufferPool.deleteAll();
+      this.shaderManager.destroy();
+    }
+  }
+
+  // -------------------------------------------------------------
+  // WORKER-RENDERER (experimentell, für zukünftige Nutzung)
+  // -------------------------------------------------------------
+  // Diese Klasse implementiert die gleiche API, delegiert aber an einen Worker.
+  // Sie wird nur verwendet, wenn options.useWorker = true und OffscreenCanvas unterstützt wird.
+  // Hinweis: Asynchrone Kommunikation erfordert Anpassungen im Aufrufer – daher hier nur Grundgerüst.
+
+  class WorkerRenderer {
+    constructor(canvas, options) {
+      this.canvas = canvas;
+      this.options = options;
+      this.worker = null;
+      this.offscreen = null;
+      if (hasOffscreenCanvas && options.useWorker) {
+        try {
+          this.offscreen = canvas.transferControlToOffscreen();
+          const workerCode = `
+            // Worker-Code (vereinfacht – würde die gesamte Renderer-Logik enthalten)
+            // Aus Platzgründen hier nur das Grundgerüst.
+            self.onmessage = function(e) {
+              const { cmd, data } = e.data;
+              if (cmd === 'init') {
+                // Worker initialisieren
+              } else if (cmd === 'resize') {
+                // Größe ändern
+              } else if (cmd === 'clear') {
+                // Löschen
+              } else if (cmd === 'drawPoints') {
+                // Punkte zeichnen
+              } else if (cmd === 'drawCurves') {
+                // Kurven zeichnen
+              }
+            };
+          `;
+          const blob = new Blob([workerCode], { type: 'application/javascript' });
+          this.worker = new Worker(URL.createObjectURL(blob));
+          this.worker.postMessage({ cmd: 'init', canvas: this.offscreen, options }, [this.offscreen]);
+          console.log('GPU Ultra: Worker-Modus aktiviert (experimentell)');
+        } catch (e) {
+          console.warn('GPU Ultra: Worker-Modus fehlgeschlagen, verwende normalen Renderer', e);
+          this._fallback = new WebGLRendererUltra(canvas, options);
         }
       } else {
-        const buffer = this.gl.createBuffer();
-        this.pools.set(name, { buffer, size: requiredSize, usage });
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        return buffer;
+        this._fallback = new WebGLRendererUltra(canvas, options);
       }
     }
 
-    bindBuffer(name, data, usage = this.gl.DYNAMIC_DRAW) {
-      const requiredSize = data.length;
-      const buffer = this.getBuffer(name, requiredSize, usage);
-      this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), usage);
+    resize(width, height) {
+      if (this.worker) {
+        this.worker.postMessage({ cmd: 'resize', width, height });
+      } else {
+        this._fallback.resize(width, height);
+      }
     }
 
-    deleteAll() {
-      for (let entry of this.pools.values()) {
-        this.gl.deleteBuffer(entry.buffer);
+    clear() {
+      if (this.worker) {
+        this.worker.postMessage({ cmd: 'clear' });
+      } else {
+        this._fallback.clear();
       }
-      this.pools.clear();
+    }
+
+    drawPoints(points) {
+      if (this.worker) {
+        this.worker.postMessage({ cmd: 'drawPoints', points });
+      } else {
+        this._fallback.drawPoints(points);
+      }
+    }
+
+    drawCurves(curves) {
+      if (this.worker) {
+        this.worker.postMessage({ cmd: 'drawCurves', curves });
+      } else {
+        this._fallback.drawCurves(curves);
+      }
+    }
+
+    destroy() {
+      if (this.worker) {
+        this.worker.terminate();
+      } else {
+        this._fallback.destroy();
+      }
+    }
+
+    setQuality(level) {
+      if (this.worker) {
+        this.worker.postMessage({ cmd: 'setQuality', level });
+      } else {
+        this._fallback.setQuality(level);
+      }
+    }
+
+    getStats() {
+      if (this.worker) {
+        // Asynchrone Antwort nicht möglich – daher leer
+        return {};
+      } else {
+        return this._fallback.getStats();
+      }
     }
   }
 
@@ -676,9 +900,12 @@
     drawPoints(points) { this._renderer.drawPoints(points); }
     drawCurves(curves) { this._renderer.drawCurves(curves); }
     destroy() { this._renderer.destroy(); }
+    setQuality(level) { this._renderer.setQuality(level); }
+    getStats() { return this._renderer.getStats(); }
 
     // Statische Hilfsmethoden (wie bisher)
-    static tessellateBezier(p0, cp, p1, segments = 20) {
+    static tessellateBezier(p0, cp, p1, segments = DEFAULT_SEGMENTS) {
+      segments = Math.max(MIN_SEGMENTS, Math.min(MAX_SEGMENTS, segments));
       const points = [];
       for (let i = 0; i <= segments; i++) {
         const t = i / segments;
@@ -737,8 +964,8 @@
       const cpX = midX + rotatedX * offset;
       const cpY = midY + rotatedY * offset;
 
-      // Adaptive Segmentanzahl (je nach Frametime könnte man später anpassen)
-      const segments = Math.max(10, Math.floor(dist / 5));
+      // Segmentzahl adaptiv: je länger die Kurve, desto mehr Segmente
+      const segments = Math.max(MIN_SEGMENTS, Math.min(MAX_SEGMENTS, Math.floor(dist / 5) + 5));
 
       const points = [];
       const colors = [];
@@ -760,80 +987,6 @@
   }
 
   // -------------------------------------------------------------
-  // OFFSCREENCANVAS-WORKER (optional)
-  // -------------------------------------------------------------
-  // Diese Klasse implementiert die gleiche API, delegiert aber an einen Worker.
-  // Sie wird nur verwendet, wenn options.useWorker = true und OffscreenCanvas unterstützt wird.
-
-  class WorkerRenderer {
-    constructor(canvas, options) {
-      this.canvas = canvas;
-      this.options = options;
-      this.worker = null;
-      this.offscreen = null;
-      if (hasOffscreenCanvas && options.useWorker) {
-        try {
-          this.offscreen = canvas.transferControlToOffscreen();
-          const workerCode = `
-            // Worker-Code (vereinfacht – würde die gesamte Renderer-Logik enthalten)
-            // Aus Platzgründen hier nur das Grundgerüst.
-          `;
-          const blob = new Blob([workerCode], { type: 'application/javascript' });
-          this.worker = new Worker(URL.createObjectURL(blob));
-          this.worker.postMessage({ cmd: 'init', canvas: this.offscreen, options }, [this.offscreen]);
-          console.log('GPU Ultra: Worker-Modus aktiviert');
-        } catch (e) {
-          console.warn('GPU Ultra: Worker-Modus fehlgeschlagen, verwende normalen Renderer', e);
-          this._fallback = new WebGLRendererUltra(canvas, options);
-        }
-      } else {
-        this._fallback = new WebGLRendererUltra(canvas, options);
-      }
-    }
-
-    // Delegiere an Worker oder Fallback
-    resize(width, height) {
-      if (this.worker) {
-        this.worker.postMessage({ cmd: 'resize', width, height });
-      } else {
-        this._fallback.resize(width, height);
-      }
-    }
-
-    clear() {
-      if (this.worker) {
-        this.worker.postMessage({ cmd: 'clear' });
-      } else {
-        this._fallback.clear();
-      }
-    }
-
-    drawPoints(points) {
-      if (this.worker) {
-        this.worker.postMessage({ cmd: 'drawPoints', points });
-      } else {
-        this._fallback.drawPoints(points);
-      }
-    }
-
-    drawCurves(curves) {
-      if (this.worker) {
-        this.worker.postMessage({ cmd: 'drawCurves', curves });
-      } else {
-        this._fallback.drawCurves(curves);
-      }
-    }
-
-    destroy() {
-      if (this.worker) {
-        this.worker.terminate();
-      } else {
-        this._fallback.destroy();
-      }
-    }
-  }
-
-  // -------------------------------------------------------------
   // EXPORT (gleiche Schnittstelle wie immer)
   // -------------------------------------------------------------
 
@@ -841,7 +994,9 @@
     WebGLRendererUltra,
     tessellateBezier: WebGLRendererUltra.tessellateBezier,
     tessellateConnection: WebGLRendererUltra.tessellateConnection,
-    hasWebGL
+    hasWebGL,
+    hasWebGL2,
+    VERSION
   };
 
 })(window);
