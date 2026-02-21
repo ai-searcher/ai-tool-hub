@@ -1,11 +1,10 @@
 // =========================================
 // PERFORMANCE.JS – Optimierungs-Engine für Quantum AI Hub
-// Version: 3.0.0 (Maximale Performance & Intelligenz)
-// Enthält: Suchindex (TF‑IDF + Trie), adaptiver Animation-Scheduler,
-//          DOM-Batcher mit Prioritäten, mehrstufiger Cache (LRU + IndexedDB),
-//          optimierte throttle/debounce, erweiterter LazyLoader,
-//          SmartSearch mit umfangreicher Intent-Erkennung.
-// KEINE Änderungen an der öffentlichen API – voll kompatibel mit app.js u.a.
+// Version: 3.1.0 (Integrierte GPU-Kopplung)
+// - Cache für Shader-Quellen (IndexedDB + LRU)
+// - AnimationScheduler mit GPU-Last-Messung und adaptiver Qualität
+// - DOMBatcher, throttle/debounce, LazyLoader, SmartSearch
+// - Feuert performance:throttle-Event bei Lastwechseln
 // =========================================
 
 (function(global) {
@@ -153,7 +152,7 @@
     constructor(targetFPS = 30, options = {}) {
       this.targetFPS = targetFPS;
       this.interval = 1000 / targetFPS;
-      this.tasks = new Set();
+      this.tasks = new Set();           // Tasks können Objekte mit .run() oder einfache Funktionen sein
       this.running = false;
       this.lastFrame = 0;
       this.frameId = null;
@@ -165,6 +164,8 @@
       this.frameCount = 0;
       this.lastMeasure = now();
       this.visibilityHidden = false;
+      this.throttleThreshold = 0.3;      // CPU-Last > 30% => drosseln
+      this.boostThreshold = 0.1;          // CPU-Last < 10% => erhöhen
 
       if (isBrowser) {
         document.addEventListener('visibilitychange', () => {
@@ -212,12 +213,32 @@
         this.cpuLoad = 1 - (actualFrames / expectedFrames);
         this.frameCount = 0;
         this.lastMeasure = nowTime;
+
+        // GPU-Last von allen Tasks sammeln, die getLoad() bereitstellen
+        let gpuLoad = 0;
+        let gpuTasks = 0;
+        this.tasks.forEach(task => {
+          if (task && typeof task.getLoad === 'function') {
+            gpuLoad += task.getLoad();
+            gpuTasks++;
+          }
+        });
+        const avgGpuLoad = gpuTasks > 0 ? gpuLoad / gpuTasks : 0;
+        const combinedLoad = (this.cpuLoad + avgGpuLoad) / 2;
+
         if (this.adaptive) {
-          // Bei hoher Last (CPU > 30%) reduziere FPS, bei niedriger erhöhe
-          if (this.cpuLoad > 0.3) {
+          // Bei hoher Last (combined > 30%) reduziere FPS, bei niedriger erhöhe
+          if (combinedLoad > this.throttleThreshold) {
             this.currentFPS = Math.max(15, Math.floor(this.targetFPS * 0.7));
-          } else if (this.cpuLoad < 0.1) {
+            // Event feuern für externe Qualitätsanpassung
+            window.dispatchEvent(new CustomEvent('performance:throttle', {
+              detail: { level: 0.6, load: combinedLoad }
+            }));
+          } else if (combinedLoad < this.boostThreshold) {
             this.currentFPS = Math.min(this.targetFPS, this.currentFPS + 2);
+            window.dispatchEvent(new CustomEvent('performance:throttle', {
+              detail: { level: 1.0, load: combinedLoad }
+            }));
           }
           this.interval = 1000 / this.currentFPS;
         }
@@ -232,9 +253,17 @@
 
       if (elapsed >= this.interval) {
         this.frameCount++;
-        // Alle Tasks ausführen (wenn kein Idle nötig)
+        // Alle Tasks ausführen – entweder Funktion oder Objekt mit run()
         this.tasks.forEach(task => {
-          try { task(); } catch (e) { console.error('Animation task error', e); }
+          try {
+            if (typeof task === 'function') {
+              task();
+            } else if (task && typeof task.run === 'function') {
+              task.run();
+            }
+          } catch (e) {
+            console.error('Animation task error', e);
+          }
         });
         this.lastFrame = nowTime - (elapsed % this.interval);
       }
@@ -301,6 +330,7 @@
       this.maxSize = maxSize;
       this.store = new Map();          // key -> { value, expires, lastAccess }
       this.persist = options.persist || false;
+      this.db = null;
       if (this.persist && isBrowser && typeof indexedDB !== 'undefined') {
         this._initDB();
       }
@@ -887,7 +917,7 @@
   })();
 
   // -------------------------------------------------------------
-  // EXPORT – unveränderte öffentliche API
+  // EXPORT – unveränderte öffentliche API (plus neues Event)
   // -------------------------------------------------------------
   global.Performance = {
     SearchIndex,
@@ -898,6 +928,13 @@
     debounce,
     LazyLoader,
     SmartSearch
+  };
+
+  // Zusätzlich eine globale Konfiguration (optional)
+  global.PerformanceConfig = {
+    maxFPS: 60,
+    adaptiveQuality: true,
+    lowPowerMode: false
   };
 
 })(window);
