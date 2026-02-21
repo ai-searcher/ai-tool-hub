@@ -56,6 +56,12 @@
       statsNew: 'Neu hinzugefügt',
       // Fallback-Tags für Kategorie-Köpfe (falls keine categoryTags)
       fallbackTags: ['Texte schreiben', 'Chatten', 'Übersetzen', 'Korrekturlesen'],
+      // Im translations.de-Objekt:
+      neonHelpTitle: '🔮 Verbindungen im Netzwerk',
+      neonHelpStrong: 'Starke Verbindung – gleiche Kategorie, nah',
+      neonHelpWeak: 'Schwächere Verbindung – gleiche Kategorie, weiter weg',
+      neonHelpBridge: 'Brücken-Verbindung – zwischen verschiedenen Kategorien',
+      neonHelpColorHint: 'Die Farbe der Linie entspricht der Kategorie der Ausgangskarte.'
       // Weitere allgemeine Texte
       unknownTool: 'Unbekannt',
       noDescription: 'Keine Beschreibung verfügbar.',
@@ -109,6 +115,12 @@
       statsBest: 'Top Rated',
       statsNew: 'Recently Added',
       fallbackTags: ['Write texts', 'Chat', 'Translate', 'Proofread'],
+      // Im translations.en-Objekt:
+      neonHelpTitle: '🔮 Network Connections',
+      neonHelpStrong: 'Strong connection – same category, nearby',
+      neonHelpWeak: 'Weaker connection – same category, farther away',
+      neonHelpBridge: 'Bridge connection – between different categories',
+      neonHelpColorHint: 'The line color matches the category of the source card.'
       unknownTool: 'Unknown',
       noDescription: 'No description available.',
       noProvider: 'Unknown',
