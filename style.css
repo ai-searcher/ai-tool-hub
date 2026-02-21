@@ -2702,9 +2702,10 @@ input:disabled + .cookie-slider {
 
 .neon-help-container {
   position: absolute;
-  top: 15px;          /* Abstand nach oben – unter der Header-Trennlinie */
-  right: 20px;         /* Abstand rechts */
-  z-index: 100;        /* Damit der Button über dem View-Toggle liegt, aber unter dem Canvas? Reicht. */
+  top: -25px;               /* Schwebt über der Leiste */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
 }
 
 .neon-help-btn {
@@ -2743,11 +2744,11 @@ input:disabled + .cookie-slider {
   background: var(--primary-dim);
 }
 
-/* Popup – erscheint unter dem Button */
 .neon-popup {
   position: absolute;
-  top: 45px;           /* Direkt unter dem Button */
-  right: 0;
+  top: 40px;               /* Direkt unter dem Button */
+  left: 50%;
+  transform: translateX(-50%);
   width: 260px;
   background: rgba(10, 14, 39, 0.95);
   backdrop-filter: blur(8px);
@@ -2767,73 +2768,15 @@ input:disabled + .cookie-slider {
   display: block;
 }
 
-.neon-popup h4 {
-  margin: 0 0 10px 0;
-  color: var(--primary);
-  font-size: 1.1rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 6px;
+/* Platz für den schwebenden Button schaffen */
+.view-toggle {
+  margin-top: 30px;
 }
 
-.neon-popup ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 8px 0;
-}
-
-.neon-popup li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-/* Legenden-Linien für das Popup */
-.neon-popup .legend-line {
-  width: 30px;
-  height: 3px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.neon-popup .legend-line.solid {
-  background: var(--primary);
-  box-shadow: 0 0 8px var(--primary-glow);
-}
-
-.neon-popup .legend-line.dashed {
-  background: repeating-linear-gradient(
-    to right,
-    var(--primary) 0,
-    var(--primary) 6px,
-    transparent 6px,
-    transparent 12px
-  );
-}
-
-.neon-popup .legend-line.dotted {
-  background: repeating-linear-gradient(
-    to right,
-    var(--primary) 0,
-    var(--primary) 2px,
-    transparent 2px,
-    transparent 6px
-  );
-}
-
-.neon-popup p {
-  margin: 8px 0 0 0;
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  border-top: 1px solid var(--border);
-  padding-top: 8px;
-}
-
-/* Mobile Anpassung */
+/* Mobile Anpassungen */
 @media (max-width: 767px) {
   .neon-help-container {
-    top: 10px;
-    right: 10px;
+    top: -20px;
   }
   .neon-help-btn {
     width: 32px;
@@ -2842,7 +2785,9 @@ input:disabled + .cookie-slider {
   }
   .neon-popup {
     width: 220px;
-    right: 0;
-    top: 40px;
+    top: 35px;
+  }
+  .view-toggle {
+    margin-top: 25px;
   }
 }
