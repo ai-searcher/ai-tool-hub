@@ -2758,7 +2758,7 @@ input:disabled + .cookie-slider {
   padding: 16px;
   color: var(--text-primary);
   box-shadow: var(--shadow-lg), 0 0 30px var(--primary-glow);
-  z-index: 200;
+  z-index: 1000;
   display: none;
   font-size: 0.9rem;
   line-height: 1.5;
