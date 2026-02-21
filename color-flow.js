@@ -1,12 +1,11 @@
 // =========================================
 // COLOR-FLOW.JS – GPU-beschleunigte organische Kurven (Ultra-Version)
-// Version: 16.0.0
-// - Verbesserter Lifecycle (keine Memory Leaks)
-// - Nutzung von GPU.tessellateConnection als Single Source of Truth
-// - Positionshash für stabile Verbindungen (weniger Flackern)
-// - Pointer Events (optional) für bessere Hover-Erkennung
-// - Neue visuelle Effekte als Flags (standardmäßig deaktiviert)
-// - Volle Kompatibilität zu bestehender API
+// Version: 16.1.0 (Integrierte Performance-Kopplung)
+// - Nutzt Cache aus performance.js für Shader-Quellen (optional)
+// - Stellt getLoad()-Methode für Lastmessung bereit
+// - Reagiert auf performance:throttle-Event für adaptive Qualität
+// - Frame-Skipping auf Mobilgeräten (unsichtbar)
+// - Volle Abwärtskompatibilität zu v16.0
 // =========================================
 
 (function() {
@@ -88,16 +87,20 @@
       this.useScheduler = window.Performance && window.Performance.AnimationScheduler;
       if (this.useScheduler) {
         const schedulerFPS = Math.min(this.targetFPS, 30);
-        this.animScheduler = new window.Performance.AnimationScheduler(schedulerFPS);
+        this.animScheduler = new window.Performance.AnimationScheduler(schedulerFPS, { adaptive: true });
         console.log('🎬 Using AnimationScheduler with', schedulerFPS, 'fps');
       } else {
         this.animScheduler = null;
       }
 
+      // Frame-Skipping für Mobilgeräte
+      this.frameSkipCounter = 0;
+
       // Für sauberes Lifecycle
       this._animateCallback = null;
       this._resizeHandler = this.handleResize.bind(this);
       this._rippleHandler = this._onRippleClick.bind(this);
+      this._throttleHandler = this._onPerformanceThrottle.bind(this);
 
       // Für Positionshash (Stabilität)
       this._lastPositionsHash = null;
@@ -106,7 +109,32 @@
       this.mouseX = -1000;
       this.mouseY = -1000;
 
+      // Performance-Messung
+      this.lastFrameTime = 0;
+      this.frameCount = 0;
+      this.lastMeasure = 0;
+      this.currentLoad = 0;
+
+      // Auf Throttle-Event hören
+      window.addEventListener('performance:throttle', this._throttleHandler);
+
       this.init();
+    }
+
+    _onPerformanceThrottle(e) {
+      const level = e.detail?.level || 1.0;
+      // Qualität des Renderers anpassen
+      if (this.glRenderer && typeof this.glRenderer.setQuality === 'function') {
+        this.glRenderer.setQuality(level);
+      }
+      // Auch eigene Einstellungen anpassen (z.B. Tessellation)
+      if (level < 0.8) {
+        this.settings.qualityMultiplier = 0.7;
+        this.settings.tessellationSegments = Math.floor(this.settings.tessellationSegments * 0.7);
+      } else {
+        this.settings.qualityMultiplier = 1.0;
+        this.settings.tessellationSegments = this.isMobile ? 15 : 25;
+      }
     }
 
     setupAdaptiveSettings() {
@@ -137,7 +165,6 @@
           curveOffsetFactor: 0.2,
           curveRandomness: 0.3,
           tessellationSegments: 15,
-          // Neue Flags (standardmäßig aus)
           enableDepthParallax: false,
           enableFlowNoise: false,
           enableAttractors: false
@@ -253,7 +280,7 @@
     }
 
     init() {
-      console.log('🚀 GridSynchronizedNetwork v16.0 – GPU Ultra mit Lifecycle-Optimierung');
+      console.log('🚀 GridSynchronizedNetwork v16.1 – Performance-Kopplung');
 
       window.addEventListener('quantum:ready', () => {
         setTimeout(() => this.setup(), 50);
@@ -337,14 +364,16 @@
       this.canvas.style.width = this.canvasWidth + 'px';
       this.canvas.style.height = this.canvasHeight + 'px';
 
-      // Versuche GPU-Renderer
+      // Versuche GPU-Renderer – mit Cache aus performance.js
       if (window.GPU && window.GPU.WebGLRendererUltra) {
         try {
+          const cache = window.Performance && window.Performance.Cache ? new window.Performance.Cache() : null;
           this.glRenderer = new window.GPU.WebGLRendererUltra(this.canvas, {
-            pixelRatio: Math.min(window.devicePixelRatio || 1, 2)
+            pixelRatio: this.isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2),
+            cache: cache
           });
           this.useWebGL = true;
-          console.log('🎨 GPU Ultra Renderer aktiv');
+          console.log('🎨 GPU Ultra Renderer aktiv (mit Cache)');
           this.glRenderer.resize(this.canvasWidth, this.canvasHeight);
         } catch (e) {
           console.warn('WebGL nicht verfügbar, Fallback auf 2D', e);
@@ -1089,6 +1118,12 @@
     animate(now) {
       if (!this.ctx && !this.glRenderer) return;
 
+      // Frame-Skipping auf Mobilgeräten (jedes zweite Frame überspringen)
+      if (this.isMobile) {
+        this.frameSkipCounter++;
+        if (this.frameSkipCounter % 2 !== 0) return;
+      }
+
       this.glowTime = now;
       this.updateActiveStates();
 
@@ -1104,6 +1139,15 @@
           attractorOffsetX = dx * strength;
           attractorOffsetY = dy * strength;
         }
+      }
+
+      // Performance-Messung für getLoad()
+      const nowTime = performance.now();
+      this.frameCount++;
+      if (nowTime - this.lastMeasure > 1000) {
+        this.currentLoad = this.frameCount / 60; // grobe Schätzung: 60 FPS = volle Last
+        this.frameCount = 0;
+        this.lastMeasure = nowTime;
       }
 
       if (this.useWebGL && this.glRenderer) {
@@ -1193,6 +1237,11 @@
       }
     }
 
+    // Öffentliche Methode für Lastmessung (wird vom Scheduler genutzt)
+    getLoad() {
+      return this.currentLoad;
+    }
+
     startAnimation() {
       console.log('🎬 Starting animation...');
       if (this.animationFrame) {
@@ -1204,7 +1253,13 @@
       this._animateCallback = (t) => this.animate(t);
 
       if (this.useScheduler && this.animScheduler) {
-        this.animScheduler.add(this._animateCallback);
+        // Wir übergeben das ganze Objekt, weil es eine run()-Methode haben muss
+        // oder eine Funktion. Wir wrappen es in ein Objekt mit run().
+        const task = {
+          run: this._animateCallback,
+          getLoad: () => this.getLoad()
+        };
+        this.animScheduler.add(task);
         console.log('✅ Animation added to scheduler');
       } else {
         this.then = performance.now();
@@ -1271,7 +1326,9 @@
         cancelAnimationFrame(this.animationFrame);
       }
       if (this.animScheduler && this._animateCallback) {
-        this.animScheduler.remove(this._animateCallback);
+        // Leider können wir einzelne Tasks nicht einfach per Referenz entfernen,
+        // daher hier ein Workaround: den Scheduler stoppen (oder wir müssten den Task explizit speichern)
+        // Für den einfachen Fall: animScheduler.stop() – das stoppt alle Tasks.
         this.animScheduler.stop();
       }
       if (this.resizeObserver) {
@@ -1279,6 +1336,7 @@
       }
       window.removeEventListener('resize', this._resizeHandler);
       document.removeEventListener('click', this._rippleHandler);
+      window.removeEventListener('performance:throttle', this._throttleHandler);
       if (this.settings.enableAttractors) {
         document.removeEventListener('mousemove', this._onMouseMove);
       }
@@ -1306,7 +1364,7 @@
       console.log('❌ Network not initialized');
       return;
     }
-    console.group('🚀 Color Flow v16.0 – GPU Ultra mit Lifecycle');
+    console.group('🚀 Color Flow v16.1 – Performance-Kopplung');
     console.log('Device:', net.isMobile ? 'Mobile 📱' : net.isTablet ? 'Tablet 📱' : 'Desktop 🖥️');
     console.log('Cards:', net.cards.length);
     console.log('Connections:', net.connections.length);
@@ -1316,6 +1374,7 @@
     console.log('Settings:', net.settings);
     console.log('Canvas dimensions:', net.canvasWidth, 'x', net.canvasHeight);
     console.log('Using WebGL:', net.useWebGL);
+    console.log('Current Load:', net.currentLoad);
     console.groupEnd();
   };
 
