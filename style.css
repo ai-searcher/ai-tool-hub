@@ -2745,7 +2745,7 @@ input:disabled + .cookie-slider {
 
 .neon-popup {
   position: absolute;
-  top: 40px;               /* Direkt unter dem Button */
+  top: 40px;
   left: 50%;
   transform: translateX(-50%);
   width: 260px;
@@ -2757,12 +2757,12 @@ input:disabled + .cookie-slider {
   padding: 16px;
   color: var(--text-primary);
   box-shadow: var(--shadow-lg), 0 0 30px var(--primary-glow);
-  z-index: 1100;            /* Höher als der View-Toggle (1000) */
+  z-index: 10000; /* extrem hoch */
   display: none;
   font-size: 0.9rem;
   line-height: 1.5;
+  overflow: visible; /* verhindert Abschneiden */
 }
-
 .neon-popup.active {
   display: block;
 }
