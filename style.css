@@ -2772,7 +2772,7 @@ input:disabled + .cookie-slider {
 .view-toggle {
   position: sticky;
   top: 10px;
-  z-index: 100;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
