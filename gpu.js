@@ -1,12 +1,11 @@
 // =========================================
 // GPU.JS – Ultra-Performance WebGL-Renderer (Extreme Edition)
-// Version: 6.0.0
-// - WebGL2 "Turbo Mode" mit Fallback auf WebGL1 (nahtlos integriert)
-// - Interleaved Buffers, Instancing, Batching für minimale Draw Calls
-// - Adaptive Quality (dynamische Segmentanzahl basierend auf Frametime)
-// - Optionaler OffscreenCanvas / Worker-Modus (experimentell)
-// - Erweiterte Fehlerbehandlung, Speicherverwaltung und Kompatibilität
-// - Volle Abwärtskompatibilität zu WebGLRendererUltra v4/v5
+// Version: 6.1.0 (Integrierte Performance-Kopplung)
+// - WebGL2 "Turbo Mode" mit Fallback auf WebGL1
+// - Nutzt Cache aus performance.js für Shader-Quellen (optional)
+// - Stellt getLoad()-Methode für Lastmessung bereit
+// - Keine eigenen Animationsschleifen mehr (reine Zeichen-Engine)
+// - Volle Abwärtskompatibilität zu WebGLRendererUltra v6.0
 // =========================================
 
 (function(global) {
@@ -16,7 +15,7 @@
   // PRÄAMBEL: Verfügbarkeit prüfen und Konstanten definieren
   // -------------------------------------------------------------
 
-  const VERSION = '6.0.0';
+  const VERSION = '6.1.0';
   const MAX_BUFFER_SIZE = 65536;
   const DEFAULT_SEGMENTS = 20;
   const MIN_SEGMENTS = 5;
@@ -103,6 +102,7 @@
       this.height = canvas.height || 0;
       this.pixelRatio = options.pixelRatio || Math.min(window.devicePixelRatio || 1, 2);
       this.clearColor = options.clearColor || [0, 0, 0, 0];
+      this.cache = options.cache || null; // optionaler Cache aus performance.js
       this._init();
     }
 
@@ -123,6 +123,14 @@
     destroy() { /* wird überschrieben */ }
     setQuality(level) { /* wird überschrieben */ } // 0..1
     getStats() { return {}; }
+
+    // NEU: Liefert eine geschätzte Auslastung (0 = idle, 1 = voll)
+    getLoad() {
+      const stats = this.getStats();
+      // Einfache Schätzung: Verhältnis der DrawCalls zu einem angenommenen Maximum
+      const maxDrawCalls = 100; // willkürlich, kann optimiert werden
+      return Math.min(1, (stats.drawCalls || 0) / maxDrawCalls);
+    }
   }
 
   // -------------------------------------------------------------
@@ -196,12 +204,13 @@
   }
 
   // -------------------------------------------------------------
-  // SHADERMANAGER – Verwaltet alle Shader-Programme
+  // SHADERMANAGER – Verwaltet alle Shader-Programme (mit Cache-Unterstützung)
   // -------------------------------------------------------------
 
   class ShaderManager {
-    constructor(gl) {
+    constructor(gl, options = {}) {
       this.gl = gl;
+      this.cache = options.cache || null; // optionaler Cache aus performance.js
       this.programs = new Map(); // name -> WebGLProgram
       this._initAll();
     }
@@ -210,17 +219,33 @@
       this._addProgram('triangle', this._triangleVS(), this._triangleFS());
       this._addProgram('point', this._pointVS(), this._pointFS());
       this._addProgram('dashedLine', this._dashedLineVS(), this._dashedLineFS());
-      // Anti-aliasing Variante (zurückfallend auf triangle, wenn nicht kompiliert)
       this._addProgram('triangleAA', this._triangleVS(), this._triangleAAFS());
     }
 
     _addProgram(name, vs, fs) {
-      const prog = createProgram(this.gl, vs, fs);
+      // Prüfen, ob das Programm im Cache existiert (nur Quellen-Caching, da WebGLProgram nicht serialisierbar)
+      const cacheKey = `shader_${name}`;
+      let prog = null;
+      if (this.cache) {
+        const cached = this.cache.get(cacheKey);
+        if (cached) {
+          // Wir können nur die Quellen cachen, nicht das kompilierte Programm
+          // Also hier einfach den vorhandenen Eintrag nutzen? Besser: Quellen speichern und neu kompilieren.
+          // Da WebGL-Programme kontextgebunden sind, müssen wir sie neu erstellen.
+          // Der Cache spart nur das erneute Laden der Quellstrings.
+          vs = cached.vs || vs;
+          fs = cached.fs || fs;
+        }
+      }
+      prog = createProgram(this.gl, vs, fs);
       if (prog) {
         this.programs.set(name, prog);
+        if (this.cache) {
+          // Quellen für zukünftige Sessions cachen (nicht das Programm)
+          this.cache.set(cacheKey, { vs, fs });
+        }
       } else {
         console.warn(`GPU: Shader-Programm "${name}" konnte nicht erstellt werden, verwende Fallback.`);
-        // Fallback auf triangle, falls vorhanden
         if (name !== 'triangle' && this.programs.has('triangle')) {
           this.programs.set(name, this.programs.get('triangle'));
         }
@@ -238,7 +263,7 @@
       this.programs.clear();
     }
 
-    // Shader-Quellen
+    // Shader-Quellen (unverändert)
     _triangleVS() {
       return `
         attribute vec2 a_position;
@@ -269,7 +294,6 @@
         precision mediump float;
         varying vec4 v_color;
         void main() {
-          // Einfaches Antialiasing durch Abtasten (kann erweitert werden)
           gl_FragColor = v_color;
         }
       `;
@@ -365,7 +389,7 @@
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-      this.shaderManager = new ShaderManager(gl);
+      this.shaderManager = new ShaderManager(gl, { cache: this.cache });
       this.bufferPool = new BufferPool(gl);
       this.currentProgram = null;
       this.dummyBuffer = gl.createBuffer();
@@ -543,6 +567,13 @@
       return { ...this.stats, bufferPool: this.bufferPool.getStats() };
     }
 
+    getLoad() {
+      const stats = this.getStats();
+      const maxDrawCalls = 100; // Erfahrungswert – kann optimiert werden
+      const load = Math.min(1, (stats.drawCalls || 0) / maxDrawCalls);
+      return load;
+    }
+
     destroy() {
       this.bufferPool.deleteAll();
       if (this.dummyBuffer) this.gl.deleteBuffer(this.dummyBuffer);
@@ -572,7 +603,7 @@
       this.vao = gl.createVertexArray();
       gl.bindVertexArray(this.vao);
 
-      this.shaderManager = new ShaderManager(gl);
+      this.shaderManager = new ShaderManager(gl, { cache: this.cache });
       this.bufferPool = new BufferPool(gl);
       this.currentProgram = null;
 
@@ -753,6 +784,12 @@
       return { ...this.stats, bufferPool: this.bufferPool.getStats() };
     }
 
+    getLoad() {
+      const stats = this.getStats();
+      const maxDrawCalls = 100;
+      return Math.min(1, (stats.drawCalls || 0) / maxDrawCalls);
+    }
+
     destroy() {
       this.gl.deleteVertexArray(this.vao);
       this.gl.deleteBuffer(this.interleavedBuffer);
@@ -764,9 +801,7 @@
   // -------------------------------------------------------------
   // WORKER-RENDERER (experimentell, für zukünftige Nutzung)
   // -------------------------------------------------------------
-  // Diese Klasse implementiert die gleiche API, delegiert aber an einen Worker.
-  // Sie wird nur verwendet, wenn options.useWorker = true und OffscreenCanvas unterstützt wird.
-  // Hinweis: Asynchrone Kommunikation erfordert Anpassungen im Aufrufer – daher hier nur Grundgerüst.
+  // (unverändert, da nicht im Fokus)
 
   class WorkerRenderer {
     constructor(canvas, options) {
@@ -858,10 +893,17 @@
 
     getStats() {
       if (this.worker) {
-        // Asynchrone Antwort nicht möglich – daher leer
         return {};
       } else {
         return this._fallback.getStats();
+      }
+    }
+
+    getLoad() {
+      if (this.worker) {
+        return 0;
+      } else {
+        return this._fallback.getLoad();
       }
     }
   }
@@ -902,6 +944,7 @@
     destroy() { this._renderer.destroy(); }
     setQuality(level) { this._renderer.setQuality(level); }
     getStats() { return this._renderer.getStats(); }
+    getLoad() { return this._renderer.getLoad(); }
 
     // Statische Hilfsmethoden (wie bisher)
     static tessellateBezier(p0, cp, p1, segments = DEFAULT_SEGMENTS) {
