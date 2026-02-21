@@ -2694,7 +2694,6 @@ input:disabled + .cookie-slider {
 .category-stack[data-category="data"] .stack-card .stack-card-category {
   color: #ffffff !important;     /* weisser Text für alle Kategorien */
 }
-
 /* ==================== NEON-HILFE-BUTTON FÜR VERBINDUNGEN ==================== */
 .main .container {
   position: relative; /* Notwendig für absolute Positionierung des Buttons */
@@ -2758,7 +2757,7 @@ input:disabled + .cookie-slider {
   padding: 16px;
   color: var(--text-primary);
   box-shadow: var(--shadow-lg), 0 0 30px var(--primary-glow);
-  z-index: 1000;
+  z-index: 1100;            /* Höher als der View-Toggle (1000) */
   display: none;
   font-size: 0.9rem;
   line-height: 1.5;
