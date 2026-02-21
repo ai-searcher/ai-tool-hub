@@ -158,6 +158,31 @@
         <p class="state-subtext" id="empty-query">Versuche einen anderen Suchbegriff</p>
       </div>
       
+      <!-- ==================== HILFE-BUTTON FÜR VERBINDUNGEN ==================== -->
+<div class="neon-help-container">
+  <button class="neon-help-btn" id="neonHelpBtn" aria-label="Hilfe zu Verbindungen">?</button>
+  <div class="neon-popup" id="neonPopup">
+    <!-- Inhalt wird per JavaScript befüllt oder kann hier direkt stehen -->
+  </div>
+</div>
+
+<!-- View Toggle mit Sortier-Dropdown -->
+<div class="view-toggle">
+  <button class="toggle-btn active" data-view="grid" data-i18n="viewGrid">Raster</button>
+  <button class="toggle-btn" data-view="stacks" data-i18n="viewStacks">Kategorien</button>
+  <div class="sort-dropdown">
+    <button class="toggle-btn sort-trigger" data-i18n="sortTrigger">Sortieren ▾</button>
+    <div class="sort-menu">
+      <button data-sort="name" data-dir="asc" data-i18n="sortNameAsc">Name (A-Z)</button>
+      <button data-sort="name" data-dir="desc" data-i18n="sortNameDesc">Name (Z-A)</button>
+      <button data-sort="school" data-dir="desc" data-i18n="sortSchool">Für Schule / Studium</button>
+      <button data-sort="work" data-dir="desc" data-i18n="sortWork">Für Beruf / Arbeit</button>
+      <button data-sort="date" data-dir="desc" data-i18n="sortDateDesc">Neueste zuerst</button>
+      <button data-sort="date" data-dir="asc" data-i18n="sortDateAsc">Älteste zuerst</button>
+    </div>
+  </div>
+</div>
+      
       <!-- View Toggle mit Sortier-Dropdown -->
       <div class="view-toggle">
         <button class="toggle-btn active" data-view="grid" data-i18n="viewGrid">Raster</button>
