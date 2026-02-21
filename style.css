@@ -2702,7 +2702,7 @@ input:disabled + .cookie-slider {
 
 .neon-help-container {
   position: absolute;
-  top: -25px;               /* Schwebt über der Leiste */
+  top: -60px;               /* Schwebt über der Leiste */
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
@@ -2776,7 +2776,7 @@ input:disabled + .cookie-slider {
 /* Mobile Anpassungen */
 @media (max-width: 767px) {
   .neon-help-container {
-    top: -20px;
+    top: -60px;
   }
   .neon-help-btn {
     width: 32px;
