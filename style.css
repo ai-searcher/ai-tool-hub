@@ -690,11 +690,12 @@ body {
   margin-bottom: 0.25rem;
 }
 
+/* Badges in der Stack-Ansicht – allgemein (für Desktop) */
 .stack-card .stack-card-category {
   display: inline-block;
   background: var(--primary-dim);
-  color: var(--primary);
-  padding: 4px 8px;
+  color: #ffffff;                 /* weisse Schrift */
+  padding: 4px 12px;              /* 12px links/rechts – genug Abstand zum Rand */
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -707,30 +708,39 @@ body {
   box-sizing: border-box;
 }
 
-/* Kategoriespezifische Farben für den Badge in der Stack-Karte */
+/* Kategoriespezifische Farben – Text bleibt weiss */
 .category-stack[data-category="text"] .stack-card .stack-card-category {
   background: var(--glow-text);
-  color: var(--color-text);
+  color: #ffffff;
 }
 .category-stack[data-category="image"] .stack-card .stack-card-category {
   background: var(--glow-image);
-  color: var(--color-image);
+  color: #ffffff;
 }
 .category-stack[data-category="code"] .stack-card .stack-card-category {
   background: var(--glow-code);
-  color: var(--color-code);
+  color: #ffffff;
 }
 .category-stack[data-category="audio"] .stack-card .stack-card-category {
   background: var(--glow-audio);
-  color: var(--color-audio);
+  color: #ffffff;
 }
 .category-stack[data-category="video"] .stack-card .stack-card-category {
   background: var(--glow-video);
-  color: var(--color-video);
+  color: #ffffff;
 }
 .category-stack[data-category="data"] .stack-card .stack-card-category {
   background: var(--glow-data);
-  color: var(--color-data);
+  color: #ffffff;
+}
+
+/* Mobile Anpassungen – noch etwas mehr Sicherheit */
+@media (max-width: 767px) {
+  .stack-card .stack-card-category {
+    font-size: 0.65rem !important;
+    padding: 4px 10px !important;   /* 10px Abstand reicht auch auf klein */
+    color: #ffffff !important;       /* weisse Schrift erzwingen */
+  }
 }
 
 /* Geschlossener Zustand: gestapelt mit Versatz */
