@@ -2657,3 +2657,30 @@ input:disabled + .cookie-slider {
     align-self: flex-start;
   }
 }
+
+/* ===== BADGES IN TOOL-QUADRATEN (RASTER) – TEXT WEISS AUF MOBIL ===== */
+@media (max-width: 767px) {
+  .square-category-badge {
+    color: #ffffff !important;  /* weisser Text */
+    /* weitere mobile Anpassungen bleiben erhalten */
+  }
+}
+
+/* ===== BADGES IN DER STACK-ANSICHT (KATEGORIEN-LAYOUT) – TEXT WEISS AUF MOBIL ===== */
+@media (max-width: 767px) {
+  .stack-card .stack-card-category {
+    color: #ffffff !important;   /* weisser Text */
+    /* Hintergrund bleibt farbig (wichtig für Kategoriezuordnung) */
+    background: inherit;         /* erbt die kategoriespezifische Hintergrundfarbe */
+  }
+}
+
+/* Falls die kategoriespezifischen Farbregeln den Text überschreiben, zusätzlich: */
+.category-stack[data-category="text"] .stack-card .stack-card-category,
+.category-stack[data-category="image"] .stack-card .stack-card-category,
+.category-stack[data-category="code"] .stack-card .stack-card-category,
+.category-stack[data-category="audio"] .stack-card .stack-card-category,
+.category-stack[data-category="video"] .stack-card .stack-card-category,
+.category-stack[data-category="data"] .stack-card .stack-card-category {
+  color: #ffffff !important;     /* weisser Text für alle Kategorien */
+}
