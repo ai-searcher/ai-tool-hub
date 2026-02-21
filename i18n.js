@@ -61,7 +61,7 @@
       neonHelpStrong: 'Starke Verbindung – gleiche Kategorie, nah',
       neonHelpWeak: 'Schwächere Verbindung – gleiche Kategorie, weiter weg',
       neonHelpBridge: 'Brücken-Verbindung – zwischen verschiedenen Kategorien',
-      neonHelpColorHint: 'Die Farbe der Linie entspricht der Kategorie der Ausgangskarte.'
+      neonHelpColorHint: 'Die Farbe der Linie entspricht der Kategorie der Ausgangskarte.',
       // Weitere allgemeine Texte
       unknownTool: 'Unbekannt',
       noDescription: 'Keine Beschreibung verfügbar.',
@@ -120,7 +120,7 @@
       neonHelpStrong: 'Strong connection – same category, nearby',
       neonHelpWeak: 'Weaker connection – same category, farther away',
       neonHelpBridge: 'Bridge connection – between different categories',
-      neonHelpColorHint: 'The line color matches the category of the source card.'
+      neonHelpColorHint: 'The line color matches the category of the source card.',
       unknownTool: 'Unknown',
       noDescription: 'No description available.',
       noProvider: 'Unknown',
