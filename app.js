@@ -1863,6 +1863,7 @@ const app = {
       ui.updateDataSource();
       ui.render();
       search.init();
+      initNeonHelp();
 
       // Globale Scroll-Buttons
       const globalScrollTop = document.getElementById('globalScrollTopBtn');
