@@ -2694,7 +2694,7 @@ input:disabled + .cookie-slider {
 .category-stack[data-category="data"] .stack-card .stack-card-category {
   color: #ffffff !important;     /* weisser Text für alle Kategorien */
 }
-/* ==================== NEON-HILFE-BUTTON FÜR VERBINDUNGEN ==================== */
+/* ==================== NEON-HILFE-BUTTON FÜR VERBINDUNGEN ====================*/
 .main .container {
   position: relative; /* Notwendig für absolute Positionierung des Buttons */
 }
@@ -2805,4 +2805,7 @@ input:disabled + .cookie-slider {
   .view-toggle {
     margin-top: 25px;
   }
+}
+.neon-help-container {
+  display: none !important;
 }
